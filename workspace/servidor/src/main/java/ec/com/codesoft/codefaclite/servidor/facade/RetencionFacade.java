@@ -5,10 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import java.sql.Date;
@@ -25,7 +27,66 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
     public RetencionFacade() {
         super(Retencion.class);
     }
+    
+    public List<RetencionDetalle> obtenerRetencionesReportesFacade(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion) {
+        RetencionDetalle rd;
+        //rd.getCodigoSri();
+        //rd.getCodigoRetencionSri();
+        //rd.getRetencion().getFechaEmision();
+        //rd.getRetencion().getProveedor();
+        String queryString = "SELECT d FROM RetencionDetalle d where d.retencion.estado<>?1 ";
+        
+        if(persona!=null)
+        {
+            queryString+=" and d.retencion.proveedor=?2 ";
+        }
+        
+        if(fi!=null)
+        {
+            queryString+=" and d.retencion.fechaEmision>=?3 ";
+        }
+        
+        if(ff!=null)
+        {
+            queryString+=" and d.retencion.fechaEmision<=?4 ";
+        }
+        
+        if(sriRetencion!=null)
+        {
+            queryString+=" and d.codigoSri=?5 ";
+        }
+        
+        
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+        
+        if(persona!=null)
+        {
+            query.setParameter(2,persona);
+        }
+        
+        if(fi!=null)
+        {
+            query.setParameter(3,fi);
+        }
+        
+        if(ff!=null)
+        {
+            query.setParameter(4,ff);
+        }
+        
+        if(sriRetencion!=null)
+        {
+            query.setParameter(5,sriRetencion.getCodigo());
+        }
+        
+        
+        
+        return query.getResultList();        
+    }
+    
 
+    @Deprecated //TODO: Ya se esta generando una nueva version que se llama obtener reteneciones reportes facade
     public List<RetencionDetalle> lista(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, String tipo) {
         String proveedor = "", fecha = "", retiva = "", retrenta = "", tipor = "";
         if (persona != null) {

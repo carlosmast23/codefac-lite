@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.compra.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -32,12 +33,12 @@ public class RetencionBusquedaDialogo implements InterfaceModelFind<Retencion> {
     @Override
     public QueryDialog getConsulta(String filter) {
         //Retencion ret;
-        //ret.getEstado();
-        String queryString = "SELECT r FROM Retencion r WHERE r.estado=?2 AND ";
+        //ret.getEstadoEnum()
+        String queryString = "SELECT r FROM Retencion r WHERE r.estado<>?2 AND ";
         queryString += " ( LOWER(r.secuencial) like ?1 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, filter);
-        queryDialog.agregarParametro(2,GeneralEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(2,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         return queryDialog;
     }
 

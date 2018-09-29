@@ -88,3 +88,4 @@ Ver si a los rubros nivel que se generan desde la pagina plantilla mensual se le
 Crear una pantalla para poder ingresar documentos de otros tipos para el inventario por ejemplo documento ingreso manual , documento por perdida, documento de translado
 Ver si agregar un campo en los detalles de la compra para ver si algunos productos no fueron ingresados praa tener mejor control.
 Ver si por cada producto se puede detallar si es una compra de gasto, de inventario o de servicios , porque puede existir compras combinadas y para reportes seria bueno tener bien clasificado
+Cambiar el tamanio de enteros de los valores a 12 unidades

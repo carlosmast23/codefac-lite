@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
@@ -40,6 +41,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComponent;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -56,6 +58,14 @@ import net.sf.jasperreports.engine.JasperReport;
  */
 public class RetencionReporteModel extends RetencionReportePanel {
 
+    private Map<String,BigDecimal> mapSumatoriaRetencionIva=new HashMap<String,BigDecimal>();
+    private Map<String,BigDecimal> mapSumatoriaRetencionRenta=new HashMap<String,BigDecimal>();
+    
+    /**
+     * Carga los tipos de retencion definida por el SRI
+     */
+    private Map<String,SriRetencion> mapTipoRetencion;
+    
     private Persona proveedor = null;
     SriRetencionIva sriRetencionIva = null;
     SriRetencionRenta sriRetencionRenta = null;
@@ -80,218 +90,53 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        getCmbTipo().addItem("IVA");
-        getCmbTipo().addItem("RENTA");
-
-        getDateFechaInicio().setDate(fechaInicioMes(hoy()));
-        getDateFechaFin().setDate(hoy());
-
-        getChkTodos().setSelected(true);
-        if (getChkTodos().isSelected()) {
-            proveedor = null;
-            getTxtProveedor().setText("...");
-            getBtnBuscarProveedor().setEnabled(false);
-        }
-
-        getChkTodos().addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                    proveedor = null;
-                    getTxtProveedor().setText("...");
-                    getBtnBuscarProveedor().setEnabled(false);
-                } else {
-                    getBtnBuscarProveedor().setEnabled(true);
+        variablesIniciales();
+        listenerCheckBox();
+        listenerBotones();
+    }
+    
+    private void construirMapSumatorias()
+    {
+        mapSumatoriaRetencionIva=new HashMap<String,BigDecimal>();
+        mapSumatoriaRetencionRenta=new HashMap<String,BigDecimal>();
+        
+        for (RetencionDetalle retencionDetalle : dataretencion) 
+        {
+            //Sumar para los totales del iva
+            if(mapTipoRetencion.get(retencionDetalle.getCodigoSri()).getNombre().equals("IVA"))
+            {
+                if(mapSumatoriaRetencionIva.get(retencionDetalle.getCodigoRetencionSri())==null)
+                {
+                    BigDecimal valor=retencionDetalle.getValorRetenido();
+                    mapSumatoriaRetencionIva.put(retencionDetalle.getCodigoRetencionSri(),valor);
+                }
+                else
+                {
+                    BigDecimal valor=mapSumatoriaRetencionIva.get(retencionDetalle.getCodigoRetencionSri());
+                    valor=valor.add(retencionDetalle.getValorRetenido());
+                    mapSumatoriaRetencionIva.put(retencionDetalle.getCodigoRetencionSri(),valor);
                 }
             }
-        });
-
-        getChkTodosIva().setSelected(true);
-        if (getChkTodosIva().isSelected()) {
-            sriRetencionIva = null;
-            banderaIva = true;
-            getCmbRetencionIva().setEnabled(false);
-        }
-
-        getChkTodosIva().addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                    sriRetencionIva = null;
-                    banderaIva = true;
-                    getCmbRetencionIva().setEnabled(false);
-                } else {
-                    banderaIva = false;
-                    getCmbRetencionIva().setEnabled(true);
+            else
+            {
+                //Sumar para los totales de la renta
+                if(mapTipoRetencion.get(retencionDetalle.getCodigoSri()).getNombre().equals("RENTA"))
+                {
+                    if (mapSumatoriaRetencionRenta.get(retencionDetalle.getCodigoRetencionSri()) == null) 
+                    {
+                        BigDecimal valor = retencionDetalle.getValorRetenido();
+                        mapSumatoriaRetencionRenta.put(retencionDetalle.getCodigoRetencionSri(), valor);
+                    } else 
+                    {
+                        BigDecimal valor = mapSumatoriaRetencionRenta.get(retencionDetalle.getCodigoRetencionSri());
+                        valor = valor.add(retencionDetalle.getValorRetenido());
+                        mapSumatoriaRetencionRenta.put(retencionDetalle.getCodigoRetencionSri(), valor);
+                    }
+                    
                 }
+                    
             }
-        });
-
-        getChkTodosRenta().setSelected(true);
-        if (getChkTodosRenta().isSelected()) {
-            sriRetencionRenta = null;
-            banderaRenta = true;
-            getCmbRetencionRenta().setEnabled(false);
         }
-
-        getChkTodosRenta().addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                    sriRetencionRenta = null;
-                    banderaRenta = true;
-                    getCmbRetencionRenta().setEnabled(false);
-                } else {
-                    banderaRenta = false;
-                    getCmbRetencionRenta().setEnabled(true);
-                }
-            }
-        });
-
-        getChkTodosTipo().setSelected(true);
-        if (getChkTodosTipo().isSelected()) {
-            banderaTipo = true;
-            getCmbTipo().setEnabled(false);
-        }
-
-        getChkTodosTipo().addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                    banderaTipo = true;
-                    getCmbTipo().setEnabled(false);
-                } else {
-                    banderaTipo = false;
-                    getCmbTipo().setEnabled(true);
-                }
-            }
-        });
-
-        //Agregar los tipos de retencion Iva
-        getCmbRetencionIva().removeAllItems();
-        SriRetencionIvaServiceIf sriRetencionIvaService = ServiceFactory.getFactory().getSriRetencionIvaServiceIf();
-        try {
-            List<SriRetencionIva> tipoRetencionesIva = sriRetencionIvaService.obtenerTodos();
-            for (SriRetencionIva tipoRetencione : tipoRetencionesIva) {
-                getCmbRetencionIva().addItem(tipoRetencione);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //Agregar los tipos de retencion Renta
-        getCmbRetencionRenta().removeAllItems();
-        SriRetencionRentaServiceIf sriRetencionRentaService = ServiceFactory.getFactory().getSriRetencionRentaServiceIf();
-        try {
-            List<SriRetencionRenta> tipoRetencionesRenta = sriRetencionRentaService.obtenerTodos();
-            for (SriRetencionRenta sriRetencionRenta : tipoRetencionesRenta) {
-                getCmbRetencionRenta().addItem(sriRetencionRenta);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        getBtnBuscarProveedor().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
-                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
-                buscarDialogoModel.setVisible(true);
-                proveedor = (Persona) buscarDialogoModel.getResultado();
-                if (proveedor != null) {
-                    String identificacion = proveedor.getIdentificacion();
-                    String nombre = proveedor.getRazonSocial();
-                    getTxtProveedor().setText(identificacion + " - " + nombre);
-                }
-            }
-        });
-
-        getBtnBuscar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    if (getDateFechaInicio().getDate() != null) {
-                        fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
-                    }
-                    if (getDateFechaFin().getDate() != null) {
-                        fechaFin = new Date(getDateFechaFin().getDate().getTime());
-                    }
-                    if (banderaIva == false) {
-                        sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
-                    }
-                    if (banderaRenta == false) {
-                        sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
-                    }
-
-                    String tipo = "";
-                    if (banderaTipo == true) {
-                        tipo = null;
-                    } else {
-                        tipo = getCmbTipo().getSelectedItem().toString();
-                    }
-
-                    Vector<String> titulo = new Vector<>();
-                    titulo.add("Proveedor");
-                    titulo.add("Preimpreso");
-                    titulo.add("Base imponble");
-                    titulo.add("Porcentaje");
-                    titulo.add("Código");
-                    titulo.add("Valor");
-
-                    DefaultTableModel modeloTablaRetenciones = new DefaultTableModel(titulo, 0);
-
-                    RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
-                    dataretencion = fs.obtenerRetencionesReporte(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, tipo);
-                    for (RetencionDetalle retencion : dataretencion) {
-                        Vector<String> fila = new Vector<String>();
-                        fila.add(retencion.getRetencion().getProveedor().getRazonSocial());
-                        fila.add(retencion.getRetencion().getCompra().getPreimpreso());
-                        fila.add(retencion.getBaseImponible().toString());
-                        fila.add(retencion.getPorcentajeRetener().toString() + " %");
-                        fila.add(retencion.getCodigoRetencionSri());
-                        fila.add(retencion.getValorRetenido().toString());
-
-                        modeloTablaRetenciones.addRow(fila);
-
-                    }
-                    getTblRetenciones().setModel(modeloTablaRetenciones);
-
-                    Vector<String> titulo2 = new Vector<>();
-                    titulo2.add("Código");
-                    titulo2.add("Valor");
-                    DefaultTableModel modeloTablaRetIva = new DefaultTableModel(titulo2, 0);
-                    List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "2");
-                    for (Object[] obj : dataRetencionCodigo) {
-                        Vector<String> fila = new Vector<String>();
-                        String r = (String) obj[0];
-                        BigDecimal valor = (BigDecimal) obj[1];
-                        fila.add(r);
-                        fila.add(valor.toString());
-                        modeloTablaRetIva.addRow(fila);
-                    }
-                    getTblRetIva().setModel(modeloTablaRetIva);
-
-                    Vector<String> titulo3 = new Vector<>();
-                    titulo3.add("Código");
-                    titulo3.add("Valor");
-                    DefaultTableModel modeloTablaRetRenta = new DefaultTableModel(titulo3, 0);
-                    List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "1");
-                    for (Object[] obj : dataRetencionCodigoRenta) {
-                        Vector<String> fila = new Vector<String>();
-                        String r = (String) obj[0];
-                        BigDecimal valor = (BigDecimal) obj[1];
-                        fila.add(r);
-                        fila.add(valor.toString());
-                        modeloTablaRetRenta.addRow(fila);
-                    }
-                    getTblRetRenta().setModel(modeloTablaRetRenta);
-
-                } catch (RemoteException ex) {
-                    Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
-        });
     }
 
     @Override
@@ -340,7 +185,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
             InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_retenciones.jrxml");
             RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
-            dataretencion = fs.obtenerRetencionesReporte(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, tipo);
+            dataretencion = fs.obtenerRetencionesReportes(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, null);
             List<ReporteRetencionesData> data = new ArrayList<ReporteRetencionesData>();
             for (RetencionDetalle retencion : dataretencion) {
                 data.add(new ReporteRetencionesData(
@@ -440,7 +285,41 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+
+        getDateFechaInicio().setDate(fechaInicioMes(hoy()));
+        getDateFechaFin().setDate(hoy());
+
+        getChkTodos().setSelected(true);
+        if (getChkTodos().isSelected()) {
+            proveedor = null;
+            getTxtProveedor().setText("...");
+            getBtnBuscarProveedor().setEnabled(false);
+        }
+
+        
+
+        getChkTodosIva().setSelected(true);
+        if (getChkTodosIva().isSelected()) {
+            sriRetencionIva = null;
+            banderaIva = true;
+            getCmbRetencionIva().setEnabled(false);
+        }
+
+        
+        getChkTodosRenta().setSelected(true);
+        if (getChkTodosRenta().isSelected()) {
+            sriRetencionRenta = null;
+            banderaRenta = true;
+            getCmbRetencionRenta().setEnabled(false);
+        }
+
+        
+        getChkTodosTipo().setSelected(true);
+        if (getChkTodosTipo().isSelected()) {
+            banderaTipo = true;
+            getCmbTipo().setEnabled(false);
+        }
     }
 
 //    @Override
@@ -474,6 +353,238 @@ public class RetencionReporteModel extends RetencionReportePanel {
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void variablesIniciales() {
+        
+        //===================//Agregar los tipos de retencion Iva//==========================//
+        getCmbRetencionIva().removeAllItems();
+        SriRetencionIvaServiceIf sriRetencionIvaService = ServiceFactory.getFactory().getSriRetencionIvaServiceIf();
+        try {
+            List<SriRetencionIva> tipoRetencionesIva = sriRetencionIvaService.obtenerTodosOrdenadoPorCodigo();
+            for (SriRetencionIva tipoRetencione : tipoRetencionesIva) {
+                getCmbRetencionIva().addItem(tipoRetencione);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //==================/Agregar los tipos de retencion Renta/===================//
+        getCmbRetencionRenta().removeAllItems();
+        SriRetencionRentaServiceIf sriRetencionRentaService = ServiceFactory.getFactory().getSriRetencionRentaServiceIf();
+        try {
+            List<SriRetencionRenta> tipoRetencionesRenta = sriRetencionRentaService.obtenerTodosOrdenadoPorCodigo();
+            for (SriRetencionRenta sriRetencionRenta : tipoRetencionesRenta) {
+                getCmbRetencionRenta().addItem(sriRetencionRenta);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        //================/ CARGAR LOS TIPOS DE RETENCIONES PARA CLASIFICAR /=============//
+        try {
+            getCmbTipo().removeAllItems();
+            mapTipoRetencion=new HashMap<String,SriRetencion>();
+            List<SriRetencion> retenecionesTipo=ServiceFactory.getFactory().getSriRetencionServiceIf().obtenerTodos();
+            for (SriRetencion sriRetencion : retenecionesTipo) {
+                mapTipoRetencion.put(sriRetencion.getCodigo(),sriRetencion);
+                getCmbTipo().addItem(sriRetencion);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //============/ Agregar los valores de tipo de retenciones que puede manejas /==============//
+        
+    }
+
+    private void listenerCheckBox() {
+        getChkTodos().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    proveedor = null;
+                    getTxtProveedor().setText("...");
+                    getBtnBuscarProveedor().setEnabled(false);
+                } else {
+                    getBtnBuscarProveedor().setEnabled(true);
+                }
+            }
+        });
+        
+        getChkTodosIva().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    sriRetencionIva = null;
+                    banderaIva = true;
+                    getCmbRetencionIva().setEnabled(false);
+                } else {
+                    banderaIva = false;
+                    getCmbRetencionIva().setEnabled(true);
+                }
+            }
+        });
+        
+        getChkTodosRenta().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    sriRetencionRenta = null;
+                    banderaRenta = true;
+                    getCmbRetencionRenta().setEnabled(false);
+                } else {
+                    banderaRenta = false;
+                    getCmbRetencionRenta().setEnabled(true);
+                }
+            }
+        });
+        
+        getChkTodosTipo().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    banderaTipo = true;
+                    getCmbTipo().setEnabled(false);
+                } else {
+                    banderaTipo = false;
+                    getCmbTipo().setEnabled(true);
+                }
+            }
+        });
+    }
+    
+    
+    private void construirTablaTotalesRenta()
+    {       
+        Vector<String> titulo3 = new Vector<>();
+        titulo3.add("Código");
+        titulo3.add("Valor");
+        DefaultTableModel modeloTablaRetRenta = new DefaultTableModel(titulo3, 0);
+        //List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "1");
+        for (Map.Entry<String, BigDecimal> entry : mapSumatoriaRetencionRenta.entrySet()) {
+            String key = entry.getKey();
+            BigDecimal value = entry.getValue();
+            
+            Vector<String> fila = new Vector<String>();            
+            fila.add(key);
+            fila.add(value.toString());
+            
+            modeloTablaRetRenta.addRow(fila);
+        }
+            
+        getTblRetRenta().setModel(modeloTablaRetRenta);
+
+    }
+    
+    private void construirTablaTotalesIva()
+    {
+        
+        Vector<String> titulo2 = new Vector<>();
+        titulo2.add("Código");
+        titulo2.add("Valor");
+        DefaultTableModel modeloTablaRetIva = new DefaultTableModel(titulo2, 0);
+        //List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "2");
+        for (Map.Entry<String, BigDecimal> entry : mapSumatoriaRetencionIva.entrySet()) {
+            String key = entry.getKey();
+            BigDecimal value = entry.getValue();
+            
+            Vector<String> fila = new Vector<String>();            
+            fila.add(key);
+            fila.add(value.toString());
+            modeloTablaRetIva.addRow(fila);
+            
+        }
+        getTblRetIva().setModel(modeloTablaRetIva);
+    }
+    
+    private void construirTablaRetenciones()
+    {
+        Vector<String> titulo = new Vector<>();
+        titulo.add("Proveedor");
+        titulo.add("Fecha");
+        titulo.add("Tipo");
+        titulo.add("Preimpreso");
+        titulo.add("Base imponble");
+        titulo.add("Porcentaje");
+        titulo.add("Código");
+        titulo.add("Valor");
+        
+        DefaultTableModel modeloTablaRetenciones = new DefaultTableModel(titulo, 0);
+        
+        for (RetencionDetalle retencion : dataretencion) {
+            Vector<String> fila = new Vector<String>();
+            fila.add(retencion.getRetencion().getRazonSocial());
+            fila.add(retencion.getRetencion().getFechaEmision().toString());
+            fila.add(mapTipoRetencion.get(retencion.getCodigoSri()).getNombre());
+            fila.add(retencion.getRetencion().getPreimpresoDocumento());
+            fila.add(retencion.getBaseImponible().toString());
+            fila.add(retencion.getPorcentajeRetener().toString() + " %");
+            fila.add(retencion.getCodigoRetencionSri());
+            fila.add(retencion.getValorRetenido().toString());
+
+            modeloTablaRetenciones.addRow(fila);
+
+        }
+        
+        getTblRetenciones().setModel(modeloTablaRetenciones);
+        
+    }
+
+    private void listenerBotones() {
+        getBtnBuscarProveedor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                proveedor = (Persona) buscarDialogoModel.getResultado();
+                if (proveedor != null) {
+                    String identificacion = proveedor.getIdentificacion();
+                    String nombre = proveedor.getRazonSocial();
+                    getTxtProveedor().setText(identificacion + " - " + nombre);
+                }
+            }
+        });
+
+        getBtnBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (getDateFechaInicio().getDate() != null) {
+                        fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
+                    }
+                    if (getDateFechaFin().getDate() != null) {
+                        fechaFin = new Date(getDateFechaFin().getDate().getTime());
+                    }
+                    if (banderaIva == false) {
+                        sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
+                    }
+                    if (banderaRenta == false) {
+                        sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+                    }
+
+                    SriRetencion sriRetencion = null;
+                    if (banderaTipo == true) {
+                        sriRetencion = null;
+                    } else {
+                        sriRetencion = (SriRetencion) getCmbTipo().getSelectedItem();
+                    }
+
+                    RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
+                    dataretencion = fs.obtenerRetencionesReportes(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, sriRetencion);
+                    construirMapSumatorias();
+                    
+                    construirTablaRetenciones();
+                    construirTablaTotalesIva();
+                    construirTablaTotalesRenta();
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        });
     }
 
 }

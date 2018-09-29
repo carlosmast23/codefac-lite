@@ -8,8 +8,10 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
 
@@ -19,7 +21,7 @@ import java.util.List;
  */
 public interface RetencionServiceIf extends ServiceAbstractIf<Retencion> {
 
-    public List<RetencionDetalle> obtenerRetencionesReporte(Persona persona, Date fi, Date ff, SriRetencionIva iva,SriRetencionRenta renta,String tipo) throws java.rmi.RemoteException;
-    public List<Object[]> obtenerRetencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva,SriRetencionRenta renta,String tipo) throws java.rmi.RemoteException;
+   public List<Object[]> obtenerRetencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva,SriRetencionRenta renta,String tipo) throws java.rmi.RemoteException;
+   public List<RetencionDetalle> obtenerRetencionesReportes(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion) throws RemoteException;
 
 }

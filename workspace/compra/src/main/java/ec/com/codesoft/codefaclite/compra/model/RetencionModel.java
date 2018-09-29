@@ -121,9 +121,11 @@ public class RetencionModel extends RetencionPanel{
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error","Error al grabar los datos",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite("error");
         } catch (RemoteException ex) {
             DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite("error");
         }
     }
     
