@@ -5,6 +5,9 @@ import ec.com.codesoft.codefaclite.compra.panel.RetencionReportePanel;
 import ec.com.codesoft.codefaclite.compra.reportdata.ReporteRetencionesData;
 import ec.com.codesoft.codefaclite.compra.reportdata.ValorRetencionesData;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
@@ -163,33 +166,14 @@ public class RetencionReporteModel extends RetencionReportePanel {
     public void imprimir() {
 
         try {
-            if (getDateFechaInicio().getDate() != null) {
-                fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
-            }
-            if (getDateFechaFin().getDate() != null) {
-                fechaFin = new Date(getDateFechaFin().getDate().getTime());
-            }
-            if (banderaIva == false) {
-                sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
-            }
-            if (banderaRenta == false) {
-                sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
-            }
-
-            String tipo = "";
-            if (banderaTipo == true) {
-                tipo = null;
-            } else {
-                tipo = getCmbTipo().getSelectedItem().toString();
-            }
-
+           
             InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_retenciones.jrxml");
-            RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
-            dataretencion = fs.obtenerRetencionesReportes(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, null);
+            
+            //Llenar la informacion con los datos consultados para 
             List<ReporteRetencionesData> data = new ArrayList<ReporteRetencionesData>();
             for (RetencionDetalle retencion : dataretencion) {
                 data.add(new ReporteRetencionesData(
-                        retencion.getRetencion().getCompra().getPreimpreso(),
+                        retencion.getRetencion().getPreimpresoDocumentoFormato(),
                         retencion.getBaseImponible().toString(),
                         retencion.getPorcentajeRetener().toString() + " %",
                         retencion.getCodigoRetencionSri(),
@@ -197,26 +181,33 @@ public class RetencionReporteModel extends RetencionReportePanel {
                 ));
             }
 
-            List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "2");
+            //List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "2");
+            
             List<ValorRetencionesData> datavc = new ArrayList<ValorRetencionesData>();
-            for (Object[] obj : dataRetencionCodigo) {
-                String r = (String) obj[0];
-                BigDecimal valor = (BigDecimal) obj[1];
+            
+            for (Map.Entry<String, BigDecimal> entry : mapSumatoriaRetencionRenta.entrySet()) {
+                String key = entry.getKey();
+                BigDecimal value = entry.getValue();
+                
                 datavc.add(new ValorRetencionesData(
-                        r, valor.toString()
+                        key, value.toString()
                 ));
+                
             }
-
-            List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "1");
+            
+           
             List<ValorRetencionesData> datav = new ArrayList<ValorRetencionesData>();
-            for (Object[] obj : dataRetencionCodigoRenta) {
-                String r = (String) obj[0];
-                BigDecimal valor = (BigDecimal) obj[1];
-                datav.add(new ValorRetencionesData(
-                        r, valor.toString()
-                ));
-            }
+            
+            for (Map.Entry<String, BigDecimal> entry : mapSumatoriaRetencionIva.entrySet()) {
+                String key = entry.getKey();
+                BigDecimal value = entry.getValue();
 
+                datav.add(new ValorRetencionesData(
+                        key, value.toString()
+                ));
+
+            }
+            
             RecursosServiceIf service = ServiceFactory.getFactory().getRecursosServiceIf();
             InputStream pathSubReporte = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPRA, "subreporte_retencion.jrxml"));
             JasperReport reportPiePagina = JasperCompileManager.compileReport(pathSubReporte);
@@ -261,7 +252,30 @@ public class RetencionReporteModel extends RetencionReportePanel {
             parameters.put("fechafin", formatDate(fechaFin, "yyyy-MM-dd"));
             parameters.put("listaIva", datavc);
             parameters.put("listaRenta", datav);
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte de retenciones");
+            //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte de retenciones");
+            
+            
+            DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try{
+                        Excel excel = new Excel();
+                        String nombreCabeceras[] = {"Preimpreso", "Base Imponible","Porcentaje", "Código", "Valor"};
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                        excel.abrirDocumento();
+                    }
+                    catch(Exception exc)
+                    {
+                        exc.printStackTrace();
+                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }  
+                }
+
+                @Override
+                public void pdf() {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Clientes ");                    
+                }
+            });
 
         } catch (RemoteException ex) {
             Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -517,7 +531,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
             fila.add(retencion.getRetencion().getRazonSocial());
             fila.add(retencion.getRetencion().getFechaEmision().toString());
             fila.add(mapTipoRetencion.get(retencion.getCodigoSri()).getNombre());
-            fila.add(retencion.getRetencion().getPreimpresoDocumento());
+            fila.add(retencion.getRetencion().getPreimpresoDocumentoFormato());
             fila.add(retencion.getBaseImponible().toString());
             fila.add(retencion.getPorcentajeRetener().toString() + " %");
             fila.add(retencion.getCodigoRetencionSri());

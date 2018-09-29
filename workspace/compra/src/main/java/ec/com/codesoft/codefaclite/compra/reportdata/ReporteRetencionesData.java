@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author CodesoftDesarrollo
  */
-public class ReporteRetencionesData  {
+public class ReporteRetencionesData implements ExcelDatosInterface{
 
     private String preimpresoRetencion;
     private String baseRetencion;
@@ -75,16 +75,21 @@ public class ReporteRetencionesData  {
 
     
     
-  /*  @Override
+    @Override
     public List<TipoDato> getDatos() {
 
         List<TipoDato> datos = new ArrayList<>();
         datos.add(new TipoDato(this.preimpresoRetencion, Excel.TipoDataEnum.TEXTO));
-        datos.add(new TipoDato(this.baseRetencion, Excel.TipoDataEnum.TEXTO));
+        datos.add(new TipoDato(this.baseRetencion, Excel.TipoDataEnum.NUMERO));
         datos.add(new TipoDato(this.porcentajeRetencion, Excel.TipoDataEnum.TEXTO));
         datos.add(new TipoDato(this.codigoRetencion, Excel.TipoDataEnum.TEXTO));
-        datos.add(new TipoDato(this.valorRetencion, Excel.TipoDataEnum.TEXTO));
+        datos.add(new TipoDato(this.valorRetencion, Excel.TipoDataEnum.NUMERO));
         return datos;
     }
-*/
+
+
+    /*@Override
+    public List<TipoDato> getDatos() {
+        
+    }*/
 }

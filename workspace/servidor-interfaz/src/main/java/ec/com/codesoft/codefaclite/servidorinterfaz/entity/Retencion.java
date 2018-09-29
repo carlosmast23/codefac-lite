@@ -288,6 +288,20 @@ public class Retencion extends ComprobanteEntity implements Serializable {
         this.detalles.add(DetalleRetencion);
 
     }
+    
+    /**
+     * Obtiene el preimpreso del documento pero con formato con lineas medias
+     * @return 
+     */
+    public String getPreimpresoDocumentoFormato()
+    {
+        String formatoPreimpreso="";
+        if(preimpresoDocumento!=null && !preimpresoDocumento.isEmpty())
+        {
+            formatoPreimpreso=preimpresoDocumento.substring(0, 3)+"-"+preimpresoDocumento.substring(3,6)+"-"+preimpresoDocumento.substring(6);
+        }
+        return formatoPreimpreso;
+    }
 
     public String getPeriodoFiscal() {
         return UtilidadesFecha.obtenerMesStr(fechaEmision) + "/" + UtilidadesFecha.obtenerAnioStr(fechaEmision);

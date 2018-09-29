@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_retenciones" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3427f0d5-5413-4d72-9b07-663b8c826977">
-	<property name="ireport.zoom" value="1.7684607682500024"/>
+	<property name="ireport.zoom" value="2.5892034107948354"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="170"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -225,7 +225,7 @@
 				<text><![CDATA[Base imponible]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="405" y="1" width="60" height="13" uuid="8929f0ad-7428-4824-8967-13fc8ae269db"/>
+				<reportElement x="405" y="1" width="61" height="13" uuid="8929f0ad-7428-4824-8967-13fc8ae269db"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -255,9 +255,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="14" splitType="Stretch">
+		<band height="12" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="231" height="12" uuid="f38daf67-1ec1-4176-b60f-60122a62c53c"/>
+				<reportElement x="0" y="0" width="234" height="12" uuid="f38daf67-1ec1-4176-b60f-60122a62c53c"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -299,7 +299,7 @@
 				<textFieldExpression><![CDATA[$F{porcentajeRetencion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="405" y="0" width="60" height="12" uuid="f76fd555-2742-4f49-bfdd-5f694955fb27"/>
+				<reportElement x="405" y="0" width="61" height="12" uuid="f76fd555-2742-4f49-bfdd-5f694955fb27"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -331,46 +331,46 @@
 	<columnFooter>
 		<band height="107">
 			<subreport>
-				<reportElement x="2" y="30" width="229" height="14" uuid="399a9fbb-5b86-436c-927f-f752382d8926"/>
+				<reportElement x="2" y="37" width="230" height="14" uuid="399a9fbb-5b86-436c-927f-f752382d8926"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaIva})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORTE_RUTA}]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="2" y="2" width="230" height="12" uuid="7f3b5801-41c9-4337-aff6-e59bec3654ba"/>
+				<reportElement x="2" y="10" width="230" height="15" uuid="7f3b5801-41c9-4337-aff6-e59bec3654ba"/>
 				<box>
 					<pen lineWidth="0.25"/>
-					<topPen lineWidth="0.25"/>
-					<leftPen lineWidth="0.25"/>
-					<bottomPen lineWidth="0.25"/>
-					<rightPen lineWidth="0.25"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[IVA]]></text>
+				<text><![CDATA[Sumataria Rentención Iva]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="323" y="1" width="230" height="12" uuid="e9b63230-b278-43c9-825a-f236e33133b2"/>
+				<reportElement x="323" y="9" width="230" height="15" uuid="e9b63230-b278-43c9-825a-f236e33133b2"/>
 				<box>
 					<pen lineWidth="0.25"/>
-					<topPen lineWidth="0.25"/>
-					<leftPen lineWidth="0.25"/>
-					<bottomPen lineWidth="0.25"/>
-					<rightPen lineWidth="0.25"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[RENTA]]></text>
+				<text><![CDATA[Sumatoria Rentención Renta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="14" width="115" height="12" uuid="e6150b55-ff77-4922-9c8b-a45fea821da6"/>
+				<reportElement x="2" y="25" width="115" height="12" uuid="e6150b55-ff77-4922-9c8b-a45fea821da6"/>
 				<box>
-					<pen lineWidth="0.25"/>
-					<topPen lineWidth="0.25"/>
-					<leftPen lineWidth="0.25"/>
-					<bottomPen lineWidth="0.25"/>
-					<rightPen lineWidth="0.25"/>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -378,13 +378,13 @@
 				<text><![CDATA[CÓDIGO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="117" y="14" width="115" height="12" uuid="e0d0d6a6-f38a-44ee-8c80-d2e8a6fb2717"/>
+				<reportElement x="117" y="25" width="115" height="12" uuid="e0d0d6a6-f38a-44ee-8c80-d2e8a6fb2717"/>
 				<box>
-					<pen lineWidth="0.25"/>
-					<topPen lineWidth="0.25"/>
-					<leftPen lineWidth="0.25"/>
-					<bottomPen lineWidth="0.25"/>
-					<rightPen lineWidth="0.25"/>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -392,13 +392,13 @@
 				<text><![CDATA[VALOR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="438" y="14" width="115" height="12" uuid="f2c3ae74-37ba-4a06-a2a7-bce35b4caba9"/>
+				<reportElement x="438" y="24" width="115" height="12" uuid="f2c3ae74-37ba-4a06-a2a7-bce35b4caba9"/>
 				<box>
 					<pen lineWidth="0.25"/>
-					<topPen lineWidth="0.25"/>
-					<leftPen lineWidth="0.25"/>
-					<bottomPen lineWidth="0.25"/>
-					<rightPen lineWidth="0.25"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -406,13 +406,13 @@
 				<text><![CDATA[VALOR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="323" y="14" width="115" height="12" uuid="3b917d24-bb7c-41be-a9ca-7cc585b37af6"/>
+				<reportElement x="323" y="24" width="115" height="12" uuid="3b917d24-bb7c-41be-a9ca-7cc585b37af6"/>
 				<box>
 					<pen lineWidth="0.25"/>
-					<topPen lineWidth="0.25"/>
-					<leftPen lineWidth="0.25"/>
-					<bottomPen lineWidth="0.25"/>
-					<rightPen lineWidth="0.25"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -420,7 +420,7 @@
 				<text><![CDATA[CÓDIGO]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="323" y="30" width="230" height="13" uuid="88a2af9c-c4d7-41a6-84d0-44c3d15df7e3"/>
+				<reportElement x="323" y="36" width="230" height="13" uuid="88a2af9c-c4d7-41a6-84d0-44c3d15df7e3"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaRenta})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORTE_RUTA_RENTA}]]></subreportExpression>
 			</subreport>
