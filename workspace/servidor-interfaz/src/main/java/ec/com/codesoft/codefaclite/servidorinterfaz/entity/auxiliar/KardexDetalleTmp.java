@@ -29,6 +29,9 @@ public class KardexDetalleTmp extends KardexDetalle implements Serializable{
         kardexDetalle.setPrecioTotal(this.getPrecioTotal());
         kardexDetalle.setPrecioUnitario(this.getPrecioUnitario());
         kardexDetalle.setReferenciaDocumentoId(this.getReferenciaDocumentoId());
+        kardexDetalle.setSecuencial(this.getSecuencial());
+        kardexDetalle.setPuntoEstablecimiento(this.getPuntoEstablecimiento());
+        kardexDetalle.setPuntoEmision(this.getPuntoEmision());
         
         if(getDetallesEspecificos()!=null)
         {

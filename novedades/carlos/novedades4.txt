@@ -89,3 +89,4 @@ Crear una pantalla para poder ingresar documentos de otros tipos para el inventa
 Ver si agregar un campo en los detalles de la compra para ver si algunos productos no fueron ingresados praa tener mejor control.
 Ver si por cada producto se puede detallar si es una compra de gasto, de inventario o de servicios , porque puede existir compras combinadas y para reportes seria bueno tener bien clasificado
 Cambiar el tamanio de enteros de los valores a 12 unidades
+En las retenciones al momento de eliminar si tiene ligado una compra restaurar el 

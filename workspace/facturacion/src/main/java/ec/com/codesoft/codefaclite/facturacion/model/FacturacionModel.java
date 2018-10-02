@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
@@ -965,6 +966,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Eliminar solo si esta en modo editar
         if (estadoFormulario.equals(ESTADO_EDITAR)) {
             if (factura != null) {
+                
+                //Verificar que la factura no tenga notas de credito aplicando porque no podria eliminar si se da esta condicion
+                if(!factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.SIN_ANULAR))
+                {
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.FacturasMensajes.ERROR_ELIMINAR_AFECTA_NOTA_CREDITO);
+                    throw new ExcepcionCodefacLite("error");
+                }
+                
+                
                 //Eliminar solo si el estado esta en sin autorizar, o esta en el modo de facturacion normal y esta con estado facturado
                 if (factura.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado()) || 
                         (factura.getTipoFacturacion().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()) && factura.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado()) )) {

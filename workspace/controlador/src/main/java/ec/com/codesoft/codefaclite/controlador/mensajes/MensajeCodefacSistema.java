@@ -25,6 +25,11 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj NO_PERMITE_EDITAR = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La pantalla no permite modificaciones",DialogoCodefac.MENSAJE_INCORRECTO);
     }
     
+    public static abstract class FacturasMensajes
+    {
+        public static final CodefacMsj ERROR_ELIMINAR_AFECTA_NOTA_CREDITO = new CodefacMsj(CodefacMsj.TITULO_ERROR,"La Factura no se puede eliminar porque hay una nota de credito que le afecta",DialogoCodefac.MENSAJE_INCORRECTO);
+    }
+    
     public static abstract  class ErrorComunicacion
     {
         public static final CodefacMsj ERROR_COMUNICACION_SERVIDOR = new CodefacMsj(CodefacMsj.TITULO_ERROR,"Erro de comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
