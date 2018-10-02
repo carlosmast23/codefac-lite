@@ -49,7 +49,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
 
         try {
-            String queryString = "SELECT u FROM Factura u WHERE " + cliente + fecha + estadoFactura +" ORDER BY u.secuencial asc";
+            String queryString = "SELECT u FROM Factura u WHERE " + cliente + fecha + estadoFactura +" ORDER BY u.secuencial+0 asc";
             Query query = getEntityManager().createQuery(queryString);
             //System.err.println("QUERY--->"+query.toString());
             if (persona != null) {

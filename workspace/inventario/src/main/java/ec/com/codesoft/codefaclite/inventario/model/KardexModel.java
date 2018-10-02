@@ -208,6 +208,9 @@ public class KardexModel extends KardexPanel{
                     {
                         kardex=resultados.get(0);
                         cargarTablaKardex();
+                        UtilidadesTablas.ubicarFinalTabla(getTblKardexDetalle());
+                        //getTblKardexDetalle().scrollRectToVisible(getTblKardexDetalle().getCellRect(getTblKardexDetalle().getRowCount()-1,0, true));
+                        //get.scrollRectToVisible(table.getCellRect(table.getRowCount()-1, 0, true));
                     }
                 } catch (RemoteException ex) {
                     Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);

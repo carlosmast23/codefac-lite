@@ -292,7 +292,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         NotaCreditoService servicioNotaCredito=new NotaCreditoService();
                         for (FacturaDetalle detalle : factura.getDetalles()) {
                             //Anulo los datos segun el tipo de modulo relacionado
-                            servicioNotaCredito.anularProcesoFactura(detalle.getTipoDocumentoEnum(),detalle.getReferenciaId(),detalle.getTotal());
+                            //servicioNotaCredito.anularProcesoFactura(detalle.getTipoDocumentoEnum(),detalle.getReferenciaId(),detalle.getTotal());
+                            servicioNotaCredito.anularProcesoFactura(detalle);
                         }
                         
                     } catch (RemoteException ex) {

@@ -240,6 +240,10 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         List<CompraDetalle> detalles=compraInventario.getDetalles();
         for (CompraDetalle detalle : detalles) {
             KardexDetalleTmp kardexDetalle = new KardexDetalleTmp();
+            kardexDetalle.setPuntoEstablecimiento(compraInventario.getPuntoEstablecimiento());
+            kardexDetalle.setPuntoEmision(compraInventario.getPuntoEmision());
+            kardexDetalle.setSecuencial(compraInventario.getSecuencial());
+            
             kardexDetalle.setCantidad(detalle.getCantidad());
             kardexDetalle.setCodigoTipoDocumento(compraInventario.getCodigoTipoDocumento());
             kardexDetalle.setReferenciaDocumentoId(compraInventario.getId());

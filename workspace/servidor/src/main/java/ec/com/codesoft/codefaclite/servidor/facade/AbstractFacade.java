@@ -249,6 +249,7 @@ public abstract class AbstractFacade<T>
     
     
     public static List<Object> findStaticDialog(String queryStr,Map<Integer,Object> map,int limiteMinimo,int limiteMaximo) {
+        System.out.println("[Dialog]"+queryStr);
         Query query = entityManager.createQuery(queryStr);
         //Agregar los parametros del map al query
         for (Map.Entry<Integer, Object> entry : map.entrySet()) {

@@ -167,6 +167,15 @@ public abstract class UtilidadesTablas {
         jTable.getColumnModel().getColumn(columna).setCellEditor(new DefaultCellEditor(jCheckBox));
     }
     
+    /**
+     * Funcion que ubica el cursor al final de la tabla
+     * @param jtable 
+     */
+    public static void ubicarFinalTabla(JTable jtable)
+    {
+        jtable.scrollRectToVisible(jtable.getCellRect(jtable.getRowCount()-1,0, true));
+    }
+    
     public static void cambiarTamanioColumnas(JTable table , Integer[] valoresColumnas)
     {
         int total=0;

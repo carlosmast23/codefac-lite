@@ -64,7 +64,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
         queryString+=" AND (u.codigoDocumento=?3 OR  u.codigoDocumento=?4) ";
         
         queryString+="AND ( LOWER(u.cliente.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
-        queryString+=" ORDER BY u.secuencial DESC ";
+        queryString+=" ORDER BY u.secuencial+0 DESC ";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(2,filter);

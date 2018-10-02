@@ -97,6 +97,16 @@ public enum TipoDocumentoEnum {
     VENTA_INVENTARIO(ModuloCodefacEnum.INVENTARIO,
             "VEI",
             "Venta inventario",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO),
+    
+    NOTA_CREDITO_INVENTARIO(ModuloCodefacEnum.INVENTARIO,
+            "NCI",
+            "Nota Credito Inventario",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+    
+    ELIMINADO_FACTURA(ModuloCodefacEnum.INVENTARIO,
+            "ELF",
+            "Factura eliminada",
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
     
     QUITAR_MERCADERIA_MANUAL(ModuloCodefacEnum.INVENTARIO,
