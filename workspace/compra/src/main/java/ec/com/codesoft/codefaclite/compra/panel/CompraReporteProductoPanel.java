@@ -61,6 +61,7 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
         getContentPane().add(jLabel1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -114,6 +115,7 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         getContentPane().add(jScrollPane2, gridBagConstraints);
 
         cmbTipoReporte.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione busqueda", "Producto", "Proveedor" }));
@@ -130,6 +132,7 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
         getContentPane().add(jLabel2, gridBagConstraints);
 
         pack();

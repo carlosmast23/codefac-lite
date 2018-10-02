@@ -17,6 +17,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +49,7 @@ public class AulaModel extends AulaPanel {
         for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
         }
+        listenerBotones();
     }
 
     @Override
@@ -175,6 +182,31 @@ public class AulaModel extends AulaPanel {
         getTxtUbicacion().setText("" + aula.getUbicacion());
         GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(aula.getEstado());
         getCmbEstado().setSelectedItem(generalEnumEstado);
+    }
+    
+    public void listenerBotones()
+    {
+        getjButton1().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                Graphics g = getjPanel1().getGraphics();
+                float pa = 10, pb = 5, pc = 5;
+                float total = pa+pb+pc;
+                int anguloA = (int)((pa*360)/total);
+                int anguloB = (int)((pb*360)/total);
+                int anguloC = (int)((pc*360)/total);
+                g.setColor(new Color(255,0,0));
+                g.fillArc(0, 0, 301, 301, 0, anguloA);
+                g.setColor(new Color(0,255,0));
+                g.fillArc(0, 0, 301, 301, anguloA, anguloB);
+                g.setColor(new Color(0,0,255));
+                g.fillArc(0, 0, 301, 301, anguloA+anguloB, anguloC);
+                System.out.println("Hola");
+                        
+            }
+        });
+        
+      
     }
 
 }

@@ -90,7 +90,8 @@ public enum VentanaEnum {
     PERIODO_CONTABILIDAD("ec.com.codesoft.codefaclite.contabilidad.model.PeriodoModel", "PECO", "Periodo", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.PROCESOS,null),
     BALANCE_GENERAL("ec.com.codesoft.codefaclite.contabilidad.model.BalanceGeneralModel", "BAGE", "Balance General", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.REPORTES,null),
     ESTADO_RESULTADO("ec.com.codesoft.codefaclite.contabilidad.model.EstadoResultadoModel", "ESRM", "Estado Resultado", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.REPORTES,null),
-    FLUJO_EFECTIVO("ec.com.codesoft.codefaclite.contabilidad.model.FlujoEfectivoModel", "ESRM", "Flujo de Efectivo", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.REPORTES,null);
+    FLUJO_EFECTIVO("ec.com.codesoft.codefaclite.contabilidad.model.FlujoEfectivoModel", "ESRM", "Flujo de Efectivo", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.REPORTES,null),
+    REPORTE_INVENTARIO_STOCK("ec.com.codesoft.codefaclite.inventario.model.ReporteInventarioStockModel", "RIST", "Reporte Inventario", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,null);
     
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,Integer teclaAtajo) {
         this.claseNombre = clase;
