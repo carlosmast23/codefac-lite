@@ -18,12 +18,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.KardexFacade;
+import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.ObtenerFecha;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -320,6 +323,56 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         } 
     
     }
+    
+    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega) throws java.rmi.RemoteException
+    {
+        List<KardexDetalle> datosConsulta=getFacade().obtenerConsultaPorFechaFacade(fechaInicial, fechaFinal, producto, bodega);
+        //Si existe fecha de corta obtenego los saldos anteriores
+        if(fechaInicial!=null)
+        {
+            List<Object[]> saldosAnteriores=getFacade().obtenerConsultaSaldoAnterior(fechaInicial, producto, bodega);
+            
+            Integer cantidadSaldo=0;
+            BigDecimal precioUnitarioSaldo=BigDecimal.ZERO;
+            BigDecimal precioTotalSaldo=BigDecimal.ZERO;
+            
+            for (Object[] saldosAnterior : saldosAnteriores) {
+                String codigoTipoDocumento=(String) saldosAnterior[0];
+                Integer cantidad=((Long) saldosAnterior[1]).intValue();
+                BigDecimal precioUnitario=(BigDecimal) saldosAnterior[2];
+                BigDecimal precioTotal=(BigDecimal) saldosAnterior[3];
+                
+                TipoDocumentoEnum tipoDocumento=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(codigoTipoDocumento);
+                
+                if(tipoDocumento.getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO))
+                {
+                    cantidadSaldo+=cantidad;
+                    precioTotalSaldo=precioTotalSaldo.add(precioTotal);                    
+                }
+                else
+                {
+                    cantidadSaldo-=cantidad;
+                    precioTotalSaldo=precioTotalSaldo.subtract(precioTotal);
+                }
+                
+                precioUnitarioSaldo=precioTotalSaldo.divide(new BigDecimal(cantidadSaldo),2,BigDecimal.ROUND_HALF_UP);                
+            }
+            ///////////////======================> CONSTRUIR KARDEX DETALLE ADICIONAL DE LOS SALDOS <==============================//////////////////
+            KardexDetalle kardexDetalle=new KardexDetalle();
+            kardexDetalle.setCantidad(cantidadSaldo);
+            kardexDetalle.setPrecioUnitario(precioUnitarioSaldo);
+            kardexDetalle.setPrecioTotal(precioTotalSaldo);
+            kardexDetalle.setFechaCreacion(fechaInicial);
+            kardexDetalle.setFechaIngreso(fechaInicial);
+            kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.SALDO_ANTERIOR.getCodigo());
+            //kardexDetalle.set            
+            datosConsulta.add(0,kardexDetalle);            
+        }
+        return datosConsulta;
+    }
+    
+    
+    
     
 }
 

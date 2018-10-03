@@ -49,16 +49,17 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         btnConsultar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblKardexDetalle = new javax.swing.JTable();
+        jLabel11 = new javax.swing.JLabel();
+        lblTotal = new javax.swing.JLabel();
+        cmbBodega = new javax.swing.JComboBox<>();
+        lblEspacioBlanco2 = new javax.swing.JLabel();
+        jToolBar1 = new javax.swing.JToolBar();
         jLabel5 = new javax.swing.JLabel();
+        lblCantidad = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         lblPrecioPromedio = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         lblPrecioUltimo = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        lblTotal = new javax.swing.JLabel();
-        cmbBodega = new javax.swing.JComboBox<>();
-        lblCantidad = new javax.swing.JLabel();
-        lblEspacioBlanco2 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -157,50 +158,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
-        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel5.setText("Stock:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel5, gridBagConstraints);
-
-        jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel7.setText("Precio Promedio:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel7, gridBagConstraints);
-
-        lblPrecioPromedio.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblPrecioPromedio.setText("00.00");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(lblPrecioPromedio, gridBagConstraints);
-
-        jLabel9.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel9.setText("Precio Ultimo:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel9, gridBagConstraints);
-
-        lblPrecioUltimo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblPrecioUltimo.setText("00.00");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(lblPrecioUltimo, gridBagConstraints);
-
-        jLabel11.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jLabel11.setText("Total:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -209,7 +167,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel11, gridBagConstraints);
 
-        lblTotal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblTotal.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         lblTotal.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
@@ -225,14 +183,6 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbBodega, gridBagConstraints);
-
-        lblCantidad.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblCantidad.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(lblCantidad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -240,6 +190,43 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         getContentPane().add(lblEspacioBlanco2, gridBagConstraints);
+
+        jToolBar1.setRollover(true);
+
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel5.setText("Stock:");
+        jToolBar1.add(jLabel5);
+
+        lblCantidad.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
+        lblCantidad.setText("0");
+        lblCantidad.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 10));
+        jToolBar1.add(lblCantidad);
+
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel7.setText("Precio Promedio:");
+        jLabel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 50, 1, 1));
+        jToolBar1.add(jLabel7);
+
+        lblPrecioPromedio.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
+        lblPrecioPromedio.setText("00.00");
+        lblPrecioPromedio.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 10));
+        jToolBar1.add(lblPrecioPromedio);
+
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel9.setText("Precio Ultimo:");
+        jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 50, 1, 1));
+        jToolBar1.add(jLabel9);
+
+        lblPrecioUltimo.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
+        lblPrecioUltimo.setText("00.00");
+        lblPrecioUltimo.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 10));
+        jToolBar1.add(lblPrecioUltimo);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 4;
+        getContentPane().add(jToolBar1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -260,6 +247,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblCantidad;
     private javax.swing.JLabel lblEspacioBlanco2;
     private javax.swing.JLabel lblPrecioPromedio;

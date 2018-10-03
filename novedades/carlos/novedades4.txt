@@ -90,3 +90,6 @@ Ver si agregar un campo en los detalles de la compra para ver si algunos product
 Ver si por cada producto se puede detallar si es una compra de gasto, de inventario o de servicios , porque puede existir compras combinadas y para reportes seria bueno tener bien clasificado
 Cambiar el tamanio de enteros de los valores a 12 unidades
 En las retenciones al momento de eliminar si tiene ligado una compra restaurar el 
+
+- Revisar las anulaciones del proceso academico para verificar saldos
+- Revisar que el precio promedio del kardex sea el mismo que lo que sale en el detalle es decir como calcula para grabar el facturas notas de credito y demas pantalla que pueden modificar

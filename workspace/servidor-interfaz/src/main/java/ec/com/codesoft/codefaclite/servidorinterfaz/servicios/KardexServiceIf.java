@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.Remote;
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,4 +29,5 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public void ingresarInventario(Map<KardexDetalle,CompraDetalle> detalles,Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException;
     public void ingresarInventario(List<KardexDetalle> detalles) throws java.rmi.RemoteException,ServicioCodefacException;
     public void ingresarInventario(KardexDetalle detalle) throws java.rmi.RemoteException,ServicioCodefacException;
+    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega) throws java.rmi.RemoteException;
 }
