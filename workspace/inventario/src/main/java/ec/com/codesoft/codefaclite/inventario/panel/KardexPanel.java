@@ -209,7 +209,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         jToolBar1.add(lblPrecioPromedio);
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        jLabel9.setText("Precio Ultimo:");
+        jLabel9.setText("Ultimo Precio:");
         jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 50, 1, 1));
         jToolBar1.add(jLabel9);
 

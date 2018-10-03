@@ -347,7 +347,7 @@ public class KardexModel extends KardexPanel {
         getTblKardexDetalle().setModel(modeloTabla);
 
         getLblCantidad().setText(kardex.getStock() + "");
-        getLblPrecioPromedio().setText(kardex.getPrecioPromedio() + "");
+        getLblPrecioPromedio().setText(kardex.calcularPrecioPromedio() + "");
         getLblPrecioUltimo().setText(kardex.getPrecioUltimo() + "");
         getLblTotal().setText(kardex.getPrecioTotal() + "");
 

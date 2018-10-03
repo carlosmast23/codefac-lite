@@ -223,10 +223,18 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
 
         //Esto va a depender del tipo de flujo del inventario es decir para saber si la suma o resta pero por defecto
         // el metodo es solo de ingreso asi que no considero el otro caso
-        kardex.setStock(kardex.getStock() + detalle.getCantidad());
-        kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(detalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
-        kardex.setPrecioTotal(kardex.getPrecioTotal().add(detalle.getPrecioTotal()));
-        kardex.setPrecioUltimo(detalle.getPrecioUnitario());
+        if(detalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO))
+        {
+            kardex.setStock(kardex.getStock() + detalle.getCantidad());
+            kardex.setPrecioTotal(kardex.getPrecioTotal().add(detalle.getPrecioTotal()));
+        }
+        else
+        {
+            kardex.setStock(kardex.getStock() - detalle.getCantidad());
+            kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(detalle.getPrecioTotal()));
+        }
+        kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(detalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));        
+        kardex.setPrecioUltimo(detalle.getPrecioUnitario()); //Ver si grabar siempre el ultimo valor 
         kardex = em.merge(kardex);
 
         //Actualizar la compra de referencia para saber que ya fue ingresada

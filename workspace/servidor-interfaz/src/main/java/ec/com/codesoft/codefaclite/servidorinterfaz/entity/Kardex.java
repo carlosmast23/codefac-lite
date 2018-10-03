@@ -178,6 +178,11 @@ public class Kardex implements Serializable {
         this.detallesKardex.add(kardexDetalle);
         
     }
+    
+    public BigDecimal calcularPrecioPromedio()
+    {
+        return this.precioTotal.divide(new BigDecimal(this.stock),2,BigDecimal.ROUND_HALF_UP);
+    }
 
     
     
