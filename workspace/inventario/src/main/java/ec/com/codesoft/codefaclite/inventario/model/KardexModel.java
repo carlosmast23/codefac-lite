@@ -85,6 +85,7 @@ public class KardexModel extends KardexPanel {
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         agregarListernerBotones();
+        listenerCheckBox();
         valoresIniciales();
     }
 
@@ -222,10 +223,15 @@ public class KardexModel extends KardexPanel {
                         fechaFinal=new Date(getCmbFechaFinal().getDate().getTime());
                     }
                     
+                    Integer cantidadMovimientos=null;
+                    if(!getChkTodosMovimientos().isSelected())
+                    {
+                        cantidadMovimientos=(Integer) getTxtMovimientos().getValue();
+                    }                    
                     
-                    detalleKardex=kardexService.obtenerConsultaPorFecha(fechaInicial,fechaFinal, productoSeleccionado, bodega);
+                    detalleKardex=kardexService.obtenerConsultaPorFecha(fechaInicial,fechaFinal, productoSeleccionado, bodega,cantidadMovimientos);
                     if (detalleKardex != null && detalleKardex.size() > 0) {
-                        kardex = detalleKardex.get(1).getKardex();
+                        kardex = detalleKardex.get(detalleKardex.size()-1).getKardex();
                         cargarTablaKardex();
                         UtilidadesTablas.ubicarFinalTabla(getTblKardexDetalle());
 
@@ -432,6 +438,22 @@ public class KardexModel extends KardexPanel {
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void listenerCheckBox() {
+        getChkTodosMovimientos().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(getChkTodosMovimientos().isSelected())
+                {
+                    getTxtMovimientos().setEnabled(false);
+                }
+                else
+                {
+                    getTxtMovimientos().setEnabled(true);
+                }
+            }
+        });
     }
 
 }

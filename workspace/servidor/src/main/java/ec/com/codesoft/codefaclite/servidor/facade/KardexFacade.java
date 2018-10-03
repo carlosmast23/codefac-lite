@@ -45,7 +45,7 @@ public class KardexFacade extends AbstractFacade<Kardex>{
         
     }
     
-    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega)
+    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Integer cantidadMovimientos)
     {
         try
         {
@@ -62,9 +62,18 @@ public class KardexFacade extends AbstractFacade<Kardex>{
             if(fechaFinal!=null)
             {
                 queryString+=" and kd.fechaIngreso<=?2 ";
-            }            
+            }
+            
+            //Agregar orden y un limite de la consulta
+            //queryString+=" order by kd.id desc ";
+            
+            
             System.out.println(queryString);
             Query query = getEntityManager().createQuery(queryString);
+            
+            //if (cantidadMovimientos != null) {
+            //    query.setMaxResults(cantidadMovimientos);
+            //}
             
             query.setParameter(3,bodega);
             query.setParameter(4,producto);
