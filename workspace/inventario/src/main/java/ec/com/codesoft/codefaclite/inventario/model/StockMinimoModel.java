@@ -5,17 +5,27 @@
  */
 package ec.com.codesoft.codefaclite.inventario.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.inventario.data.StockMinimoData;
 import ec.com.codesoft.codefaclite.inventario.panel.StockMinimoPanel;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -29,6 +39,7 @@ import javax.swing.table.DefaultTableModel;
 public class StockMinimoModel extends StockMinimoPanel{
     
     private List<Object[]> listaStock;
+    private List<StockMinimoData> listaData;
     //private 
 
     @Override
@@ -59,7 +70,33 @@ public class StockMinimoModel extends StockMinimoPanel{
 
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream("stockMinimo.jrxml");
+        
+        DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try{
+                        Excel excel = new Excel();
+                        String nombreCabeceras[] = {"Código", "Producto", "Stock", "Cantidad Min"};
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras,listaData);
+                        excel.abrirDocumento();
+                    }
+                    catch(Exception exc)
+                    {
+                        exc.printStackTrace();
+                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }  
+                }
+
+                @Override
+                public void pdf() {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path,new HashMap(), listaData, panelPadre, "Reporte Stock Minimo ");
+                    //dispose();
+                    //setVisible(false);
+                }
+            });
+        
     }
 
     @Override
@@ -79,7 +116,10 @@ public class StockMinimoModel extends StockMinimoPanel{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -117,6 +157,26 @@ public class StockMinimoModel extends StockMinimoPanel{
             public void actionPerformed(ActionEvent e) {
                 try {
                     listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStockMinimo();
+                    listaData=new ArrayList<StockMinimoData>();
+                    
+                     for (Object[] objeto : listaStock) 
+                     {
+                        Producto producto = (Producto) objeto[0];
+                        Integer cantidad = (Integer) objeto[1];
+                        
+                        StockMinimoData data=new StockMinimoData();
+                        
+                        data.setCodigo(producto.getCodigoPersonalizado().toString());
+                        data.setProducto(producto.getNombre());
+                        data.setStock(cantidad.toString());
+                        data.setCantidadMinima(producto.getCantidadMinima().toString());
+                        
+                        listaData.add(data);
+                        
+                    }
+                    
+                    
+                    
                     construirTabla();
                 } catch (RemoteException ex) {
                     Logger.getLogger(StockMinimoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -135,22 +195,20 @@ public class StockMinimoModel extends StockMinimoPanel{
         };
         
         DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
-        for (Object[] objeto : listaStock) {
-            Producto producto=(Producto) objeto[0];
-            Integer cantidad=(Integer) objeto[1];
+        for (StockMinimoData stockMinimo : listaData) {
             
             String[] datos=
             {
-                producto.getCodigoPersonalizado().toString(),
-                producto.getNombre(),
-                cantidad.toString(),
-                producto.getCantidadMinima().toString()
+                stockMinimo.getCodigo(),
+                stockMinimo.getProducto(),
+                stockMinimo.getStock(),
+                stockMinimo.getCantidadMinima(),
                 
             };
             
             modeloTabla.addRow(datos);
-            
         }
+        
         getTblDato().setModel(modeloTabla);
         
     }
