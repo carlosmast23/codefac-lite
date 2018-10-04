@@ -30,4 +30,5 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public void ingresarInventario(List<KardexDetalle> detalles) throws java.rmi.RemoteException,ServicioCodefacException;
     public void ingresarInventario(KardexDetalle detalle) throws java.rmi.RemoteException,ServicioCodefacException;
     public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Integer cantidadMovimientos) throws java.rmi.RemoteException;
+    public List<Object[]> consultarStockMinimo() throws java.rmi.RemoteException;
 }
