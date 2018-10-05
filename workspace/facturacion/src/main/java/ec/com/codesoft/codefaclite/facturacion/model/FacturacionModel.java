@@ -19,7 +19,9 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
@@ -27,6 +29,7 @@ import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
+import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -69,6 +72,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -852,6 +856,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(), cic);
                 }
 
+                //=====================> Imprimir comprobante de venta <==============================//
+                imprimirComprobanteVenta(factura);
                 
             }
             
@@ -861,6 +867,47 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void imprimirComprobanteVenta(Factura factura)
+    {
+        if(DialogoCodefac.dialogoPregunta("Pregunta","Desea imprimir un comprobante de la venta",DialogoCodefac.MENSAJE_CORRECTO))
+        {
+            List<ComprobanteVentaData> dataReporte=new ArrayList<ComprobanteVentaData>();
+            
+            
+            for (FacturaDetalle detalle : factura.getDetalles()) {
+                
+                ComprobanteVentaData data=new ComprobanteVentaData();
+                data.setCantidad(detalle.getCantidad().toString());
+                data.setCodigo(detalle.getId().toString());
+                data.setNombre(detalle.getDescripcion().toString());
+                data.setPrecioUnitario(detalle.getPrecioUnitario().toString());
+                data.setTotal(detalle.getTotal().toString());
+                
+                dataReporte.add(data);                
+            }
+            //map de los parametros faltantes
+            Map<String,Object> mapParametros=new HashMap<String, Object>();
+            mapParametros.put("codigo", factura.getPreimpreso());
+            mapParametros.put("cedula", factura.getIdentificacion());
+            mapParametros.put("cliente", factura.getRazonSocial());
+            mapParametros.put("direccion", factura.getDireccion());
+            mapParametros.put("telefonos", factura.getTelefono());
+            mapParametros.put("fechaIngreso", factura.getFechaEmision().toString());
+            mapParametros.put("subtotal", factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
+            mapParametros.put("iva", factura.getIva().toString());
+            mapParametros.put("total", factura.getTotal().toString());
+            mapParametros.put("autorizacion", factura.getClaveAcceso());
+            
+            
+            InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
+            
+           ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, dataReporte, panelPadre, "Comprobante de Venta ",OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.A5);
+            
+        }
+        
+        
     }
     
     private void facturaManual() throws ServicioCodefacException
