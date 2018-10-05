@@ -449,6 +449,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return getFacade().consultarStockMinimoFacade();
     }
     
+    public List<Object[]> consultarStock() throws java.rmi.RemoteException
+    {
+        return getFacade().consultarStockFacade();
+    }
+
+    
     
 }
 
