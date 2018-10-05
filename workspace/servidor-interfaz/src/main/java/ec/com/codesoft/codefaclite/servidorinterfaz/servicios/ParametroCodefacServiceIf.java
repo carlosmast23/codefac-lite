@@ -27,6 +27,8 @@ public interface ParametroCodefacServiceIf extends ServiceAbstractIf<ParametroCo
      */
     public void editarParametros(Map<String ,ParametroCodefac> parametro) throws java.rmi.RemoteException;
     
+    public void editarParametros(List<ParametroCodefac> parametro) throws java.rmi.RemoteException;
+    
     public ParametroCodefac grabar(ParametroCodefac parametro) throws java.rmi.RemoteException;
     
     public List<ParametroCodefac> buscarParametrosPorMap(Map<String,Object> map) throws java.rmi.RemoteException;

@@ -8,16 +8,24 @@ package ec.com.codesoft.codefaclite.facturacion.callback;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
+import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
@@ -25,9 +33,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -130,7 +143,14 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    generarReportePdf(clave.clave);
+                    if(verificarImprimirComprobanteVenta())
+                    {
+                        imprimirComprobanteVenta();
+                    }
+                    else
+                    {
+                        generarReportePdf(clave.clave);
+                    }
                 }
             });
             
@@ -166,7 +186,14 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
                     monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
+                            if(verificarImprimirComprobanteVenta())
+                            {
+                                imprimirComprobanteVenta();
+                            }
+                            else
+                            {
+                                facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
+                            }
 
                         }
                     });
@@ -192,9 +219,17 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     
     private void generarReportePdf(String clave) {
         try {
-            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
-            JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
-            facturacionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
+            
+            if(verificarImprimirComprobanteVenta())
+            {
+                imprimirComprobanteVenta();
+            }
+            else
+            {            
+                byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
+                JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
+                facturacionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
+            }
             //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
@@ -204,6 +239,63 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    private boolean verificarImprimirComprobanteVenta()
+    {
+        ParametroCodefac parametroCodefac = facturacionModel.session.getParametrosCodefac().get(ParametroCodefac.COMPROBANTE_VENTA_ACTIVAR);
+        if (parametroCodefac == null) {
+            //Si no esta tiene ningun dato por defecto no habilito la opcion de comprobante de venta
+            return false;
+        } else {
+            if (EnumSiNo.getEnumByLetra(parametroCodefac.getValor()).equals(EnumSiNo.NO)) {
+                //Si esta marcado la opcion no entonce no genero la opcion de imprimir el comprobante de venta
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private  void imprimirComprobanteVenta()
+    {
+
+        //if(DialogoCodefac.dialogoPregunta("Pregunta","Desea imprimir un comprobante de la venta",DialogoCodefac.MENSAJE_CORRECTO))
+        //{
+            List<ComprobanteVentaData> dataReporte=new ArrayList<ComprobanteVentaData>();
+            
+            
+            for (FacturaDetalle detalle : facturaProcesando.getDetalles()) {
+                
+                ComprobanteVentaData data=new ComprobanteVentaData();
+                data.setCantidad(detalle.getCantidad().toString());
+                data.setCodigo(detalle.getId().toString());
+                data.setNombre(detalle.getDescripcion().toString());
+                data.setPrecioUnitario(detalle.getPrecioUnitario().toString());
+                data.setTotal(detalle.getTotal().toString());
+                
+                dataReporte.add(data);                
+            }
+            //map de los parametros faltantes
+            Map<String,Object> mapParametros=new HashMap<String, Object>();
+            mapParametros.put("codigo", facturaProcesando.getPreimpreso());
+            mapParametros.put("cedula", facturaProcesando.getIdentificacion());
+            mapParametros.put("cliente", facturaProcesando.getRazonSocial());
+            mapParametros.put("direccion", facturaProcesando.getDireccion());
+            mapParametros.put("telefonos", facturaProcesando.getTelefono());
+            mapParametros.put("fechaIngreso", facturaProcesando.getFechaEmision().toString());
+            mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().add(facturaProcesando.getSubtotalSinImpuestos()).toString());
+            mapParametros.put("iva", facturaProcesando.getIva().toString());
+            mapParametros.put("total", facturaProcesando.getTotal().toString());
+            mapParametros.put("autorizacion", facturaProcesando.getClaveAcceso());
+            
+            
+            InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
+            
+           ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, dataReporte, facturacionModel.panelPadre, "Comprobante de Venta ",OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.A5);
+            
+        //}
+        
+        
     }
 
 }

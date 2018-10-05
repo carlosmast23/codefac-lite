@@ -67,6 +67,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPanel {
 
     private Map<String, ParametroCodefac> parametros;
+    private List<ParametroCodefac> parametrosEditar;
     private ParametroCodefacServiceIf parametroCodefacService;
     private ImpuestoDetalleServiceIf impuestoDetalleService;
     private JFileChooser jFileChooser;
@@ -118,14 +119,14 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                 
             }
             
-            this.parametroCodefacService.editarParametros(parametros);
+            this.parametroCodefacService.editarParametros(parametrosEditar);
             /**
              * Establesco el ciclo de vida en el cual me encuentro
              */
             this.estadoFormulario = GeneralPanelInterface.ESTADO_GRABAR;
-            DialogoCodefac.mensaje("Actualizado datos", "Los datos de los parametros fueron actualizados", DialogoCodefac.MENSAJE_CORRECTO);
+            DialogoCodefac.mensaje("Actualizado datos", "Los datos de los parametros fueron actualizados", DialogoCodefac.MENSAJE_CORRECTO);            
             //DialogoCodefac.mensaje("Firma", "Datos actualizados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            dispose();
+            dispose(); //TODO: En esta parte analizar porque cuando se sale del formulario no se borra de la lita de ventas abiertas del menu
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -188,31 +189,64 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     }
 
     private void actualizarDatosVista() {
+        parametrosEditar=new ArrayList<ParametroCodefac>();
         parametros.get(ParametroCodefac.SECUENCIAL_FACTURA).setValor(getTxtFacturaSecuencial().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA));
+                
         parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).setValor(getTxtNotaCreditoSecuencial().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO));
+        
         parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO).setValor(getTxtNotaDebitoSecuencial().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO));        
+        
         parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).setValor(getTxtGuiaRemisionSecuencial().getText());
-        parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).setValor(getTxtRetencionesSecuencial().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION));
+        
+        parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).setValor(getTxtRetencionesSecuencial().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION));
         
         parametros.get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).setValor(getTxtFacturaSecuencialFisico().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA));
+        
         parametros.get(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA).setValor(getTxtNotaVentaSecuencialFisico().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA));
+        
         parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA).setValor(getTxtNotaCreditoSecuencialFisico().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA));
+        
         parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO_FISICA).setValor(getTxtNotaDebitoSecuencialFisico().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO_FISICA));
+        
         parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).setValor(getTxtGuiaRemisionSecuencialFisico().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA));
+        
         parametros.get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA).setValor(getTxtRetencionesSecuencialFisico().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA));
         
         parametros.get(ParametroCodefac.ESTABLECIMIENTO).setValor(getTxtEstablecimiento().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.ESTABLECIMIENTO));
+        
         parametros.get(ParametroCodefac.PUNTO_EMISION).setValor(getTxtPuntoEmision().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.PUNTO_EMISION));
+        
         String ivaDefacto = ((ImpuestoDetalle) getCmbIvaDefault().getSelectedItem()).getTarifa().toString();
         parametros.get(ParametroCodefac.IVA_DEFECTO).setValor(ivaDefacto);
+        parametrosEditar.add(parametros.get(ParametroCodefac.IVA_DEFECTO));
+        
         parametros.get(ParametroCodefac.CORREO_USUARIO).setValor(getTxtCorreoElectronico().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.CORREO_USUARIO));
+        
         parametros.get(ParametroCodefac.CORREO_CLAVE).setValor(UtilidadesEncriptar.encriptar(new String(getTxtPasswordCorreo().getPassword()),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-
+        parametrosEditar.add(parametros.get(ParametroCodefac.CORREO_CLAVE));
+        
         parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).setValor(UtilidadesEncriptar.encriptar(new String(getTxtClaveFirma().getPassword()),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
+        parametrosEditar.add(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA));
 
         parametros.get(ParametroCodefac.MODO_FACTURACION).setValor(getCmbModoFacturacion().getSelectedItem().toString());
+        parametrosEditar.add(parametros.get(ParametroCodefac.MODO_FACTURACION));
         
         parametros.get(ParametroCodefac.TIPO_FACTURACION).setValor(((ComprobanteEntity.TipoEmisionEnum)getCmbTipoFacturacion().getSelectedItem()).getLetra());
+        parametrosEditar.add(parametros.get(ParametroCodefac.TIPO_FACTURACION));
         
         
         
