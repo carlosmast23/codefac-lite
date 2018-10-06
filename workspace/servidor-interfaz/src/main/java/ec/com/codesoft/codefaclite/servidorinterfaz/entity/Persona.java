@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -73,6 +74,15 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     @JoinColumn(name = "SRI_FORMA_PAGO_ID")
     private SriFormaPago sriFormaPago;
+    
+    /**
+     * Variable para saber si el envia clientes recomendados
+     */
+    @Column(name = "CONTACTO_CLIENTES")
+    private String contactoCliente;
+
+    @Column(name = "CONTACTO_CLIENTES_PORCENTAJE")
+    private BigDecimal contactoClientePorcentaje;
 
     //@JoinColumn(name = "SRI_IDENTIFICACION_ID")
     //private SriIdentificacion sriTipoIdentificacion;
@@ -233,6 +243,24 @@ public class Persona implements Serializable, Comparable<Persona> {
         this.tipoIdentificacion = tipoIdentificacion;
     }
 
+    public String getContactoCliente() {
+        return contactoCliente;
+    }
+
+    public void setContactoCliente(String contactoCliente) {
+        this.contactoCliente = contactoCliente;
+    }
+
+    public BigDecimal getContactoClientePorcentaje() {
+        return contactoClientePorcentaje;
+    }
+
+    public void setContactoClientePorcentaje(BigDecimal contactoClientePorcentaje) {
+        this.contactoClientePorcentaje = contactoClientePorcentaje;
+    }
+    
+    
+
     ///Metodos personalizados
     public String getNombresCompletos() {
         String nombresTmp = (nombres != null) ? nombres : "";
@@ -270,6 +298,11 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     public EnumSiNo getObligadoLlevarContabilidadEnum() {
         return EnumSiNo.getEnumByLetra(obligadoLlevarContabilidad);
+    }
+    
+    public EnumSiNo getContactoClientesEnum()
+    {
+        return EnumSiNo.getEnumByLetra(contactoCliente);
     }
 
     @Override

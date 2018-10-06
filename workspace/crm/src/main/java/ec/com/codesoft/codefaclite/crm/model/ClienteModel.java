@@ -55,6 +55,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -172,6 +173,16 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         else
             persona.setObligadoLlevarContabilidad(EnumSiNo.NO.getLetra());
         
+        //Grabar si el contacto tiene un check box
+        if(getChkContacto().isSelected())
+            persona.setContactoCliente(EnumSiNo.SI.getLetra());
+        else
+            persona.setContactoCliente(EnumSiNo.NO.getLetra());
+        
+        if(!getTxtPorcentajeComision().getText().isEmpty())
+        {
+            persona.setContactoClientePorcentaje(new BigDecimal(getTxtPorcentajeComision().getText()));
+        }
         
         
     }
@@ -314,6 +325,26 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 getChkObligadoLlevarContabilidad().setSelected(false);
             }
         }
+        
+        
+        if(persona.getContactoCliente()!=null)
+        {
+            if(persona.getContactoClientesEnum().equals(EnumSiNo.SI))
+            {
+                getChkContacto().setSelected(true);
+            }
+            else
+            {
+                getChkContacto().setSelected(false);
+            }
+        }
+        else
+        {
+            getChkContacto().setSelected(false);
+        }
+        
+        getTxtPorcentajeComision().setText((persona.getContactoClientePorcentaje()!=null)?persona.getContactoClientePorcentaje().toString():"");
+        
 
         System.out.println("Datos cargados ");
     }
@@ -350,6 +381,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
             //Setear el valor por defecto
             getCmbEstado().setSelectedItem(ClienteEnumEstado.ACTIVO);
+            
+            getTxtPorcentajeComision().setText("0");
+            getChkContacto().setSelected(false);
             this.razonSocial = "";
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
