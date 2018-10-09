@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
@@ -238,6 +239,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void addListenerButtons() {        
+        
+        getBtnBuscarReferenciaContacto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ReferidoBusquedaDialogo busquedaDialog = new ReferidoBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialog);
+                buscarDialogoModel.setVisible(true);
+                Persona referidoTmp=(Persona) buscarDialogoModel.getResultado();
+                if(referidoTmp!=null)
+                {
+                    factura.setReferido(referidoTmp);
+                    getTxtReferenciaContacto().setText(referidoTmp.getIdentificacion()+" - "+referidoTmp.getNombresCompletos());
+                }
+            }
+        });
         
         getBtnAgregarDatosAdicionales().addActionListener(new ActionListener() {
             @Override
@@ -1141,6 +1157,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtCantidad().setText("");
         getTxtDescripcion().setText("");
         getTxtDescuento().setText("");
+        getTxtReferenciaContacto().setText("");
         //getTxtClientePresupuesto().setText("");
         getCheckPorcentaje().setSelected(false);
 

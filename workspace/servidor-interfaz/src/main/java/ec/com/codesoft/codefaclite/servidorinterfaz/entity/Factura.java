@@ -88,6 +88,10 @@ public class Factura extends ComprobanteEntity implements Serializable {
     @ManyToOne    
     private Persona cliente;
     
+    @JoinColumn(name = "REFERIDO_ID")
+    @ManyToOne    
+    private Persona referido;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
     
@@ -224,6 +228,16 @@ public class Factura extends ComprobanteEntity implements Serializable {
     public void setEstadoNotaCredito(String estadoNotaCredito) {
         this.estadoNotaCredito = estadoNotaCredito;
     }
+
+    public Persona getReferido() {
+        return referido;
+    }
+
+    public void setReferido(Persona referido) {
+        this.referido = referido;
+    }
+    
+    
         
     
     /**

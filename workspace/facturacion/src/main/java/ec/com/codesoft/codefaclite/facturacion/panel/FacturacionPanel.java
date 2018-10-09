@@ -1687,6 +1687,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         return PanelFormasPago;
     }
 
+    public JButton getBtnBuscarReferenciaContacto() {
+        return btnBuscarReferenciaContacto;
+    }
+
+    public JTextField getTxtReferenciaContacto() {
+        return txtReferenciaContacto;
+    }
+
    
     
     

@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaReportePanel;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DataEjemploReporte;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ReporteFacturaData;
@@ -49,6 +50,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import sun.nio.cs.ext.Big5;
 
 /**
  *
@@ -56,9 +58,17 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FacturaReporteModel extends FacturaReportePanel {
 
+    protected Boolean filtrarReferidos;
+    //protected Persona referido;
+    
     private Persona persona;
+    protected Persona referido;
     //Map<String, Object> parameters = new HashMap<String, Object>();
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    
+    private List<ReporteFacturaData> data;
+    
+    private Map<String,BigDecimal> mapTotales;
 
     //private List<Factura> datafact;
     //private List<NotaCredito> datafact2;
@@ -75,83 +85,35 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     private void initListener() {
         
-        getCmbDocumento().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DocumentosConsultarEnum documentoEnum=(DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
-                
-                //Si el documento es nota de credito desabilito el panel de control
-                if(documentoEnum.equals(DocumentosConsultarEnum.NOTA_CREDITO))
-                {
-                    getPanelOpciones().setEnabled(false);
-                    getChkAfectaNotaCredito().setEnabled(false);
-                    getChkAfectaNotaDebito().setEnabled(false);
-                }
-                else
-                {
-                    getPanelOpciones().setEnabled(true);
-                    getChkAfectaNotaCredito().setEnabled(true);
-                    getChkAfectaNotaDebito().setEnabled(true);
-                }
-            }
-        });
+        listenerBotones();
+        listenerCombos();
+        listenerChecks();
         
-        //String texto= session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
-        getChkTodos().addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                    persona = null;
-                    getTxtCliente().setText("...");
-                    //getLblNombreCliente().setText("..");
-                    getBtnBuscarCliente().setEnabled(false);
-                } else {
-                    getBtnBuscarCliente().setEnabled(true);
-                }
-            }
-        });
-        getBtnBuscarCliente().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
-                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
-                buscarDialogoModel.setVisible(true);
-                persona = (Persona) buscarDialogoModel.getResultado();
-                if (persona != null) {
-                    setearValoresCliente();
-                }
-            }
-        });
-
-        getBtnBuscar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                generarReporte(true,false); //codigo que genera el reporte
-            }
-        });
-        getBtnLimpiarFechaInicio().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getDateFechaInicio().setDate(null);
-            }
-        });
-
-        getBtnLimpiarFechaFin().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getDateFechaFin().setDate(null);
-            }
-        });
     }
     
-    private void generarReporte(Boolean tabla,Boolean reporte)
+    private void agregarValorTotal(String nombre,BigDecimal valor)
+    {
+        BigDecimal valorTmp=mapTotales.get(nombre);
+        if(valorTmp==null)
+        {
+            mapTotales.put(nombre,valor);
+        }
+        else
+        {
+            valorTmp=valorTmp.add(valor);
+            mapTotales.put(nombre,valorTmp);
+        }
+    }
+    
+    private void generarReporte()
     {
         try {
             
             Date fechaInicio=null;
             Date fechaFin =null;
             
-            BigDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
+            mapTotales=new HashMap<String,BigDecimal>();
+            //igDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
             ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
             String estadoStr = estadoFactura.getEstado();
             
@@ -164,11 +126,11 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
 
             FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
-            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoStr);
+            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoStr,filtrarReferidos,referido);
             NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();
             List<NotaCredito> dataNotCre = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin,estadoStr);
             
-            List<ReporteFacturaData> data = new ArrayList<ReporteFacturaData>();
+            data = new ArrayList<ReporteFacturaData>();
 
             DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
 
@@ -190,10 +152,15 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 preimpresoNotaCreditoAfecta=notaCredito.getPreimpreso();
                                 totalNotaCredito=notaCredito.getTotal();
                                 totalMenosNotaCredito = factura.getTotal().subtract(notaCredito.getTotal());
-                                acum = acum.add(factura.getSubtotalSinImpuestos().subtract(notaCredito.getSubtotalCero()));
-                                acumdoce = acumdoce.add(factura.getSubtotalImpuestos().subtract(notaCredito.getSubtotalDoce()));
-                                acumiva = acumiva.add(factura.getIva().subtract(notaCredito.getValorIvaDoce()));
-                                acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
+                                
+                                agregarValorTotal("acum",factura.getSubtotalSinImpuestos().subtract(notaCredito.getSubtotalCero()));
+                                //acum = acum.add(factura.getSubtotalSinImpuestos().subtract(notaCredito.getSubtotalCero()));
+                                agregarValorTotal("acumdoce",factura.getSubtotalImpuestos().subtract(notaCredito.getSubtotalDoce()));
+                                //acumdoce = acumdoce.add(factura.getSubtotalImpuestos().subtract(notaCredito.getSubtotalDoce()));
+                                agregarValorTotal("acumiva",factura.getIva().subtract(notaCredito.getValorIvaDoce()));
+                                //acumiva = acumiva.add(factura.getIva().subtract(notaCredito.getValorIvaDoce()));
+                                agregarValorTotal("acumdesc",factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
+                                //acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
                             } else {
                                 //Calculo de los valores cuenado no existe nota de credito                                
                                 calcularTotalesSinNotasCredito=true;
@@ -206,14 +173,17 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         if(calcularTotalesSinNotasCredito)
                         {
                             totalMenosNotaCredito = factura.getTotal();
-                            acum = acum.add(factura.getSubtotalSinImpuestos());
-                            acumdoce = acumdoce.add(factura.getSubtotalImpuestos());
-                            acumiva = acumiva.add(factura.getIva());
-                            acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
+                            agregarValorTotal("acum",factura.getSubtotalSinImpuestos());
+                            //acum = acum.add(factura.getSubtotalSinImpuestos());
+                            agregarValorTotal("acumdoce",factura.getSubtotalImpuestos());
+                            //acumdoce = acumdoce.add(factura.getSubtotalImpuestos());
+                            agregarValorTotal("acumiva",factura.getIva());
+                            //acumiva = acumiva.add(factura.getIva());
+                            agregarValorTotal("acumdesc",factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
+                            //acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
                         }
 
-                        
-                        data.add(new ReporteFacturaData(
+                        ReporteFacturaData reporteData=new ReporteFacturaData(
                                 factura.getPreimpreso(),
                                 dateFormat.format(factura.getFechaEmision()),
                                 factura.getCliente().getIdentificacion(),
@@ -229,9 +199,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 factura.getTotal().toString(),
                                 totalNotaCredito.toString(),
                                 preimpresoNotaCreditoAfecta,
-                                totalMenosNotaCredito.toString()
+                                totalMenosNotaCredito.toString(),
+                                (factura.getReferido()!=null)?factura.getReferido().getRazonSocial():""
                                 
-                        ));
+                        );
+                        
+                        reporteData.mostrarReferido=filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
+                        data.add(reporteData);
 
 
                     }
@@ -243,7 +217,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         Vector<String> fila = new Vector<String>();
                         ComprobanteEntity.ComprobanteEnumEstado estadoEnum = ComprobanteEntity.ComprobanteEnumEstado.getEnum(nota.getEstado());
                         
-                        data.add(new ReporteFacturaData(
+                        ReporteFacturaData reporteData=new ReporteFacturaData(
                                 nota.getPreimpreso(),
                                 dateFormat.format(nota.getFechaEmision()),
                                 nota.getCliente().getIdentificacion(),
@@ -259,13 +233,22 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 nota.getTotal().toString(),
                                 "0",
                                 nota.getFactura().getPreimpreso(),
-                                nota.getTotal().toString()
-                        ));
-
-                        acum = acum.add(nota.getSubtotalCero());
-                        acumdoce = acumdoce.add(nota.getSubtotalDoce());
-                        acumiva = acumiva.add(nota.getValorIvaDoce());
-                        acumdesc = acumdesc.add(nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()));
+                                nota.getTotal().toString(),
+                                nota.getFactura().getReferido().getRazonSocial()
+                        );
+                        
+                        reporteData.mostrarReferido=filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
+                        data.add(reporteData);
+                        
+                        
+                        agregarValorTotal("acum",nota.getSubtotalCero());
+                        //acum = acum.add(nota.getSubtotalCero());
+                        agregarValorTotal("acumdoce",nota.getSubtotalDoce());
+                        //acumdoce = acumdoce.add(nota.getSubtotalDoce());
+                        agregarValorTotal("acumiva",nota.getValorIvaDoce());
+                        //acumiva = acumiva.add(nota.getValorIvaDoce());
+                        agregarValorTotal("acumdesc",nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()));
+                        //acumdesc = acumdesc.add(nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()));
 
                         
                     }
@@ -274,102 +257,142 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
             }
             
-            if (tabla) 
-            {
-                //Si genera en la tabla creo los datos de las filas
-                DefaultTableModel modeloTablaFacturas = construirModelTabla();
-                for (ReporteFacturaData reporteFacturaData : data) {
-                        Vector<String> fila = new Vector<String>();
-                        fila.add(reporteFacturaData.getNumeroFactura());
-                        fila.add(reporteFacturaData.getReferencia());
-                        fila.add(reporteFacturaData.getFechaFactura());
-                        fila.add(reporteFacturaData.getIdentificacionCliente());
-                        fila.add(reporteFacturaData.getRazonSocialCliente());
-                        fila.add(reporteFacturaData.getNombreLegalCliente());
-                        fila.add(reporteFacturaData.getDocumento()); //Aqui debe ir el tipo de documento
-                        fila.add(reporteFacturaData.getEstadoFactura());
-                        fila.add(reporteFacturaData.getTipoEmision()); //Falta implementar
-                        fila.add(reporteFacturaData.getSubtotalDoceFactura());
-                        fila.add(reporteFacturaData.getSubtotalCeroFactura());
-                        fila.add(reporteFacturaData.getDescFactura());
-                        fila.add(reporteFacturaData.getIvaDoceFactura());
-                        fila.add(reporteFacturaData.getValorAfecta());
-                        fila.add(reporteFacturaData.getTotalFinal());                        
-                        modeloTablaFacturas.addRow(fila);
-                }
+            //if (tabla) 
+            //{
+                imprimirTabla();                
                 
-                getTblDocumentos().setModel(modeloTablaFacturas);
-                Map<Integer,Integer> mapTamanios=new HashMap<Integer,Integer>();
-                mapTamanios.put(0,130);
-                UtilidadesTablas.definirTamanioColumnasPorMap(getTblDocumentos(),mapTamanios);
-                
-                getLblSubtotal0().setText(acum.toString());
-                getLblSubtotal12().setText(acumdoce.toString());
-                BigDecimal subtotal = acum.add(acumdoce);
-                getLblSubtotalSinImpuesto().setText(subtotal.toString());
-                getLblTotalDescuento().setText(acumdesc.toString());
-                getLblIva12().setText(acumiva.toString());
-                BigDecimal total = acum.add(acumdoce).add(acumiva);
-                getTxtValorTotal().setText(total.toString());
-            }
+            //}
             
-            //Si crea un reporte paso los datos al jasper
-            if(reporte)
-            {
-                String estadoText = estadoFactura.getNombre();
-                final InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
-                String cliente = "";
-                if (persona == null) {
-                    cliente = "TODOS";
-                } else {
-                    cliente = persona.getRazonSocial();
-                }
-                
-                Map<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put("fechainicio", (fechaInicio != null) ? dateFormat.format(fechaInicio) : "");
-                parameters.put("fechafin", (fechaFin != null) ? dateFormat.format(fechaFin) : "");
-                parameters.put("tipodocumento", documentoConsultaEnum.toString());
-                parameters.put("cliente", cliente);
-                parameters.put("subtotal", acum.toString());
-                parameters.put("subtotaliva", acumdoce.toString());
-                parameters.put("valoriva", acumiva.toString());
-                BigDecimal total = acum.add(acumdoce).add(acumiva);
-                parameters.put("total", total.toString());
-                BigDecimal subtotal = acum.add(acumdoce);
-                parameters.put("totalsubtotales", subtotal.toString());
-                parameters.put("descuentos", acumdesc.toString());
-                parameters.put("estadofactura", estadoText);
-                
-                
-                DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
-                    
-                    
-                    
-                    @Override
-                    public void excel() {
-                        try {
-                            Excel excel = new Excel();
-                            Vector<String> titulosVector=crearCabezeraTabla();
-                            String nombreCabeceras[] = titulosVector.toArray(new String[titulosVector.size()]); //Convertir en array
-                            excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
-                            excel.abrirDocumento();
-                        } catch (Exception exc) {
-                            exc.printStackTrace();
-                            DialogoCodefac.mensaje("Error", "El archivo Excel se encuentra abierto", DialogoCodefac.MENSAJE_INCORRECTO);
-                        }
-                    }
-
-                    @Override
-                    public void pdf() {                      
-                        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Documentos ", OrientacionReporteEnum.HORIZONTAL);
-                    }
-                });
-            
-            }
             
         } catch (RemoteException ex) {
             Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    protected InputStream getReporte()
+    {
+        return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
+    }
+    
+    protected void imprimirReporte()
+    {
+        Date fechaInicio = null;
+        Date fechaFin = null;
+
+        //BigDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
+        ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
+        String estadoStr = estadoFactura.getEstado();
+
+        if (getDateFechaInicio().getDate() != null) {
+            fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
+        }
+        if (getDateFechaFin().getDate() != null) {
+            fechaFin = new Date(getDateFechaFin().getDate().getTime());
+        }
+        
+        String estadoText = estadoFactura.getNombre();
+        final InputStream path = getReporte();
+        String cliente = "";
+        if (persona == null) {
+            cliente = "TODOS";
+        } else {
+            cliente = persona.getRazonSocial();
+        }
+        
+        DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
+        
+        /**
+         * Genera el reporte
+         */
+
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("fechainicio", (fechaInicio != null) ? dateFormat.format(fechaInicio) : "");
+        parameters.put("fechafin", (fechaFin != null) ? dateFormat.format(fechaFin) : "");
+        parameters.put("tipodocumento", documentoConsultaEnum.toString());
+        parameters.put("cliente", cliente);
+        parameters.put("subtotal",mapTotales.get("acum").toString());
+        parameters.put("subtotaliva",mapTotales.get("acumdoce").toString());
+        parameters.put("valoriva",mapTotales.get("acumiva").toString());
+        //BigDecimal total = acum.add(acumdoce).add(acumiva);
+        BigDecimal total = mapTotales.get("acum").add(mapTotales.get("acumdoce").add(mapTotales.get("acumiva")));
+        parameters.put("total", total.toString());
+        
+        //BigDecimal subtotal = acum.add(acumdoce);
+        BigDecimal subtotal = mapTotales.get("acum").add(mapTotales.get("acumdoce"));
+        parameters.put("totalsubtotales", subtotal.toString());
+        parameters.put("descuentos",mapTotales.get("acumdesc").toString());
+        parameters.put("estadofactura", estadoText);
+
+        DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+
+            @Override
+            public void excel() {
+                try {
+                    Excel excel = new Excel();
+                    Vector<String> titulosVector = crearCabezeraTabla();
+                    String nombreCabeceras[] = titulosVector.toArray(new String[titulosVector.size()]); //Convertir en array
+                    excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                    excel.abrirDocumento();
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                    DialogoCodefac.mensaje("Error", "El archivo Excel se encuentra abierto", DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+            }
+
+            @Override
+            public void pdf() {
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Documentos ", OrientacionReporteEnum.HORIZONTAL);
+            }
+        });
+    }
+    
+    protected void imprimirTabla()
+    {
+        //Si genera en la tabla creo los datos de las filas
+        DefaultTableModel modeloTablaFacturas = construirModelTabla();
+        for (ReporteFacturaData reporteFacturaData : data) {
+            Vector<String> fila = new Vector<String>();
+            fila.add(reporteFacturaData.getNumeroFactura());
+            fila.add(reporteFacturaData.getReferencia());
+            fila.add(reporteFacturaData.getFechaFactura());
+            fila.add(reporteFacturaData.getIdentificacionCliente());
+            fila.add(reporteFacturaData.getRazonSocialCliente());
+            
+            //Imprimir segun el tipo de consulta que estoy haciendo
+            if(filtrarReferidos)
+                fila.add(reporteFacturaData.getReferido());
+            else                
+                fila.add(reporteFacturaData.getNombreLegalCliente());
+            
+            
+            fila.add(reporteFacturaData.getDocumento()); //Aqui debe ir el tipo de documento
+            fila.add(reporteFacturaData.getEstadoFactura());
+            fila.add(reporteFacturaData.getTipoEmision()); //Falta implementar
+            fila.add(reporteFacturaData.getSubtotalDoceFactura());
+            fila.add(reporteFacturaData.getSubtotalCeroFactura());
+            fila.add(reporteFacturaData.getDescFactura());
+            fila.add(reporteFacturaData.getIvaDoceFactura());
+            fila.add(reporteFacturaData.getValorAfecta());
+            fila.add(reporteFacturaData.getTotalFinal());
+            modeloTablaFacturas.addRow(fila);
+        }
+
+        getTblDocumentos().setModel(modeloTablaFacturas);
+        Map<Integer, Integer> mapTamanios = new HashMap<Integer, Integer>();
+        mapTamanios.put(0, 130);
+        UtilidadesTablas.definirTamanioColumnasPorMap(getTblDocumentos(), mapTamanios);
+        
+        getLblSubtotal0().setText(mapTotales.get("acum").toString());
+        getLblSubtotal12().setText(mapTotales.get("acumdoce").toString());
+        BigDecimal subtotal = mapTotales.get("acum").add(mapTotales.get("acumdoce"));
+        getLblSubtotalSinImpuesto().setText(subtotal.toString());
+        getLblTotalDescuento().setText(mapTotales.get("acumdesc").toString());
+        getLblIva12().setText(mapTotales.get("acumiva").toString());
+        BigDecimal total = mapTotales.get("acum").add(mapTotales.get("acumdoce")).add(mapTotales.get("acumiva"));
+        getTxtValorTotal().setText(total.toString());
+
+
+       
     }
 
     private NotaCredito verificarPorFactura(Factura factura,List<NotaCredito> notasCredito) {
@@ -381,7 +404,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         return null;
     }
     
-    private Vector<String>  crearCabezeraTabla()
+    protected Vector<String>  crearCabezeraTabla()
     {
         Vector<String> titulo = new Vector<>();
         titulo.add("Preimpreso");
@@ -389,7 +412,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
         titulo.add("Fecha");
         titulo.add("Identificación");
         titulo.add("Razón social");
-        titulo.add("Nombre legal");
+        
+        //Si esta activo esta opcion envez del nombre legal pongo el nombre del referido TODO: Buscar alguna solucion mas elegante
+        if(filtrarReferidos)
+            titulo.add("Referido");
+        else
+            titulo.add("Nombre legal");
+            
         titulo.add("Documento");
         titulo.add("Estado");
         titulo.add("Tipo");
@@ -425,7 +454,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     @Override
     public void imprimir() {
-        generarReporte(false,true);        
+        imprimirReporte();
     }
 
     @Override
@@ -475,7 +504,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     @Override
     public void iniciar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -499,6 +528,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
     }
 
     private void valoresIniciales() {
+        
+        filtrarReferidos=false;
         getDateFechaInicio().setDate(fechaInicioMes(hoy()));
         getDateFechaFin().setDate(hoy());
 
@@ -521,6 +552,95 @@ public class FacturaReporteModel extends FacturaReportePanel {
         for (DocumentosConsultarEnum documentoEnum : DocumentosConsultarEnum.values()) {
             getCmbDocumento().addItem(documentoEnum);
         }
+        
+        getChkTodosReferidos().setSelected(true);
+        getBtnBuscarReferido().setEnabled(false);
+        referido=null;
+        
+        ///Para el reporte de facturacion no me importa que sean visibles estos campos del referido
+        getLblReferido().setVisible(false);
+        getTxtReferido().setVisible(false);
+        getBtnBuscarReferido().setVisible(false);
+        getChkTodosReferidos().setVisible(false);
+    }
+
+    protected void listenerBotones() {
+        
+       
+        getBtnBuscarCliente().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                persona = (Persona) buscarDialogoModel.getResultado();
+                if (persona != null) {
+                    setearValoresCliente();
+                }
+            }
+        });
+
+        getBtnBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generarReporte(); //codigo que genera el reporte
+            }
+        });
+        getBtnLimpiarFechaInicio().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaInicio().setDate(null);
+            }
+        });
+
+        getBtnLimpiarFechaFin().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaFin().setDate(null);
+            }
+        });
+    }
+
+    private void listenerCombos() {
+        getCmbDocumento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DocumentosConsultarEnum documentoEnum=(DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
+                
+                //Si el documento es nota de credito desabilito el panel de control
+                if(documentoEnum.equals(DocumentosConsultarEnum.NOTA_CREDITO))
+                {
+                    getPanelOpciones().setEnabled(false);
+                    getChkAfectaNotaCredito().setEnabled(false);
+                    getChkAfectaNotaDebito().setEnabled(false);
+                }
+                else
+                {
+                    getPanelOpciones().setEnabled(true);
+                    getChkAfectaNotaCredito().setEnabled(true);
+                    getChkAfectaNotaDebito().setEnabled(true);
+                }
+            }
+        });
+    }
+
+    protected void listenerChecks() {
+        
+        
+        //String texto= session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
+        getChkTodos().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    persona = null;
+                    getTxtCliente().setText("...");
+                    //getLblNombreCliente().setText("..");
+                    getBtnBuscarCliente().setEnabled(false);
+                } else {
+                    getBtnBuscarCliente().setEnabled(true);
+                }
+            }
+        });
     }
     
     
