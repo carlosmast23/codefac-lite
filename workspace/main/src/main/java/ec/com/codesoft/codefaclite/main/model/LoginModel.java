@@ -39,6 +39,7 @@ import javax.swing.JOptionPane;
 public class LoginModel extends LoginFormDialog{
 
     private static final Logger LOG = Logger.getLogger(LoginModel.class.getName());
+    public boolean salirAplicacion=false;
     
     UsuarioServicioIf usuarioServicio;
     Usuario usuario;
@@ -77,11 +78,15 @@ public class LoginModel extends LoginFormDialog{
             public void windowOpened(WindowEvent e) {}
 
             @Override
-            public void windowClosing(WindowEvent e) {}
+            public void windowClosing(WindowEvent e) {
+                salirAplicacion=true;
+                setVisible(false);
+            }
 
             @Override
             public void windowClosed(WindowEvent e) {
-                System.exit(0); //Salir de toda la aplicacion
+                //salirAplicacion=true;
+                //setVisible(false);
             }
 
             @Override
@@ -104,7 +109,9 @@ public class LoginModel extends LoginFormDialog{
         getBtnSalir().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose();
+                //dispose();
+                salirAplicacion=true;
+                setVisible(false);
             }
         });
         
@@ -167,7 +174,7 @@ public class LoginModel extends LoginFormDialog{
                     {                            
                             usuario=usuarioRoot;
                             LOG.log(Level.INFO, "Ingresando con el usuario root: "+usuarioTxt);
-                            dispose();
+                            setVisible(false);
                     }
                     else
                     {
@@ -182,7 +189,7 @@ public class LoginModel extends LoginFormDialog{
                     {
                         usuario=usuarioRoot;
                         LOG.log(Level.INFO, "Ingresando con el usuario root en produccion: " + usuarioTxt);
-                        dispose();
+                        setVisible(false);
                     }
                     else
                     {
@@ -199,7 +206,7 @@ public class LoginModel extends LoginFormDialog{
                     if(usuario!=null)
                     {
                         LOG.log(Level.INFO, "Ingresando con el usuario: "+usuarioTxt);
-                        dispose();
+                        setVisible(false);
                     }
                     else
                     {

@@ -772,9 +772,13 @@ public class Main {
         frameAplicacion.setVisible(true); //muestro el hilo de ejcucion porque el login es un dialog que no tiene icono en la barra de tareas
         LoginModel loginModel = new LoginModel();
         loginModel.setVisible(true);
+        
+        if(loginModel.salirAplicacion)System.exit(0);
+        
         Usuario usuarioLogin = loginModel.getUsuarioLogin();
         frameAplicacion.dispose();
         loginModel.getTxtUsuario().requestFocus();
+        loginModel.dispose();
         return usuarioLogin;
     }
 
