@@ -83,6 +83,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         txtReferido = new javax.swing.JTextField();
         btnBuscarReferido = new javax.swing.JButton();
         chkTodosReferidos = new javax.swing.JCheckBox();
+        chkReporteAgrupadoReferido = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -167,7 +168,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -210,11 +211,11 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         jLabel12.setText("           ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         getContentPane().add(jLabel12, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         getContentPane().add(jLabel21, gridBagConstraints);
 
         btnLimpiarFechaFin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
@@ -355,7 +356,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -459,6 +460,14 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(chkTodosReferidos, gridBagConstraints);
 
+        chkReporteAgrupadoReferido.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkReporteAgrupadoReferido.setText("Reporte Agrupado Referido");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 4;
+        getContentPane().add(chkReporteAgrupadoReferido, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -483,6 +492,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnLimpiarFechaInicio;
     private javax.swing.JCheckBox chkAfectaNotaCredito;
     private javax.swing.JCheckBox chkAfectaNotaDebito;
+    private javax.swing.JCheckBox chkReporteAgrupadoReferido;
     private javax.swing.JCheckBox chkTodos;
     private javax.swing.JCheckBox chkTodosReferidos;
     private javax.swing.JComboBox<DocumentosConsultarEnum> cmbDocumento;
@@ -680,6 +690,10 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
 
     public JLabel getLblReferido() {
         return lblReferido;
+    }
+
+    public JCheckBox getChkReporteAgrupadoReferido() {
+        return chkReporteAgrupadoReferido;
     }
 
     

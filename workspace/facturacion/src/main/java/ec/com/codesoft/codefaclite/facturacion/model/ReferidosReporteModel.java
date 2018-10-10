@@ -35,6 +35,7 @@ public class ReferidosReporteModel extends FacturaReporteModel{
         getTxtReferido().setVisible(true);
         getBtnBuscarReferido().setVisible(true);
         getChkTodosReferidos().setVisible(true);
+        getChkReporteAgrupadoReferido().setVisible(true);
         setTitle("Referidos Reporte");
     }
 
@@ -77,7 +78,14 @@ public class ReferidosReporteModel extends FacturaReporteModel{
 
     @Override
     protected InputStream getReporte() {
-        return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_referidos.jrxml");
+        if(getChkReporteAgrupadoReferido().isSelected())
+        {
+            return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_referidos_acumulado.jrxml");
+        }   
+        else
+        {
+            return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_referidos.jrxml");
+        }
     }
 
     @Override

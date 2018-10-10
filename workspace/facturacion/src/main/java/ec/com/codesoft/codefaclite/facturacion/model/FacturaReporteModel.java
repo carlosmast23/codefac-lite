@@ -37,6 +37,7 @@ import java.awt.event.ItemListener;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -123,10 +124,11 @@ public class FacturaReporteModel extends FacturaReportePanel {
             if (getDateFechaFin().getDate() != null) {
                 fechaFin = new Date(getDateFechaFin().getDate().getTime());
             }
+            
 
 
             FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
-            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoStr,filtrarReferidos,referido);
+            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoStr,filtrarReferidos,referido,getChkReporteAgrupadoReferido().isSelected());
             NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();
             List<NotaCredito> dataNotCre = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin,estadoStr);
             
@@ -183,6 +185,27 @@ public class FacturaReporteModel extends FacturaReportePanel {
                             //acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
                         }
 
+                        BigDecimal valorComision=BigDecimal.ZERO;                                
+                        if(factura.getReferido()!=null)
+                        {
+                            BigDecimal porcentajeComision=(factura.getReferido().getContactoClientePorcentaje()!=null)?factura.getReferido().getContactoClientePorcentaje():BigDecimal.ZERO;
+                            
+                            //Cuando los valores son distintos es porque aplica una nota de credito
+                            if(factura.getTotal().compareTo(totalMenosNotaCredito)!=0)
+                            {                                
+                                BigDecimal porcentajeImpuestosOriginal=factura.getIva().divide(factura.getTotal(),8,BigDecimal.ROUND_HALF_UP); //Obtenego cual es la proporcion del iva original , por si afecta un nota de credito valor a calcular la comision con esta proporicion
+                                valorComision=totalMenosNotaCredito.divide(porcentajeImpuestosOriginal.add(BigDecimal.ONE),2,BigDecimal.ROUND_HALF_UP);
+                                valorComision=valorComision.multiply(porcentajeComision.divide(new BigDecimal("100"), 8, BigDecimal.ROUND_HALF_UP));
+                                valorComision=valorComision.setScale(2,BigDecimal.ROUND_HALF_UP);
+                            }
+                            else
+                            { //Este caso es cuando no aplica ninguna nota de credito
+                                valorComision=factura.getTotal().subtract(factura.getIva());                            
+                                valorComision=valorComision.multiply(porcentajeComision.divide(new BigDecimal("100"),8, BigDecimal.ROUND_HALF_UP));
+                                valorComision=valorComision.setScale(8,BigDecimal.ROUND_HALF_UP);                            
+                            }
+                        }
+                        
                         ReporteFacturaData reporteData=new ReporteFacturaData(
                                 factura.getPreimpreso(),
                                 dateFormat.format(factura.getFechaEmision()),
@@ -200,7 +223,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 totalNotaCredito.toString(),
                                 preimpresoNotaCreditoAfecta,
                                 totalMenosNotaCredito.toString(),
-                                (factura.getReferido()!=null)?factura.getReferido().getRazonSocial():""
+                                (factura.getReferido()!=null)?factura.getReferido().getRazonSocial():"",
+                                (factura.getReferido()!=null)?factura.getReferido().getIdentificacion():"",
+                                (factura.getReferido()!=null)?factura.getReferido().getContactoClientePorcentaje().toString():"0",
+                                valorComision.toString()
                                 
                         );
                         
@@ -234,7 +260,11 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 "0",
                                 nota.getFactura().getPreimpreso(),
                                 nota.getTotal().toString(),
-                                nota.getFactura().getReferido().getRazonSocial()
+                                (nota.getFactura().getReferido()!=null)?nota.getFactura().getReferido().getRazonSocial():"",                                
+                                (nota.getFactura().getReferido()!=null)?nota.getFactura().getReferido().getIdentificacion():"",
+                                (nota.getFactura().getReferido()!=null)?nota.getFactura().getReferido().getContactoClientePorcentaje().toString():"0",
+                                "0"//TODO: Revisar porque en esta parte me late que no necesito calcular el iva
+                                
                         );
                         
                         reporteData.mostrarReferido=filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
@@ -562,6 +592,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getTxtReferido().setVisible(false);
         getBtnBuscarReferido().setVisible(false);
         getChkTodosReferidos().setVisible(false);
+        getChkReporteAgrupadoReferido().setVisible(false);
     }
 
     protected void listenerBotones() {

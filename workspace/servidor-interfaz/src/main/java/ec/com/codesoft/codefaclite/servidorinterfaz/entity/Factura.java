@@ -75,8 +75,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
     @Column(name = "IVA")
     private BigDecimal iva;
 
-    @Column(name = "IVA_SRI_ID")
-    private Long ivaSriId;
+    //@Column(name = "IVA_SRI_ID")
+    @JoinColumn(name = "IVA_SRI_ID")
+    private ImpuestoDetalle ivaSriId;
     
     @Column(name = "TOTAL")
     private BigDecimal total;
@@ -118,7 +119,7 @@ public class Factura extends ComprobanteEntity implements Serializable {
     }
     
 
-    public Long getIvaSriId() {
+    public ImpuestoDetalle getIvaSriId() {
         return ivaSriId;
     }
 
@@ -144,7 +145,7 @@ public class Factura extends ComprobanteEntity implements Serializable {
     }
 
 
-    public void setIvaSriId(Long ivaSriId) {
+    public void setIvaSriId(ImpuestoDetalle ivaSriId) {
         this.ivaSriId = ivaSriId;
     }
 

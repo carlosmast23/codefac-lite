@@ -247,8 +247,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return facturaFacade.findAll();
     }
 
-    public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,String estado,Boolean consultarReferidos,Persona referido) {
-        return facturaFacade.lista(persona,fi,ff,estado,consultarReferidos,referido);
+    public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,String estado,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido) throws java.rmi.RemoteException {
+        return facturaFacade.lista(persona,fi,ff,estado,consultarReferidos,referido,agrupadoReferido);
     }
 
     public List<Factura> obtenerFacturasActivas()

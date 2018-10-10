@@ -26,10 +26,10 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    public List<Factura> lista(Persona persona, Date fi, Date ff, String estado,Boolean consultarReferidos,Persona referido) {
+    public List<Factura> lista(Persona persona, Date fi, Date ff, String estado,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido) {
         //Factura factura;
         //factura.getReferido();
-        String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="";
+        String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="";
         if (persona != null) {
             cliente = "u.cliente=?1";
         } else {
@@ -48,6 +48,11 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             estadoFactura = " AND u.estado=?4";
         }
         
+        if(agrupadoReferido)
+        {
+            ordenarAgrupado=" u.referido ,";
+        }
+        
         if(consultarReferidos)
         {
             filtrarReferidos=" AND u.referido IS NOT NULL ";
@@ -58,7 +63,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
 
         try {
-            String queryString = "SELECT u FROM Factura u WHERE " + cliente + fecha + estadoFactura +filtrarReferidos+" ORDER BY u.secuencial+0 asc";
+            String queryString = "SELECT u FROM Factura u WHERE " + cliente + fecha + estadoFactura +filtrarReferidos+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
             Query query = getEntityManager().createQuery(queryString);
             //System.err.println("QUERY--->"+query.toString());
             if (persona != null) {
