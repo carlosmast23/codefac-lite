@@ -109,6 +109,31 @@ public class ReferidosReporteModel extends FacturaReporteModel{
         return titulo;
     }
 
+    @Override
+    protected Vector<String> crearCabezeraExcel() {
+        Vector<String> titulo = new Vector<>();
+        titulo.add("Identificación Ref");
+        titulo.add("Nombres Ref");
+        titulo.add("Porcentaje Ref");
+        titulo.add("Comisión Ref");
+        titulo.add("Preimpreso");
+        titulo.add("Referencia");
+        titulo.add("Fecha");
+        titulo.add("Identificación");
+        titulo.add("Razón social");
+        titulo.add("Referido");           
+        titulo.add("Documento");
+        titulo.add("Estado");
+        titulo.add("Tipo");
+        titulo.add("Subtotal 12%");
+        titulo.add("Subtotal 0% ");
+        titulo.add("Descuentos");
+        titulo.add("IVA 12%");
+        titulo.add("Valor Afecta");
+        titulo.add("Total");
+        return titulo;
+    }
+
     
     
     

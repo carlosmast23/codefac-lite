@@ -232,20 +232,24 @@ public class ReporteFacturaData implements ExcelDatosInterface {
 
     @Override
     public List<TipoDato> getDatos() {
-        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
         
-               
+        if(mostrarReferido)
+            return getDatosReporteComisiones();
+        else
+            return getDatosReporteFactura();
+        
+    }
+
+    public List<TipoDato> getDatosReporteFactura()
+    {    
+        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
+
         tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));
         tiposDatos.add(new TipoDato(this.identificacionCliente, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.razonSocialCliente, Excel.TipoDataEnum.TEXTO));
-        
-        if(mostrarReferido)
-            tiposDatos.add(new TipoDato(this.referido, Excel.TipoDataEnum.TEXTO));             
-        else
-            tiposDatos.add(new TipoDato(this.nombreLegalCliente, Excel.TipoDataEnum.TEXTO));
-        
+        tiposDatos.add(new TipoDato(this.nombreLegalCliente, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.documento, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.estadoFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.tipoEmision, Excel.TipoDataEnum.TEXTO));
@@ -255,11 +259,36 @@ public class ReporteFacturaData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.ivaDoceFactura, Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.valorAfecta, Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.totalFinal, Excel.TipoDataEnum.NUMERO));
-        
+
         return tiposDatos;
     }
-
     
+    
+    public List<TipoDato> getDatosReporteComisiones()
+    {    
+        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
+        tiposDatos.add(new TipoDato(this.referidoIdentificacion, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.referido, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.referidoPorcentaje, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.valorComision, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));
+        tiposDatos.add(new TipoDato(this.identificacionCliente, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.razonSocialCliente, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.nombreLegalCliente, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.documento, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.estadoFactura, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.tipoEmision, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.subtotalDoceFactura, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.subtotalCeroFactura, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.descFactura, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.ivaDoceFactura, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.valorAfecta, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.totalFinal, Excel.TipoDataEnum.NUMERO));
+
+        return tiposDatos;
+    }
     
    
     

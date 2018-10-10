@@ -359,7 +359,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             public void excel() {
                 try {
                     Excel excel = new Excel();
-                    Vector<String> titulosVector = crearCabezeraTabla();
+                    Vector<String> titulosVector = crearCabezeraExcel();
                     String nombreCabeceras[] = titulosVector.toArray(new String[titulosVector.size()]); //Convertir en array
                     excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
                     excel.abrirDocumento();
@@ -460,6 +460,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
         titulo.add("Total");
         return titulo;
     }
+    
+    protected Vector<String>  crearCabezeraExcel()
+    {
+        return crearCabezeraTabla();
+    }
+    
+    
     
     private DefaultTableModel construirModelTabla() {
         Vector<String> titulo = crearCabezeraTabla();        
