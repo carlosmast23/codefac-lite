@@ -369,7 +369,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             
             getTxtNombreFirma().setText("" + destino.getFileName());
             ParametroCodefac parametro = parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
-            parametro.setValor(destino.getFileName().toString());
+            parametro.setValor(destino.getFileName().toString());            
+            parametrosEditar.add(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA));
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
