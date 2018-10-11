@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceException;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -88,7 +89,21 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     }
     
 
-    public Factura grabar(Factura factura) {
+    public Factura grabar(Factura factura) throws ServicioCodefacException {
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
+
+                ComprobantesService servicioComprobante = new ComprobantesService();
+                servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);            
+                grabarDetallesFactura(factura);
+                grabarCartera(factura);
+            }
+        });
+        return factura;
+        /*
         EntityTransaction transaction= entityManager.getTransaction();
         transaction.begin();
         
@@ -107,13 +122,19 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(PersistenceException ex)
+        {
+            transaction.rollback();
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return factura;
+        return factura;*/
     }
     
-    private void grabarDetallesFactura(Factura factura) throws RemoteException
+    private void grabarDetallesFactura(Factura factura) throws RemoteException,PersistenceException
     {
-         factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());            
+        try
+        {
+            factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());            
             //facturaFacade.create(factura);
             entityManager.persist(factura);
             entityManager.flush();
@@ -141,6 +162,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
                 
             }
+        }
+        catch (PersistenceException ex) {
+            throw ex;
+        }
             
     }
     

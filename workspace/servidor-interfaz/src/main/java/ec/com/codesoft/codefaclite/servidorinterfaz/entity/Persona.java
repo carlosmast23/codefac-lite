@@ -348,14 +348,25 @@ public class Persona implements Serializable, Comparable<Persona> {
         RUC("R", "Ruc"),
         CEDULA("C", "Cédula"),
         PASAPORTE("P", "Pasaporte"),
-        CLIENTE_FINAL("F", "Consumidor Final");
+        CLIENTE_FINAL("F", "Consumidor Final","9999999999999",new BigDecimal("200"));
 
         private String letra;
         private String nombre;
+        private String identificacion;
+        private BigDecimal montoMaximo;
 
-        private TipoIdentificacionEnum(String letra, String nombre) {
+        private TipoIdentificacionEnum(String letra, String nombre) 
+        {
             this.letra = letra;
             this.nombre = nombre;
+        }
+        
+        private TipoIdentificacionEnum(String letra,String nombre,String identificacion,BigDecimal montoMaximo ) 
+        {
+            this.letra = letra;
+            this.nombre = nombre;
+            this.identificacion=identificacion;
+            this.montoMaximo=montoMaximo;
         }
 
         public String getLetra() {
@@ -365,6 +376,18 @@ public class Persona implements Serializable, Comparable<Persona> {
         public String getNombre() {
             return nombre;
         }
+
+        public String getIdentificacion() {
+            return identificacion;
+        }
+
+        public BigDecimal getMontoMaximo() {
+            return montoMaximo;
+        }
+        
+        
+        
+        
 
         public static TipoIdentificacionEnum obtenerPorLetra(String letra) {
             for (Persona.TipoIdentificacionEnum tipoIdentificacion : TipoIdentificacionEnum.values()) {
