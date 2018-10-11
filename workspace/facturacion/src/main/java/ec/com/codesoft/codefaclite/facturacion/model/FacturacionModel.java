@@ -800,6 +800,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     public void validacionesGrabar() throws ExcepcionCodefacLite
     {
+        
         if (!verificarSumaFormaPago()) {
             throw new ExcepcionCodefacLite("Formas de pago erroneas");
         }
@@ -812,6 +813,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (factura.getDetalles().isEmpty()) {
             DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
+        }
+        
+        //Verificar que si consumidor final no permita facturar un valor superior a 200 dolares
+        if (Persona.TipoIdentificacionEnum.CLIENTE_FINAL.getIdentificacion().equals(factura.getCliente().getIdentificacion()))
+        {
+           if(Persona.TipoIdentificacionEnum.CLIENTE_FINAL.getMontoMaximo().compareTo(factura.getTotal())<0)
+           {
+               DialogoCodefac.mensaje("Alerta","El Monto no puede ser superior a 200$ para el CLIENTE FINAL",DialogoCodefac.MENSAJE_ADVERTENCIA);
+               throw new ExcepcionCodefacLite("El Monto no puede ser superior a 200$ para el CLIENTE FINAL");
+           }
         }
 
     }
