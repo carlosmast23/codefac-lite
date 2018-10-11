@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Codefac"
-#define MyAppVersion "1.2"
+#define MyAppVersion "1.2.6.9"
 #define MyAppPublisher "Codesoft"
 #define MyAppURL "http://www.cf.codesoft-ec.com/"
 #define MyAppExeName "codefac.bat"

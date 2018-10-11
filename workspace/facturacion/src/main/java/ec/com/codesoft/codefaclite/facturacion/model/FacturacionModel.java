@@ -19,7 +19,10 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
@@ -27,6 +30,7 @@ import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
+import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -69,6 +73,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -234,6 +239,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void addListenerButtons() {        
+        
+        getBtnBuscarReferenciaContacto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ReferidoBusquedaDialogo busquedaDialog = new ReferidoBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialog);
+                buscarDialogoModel.setVisible(true);
+                Persona referidoTmp=(Persona) buscarDialogoModel.getResultado();
+                if(referidoTmp!=null)
+                {
+                    factura.setReferido(referidoTmp);
+                    getTxtReferenciaContacto().setText(referidoTmp.getIdentificacion()+" - "+referidoTmp.getNombresCompletos());
+                }
+            }
+        });
         
         getBtnAgregarDatosAdicionales().addActionListener(new ActionListener() {
             @Override
@@ -852,6 +872,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(), cic);
                 }
 
+                //=====================> Imprimir comprobante de venta <==============================//
+                //imprimirComprobanteVenta(factura);
                 
             }
             
@@ -862,6 +884,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
     
     private void facturaManual() throws ServicioCodefacException
     {
@@ -1133,6 +1157,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtCantidad().setText("");
         getTxtDescripcion().setText("");
         getTxtDescuento().setText("");
+        getTxtReferenciaContacto().setText("");
         //getTxtClientePresupuesto().setText("");
         getCheckPorcentaje().setSelected(false);
 
@@ -1670,6 +1695,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setCodigoDocumento(documentoEnum.getCodigo());
         
         factura.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
+        
+        //factura.setIvaSriId(session.get;
         
         /**
          * Redondeo los valores de los precios unitario de los detalles de la factura

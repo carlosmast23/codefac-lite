@@ -18,12 +18,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.KardexFacade;
+import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.ObtenerFecha;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -218,10 +223,18 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
 
         //Esto va a depender del tipo de flujo del inventario es decir para saber si la suma o resta pero por defecto
         // el metodo es solo de ingreso asi que no considero el otro caso
-        kardex.setStock(kardex.getStock() + detalle.getCantidad());
-        kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(detalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
-        kardex.setPrecioTotal(kardex.getPrecioTotal().add(detalle.getPrecioTotal()));
-        kardex.setPrecioUltimo(detalle.getPrecioUnitario());
+        if(detalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO))
+        {
+            kardex.setStock(kardex.getStock() + detalle.getCantidad());
+            kardex.setPrecioTotal(kardex.getPrecioTotal().add(detalle.getPrecioTotal()));
+        }
+        else
+        {
+            kardex.setStock(kardex.getStock() - detalle.getCantidad());
+            kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(detalle.getPrecioTotal()));
+        }
+        kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(detalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));        
+        kardex.setPrecioUltimo(detalle.getPrecioUnitario()); //Ver si grabar siempre el ultimo valor 
         kardex = em.merge(kardex);
 
         //Actualizar la compra de referencia para saber que ya fue ingresada
@@ -320,6 +333,128 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         } 
     
     }
+    
+    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Integer cantidadMovimientos) throws java.rmi.RemoteException
+    {
+        List<KardexDetalle> datosConsulta=getFacade().obtenerConsultaPorFechaFacade(fechaInicial, fechaFinal, producto, bodega,cantidadMovimientos);
+        //Invertir la lista porque los resultados estan invertidos
+        //Collections.reverse(datosConsulta);
+        
+        Integer cantidadSaldo = 0;
+        BigDecimal precioUnitarioSaldo = BigDecimal.ZERO;
+        BigDecimal precioTotalSaldo = BigDecimal.ZERO;
+        
+        List<KardexDetalle> datosConsultaTemp=new ArrayList<KardexDetalle>();
+        if(cantidadMovimientos!=null && (datosConsulta.size()-cantidadMovimientos)>0 )
+        {
+            int numeroCorte=datosConsulta.size()-cantidadMovimientos;
+            List<KardexDetalle> valoresAnteriores=datosConsulta.subList(0,numeroCorte);
+            List<KardexDetalle> datosConsultaTemp2=datosConsulta.subList(numeroCorte,datosConsulta.size());
+            datosConsultaTemp=new ArrayList<KardexDetalle>(valoresAnteriores);
+            
+            //Calcular los saldos anteriores
+            for (KardexDetalle valorAnterior : valoresAnteriores) {
+                
+                if(valorAnterior.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO))
+                {
+                    cantidadSaldo+=valorAnterior.getCantidad();
+                    precioTotalSaldo=precioTotalSaldo.add(valorAnterior.getPrecioTotal());
+                }
+                else
+                {
+                    cantidadSaldo-=valorAnterior.getCantidad();
+                    precioTotalSaldo=precioTotalSaldo.subtract(valorAnterior.getPrecioTotal());
+                }                
+                
+            }
+            
+        }
+        
+        //Si existe fecha de corta obtenego los saldos anteriores
+        if(fechaInicial!=null)
+        {
+            List<Object[]> saldosAnteriores=getFacade().obtenerConsultaSaldoAnterior(fechaInicial, producto, bodega);
+            
+            for (Object[] saldosAnterior : saldosAnteriores) {
+                String codigoTipoDocumento=(String) saldosAnterior[0];
+                Integer cantidad=((Long) saldosAnterior[1]).intValue();
+                BigDecimal precioUnitario=(BigDecimal) saldosAnterior[2];
+                BigDecimal precioTotal=(BigDecimal) saldosAnterior[3];
+                
+                TipoDocumentoEnum tipoDocumento=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(codigoTipoDocumento);
+                
+                if(tipoDocumento.getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO))
+                {
+                    cantidadSaldo+=cantidad;
+                    precioTotalSaldo=precioTotalSaldo.add(precioTotal);                    
+                }
+                else
+                {
+                    cantidadSaldo-=cantidad;
+                    precioTotalSaldo=precioTotalSaldo.subtract(precioTotal);
+                }
+                
+                precioUnitarioSaldo=precioTotalSaldo.divide(new BigDecimal(cantidadSaldo),2,BigDecimal.ROUND_HALF_UP); //Todo: Ver si esta varible se elimina porque el precio promedio puedo calcular del total       
+            }                        
+        }
+        
+        if(cantidadSaldo>0)
+        {
+            ///////////////======================> CONSTRUIR KARDEX DETALLE ADICIONAL DE LOS SALDOS <==============================//////////////////
+            KardexDetalle kardexDetalle = new KardexDetalle();
+            kardexDetalle.setCantidad(cantidadSaldo);
+            kardexDetalle.setPrecioUnitario(precioUnitarioSaldo);
+            kardexDetalle.setPrecioTotal(precioTotalSaldo);
+            kardexDetalle.setFechaCreacion(fechaInicial);
+            kardexDetalle.setFechaIngreso(fechaInicial);
+            kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.SALDO_ANTERIOR.getCodigo());
+            //kardexDetalle.set            
+            datosConsulta.add(0, kardexDetalle);
+        }
+        
+        for (int j = 0; j < datosConsultaTemp.size(); j++) 
+        {
+            KardexDetalle kardexDetalleTemp = datosConsultaTemp.get(j);
+            if (datosConsulta.contains(kardexDetalleTemp)) 
+            {
+                datosConsulta.remove(kardexDetalleTemp);
+            }
+        }
+        
+        /*
+        for(int i=0;i<datosConsulta.size();i++){
+        //for (KardexDetalle kardexDetalle : datosConsulta) {
+            KardexDetalle kardexDetalle=datosConsulta.get(i);
+            
+            for(int j=0;j<datosConsultaTemp.size();j++)
+            {
+                KardexDetalle kardexDetalleTemp=datosConsultaTemp.get(j);
+                if(kardexDetalleTemp.getId().equals(kardexDetalle.getId()))
+                {
+                    datosConsulta.remove(kardexDetalle);
+                }
+            }
+            //if(datosConsultaTemp.contains(kardexDetalle))
+            //{
+            //    datosConsulta.remove(kardexDetalle);
+            //}
+        }
+        */
+        
+        return datosConsulta;
+    }
+    
+    public List<Object[]> consultarStockMinimo() throws java.rmi.RemoteException
+    {
+        return getFacade().consultarStockMinimoFacade();
+    }
+    
+    public List<Object[]> consultarStock() throws java.rmi.RemoteException
+    {
+        return getFacade().consultarStockFacade();
+    }
+
+    
     
 }
 

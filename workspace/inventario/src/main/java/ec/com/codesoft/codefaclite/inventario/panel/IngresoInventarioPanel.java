@@ -103,7 +103,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jLabel10.setText("Total:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -112,6 +112,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel10, gridBagConstraints);
 
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         jLabel11.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;

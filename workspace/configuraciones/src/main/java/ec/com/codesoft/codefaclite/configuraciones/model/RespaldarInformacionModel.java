@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
@@ -71,6 +72,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
         this.jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
         agregarListener();
         obtenerUbicacionCarpetaRespaldo();
+        validacionDatosIngresados=false;
 
     }
 
@@ -98,11 +100,11 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                     }
                     else
                     {
-                        this.parametroCodefacServiceIf.editarParametros(this.parametro);
+                        this.parametroCodefacServiceIf.editar(p); //Solo editar el parametro
                     }
                     if(respuesta)
                     {
-                        this.parametroCodefacServiceIf.editarParametros(this.parametro);
+                        this.parametroCodefacServiceIf.editar(p); //Solo editar el parametro
                     }
                     
                         
@@ -118,7 +120,9 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
             catch(RemoteException exc)
             {
                 System.out.println("Error guardando parametro de path respaldo");
-            }
+            } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RespaldarInformacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     } 
     
 

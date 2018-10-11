@@ -18,6 +18,8 @@ import java.util.List;
  * @author CodesoftDesarrollo
  */
 public class ReporteFacturaData implements ExcelDatosInterface {
+    
+    public Boolean mostrarReferido=false;
 
     private String numeroFactura;
     private String fechaFactura;
@@ -35,8 +37,14 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     private String valorAfecta;
     private String referencia;
     private String totalFinal;
+    
+    //============> Campos adicionales para los referidos <===================//
+    private String referido;
+    private String referidoIdentificacion;
+    private String referidoPorcentaje;
+    private String valorComision;
 
-    public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal) {
+    public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal,String referido,String referidoIdentificacion,String referidoPorcentaje,String valorComision) {
         this.numeroFactura = numeroFactura;
         this.fechaFactura = fechaFactura;
         this.identificacionCliente = identificacionCliente;
@@ -53,6 +61,10 @@ public class ReporteFacturaData implements ExcelDatosInterface {
         this.valorAfecta=valorAfecta;
         this.referencia=referencia;
         this.totalFinal=totalFinal;
+        this.referido=referido;
+        this.referidoIdentificacion=referidoIdentificacion;
+        this.referidoPorcentaje=referidoPorcentaje;
+        this.valorComision=valorComision;
     }
 
         
@@ -184,9 +196,54 @@ public class ReporteFacturaData implements ExcelDatosInterface {
         this.totalFinal = totalFinal;
     }
 
+    public String getReferido() {
+        return referido;
+    }
+
+    public void setReferido(String referido) {
+        this.referido = referido;
+    }
+
+    public String getReferidoIdentificacion() {
+        return referidoIdentificacion;
+    }
+
+    public void setReferidoIdentificacion(String referidoIdentificacion) {
+        this.referidoIdentificacion = referidoIdentificacion;
+    }
+
+    public String getReferidoPorcentaje() {
+        return referidoPorcentaje;
+    }
+
+    public void setReferidoPorcentaje(String referidoPorcentaje) {
+        this.referidoPorcentaje = referidoPorcentaje;
+    }
+
+    public String getValorComision() {
+        return valorComision;
+    }
+
+    public void setValorComision(String valorComision) {
+        this.valorComision = valorComision;
+    }
+    
+    
+
     @Override
     public List<TipoDato> getDatos() {
+        
+        if(mostrarReferido)
+            return getDatosReporteComisiones();
+        else
+            return getDatosReporteFactura();
+        
+    }
+
+    public List<TipoDato> getDatosReporteFactura()
+    {    
         List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
+
         tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));
@@ -202,10 +259,36 @@ public class ReporteFacturaData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.ivaDoceFactura, Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.valorAfecta, Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.totalFinal, Excel.TipoDataEnum.NUMERO));
+
         return tiposDatos;
     }
-
     
+    
+    public List<TipoDato> getDatosReporteComisiones()
+    {    
+        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
+        tiposDatos.add(new TipoDato(this.referidoIdentificacion, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.referido, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.referidoPorcentaje, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.valorComision, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));
+        tiposDatos.add(new TipoDato(this.identificacionCliente, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.razonSocialCliente, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.nombreLegalCliente, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.documento, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.estadoFactura, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.tipoEmision, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.subtotalDoceFactura, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.subtotalCeroFactura, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.descFactura, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.ivaDoceFactura, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.valorAfecta, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.totalFinal, Excel.TipoDataEnum.NUMERO));
+
+        return tiposDatos;
+    }
     
    
     

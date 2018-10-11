@@ -32,7 +32,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
     
     public Map<String ,ParametroCodefac> getParametrosMap() throws java.rmi.RemoteException
     {
-            Map<String ,ParametroCodefac> parametrosCodefacMap=new HashMap<String,ParametroCodefac>();
+        Map<String ,ParametroCodefac> parametrosCodefacMap=new HashMap<String,ParametroCodefac>();
         
         List<ParametroCodefac> parametros=parametroCodefacFacade.findAll();
         for (ParametroCodefac parametro : parametros) {
@@ -53,9 +53,34 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
             return null;
     }
     
+    
+    public void editarParametros(List<ParametroCodefac> parametro) throws java.rmi.RemoteException
+    {
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+                    for (ParametroCodefac parametroCodefac : parametro) {
+                        if (parametroCodefac.getId() == null) //Si no existe el dato lo grabo
+                        {
+                            entityManager.persist(parametroCodefac);
+                        } else //Si existe el dato solo lo edito
+                        {
+                            entityManager.merge(parametroCodefac);
+                        }
+                    }
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ParametroCodefacService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
     /**
      * Edita todos los parametros 
      * @param parametro 
+     * @deprecated porque cuando se actualizan todos los valores causan problemas en algunos formularios
      */
     public void editarParametros(Map<String ,ParametroCodefac> parametro) throws java.rmi.RemoteException
     {

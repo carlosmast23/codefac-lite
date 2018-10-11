@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,8 @@ import java.util.logging.Logger;
  */
 public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
     
-    private Map<String, ParametroCodefac> parametros;
+    private Map<String, ParametroCodefac> parametrosTodos;
+    private List<ParametroCodefac> parametrosEditar;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -53,8 +55,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         try {
             setearVariable();
             ParametroCodefacServiceIf service=ServiceFactory.getFactory().getParametroCodefacServiceIf();
-            service.editarParametros(parametros);
+            service.editarParametros(parametrosEditar);
             DialogoCodefac.mensaje("Actualizado datos", "Los parametros fueron actualizados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            //Cargar nuevamente lo datos de la base para tener persistente la informacion
+            cargarDatos();
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error","No se pueden grabar los parametros",DialogoCodefac.MENSAJE_INCORRECTO);
@@ -142,34 +147,44 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         getCmbActivarModuloCartera().addItem(EnumSiNo.NO);
         getCmbActivarModuloCartera().addItem(EnumSiNo.SI);
         
+        //Agregar las opcion para esocger si o no en activar los comprobantes de venta
+        getCmbActivarComprobanteVenta().removeAllItems();
+        getCmbActivarComprobanteVenta().addItem(EnumSiNo.NO);
+        getCmbActivarComprobanteVenta().addItem(EnumSiNo.SI);
+        
     }
 
     private void cargarDatos() {
         try {
             ParametroCodefacServiceIf service=ServiceFactory.getFactory().getParametroCodefacServiceIf();
-            parametros = service.getParametrosMap();
+            parametrosTodos = service.getParametrosMap();
             
-            ParametroCodefac parametroTipoDocumento= parametros.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA);
+            ParametroCodefac parametroTipoDocumento= parametrosTodos.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA);
             TipoDocumentoEnum tipoDocumentoEnum=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroTipoDocumento.getValor());            
             getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnum);
             
             //Cargar el documento de la compra
-            ParametroCodefac parametroTipoDocumentoCompra= parametros.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA);
+            ParametroCodefac parametroTipoDocumentoCompra= parametrosTodos.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA);
             TipoDocumentoEnum tipoDocumentoCompraEnum=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroTipoDocumentoCompra.getValor());            
             getCmbTipoDocumentoCompra().setSelectedItem(tipoDocumentoCompraEnum);
             
             //Cargar el documento de la compra
-            ParametroCodefac parametroOrdenCompraObservacion= parametros.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
+            ParametroCodefac parametroOrdenCompraObservacion= parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
             getTxtOrdenTrabajoReporte().setText((parametroOrdenCompraObservacion!=null)?parametroOrdenCompraObservacion.getValor():"");
             
             //Cargar datos del tipo de reporte de las ordenes de trabajo
-            ParametroCodefac parametroFormtaOrdenTrabajo= parametros.get(ParametroCodefac.FORMATO_ORDEN_TRABAJO);
+            ParametroCodefac parametroFormtaOrdenTrabajo= parametrosTodos.get(ParametroCodefac.FORMATO_ORDEN_TRABAJO);
             getCmbFormatoHojas().setSelectedItem((parametroFormtaOrdenTrabajo!=null)?parametroFormtaOrdenTrabajo.getValor():null);
             
-            ParametroCodefac parametroActivarCarteras = parametros.get(ParametroCodefac.ACTIVAR_CARTERA);
+            ParametroCodefac parametroActivarCarteras = parametrosTodos.get(ParametroCodefac.ACTIVAR_CARTERA);
             EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra((parametroActivarCarteras!=null)?parametroActivarCarteras.getValor():null);
             getCmbActivarModuloCartera().setSelectedItem(enumSiNo);
             //getTxtOrdenTrabajoReporte().setText((parametroFormtaOrdenTrabajo!=null)?parametroFormtaOrdenTrabajo.getValor():"");
+            
+            ParametroCodefac parametroComprobanteVenta= parametrosTodos.get(ParametroCodefac.COMPROBANTE_VENTA_ACTIVAR);
+            enumSiNo=EnumSiNo.getEnumByLetra((parametroComprobanteVenta!=null)?parametroComprobanteVenta.getValor():null);
+            getCmbActivarComprobanteVenta().setSelectedItem(enumSiNo);
+            
             
             
         } catch (RemoteException ex) {
@@ -178,24 +193,36 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
     }
 
     private void setearVariable() {
+        parametrosEditar=new ArrayList<ParametroCodefac>();        
+                
         TipoDocumentoEnum tipoDocumento=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-        parametros.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA).setValor(tipoDocumento.getCodigo());
+        parametrosTodos.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA).setValor(tipoDocumento.getCodigo());
+        parametrosEditar.add(parametrosTodos.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA));
         
         TipoDocumentoEnum tipoDocumentoCompra=(TipoDocumentoEnum) getCmbTipoDocumentoCompra().getSelectedItem();
-        parametros.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA).setValor(tipoDocumentoCompra.getCodigo());
+        parametrosTodos.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA).setValor(tipoDocumentoCompra.getCodigo());
+        parametrosEditar.add(parametrosTodos.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA));
         
         //Agregar detalle para la orden de trabajo
         agregarParametro(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES,getTxtOrdenTrabajoReporte().getText());
+        parametrosEditar.add(parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES));
+        
         
         EnumSiNo enumSiNo=(EnumSiNo) getCmbActivarModuloCartera().getSelectedItem();
         agregarParametro(ParametroCodefac.ACTIVAR_CARTERA,enumSiNo.getLetra());
-        /*ParametroCodefac parametroCodefac=parametros.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
+        parametrosEditar.add(parametrosTodos.get(ParametroCodefac.ACTIVAR_CARTERA));
+        
+        
+        enumSiNo = (EnumSiNo) getCmbActivarComprobanteVenta().getSelectedItem();
+        agregarParametro(ParametroCodefac.COMPROBANTE_VENTA_ACTIVAR, (enumSiNo!=null)?enumSiNo.getLetra():null);
+        parametrosEditar.add(parametrosTodos.get(ParametroCodefac.COMPROBANTE_VENTA_ACTIVAR));
+        /*ParametroCodefac parametroCodefac=parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)
         {
             parametroCodefac=new ParametroCodefac();
             parametroCodefac.setNombre(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
             parametroCodefac.setValor(getTxtOrdenTrabajoReporte().getText());
-            parametros.put(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES, parametroCodefac);
+            parametrosTodos.put(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES, parametroCodefac);
 
         }
         else
@@ -212,17 +239,18 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         }
         
         agregarParametro(ParametroCodefac.FORMATO_ORDEN_TRABAJO,formatoHojaEnum.getLetra());
+        parametrosEditar.add(parametrosTodos.get(ParametroCodefac.FORMATO_ORDEN_TRABAJO));
         
     }
     
     private void agregarParametro(String nombreParametro,String valor)
     {
-        ParametroCodefac parametroCodefac = parametros.get(nombreParametro);
+        ParametroCodefac parametroCodefac = parametrosTodos.get(nombreParametro);
         if (parametroCodefac == null) {
             parametroCodefac = new ParametroCodefac();
             parametroCodefac.setNombre(nombreParametro);
             parametroCodefac.setValor(valor);
-            parametros.put(nombreParametro, parametroCodefac);
+            parametrosTodos.put(nombreParametro, parametroCodefac);
 
         } else {
             parametroCodefac.setValor(valor);

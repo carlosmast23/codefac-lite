@@ -98,6 +98,13 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         chkObligadoLlevarContabilidad = new javax.swing.JCheckBox();
         lblEspacio7 = new javax.swing.JLabel();
         lblEspacio4 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        chkContacto = new javax.swing.JCheckBox();
+        lblEspacioHorizontal = new javax.swing.JLabel();
+        lblEspacioVertical = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        txtPorcentajeComision = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -407,9 +414,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(chkObligadoLlevarContabilidad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio7, gridBagConstraints);
@@ -422,6 +428,49 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
         jTabbedPane1.addTab("Datos Adicionales", jPanel1);
 
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel1.setText("Contacto clientes recomendados:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(jLabel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel2.add(chkContacto, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.weightx = 0.1;
+        jPanel2.add(lblEspacioHorizontal, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 0.1;
+        jPanel2.add(lblEspacioVertical, gridBagConstraints);
+
+        jLabel18.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel18.setText("Porcentaje Comisión :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(jLabel18, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 100;
+        jPanel2.add(txtPorcentajeComision, gridBagConstraints);
+
+        jTabbedPane1.addTab("Referencias", jPanel2);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -433,6 +482,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox chkContacto;
     private javax.swing.JCheckBox chkObligadoLlevarContabilidad;
     private javax.swing.JComboBox<ClienteEnumEstado> cmbEstado;
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
@@ -440,6 +490,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JComboBox<OperadorNegocioEnum> cmbTipoOperador;
     private javax.swing.JComboBox<Persona.TipoIdentificacionEnum> jComboIdentificacion;
     private javax.swing.JComboBox<String> jComboTipoCliente;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -448,6 +499,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -457,6 +509,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelCaracteristicasGenerales;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -475,8 +528,11 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio6;
     private javax.swing.JLabel lblEspacio7;
     private javax.swing.JLabel lblEspacio8;
+    private javax.swing.JLabel lblEspacioHorizontal;
+    private javax.swing.JLabel lblEspacioVertical;
     private javax.swing.JLabel lblOligadoLlevarContabilidad;
     private javax.swing.JTextField txtNombreLegal;
+    private javax.swing.JTextField txtPorcentajeComision;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<String> getjComboTipoCliente() {
@@ -648,6 +704,16 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public void setTxtNombreLegal(JTextField txtNombreLegal) {
         this.txtNombreLegal = txtNombreLegal;
     }
+
+    public JCheckBox getChkContacto() {
+        return chkContacto;
+    }
+    
+    public JTextField getTxtPorcentajeComision() {
+        return txtPorcentajeComision;
+    }
+    
+    
 
     @ComponenteSecundarioAnotacion(nombreCategoria = "Mensajeria")
     public ComponenteEnvioSmsPanel getPnlSms() {

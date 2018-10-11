@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
@@ -59,18 +60,23 @@ import org.apache.commons.collections4.map.HashedMap;
  *
  * @author Carlos
  */
-public class KardexModel extends KardexPanel{
-    
+public class KardexModel extends KardexPanel {
+
     /**
      * Referencia del producto para consultar el kardex
      */
     private Producto productoSeleccionado;
-    
+
     /**
      * Variable donde se alamcena todos los kardex consultados
      */
     private Kardex kardex;
     
+    /**
+     * Variable donde se almacena la consulta de los detalles del kardex para imprimir
+     */
+    private List<KardexDetalle> detalleKardex;
+
     /**
      * Lista de resultado de los datos para imprimir
      */
@@ -79,6 +85,7 @@ public class KardexModel extends KardexPanel{
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         agregarListernerBotones();
+        listenerCheckBox();
         valoresIniciales();
     }
 
@@ -104,16 +111,15 @@ public class KardexModel extends KardexPanel{
 
     @Override
     public void imprimir() {
-        
+
         InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream("kardex.jrxml");
-        
-                
+
         DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
             @Override
             public void excel() {
                 try {
                     Excel excel = new Excel();
-                    String[] titulo={"#","Fecha","Documento","Preimpreso","Proveedor","Cant","P.Unit","P.Total","Cant","P.Unit","P.Total","Cant","P.Unit","P.Total"};
+                    String[] titulo = {"#", "Fecha", "Documento", "Preimpreso", "Proveedor", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total"};
                     excel.gestionarIngresoInformacionExcel(titulo, listaKardex);
                     excel.abrirDocumento();
                 } catch (IOException ex) {
@@ -127,8 +133,8 @@ public class KardexModel extends KardexPanel{
 
             @Override
             public void pdf() {
-                Map<String,Object> parameters = new HashMap<String,Object>();
-                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listaKardex, panelPadre, "Kardex "+productoSeleccionado.getNombre(), OrientacionReporteEnum.HORIZONTAL);                
+                Map<String, Object> parameters = new HashMap<String, Object>();
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listaKardex, panelPadre, "Kardex " + productoSeleccionado.getNombre(), OrientacionReporteEnum.HORIZONTAL);
             }
         });
     }
@@ -145,7 +151,7 @@ public class KardexModel extends KardexPanel{
 
     @Override
     public void limpiar() {
-        listaKardex=new ArrayList<KardexData>();
+        listaKardex = new ArrayList<KardexData>();
     }
 
 //    @Override
@@ -188,67 +194,73 @@ public class KardexModel extends KardexPanel{
                 }
             }
         });
-        
+
         getBtnConsultar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     //Date fechaInicio=new Date(getCmbFechaInicial().getDate().getTime());
                     //Date fechaFin=new Date(getCmbFechaFinal().getDate().getTime());
-                    Bodega bodega=(Bodega) getCmbBodega().getSelectedItem();
-                    
-                    KardexServiceIf kardexService=ServiceFactory.getFactory().getKardexServiceIf();
-                    
-                    Map<String,Object> parametrosMap=new HashMap<String, Object>();
+                    Bodega bodega = (Bodega) getCmbBodega().getSelectedItem();
+
+                    KardexServiceIf kardexService = ServiceFactory.getFactory().getKardexServiceIf();
+
+                    /*Map<String, Object> parametrosMap = new HashMap<String, Object>();
                     parametrosMap.put("bodega", bodega);
-                    parametrosMap.put("producto", productoSeleccionado);
-                    
-                    List<Kardex> resultados=kardexService.obtenerPorMap(parametrosMap);
-                    if(resultados!=null && resultados.size()>0)
+                    parametrosMap.put("producto", productoSeleccionado);*/
+
+                    //List<Kardex> resultados = kardexService.obtenerPorMap(parametrosMap);
+                    Date fechaInicial=null;
+                    Date fechaFinal=null;
+                            
+                    if(getCmbFechaInicial().getDate()!=null)
                     {
-                        kardex=resultados.get(0);
+                        fechaInicial=new Date(getCmbFechaInicial().getDate().getTime());
+                    }
+                    
+                    if(getCmbFechaFinal().getDate()!=null)
+                    {
+                        fechaFinal=new Date(getCmbFechaFinal().getDate().getTime());
+                    }
+                    
+                    Integer cantidadMovimientos=null;
+                    if(!getChkTodosMovimientos().isSelected())
+                    {
+                        cantidadMovimientos=(Integer) getTxtMovimientos().getValue();
+                    }                    
+                    
+                    detalleKardex=kardexService.obtenerConsultaPorFecha(fechaInicial,fechaFinal, productoSeleccionado, bodega,cantidadMovimientos);
+                    if (detalleKardex != null && detalleKardex.size() > 0) {
+                        kardex = detalleKardex.get(detalleKardex.size()-1).getKardex();
                         cargarTablaKardex();
                         UtilidadesTablas.ubicarFinalTabla(getTblKardexDetalle());
-                        //getTblKardexDetalle().scrollRectToVisible(getTblKardexDetalle().getCellRect(getTblKardexDetalle().getRowCount()-1,0, true));
-                        //get.scrollRectToVisible(table.getCellRect(table.getRowCount()-1, 0, true));
+
                     }
                 } catch (RemoteException ex) {
                     Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
                 }
-                
+
             }
         });
     }
-    
-    private void cargarTablaKardex()
-    {
-        Integer cantidadAcumulada=0;
-        BigDecimal precioUnitarioPromedio=BigDecimal.ZERO;
-        BigDecimal precioTotalAcumulado=BigDecimal.ZERO;
-        
-        
-        listaKardex=new ArrayList<KardexData>();
-        List<KardexDetalle> detalles=kardex.getDetallesKardex();
-        for (int i = 0; i < detalles.size(); i++) 
-        {
+
+    private void cargarTablaKardex() {
+        Integer cantidadAcumulada = 0;
+        BigDecimal precioUnitarioPromedio = BigDecimal.ZERO;
+        BigDecimal precioTotalAcumulado = BigDecimal.ZERO;
+
+        listaKardex = new ArrayList<KardexData>();
+        //List<KardexDetalle> detalles = kardex.getDetallesKardex();
+        for (int i = 0; i < detalleKardex.size(); i++) {
             KardexData kardexData = new KardexData();
             //Vector<String> fila=new Vector<String>();
-            KardexDetalle kardexDetalle = detalles.get(i);
+            KardexDetalle kardexDetalle = detalleKardex.get(i);
 
             //fila.add(i+""); //numeracion
             kardexData.setDocumento(kardexDetalle.getCodigoTipoDocumentoEnum().getNombre());
             //fila.add(kardexDetalle.getCodigoTipoDocumentoEnum().getNombre()); //tipo del documento
             TipoDocumentoEnum tipoDocumentoEnum = kardexDetalle.getCodigoTipoDocumentoEnum();
-
-            if (i == 0) //Si es el primer registro el precio es el mismo
-            {
-                precioUnitarioPromedio = kardexDetalle.getPrecioUnitario();
-            } else //Cuando es el segundo registro empiezo a calcular el promedio
-            {
-                precioUnitarioPromedio = precioUnitarioPromedio.add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 3, RoundingMode.HALF_UP);
-            }
 
             //llenar los datos adionales
             kardexData.setPreimpreso(kardexDetalle.getPreimpreso());
@@ -262,66 +274,80 @@ public class KardexModel extends KardexPanel{
 
                     cantidadAcumulada += kardexDetalle.getCantidad();
                     precioTotalAcumulado = precioTotalAcumulado.add(kardexDetalle.getPrecioTotal());
+
+                    if (i == 0) //Si es el primer registro el precio es el mismo
+                    {
+                        precioUnitarioPromedio = kardexDetalle.getPrecioUnitario();
+                    } else //Cuando es el segundo registro empiezo a calcular el promedio
+                    {
+                        precioUnitarioPromedio = precioTotalAcumulado.divide(new BigDecimal(cantidadAcumulada),2,BigDecimal.ROUND_HALF_UP);
+                    }
+
                     completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado, true);
                 } else //Cuando afecta de forma negativa
                 {
 
                     cantidadAcumulada -= kardexDetalle.getCantidad();
                     precioTotalAcumulado = precioTotalAcumulado.subtract(kardexDetalle.getPrecioTotal());
+                    
+                    if (i == 0) //Si es el primer registro el precio es el mismo
+                    {
+                        precioUnitarioPromedio = kardexDetalle.getPrecioUnitario();
+                    } else //Cuando es el segundo registro empiezo a calcular el promedio
+                    {
+                        precioUnitarioPromedio = precioTotalAcumulado.divide(new BigDecimal(cantidadAcumulada),2,BigDecimal.ROUND_HALF_UP);
+                    }
+                    
                     completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado, false);
                 }
             }
 
             listaKardex.add(kardexData);//Agregar los items a la lista de consulta
-                
-                                
+
         }
-        
+
         construirModeloTabla();
-   
-        
+
     }
-    
-    
-    private void construirModeloTabla()
-    {
-        String[] titulo={"#","Fecha","Documento","Preimpreso","Proveedor","Cant","P.Unit","P.Total","Cant","P.Unit","P.Total","Cant","P.Unit","P.Total"};
-        String[] primeraFila={" ","","KARDEX","","","","INGRESO","","","EGRESO","","","SALDO",""};
-        
-        DefaultTableModel modeloTabla=new DefaultTableModel(primeraFila,0);
+
+    private void construirModeloTabla() {
+        String[] titulo = {"#", "Fecha", "Documento", "Preimpreso", "Proveedor", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total"};
+        String[] primeraFila = {" ", "", "KARDEX", "", "", "", "INGRESO", "", "", "EGRESO", "", "", "SALDO", ""};
+
+        DefaultTableModel modeloTabla = new DefaultTableModel(primeraFila, 0);
         modeloTabla.addRow(titulo);
-        
-        int indice=1;
+
+        int indice = 1;
         for (KardexData kardexData : listaKardex) {
-            
-            Vector fila =new Vector();
+
+            Vector fila = new Vector();
             fila.add(indice++);
             fila.add(kardexData.getFecha());
-            
+
             fila.add(kardexData.getDocumento());
             fila.add(kardexData.getPreimpreso());
             fila.add(kardexData.getProveedor());
-            
+
             fila.add(kardexData.getIngreso_cantidad());
             fila.add(kardexData.getIngreso_precio());
             fila.add(kardexData.getIngreso_total());
-            
+
             fila.add(kardexData.getEgreso_cantidad());
             fila.add(kardexData.getEgreso_precio());
             fila.add(kardexData.getEgreso_total());
-            
+
             fila.add(kardexData.getSaldo_cantidad());
             fila.add(kardexData.getSaldo_precio());
             fila.add(kardexData.getSaldo_total());
-            
+
             modeloTabla.addRow(fila);
         }
-        
+
         //modeloTabla.addRow(fila);
         getTblKardexDetalle().setModel(modeloTabla);
 
         getLblCantidad().setText(kardex.getStock() + "");
-        getLblPrecioPromedio().setText(kardex.getPrecioPromedio() + "");
+        getLblPrecioPromedio().setText(kardex.calcularPrecioPromedio() + "");
         getLblPrecioUltimo().setText(kardex.getPrecioUltimo() + "");
         getLblTotal().setText(kardex.getPrecioTotal() + "");
 
@@ -333,26 +359,24 @@ public class KardexModel extends KardexPanel{
         tamaniosMap.put(10, 15);
 
         UtilidadesTablas.definirTamanioColumnasPorMap(getTblKardexDetalle(), tamaniosMap);
-        
+
     }
-    
-    private void completarFila(KardexData kardexData,ModuloCodefacEnum moduloEnum,KardexDetalle kardexDetalle,Integer cantidadAcumulada,BigDecimal precioUnitarioAcumulado,BigDecimal precioTotalAcumulado,boolean agregar)
-    {
+
+    private void completarFila(KardexData kardexData, ModuloCodefacEnum moduloEnum, KardexDetalle kardexDetalle, Integer cantidadAcumulada, BigDecimal precioUnitarioAcumulado, BigDecimal precioTotalAcumulado, boolean agregar) {
         //Agregar la fecha UtilidadesFecha
-        if(kardexDetalle.getFechaIngreso()!=null)
-        {
+        if (kardexDetalle.getFechaIngreso() != null) {
             kardexData.setFecha(UtilidadesFecha.formatoDiaMesAño(kardexDetalle.getFechaIngreso()));
         }
-        
+
         if (agregar) {
             kardexData.setIngreso_cantidad(kardexDetalle.getCantidad() + "");
             kardexData.setIngreso_precio(kardexDetalle.getPrecioUnitario() + "");
             kardexData.setIngreso_total(kardexDetalle.getPrecioTotal() + "");
-            
+
             kardexData.setEgreso_cantidad("");
             kardexData.setEgreso_precio("");
             kardexData.setEgreso_total("");
-            
+
             /*
             fila.add(kardexDetalle.getCantidad() + "");
             fila.add(kardexDetalle.getPrecioUnitario() + "");
@@ -361,10 +385,7 @@ public class KardexModel extends KardexPanel{
             fila.add("");
             fila.add("");
             fila.add("");*/
-
-        } 
-        else 
-        {
+        } else {
             kardexData.setIngreso_cantidad("");
             kardexData.setIngreso_precio("");
             kardexData.setIngreso_total("");
@@ -380,23 +401,22 @@ public class KardexModel extends KardexPanel{
             fila.add(kardexDetalle.getCantidad() + "");
             fila.add(kardexDetalle.getPrecioUnitario() + "");
             fila.add(kardexDetalle.getPrecioTotal() + "");
-            */
+             */
 
         }
-        
+
         //Agregar los saldos
         kardexData.setSaldo_cantidad(cantidadAcumulada + "");
-        kardexData.setSaldo_precio(precioUnitarioAcumulado+ "");
-        kardexData.setSaldo_total(precioTotalAcumulado+"");
+        kardexData.setSaldo_precio(precioUnitarioAcumulado + "");
+        kardexData.setSaldo_total(precioTotalAcumulado + "");
         /*fila.add(cantidadAcumulada + "");
         fila.add(precioUnitarioAcumulado+ "");
         fila.add(precioTotalAcumulado+"");*/
-        
+
     }
-    
+
     private void valoresIniciales() {
-        
-        
+
         try {
             getCmbBodega().removeAllItems();
             BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
@@ -407,7 +427,7 @@ public class KardexModel extends KardexPanel{
         } catch (RemoteException ex) {
             Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     @Override
@@ -420,5 +440,20 @@ public class KardexModel extends KardexPanel{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
+    private void listenerCheckBox() {
+        getChkTodosMovimientos().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(getChkTodosMovimientos().isSelected())
+                {
+                    getTxtMovimientos().setEnabled(false);
+                }
+                else
+                {
+                    getTxtMovimientos().setEnabled(true);
+                }
+            }
+        });
+    }
+
 }

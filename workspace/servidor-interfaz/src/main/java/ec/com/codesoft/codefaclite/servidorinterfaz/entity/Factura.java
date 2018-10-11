@@ -75,8 +75,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
     @Column(name = "IVA")
     private BigDecimal iva;
 
-    @Column(name = "IVA_SRI_ID")
-    private Long ivaSriId;
+    //@Column(name = "IVA_SRI_ID")
+    @JoinColumn(name = "IVA_SRI_ID")
+    private ImpuestoDetalle ivaSriId;
     
     @Column(name = "TOTAL")
     private BigDecimal total;
@@ -87,6 +88,10 @@ public class Factura extends ComprobanteEntity implements Serializable {
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne    
     private Persona cliente;
+    
+    @JoinColumn(name = "REFERIDO_ID")
+    @ManyToOne    
+    private Persona referido;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -114,7 +119,7 @@ public class Factura extends ComprobanteEntity implements Serializable {
     }
     
 
-    public Long getIvaSriId() {
+    public ImpuestoDetalle getIvaSriId() {
         return ivaSriId;
     }
 
@@ -140,7 +145,7 @@ public class Factura extends ComprobanteEntity implements Serializable {
     }
 
 
-    public void setIvaSriId(Long ivaSriId) {
+    public void setIvaSriId(ImpuestoDetalle ivaSriId) {
         this.ivaSriId = ivaSriId;
     }
 
@@ -224,6 +229,16 @@ public class Factura extends ComprobanteEntity implements Serializable {
     public void setEstadoNotaCredito(String estadoNotaCredito) {
         this.estadoNotaCredito = estadoNotaCredito;
     }
+
+    public Persona getReferido() {
+        return referido;
+    }
+
+    public void setReferido(Persona referido) {
+        this.referido = referido;
+    }
+    
+    
         
     
     /**

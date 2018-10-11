@@ -66,6 +66,11 @@ public class ParametroCodefac implements Serializable {
     public static final String FORMATO_ORDEN_TRABAJO="formato_orden_trabajo";
     public static final String ACTIVAR_CARTERA="cartera_activa";
     
+    /**
+     * Parametro para activar los comporbante de venta para imprimir en las facturas electronicas
+     */
+    public static final String COMPROBANTE_VENTA_ACTIVAR="comprobante_venta_activar";
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
