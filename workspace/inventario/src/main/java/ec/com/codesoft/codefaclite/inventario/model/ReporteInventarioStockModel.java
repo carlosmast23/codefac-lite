@@ -5,13 +5,28 @@
  */
 package ec.com.codesoft.codefaclite.inventario.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.inventario.busqueda.CategoriaProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.inventario.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.inventario.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.ReporteInventarioStockPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -23,10 +38,17 @@ import java.util.logging.Logger;
  */
 public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
 {
-
+    private Producto producto;
+    private Persona proveedor; 
+    private CategoriaProducto categoriaProducto;
+    private Boolean todos;
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         iniciarValores();
+        addListenerBotones();
+        addCheckListener();
+        addComboListener();
     }
 
     @Override
@@ -61,8 +83,11 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        this.producto = null;
+        this.proveedor = null;
+        this.categoriaProducto = null;
+        getTxtNombre().setText("");
+   }
 
     @Override
     public String getURLAyuda() {
@@ -71,22 +96,69 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
     public List<String> getPerfilesPermisos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<String> permisos = new ArrayList<String>();
+        permisos.add(Perfil.PERFIl_ADMINISTRADOR);
+        permisos.add(Perfil.PERFIl_OPERADOR);
+        return permisos;
     }
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BuscarDialogoModel buscarDialogoModel = null;
+        String opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
+        switch(opcionReporte)
+        {
+            case "Producto":
+                ProductoBusquedaDialogo busquedaDialogo = new ProductoBusquedaDialogo();
+                buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
+            break;
+            case "Proveedor":
+                ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
+                buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
+            break;
+            case "Categoria":
+                CategoriaProductoBusquedaDialogo categoriaProductoBusquedaDialogo = new CategoriaProductoBusquedaDialogo();
+                buscarDialogoModel = new BuscarDialogoModel(categoriaProductoBusquedaDialogo);
+            break;
+        }
+        return buscarDialogoModel;
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
+        switch(opcionReporte)
+        {
+            case "Producto":
+                producto = (Producto) entidad;
+                getTxtNombre().setText(" " + producto.getNombre()+ " - " + producto.getCodigoPersonalizado());
+            break;
+            case "Proveedor":
+                proveedor =(Persona) entidad;
+                getTxtNombre().setText(" " + proveedor.getIdentificacion() + " - " + proveedor.getRazonSocial());
+            break;
+            case "Categoria":
+                categoriaProducto = (CategoriaProducto) entidad;
+                getTxtNombre().setText(" " + categoriaProducto.getNombre() + " " + categoriaProducto.getDescripcion());
+                
+            break;
+            default:
+                getTxtNombre().setText("");
+            break;
+        }
+        
     }
     
     private void iniciarValores() {
@@ -102,4 +174,164 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
         }
     }
     
+    public void addListenerBotones()
+    {
+        getBtnBuscarGenerica().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if(getCmbTipoReporte().getSelectedItem().equals("Producto"))
+                {
+                    ProductoBusquedaDialogo busquedaDialogo = new ProductoBusquedaDialogo();
+                    BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
+                    buscarDialogoModel.setVisible(true);
+                    Producto productoTemp = (Producto) buscarDialogoModel.getResultado();
+                    if(productoTemp != null)
+                    {
+                        limpiar();
+                        producto = productoTemp;
+                        getTxtNombre().setText(" " + producto.getNombre()+ " - " + producto.getCodigoPersonalizado());
+                        
+                    }
+                }
+                else if(getCmbTipoReporte().getSelectedItem().equals("Proveedor"))
+                {
+                    ProveedorBusquedaDialogo busquedaDialogo = new ProveedorBusquedaDialogo();
+                    BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
+                    buscarDialogoModel.setVisible(true);
+                    Persona proveedorTemp = (Persona) buscarDialogoModel.getResultado();
+                    if(proveedorTemp != null)
+                    {
+                        limpiar();
+                        proveedor = proveedorTemp;
+                        getTxtNombre().setText(" " + proveedor.getNombreSimple() + " " + proveedor.getIdentificacion());
+                    }
+                }
+                else if(getCmbTipoReporte().getSelectedItem().equals("Categoria"))
+                {
+                    CategoriaProductoBusquedaDialogo busquedaDialogo = new CategoriaProductoBusquedaDialogo();
+                    BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
+                    buscarDialogoModel.setVisible(true);
+                    CategoriaProducto categoriaProductoTemp = (CategoriaProducto) buscarDialogoModel.getResultado();
+                    if(categoriaProductoTemp != null)
+                    {
+                        limpiar();
+                        categoriaProducto = categoriaProductoTemp;
+                        getTxtNombre().setText(" " + categoriaProducto.getNombre() + " " + categoriaProducto.getDescripcion());
+                    }
+                }else
+                {
+                    DialogoCodefac.mensaje("Advertencia", "Seleccione una opción valida", DialogoCodefac.MENSAJE_ADVERTENCIA);                
+                }
+            }
+        });
+        
+        getBtnBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                String opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
+                switch(opcionReporte)
+                {
+                    case "Producto":
+                        if(!todos){
+//                                buscarPorProductor();
+//                                crearMapPorProducto();
+                        }else{
+//                                buscarTodosProductoProveedor();
+//                                crearMapPorProducto();
+                        }
+//                      if(productoProveedores != null && productoProveedores.size() > 0){
+//                          mostrarDatosTablaProducto();
+//                      }else{
+//                          DialogoCodefac.mensaje("Producto", "No existen Proveedores para el Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+//                      }
+                    break;
+                    case "Proveedor":
+                        if(!todos){
+//                                buscarPorProveedor();
+//                                crearMapPorProveedor();
+                        }else{
+//                                buscarTodosProductoProveedor();
+//                                crearMapPorProveedor();
+                        }
+//                      if(productoProveedores != null && productoProveedores.size() > 0){
+//                          mostrarDatosTablaProveedor();
+//                      }else{
+//                          DialogoCodefac.mensaje("Proveedor", "No existen Producots para el Proveedor", DialogoCodefac.MENSAJE_ADVERTENCIA);
+//                      }
+                    break;
+                    case "Categoria":
+                        if(!todos)
+                        {
+                            
+                        }else
+                        {
+                            
+                        }
+                    default:
+                        DialogoCodefac.mensaje("Advertencia", "Seleccione una opción valida", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    break;                
+                }
+            }
+        });
+    }
+    
+    public void addComboListener()
+    {
+        getCmbTipoReporte().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limpiar();                
+            }
+        });
+    }
+    
+    public void addCheckListener()
+    {
+        getCheckTodos().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(getCheckTodos().isSelected())
+                {
+                    todos = true;
+                    getBtnBuscarGenerica().setEnabled(false);
+                    getTxtNombre().setEnabled(false);
+                    getTxtNombre().setText("");
+                }
+                else
+                {
+                    todos = false;
+                    getBtnBuscarGenerica().setEnabled(true);
+                    getTxtNombre().setEnabled(true);
+                    getTxtNombre().setText("");
+                }
+            }
+        });
+    }
+    
+    public void buscarPorProducto()
+    {
+        
+    }
+    
+    public void buscarPorTodosProducto()
+    {
+        
+    }
+    
+    public void buscarPorProveedor()
+    {
+        
+    }
+    
+    public void buscarPorTodosProveedor(){
+        
+    }
+    
+    public void buscarPorCategoria(){
+        
+    }
+    
+    public void buscarPorTodosCategoria(){
+        
+    }
 }
