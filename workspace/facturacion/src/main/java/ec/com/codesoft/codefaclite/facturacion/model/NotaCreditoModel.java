@@ -14,8 +14,10 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaNotaCredito;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.NotaCreditoBusqueda;
+import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteNotaCreditoImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.panel.NotaCreditoPanel;
@@ -25,6 +27,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataNotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -37,13 +40,19 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoService
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
@@ -53,6 +62,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -62,7 +72,9 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -74,8 +86,11 @@ public class NotaCreditoModel extends NotaCreditoPanel {
 
     private DefaultTableModel modeloTablaDetalle = new DefaultTableModel();
     private NotaCredito notaCredito;
+    private Producto productoSeleccionado;
 
     public NotaCreditoModel() {
+        valoresIniciales();
+        initComponenesGraficos();
         addListenerButtons();
         super.validacionDatosIngresados=false;
     }
@@ -195,7 +210,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             crearDetalleTabla();
             this.notaCredito = notaCreditoTmp;
             mostrarDatosNotaCredito(); 
-            actualizarDatosTablaDetalle();
+            cargarDatosDetalles();
             cargarTablaDatosAdicionales();
         }
         else
@@ -275,8 +290,352 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
+    
+    private void agregarProducto() {
+        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
+        agregarProductoVista(productoSeleccionado);
+    }
+    
+    private void agregarProductoVista(Producto productoSeleccionado) {
+        if (productoSeleccionado == null) {
+            return;
+        }
+        
+        this.productoSeleccionado=productoSeleccionado;
+        setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado());
+    }
+    
+    private void setearValoresProducto(BigDecimal valorUnitario,String descripcion,String codigo) {
+        getTxtValorUnitario().setText(valorUnitario+"");
+        getTxtDescripcion().setText(descripcion);
+        //getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
+        //getTxtDescripcion().setText(productoSeleccionado.getNombre());
+        //Dar foco a la cantidad a ingresar
+        getTxtCantidad().setText("1");
+        getTxtCodigoDetalle().setText(codigo);
+        getTxtCantidad().requestFocus();
+        getTxtCantidad().selectAll();
+    }
+    
+    private void btnListenerCrearProducto() {
+        TipoDocumentoEnum tipoDocumento=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        
+        EnumSiNo manejoInventario=EnumSiNo.NO;
+        switch (tipoDocumento) {
+            case INVENTARIO:
+                manejoInventario=EnumSiNo.SI;
+                break;
+
+        }
+                
+        ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() {
+            @Override
+            public void updateInterface(Producto entity) {
+                if (entity != null) {
+                    productoSeleccionado = entity;
+                    setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado());
+                    //Establecer puntero en la cantidad para agregar
+                    getTxtCantidad().requestFocus();
+                    getTxtCantidad().selectAll();
+                }
+            }
+        };
+                
+        panelPadre.crearDialogoCodefac(observer, VentanaEnum.PRODUCTO, false, new Object[]{manejoInventario,getTxtCodigoDetalle().getText()},this);
+        
+    }
+    
+    private boolean verificarCamposValidados() {
+        //bandera para comprobar que todos los campos esten validados
+        boolean b = true;
+        List<JTextField> camposValidar = new ArrayList<JTextField>();
+        //Ingresar los campos para validar 
+        camposValidar.add(getTxtValorUnitario());
+        camposValidar.add(getTxtCantidad());
+        camposValidar.add(getTxtDescripcion());
+        camposValidar.add(getTxtDescuento());
+        //Obtener el estado de validacion de los campos
+        for (JTextField campo : camposValidar) {
+            Color color=campo.getBackground();
+            //System.out.println(color.getRed()+"-"+color.getGreen()+"-"+color.getBlue());
+            //SeaGlassLookAndFeel.
+            if (!compararColores(color,Color.white)) {
+                b = false;
+            }
+        }
+        return b;
+    }
+    
+    private boolean compararColores(Color color1,Color color2) //TODO: Artificio para comparar colores cuando se manejan templates no compara directo los objetos
+    {
+        if(color1.getRed()==color2.getRed() && color1.getGreen()==color2.getGreen() && color1.getBlue()==color2.getBlue())
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean validacionPersonalizadaPorModulos() {
+        TipoDocumentoEnum tipoDocEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        BigDecimal cantidad = new BigDecimal(getTxtCantidad().getText());
+        BigDecimal valorUnitario = new BigDecimal(getTxtValorUnitario().getText());
+
+        switch(tipoDocEnum)
+        {
+            /*
+            case ACADEMICO:
+                //TODO: Analizar para el caso que tenga descuento
+                if (rubroSeleccionado.getSaldo().compareTo(cantidad.multiply(valorUnitario)) == -1) {
+                    DialogoCodefac.mensaje("Validación", "El Total no puede exceder del valor " + rubroSeleccionado.getSaldo() + " del rubro", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return false;
+                }
+                break;
+                
+            case PRESUPUESTOS:
+                if (presupuestoSeleccionado.getTotalVenta().compareTo(cantidad.multiply(valorUnitario)) == -1) {
+                    DialogoCodefac.mensaje("Validación", "El Total no puede exceder del valor " + rubroSeleccionado.getSaldo() + " del rubro", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return false;
+                }
+                break;
+            */
+        }
+        
+        return true;
+    }
+    
+    public BigDecimal obtenerValorIva() {
+        try {
+            Map<String, Object> map = new HashMap<>();
+            ImpuestoDetalleServiceIf impuestoDetalleService =ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
+            map.put("tarifa", 12); //TODO Parametrizar el iva con la variable del sistema
+            List<ImpuestoDetalle> listaImpuestoDetalles = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
+            listaImpuestoDetalles.forEach((iD) -> {
+                BigDecimal iva = iD.getPorcentaje();
+            });
+            return new BigDecimal(0.120);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public boolean agregarDetallesFactura(NotaCreditoDetalle facturaDetalle) {
+        boolean agregar = true;
+
+        //Verifica si manda un detalle existe solo se modifica
+        if (facturaDetalle != null) {
+            agregar = false;
+        } else {
+            facturaDetalle = new NotaCreditoDetalle();
+        }
+
+        if (!panelPadre.validarPorGrupo("detalles")) {
+            int filaSeleccionada=getTblDetalleNotaCredito().getSelectedRow();
+            cargarDatosDetalles(); //Si no se pudo editar vuelvo a cargar los detalles si se modifico desde la tabla para que quede la forma original
+            //actualizarDatosTablaDetalle();
+            getTblDetalleNotaCredito().setRowSelectionInterval(filaSeleccionada,filaSeleccionada);
+            return false;
+        }
+        
+
+        if (verificarCamposValidados()) {
+            
+            //Validacion dependiendo de la logica de cada tipo de documento
+            if (!validacionPersonalizadaPorModulos()) {
+                return false;
+            }
+            
+            
+            //Variable del producto para verificar otros datos como el iva
+            CatalogoProducto catalogoProducto=null;
+            //Seleccionar la referencia dependiendo del tipo de documento
+            //TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+            
+            facturaDetalle.setTipoReferencia(TipoDocumentoEnum.LIBRE.getCodigo());
+            facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+            try {
+                catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+            } catch (RemoteException ex) {
+                Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            /*
+            facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
+            switch (tipoDocumentoEnum)
+            {
+            case ACADEMICO:
+            facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
+            catalogoProducto = rubroSeleccionado.getRubroNivel().getCatalogoProducto();
+            break;
+            
+            case PRESUPUESTOS:
+            facturaDetalle.setReferenciaId(presupuestoSeleccionado.getId());
+            catalogoProducto=presupuestoSeleccionado.getCatalogoProducto();
+            break;
+            
+            //Para invetario o para libre es la misma logica
+            case INVENTARIO: case LIBRE:
+            facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+            catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+            break;
+            }*/
+            //Advertecia catalogo producto
+            if(catalogoProducto==null)
+            {
+                DialogoCodefac.mensaje("Advertencia","No esta definido el Catalogo Producto ,donde se especifica los impuestos para facturar ",DialogoCodefac.MENSAJE_INCORRECTO);
+                return false;
+            }
+            //FacturaDetalle facturaDetalle = new FacturaDetalle();
+            facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+            facturaDetalle.setDescripcion(getTxtDescripcion().getText());
+            BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
+            facturaDetalle.setPrecioUnitario(valorTotalUnitario);
+            facturaDetalle.setValorIce(BigDecimal.ZERO);
+            facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
+            
+            BigDecimal descuento;
+            if (!getCheckPorcentaje().isSelected()) { //Cuando no es porcentaje el valor se setea directo
+                if (!getTxtDescuento().getText().equals("")) {
+                    descuento = new BigDecimal(getTxtDescuento().getText());
+                } else {
+                    descuento = BigDecimal.ZERO;
+                }
+                
+                facturaDetalle.setDescuento(descuento);
+            } else { //Cuando es porcentaje se calcula el valor directo
+                if (!getTxtDescuento().getText().equals("")) {
+                    BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
+                    porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
+                    BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario().setScale(2,BigDecimal.ROUND_HALF_UP)); //Escala a 2 decimales el valor del valor unitario porque algunos proveedores tienen 3 decimales
+                    descuento = total.multiply(porcentajeDescuento);
+                    facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
+            }
+            //Calular el total despues del descuento porque necesito esa valor para grabar
+            BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
+            facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+            /**
+             * Revisar este calculo del iva para no calcular 2 veces al mostrar
+             */
+            //facturaDetalle.set
+            //facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
+            if (catalogoProducto.getIva().getTarifa().equals(0)) {
+                facturaDetalle.setIva(BigDecimal.ZERO);
+            } else {
+                BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                facturaDetalle.setIva(iva);
+            }
+            if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) > 0) {
+                
+                //Solo agregar si se enviar un dato vacio
+                if (agregar) {
+                    notaCredito.addDetalle(facturaDetalle);
+                }
+                
+                cargarDatosDetalles();
+                limpiarDetalleFactura();
+                cargarTotales();
+            } else {
+                DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                limpiarDetalleFactura();
+                return false;
+            }
+            
+            return true; //si pasa todas las validaciones asumo que se edito correctamente
+
+        }
+        else
+        {
+            return false;
+        }
+        
+    }
+    
+    public void cargarTotales() {
+        notaCredito.calcularTotalesDesdeDetalles();
+        /**
+         * Setear los componentes graficos despues de los calculos
+         */
+        getLblSubtotalSinImpuesto().setText("" + notaCredito.getSubtotalSinImpuestos().add(notaCredito.getSubtotalImpuestos()));
+        getLblSubtotal12().setText("" + notaCredito.getSubtotalImpuestos());
+        getLblSubtotal0().setText("" + notaCredito.getSubtotalSinImpuestos());
+        getLblIva12().setText("" + notaCredito.getIva());
+        getTxtValorTotal().setText("" + this.notaCredito.getTotal());
+        //getLblSubTotalDescuentoConImpuesto().setText("" + notaCredito.getDescuentoImpuestos());
+        //getLblSubTotalDescuentoSinImpuesto().setText("" + notaCredito.getDescuentoSinImpuestos());
+        getLblTotalDescuento().setText("" + notaCredito.getDescuentoImpuestos().add(notaCredito.getDescuentoSinImpuestos()));
+        
+
+    }
+    
+    private void limpiarDetalleFactura() {
+        /*
+        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        
+        //TODO: REVISAR PORQUE ME TOCA HACER ESTA VALIDACION
+        if(tipoDocumentoEnum==null)
+        {
+            tipoDocumentoEnum=tipoDocumentoEnum.LIBRE;
+        }
+        
+        //Limpio las variables
+        switch(tipoDocumentoEnum)
+        {
+            case LIBRE:
+            case INVENTARIO:
+                productoSeleccionado=null;
+                break;
+                
+            case PRESUPUESTOS:
+                presupuestoSeleccionado=null;
+                break;
+                
+            case ACADEMICO:
+                rubroSeleccionado=null;
+                break;
+        
+        }
+        */    
+        
+        //Limpio los datos en la pantalla
+        getTxtCantidad().setText("");
+        getTxtDescripcion().setText("");
+        getTxtValorUnitario().setText("");
+        getTxtDescuento().setText("0");
+        getTxtCodigoDetalle().setText("");
+        getTxtCodigoDetalle().requestFocus();
+        getTxtCodigoDetalle().selectAll();
+    }
 
     private void addListenerButtons() {
+        
+        getBtnAgregarDetalleFactura().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //System.out.println(panelPadre.validarPorGrupo("detalles"));
+                agregarDetallesFactura(null);
+                
+            }
+        });
+        
+        getBtnCrearProducto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnListenerCrearProducto();
+            }
+        });
+        
+        getBtnAgregarProducto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                agregarProducto();
+                
+            }
+        });
         
         getBtnAgregarDatosAdicionales().addActionListener(new ActionListener() {
             @Override
@@ -380,6 +739,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             notaDetalle.setTipoReferencia(facturaDetalle.getTipoDocumento());
             notaDetalle.setTotal(facturaDetalle.getTotal());
             notaDetalle.setValorIce(facturaDetalle.getValorIce());
+            notaDetalle.setIvaPorcentaje(facturaDetalle.getIvaPorcentaje());
 
             notaCredito.addDetalle(notaDetalle);
         }
@@ -405,7 +765,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
          }
         */
         
-        actualizarDatosTablaDetalle();
+        cargarDatosDetalles();
         mostrarDatosNotaCredito();
 
     }
@@ -443,7 +803,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getTblDetalleNotaCredito().setModel(this.modeloTablaDetalle);
     }
 
-    private void actualizarDatosTablaDetalle() {
+    private void cargarDatosDetalles() {
         crearDetalleTabla();
         List<NotaCreditoDetalle> detalles = notaCredito.getDetalles();
         for (NotaCreditoDetalle detalle : detalles) {
@@ -606,6 +966,40 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private void initComponenesGraficos() {
+        URL path = RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/mas-ico.png");
+        getBtnAgregarDetalleFactura().setIcon(new ImageIcon(path));
+        getBtnAgregarDetalleFactura().setText("");
+        getBtnAgregarDetalleFactura().setToolTipText("Agregar detalle Nota Crédito");
+
+        getBtnEditarDetalle().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/edit_icon.png")));
+        getBtnEditarDetalle().setText("");
+        getBtnEditarDetalle().setToolTipText("Editar detalle Nota Crédito");
+
+        getBtnQuitarDetalle().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/cerrar-ico.png")));
+        getBtnQuitarDetalle().setText("");
+        getBtnQuitarDetalle().setToolTipText("Eliminar detalle Nota Crédito");
+
+        getBtnAgregarProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/list.png")));
+        getBtnAgregarProducto().setText("");
+        getBtnAgregarProducto().setToolTipText("Agregar producto a la Nota Crédito");
+
+        getBtnCrearProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/add2.png")));
+        getBtnCrearProducto().setText("");
+        getBtnCrearProducto().setToolTipText("Crear nuevo producto");
+
+    }
+
+    private void valoresIniciales() {
+        getCmbTipoDocumento().removeAllItems();
+        getCmbTipoDocumento().addItem(TipoDocumentoEnum.LIBRE);
+        getCmbTipoDocumento().addItem(TipoDocumentoEnum.VENTA);
+        
+        
+        
+        
     }
 
 }

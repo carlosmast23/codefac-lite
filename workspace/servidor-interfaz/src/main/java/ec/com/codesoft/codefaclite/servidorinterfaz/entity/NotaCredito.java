@@ -52,16 +52,33 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     //private Date fechaNotaCredito;
     //@Column(name = "FECHA_CREACION")
     //private Date fechaCreacion;
+    
+        /**
+     * Valor del descuento de los productos que cobran iva
+     */
+    @Column(name = "DESCUENTO_IVA")
+    private BigDecimal descuentoImpuestos;
+    /**
+     * Valor del descuento de los productos que no cobran iva
+     */    
+    @Column(name = "DESCUENTO_IVA_CERO")
+    private BigDecimal descuentoSinImpuestos;
+    
     @Column(name = "SUBTOTAL_SIN_IMPUESTOS")
     private BigDecimal subtotalSinImpuesto;
+    
     @Column(name = "SUBTOTAL_DOCE")
-    private BigDecimal subtotalDoce;
+    private BigDecimal subtotalImpuestos;
+    
     @Column(name = "SUBTOTAL_CERO")
-    private BigDecimal subtotalCero;
+    private BigDecimal subtotalSinImpuestos;
+    
     @Column(name = "VALOR_IVA_DOCE")
-    private BigDecimal valorIvaDoce;
-    @Column(name = "VALOR_IVA_CERO")
-    private BigDecimal valorIvaCero;
+    private BigDecimal iva;
+    
+    //@Column(name = "VALOR_IVA_CERO")
+    //private BigDecimal valorIvaCero;
+    
     @Column(name = "IVA_SRI_ID")
     private Long ivaSriId;
     @Column(name = "TOTAL")
@@ -180,36 +197,36 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     }
 
     public BigDecimal getSubtotalDoce() {
-        return subtotalDoce;
+        return subtotalImpuestos;
     }
 
     public void setSubtotalDoce(BigDecimal subtotalDoce) {
-        this.subtotalDoce = subtotalDoce;
+        this.subtotalImpuestos = subtotalDoce;
     }
 
     public BigDecimal getSubtotalCero() {
-        return subtotalCero;
+        return subtotalSinImpuestos;
     }
 
     public void setSubtotalCero(BigDecimal subtotalCero) {
-        this.subtotalCero = subtotalCero;
+        this.subtotalSinImpuestos = subtotalCero;
     }
 
     public BigDecimal getValorIvaDoce() {
-        return valorIvaDoce;
+        return iva;
     }
 
     public void setValorIvaDoce(BigDecimal valorIvaDoce) {
-        this.valorIvaDoce = valorIvaDoce;
+        this.iva = valorIvaDoce;
     }
-
+    /*
     public BigDecimal getValorIvaCero() {
         return valorIvaCero;
     }
 
     public void setValorIvaCero(BigDecimal valorIvaCero) {
         this.valorIvaCero = valorIvaCero;
-    }
+    }*/
 
     public Long getIvaSriId() {
         return ivaSriId;
@@ -315,6 +332,50 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
         this.datosAdicionales = datosAdicionales;
     }
 
+    public BigDecimal getDescuentoImpuestos() {
+        return descuentoImpuestos;
+    }
+
+    public void setDescuentoImpuestos(BigDecimal descuentoImpuestos) {
+        this.descuentoImpuestos = descuentoImpuestos;
+    }
+
+    public BigDecimal getDescuentoSinImpuestos() {
+        return descuentoSinImpuestos;
+    }
+
+    public void setDescuentoSinImpuestos(BigDecimal descuentoSinImpuestos) {
+        this.descuentoSinImpuestos = descuentoSinImpuestos;
+    }
+
+    public BigDecimal getSubtotalImpuestos() {
+        return subtotalImpuestos;
+    }
+
+    public void setSubtotalImpuestos(BigDecimal subtotalImpuestos) {
+        this.subtotalImpuestos = subtotalImpuestos;
+    }
+
+    public BigDecimal getSubtotalSinImpuestos() {
+        return subtotalSinImpuestos;
+    }
+
+    public void setSubtotalSinImpuestos(BigDecimal subtotalSinImpuestos) {
+        this.subtotalSinImpuestos = subtotalSinImpuestos;
+    }
+
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
+    }
+    
+    
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -410,6 +471,87 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     
     }
     
+    
+    public void calcularTotalesDesdeDetalles()
+    {
+        //Solo calcular si la variables de detalles fue creada
+        if(detalles==null || detalles.size()==0)
+        {
+            this.total=BigDecimal.ZERO;
+            this.descuentoSinImpuestos=BigDecimal.ZERO;
+            this.descuentoImpuestos=BigDecimal.ZERO;
+            this.subtotalSinImpuestos=BigDecimal.ZERO;            
+            this.subtotalSinImpuestos=BigDecimal.ZERO;
+            this.iva=BigDecimal.ZERO;
+            return;
+        }
+        
+        BigDecimal total=BigDecimal.ZERO; //total de la factura
+        
+        BigDecimal subTotalSinImpuestos=BigDecimal.ZERO;//Sin el descuento
+        BigDecimal subTotalConImpuestos=BigDecimal.ZERO;//Sin los descuentos
+        
+        BigDecimal descuentoSinImpuestos=BigDecimal.ZERO; //
+        BigDecimal descuentoConImpuestos=BigDecimal.ZERO; //
+        
+        BigDecimal impuestoIva=BigDecimal.ZERO; //
+        
+        BigDecimal ivaDecimal=BigDecimal.ZERO; //Todo: Variable donde se almacena el iva de uno de los detalles (pero si tuviera varias ivas distintos de 0 , se generaria poroblemas)
+        
+        for (NotaCreditoDetalle detalle : detalles) {
+            //Sumar los subtotales
+            if(detalle.getIvaPorcentaje().equals(0))
+            {
+                subTotalSinImpuestos=subTotalSinImpuestos.add(detalle.getPrecioUnitario().multiply(detalle.getCantidad()));
+                descuentoSinImpuestos=descuentoSinImpuestos.add(detalle.getDescuento());
+            }
+            else
+            {                
+                subTotalConImpuestos=subTotalConImpuestos.add(detalle.getPrecioUnitario().multiply(detalle.getCantidad()));
+                descuentoConImpuestos=descuentoConImpuestos.add(detalle.getDescuento());
+                
+                ivaDecimal=new BigDecimal(detalle.getIvaPorcentaje().toString()).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+                impuestoIva=subTotalConImpuestos.subtract(descuentoConImpuestos).multiply(ivaDecimal);
+            }
+           
+            
+        }
+        
+        //Calcula el total de los totales
+        total=subTotalSinImpuestos.subtract(descuentoSinImpuestos)
+                .add(subTotalConImpuestos.subtract(descuentoConImpuestos))
+                .add(impuestoIva);
+        
+       
+        /**
+         * Recalcular los valores partiendo del total para redondear con 2 cifras y que los valores cuadren
+         */
+        //total=total.setScale(2,BigDecimal.ROUND_HALF_UP);
+        this.total=total.setScale(2,BigDecimal.ROUND_HALF_UP); //valor final con 2 decimales
+        
+        this.descuentoSinImpuestos=descuentoSinImpuestos.setScale(2,BigDecimal.ROUND_HALF_UP); //Este valor no se mueve porque debe ser fijo de 2 decimales segun el sri
+        this.subtotalSinImpuestos=subTotalSinImpuestos.setScale(2,BigDecimal.ROUND_HALF_UP);// Este valor se redondea y tampoco ya no se mueve porque no interfiere con el iva donde se descuadra //TODO: PERO REVISAR ESTA AFIRMACION
+        
+        //---------------- CALCULOS PARA LOS VALORES CON IMPUESTAS QUE ES LA PARTE DONDE GENERAN PROBLEMAS ------------------------///
+        BigDecimal ivaDecimalTmp=ivaDecimal.add(BigDecimal.ONE); //1.12 por ejemplo
+        
+        //Valor total solo de los valores que tienen impuestos
+        BigDecimal totalConImpuestos=this.total.subtract(this.subtotalSinImpuestos).add(this.descuentoSinImpuestos); //esto ya tiene 2 decimales no debo redondear
+        
+        //Estos valores seteo directo porque solo pueden tener 2 decimales en los calculos y no deberia cambiar porque generarian confusion
+        this.descuentoImpuestos = descuentoConImpuestos.setScale(2,BigDecimal.ROUND_HALF_UP);
+        
+        //Calculo el subtotal ya restado el descuento diviendo para 1.12 por ejemplo
+        BigDecimal subtotalMenosImpuestos=totalConImpuestos.divide(ivaDecimalTmp,2,BigDecimal.ROUND_HALF_UP);
+        
+        //Al subtotal menos impuesto le sumo el descuento y ya tengo el subtotal original
+        this.subtotalImpuestos=subtotalMenosImpuestos.add(this.descuentoImpuestos);
+        
+        //Calcular el iva de la resta del del total -subtotal
+        this.iva=totalConImpuestos.subtract(subtotalMenosImpuestos);
+ 
+    
+    }
 
     
 }

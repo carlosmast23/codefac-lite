@@ -36,6 +36,16 @@ public enum TipoDocumentoEnum {
             "Compra", 
             TipoDocumentoEnum.NO_AFECTA_INVETARIO,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA}),
+    /**
+    * Tipo de documento general que uso para clasificar alguna venta como por ejemplo en la pantalla de notas de credito
+    */
+    VENTA(ModuloCodefacEnum.FACTURACION, 
+            "COG", 
+            "Compra", 
+            TipoDocumentoEnum.NO_AFECTA_INVETARIO,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA}),
+    
+    
     
     /**
      * Tipo de documento que afecta al stock de los productos

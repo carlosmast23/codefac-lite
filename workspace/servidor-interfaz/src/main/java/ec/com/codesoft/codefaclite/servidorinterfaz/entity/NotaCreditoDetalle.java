@@ -54,6 +54,13 @@ public class NotaCreditoDetalle implements Serializable {
     
     @Column(name = "TIPO_REFERENCIA")
     private String tipoReferencia;
+    
+    /**
+     * Variable adicional para grabar el porcentaje del iva
+     * @fecha_modificacion 11/10/2018
+     */
+    @Column(name = "IVA_PORCENTAJE")
+    private Integer ivaPorcentaje;
 
     public NotaCreditoDetalle() {
     }
@@ -147,6 +154,16 @@ public class NotaCreditoDetalle implements Serializable {
     public void setTipoReferencia(String tipoReferencia) {
         this.tipoReferencia = tipoReferencia;
     }
+
+    public Integer getIvaPorcentaje() {
+        return ivaPorcentaje;
+    }
+
+    public void setIvaPorcentaje(Integer ivaPorcentaje) {
+        this.ivaPorcentaje = ivaPorcentaje;
+    }
+    
+    
 
     //Metodos personalizados implementados
     public TipoDocumentoEnum getTipoDocumentoEnum()

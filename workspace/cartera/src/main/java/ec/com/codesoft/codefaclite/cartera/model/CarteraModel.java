@@ -96,7 +96,7 @@ public class CarteraModel extends CarteraPanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -146,6 +146,20 @@ public class CarteraModel extends CarteraPanel{
         cruces=new ArrayList<CarteraCruce>();
         getCmbTipoCartera().setSelectedIndex(0);
         getCmbFechaEmision().setDate(UtilidadesFecha.getFechaHoy());
+        
+        getTblDetalles().setModel(new DefaultTableModel());
+        getTblDetallesCruzar().setModel(new DefaultTableModel());
+        getTblDetallesCruzar().setModel(new DefaultTableModel());
+        getTblCruceDetalles().setModel(new DefaultTableModel());
+        
+        
+        getTxtIdentificacion().setText("");
+        getLblDireccion().setText("");
+        getLblNombresClientes().setText("");
+        getLblTelefonos().setText("");
+        getLblTotalCartera().setText("0");
+        getTxtValorDetalle().setText("");
+        getTxtDescripcionDetalle().setText("");
     }
 
     //@Override
