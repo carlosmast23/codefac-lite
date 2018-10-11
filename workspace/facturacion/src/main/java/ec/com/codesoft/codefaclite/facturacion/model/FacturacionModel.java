@@ -880,6 +880,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error ","No se puede grabar: \nCausa: "+ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);            
+            throw new ExcepcionCodefacLite("Error al grabar: "+ex.getMessage());
+            
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }

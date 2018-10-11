@@ -140,7 +140,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             }
             else
             {
-                throw new ServicioCodefacException(ExcepcionDataBaseEnum.DESCONOCIDO.getMensaje());
+                throw new ServicioCodefacException(ExcepcionDataBaseEnum.DESCONOCIDO.getMensaje()+"\n Causa: "+ ex.getMessage());
             }  
             
             

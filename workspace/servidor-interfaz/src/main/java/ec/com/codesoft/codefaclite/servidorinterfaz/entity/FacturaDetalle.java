@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import javax.inject.Singleton;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +39,8 @@ public class FacturaDetalle implements Serializable {
     private BigDecimal descuento;
     @Column(name = "VALOR_ICE")
     private BigDecimal valorIce;
-    @Column(name = "DESCRIPCION")
+    
+    @Column(name = "DESCRIPCION" ,length = 150)
     private String descripcion;
     @Column(name = "TOTAL")
     private BigDecimal total;
