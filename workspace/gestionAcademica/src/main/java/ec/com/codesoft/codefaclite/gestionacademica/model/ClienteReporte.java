@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
@@ -49,7 +50,59 @@ public class ClienteReporte extends ControladorCodefacInterface{
     
     private void imprimirReporte() throws IOException, FileNotFoundException, IllegalArgumentException, IllegalAccessException
     {
-        try {
+        List<Object[]> lista=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().consultarRepresentanteConEstudiantesYCursos();
+        InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporteClientes.jrxml");
+        EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
+        
+        List<ClienteData> data = new ArrayList<ClienteData>();
+        
+        
+        for (Object[] object : lista) {
+            Persona representante=(Persona) object[0];
+            Estudiante estudiante=(Estudiante) object[1];
+            EstudianteInscrito estudianteInscrito=(EstudianteInscrito) object[2];
+
+            
+            ClienteData clienteData = new ClienteData();
+            clienteData.setNombresCompletos((representante!=null && representante.getRazonSocial()!=null)?representante.getRazonSocial().toString():"");
+            clienteData.setNombreLegal((representante!=null && representante.getNombreLegal()!=null)?representante.getNombreLegal().toString():"");            
+            clienteData.setDireccion((representante!=null)?representante.getDireccion():"");
+            clienteData.setEmail((representante!=null)?representante.getCorreoElectronico():"");
+            clienteData.setIdentificacion((representante!=null)?representante.getIdentificacion():"");
+            clienteData.setTelefono((representante!=null)?representante.getTelefonoCelular():"");
+            clienteData.setNombresCompletosEstudiante((estudiante!=null)?estudiante.getNombreCompleto():"Sin Asignar");
+            clienteData.setCurso((estudianteInscrito!=null)?estudianteInscrito.getNivelAcademico().getNivel().getNombre():"");
+            data.add(clienteData);
+            EstudianteInscrito ei;
+            
+        }
+        
+        DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try{
+                        Excel excel = new Excel();
+                        String nombreCabeceras[] = {"Identificación", "Representante", "Estudiante", "Telefono", "Dirección", "Email","Curso"};
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                        excel.abrirDocumento();
+                    }
+                    catch(Exception exc)
+                    {
+                        exc.printStackTrace();
+                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }  
+                }
+
+                @Override
+                public void pdf() {
+                    Map parameters = new HashMap();
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Academico-Clientes ", OrientacionReporteEnum.HORIZONTAL);
+                    dispose();
+                    setVisible(false);
+                }
+            });
+        
+        /*try {
             InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporteClientes.jrxml");
             EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
             PeriodoServiceIf psi = ServiceFactory.getFactory().getPeriodoServiceIf();
@@ -135,7 +188,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
             
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteReporte.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }
 
     

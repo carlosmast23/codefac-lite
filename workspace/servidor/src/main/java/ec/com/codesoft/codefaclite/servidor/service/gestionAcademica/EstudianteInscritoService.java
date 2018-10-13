@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.EstudianteInscritoFacade;
+import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
@@ -17,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -144,5 +147,38 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         mapParametros.put("estudiante", estudiante);
         mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
         return getFacade().findByMap(mapParametros);
+    }
+    
+    @Override
+    public List<Object[]> consultarRepresentanteConEstudiantesYCursos() throws RemoteException
+    {
+        PeriodoService periodoService=new PeriodoService();
+        Periodo periodoActivo=periodoService.obtenerPeriodoActivo().get(0);
+        PersonaService personaService=new PersonaService();
+        EstudianteService estudianteService=new EstudianteService();
+        EstudianteInscritoService estudianteInscritoService=new EstudianteInscritoService();
+        
+        List<Object[]> resultadoObjetos=new ArrayList< Object[]>();
+        
+        List<Object[]> resultadosIds=getFacade().consultarRepresentanteConEstudiantesYCursosFacade(periodoActivo);
+        for (Object[] resultadoId : resultadosIds) {
+            Long representanteId=(Long) resultadoId[0];
+            Long estudianteId=(Long) resultadoId[1];
+            Long estudianteInscritoId=(Long) resultadoId[2];
+            
+            Persona representante=(Persona) ((representanteId!=null)?personaService.buscarPorId(representanteId):null);
+            Estudiante estudiante=(Estudiante) ((estudianteId!=null)?estudianteService.buscarPorId(estudianteId):null);
+            EstudianteInscrito estudianteInscrito= (EstudianteInscrito) ((estudianteInscritoId!=null)?estudianteInscritoService.buscarPorId(estudianteInscritoId):null);
+            
+            
+            Object[] dato={
+                representante,
+                estudiante,
+                estudianteInscrito
+            };
+            
+            resultadoObjetos.add(dato);
+        }
+        return resultadoObjetos;
     }
 }

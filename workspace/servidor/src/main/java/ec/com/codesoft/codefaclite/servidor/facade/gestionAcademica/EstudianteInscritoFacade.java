@@ -6,12 +6,14 @@
 package ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -89,6 +91,50 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         } catch (NoResultException e) {
             return null;
         }
+    }
+    
+    public List<Object[]> consultarRepresentanteConEstudiantesYCursosFacade(Periodo periodoActivo)
+    {
+        //Estudiante e;
+        //e.getEstado();
+        //Persona cliente;
+        //cliente.getEstado();
+        //EstudianteInscrito ei;
+        //ei.getEstado()
+        //Estudiante e;
+        //e.getRepresentante()
+        
+        //cliente.getnom
+        String queryString="SELECT C.CLIENTE_ID,E.ESTUDIANTE_ID,EI.ID " +
+        "    FROM CLIENTE C " +
+        "    LEFT JOIN ESTUDIANTE E " +
+        "    ON E.ESTADO=?1 AND (E.REPRESENTANTE1_ID=C.CLIENTE_ID OR E.REPRESENTANTE2_ID=C.CLIENTE_ID) " +
+        "        LEFT JOIN ESTUDIANTE_INSCRITO EI " +
+        "        ON EI.ESTADO=?2 AND (EI.ESTUDIANTE_ID=E.ESTUDIANTE_ID) "+
+        "           LEFT JOIN NIVEL_ACADEMICO NA "+
+        "           ON (NA.ID=EI.NIVEL_ACADEMICO_ID ) "+
+        "               WHERE C.ESTADO=?3 " + 
+        "               AND ((NA.PERIODO_ID IS NULL) OR (NA.PERIODO_ID IS NOT NULL AND NA.PERIODO_ID=?4)) "+ // Linea que me permite solo filtrar los estudiantes inscritos del periodo seleccionado        
+        "               ORDER BY C.RAZON_SOCIAL ";
+        
+        System.out.println(queryString);
+        //getEntityManager().createNativeQuery(queryString)
+        Query query = getEntityManager().createNativeQuery(queryString);
+        query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
+        query.setParameter(2, GeneralEnumEstado.ACTIVO.getEstado());
+        query.setParameter(3, GeneralEnumEstado.ACTIVO.getEstado());
+        query.setParameter(4, periodoActivo.getIdPeriodo());
+        //query.setParameter(4, 10);
+        /*List<Object[]> resultados=query.getResultList();
+        
+        List<Object[]> resultadosObjeto=new ArrayList<Object[]>();
+        for (Object[] resultado : resultados) {
+            Long id=resultado[0]
+        }*/
+        
+        
+        return (List<Object[]>) query.getResultList();
+        
     }
 
 }

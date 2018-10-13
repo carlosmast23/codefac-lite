@@ -562,7 +562,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
             @Override
             public void focusLost(FocusEvent evt) {
-                getjTextNombreSocial().setText(getjTextApellidos().getText() + " " + getjTextNombres().getText());
+                construirNombreSocial();
             }
         });
 
@@ -574,9 +574,14 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
             @Override
             public void focusLost(FocusEvent evt) {
-                getjTextNombreSocial().setText(getjTextNombres().getText() + " " + getjTextApellidos().getText());
+                construirNombreSocial();
             }
         });
+    }
+    
+    private void construirNombreSocial()
+    {
+        getjTextNombreSocial().setText(getjTextApellidos().getText() + " " + getjTextNombres().getText());
     }
 
     @Override
