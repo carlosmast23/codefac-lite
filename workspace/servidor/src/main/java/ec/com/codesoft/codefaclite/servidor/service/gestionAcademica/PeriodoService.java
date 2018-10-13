@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.PeriodoFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
@@ -54,16 +55,28 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
         return periodos;
     }
     
-    public List<Periodo> obtenerPeriodoSinEliminar() throws RemoteException
+    
+    public void setearPeriodoActivo(Periodo periodoActivar) throws RemoteException,ServicioCodefacException
     {
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-         mapParametros.put("estado",GeneralEnumEstado.INACTIVO.getEstado());
-          mapParametros.put("estado",GeneralEnumEstado.ANULADO.getEstado());
-           mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-            mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        List<Periodo> periodos= obtenerPorMap(mapParametros);
-        return periodos;
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                List<Periodo> periodos=obtenerPeriodosSinEliminar();
+                for (Periodo periodo : periodos) 
+                {
+                    if(periodoActivar.equals(periodo))
+                    {                        
+                        periodo.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                    }
+                    else
+                    {
+                        periodo.setEstado(GeneralEnumEstado.INACTIVO.getEstado());
+                    }
+                    entityManager.merge(periodo);
+                }
+                
+            }
+        });
     }
     
     public List<Periodo> obtenerPeriodosSinEliminar() throws RemoteException

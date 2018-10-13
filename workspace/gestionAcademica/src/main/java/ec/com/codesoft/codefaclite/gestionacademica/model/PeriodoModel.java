@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -19,6 +20,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.formatDate;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
@@ -51,35 +54,47 @@ public class PeriodoModel extends PeriodoPanel {
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        getCmbEstado().removeAllItems();
-        for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
-            getCmbEstado().addItem(enumerador);
+        listenerBotones();
+        try {
+            getCmbEstado().removeAllItems();
+            for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
+                getCmbEstado().addItem(enumerador);
+            }
+            
+            getDateFechaInicio().setDate(fechaInicioMes(hoy()));
+            getDateFechaFin().setDate(hoy());
+            
+            getDateFechaInicio().addPropertyChangeListener(new PropertyChangeListener() {
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if ("date".equals(evt.getPropertyName())) {
+                        if (getDateFechaInicio().getDate() != null || getDateFechaFin().getDate() != null) {
+                            getTxtNombre().setText(formatDate(getDateFechaInicio().getDate(), "yyyy MMMMM") + " - " + formatDate(getDateFechaFin().getDate(), "MMMMM"));
+                        }
+                    }
+                }
+            });
+            
+            getDateFechaFin().addPropertyChangeListener(new PropertyChangeListener() {
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if ("date".equals(evt.getPropertyName())) {
+                        if (getDateFechaInicio().getDate() != null || getDateFechaFin().getDate() != null) {
+                            getTxtNombre().setText(formatDate(getDateFechaInicio().getDate(), "yyyy MMMMM") + " - " + formatDate(getDateFechaFin().getDate(), "MMMMM"));
+                        }
+                    }
+                }
+            });
+            
+            //=============> CARGAR LOS PERIODOS ACTIVOS <==================/
+            getCmbPeriodosActivos().removeAllItems();
+            List<Periodo> periodos=ServiceFactory.getFactory().getPeriodoServiceIf().obtenerPeriodosSinEliminar();
+            for (Periodo periodo : periodos) {
+                getCmbPeriodosActivos().addItem(periodo);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(PeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        getDateFechaInicio().setDate(fechaInicioMes(hoy()));
-        getDateFechaFin().setDate(hoy());
-
-        getDateFechaInicio().addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if ("date".equals(evt.getPropertyName())) {
-                    if (getDateFechaInicio().getDate() != null || getDateFechaFin().getDate() != null) {
-                        getTxtNombre().setText(formatDate(getDateFechaInicio().getDate(), "yyyy MMMMM") + " - " + formatDate(getDateFechaFin().getDate(), "MMMMM"));
-                    }
-                }
-            }
-        });
-
-        getDateFechaFin().addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if ("date".equals(evt.getPropertyName())) {
-                    if (getDateFechaInicio().getDate() != null || getDateFechaFin().getDate() != null) {
-                        getTxtNombre().setText(formatDate(getDateFechaInicio().getDate(), "yyyy MMMMM") + " - " + formatDate(getDateFechaFin().getDate(), "MMMMM"));
-                    }
-                }
-            }
-        });
 
     }
 
@@ -218,6 +233,25 @@ public class PeriodoModel extends PeriodoPanel {
     public void cargarDatosPantalla(Object entidad) {
         periodo = (Periodo) entidad;
         cargarDatos();
+    }
+
+    private void listenerBotones() {
+        getBtnEstablecerPeriodoActivo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Periodo periodoSeleccionado=(Periodo) getCmbPeriodosActivos().getSelectedItem();
+                    ServiceFactory.getFactory().getPeriodoServiceIf().setearPeriodoActivo(periodoSeleccionado);
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(PeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(PeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+            }
+        });
     }
 
 }
