@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaNotaCredito;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.NotaCreditoBusqueda;
@@ -43,6 +44,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -59,6 +61,9 @@ import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -92,6 +97,8 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         valoresIniciales();
         initComponenesGraficos();
         addListenerButtons();
+        addListenerTablas();
+        addListenerCombos();
         super.validacionDatosIngresados=false;
     }
     
@@ -235,6 +242,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
             getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
             
+            getCmbTipoDocumento().setSelectedItem(TipoDocumentoEnum.VENTA);
             
             notaCredito = new NotaCredito();
             crearDetalleTabla();
@@ -611,6 +619,36 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     }
 
     private void addListenerButtons() {
+                
+        getBtnBuscarProveedor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProveedorBusquedaDialogo clienteBusquedaDialogo = new ProveedorBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                Persona proveedorTmp=(Persona) buscarDialogoModel.getResultado();
+                
+                if(proveedorTmp!=null)
+                {
+                    notaCredito.setCliente(proveedorTmp);
+                    getTxtProveedor().setText(proveedorTmp.getIdentificacion()+" - "+proveedorTmp.getRazonSocial());
+                }
+            }
+        });
+        
+        getBtnQuitarDetalle().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnListenerEliminar();
+            }
+        });
+        
+        getBtnEditarDetalle().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnListenerEditar();
+            }
+        });
         
         getBtnAgregarDetalleFactura().addActionListener(new ActionListener() {
             @Override
@@ -997,9 +1035,180 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.LIBRE);
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.VENTA);
         
+    }
+    
+    private void btnListenerEditar()
+    {
+        int fila = getTblDetalleNotaCredito().getSelectedRow();
+        if(fila>=0)
+        {
+            try {
+                NotaCreditoDetalle facturaDetalle = notaCredito.getDetalles().get(fila);
+                //Buscar la referencia de las variables depedendiendo del modulo seleccionado
+                TipoDocumentoEnum tipoDocumentoEnum = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                
+                Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                productoSeleccionado = producto;
+                /*
+                switch (tipoDocumentoEnum) {
+                    case LIBRE:
+                    case INVENTARIO:
+                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                        productoSeleccionado = producto;
+                        break;
+                        
+                    case PRESUPUESTOS:
+                        Presupuesto presupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                        presupuestoSeleccionado = presupuesto;
+                        break;
+                        
+                    case ACADEMICO:
+                        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                        rubroSeleccionado = rubroEstudiante;
+                        break;
+                        
+                }*/
+                if(agregarDetallesFactura(facturaDetalle))
+                {
+                    habilitarModoIngresoDatos();
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    private void habilitarModoIngresoDatos() 
+    {
+        getBtnEditarDetalle().setEnabled(false);
+        getBtnQuitarDetalle().setEnabled(false);
+        getBtnAgregarDetalleFactura().setEnabled(true);
+        getBtnAgregarProducto().setEnabled(true);
+        getBtnCrearProducto().setEnabled(true);
+    }
+    
+    private void btnListenerEliminar() {
+        int fila = getTblDetalleNotaCredito().getSelectedRow();
+        DefaultTableModel modeloTablaDetallesProductos=(DefaultTableModel) getTblDetalleNotaCredito().getModel();
+        if(fila>=0)
+        {
+            modeloTablaDetallesProductos.removeRow(fila);
+            notaCredito.getDetalles().remove(fila);
+            cargarTotales();
+            getBtnEditarDetalle().setEnabled(false);
+            getBtnQuitarDetalle().setEnabled(false);
+            getBtnAgregarDetalleFactura().setEnabled(true);
+            getBtnAgregarProducto().setEnabled(true);
+            getBtnCrearProducto().setEnabled(true);
+        }
+    }
+    
+    private void addListenerTablas() {
         
+        getTblDetalleNotaCredito().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int fila = getTblDetalleNotaCredito().getSelectedRow();
+                if(fila>=0)
+                {
+                    //setear valores para cargar de nuevo en los campos de la factura
+                    NotaCreditoDetalle facturaDetalle = notaCredito.getDetalles().get(fila);
+                    getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario() + "");
+                    getTxtCantidad().setText(facturaDetalle.getCantidad() + "");
+                    getTxtDescripcion().setText(facturaDetalle.getDescripcion());
+                    getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
+                    getCheckPorcentaje().setSelected(false);
+                    getBtnEditarDetalle().setEnabled(true);
+                    getBtnQuitarDetalle().setEnabled(true);
+                    getBtnAgregarDetalleFactura().setEnabled(false);
+                    getBtnAgregarProducto().setEnabled(false);
+                    getBtnCrearProducto().setEnabled(false);
+                }
+            }
+        });
+       
+          
+        getTblDetalleNotaCredito().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                getTblDetalleNotaCredito().addKeyListener(new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {}
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        //Evento cuando se desea eliminar un dato de los detalles
+                        if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                            btnListenerEliminar();
+                        }      
+                        
+                        //Permite salir del modo edicion y regresa al modo ingreso
+                        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                            btnListenerEditar();
+                        }
+
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {}
+                });
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+    }
+
+    private void addListenerCombos() {
+        getCmbTipoDocumento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                TipoDocumentoEnum tipoDocumentoEnum = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                //tipoDocumentoEnum=getTi
+                switch(tipoDocumentoEnum)
+                {
+                    case VENTA:
+                        getTabTipoDocumentos().setSelectedIndex(0);
+                        habilitarEdicionRetencion(false);                        
+                        habilitarTab(0);
+                        break;
+                    
+                    case LIBRE:
+                        getTabTipoDocumentos().setSelectedIndex(1);
+                        habilitarEdicionRetencion(true);
+                        habilitarTab(1);
+                        break;
+                
+                }
+                
+                
+            }
+        });
+    }
+    
+    private void habilitarTab(int numeroTab)
+    {
+        getTabTipoDocumentos().setEnabledAt(0, false);
+        getTabTipoDocumentos().setEnabledAt(1, false);
         
+        getTabTipoDocumentos().setEnabledAt(numeroTab,true);
         
     }
+    
+    private void habilitarEdicionRetencion(Boolean opcion)
+    {
+        /*
+        getTxtBaseImponible().setEnabled(opcion);
+        getCmbRetencionIva().setEnabled(opcion);
+        getCmbRetencionRenta().setEnabled(opcion);
+        getBtnAgregar().setEnabled(opcion);
+        ge/tBtnEditar().setEnabled(opcion);*/
+    }
+    
+    
 
 }

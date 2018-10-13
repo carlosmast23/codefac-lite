@@ -41,7 +41,7 @@ public enum TipoDocumentoEnum {
     */
     VENTA(ModuloCodefacEnum.FACTURACION, 
             "COG", 
-            "Compra", 
+            "Venta", 
             TipoDocumentoEnum.NO_AFECTA_INVETARIO,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA}),
     
