@@ -63,6 +63,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         agregarBotonListener();
+        agregarComboListener();
         todos = false;
     }
 
@@ -228,9 +229,9 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                     Producto productoTemp = (Producto) buscarDialogoModel.getResultado();
                     if(productoTemp != null)
                     {
+                        limpiar();
                         producto = productoTemp;
                         proveedor = null;
-                        limpiar();
                         getTxtGenericoProductoProveedor().setText("" + producto.getNombre() + " - " + producto.getCodigoPersonalizado());
                     }
                 }else if(getCmbTipoReporte().getSelectedItem().equals("Proveedor"))
@@ -241,9 +242,9 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                     Persona proveedorTemp = (Persona) buscarDialogoModel.getResultado();
                     if(proveedorTemp != null)
                     {
+                        limpiar();
                         proveedor = proveedorTemp;
                         producto = null;
-                        limpiar();
                         getTxtGenericoProductoProveedor().setText(" " + proveedor.getIdentificacion() + " - " + proveedor.getRazonSocial());
                     }
                     
