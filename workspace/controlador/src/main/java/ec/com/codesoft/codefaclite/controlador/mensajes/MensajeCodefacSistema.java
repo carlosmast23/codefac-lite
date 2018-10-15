@@ -35,6 +35,11 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj ERROR_COMUNICACION_SERVIDOR = new CodefacMsj(CodefacMsj.TITULO_ERROR,"Erro de comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
     }
     
+    public static abstract  class ErrorValidación
+    {
+        public static final CodefacMsj ERROR_VALIDAR_NUMEROS = new CodefacMsj(CodefacMsj.TITULO_ERROR,"El formato es incorrecto para el ingreso de números",DialogoCodefac.MENSAJE_INCORRECTO);
+    }
+    
     /*
     public class  MensajeCodefacEnum {
         public String titulo;

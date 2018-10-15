@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.compra.callback.RetencionImplCallBack;
 import ec.com.codesoft.codefaclite.compra.panel.RetencionPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -334,6 +335,17 @@ public class RetencionModel extends RetencionPanel{
     
     private void actualizarDato(CompraDetalle compraDetalle,Boolean actualizar)
     {
+        BigDecimal baseImponible=BigDecimal.ZERO;
+        try
+        {
+            baseImponible = new BigDecimal(getTxtBaseImponible().getText());
+        }
+        catch(java.lang.NumberFormatException nfe)
+        {
+            DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorValidación.ERROR_VALIDAR_NUMEROS);
+            return ;
+        }
+        
          //Setear la fecha de la facutura
         //TODO:pendiente
 
@@ -343,8 +355,8 @@ public class RetencionModel extends RetencionPanel{
         //compraDetalle.setDescripcion(getTxtDescripcion().getText());
         compraDetalle.setCantidad(1);
 
-        //TODO: Revisar si solo una base imponible o debo usar 2 para mas precion con productos que no distintas base de retencion        
-        BigDecimal baseImponible = new BigDecimal(getTxtBaseImponible().getText());
+        //TODO: Revisar si solo una base imponible o debo usar 2 para mas precion con productos que no distintas base de retencion                
+        
         SriRetencionIva sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
         SriRetencionRenta sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
 
