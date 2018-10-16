@@ -103,7 +103,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         
         info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(notaCredito.getCliente().getDireccion()));
         info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(notaCredito.getFechaEmision()));
-        info.setFechaEmisionDocSustento(ComprobantesElectronicosUtil.dateToString(notaCredito.getFactura().getFechaEmision()));
+        info.setFechaEmisionDocSustento(ComprobantesElectronicosUtil.dateToString(notaCredito.getFechaEmisionDocSustento()));
         
         SriIdentificacionServiceIf servicioSri=ServiceFactory.getFactory().getSriIdentificacionServiceIf();
         SriIdentificacion sriIdentificacion=null;
@@ -127,7 +127,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         info.setMoneda("DOLAR");
         
         info.setMotivo(notaCredito.getRazonModificado());
-        info.setNumDocModificado(notaCredito.getFactura().getPreimpreso());
+        info.setNumDocModificado(notaCredito.getNumDocModificado());
         info.setObligadoContabilidad(notaCredito.getObligadoLlevarContabilidad());
         info.setRazonSocialComprador(UtilidadValidador.normalizarTexto(notaCredito.getCliente().getRazonSocial()));
         

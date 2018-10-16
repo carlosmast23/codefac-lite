@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -106,6 +107,16 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne    
     private Persona cliente;
+    
+    @Column(name = "TIPO_DOCUMENTO")
+    private String tipoDocumento;
+    
+    @Column(name = "FECHA_EMISION_DOC_SUSTENTO")
+    protected Date fechaEmisionDocSustento;
+    
+    @Column(name = "NUM_DOC_MODIFICADO")
+    protected String numDocModificado;
+    
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "notaCredito",fetch = FetchType.EAGER)
     private List<NotaCreditoDetalle> detalles;
@@ -371,8 +382,35 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     public void setIva(BigDecimal iva) {
         this.iva = iva;
     }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
     
-    
+    public TipoDocumentoEnum getTipoDocumentoEnum() 
+    {
+        return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(tipoDocumento);
+    }
+
+    public Date getFechaEmisionDocSustento() {
+        return fechaEmisionDocSustento;
+    }
+
+    public void setFechaEmisionDocSustento(Date fechaEmisionDocSustento) {
+        this.fechaEmisionDocSustento = fechaEmisionDocSustento;
+    }
+
+    public String getNumDocModificado() {
+        return numDocModificado;
+    }
+
+    public void setNumDocModificado(String numDocModificado) {
+        this.numDocModificado = numDocModificado;
+    }
     
     
 

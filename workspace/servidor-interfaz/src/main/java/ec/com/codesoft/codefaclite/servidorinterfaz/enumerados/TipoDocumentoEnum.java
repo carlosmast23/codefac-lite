@@ -40,7 +40,7 @@ public enum TipoDocumentoEnum {
     * Tipo de documento general que uso para clasificar alguna venta como por ejemplo en la pantalla de notas de credito
     */
     VENTA(ModuloCodefacEnum.FACTURACION, 
-            "COG", 
+            "VNT", 
             "Venta", 
             TipoDocumentoEnum.NO_AFECTA_INVETARIO,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA}),

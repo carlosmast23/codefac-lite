@@ -79,18 +79,21 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             
             /**
              * Actualizar el estado de la nota de credito de la factura dependiendo del tipo anuluacion parcial o total
+             * Y validando si tiene referencia a la factura o fue creada en la modalidad libre
              */
-            if (notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal()) < 0) 
+            if(notaCredito.getTipoDocumento()!=null && notaCredito.getTipoDocumentoEnum().equals(TipoDocumentoEnum.VENTA))
             {
-                notaCredito.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.ANULADO_PARCIAL.getEstado());
-            } 
-            else 
-            {
-                notaCredito.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.getEstado());
+                if (notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal()) < 0) 
+                {
+                    notaCredito.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.ANULADO_PARCIAL.getEstado());
+                } 
+                else 
+                {
+                    notaCredito.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.getEstado());
+                }
+                //Actualizar la referencia de la factura con el nuevo estado
+                entityManager.merge(notaCredito.getFactura());
             }
-
-            //Actualizar la referencia de la factura con el nuevo estado
-            entityManager.merge(notaCredito.getFactura());
             
             
             transaccion.commit();

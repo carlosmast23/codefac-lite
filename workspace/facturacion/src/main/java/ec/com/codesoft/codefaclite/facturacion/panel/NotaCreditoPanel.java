@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -119,7 +120,6 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         btnAgregarDatosAdicionales = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblDatosAdicionales = new javax.swing.JTable();
-        btnQuitarDatosAdicionales = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel31 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
@@ -834,14 +834,6 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         PanelDatosAdicionales.add(jScrollPane5, gridBagConstraints);
 
-        btnQuitarDatosAdicionales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        PanelDatosAdicionales.add(btnQuitarDatosAdicionales, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
@@ -1028,7 +1020,6 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarProveedor;
     private javax.swing.JButton btnCrearProducto;
     private javax.swing.JButton btnEditarDetalle;
-    private javax.swing.JButton btnQuitarDatosAdicionales;
     private javax.swing.JButton btnQuitarDetalle;
     private javax.swing.JCheckBox checkPorcentaje;
     private com.toedter.calendar.JDateChooser cmbFechaCompra;
@@ -1261,13 +1252,6 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         this.btnAgregarDatosAdicionales = btnAgregarDatosAdicionales;
     }
 
-    public JButton getBtnQuitarDatosAdicionales() {
-        return btnQuitarDatosAdicionales;
-    }
-
-    public void setBtnQuitarDatosAdicionales(JButton btnQuitarDatosAdicionales) {
-        this.btnQuitarDatosAdicionales = btnQuitarDatosAdicionales;
-    }
 
     public JComboBox<TipoDocumentoEnum> getCmbTipoDocumento() {
         return cmbTipoDocumento;
@@ -1371,6 +1355,14 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
 
     public JTabbedPane getTabTipoDocumentos() {
         return tabTipoDocumentos;
+    }
+
+    public JFormattedTextField getTxtPreimpresoProveedor() {
+        return txtPreimpresoProveedor;
+    }
+
+    public JDateChooser getCmbFechaCompra() {
+        return cmbFechaCompra;
     }
     
     

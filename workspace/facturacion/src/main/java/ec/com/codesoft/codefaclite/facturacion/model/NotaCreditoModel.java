@@ -58,6 +58,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -78,7 +79,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -92,6 +95,10 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     private DefaultTableModel modeloTablaDetalle = new DefaultTableModel();
     private NotaCredito notaCredito;
     private Producto productoSeleccionado;
+    
+    private static final int TAB_INDEX_VENTA=0;
+    private static final int TAB_INDEX_LIBRE=1;
+    
 
     public NotaCreditoModel() {
         valoresIniciales();
@@ -99,6 +106,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         addListenerButtons();
         addListenerTablas();
         addListenerCombos();
+        addPopUpListener();
         super.validacionDatosIngresados=false;
     }
     
@@ -116,6 +124,25 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         notaCredito.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
         //notaCredito.setSubtotalCero(BigDecimal.ZERO);
         
+        
+        //Actualizar en el documento de nota_credito el nuevo tipo de documento
+        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        notaCredito.setTipoDocumento(tipoDocumentoEnum.getCodigo());
+        
+        switch(tipoDocumentoEnum)
+        {
+            case LIBRE:
+                //TODO: Validar que estos campos en la nota de credito esten ingresados correctamente
+                notaCredito.setNumDocModificado(getTxtPreimpresoProveedor().getText());
+                notaCredito.setFechaEmisionDocSustento(new java.sql.Date(getCmbFechaCompra().getDate().getTime()));
+                break;
+                
+            case VENTA:
+                notaCredito.setNumDocModificado(notaCredito.getFactura().getPreimpreso());
+                notaCredito.setFechaEmisionDocSustento(notaCredito.getFactura().getFechaEmision());
+                break;
+        
+        }
         //Verificacion para cambiar el estado de la factura
         /*if(notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal())<0)
         {
@@ -163,9 +190,12 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     private Map<String,String> getMapAdicional(NotaCredito notaCredito)
     {
         Map<String,String> parametroMap=new HashMap<String ,String>();
-        for (NotaCreditoAdicional datoAdicional : notaCredito.getDatosAdicionales()) 
+        if(notaCredito.getDatosAdicionales()!=null)
         {
-            parametroMap.put(datoAdicional.getCampo(),datoAdicional.getValor());
+            for (NotaCreditoAdicional datoAdicional : notaCredito.getDatosAdicionales()) 
+            {
+                parametroMap.put(datoAdicional.getCampo(),datoAdicional.getValor());
+            }
         }
         return parametroMap;
     }
@@ -216,6 +246,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         {
             crearDetalleTabla();
             this.notaCredito = notaCreditoTmp;
+            setearDatosProveedor(this.notaCredito.getCliente());
             mostrarDatosNotaCredito(); 
             cargarDatosDetalles();
             cargarTablaDatosAdicionales();
@@ -238,11 +269,18 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             getLblTelefonos().setText(session.getEmpresa().getTelefonos());
             getLblNombreComercial().setText(session.getEmpresa().getRazonSocial());
             
+            getTxtProveedor().setText("");
+            getTxtPreimpresoProveedor().setText("");
+            getCmbFechaCompra().setDate(UtilidadesFecha.getFechaHoy());
+                        
+            
             //Cargar el secuncial correspondiente
             NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
             getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
             
             getCmbTipoDocumento().setSelectedItem(TipoDocumentoEnum.VENTA);
+            
+            getTblDatosAdicionales().setModel(new DefaultTableModel());
             
             notaCredito = new NotaCredito();
             crearDetalleTabla();
@@ -617,6 +655,22 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getTxtCodigoDetalle().requestFocus();
         getTxtCodigoDetalle().selectAll();
     }
+    
+    private void agregarCorreo(String correo)
+    {
+        if(notaCredito.getDatosAdicionales()!=null)
+        {
+            notaCredito.getDatosAdicionales().clear();            
+        }
+        
+        if(correo!=null)
+        {
+            notaCredito.addDatosAdicionalCorreo(correo);
+        }
+        //Cargar los datos en la tabla
+        cargarTablaDatosAdicionales();
+        
+    }
 
     private void addListenerButtons() {
                 
@@ -631,7 +685,10 @@ public class NotaCreditoModel extends NotaCreditoPanel {
                 if(proveedorTmp!=null)
                 {
                     notaCredito.setCliente(proveedorTmp);
+                    agregarCorreo(proveedorTmp.getCorreoElectronico());
+                    setearDatosProveedor(proveedorTmp);                    
                     getTxtProveedor().setText(proveedorTmp.getIdentificacion()+" - "+proveedorTmp.getRazonSocial());
+                    mostrarDatosNotaCredito();
                 }
             }
         });
@@ -716,12 +773,23 @@ public class NotaCreditoModel extends NotaCreditoPanel {
                 Factura factura = (Factura) buscarDialogoModel.getResultado();
                 if (factura != null) {
                     notaCredito.setFactura(factura);
+                    notaCredito.setNumDocModificado(factura.getPreimpreso());
+                    setearDatosProveedor(factura.getCliente());
                     cargarDatosNotaCredito();
                     cargarDatosAdicionales();
                     cargarTablaDatosAdicionales();
+                    mostrarDatosNotaCredito();
                 }
             }
         });
+    }
+    
+    private void setearDatosProveedor(Persona proveedor)
+    {
+        notaCredito.setCliente(proveedor);
+        notaCredito.setTelefono(proveedor.getTelefonoConvencional());
+        notaCredito.setDireccion(proveedor.getDireccion());
+        notaCredito.setRazonSocial(proveedor.getRazonSocial());
     }
     
     private void cargarDatosAdicionales()
@@ -809,11 +877,47 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     }
 
     private void mostrarDatosNotaCredito() {
-        getTxtReferenciaFactura().setText(notaCredito.getFactura().getPreimpreso());
-        getLblNombreCliente().setText(notaCredito.getFactura().getCliente().getRazonSocial());
-        getLblDireccionCliente().setText(notaCredito.getFactura().getCliente().getDireccion());
-        getLblTelefonoCliente().setText(notaCredito.getFactura().getCliente().getTelefonoCelular());
+        getTxtReferenciaFactura().setText(notaCredito.getNumDocModificado());
+        
+        getLblNombreCliente().setText(notaCredito.getRazonSocial());
+        getLblDireccionCliente().setText(notaCredito.getDireccion());
+        getLblTelefonoCliente().setText(notaCredito.getTelefono());
         getTxtMotivoAnulacion().setText(notaCredito.getRazonModificado());
+        
+        
+        //Cargar los datos de la seccion de libre
+        getTxtProveedor().setText(notaCredito.getCliente().toString());
+        getCmbFechaCompra().setDate(notaCredito.getFechaEmisionDocSustento());
+        getTxtPreimpresoProveedor().setText(notaCredito.getNumDocModificado());
+        
+        //Cargar laseccion segun el tipo de documento guardado en la nota de credito
+        if(estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            TipoDocumentoEnum tipoDocumento=notaCredito.getTipoDocumentoEnum();
+            if(tipoDocumento!=null)
+            {
+                getCmbTipoDocumento().setSelectedItem(tipoDocumento);
+                /*switch(tipoDocumento)
+                {
+                    case LIBRE:
+                        getCmbTipoDocumento().setSelectedItem(t);
+                        //habilitarTab(TAB_INDEX_LIBRE);
+                        break;
+
+                    case VENTA:
+                        getCmbTipoDocumento().setSelectedIndex(TAB_INDEX_VENTA);
+                        //habilitarTab(TAB_INDEX_VENTA);
+                        break;
+                }*/
+            }
+            else
+            {
+                //TODO: Asumo que los que tienen null ese campo mandaron como venta porque antes no existia ese campo
+                habilitarTab(TAB_INDEX_VENTA);
+            }
+            
+        }
+        
         
         //Cargar el preimpreso solo cuando el estado sea editar
         if(estadoFormulario.equals(ESTADO_EDITAR))
@@ -968,11 +1072,15 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         Vector<String> titulo = new Vector<>();
         titulo.add("Nombre");
         titulo.add("Valor");
-
-        DefaultTableModel modeloTablaDatosAdicionales = new DefaultTableModel(titulo, 0);
+        
+        DefaultTableModel modeloTablaDatosAdicionales=UtilidadesTablas.crearModeloTabla(new String[]{"","Nombre","Valor"},new Class[]{FacturaAdicional.class,String.class,String.class});
+        //this.modeloTablaDatosAdicionales = new DefaultTableModel(titulo, 0);
+       
+        //DefaultTableModel modeloTablaDatosAdicionales = new DefaultTableModel(titulo, 0);
        
         for (NotaCreditoAdicional datoAdicional : notaCredito.getDatosAdicionales()) {
             Vector dato = new Vector();
+            dato.add(datoAdicional);
             dato.add(datoAdicional.getCampo());
             dato.add(datoAdicional.getValor());
             
@@ -980,6 +1088,9 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         }
         
         getTblDatosAdicionales().setModel(modeloTablaDatosAdicionales);
+        
+        getTblDatosAdicionales().setModel(modeloTablaDatosAdicionales);
+        UtilidadesTablas.ocultarColumna(getTblDatosAdicionales(), 0); //Ocultar la fila del objeto para poder volver a modificar
 
     }
 
@@ -1196,6 +1307,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getTabTipoDocumentos().setEnabledAt(1, false);
         
         getTabTipoDocumentos().setEnabledAt(numeroTab,true);
+        getTabTipoDocumentos().setSelectedIndex(numeroTab);
         
     }
     
@@ -1208,6 +1320,27 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getBtnAgregar().setEnabled(opcion);
         ge/tBtnEditar().setEnabled(opcion);*/
     }
+    
+      private void addPopUpListener() {
+        JPopupMenu jPopupMenu=new JPopupMenu();
+        JMenuItem jMenuItemDatoAdicional=new JMenuItem("Eliminar");
+        jMenuItemDatoAdicional.addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada=getTblDatosAdicionales().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    NotaCreditoAdicional notaCreditoAdicional=(NotaCreditoAdicional)getTblDatosAdicionales().getValueAt(filaSeleccionada,0); //Obtener el objeto de la columna
+                    notaCredito.getDatosAdicionales().remove(notaCreditoAdicional);
+                    cargarTablaDatosAdicionales();//Volver a cargar los datos adicionales en la tabla de la vista
+                }
+            }
+        });
+        
+        jPopupMenu.add(jMenuItemDatoAdicional);
+        getTblDatosAdicionales().setComponentPopupMenu(jPopupMenu);
+      }
     
     
 

@@ -254,15 +254,15 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 (nota.getCodigoDocumentoEnum()!=null)?nota.getCodigoDocumentoEnum().getNombre():"",
                                 nota.getSubtotalDoce().toString(),
                                 nota.getSubtotalCero().toString(),
-                                nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()).toString(),
+                                "0", //Ver si es necesario calcular los descuentos en las notas de credito
                                 nota.getValorIvaDoce().toString(),
                                 nota.getTotal().toString(),
                                 "0",
-                                nota.getFactura().getPreimpreso(),
+                                nota.getNumDocModificado(),
                                 nota.getTotal().toString(),
-                                (nota.getFactura().getReferido()!=null)?nota.getFactura().getReferido().getRazonSocial():"",                                
-                                (nota.getFactura().getReferido()!=null)?nota.getFactura().getReferido().getIdentificacion():"",
-                                (nota.getFactura().getReferido()!=null)?nota.getFactura().getReferido().getContactoClientePorcentaje().toString():"0",
+                                (nota.getRazonSocial()!=null)?nota.getRazonSocial():"",                                
+                                (nota.getIdentificacion()!=null)?nota.getIdentificacion():"",
+                                "0",
                                 "0"//TODO: Revisar porque en esta parte me late que no necesito calcular el iva
                                 
                         );
@@ -277,7 +277,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         //acumdoce = acumdoce.add(nota.getSubtotalDoce());
                         agregarValorTotal("acumiva",nota.getValorIvaDoce());
                         //acumiva = acumiva.add(nota.getValorIvaDoce());
-                        agregarValorTotal("acumdesc",nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()));
+                        agregarValorTotal("acumdesc",BigDecimal.ZERO); //todo: ver si agregar el descuento
                         //acumdesc = acumdesc.add(nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()));
 
                         

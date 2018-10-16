@@ -335,6 +335,7 @@ public class RetencionModel extends RetencionPanel{
     
     private void actualizarDato(CompraDetalle compraDetalle,Boolean actualizar)
     {
+        //TODO: Ver una forma mejor de validar esta parte
         BigDecimal baseImponible=BigDecimal.ZERO;
         try
         {
