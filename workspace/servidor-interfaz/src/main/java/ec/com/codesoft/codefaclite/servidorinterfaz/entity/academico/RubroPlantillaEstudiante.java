@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -37,6 +38,9 @@ public class RubroPlantillaEstudiante implements Serializable{
     @JoinColumn(name = "ESTUDIANTE_INSCRITO_ID")
     @OneToOne(cascade = CascadeType.MERGE) //Con esta relacion se actualiza la referencia del padre cuando edito el estudiante Inscrito
     private EstudianteInscrito estudianteInscrito;
+    
+    @Column(name = "VALOR_PLANTILLA")
+    private BigDecimal valorPlantilla;
 
     public Long getId() {
         return id;
@@ -61,6 +65,16 @@ public class RubroPlantillaEstudiante implements Serializable{
     public void setEstudianteInscrito(EstudianteInscrito estudianteInscrito) {
         this.estudianteInscrito = estudianteInscrito;
     }
+
+    public BigDecimal getValorPlantilla() {
+        return valorPlantilla;
+    }
+
+    public void setValorPlantilla(BigDecimal valorPlantilla) {
+        this.valorPlantilla = valorPlantilla;
+    }
+    
+    
 
     @Override
     public int hashCode() {

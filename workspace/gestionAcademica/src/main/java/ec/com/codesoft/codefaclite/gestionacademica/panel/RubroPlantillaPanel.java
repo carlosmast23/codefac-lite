@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import javax.swing.ButtonGroup;
@@ -32,7 +33,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
      * Creates new form RubroPlantillaPanel
      */
     public RubroPlantillaPanel() {
-        RubroPlantillaMes rubroPlantillaMes;
+        //RubroPlantilla.TipoValorEnum;
         initComponents();
     }
 
@@ -66,6 +67,8 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        cmbTipoValor = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         cmbCursoSinRegistrar = new javax.swing.JComboBox<>();
@@ -141,10 +144,10 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         jPanel2.add(txtNombre, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Rubro:");
+        jLabel5.setText("Tipo Valor:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel5, gridBagConstraints);
@@ -153,7 +156,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         jLabel4.setText("Valor:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel4, gridBagConstraints);
@@ -170,7 +173,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         txtValor.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.weightx = 0.2;
@@ -180,7 +183,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         jLabel6.setText("Días Credito:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel6, gridBagConstraints);
@@ -189,7 +192,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         txtDiasCredito.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 100;
         jPanel2.add(txtDiasCredito, gridBagConstraints);
@@ -203,7 +206,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         jPanel2.add(btnAgregarRubro, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.5;
         jPanel2.add(lblEspacio3, gridBagConstraints);
@@ -215,7 +218,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         jPanel2.add(lblEspacio1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel2.add(lblEspacio2, gridBagConstraints);
@@ -223,8 +226,24 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         jLabel7.setText("                                        ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         jPanel2.add(jLabel7, gridBagConstraints);
+
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel13.setText("Rubro:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel13, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 100;
+        jPanel2.add(cmbTipoValor, gridBagConstraints);
 
         jTabPanel.addTab("Datos Generales", jPanel2);
 
@@ -449,10 +468,12 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<NivelAcademico> cmbCursosRegistrados;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
     private javax.swing.JComboBox<CatalogoProducto> cmbRubro;
+    private javax.swing.JComboBox<RubroPlantilla.TipoValorEnum> cmbTipoValor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -650,6 +671,11 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     public void setChkCursoSinRegistrar(JCheckBox chkCursoSinRegistrar) {
         this.chkCursoSinRegistrar = chkCursoSinRegistrar;
     }
+
+    public JComboBox<RubroPlantilla.TipoValorEnum> getCmbTipoValor() {
+        return cmbTipoValor;
+    }
+    
     
     
     

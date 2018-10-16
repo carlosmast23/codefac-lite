@@ -477,7 +477,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
             facturaDetalle.setDescripcion(rubro.getRubroNivel().getNombre());
             facturaDetalle.setDescuento(BigDecimal.ZERO);
 
-            facturaDetalle.setPrecioUnitario(rubro.getRubroNivel().getValor());
+            facturaDetalle.setPrecioUnitario(rubro.getValor());
 
             facturaDetalle.setReferenciaId(rubro.getId());
             facturaDetalle.setTipoDocumento(TipoDocumentoEnum.ACADEMICO.getCodigo());

@@ -57,6 +57,12 @@ public class RubroPlantilla implements Serializable{
     
     @JoinColumn(name = "ESTADO")
     private String estado;
+    
+    /**
+     * @FECHA_CREADO: 16/10/2018
+     */
+    @Column(name = "TIPO_VALOR")
+    private String tipoValor;
  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rubroPlantilla",fetch = FetchType.EAGER)
     private List<RubroPlantillaEstudiante> detalles;
@@ -143,6 +149,19 @@ public class RubroPlantilla implements Serializable{
     public GeneralEnumEstado getEstadoEnum()
     {
         return GeneralEnumEstado.getEnum(estado);
+    }
+
+    public String getTipoValor() {
+        return tipoValor;
+    }
+
+    public void setTipoValor(String tipoValor) {
+        this.tipoValor = tipoValor;
+    }
+    
+    public TipoValorEnum tipoValorEnum()
+    {
+        return TipoValorEnum.getObject(tipoValor);
     }
     
     // METODO PERSONALIZADO //////////////////
@@ -266,8 +285,8 @@ public class RubroPlantilla implements Serializable{
         }
         return false;
     }
-
-
+    
+    
     @Override
     public int hashCode() {
         int hash = 3;
@@ -293,6 +312,37 @@ public class RubroPlantilla implements Serializable{
         return true;
     }
     
-    
+    public enum TipoValorEnum {
+        VALOR_FIJO("Fijo", "F"),
+        VALOR_VARIABLE("Variable", "V");
+
+        private TipoValorEnum(String nombre, String codigo) {
+            this.nombre = nombre;
+            this.codigo = codigo;
+        }
+
+        public String nombre;
+        public String codigo;
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+        public static TipoValorEnum getObject(String codigo)
+        {
+            for (TipoValorEnum object : TipoValorEnum.values()) 
+            {
+                if(object.codigo.equals(codigo))
+                {
+                    return object;
+                }
+            }
+            return null;
+        }
+
+    }
+
     
 }
+

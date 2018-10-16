@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -187,8 +188,10 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
                 rubroEstudiante.setEstudianteInscrito(estudiateInscrito.getEstudianteInscrito());
                 rubroEstudiante.setRubroNivel(rubroNivel);
 
-                rubroEstudiante.setSaldo(rubroNivel.getValor());
-                rubroEstudiante.setValor(rubroNivel.getValor());
+                //Si existen los valores del estudiante ingresado son los mismos , si no existen obtengo la valor general
+                BigDecimal valorDeudaEstudiante=(estudiateInscrito.getValorPlantilla()!=null)?estudiateInscrito.getValorPlantilla():rubroNivel.getValor();
+                rubroEstudiante.setSaldo(valorDeudaEstudiante);
+                rubroEstudiante.setValor(valorDeudaEstudiante);
 
                 entityManager.persist(rubroEstudiante);
             }

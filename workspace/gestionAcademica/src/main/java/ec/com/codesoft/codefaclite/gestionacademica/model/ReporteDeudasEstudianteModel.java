@@ -129,9 +129,9 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
                 for (RubroEstudiante re : dataRubro) {
                     Vector<String> fila2 = new Vector<String>();
                     fila2.add(re.getRubroNivel().getNombre());
-                    fila2.add(re.getRubroNivel().getValor().toString());
+                    fila2.add(re.getValor().toString());
 
-                    acum = acum.add(re.getRubroNivel().getValor());
+                    acum = acum.add(re.getValor());
                     modeloTablaDeudas.addRow(fila2);
                 }
             }
@@ -187,10 +187,10 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
                             re.getRubroNivel().getNombre(),
                             re.getRubroNivel().getValor().toString(),
                             re.getEstudianteInscrito().getNivelAcademico().getPeriodo().getNombre(),
-                            re.getEstudianteInscrito().getNivelAcademico().getNombre()
+                            re.getValor().toString()
                     ));
 
-                    acum = acum.add(re.getRubroNivel().getValor());
+                    acum = acum.add(re.getValor());
                 }
             }
 

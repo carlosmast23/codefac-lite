@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
@@ -34,6 +35,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteSer
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
@@ -44,6 +47,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -52,6 +56,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import org.eclipse.persistence.sessions.factories.SessionFactory;
 
@@ -80,6 +86,8 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
      * Referencia para trabajar con el objeto rubro plantilla
      */
     private RubroPlantilla rubroPlantilla;
+    
+    private static final int COLUMNA_VALOR_ESTUDIANTE=3; 
 
     public RubroPlantillaModel() {
         listaExclusionComponentes.add(getTxtValor()); //Agrego a la lista de exluciones para evitar que valide cuando existan datos ingresados
@@ -206,6 +214,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     @Override
     public void limpiar() {
         limpiarVariables();        
+        getCmbTipoValor().setSelectedItem(RubroPlantilla.TipoValorEnum.VALOR_FIJO);
         ///cargarDatosDetallesMap();
                 
     }
@@ -251,6 +260,14 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                 getCmbRubro().addItem(producto);
             }
             
+            //Cargar los tipos de valor
+            RubroPlantilla.TipoValorEnum[] tipos=RubroPlantilla.TipoValorEnum.values();
+            
+            getCmbTipoValor().removeAllItems();
+            for (RubroPlantilla.TipoValorEnum tipo : tipos) {
+                getCmbTipoValor().addItem(tipo);
+            }
+            
             
         } catch (RemoteException ex) {
             Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -258,6 +275,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     }
 
     private void iniciarListener() {
+        listenerText();
         listenerBotones();
         listenerCombos();
         listenerList();
@@ -508,6 +526,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         RubroPlantillaEstudiante estudianteRubroPlantilla=new RubroPlantillaEstudiante();
         estudianteRubroPlantilla.setEstudianteInscrito(estudianteInscrito);
         estudianteRubroPlantilla.setRubroPlantilla(rubroPlantilla);
+        estudianteRubroPlantilla.setValorPlantilla(new BigDecimal(getTxtValor().getText()));
         
         NivelAcademico nivelEstudiante=estudianteInscrito.getNivelAcademico();
         List<RubroPlantillaEstudiante> estudiantesInscritos= estudiantesRegistradosMap.get(nivelEstudiante);
@@ -528,6 +547,24 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     
     private void listenerCombos()
     {
+        getCmbTipoValor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RubroPlantilla.TipoValorEnum tipoValor=(RubroPlantilla.TipoValorEnum) getCmbTipoValor().getSelectedItem();
+                if(tipoValor!=null)
+                {
+                    if(tipoValor.equals(RubroPlantilla.TipoValorEnum.VALOR_VARIABLE))
+                    {
+                        getTxtValor().setEnabled(false);
+                    }
+                    else
+                    {
+                        getTxtValor().setEnabled(true);
+                    }
+                }
+            }
+        });
+        
         getCmbPeriodo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -569,8 +606,8 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     
     private void cargarEstudiantesInscritosTabla(NivelAcademico nivelAcademico)
     {
-        String[] titulo={"objeto","Seleccionar","Nombre"};
-        DefaultTableModel modeloTabla=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{RubroPlantillaEstudiante.class,Boolean.class,String.class});
+        String[] titulo={"objeto","Seleccionar","Nombre","Valor"};
+        DefaultTableModel modeloTabla=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{RubroPlantillaEstudiante.class,Boolean.class,String.class,BigDecimal.class});
         
         List<RubroPlantillaEstudiante> estudiantesInscritos= estudiantesRegistradosMap.get(nivelAcademico);
         
@@ -579,13 +616,38 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             //Si el rubro esta dentro de la lista de datos a eliminar no lo muestro
             if(!estudiantesEliminar.contains(estudianteInscrito))
             {
-                modeloTabla.addRow(new Object[]{estudianteInscrito,false,estudianteInscrito.getEstudianteInscrito().getEstudiante().getNombreCompleto()});
+                //BigDecimal valorEstudiante=new BigDecimal(getTxtValor().getText());
+                modeloTabla.addRow(
+                        new Object[]{
+                            estudianteInscrito,
+                            false,
+                            estudianteInscrito.getEstudianteInscrito().getEstudiante().getNombreCompleto(),
+                            estudianteInscrito.getValorPlantilla()
+                        }
+                );
             }
             
         }
         
         getTblDatosRegistrados().setModel(modeloTabla);
-        UtilidadesTablas.ocultarColumna(getTblDatosRegistrados(),0);                
+        UtilidadesTablas.ocultarColumna(getTblDatosRegistrados(),0);   
+        
+        modeloTabla.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int filaSeleccionada= e.getFirstRow();
+                int columnaSeleccionada=e.getColumn();
+                
+                if(columnaSeleccionada==COLUMNA_VALOR_ESTUDIANTE)
+                {
+                    DefaultTableModel modeloDatos=(DefaultTableModel) e.getSource();
+                    BigDecimal valorModificado=(BigDecimal) modeloDatos.getValueAt(filaSeleccionada,COLUMNA_VALOR_ESTUDIANTE);
+                    RubroPlantillaEstudiante estudiantePlantilla=(RubroPlantillaEstudiante) modeloDatos.getValueAt(filaSeleccionada,0);
+                    estudiantePlantilla.setValorPlantilla(valorModificado);
+                    
+                }
+            }
+        });
         
     }
     
@@ -911,5 +973,46 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    private void listenerText() {
+        
+        getTxtValor().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                listenerTextValor();
+            }
+        });
+        getTxtValor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listenerTextValor();
+            }
+        });
+    }
+    
+    private void listenerTextValor() {
+        if (estudiantesRegistradosMap.size() > 0) {
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Pregunta", "Desea actualizar el valor a todos los estudiantes registrados?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if (respuesta) {
+                BigDecimal valorEstudiante = new BigDecimal(getTxtValor().getText());
+                for (Map.Entry<NivelAcademico, List<RubroPlantillaEstudiante>> entry : estudiantesRegistradosMap.entrySet()) {
+                    NivelAcademico nivelAcademico = entry.getKey();
+                    List<RubroPlantillaEstudiante> lista = entry.getValue();
+
+                    for (RubroPlantillaEstudiante plantillaEstudiante : lista) {
+                        plantillaEstudiante.setValorPlantilla(valorEstudiante);
+                    }
+
+                }
+                getCmbCursosRegistrados().setSelectedIndex(getCmbCursosRegistrados().getSelectedIndex());
+            }
+        }
+    }
+    
     
 }
