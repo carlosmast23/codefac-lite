@@ -28,6 +28,7 @@
         <module>../transporte</module>
         <module>../app-web</module>
         <module>../contabilidad</module>
+        <module>../impuestos</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

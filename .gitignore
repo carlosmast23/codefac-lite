@@ -67,3 +67,4 @@ workspace/main/codefac.ini
 /workspace/app-web/virtualmall/virtualmall-ejb/target/
 /workspace/app-web/virtualmall/virtualmall-web/target/
 /workspace/app-web/virtualmall/virtualmall-ear/target/
+/workspace/impuestos/target/

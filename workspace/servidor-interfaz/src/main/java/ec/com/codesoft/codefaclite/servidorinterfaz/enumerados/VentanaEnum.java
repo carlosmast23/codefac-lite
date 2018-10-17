@@ -94,7 +94,8 @@ public enum VentanaEnum {
     REPORTE_INVENTARIO_STOCK("ec.com.codesoft.codefaclite.inventario.model.ReporteInventarioStockModel", "RIST", "Reporte Inventario", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,null),
     STOCK_MINIMO("ec.com.codesoft.codefaclite.inventario.model.StockMinimoModel", "STMN", "Stock minimo", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,null),
     STOCK_REPORTE("ec.com.codesoft.codefaclite.inventario.model.StockReporteModel", "STRE", "Stock reporte", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,null),
-    REFERIDO_REPORTE("ec.com.codesoft.codefaclite.facturacion.model.ReferidosReporteModel", "RERM", "Referido Reporte", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.PRO,null);
+    REFERIDO_REPORTE("ec.com.codesoft.codefaclite.facturacion.model.ReferidosReporteModel", "RERM", "Referido Reporte", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.PRO,null),
+    ATS("ec.com.codesoft.codefaclite.impuestos.model.AtsModel", "ATSM", "ATS", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.PRO,null);
 
     
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,Integer teclaAtajo) {
