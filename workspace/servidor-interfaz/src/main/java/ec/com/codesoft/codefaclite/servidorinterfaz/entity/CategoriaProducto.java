@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -83,5 +84,32 @@ public class CategoriaProducto implements Serializable {
     public String toString() {
         return nombre;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.idCatProducto);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CategoriaProducto other = (CategoriaProducto) obj;
+        if (!Objects.equals(this.idCatProducto, other.idCatProducto)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }
