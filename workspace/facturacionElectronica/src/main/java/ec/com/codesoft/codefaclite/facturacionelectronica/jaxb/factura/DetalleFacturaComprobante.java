@@ -28,7 +28,8 @@ public class DetalleFacturaComprobante implements Serializable{
     
     private String codigoPrincipal;
     
-    
+    @XmlElementWrapper(name = "formasDePago")
+    @XmlElement(name = "formaPago")
     private List<ImpuestoComprobante> impuestos; 
 
     public DetalleFacturaComprobante() {

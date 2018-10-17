@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.impuestos.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JButton;
+import javax.swing.JTable;
 
 /**
  *
@@ -38,7 +40,7 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jRadioButton3 = new javax.swing.JRadioButton();
-        jButton1 = new javax.swing.JButton();
+        btnConsultar = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblVentas = new javax.swing.JTable();
@@ -110,26 +112,15 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jRadioButton3, gridBagConstraints);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        jButton1.setText("Consultar");
+        btnConsultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnConsultar.setText("Consultar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel1.add(jButton1, gridBagConstraints);
+        jPanel1.add(btnConsultar, gridBagConstraints);
 
-        tblVentas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         jScrollPane1.setViewportView(tblVentas);
 
         jTabbedPane1.addTab("Ventas", jScrollPane1);
@@ -181,7 +172,7 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnConsultar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -198,4 +189,16 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
     private javax.swing.JTable tblCompras;
     private javax.swing.JTable tblVentas;
     // End of variables declaration//GEN-END:variables
+
+    public JButton getBtnConsultar() {
+        return btnConsultar;
+    }
+
+    public JTable getTblVentas() {
+        return tblVentas;
+    }
+    
+    
+
+    
 }
