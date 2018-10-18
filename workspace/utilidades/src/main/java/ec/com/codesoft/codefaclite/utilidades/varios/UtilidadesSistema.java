@@ -5,6 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.varios;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+
 /**
  *
  * @author Carlos
@@ -53,5 +57,10 @@ public abstract class UtilidadesSistema {
         }
         
 
+    }
+    
+    public static void abrirDocumento(File path) throws IOException
+    {
+        Desktop.getDesktop().open(path);
     }
 }

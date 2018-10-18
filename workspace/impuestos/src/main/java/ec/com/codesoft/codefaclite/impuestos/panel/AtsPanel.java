@@ -6,7 +6,11 @@
 package ec.com.codesoft.codefaclite.impuestos.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 
 /**
@@ -32,13 +36,12 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        btnGenerarXml = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jRadioButton3 = new javax.swing.JRadioButton();
         btnConsultar = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -48,6 +51,12 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
         tblCompras = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblAnulados = new javax.swing.JTable();
+        txtAnio = new javax.swing.JSpinner();
+        jComboBox1 = new javax.swing.JComboBox<>();
+
+        btnGenerarXml.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnGenerarXml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/xml.png"))); // NOI18N
+        btnGenerarXml.setText("Generar Xml");
 
         setClosable(true);
         setIconifiable(true);
@@ -76,18 +85,12 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
         jPanel1.add(jRadioButton2, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Anio:");
+        jLabel1.setText("Año:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel1.add(jTextField1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Mes:");
@@ -96,12 +99,6 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel2, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel1.add(jTextField2, gridBagConstraints);
 
         jRadioButton3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jRadioButton3.setText("Compras");
@@ -164,6 +161,19 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jTabbedPane1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(txtAnio, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jComboBox1, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -173,6 +183,8 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultar;
+    private javax.swing.JButton btnGenerarXml;
+    private javax.swing.JComboBox<MesEnum> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -183,11 +195,10 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTable tblAnulados;
     private javax.swing.JTable tblCompras;
     private javax.swing.JTable tblVentas;
+    private javax.swing.JSpinner txtAnio;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBtnConsultar() {
@@ -197,6 +208,20 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
     public JTable getTblVentas() {
         return tblVentas;
     }
+
+    public JComboBox<MesEnum> getCmbMes() {
+        return jComboBox1;
+    }
+
+    public JSpinner getTxtAnio() {
+        return txtAnio;
+    }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Xml")
+    public JButton getBtnGenerarXml() {
+        return btnGenerarXml;
+    }
+    
     
     
 

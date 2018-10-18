@@ -284,16 +284,18 @@ public class ComprobanteEntity implements Serializable{
      * Enumerado que me sirve para saber el tipo de emision si fue electronica o manual
      */
     public enum TipoEmisionEnum {
-        ELECTRONICA("e", "Electrónica"),
-        NORMAL("m", "Manual");
+        ELECTRONICA("e","E", "Electrónica"),
+        NORMAL("m","F","Manual");
 
-        private TipoEmisionEnum(String letra, String nombre) {
+        private TipoEmisionEnum(String letra,String codigoSri, String nombre) {
             this.letra = letra;
             this.nombre = nombre;
+            this.codigoSri=codigoSri;
         }
 
         private String letra;
         private String nombre;
+        private String codigoSri;
 
         public String getLetra() {
             return letra;
@@ -302,6 +304,12 @@ public class ComprobanteEntity implements Serializable{
         public String getNombre() {
             return nombre;
         }
+
+        public String getCodigoSri() {
+            return codigoSri;
+        }
+        
+        
 
         public static TipoEmisionEnum getEnumByEstado(String estado) {
 

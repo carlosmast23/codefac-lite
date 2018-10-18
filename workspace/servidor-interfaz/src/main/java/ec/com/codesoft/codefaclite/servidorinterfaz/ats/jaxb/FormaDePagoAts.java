@@ -5,17 +5,20 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb;
 
+import java.io.Serializable;
+import javax.xml.bind.annotation.XmlElement;
+
 /**
  *
  * @author Carlos
  */
-public class FormaDePagoAts {
+public class FormaDePagoAts implements Serializable {
     private String formaPago;
 
     public FormaDePagoAts() {
     }
     
-    
+    @XmlElement(name = "TipoIDInformante")
     public String getFormaPago() {
         return formaPago;
     }
