@@ -1702,6 +1702,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         /**
          * Todo: Carlos Pato
          */
+        Persona.TipoIdentificacionEnum tipoIdentificacionEnum=factura.getCliente().getTipoIdentificacionEnum();
+        String codigoSri=tipoIdentificacionEnum.getCodigoSriVenta();
+        factura.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
         factura.setEmpresaId(session.getEmpresa().getId());
         factura.setEstado(Factura.ESTADO_FACTURADO);
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());

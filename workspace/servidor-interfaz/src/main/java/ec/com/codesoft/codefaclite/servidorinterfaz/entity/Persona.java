@@ -345,28 +345,34 @@ public class Persona implements Serializable, Comparable<Persona> {
     }
 
     public enum TipoIdentificacionEnum {
-        RUC("R", "Ruc"),
-        CEDULA("C", "Cédula"),
-        PASAPORTE("P", "Pasaporte"),
-        CLIENTE_FINAL("F", "Consumidor Final","9999999999999",new BigDecimal("200"));
+        RUC("R", "Ruc","04","01"),
+        CEDULA("C", "Cédula","05","02"),
+        PASAPORTE("P", "Pasaporte","06","03"),
+        CLIENTE_FINAL("F", "Consumidor Final","9999999999999",new BigDecimal("200"),"07","");
 
         private String letra;
         private String nombre;
         private String identificacion;
         private BigDecimal montoMaximo;
+        private String codigoSriVenta;
+        private String codigoSriCompra;
 
-        private TipoIdentificacionEnum(String letra, String nombre) 
+        private TipoIdentificacionEnum(String letra, String nombre,String codigoSriVenta,String codigoSriCompra) 
         {
             this.letra = letra;
             this.nombre = nombre;
+            this.codigoSriVenta=codigoSriVenta;
+            this.codigoSriCompra=codigoSriCompra;
         }
         
-        private TipoIdentificacionEnum(String letra,String nombre,String identificacion,BigDecimal montoMaximo ) 
+        private TipoIdentificacionEnum(String letra,String nombre,String identificacion,BigDecimal montoMaximo,String codigoSriVenta,String codigoSriCompra ) 
         {
             this.letra = letra;
             this.nombre = nombre;
             this.identificacion=identificacion;
             this.montoMaximo=montoMaximo;
+            this.codigoSriVenta = codigoSriVenta;
+            this.codigoSriCompra = codigoSriCompra;
         }
 
         public String getLetra() {
@@ -384,6 +390,16 @@ public class Persona implements Serializable, Comparable<Persona> {
         public BigDecimal getMontoMaximo() {
             return montoMaximo;
         }
+
+        public String getCodigoSriVenta() {
+            return codigoSriVenta;
+        }
+
+        public String getCodigoSriCompra() {
+            return codigoSriCompra;
+        }
+        
+        
         
         
         

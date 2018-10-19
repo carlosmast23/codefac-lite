@@ -37,7 +37,10 @@ import javax.xml.bind.annotation.XmlType;
 public class VentaAts implements Serializable{
     private String tpIdCliente;
     private String idCliente;
-    private String parteRelVtas; //TODO: Revisar para que sirve estacampo por defecto esta ingresado 18
+    /**
+     * Este campo debe ser ingresado unicamente cuando el cliente es diferente de cliente final es decir 07
+     */
+    private String parteRelVtas;
     private String tipoComprobante; // TODO: Este es el codigo del tipo de comprobante de la tabla4
     private String tipoEmision; //Esta relacionado con el valor de TipoEmisionEnum
     private int numeroComprobantes;

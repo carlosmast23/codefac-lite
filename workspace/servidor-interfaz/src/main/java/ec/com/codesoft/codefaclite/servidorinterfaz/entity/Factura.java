@@ -48,8 +48,8 @@ public class Factura extends ComprobanteEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TIPO_IDENTIFICACION_ID")
-    private Long tipoClienteId;
+    //@Column(name = "TIPO_IDENTIFICACION_ID")
+    //private Long tipoClienteId;
    
     /**
      * Valor del descuento de los productos que cobran iva
@@ -85,6 +85,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
     @Column(name = "ESTADO_NOTA_CREDITO")
     private String estadoNotaCredito;
     
+    @Column(name = "TIPO_IDENTIFICACION_CODIGO_SRI")
+    private String tipoIdentificacionCodigoSri;
+    
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne    
     private Persona cliente;
@@ -92,6 +95,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
     @JoinColumn(name = "REFERIDO_ID")
     @ManyToOne    
     private Persona referido;
+    
+    @JoinColumn(name = "TIPO_IDENTIFICACION_ID")
+    private SriIdentificacion sriIdentificacion;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -114,10 +120,6 @@ public class Factura extends ComprobanteEntity implements Serializable {
     }
 
 
-    public Long getTipoClienteId() {
-        return tipoClienteId;
-    }
-    
 
     public ImpuestoDetalle getIvaSriId() {
         return ivaSriId;
@@ -138,11 +140,6 @@ public class Factura extends ComprobanteEntity implements Serializable {
         this.id = id;
     }
 
-
-
-    public void setTipoClienteId(Long tipoClienteId) {
-        this.tipoClienteId = tipoClienteId;
-    }
 
 
     public void setIvaSriId(ImpuestoDetalle ivaSriId) {
@@ -237,9 +234,24 @@ public class Factura extends ComprobanteEntity implements Serializable {
     public void setReferido(Persona referido) {
         this.referido = referido;
     }
+
+    public SriIdentificacion getSriIdentificacion() {
+        return sriIdentificacion;
+    }
+
+    public void setSriIdentificacion(SriIdentificacion sriIdentificacion) {
+        this.sriIdentificacion = sriIdentificacion;
+    }
+
+    public String getTipoIdentificacionCodigoSri() {
+        return tipoIdentificacionCodigoSri;
+    }
+
+    public void setTipoIdentificacionCodigoSri(String tipoIdentificacionCodigoSri) {
+        this.tipoIdentificacionCodigoSri = tipoIdentificacionCodigoSri;
+    }
     
     
-        
     
     /**
      * Informacion adicional

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,13 +13,14 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author Carlos
  */
-@XmlType(propOrder = {"tipoIDInformante","idInformante","razonSocial","anio","mes","numEstabRuc","totalVentas","codigoOperativo","ventas"})
+@XmlType(propOrder = {"tipoIDInformante","idInformante","razonSocial","anio","mes","numEstabRuc","totalVentas","codigoOperativo","ventas","ventasEstablecimiento"})
 @XmlRootElement(name = "iva")
 public class AtsJaxb implements Serializable
 {
@@ -29,10 +31,24 @@ public class AtsJaxb implements Serializable
     private String mes;
     private String numEstabRuc;
     private BigDecimal totalVentas;
-    private String codigoOperativo;    
+    private String codigoOperativo;
+    
     private List<VentaAts> ventas;
+    private List<VentasEstablecimientoAts> ventasEstablecimiento;
+    
+    /**
+     * DATOS ADICIONALES QUE NO APARECEN EN EL XML
+     */
+    //@XmlTransient
+    //public BigDecimal totalIva;
 
     public AtsJaxb() {
+    }
+
+    @XmlElementWrapper(name = "ventasEstablecimiento")
+    @XmlElement(name = "ventaEst")
+    public List<VentasEstablecimientoAts> getVentasEstablecimiento() {
+        return ventasEstablecimiento;
     }
 
     @XmlElementWrapper(name = "ventas")
@@ -116,6 +132,12 @@ public class AtsJaxb implements Serializable
     public void setVentas(List<VentaAts> ventas) {
         this.ventas = ventas;
     }
+
+    public void setVentasEstablecimiento(List<VentasEstablecimientoAts> ventasEstablecimiento) {
+        this.ventasEstablecimiento = ventasEstablecimiento;
+    }
+    
+    
     
     /**
      *=========================> METODOS PERSONALIZADOS <====================
@@ -126,10 +148,16 @@ public class AtsJaxb implements Serializable
     public void calcularTotalVentas()
     {
         this.totalVentas=BigDecimal.ZERO;
+        //this.totalIva=BigDecimal.ZERO;
+        
         if(ventas!=null)
         {
             for (VentaAts venta : ventas) {
-                this.totalVentas=this.totalVentas.add(venta.getBaseImponible());
+                if(venta.getTipoEmision().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getCodigoSri()))
+                {   
+                    this.totalVentas=this.totalVentas.add(venta.getBaseImpGrav());
+                }
+                //this.totalIva=this.totalIva.add(venta.getMontoIva());
             }
         }
     }

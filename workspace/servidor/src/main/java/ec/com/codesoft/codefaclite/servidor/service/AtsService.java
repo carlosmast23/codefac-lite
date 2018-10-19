@@ -6,10 +6,14 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AtsJaxb;
+import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.FormaDePagoAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.VentaAts;
+import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.VentasEstablecimientoAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
@@ -60,6 +64,20 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         List<VentaAts> ventas=consultarVentasAts(fechaInicial, fechaFinal);
         ats.setVentas(ventas);
         ats.calcularTotalVentas();
+        
+                
+        //======================> Armar los subtotales de ventas por establecimient <===============================///
+        //TODO: Analizar esta parte que esta diseñada solo para una sucursal
+        VentasEstablecimientoAts ventaEstablecimientoAts=new VentasEstablecimientoAts();
+        ventaEstablecimientoAts.setCodEstab(numeroSucursal);
+        ventaEstablecimientoAts.setIvaComp(BigDecimal.ZERO); //Solo aplicaba para cuando era iva de compensacion por el terremoto
+        ventaEstablecimientoAts.setVentasEstab(ats.getTotalVentas());
+        
+        List<VentasEstablecimientoAts> establecimientos=new ArrayList<VentasEstablecimientoAts>();
+        establecimientos.add(ventaEstablecimientoAts);
+        
+        ats.setVentasEstablecimiento(establecimientos);
+        
         return ats;
         
     }
@@ -67,7 +85,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
     public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal) throws  RemoteException,ServicioCodefacException
     {
         FacturacionService facturacionService=new FacturacionService();
-        List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,null,false,null,false);
+        List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado(),false,null,false);
         
         Map<String,VentaAts> mapVentas=new HashMap<String,VentaAts>();
         
@@ -77,9 +95,16 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             if(ventaAts==null)
             { //Cuando no existe el dato en el map lo creo
                 ventaAts=new VentaAts();
-                ventaAts.setTpIdCliente("04");//Consultar el tipo de cliente
+                
+                String codigoSri=getCodigoSri(factura);                        
+                ventaAts.setTpIdCliente(codigoSri);//Consultar el tipo de cliente
                 ventaAts.setIdCliente(factura.getIdentificacion());
-                ventaAts.setParteRelVtas("SI");
+                
+                if(!ventaAts.getTpIdCliente().equals(Persona.TipoIdentificacionEnum.CLIENTE_FINAL.getCodigoSriVenta()))
+                {
+                    ventaAts.setParteRelVtas("SI");
+                }
+                
                 ventaAts.setTipoComprobante("18");
                 ventaAts.setTipoEmision((factura.getTipoFacturacionEnum()!=null)?factura.getTipoFacturacionEnum().getCodigoSri():ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getCodigoSri()); //Todo: Si no tiene tipo asignado por algun motivo le dejo con electronica
                 //Valores para los calculos
@@ -91,7 +116,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 ventaAts.setMontoIce(BigDecimal.ZERO); // TODO: Este valor no estoy grabando para obtener el subtotal
                 ventaAts.setValorRetIva(BigDecimal.ZERO); //TODO: Este dato aun no tento porque viene de la cartera
                 ventaAts.setValorRetRenta(BigDecimal.ZERO); //TODO: Este dato aun no tengo porque viene de la cartera
-                
+                ventaAts.setFormasDePago(getFormasPago(factura)); //La primera setea la primera forma de pago
 
                 mapVentas.put(factura.getIdentificacion(),ventaAts);
             }
@@ -108,6 +133,12 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 ventaAts.setValorRetIva(BigDecimal.ZERO); //TODO: Este dato aun no tento porque viene de la cartera
                 ventaAts.setValorRetRenta(BigDecimal.ZERO); //TODO: Este dato aun no tengo porque viene de la cartera
                 
+                //Agregar solo formas de pago que no esten ya registrados en el cliente
+                List<FormaDePagoAts> formasPagoOriginal=getFormasPago(factura);
+                List<FormaDePagoAts> formasPagoAcumulado=unirFormasPago(ventaAts.getFormasDePago(),formasPagoOriginal);
+                
+                ventaAts.setFormasDePago(formasPagoAcumulado);
+                
             }
         }
         
@@ -118,8 +149,53 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             VentaAts value = entry.getValue();
             ventasAts.add(value);
         }
-        return ventasAts;
         
+        return ventasAts;
+
+        
+    }
+    
+    private List<FormaDePagoAts> unirFormasPago(List<FormaDePagoAts> acumulados, List<FormaDePagoAts> nuevos)
+    {
+        for (FormaDePagoAts nuevo : nuevos) {
+            if(!acumulados.contains(nuevo))
+            {
+                acumulados.add(nuevo);
+            }
+        }
+        return acumulados;
+    }
+    
+    private List<FormaDePagoAts> getFormasPago(Factura factura)
+    {
+        List<FormaDePagoAts> formasPagoAts=new ArrayList<FormaDePagoAts>();
+                
+        List<FormaPago> formasPago=factura.getFormaPagos();
+        for (FormaPago formaPago : formasPago) 
+        {
+            FormaDePagoAts formaPagoAts=new FormaDePagoAts();
+            formaPagoAts.setFormaPago(formaPago.getSriFormaPago().getCodigo());
+            formasPagoAts.add(formaPagoAts);
+            //formaPagoAts.setFormaPago("");
+        }
+        return formasPagoAts;
+    }
+    
+    /**
+     * Funcion para consulta el tipo de identificacion 
+     * @param factura
+     * @return 
+     */
+    private String getCodigoSri(Factura factura)
+    {
+        if(factura.getTipoIdentificacionCodigoSri()!=null)
+        {
+            return factura.getTipoIdentificacionCodigoSri();
+        }
+        else
+        {
+            return factura.getCliente().getTipoIdentificacionEnum().getCodigoSriVenta();
+        }
     }
     
 }
