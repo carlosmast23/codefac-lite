@@ -25,6 +25,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -45,6 +49,10 @@ import javax.xml.bind.Marshaller;
 public class AtsModel extends AtsPanel {
 
     private AtsJaxb atsJaxb;
+    
+    private final static int COLUMNA_OBJETO=0;
+    private final static int COLUMNA_VENTA_RET_RENTA=5;
+    private final static int COLUMNA_VENTA_RET_IVA=6;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -158,23 +166,82 @@ public class AtsModel extends AtsPanel {
 
     private void construirTablaVenta() {
         String titulo[] = {
+            "",
             "Identificación",
             "# Comprobantes",
             "Base Imponible",
-            "Iva",};
-        DefaultTableModel modeloTabla = new DefaultTableModel(titulo, 0);
+            "Iva",
+            "Ret Renta",
+            "Ret Iva"};
+        
+        Class clase[]={
+            VentaAts.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+        };
+        
+        Boolean editar[]={
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true,
+        };
+        
+        DefaultTableModel modeloTabla = UtilidadesTablas.crearModeloTabla(titulo, clase, editar);
 
         for (VentaAts venta : atsJaxb.getVentas()) {
-            modeloTabla.addRow(new String[]{
+            modeloTabla.addRow(new Object[]{
+                venta,
                 venta.getIdCliente(),
                 venta.getNumeroComprobantes() + "",
-                venta.getBaseImponible().toString(),
-                venta.getMontoIva().toString()
-
+                venta.getBaseImpGrav().toString(),
+                venta.getMontoIva().toString(),
+                venta.getValorRetRenta().toString(),
+                venta.getValorRetIva().toString(),
             });
         }
 
         getTblVentas().setModel(modeloTabla);
+        UtilidadesTablas.ocultarColumna(getTblVentas(),0);
+        
+        //listener tabla de las ventas 
+        modeloTabla.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int filaSeleccionada=e.getFirstRow();
+                if(filaSeleccionada>=0)
+                {
+                    int columnaSeleccionada=e.getColumn();
+                    DefaultTableModel modeloTabla=(DefaultTableModel) e.getSource();
+                    VentaAts ventaAts=(VentaAts) modeloTabla.getValueAt(filaSeleccionada,COLUMNA_OBJETO);
+                    
+                    switch(columnaSeleccionada)
+                    {
+                        case COLUMNA_VENTA_RET_IVA:
+                            BigDecimal valorNuevoIva=new BigDecimal(modeloTabla.getValueAt(filaSeleccionada,COLUMNA_VENTA_RET_IVA).toString());
+                            ventaAts.setValorRetIva(valorNuevoIva);
+                            break;
+
+                        case COLUMNA_VENTA_RET_RENTA:
+                            BigDecimal valorNuevoRenta=new BigDecimal(modeloTabla.getValueAt(filaSeleccionada,COLUMNA_VENTA_RET_RENTA).toString());
+                            ventaAts.setValorRetRenta(valorNuevoRenta);
+                            break;
+                        
+                    
+                    }
+                    
+                    
+                    
+                }
+            }
+        });
     }
 
     private void valoresIniciales() {

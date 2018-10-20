@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SriEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.Serializable;
@@ -100,9 +101,17 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 ventaAts.setTpIdCliente(codigoSri);//Consultar el tipo de cliente
                 ventaAts.setIdCliente(factura.getIdentificacion());
                 
+                //Este campo solo se incluye cuando el cliente es diferente del cliente final
                 if(!ventaAts.getTpIdCliente().equals(Persona.TipoIdentificacionEnum.CLIENTE_FINAL.getCodigoSriVenta()))
                 {
                     ventaAts.setParteRelVtas("SI");
+                }
+                
+                //Este cmapo solo debe aparecer cuando el cliente extranjero
+                if(ventaAts.getTpIdCliente().equals(Persona.TipoIdentificacionEnum.PASAPORTE.getCodigoSriVenta()))
+                {
+                    ventaAts.setTipoCliente(SriEnum.TipoIdentificacion.PERSONA_NATURAL.codigo); //TODO: por el momento dejeo seteado que todos son personas naturales los estranjeros
+                    ventaAts.setDenoCli(factura.getRazonSocial());
                 }
                 
                 ventaAts.setTipoComprobante("18");

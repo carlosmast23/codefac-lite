@@ -23,6 +23,8 @@ import javax.xml.bind.annotation.XmlType;
     "tpIdCliente",
     "idCliente",
     "parteRelVtas",
+    "tipoCliente",
+    "denoCli",
     "tipoComprobante",
     "tipoEmision",
     "numeroComprobantes",
@@ -37,6 +39,11 @@ import javax.xml.bind.annotation.XmlType;
 public class VentaAts implements Serializable{
     private String tpIdCliente;
     private String idCliente;
+    private String tipoCliente; //Campo cuando el cliente es estranjero
+    /**
+     * Razon social o denomonicacion del cliente
+     */
+    private String denoCli; //Campo cuando el cliente es estranjero
     /**
      * Este campo debe ser ingresado unicamente cuando el cliente es diferente de cliente final es decir 07
      */
@@ -62,6 +69,11 @@ public class VentaAts implements Serializable{
     @XmlElement(name = "formaPago")
     public List<FormaDePagoAts> getFormasDePago() {
         return formasDePago;
+    }
+
+    @XmlElement(name = "denoCli")
+    public String getDenoCli() {
+        return denoCli;
     }
 
     @XmlElement(name = "tpIdCliente")
@@ -185,6 +197,21 @@ public class VentaAts implements Serializable{
     public void setValorRetRenta(BigDecimal valorRetRenta) {
         this.valorRetRenta = valorRetRenta;
     }
+
+    public String getTipoCliente() {
+        return tipoCliente;
+    }
+
+    public void setTipoCliente(String tipoCliente) {
+        this.tipoCliente = tipoCliente;
+    }
+
+    public void setDenoCli(String denoCli) {
+        this.denoCli = denoCli;
+    }
+    
+    
+    
     
     
 

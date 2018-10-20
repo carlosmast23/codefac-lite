@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Carlos
  */
-@XmlType(propOrder = {"tipoIDInformante","idInformante","razonSocial","anio","mes","numEstabRuc","totalVentas","codigoOperativo","ventas","ventasEstablecimiento"})
+@XmlType(propOrder = {"tipoIDInformante","idInformante","razonSocial","anio","mes","numEstabRuc","totalVentas","codigoOperativo","compras","ventas","ventasEstablecimiento"})
 @XmlRootElement(name = "iva")
 public class AtsJaxb implements Serializable
 {
@@ -33,8 +33,10 @@ public class AtsJaxb implements Serializable
     private BigDecimal totalVentas;
     private String codigoOperativo;
     
+    private List<CompraAts> compras;
     private List<VentaAts> ventas;
     private List<VentasEstablecimientoAts> ventasEstablecimiento;
+    
     
     /**
      * DATOS ADICIONALES QUE NO APARECEN EN EL XML
@@ -43,6 +45,12 @@ public class AtsJaxb implements Serializable
     //public BigDecimal totalIva;
 
     public AtsJaxb() {
+    }
+
+    @XmlElementWrapper(name = "compras")
+    @XmlElement(name = "detalleCompras")    
+    public List<CompraAts> getCompras() {
+        return compras;
     }
 
     @XmlElementWrapper(name = "ventasEstablecimiento")
