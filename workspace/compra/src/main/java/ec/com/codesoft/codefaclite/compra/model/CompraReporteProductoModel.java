@@ -358,7 +358,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
     public void buscarPorProveedor() throws RemoteException, ServicioCodefacException
     {
         ProductoProveedorServiceIf productoProveedorServiceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        Map<String, Object> mapParametros = new HashMap<>();
         mapParametros.put("proveedor", proveedor);
         productoProveedores = productoProveedorServiceIf.obtenerPorMap(mapParametros);
     }
