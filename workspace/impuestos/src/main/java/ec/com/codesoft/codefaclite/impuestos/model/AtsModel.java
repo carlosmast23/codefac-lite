@@ -420,6 +420,10 @@ public class AtsModel extends AtsPanel {
         {
             getCmbMes().addItem(mes);
         }
+        
+        getRdbVentas().setSelected(true);
+        getRdbCompras().setSelected(true);
+        getRdbAnulados().setSelected(true);
 
     }
 

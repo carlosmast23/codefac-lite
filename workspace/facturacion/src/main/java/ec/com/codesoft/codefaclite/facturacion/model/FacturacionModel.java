@@ -410,6 +410,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     getBtnAgregarDetalleFactura().setEnabled(false);
                     getBtnAgregarProducto().setEnabled(false);
                     getBtnCrearProducto().setEnabled(false);
+                    getCmbIva().setSelectedItem(EnumSiNo.NO);
                 }
             }
         });
@@ -786,6 +787,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
+        getCmbIva().setSelectedItem(EnumSiNo.NO);
+                
         agregarProductoVista(productoSeleccionado);
     }
     
@@ -2000,6 +2003,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 
                 BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
+                
+                EnumSiNo enumSino=(EnumSiNo) getCmbIva().getSelectedItem();
+                if(enumSino.equals(EnumSiNo.SI))
+                {
+                    BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+                    BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
+                    valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,3,BigDecimal.ROUND_HALF_UP);
+                }
+                
+                
                 facturaDetalle.setPrecioUnitario(valorTotalUnitario);
                 
                 
@@ -2209,9 +2222,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA);
         TipoDocumentoEnum tipoDocumentoEnumDefault=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroCodefac.getValor());
         getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnumDefault);
+        
+        getCmbIva().removeAllItems();
+        getCmbIva().addItem(EnumSiNo.SI);
+        getCmbIva().addItem(EnumSiNo.NO);
+        
     }
 
     private void addListenerCombos() {
+        
+        
         getCmbTipoDocumento().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
