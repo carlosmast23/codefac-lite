@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.inventario.busqueda.CatalogoProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.ProveedorBusquedaDialogo;
@@ -19,16 +20,21 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -208,7 +214,7 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
                 }
                 else if(getCmbTipoReporte().getSelectedItem().equals("Categoria"))
                 {
-                    CategoriaProductoBusquedaDialogo busquedaDialogo = new CategoriaProductoBusquedaDialogo();
+                    CatalogoProductoBusquedaDialogo busquedaDialogo = new CatalogoProductoBusquedaDialogo();
                     BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
                     buscarDialogoModel.setVisible(true);
                     CategoriaProducto categoriaProductoTemp = (CategoriaProducto) buscarDialogoModel.getResultado();
@@ -233,11 +239,11 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
                 {
                     case "Producto":
                         if(!todos){
-//                                buscarPorProductor();
-//                                crearMapPorProducto();
+                            //buscarProducto();
+                            crearMapPorProducto();
                         }else{
-//                                buscarTodosProductoProveedor();
-//                                crearMapPorProducto();
+                            //buscarTodosProducto();
+                            crearMapPorProducto();
                         }
 //                      if(productoProveedores != null && productoProveedores.size() > 0){
 //                          mostrarDatosTablaProducto();
@@ -308,12 +314,51 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
         });
     }
     
-    public void buscarPorProducto()
+    public List<ProductoProveedor> buscarProducto() throws RemoteException, ServicioCodefacException
     {
-        
+        ProductoProveedorServiceIf serviceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
+        Map<String,Object> parametros = new HashMap<>();
+        parametros.put("producto", this.producto);
+        List<ProductoProveedor> productos = serviceIf.obtenerPorMap(parametros);
+        return productos;
     }
     
-    public void buscarPorTodosProducto()
+    public List<ProductoProveedor> buscarTodosProducto() throws RemoteException, RemoteException
+    {
+        ProductoProveedorServiceIf serviceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
+        List<ProductoProveedor> productos = serviceIf.obtenerTodos();
+        return productos;
+    }
+    
+    
+    public Map<Producto, List<ProductoProveedor>> mapProducto(List<ProductoProveedor> productos)
+    {
+        Map<Producto, List<ProductoProveedor>> mapProductos = new TreeMap<>(new Comparator<Producto>() {
+            @Override
+            public int compare(Producto p1, Producto p2){
+                return p1.compareTo(p2);
+            }
+        });
+        
+       for(ProductoProveedor pp : productos) 
+       {
+           if(mapProductos.get(pp.getProducto()) == null)
+           {
+               List<ProductoProveedor> pps = new ArrayList<>();
+               pps.add(pp);
+               mapProductos.put(pp.getProducto(), pps);
+           }else{
+               mapProductos.get(pp.getProducto()).add(pp);
+           }  
+       }
+       
+       return mapProductos;
+    }
+    
+    
+    
+    
+    public void crearMapPorProducto()
     {
         
     }

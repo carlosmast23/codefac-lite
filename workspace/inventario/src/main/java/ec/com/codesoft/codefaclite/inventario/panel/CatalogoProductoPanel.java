@@ -124,6 +124,7 @@ public abstract class CatalogoProductoPanel extends ControladorCodefacInterface 
         getContentPane().add(cmbModulo, gridBagConstraints);
 
         cmbCategoriaProducto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        cmbCategoriaProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
