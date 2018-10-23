@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundar
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 
@@ -38,11 +39,11 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
 
         btnGenerarXml = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rdbVentas = new javax.swing.JRadioButton();
+        rdbAnulados = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        rdbCompras = new javax.swing.JRadioButton();
         btnConsultar = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -66,23 +67,23 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jRadioButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jRadioButton1.setText("Ventas");
+        rdbVentas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        rdbVentas.setText("Ventas");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel1.add(jRadioButton1, gridBagConstraints);
+        jPanel1.add(rdbVentas, gridBagConstraints);
 
-        jRadioButton2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jRadioButton2.setText("Anulados");
+        rdbAnulados.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        rdbAnulados.setText("Anulados");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel1.add(jRadioButton2, gridBagConstraints);
+        jPanel1.add(rdbAnulados, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Año:");
@@ -100,14 +101,14 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel2, gridBagConstraints);
 
-        jRadioButton3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jRadioButton3.setText("Compras");
+        rdbCompras.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        rdbCompras.setText("Compras");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel1.add(jRadioButton3, gridBagConstraints);
+        jPanel1.add(rdbCompras, gridBagConstraints);
 
         btnConsultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnConsultar.setText("Consultar");
@@ -166,13 +167,13 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JRadioButton rdbAnulados;
+    private javax.swing.JRadioButton rdbCompras;
+    private javax.swing.JRadioButton rdbVentas;
     private javax.swing.JTable tblAnulados;
     private javax.swing.JTable tblCompras;
     private javax.swing.JTable tblVentas;
@@ -207,6 +208,19 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
     public JTable getTblCompras() {
         return tblCompras;
     }
+
+    public JRadioButton getRdbAnulados() {
+        return rdbAnulados;
+    }
+
+    public JRadioButton getRdbCompras() {
+        return rdbCompras;
+    }
+
+    public JRadioButton getRdbVentas() {
+        return rdbVentas;
+    }
+    
     
     
     

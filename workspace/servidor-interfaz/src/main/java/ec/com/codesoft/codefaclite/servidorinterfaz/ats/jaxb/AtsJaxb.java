@@ -20,7 +20,18 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Carlos
  */
-@XmlType(propOrder = {"tipoIDInformante","idInformante","razonSocial","anio","mes","numEstabRuc","totalVentas","codigoOperativo","compras","ventas","ventasEstablecimiento"})
+@XmlType(propOrder = {"tipoIDInformante",
+    "idInformante",
+    "razonSocial",
+    "anio",
+    "mes",
+    "numEstabRuc",
+    "totalVentas",
+    "codigoOperativo",
+    "compras",
+    "ventas",
+    "ventasEstablecimiento",
+    "anuladosAts"})
 @XmlRootElement(name = "iva")
 public class AtsJaxb implements Serializable
 {
@@ -36,6 +47,8 @@ public class AtsJaxb implements Serializable
     private List<CompraAts> compras;
     private List<VentaAts> ventas;
     private List<VentasEstablecimientoAts> ventasEstablecimiento;
+    private List<AnuladoAts> anuladosAts;
+    
     
     
     /**
@@ -45,6 +58,12 @@ public class AtsJaxb implements Serializable
     //public BigDecimal totalIva;
 
     public AtsJaxb() {
+    }
+
+    @XmlElementWrapper(name = "anulados")
+    @XmlElement(name = "detalleAnulados")    
+    public List<AnuladoAts> getAnuladosAts() {
+        return anuladosAts;
     }
 
     @XmlElementWrapper(name = "compras")
@@ -148,6 +167,11 @@ public class AtsJaxb implements Serializable
     public void setCompras(List<CompraAts> compras) {
         this.compras = compras;
     }
+
+    public void setAnuladosAts(List<AnuladoAts> anuladosAts) {
+        this.anuladosAts = anuladosAts;
+    }
+    
     
     
     

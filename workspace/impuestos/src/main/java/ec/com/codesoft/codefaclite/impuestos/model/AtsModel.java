@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.impuestos.panel.AtsPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AnuladoAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AtsJaxb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.CompraAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.VentaAts;
@@ -153,9 +154,10 @@ public class AtsModel extends AtsPanel {
                     Integer anio=(Integer)getTxtAnio().getValue();
                     MesEnum mesEnum=(MesEnum)getCmbMes().getSelectedItem();
                     String establecimiento=session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor;
-                    atsJaxb = ServiceFactory.getFactory().getAtsServiceIf().consultarAts(anio,mesEnum,session.getEmpresa(),establecimiento);
+                    atsJaxb = ServiceFactory.getFactory().getAtsServiceIf().consultarAts(anio,mesEnum,session.getEmpresa(),establecimiento,getRdbCompras().isSelected(),getRdbVentas().isSelected(),getRdbAnulados().isSelected());
                     construirTablaVenta();
                     construirTablaCompra();
+                    construirTablaAnulados();
 
                 } catch (RemoteException ex) {
                     Logger.getLogger(AtsModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -199,16 +201,19 @@ public class AtsModel extends AtsPanel {
         
         DefaultTableModel modeloTabla = UtilidadesTablas.crearModeloTabla(titulo, clase, editar);
 
-        for (CompraAts compra : atsJaxb.getCompras()) {
-            modeloTabla.addRow(new Object[]{
-                compra,
-                compra.getIdProv(),
-                "1",
-                compra.getBaseImpGrav().toString(),
-                compra.getMontoIva().toString(),
-                "0",
-                "0",
-            });
+        if(atsJaxb.getCompras()!=null)
+        {
+            for (CompraAts compra : atsJaxb.getCompras()) {
+                modeloTabla.addRow(new Object[]{
+                    compra,
+                    compra.getIdProv(),
+                    "1",
+                    compra.getBaseImpGrav().toString(),
+                    compra.getMontoIva().toString(),
+                    "0",
+                    "0",
+                });
+            }
         }
 
         getTblCompras().setModel(modeloTabla);
@@ -248,6 +253,7 @@ public class AtsModel extends AtsPanel {
     }
 
     private void construirTablaVenta() {
+        
         String titulo[] = {
             "",
             "Identificación",
@@ -279,16 +285,19 @@ public class AtsModel extends AtsPanel {
         
         DefaultTableModel modeloTabla = UtilidadesTablas.crearModeloTabla(titulo, clase, editar);
 
-        for (VentaAts venta : atsJaxb.getVentas()) {
-            modeloTabla.addRow(new Object[]{
-                venta,
-                venta.getIdCliente(),
-                venta.getNumeroComprobantes() + "",
-                venta.getBaseImpGrav().toString(),
-                venta.getMontoIva().toString(),
-                venta.getValorRetRenta().toString(),
-                venta.getValorRetIva().toString(),
-            });
+        if(atsJaxb.getVentas()!=null)
+        {
+            for (VentaAts venta : atsJaxb.getVentas()) {
+                modeloTabla.addRow(new Object[]{
+                    venta,
+                    venta.getIdCliente(),
+                    venta.getNumeroComprobantes() + "",
+                    venta.getBaseImpGrav().toString(),
+                    venta.getMontoIva().toString(),
+                    venta.getValorRetRenta().toString(),
+                    venta.getValorRetIva().toString(),
+                });
+            }
         }
 
         getTblVentas().setModel(modeloTabla);
@@ -319,6 +328,81 @@ public class AtsModel extends AtsPanel {
                         
                     
                     }
+                    
+                    
+                    
+                }
+            }
+        });
+    }
+    
+    private void construirTablaAnulados() {
+        String titulo[] = {
+            "",
+            "Establecimientos",
+            "Punto Emisión",
+            "Secuencial",
+            "Autorización"};
+        
+        Class clase[]={
+            AnuladoAts.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+        };
+        
+        Boolean editar[]={
+            false,
+            false,
+            false,
+            false,
+            false,
+        };
+        
+        DefaultTableModel modeloTabla = UtilidadesTablas.crearModeloTabla(titulo, clase, editar);
+
+        if(atsJaxb.getAnuladosAts()!=null)
+        {
+            for (AnuladoAts anulado : atsJaxb.getAnuladosAts()) {
+                modeloTabla.addRow(new Object[]{
+                    anulado,
+                    anulado.getEstablecimiento(),
+                    anulado.getPuntoEmision()+ "",
+                    anulado.getSecuencialInicio().toString(),
+                    anulado.getAutorizacion().toString(),
+                });
+            }
+        }
+
+        getTblAnulados().setModel(modeloTabla);
+        UtilidadesTablas.ocultarColumna(getTblAnulados(),0);
+        
+        //listener tabla de las ventas 
+        modeloTabla.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int filaSeleccionada=e.getFirstRow();
+                if(filaSeleccionada>=0)
+                {
+                    int columnaSeleccionada=e.getColumn();
+                    DefaultTableModel modeloTabla=(DefaultTableModel) e.getSource();
+                    AnuladoAts anuladoAts=(AnuladoAts) modeloTabla.getValueAt(filaSeleccionada,COLUMNA_OBJETO);
+                    /*
+                    switch(columnaSeleccionada)
+                    {
+                        case COLUMNA_VENTA_RET_IVA:
+                            BigDecimal valorNuevoIva=new BigDecimal(modeloTabla.getValueAt(filaSeleccionada,COLUMNA_VENTA_RET_IVA).toString());
+                            ventaAts.setValorRetIva(valorNuevoIva);
+                            break;
+
+                        case COLUMNA_VENTA_RET_RENTA:
+                            BigDecimal valorNuevoRenta=new BigDecimal(modeloTabla.getValueAt(filaSeleccionada,COLUMNA_VENTA_RET_RENTA).toString());
+                            ventaAts.setValorRetRenta(valorNuevoRenta);
+                            break;
+                        
+                    
+                    }*/
                     
                     
                     

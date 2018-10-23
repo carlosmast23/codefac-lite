@@ -96,3 +96,7 @@ En las retenciones al momento de eliminar si tiene ligado una compra restaurar e
 - Revisar las anulaciones del proceso academico para verificar saldos
 - Revisar que el precio promedio del kardex sea el mismo que lo que sale en el detalle es decir como calcula para grabar el facturas notas de credito y demas pantalla que pueden modificar
 - Revisar como funciona el ice y como debo grabar en las facturas y modificar en los ats
+
+En los ats preguntar si se debe hacer el calculo de las ventas restando las notas de credito que le afectan, y en los anulados solo deben ir datos de las facturas anuladas complentamente
+
+Verifica en los ats en la seccion de anulados si este dato es el de la nota de credito o la factura que elimina , pero si son algunas no tiene sentido que sea el de la factura

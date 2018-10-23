@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AnuladoAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AtsJaxb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.CompraAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.FormaDePagoAts;
@@ -16,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
@@ -56,7 +58,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         return mes.toString();
     }
     
-    public AtsJaxb consultarAts(Integer anio, MesEnum mes,Empresa empresa,String numeroSucursal) throws  RemoteException,ServicioCodefacException
+    public AtsJaxb consultarAts(Integer anio, MesEnum mes,Empresa empresa,String numeroSucursal,boolean  comprasBool, boolean  ventasBool,boolean anuladosBool) throws  RemoteException,ServicioCodefacException
     {
         AtsJaxb ats=new AtsJaxb();
         ats.setAnio(anio);
@@ -74,32 +76,70 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         /**
          * ===================> COMPRAS <==========================
          */
-        List<CompraAts> compras=consultarComprasAts(fechaInicial, fechaFinal);
-        ats.setCompras(compras);
+        if(comprasBool)
+        {
+            List<CompraAts> compras=consultarComprasAts(fechaInicial, fechaFinal);
+            ats.setCompras(compras);
+        }
         
         /**
          * ===================> VENTAS <==========================
          */
-        List<VentaAts> ventas=consultarVentasAts(fechaInicial, fechaFinal);
-        ats.setVentas(ventas);
-        ats.calcularTotalVentas();
+        if(ventasBool)
+        {
+            List<VentaAts> ventas=consultarVentasAts(fechaInicial, fechaFinal);
+            ats.setVentas(ventas);
+            ats.calcularTotalVentas();
+            
+            /**
+             * ======================> TOTALES POR ESTABLECIMIENTO <===============================
+             */
+            //TODO: Analizar esta parte que esta diseñada solo para una sucursal
+            VentasEstablecimientoAts ventaEstablecimientoAts = new VentasEstablecimientoAts();
+            ventaEstablecimientoAts.setCodEstab(numeroSucursal);
+            ventaEstablecimientoAts.setIvaComp(BigDecimal.ZERO); //Solo aplicaba para cuando era iva de compensacion por el terremoto
+            ventaEstablecimientoAts.setVentasEstab(ats.getTotalVentas());
+
+            List<VentasEstablecimientoAts> establecimientos = new ArrayList<VentasEstablecimientoAts>();
+            establecimientos.add(ventaEstablecimientoAts);
+
+            ats.setVentasEstablecimiento(establecimientos);
+        }
         
-                
-        //======================> Armar los subtotales de ventas por establecimient <===============================///
-        //TODO: Analizar esta parte que esta diseñada solo para una sucursal
-        VentasEstablecimientoAts ventaEstablecimientoAts=new VentasEstablecimientoAts();
-        ventaEstablecimientoAts.setCodEstab(numeroSucursal);
-        ventaEstablecimientoAts.setIvaComp(BigDecimal.ZERO); //Solo aplicaba para cuando era iva de compensacion por el terremoto
-        ventaEstablecimientoAts.setVentasEstab(ats.getTotalVentas());
-        
-        List<VentasEstablecimientoAts> establecimientos=new ArrayList<VentasEstablecimientoAts>();
-        establecimientos.add(ventaEstablecimientoAts);
-        
-        ats.setVentasEstablecimiento(establecimientos);
+        /**
+         * ===================> ANULADOS <==========================
+         */
+        if(anuladosBool)
+        {
+            List<AnuladoAts> anulados=consultarAnuladosAts(fechaInicial, fechaFinal);
+            ats.setAnuladosAts(anulados);
+        }
         
         return ats;
         
     }
+    
+    public List<AnuladoAts> consultarAnuladosAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal) throws  RemoteException,ServicioCodefacException
+    {
+        List<AnuladoAts> anuladosAts=new ArrayList<AnuladoAts>();
+        NotaCreditoService notaCreditoService=new NotaCreditoService();
+        List<NotaCredito> notasCredito=notaCreditoService.obtenerNotasReporte(null, fechaInicial, fechaFinal, GeneralEnumEstado.ACTIVO.getEstado());
+        
+        for (NotaCredito notaCredito : notasCredito) {
+            AnuladoAts anuladoAts=new AnuladoAts();
+            
+            anuladoAts.setTipoComprobante("18"); //Todo: por defecto solo anulo el tipo 18 que supuestamente corresponde documentos autorizados electronicamente
+            String preimpreso[]=notaCredito.getNumDocModificado().split("-");
+            anuladoAts.setEstablecimiento(preimpreso[0]);
+            anuladoAts.setPuntoEmision(preimpreso[1]);
+            anuladoAts.setSecuencialInicio(Integer.parseInt(preimpreso[2]));
+            anuladoAts.setSecuencialFin(Integer.parseInt(preimpreso[2]));
+            anuladoAts.setAutorizacion(notaCredito.getClaveAcceso()); //Todo: Verifica si este dato es el de la nota de credito o la factura que elimina , pero si son algunas no tiene sentido que sea el de la factura
+            anuladosAts.add(anuladoAts);
+        }
+        return anuladosAts;
+    }
+   
     
     public List<CompraAts> consultarComprasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal) throws  RemoteException,ServicioCodefacException
     {
@@ -257,6 +297,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
 
         
     }
+    
     
     private List<FormaDePagoAts> unirFormasPago(List<FormaDePagoAts> acumulados, List<FormaDePagoAts> nuevos)
     {
