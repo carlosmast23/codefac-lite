@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.sql.Date;
 import java.util.List;
@@ -24,19 +25,21 @@ public class CompraFacade extends AbstractFacade<Compra>{
     public CompraFacade() {
         super(Compra.class);
     }
-    public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum)
+    public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum)
     {
         
         String cliente = "";
         String fecha = "";
         String documento = "";
         String tipoDocumento = "";
+        String estadoEnumQuery= "";
         
         if (proveedor != null) {
             cliente = "u.proveedor=?1";
         } else {
             cliente = "1=1";
         }
+        
         if (fechaInicial == null && fechaFin != null) {
             fecha = " AND u.fechaFactura <= ?3";
         } else if (fechaInicial != null && fechaFin == null) {
@@ -56,8 +59,14 @@ public class CompraFacade extends AbstractFacade<Compra>{
             tipoDocumento = " AND u.codigoTipoDocumento=?5";
         }
         
+        if(estadoEnum!=null)
+        {
+            estadoEnumQuery=" AND u.estado=?6 ";
+        }
+        
         try {
-            String queryString = "SELECT u FROM Compra u WHERE " + cliente + fecha + documento + tipoDocumento;
+            String queryString = "SELECT u FROM Compra u WHERE " + cliente + fecha + documento + tipoDocumento+estadoEnumQuery;
+            System.out.println("Script: "+queryString);
             Query query = getEntityManager().createQuery(queryString);
             if (proveedor != null) 
             {
@@ -73,13 +82,18 @@ public class CompraFacade extends AbstractFacade<Compra>{
             }
             if (documentoEnum != null) 
             {
-                System.out.println("---->>>>>>" + documentoEnum.getCodigo());
+                //System.out.println("---->>>>>>" + documentoEnum.getCodigo());
                 query.setParameter(4, documentoEnum.getCodigo());
                 
             }
             if(tipoDocumentoEnum != null)
             {
                 query.setParameter(5, tipoDocumentoEnum.getCodigo());
+            }
+            
+            if(estadoEnum!=null)
+            {
+                query.setParameter(6,estadoEnum.getEstado());
             }
             return query.getResultList();
         } catch (NoResultException e) {

@@ -22,7 +22,14 @@ public abstract class MensajeCodefacSistema {
     public static abstract class AccionesFormulario {
 
         public static final CodefacMsj GUARDADO = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La información fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        public static final CodefacMsj ELIMINADO_CORRECTAMENTE = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La información fue eliminada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         public static final CodefacMsj NO_PERMITE_EDITAR = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La pantalla no permite modificaciones",DialogoCodefac.MENSAJE_INCORRECTO);
+        public static final CodefacMsj NO_PERMITE_ELIMINAR = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"Solo se puede eliminar en modo edicion",DialogoCodefac.MENSAJE_INCORRECTO);
+    }
+    
+    public static abstract class Preguntas
+    {
+        public static final CodefacMsj GUARDADO = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"Esta seguro que desea eliminar el registro? ",DialogoCodefac.MENSAJE_ADVERTENCIA);
     }
     
     public static abstract class FacturasMensajes

@@ -118,6 +118,9 @@ public class Compra implements Serializable {
     @Column(name ="ESTADO_RETENCION")
     private String estadoRetencion;
     
+    @Column(name ="AUTORIZACION")
+    private String autorizacion;
+    
     @JoinColumn(name ="ORDEN_COMPRA_ID")
     private OrdenCompra ordenCompra;
     
@@ -127,6 +130,9 @@ public class Compra implements Serializable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "compra",fetch = FetchType.EAGER)
     private List<CompraDetalle> detalles;
+    
+    @Column(name ="TIPO_IDENTIFICACION_CODIGO_SRI")
+    private String tipoIdentificacionCodigoSri;
     
 
     public Compra() {
@@ -185,7 +191,11 @@ public class Compra implements Serializable {
         return estado;
     }
 
+    public String getTipoIdentificacionCodigoSri() {
+        return tipoIdentificacionCodigoSri;
+    }
 
+    
     
 
     public void setId(Long id) {
@@ -385,8 +395,25 @@ public class Compra implements Serializable {
     public void setObservacion(String observacion) {
         this.observacion = observacion;
     }
+
+    public void setTipoIdentificacionCodigoSri(String tipoIdentificacionCodigoSri) {
+        this.tipoIdentificacionCodigoSri = tipoIdentificacionCodigoSri;
+    }
+
+    public String getAutorizacion() {
+        return autorizacion;
+    }
+
+    public void setAutorizacion(String autorizacion) {
+        this.autorizacion = autorizacion;
+    }
     
     
+    
+    public GeneralEnumEstado getEstadoEnum()
+    {
+        return GeneralEnumEstado.getEnum(estado);
+    }
     
    
     /**

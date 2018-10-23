@@ -6,24 +6,32 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AtsJaxb;
+import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.CompraAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.FormaDePagoAts;
+import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.PagoExteriorAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.VentaAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.VentasEstablecimientoAts;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SriEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,9 +67,19 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         ats.setRazonSocial(empresa.getRazonSocial());
         ats.setTipoIDInformante("R"); //Todo: Ver que opciones existen para ese campo
         
+        
         java.sql.Date fechaInicial=new java.sql.Date(UtilidadesFecha.getPrimerDiaMes(anio,mes.getNumero()-1).getTime());
         java.sql.Date fechaFinal=new java.sql.Date(UtilidadesFecha.getUltimoDiaMes(anio,mes.getNumero()-1).getTime());
         
+        /**
+         * ===================> COMPRAS <==========================
+         */
+        List<CompraAts> compras=consultarComprasAts(fechaInicial, fechaFinal);
+        ats.setCompras(compras);
+        
+        /**
+         * ===================> VENTAS <==========================
+         */
         List<VentaAts> ventas=consultarVentasAts(fechaInicial, fechaFinal);
         ats.setVentas(ventas);
         ats.calcularTotalVentas();
@@ -80,6 +98,82 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         ats.setVentasEstablecimiento(establecimientos);
         
         return ats;
+        
+    }
+    
+    public List<CompraAts> consultarComprasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal) throws  RemoteException,ServicioCodefacException
+    {
+        List<CompraAts> comprasAts=new ArrayList<CompraAts>();
+        CompraService compraService=new CompraService();
+        List<Compra> compras=compraService.obtenerCompraReporte(null, fechaInicial, fechaFinal,null,null,GeneralEnumEstado.ACTIVO);
+        
+        for (Compra compra : compras) {
+            CompraAts compraAts=new CompraAts();
+            
+            String identificacion=(compra.getIdentificacion()!=null && !compra.getIdentificacion().isEmpty() )?compra.getIdentificacion():compra.getProveedor().getIdentificacion();
+                    
+            
+            compraAts.setCodSustento("10"); //TODO:TABLA 5 consultar para integrar todas las clasificaciones de las compras
+            String codigoSri=getCodigoSri(compra);        
+            compraAts.setTpIdProv(codigoSri);
+            compraAts.setIdProv(identificacion);
+            compraAts.setTipoComprobante("19");//Todo: Por el momento queda regitra ese codigo pero existen otro que toca preguntar para ver como funciona
+            compraAts.setParteRel("SI");
+            SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
+            compraAts.setFechaRegistro(dateFormat.format(compra.getFechaCreacion()));
+            compraAts.setEstablecimiento(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEstablecimiento(),3,"0"));
+            compraAts.setPuntoEmision(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEmision(),3,"0"));
+            compraAts.setSecuencial(compra.getSecuencial().toString());
+            compraAts.setFechaEmision(dateFormat.format(compra.getFechaFactura()));
+            
+            String autorizacion=(compra.getAutorizacion()!=null && !compra.getAutorizacion().isEmpty())?compra.getAutorizacion():"0000000000";
+            compraAts.setAutorizacion(autorizacion); //todo: revisar si para las comptas es lo mismo la clave de autorizacion y la autorizacion
+            compraAts.setBaseNoGraIva(BigDecimal.ZERO);
+            compraAts.setBaseImponible(compra.getSubtotalSinImpuestos());
+            compraAts.setBaseImpGrav(compra.getSubtotalImpuestos());
+            compraAts.setBaseImpExe(BigDecimal.ZERO);//TODO: Revisar cuando se aplica este campo , el manula dice que son Base imponible exenta de IVA
+            compraAts.setMontoIce(BigDecimal.ZERO);
+            compraAts.setMontoIva(compra.getIva());
+            
+            ///=======> DATOS DE LAS RETENCIONES <============///
+            compraAts.setValRetBien10(BigDecimal.ZERO); //TODO:completar
+            compraAts.setValRetServ20(BigDecimal.ZERO); //TODO:completar
+            compraAts.setValorRetBienes(BigDecimal.ZERO); //TODO:completar
+            compraAts.setValRetServ50(BigDecimal.ZERO); //TODO:completar
+            compraAts.setValorRetServicios(BigDecimal.ZERO); //TODO:completar
+            compraAts.setValRetServ100(BigDecimal.ZERO); //TODO:completar
+            
+            //========> COMPRAS DE REEMBOLSO <=================//
+            compraAts.setTotbasesImpReemb(BigDecimal.ZERO); //TODO: Esto queda pendiente de programar
+            //TODO: Falta programar para pagos en el exterior
+            
+            //========> PAGO EXTERIOR <========================//
+            PagoExteriorAts pagoExteriorAts=new PagoExteriorAts();
+            pagoExteriorAts.setPagoLocExt("01"); //Todo:por el momento dejo seteado solo para personas locales , el codigo para personas del exterior es 02
+            pagoExteriorAts.setPaisEfecPagoGen("NA");
+            pagoExteriorAts.setPaisEfecPago("NA");
+            pagoExteriorAts.setAplicConvDobTrib("NA");
+            pagoExteriorAts.setPagExtSujRetNorLeg("NA");
+            compraAts.setPagoExteriorAts(pagoExteriorAts);
+            
+            
+             //Agregar solo formas de pago que no esten ya registrados en el cliente //Solo deben aparecer las formas de pago cuando la base imponible es superior a 1000 dolares
+            List<FormaDePagoAts> formasPago = new ArrayList<FormaDePagoAts>();
+            FormaDePagoAts formaPago=new FormaDePagoAts();
+            formaPago.setFormaPago("01"); //Todo: Por defecto queda setear pago en efectivo(Sin utuizacion del sistema financiero)
+            formasPago.add(formaPago);
+            
+            //TODO Falta completar los detalles de los impuestos a la renta
+            
+            //compraAts.setEstabRetencion1("");
+            //compraAts.setPtoEmiRetencion1("");
+            //compraAts.setSecRetencion1(codigoSri); //Secuecual de la retencion
+            //compraAts.setAutRetencion1("");
+            //compraAts.setFechaEmiRet1("");
+            comprasAts.add(compraAts);
+        }
+        
+        return comprasAts;
         
     }
     
@@ -114,7 +208,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                     ventaAts.setDenoCli(factura.getRazonSocial());
                 }
                 
-                ventaAts.setTipoComprobante("18");
+                ventaAts.setTipoComprobante("18"); //TODO: Revisar en la tabla 4 cuando sea otro tipo de documento
                 ventaAts.setTipoEmision((factura.getTipoFacturacionEnum()!=null)?factura.getTipoFacturacionEnum().getCodigoSri():ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getCodigoSri()); //Todo: Si no tiene tipo asignado por algun motivo le dejo con electronica
                 //Valores para los calculos
                 ventaAts.setNumeroComprobantes(1);
@@ -204,6 +298,23 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         else
         {
             return factura.getCliente().getTipoIdentificacionEnum().getCodigoSriVenta();
+        }
+    }
+    
+    /**
+     * Funcion para consulta el tipo de identificacion 
+     * @param factura
+     * @return 
+     */
+    private String getCodigoSri(Compra factura)
+    {
+        if(factura.getTipoIdentificacionCodigoSri()!=null)
+        {
+            return factura.getTipoIdentificacionCodigoSri();
+        }
+        else
+        {
+            return factura.getProveedor().getTipoIdentificacionEnum().getCodigoSriCompra();
         }
     }
     

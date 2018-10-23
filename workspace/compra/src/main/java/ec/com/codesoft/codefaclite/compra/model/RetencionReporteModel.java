@@ -85,10 +85,8 @@ public class RetencionReporteModel extends RetencionReportePanel {
     private static final Logger LOG = Logger.getLogger(RetencionReporteModel.class.getName());
 
     public RetencionReporteModel() {
-        super.validacionDatosIngresados=false;
+        
     }
-    
-    
     
 
     @Override
@@ -96,6 +94,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
         variablesIniciales();
         listenerCheckBox();
         listenerBotones();
+        super.validacionDatosIngresados=false;
     }
     
     private void construirMapSumatorias()

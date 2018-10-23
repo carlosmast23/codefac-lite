@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
@@ -50,6 +51,10 @@ import javax.swing.table.DefaultTableModel;
  * @author CodesoftDesarrollo 1
  */
 public class CompraReporteModel extends CompraReportePanel {
+
+    private static final Logger LOG = Logger.getLogger(CompraReporteModel.class.getName());
+    
+    
 
     private DefaultTableModel modeloTablaDetallesCompras;
     private Persona proveedor;
@@ -88,21 +93,26 @@ public class CompraReporteModel extends CompraReportePanel {
     private Map parametros;
 
     public CompraReporteModel() {
-        super.validacionDatosIngresados=false;
+        
     }
     
     
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        iniciarValoresVentana();
+        super.validacionDatosIngresados=false;
+        
         agregarListener();
+        agregarListenerChecks();
         crearVariables();
         this.compraServiceIf = ServiceFactory.getFactory().getCompraServiceIf();
+        iniciarValoresVentana();
+        
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
+        /*
         Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los cambios realizados?", DialogoCodefac.MENSAJE_ADVERTENCIA);
         if (!respuesta) {
             throw new ExcepcionCodefacLite("Cancelacion usuario");
@@ -110,7 +120,7 @@ public class CompraReporteModel extends CompraReportePanel {
             iniciarValoresVentana();
             crearVariables();
             limpiarTotalesComprasIndiviales();
-        }
+        }*/
     }
 
     @Override
@@ -209,6 +219,8 @@ public class CompraReporteModel extends CompraReportePanel {
 
             }
         } catch (Exception e) {
+            LOG.log(Level.SEVERE,e.getMessage());
+            e.printStackTrace();
             DialogoCodefac.mensaje("Error", "No se pudo crear el reporte correctamente", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
 
@@ -275,6 +287,13 @@ public class CompraReporteModel extends CompraReportePanel {
         initValoresCombos();
         initModelTablaDetalleCompras();
         getTxtProveedor().setEnabled(false);
+        
+        getChkDocumento().doClick();
+        getChkDocumento().setSelected(true);
+        getChkTipoDocumento().doClick();
+        getChkTipoDocumento().setSelected(true);
+        getChkTodos().doClick();
+        getChkTodos().setSelected(true);
     }
 
     //Valores iniciales que tendra la tabla detalle compras
@@ -298,9 +317,31 @@ public class CompraReporteModel extends CompraReportePanel {
         for (TipoDocumentoEnum tipoDocumentoEnum : tipoDocumentoEnums) {
             getCmbTipoDocumento().addItem(tipoDocumentoEnum);
         }
+        
+        //Inicar valores del combo de Estados
+        getCmbEstado().removeAllItems();
+        getCmbEstado().addItem(GeneralEnumEstado.ACTIVO);
+        getCmbEstado().addItem(GeneralEnumEstado.ELIMINADO);
+        
+        
     }
 
     public void agregarListener() {
+        
+        getBtnLimpiarFechaInicial().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaInicio().setDate(null);
+            }
+        });
+        
+        getBtnLimpiarFechaFinal().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaFinal().setDate(null);
+            }
+        });
+        
         //Permite buscar a un proveedor mediante una ventana
         getBtnBuscarProveedor().addActionListener(new ActionListener() {
             @Override
@@ -317,20 +358,6 @@ public class CompraReporteModel extends CompraReportePanel {
             }
         });
 
-        //Permite establecer la busqueda por un proveedor o todos los proveedores
-        getChkTodos().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (getChkTodos().isSelected()) {
-                    getBtnBuscarProveedor().setEnabled(false);
-                    getTxtProveedor().setText("");
-                    banderaBusqueda = true;
-                } else {
-                    getBtnBuscarProveedor().setEnabled(true);
-                    banderaBusqueda = false;
-                }
-            }
-        });
 
         getBtcConsultar().addActionListener(new ActionListener() {
             @Override
@@ -347,40 +374,71 @@ public class CompraReporteModel extends CompraReportePanel {
 
     public void setearValores() throws RemoteException {
         //Obtener valores de combos
-        this.documentoEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
-        this.tipoDocumentoEnum = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        if(!getChkDocumento().isSelected())
+        {
+            this.documentoEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
+        }
+        else
+        {
+            this.documentoEnum=null;
+        }
+        
+        if(!getChkTipoDocumento().isSelected())
+        {
+            this.tipoDocumentoEnum = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        }
+        else
+        {
+            this.tipoDocumentoEnum = null;
+        }
+        
+        if(getChkTodos().isSelected())
+        {
+            this.proveedor=null;
+        }
+        
         //Obtener las fecha seleccionadas de los combos
-        this.fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
-        this.fechaFinal = new Date(getDateFechaFinal().getDate().getTime());
+        this.fechaInicio = (getDateFechaInicio().getDate()!=null)?new Date(getDateFechaInicio().getDate().getTime()):null;
+        this.fechaFinal =(getDateFechaFinal().getDate()!=null)?new Date(getDateFechaFinal().getDate().getTime()):null;
+        
+        GeneralEnumEstado estadoEnum=(GeneralEnumEstado) getCmbEstado().getSelectedItem();
 
-        if (banderaBusqueda) {
-            this.compras = compraServiceIf.obtenerTodos();
-            mostrarDatosEnTabla(this.compras);
-            sumarTotalesComprasIndividuales(this.compras);
-        } else {
-            if (proveedor != null) {
-                this.compras = compraServiceIf.obtenerCompraReporte(proveedor, fechaInicio, fechaFinal, documentoEnum, tipoDocumentoEnum);
+        //if (banderaBusqueda) {
+        //    this.compras = compraServiceIf.obtenerTodos(null,);
+        //    mostrarDatosEnTabla(this.compras);
+        //    sumarTotalesComprasIndividuales(this.compras);
+        //} else {
+            //if (proveedor != null) {
+                this.compras = compraServiceIf.obtenerCompraReporte(proveedor, fechaInicio, fechaFinal, documentoEnum, tipoDocumentoEnum,estadoEnum);
                 mostrarDatosEnTabla(this.compras);
                 sumarTotalesComprasIndividuales(this.compras);
-            } else {
-                DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un proveedor", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            }
-        }
+            //} else {
+            //    DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un proveedor", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            //}
+        //}
 
     }
 
     public void sumarTotalesComprasIndividuales(List<Compra> compras) {
         for (Compra compra : compras) {
-            this.subtotal = this.subtotal.add(compra.getSubtotalImpuestos().add(compra.getSubtotalSinImpuestos()));
+            BigDecimal subtotalImpuestos=(compra.getSubtotalImpuestos()!=null)?compra.getSubtotalImpuestos():BigDecimal.ZERO;
+            BigDecimal subtotalSinImpuestos=(compra.getSubtotalSinImpuestos()!=null)?compra.getSubtotalSinImpuestos():BigDecimal.ZERO;
+            BigDecimal descuentoImpuestos=(compra.getDescuentoImpuestos()!=null)?compra.getDescuentoImpuestos():BigDecimal.ZERO;
+            BigDecimal descuentoSinImpuestos=(compra.getDescuentoSinImpuestos()!=null)?compra.getDescuentoSinImpuestos():BigDecimal.ZERO;
+            BigDecimal iva=(compra.getIva()!=null)?compra.getIva():BigDecimal.ZERO;
+            BigDecimal total=(compra.getTotal()!=null)?compra.getTotal():BigDecimal.ZERO;
+            
+            
+            this.subtotal = this.subtotal.add(subtotalImpuestos.add(subtotalSinImpuestos));
             //this.subtotal = sumarValores(compra.getSubtotalImpuestos(), compra.getSubtotalSinImpuestos());
-            this.subtotal0 = this.subtotal0.add(compra.getSubtotalSinImpuestos());
-            this.subtotal12 = this.subtotal12.add(compra.getSubtotalImpuestos());
-            this.descuento = this.descuento.add(compra.getDescuentoImpuestos().add(compra.getDescuentoSinImpuestos()));
+            this.subtotal0 = this.subtotal0.add(subtotalSinImpuestos);
+            this.subtotal12 = this.subtotal12.add(subtotalImpuestos);
+            this.descuento = this.descuento.add(descuentoImpuestos.add(descuentoSinImpuestos));
 //            this.descuento = sumarValores(compra.getDescuentoImpuestos(), compra.getDescuentoSinImpuestos());
-            this.descuento0 = this.descuento0.add(compra.getDescuentoSinImpuestos());
-            this.descuento12 = this.descuento12.add(compra.getDescuentoImpuestos());
-            this.iva = this.iva.add(compra.getIva());
-            this.total = this.total.add(compra.getTotal());
+            this.descuento0 = this.descuento0.add(descuentoSinImpuestos);
+            this.descuento12 = this.descuento12.add(descuentoImpuestos);
+            this.iva = this.iva.add(iva);
+            this.total = this.total.add(total);
         }
     }
 
@@ -394,14 +452,16 @@ public class CompraReporteModel extends CompraReportePanel {
 
         for (Compra compra : compras) {
             Vector<String> fila = new Vector();
-            fila.add(compra.getPuntoEmision() + compra.getSecuencial() + compra.getPuntoEstablecimiento());
+            fila.add(compra.getPreimpreso());
             fila.add(compra.getProveedor().getIdentificacion());
             fila.add(compra.getProveedor().getRazonSocial());
             fila.add(compra.getFechaFactura() + "");
             fila.add(compra.getSubtotalImpuestos() + "");
             fila.add(compra.getSubtotalSinImpuestos() + "");
             BigDecimal descuento = new BigDecimal(BigInteger.ZERO);
-            descuento = descuento.add(compra.getDescuentoImpuestos()).add(compra.getDescuentoSinImpuestos());
+            BigDecimal descuentoImpuestos=(compra.getDescuentoImpuestos()!=null)?compra.getDescuentoImpuestos():BigDecimal.ZERO;
+            BigDecimal descuentoSinImpuestos=(compra.getDescuentoSinImpuestos()!=null)?compra.getDescuentoSinImpuestos():BigDecimal.ZERO;
+            descuento = descuento.add(descuentoImpuestos).add(descuentoSinImpuestos);
             fila.add(descuento + "");
             fila.add(compra.getIva() + "");
             fila.add(compra.getTotal() + "");
@@ -446,5 +506,36 @@ public class CompraReporteModel extends CompraReportePanel {
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void agregarListenerChecks() {
+        //Permite establecer la busqueda por un proveedor o todos los proveedores
+        getChkTodos().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (getChkTodos().isSelected()) {
+                    getBtnBuscarProveedor().setEnabled(false);
+                    getTxtProveedor().setText("");
+                    banderaBusqueda = true;
+                } else {
+                    getBtnBuscarProveedor().setEnabled(true);
+                    banderaBusqueda = false;
+                }
+            }
+        });
+        
+        getChkDocumento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getCmbDocumento().setEnabled(!getChkDocumento().isSelected());
+            }
+        });
+        
+        getChkTipoDocumento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getCmbTipoDocumento().setEnabled(!getChkTipoDocumento().isSelected());
+            }
+        });
     }
 }

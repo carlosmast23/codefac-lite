@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlType;
     "valorRetServicios",
     "valRetServ100",
     "totbasesImpReemb",
+    "pagoExteriorAts",
     "formasDePago",
     "detalleAir",
     "estabRetencion1",
@@ -74,17 +75,26 @@ public class CompraAts implements Serializable {
     private BigDecimal valorRetServicios;
     private BigDecimal valRetServ100;
     private BigDecimal totbasesImpReemb;
+    private PagoExteriorAts pagoExteriorAts;
     //Todo: Queda pendiente hacer los pagos al exterior
     private List<FormaDePagoAts> formasDePago;
     private List<AirAts> detalleAir;
 
     private String estabRetencion1;
     private String ptoEmiRetencion1;
+    /**
+     * Secuencial del documento de retencion
+     */
     private String secRetencion1;
     private String autRetencion1;
     private String fechaEmiRet1;
 
     public CompraAts() {
+    }
+
+    @XmlElement(name = "pagoExterior")
+    public PagoExteriorAts getPagoExteriorAts() {
+        return pagoExteriorAts;
     }
 
     @XmlElement(name = "codSustento")
@@ -368,5 +378,11 @@ public class CompraAts implements Serializable {
     public void setFechaEmiRet1(String fechaEmiRet1) {
         this.fechaEmiRet1 = fechaEmiRet1;
     }
+
+    public void setPagoExteriorAts(PagoExteriorAts pagoExteriorAts) {
+        this.pagoExteriorAts = pagoExteriorAts;
+    }
+    
+    
 
 }

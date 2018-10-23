@@ -144,6 +144,12 @@ public class AtsJaxb implements Serializable
     public void setVentasEstablecimiento(List<VentasEstablecimientoAts> ventasEstablecimiento) {
         this.ventasEstablecimiento = ventasEstablecimiento;
     }
+
+    public void setCompras(List<CompraAts> compras) {
+        this.compras = compras;
+    }
+    
+    
     
     
     

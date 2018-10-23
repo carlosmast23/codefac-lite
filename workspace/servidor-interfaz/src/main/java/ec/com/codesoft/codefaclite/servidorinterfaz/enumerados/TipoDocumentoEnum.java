@@ -32,7 +32,7 @@ public enum TipoDocumentoEnum {
      * Tipo de documento general que uso para clasificar alguna compra como por ejemplo en las retenciones
      */
     COMPRA(ModuloCodefacEnum.COMPRA, 
-            "COG", 
+            "COM", 
             "Compra", 
             TipoDocumentoEnum.NO_AFECTA_INVETARIO,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA}),

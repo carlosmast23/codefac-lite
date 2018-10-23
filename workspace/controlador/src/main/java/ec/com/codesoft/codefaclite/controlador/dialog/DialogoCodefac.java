@@ -72,6 +72,9 @@ public abstract class DialogoCodefac {
         //dialogo.setVisible(true);
     }
     
+    public static boolean dialogoPregunta(CodefacMsj codefacMsj) {
+        return dialogoPregunta(codefacMsj.titulo,codefacMsj.mensaje,codefacMsj.modoMensaje);
+    }
     
     public static boolean dialogoPregunta(String titulo, String mensaje, Integer tipoMensaje) {
         ImageIcon icono=null;

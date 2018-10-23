@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.compra.busqueda.CompraBusqueda;
 import ec.com.codesoft.codefaclite.compra.busqueda.OrdenCompraBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
@@ -31,11 +32,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -154,15 +157,22 @@ public class CompraModel extends CompraPanel{
     
     private void setearValores()
     {
+        Persona.TipoIdentificacionEnum tipoIdentificacionEnum=compra.getProveedor().getTipoIdentificacionEnum();
+        String codigoSri=tipoIdentificacionEnum.getCodigoSriCompra();
+        compra.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
+        
         String preimpreso = "";
         compra.setClaveAcceso("");
         DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
-        compra.setCodigoDocumento(documentoEnum.getCodigo());
-        compra.setDireccion("");
-        compra.setEstado("a"); //TODO: cambiar el estado de las ordenes de compra
+        compra.setCodigoDocumento(documentoEnum.getCodigo());        
+        compra.setEstado(GeneralEnumEstado.ACTIVO.getEstado()); //TODO: cambiar el estado de las ordenes de compra
         compra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         compra.setFechaFactura(new Date(getCmbFechaCompra().getDate().getTime()));
-        compra.setIdentificacion("");
+        
+        compra.setIdentificacion(compra.getProveedor().getIdentificacion());
+        compra.setRazonSocial(compra.getProveedor().getRazonSocial());
+        compra.setTelefono(compra.getProveedor().getTelefonoCelular());
+        compra.setDireccion(compra.getProveedor().getDireccion());
         //compra.setProveedor(proveedor);
         
 //        compra.setPuntoEmision(getTxtPuntoEmision().getText());
@@ -171,11 +181,10 @@ public class CompraModel extends CompraPanel{
         compra.setPuntoEmision(getTxtFPreimpreso().getText().substring(0,3));
         compra.setPuntoEstablecimiento(getTxtFPreimpreso().getText().substring(4,7));
         compra.setSecuencial(Integer.parseInt(getTxtFPreimpreso().getText().substring(8, 17)));
-        compra.setRazonSocial("");
-        compra.setTelefono("");
         compra.setTipoFacturacion(""); //TODO: Establecer el metodo de facturacion manual y electronica
         compra.setInventarioIngreso(EnumSiNo.NO.getLetra());
         compra.setObservacion(getTxtObservacion().getText());
+        compra.setAutorizacion(getTxtAutorizacion().getText());
         
         //Seteando el tipo de documento 
         TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
@@ -197,8 +206,30 @@ public class CompraModel extends CompraPanel{
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite {
-        
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+        if(estadoFormulario==ESTADO_EDITAR)
+        {
+            try {
+                Boolean confirmarEliminar=DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.GUARDADO);
+                if(confirmarEliminar)
+                {
+                    ServiceFactory.getFactory().getCompraServiceIf().eliminarCompra(compra);
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE); 
+                }
+                else
+                {
+                    throw new ExcepcionCodefacLite("Cancelado eliminar");
+                }
+                
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
+            }
+        }
+        else
+        {
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.NO_PERMITE_ELIMINAR);
+        }
     }
 
     @Override

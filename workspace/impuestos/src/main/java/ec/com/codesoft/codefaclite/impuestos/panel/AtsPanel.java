@@ -122,32 +122,10 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
 
         jTabbedPane1.addTab("Ventas", jScrollPane1);
 
-        tblCompras.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         jScrollPane2.setViewportView(tblCompras);
 
         jTabbedPane1.addTab("Compras", jScrollPane2);
 
-        tblAnulados.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         jScrollPane3.setViewportView(tblAnulados);
 
         jTabbedPane1.addTab("Anulados", jScrollPane3);
@@ -221,6 +199,16 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
     public JButton getBtnGenerarXml() {
         return btnGenerarXml;
     }
+
+    public JTable getTblAnulados() {
+        return tblAnulados;
+    }
+
+    public JTable getTblCompras() {
+        return tblCompras;
+    }
+    
+    
     
     
     

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.impuestos.panel.AtsPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AtsJaxb;
+import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.CompraAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.VentaAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -154,11 +155,93 @@ public class AtsModel extends AtsPanel {
                     String establecimiento=session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor;
                     atsJaxb = ServiceFactory.getFactory().getAtsServiceIf().consultarAts(anio,mesEnum,session.getEmpresa(),establecimiento);
                     construirTablaVenta();
+                    construirTablaCompra();
 
                 } catch (RemoteException ex) {
                     Logger.getLogger(AtsModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(AtsModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
+    
+    private void construirTablaCompra()
+    {
+        String titulo[] = {
+            "",
+            "Identificación",
+            "# Comprobantes",
+            "Base Imponible",
+            "Iva",
+            "Ret Renta",
+            "Ret Iva"};
+        
+        Class clase[]={
+            CompraAts.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+        };
+        
+        Boolean editar[]={
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true,
+        };
+        
+        DefaultTableModel modeloTabla = UtilidadesTablas.crearModeloTabla(titulo, clase, editar);
+
+        for (CompraAts compra : atsJaxb.getCompras()) {
+            modeloTabla.addRow(new Object[]{
+                compra,
+                compra.getIdProv(),
+                "1",
+                compra.getBaseImpGrav().toString(),
+                compra.getMontoIva().toString(),
+                "0",
+                "0",
+            });
+        }
+
+        getTblCompras().setModel(modeloTabla);
+        UtilidadesTablas.ocultarColumna(getTblCompras(),0);
+        
+        //listener tabla de las ventas 
+        modeloTabla.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int filaSeleccionada=e.getFirstRow();
+                if(filaSeleccionada>=0)
+                {
+                    int columnaSeleccionada=e.getColumn();
+                    DefaultTableModel modeloTabla=(DefaultTableModel) e.getSource();
+                    VentaAts ventaAts=(VentaAts) modeloTabla.getValueAt(filaSeleccionada,COLUMNA_OBJETO);
+                    
+                    switch(columnaSeleccionada)
+                    {
+                        case COLUMNA_VENTA_RET_IVA:
+                            BigDecimal valorNuevoIva=new BigDecimal(modeloTabla.getValueAt(filaSeleccionada,COLUMNA_VENTA_RET_IVA).toString());
+                            ventaAts.setValorRetIva(valorNuevoIva);
+                            break;
+
+                        case COLUMNA_VENTA_RET_RENTA:
+                            BigDecimal valorNuevoRenta=new BigDecimal(modeloTabla.getValueAt(filaSeleccionada,COLUMNA_VENTA_RET_RENTA).toString());
+                            ventaAts.setValorRetRenta(valorNuevoRenta);
+                            break;
+                        
+                    
+                    }
+                    
+                    
+                    
                 }
             }
         });

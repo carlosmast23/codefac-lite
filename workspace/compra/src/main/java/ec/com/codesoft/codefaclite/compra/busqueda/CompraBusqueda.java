@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
 /**
@@ -33,10 +34,13 @@ public class CompraBusqueda implements InterfaceModelFind<Compra>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT c FROM Compra c WHERE ";
+        //Compra c;
+        //c.getEstado();
+        String queryString = "SELECT c FROM Compra c WHERE c.estado=?2 AND ";
         queryString+=" ( LOWER(c.secuencial) like ?1 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
+        queryDialog.agregarParametro(2,GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 
