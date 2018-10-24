@@ -71,7 +71,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
             clienteData.setIdentificacion((representante!=null)?representante.getIdentificacion():"");
             clienteData.setTelefono((representante!=null)?representante.getTelefonoCelular():"");
             clienteData.setNombresCompletosEstudiante((estudiante!=null)?estudiante.getNombreCompleto():"Sin Asignar");
-            clienteData.setCurso((estudianteInscrito!=null)?estudianteInscrito.getNivelAcademico().getNivel().getNombre():"");
+            clienteData.setCurso((estudianteInscrito!=null)?estudianteInscrito.getNivelAcademico().getNombre():"");
             data.add(clienteData);
             EstudianteInscrito ei;
             
