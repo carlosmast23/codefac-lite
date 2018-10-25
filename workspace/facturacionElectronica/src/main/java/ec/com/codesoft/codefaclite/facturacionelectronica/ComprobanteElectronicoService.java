@@ -1369,6 +1369,17 @@ public class ComprobanteElectronicoService implements Runnable {
                 {
                     prefijo=ComprobanteEnum.COMPROBANTE_RETENCION.getPrefijo();
                 }
+                else
+                {
+                    if(ComprobanteEnum.GUIA_REMISION.getCodigo().equals(comprobante.getInformacionTributaria().getCodigoDocumento()))
+                    {
+                        prefijo=ComprobanteEnum.GUIA_REMISION.getPrefijo();
+                    }
+                    else
+                    {
+                        //TODO: Falta implentar para el ultimo documento que son las notas de debito si algun rato alguien nos pide
+                    }
+                }
             }
         }
         comprobante.getTipoDocumento();

@@ -18,7 +18,7 @@ public enum ComprobanteEnum {
     FACTURA("FACTURA","01","FAC",FacturaComprobante.class),
     NOTA_CREDITO("NOTA DE CRÉDITO","04","CRE",NotaCreditoComprobante.class),
     NOTA_DEBITO("NOTA DEBITO","05","",null),
-    GUIA_REMISION("GUIA REMISION","06","",GuiaRemisionComprobante.class),
+    GUIA_REMISION("GUIA REMISION","06","GUI",GuiaRemisionComprobante.class),
     COMPROBANTE_RETENCION("COMPROBANTE RETENCION","07","RET",RetencionComprobante.class);
     
     private String nombre;
