@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Factur
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.GuiaRemisionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -110,7 +111,23 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(estadoFormulario.equals(ESTADO_GRABAR))
+        {
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.NO_PERMITE_ELIMINAR);
+        }
+        else
+        {
+            boolean pregunta=DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_COMPROBANTE_ELECTRONICO);
+            if(pregunta)
+            {
+                ServiceFactory.getFactory().getGuiaRemisionServiceIf().eliminar(guiaRemision);
+                DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+            }
+            else
+            {
+                throw new ExcepcionCodefacLite("Canelado eliminar usuario"); 
+            }
+        }
     }
 
     @Override

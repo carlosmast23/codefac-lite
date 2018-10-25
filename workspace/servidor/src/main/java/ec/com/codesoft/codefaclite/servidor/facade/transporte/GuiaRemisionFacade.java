@@ -6,7 +6,10 @@
 package ec.com.codesoft.codefaclite.servidor.facade.transporte;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
 import javax.persistence.Query;
@@ -21,12 +24,48 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
         super(GuiaRemision.class);
     }
     
-    public List<GuiaRemision> obtenerConsultaFacade(Date fechaInicial,Date fechaFinal)
+    public List<GuiaRemision> obtenerConsultaFacade(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado) throws ServicioCodefacException, RemoteException    
     {
         GuiaRemision guia;
+        //guia.getFechaEmision()
+        //guia.getEs
         //guia.getFechaIniciaTransporte();
-        String queryString="select u from GuiaRemision u ";
+        String queryString="select u from GuiaRemision u where 1=1 ";
+        
+        if(fechaInicial!=null)
+        {
+            queryString+=" AND u.fechaEmision>=?1 ";
+        }
+        
+        if(fechaFinal!=null)
+        {
+            queryString+="AND u.fechaEmision<=?2 ";
+        }
+        
+        if(estado!=null)
+        {
+            queryString+=" AND u.estado=?5 " ;
+        }
+        
+        /**
+         * ===================> SETEAR VALORES <=====================
+         */
+        
         Query query = getEntityManager().createQuery(queryString);
+
+        if (fechaInicial != null) {
+            query.setParameter(1,fechaInicial);
+        }
+
+        if (fechaFinal != null) {
+            query.setParameter(2,fechaFinal);
+        }
+        
+        if(estado!=null)
+        {
+            query.setParameter(5,estado.getEstado());
+        }
+        
         return query.getResultList();        
     }
     

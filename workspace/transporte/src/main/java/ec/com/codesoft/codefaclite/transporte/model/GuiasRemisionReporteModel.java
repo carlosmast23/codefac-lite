@@ -212,8 +212,9 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
             GuiaRemisionServiceIf guiaRemisionServiceIf=ServiceFactory.getFactory().getGuiaRemisionServiceIf();
             fechaInicial=(getDateFechaInicio().getDate()!=null)?new java.sql.Date(getDateFechaInicio().getDate().getTime()):null;
             fechaFinal=(getDateFechaFin().getDate()!=null)?new java.sql.Date(getDateFechaFin().getDate().getTime()):null;
+            ComprobanteEntity.ComprobanteEnumEstado estado=(ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
             
-            listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal);
+            listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal,estado);
             mostrarReporteTabla();
             //imprimirReporte();
             

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
@@ -17,5 +18,5 @@ import java.util.List;
  * @author Carlos
  */
 public interface GuiaRemisionServiceIf extends ServiceAbstractIf<GuiaRemision> {
-    public List<GuiaRemision> obtenerConsulta(Date fechaInicial,Date fechaFinal) throws ServicioCodefacException, RemoteException;
+    public List<GuiaRemision> obtenerConsulta(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado) throws ServicioCodefacException, RemoteException;
 }

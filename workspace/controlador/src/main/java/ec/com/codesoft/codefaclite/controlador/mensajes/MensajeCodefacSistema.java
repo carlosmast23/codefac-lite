@@ -24,12 +24,13 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj GUARDADO = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La información fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         public static final CodefacMsj ELIMINADO_CORRECTAMENTE = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La información fue eliminada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         public static final CodefacMsj NO_PERMITE_EDITAR = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La pantalla no permite modificaciones",DialogoCodefac.MENSAJE_INCORRECTO);
-        public static final CodefacMsj NO_PERMITE_ELIMINAR = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"Solo se puede eliminar en modo edicion",DialogoCodefac.MENSAJE_INCORRECTO);
+        public static final CodefacMsj NO_PERMITE_ELIMINAR = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"Solo se puede eliminar en modo edición",DialogoCodefac.MENSAJE_INCORRECTO);
     }
     
     public static abstract class Preguntas
     {
         public static final CodefacMsj GUARDADO = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"Esta seguro que desea eliminar el registro? ",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        public static final CodefacMsj ELIMINAR_COMPROBANTE_ELECTRONICO = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"El comprobante electronico se encuentra autorizada en el SRI , \nPorfavor elimine solo si tambien esta anulado en el SRI\nDesea eliminar la factura de todos modos?" ,DialogoCodefac.MENSAJE_INCORRECTO);
     }
     
     public static abstract class FacturasMensajes
@@ -39,7 +40,7 @@ public abstract class MensajeCodefacSistema {
     
     public static abstract  class ErrorComunicacion
     {
-        public static final CodefacMsj ERROR_COMUNICACION_SERVIDOR = new CodefacMsj(CodefacMsj.TITULO_ERROR,"Erro de comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
+        public static final CodefacMsj ERROR_COMUNICACION_SERVIDOR = new CodefacMsj(CodefacMsj.TITULO_ERROR,"Error de comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
     }
     
     public static abstract  class ErrorValidación

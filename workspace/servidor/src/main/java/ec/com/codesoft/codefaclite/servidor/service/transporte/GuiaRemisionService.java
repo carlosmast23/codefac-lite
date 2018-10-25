@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.transporte.GuiaRemisionFacade
 import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
@@ -65,10 +66,28 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         return entity;
     }
     
-    public List<GuiaRemision> obtenerConsulta(Date fechaInicial,Date fechaFinal) throws ServicioCodefacException, RemoteException
+    public List<GuiaRemision> obtenerConsulta(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado) throws ServicioCodefacException, RemoteException
     {
-        return getFacade().obtenerConsultaFacade(fechaInicial, fechaFinal);
+        return getFacade().obtenerConsultaFacade(fechaInicial, fechaFinal,estado);
     }
+
+    @Override
+    public void eliminar(GuiaRemision entity) throws RemoteException {
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+                    entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+                    entityManager.merge(entity);
+                    //entity.setEstado(estado);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GuiaRemisionService.class.getName()).log(Level.SEVERE, null, ex);            
+        }
+    }
+    
+    
     
     
 }
