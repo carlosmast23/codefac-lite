@@ -14,9 +14,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 
@@ -47,17 +49,15 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
 
         btnEnviar = new javax.swing.JButton();
         btnImprimir = new javax.swing.JButton();
+        cmbPeriodo = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         lblEspacio1 = new javax.swing.JLabel();
-        btnQuitar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtFormatoMensaje = new javax.swing.JTextArea();
-        btnLimpiar = new javax.swing.JButton();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabOpciones = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        btnAgregarPorMes = new javax.swing.JButton();
         cmbTipoRubroPorMes = new javax.swing.JComboBox<>();
         cmbMesFiltro = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
@@ -69,17 +69,25 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         cmbTipoRubroGrupo = new javax.swing.JComboBox<>();
-        btnAgregarPorGrupo = new javax.swing.JButton();
+        lblEspacio5 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         cmbTipoRubroPorRubro = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         cmbRubro = new javax.swing.JComboBox<>();
-        btnAgregarPorRubro = new javax.swing.JButton();
+        lblEspacio6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRubros = new javax.swing.JTable();
-        cmbPeriodo = new javax.swing.JComboBox<>();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblEstudiantes = new javax.swing.JTable();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnAgregarRubro = new javax.swing.JButton();
+        btnQuitar = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        btnConsultarEstudiante = new javax.swing.JButton();
+        chkSeleccionarTodos = new javax.swing.JCheckBox();
 
         btnEnviar.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnEnviar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/email.png"))); // NOI18N
@@ -89,6 +97,12 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/reporte.png"))); // NOI18N
         btnImprimir.setText("Imprimir Notificaciones");
 
+        cmbPeriodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbPeriodoActionPerformed(evt);
+            }
+        });
+
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -97,26 +111,17 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.3;
         jPanel4.add(lblEspacio1, gridBagConstraints);
 
-        btnQuitar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/salir-ico.png"))); // NOI18N
-        btnQuitar.setText("Quitar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(btnQuitar, gridBagConstraints);
-
-        jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("Formato del mensaje:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel4.add(jLabel6, gridBagConstraints);
@@ -127,31 +132,19 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         jScrollPane2.setViewportView(txtFormatoMensaje);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 299;
-        gridBagConstraints.ipady = 200;
+        gridBagConstraints.ipady = 70;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         jPanel4.add(jScrollPane2, gridBagConstraints);
-
-        btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
-        btnLimpiar.setText("Limpiar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(btnLimpiar, gridBagConstraints);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Tipo Rubro:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -159,15 +152,6 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
-
-        btnAgregarPorMes.setText("Agregar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(btnAgregarPorMes, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -187,7 +171,7 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbMesFiltro, gridBagConstraints);
 
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText("Filtro Por Mes:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
@@ -227,7 +211,7 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(lblEspacio2, gridBagConstraints);
 
-        jTabbedPane1.addTab("Por Mes", jPanel1);
+        tabOpciones.addTab("Por Mes", jPanel1);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
@@ -246,18 +230,16 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 18);
         jPanel2.add(cmbTipoRubroGrupo, gridBagConstraints);
-
-        btnAgregarPorGrupo.setText("Agregar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        jPanel2.add(btnAgregarPorGrupo, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel2.add(lblEspacio5, gridBagConstraints);
 
-        jTabbedPane1.addTab("Por Grupo", jPanel2);
+        tabOpciones.addTab("Por Grupo", jPanel2);
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Tipo Rubro:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -274,6 +256,7 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 18);
         jPanel3.add(cmbTipoRubroPorRubro, gridBagConstraints);
 
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Rubro:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -289,43 +272,27 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 18);
         jPanel3.add(cmbRubro, gridBagConstraints);
-
-        btnAgregarPorRubro.setText("Agregar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        jPanel3.add(btnAgregarPorRubro, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel3.add(lblEspacio6, gridBagConstraints);
 
-        jTabbedPane1.addTab("Por Rubro", jPanel3);
+        tabOpciones.addTab("Por Rubro", jPanel3);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        jPanel4.add(jTabbedPane1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        jPanel4.add(tabOpciones, gridBagConstraints);
 
-        tblRubros.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         jScrollPane1.setViewportView(tblRubros);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -333,39 +300,111 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         jPanel4.add(jScrollPane1, gridBagConstraints);
 
+        jScrollPane4.setViewportView(tblEstudiantes);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 4.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        jPanel4.add(jScrollPane4, gridBagConstraints);
+
+        jToolBar1.setBorder(null);
+        jToolBar1.setFloatable(false);
+
+        btnAgregarRubro.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnAgregarRubro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarRubro.setText("Agregar");
+        btnAgregarRubro.setFocusable(false);
+        btnAgregarRubro.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        btnAgregarRubro.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnAgregarRubro.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnAgregarRubro);
+
+        btnQuitar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnQuitar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/facturaError.png"))); // NOI18N
+        btnQuitar.setText("Quitar");
+        btnQuitar.setFocusable(false);
+        btnQuitar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnQuitar);
+
+        btnLimpiar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
+        btnLimpiar.setText("Limpiar Todo");
+        btnLimpiar.setFocusable(false);
+        btnLimpiar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnLimpiar);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        jPanel4.add(jToolBar1, gridBagConstraints);
+
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Rubros");
+        jLabel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 5);
+        jPanel4.add(jLabel1, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("Estudiantes");
+        jLabel8.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 25);
-        jPanel4.add(cmbPeriodo, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 5);
+        jPanel4.add(jLabel8, gridBagConstraints);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Periodo Activo:");
+        btnConsultarEstudiante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/buscar2.png"))); // NOI18N
+        btnConsultarEstudiante.setToolTipText("Consultar Estudiantes");
+        btnConsultarEstudiante.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
-        jPanel4.add(jLabel1, gridBagConstraints);
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 5, 0);
+        jPanel4.add(btnConsultarEstudiante, gridBagConstraints);
+
+        chkSeleccionarTodos.setText("Seleccionar Todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        jPanel4.add(chkSeleccionarTodos, gridBagConstraints);
 
         getContentPane().add(jPanel4, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cmbPeriodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPeriodoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbPeriodoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarMes;
-    private javax.swing.JButton btnAgregarPorGrupo;
-    private javax.swing.JButton btnAgregarPorMes;
-    private javax.swing.JButton btnAgregarPorRubro;
+    private javax.swing.JButton btnAgregarRubro;
+    private javax.swing.JButton btnConsultarEstudiante;
     private javax.swing.JButton btnEliminarMes;
     private javax.swing.JButton btnEnviar;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnQuitar;
+    private javax.swing.JCheckBox chkSeleccionarTodos;
     private javax.swing.JComboBox<RubroPlantillaMes> cmbMesFiltro;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
     private javax.swing.JComboBox<RubrosNivel> cmbRubro;
@@ -379,6 +418,7 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -386,39 +426,30 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JLabel lblEspacio5;
+    private javax.swing.JLabel lblEspacio6;
     private javax.swing.JList<RubroPlantillaMes> lstFiltrosMes;
+    private javax.swing.JTabbedPane tabOpciones;
+    private javax.swing.JTable tblEstudiantes;
     private javax.swing.JTable tblRubros;
     private javax.swing.JTextArea txtFormatoMensaje;
     // End of variables declaration//GEN-END:variables
 
-    public JButton getBtnAgregarPorGrupo() {
-        return btnAgregarPorGrupo;
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Periodo Activo")
+    public JComboBox<Periodo> getCmbPeriodo() {
+        return cmbPeriodo;
     }
 
-    public void setBtnAgregarPorGrupo(JButton btnAgregarPorGrupo) {
-        this.btnAgregarPorGrupo = btnAgregarPorGrupo;
+    public void setCmbPeriodo(JComboBox<Periodo> cmbPeriodo) {
+        this.cmbPeriodo = cmbPeriodo;
     }
 
-    public JButton getBtnAgregarPorMes() {
-        return btnAgregarPorMes;
-    }
-
-    public void setBtnAgregarPorMes(JButton btnAgregarPorMes) {
-        this.btnAgregarPorMes = btnAgregarPorMes;
-    }
-
-    public JButton getBtnAgregarPorRubro() {
-        return btnAgregarPorRubro;
-    }
-
-    public void setBtnAgregarPorRubro(JButton btnAgregarPorRubro) {
-        this.btnAgregarPorRubro = btnAgregarPorRubro;
-    }
     
-    @ComponenteSecundarioAnotacion(nombreCategoria = "Opciones")
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Opciones",visible = false)
     public JButton getBtnEnviar() {
         return btnEnviar;
     }
@@ -433,14 +464,6 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
 
     public void setBtnLimpiar(JButton btnLimpiar) {
         this.btnLimpiar = btnLimpiar;
-    }
-
-    public JComboBox<Periodo> getCmbPeriodo() {
-        return cmbPeriodo;
-    }
-
-    public void setCmbPeriodo(JComboBox<Periodo> cmbPeriodo) {
-        this.cmbPeriodo = cmbPeriodo;
     }
 
     public JComboBox<RubrosNivel> getCmbRubro() {
@@ -543,10 +566,31 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         this.btnImprimir = btnImprimir;
     }
 
-    @ComponenteSecundarioAnotacion(nombreCategoria = "Servicio Mensajeria")
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Servicio Mensajeria",visible = false)
     public ComponenteEnvioSmsPanel getPnlSms() {
         return pnlSms;
     }
+
+    public JTabbedPane getTabOpciones() {
+        return tabOpciones;
+    }
+
+    public JButton getBtnAgregarRubro() {
+        return btnAgregarRubro;
+    }
+
+    public JButton getBtnConsultarEstudiante() {
+        return btnConsultarEstudiante;
+    }
+
+    public JTable getTblEstudiantes() {
+        return tblEstudiantes;
+    }
+
+    public JCheckBox getChkSeleccionarTodos() {
+        return chkSeleccionarTodos;
+    }
+    
     
     
     

@@ -112,12 +112,17 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * Lista de botones auxiliares para la barra lateral izquierda de la pantalla
      */
     private Map<String,List<Component>> mapComponentesLaterales;
+    /**
+     * Map para saber que componentes deben estar visibles y cuales no
+     */
+    private Map<String,Boolean> mapComponentesLateralesVisibles;
 
     public GeneralPanelInterface() {
         this.formularioActual=this;
         this.listaExclusionComponentes=new ArrayList<JComponent>();
         this.mapDatosIngresadosDefault=new HashMap<JComponent,Object>();
         this.mapComponentesLaterales=new HashMap<String,List<Component>>();
+        this.mapComponentesLateralesVisibles=new HashMap<String,Boolean>();
         
         this.validacionDatosIngresados=true;       
     }
@@ -381,31 +386,16 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
         
          JXTaskPaneContainer panelVertical = new JXTaskPaneContainer();
          panelVertical.setBackground(new Color(99, 130, 191));
-        //JPanel panelVertical = new JPanel();
-        //panelVertical.setLayout(new VerticalLayout());
-        //TitledBorder titledBorder=BorderFactory.createTitledBorder("");
-        //titledBorder.setTitleColor(Color.white);
-        //panelVertical.setBorder(BorderFactory.createTitledBorder(""));
-        //panelVertical.setBackground(new Color(99, 130, 191));
-        
-        //panelVertical.add(new JLabel("asdkañsdkñlasdkñl"));
+         
+
         for (Map.Entry<String, List<Component>> entry : mapComponentesLaterales.entrySet()) {
             String key = entry.getKey();
             List<Component> componentes = entry.getValue();
             
-            
-            //JPanel panelVerticalAgrupador = new JPanel();
-            //panelVerticalAgrupador.setLayout(new VerticalLayout());
-            
-            //TitledBorder title;
-            //title = BorderFactory.createTitledBorder(key);
-            //title.setTitleColor(Color.white);
-            //panelVerticalAgrupador.setBorder(title);
-            //panelVerticalAgrupador.setBackground(new Color(99, 130, 191));
-            
-            
+           
             JXTaskPane taskpane = new JXTaskPane();
             taskpane.setTitle(key);
+            taskpane.setCollapsed(!mapComponentesLateralesVisibles.get(key));
            
             
             //LLenar con todos los componentes enviados
@@ -441,6 +431,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     private void buscarComponentesSecundarios()
     {
         this.mapComponentesLaterales=new HashMap<String,List<Component>>();
+        this.mapComponentesLateralesVisibles=new HashMap<String,Boolean>();
         
         Class classVentana=this.getClass();
         Method[] metodos=classVentana.getMethods();
@@ -452,6 +443,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
             {
                 try {
                     String nombreCategoria=anotacion.nombreCategoria();
+                    boolean visible= anotacion.visible();
                     if(metodo.getName().indexOf("get")!=0)
                     {
                         continue;
@@ -459,6 +451,8 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
                     
                     Component componente=(Component) metodo.invoke(this);
                     agregarComponenteLateral(nombreCategoria,componente);
+                    
+                    this.mapComponentesLateralesVisibles.put(nombreCategoria,visible);
                     
                 } catch (IllegalAccessException ex) {
                     Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
@@ -477,6 +471,12 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
         return ventanaEnum.getNombre();
     }
     
+    public class PanelSecundario
+    {
+        public boolean visible;
+        public List<Component> componentes;
+        
+    }
     
     
     
