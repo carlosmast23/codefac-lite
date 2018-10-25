@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_documentos" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9cda46cf-cd6e-4c09-b67c-62113b7f5ab2">
-	<property name="ireport.zoom" value="1.366026910730178"/>
-	<property name="ireport.x" value="263"/>
-	<property name="ireport.y" value="84"/>
+	<property name="ireport.zoom" value="1.6528925619835197"/>
+	<property name="ireport.x" value="558"/>
+	<property name="ireport.y" value="251"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
 	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
@@ -536,7 +536,7 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="139">
+		<band height="184">
 			<textField>
 				<reportElement x="700" y="21" width="100" height="20" uuid="38e3ed34-ff56-44b6-bcc7-3ce8b3e52195"/>
 				<box>
@@ -710,6 +710,49 @@
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{descuentos}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="130" width="802" height="54" uuid="22e9a120-a3b6-4839-b07b-ceaa9f3ba399"/>
+				<subreportParameter name="pl_img_whatsapp">
+					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_logo_pie">
+					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_telefono">
+					<subreportParameterExpression><![CDATA[$P{pl_img_telefono}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_img_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_celular">
+					<subreportParameterExpression><![CDATA[$P{pl_celular}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_adicional">
+					<subreportParameterExpression><![CDATA[$P{pl_adicional}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{pl_url_piepagina}]]></subreportExpression>
+			</subreport>
+			<textField evaluationTime="Report">
+				<reportElement x="762" y="164" width="40" height="20" uuid="3eedb489-4ca1-41f9-8be0-4f8fc2026c66"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="680" y="164" width="79" height="20" uuid="682eda15-bb72-490c-851c-f3a81d280ffb"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 		</band>
 	</lastPageFooter>

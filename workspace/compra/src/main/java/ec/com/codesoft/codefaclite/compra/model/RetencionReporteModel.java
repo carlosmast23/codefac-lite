@@ -272,7 +272,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
                 @Override
                 public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Clientes ");                    
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Retenciones ");                    
                 }
             });
 

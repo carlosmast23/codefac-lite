@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_documentos" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9cda46cf-cd6e-4c09-b67c-62113b7f5ab2">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.210000000000002"/>
+	<property name="ireport.x" value="168"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
@@ -30,23 +30,7 @@
 	<parameter name="pl_celular" class="java.lang.String"/>
 	<parameter name="pl_adicional" class="java.lang.String"/>
 	<parameter name="pl_facebook" class="java.lang.String"/>
-<<<<<<< HEAD
 	<parameter name="transportista" class="java.lang.String"/>
-	<field name="numeroFactura" class="java.lang.String"/>
-	<field name="fechaFactura" class="java.lang.String"/>
-	<field name="identificacionCliente" class="java.lang.String"/>
-	<field name="totalFactura" class="java.lang.String"/>
-	<field name="razonSocialCliente" class="java.lang.String"/>
-	<field name="nombreLegalCliente" class="java.lang.String"/>
-	<field name="subtotalDoceFactura" class="java.lang.String"/>
-	<field name="subtotalCeroFactura" class="java.lang.String"/>
-	<field name="ivaDoceFactura" class="java.lang.String"/>
-	<field name="estadoFactura" class="java.lang.String"/>
-	<field name="descFactura" class="java.lang.String"/>
-	<field name="referencia" class="java.lang.String"/>
-	<field name="totalFinal" class="java.lang.String"/>
-	<field name="valorAfecta" class="java.lang.String"/>
-=======
 	<field name="preimpreso" class="java.lang.String"/>
 	<field name="transportista" class="java.lang.String"/>
 	<field name="identififacion" class="java.lang.String"/>
@@ -55,12 +39,11 @@
 	<field name="fechaFin" class="java.lang.String"/>
 	<field name="direccionPartida" class="java.lang.String"/>
 	<field name="placa" class="java.lang.String"/>
->>>>>>> 6021584c76d87fb5824ec0219919c8179e056fb1
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="162" splitType="Stretch">
+		<band height="52" splitType="Stretch">
 			<subreport>
 				<reportElement x="0" y="0" width="802" height="50" uuid="31eb3805-56c5-4f98-981f-b7c717ff02c4"/>
 				<subreportParameter name="pl_direccion">
@@ -87,69 +70,6 @@
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{pl_url_cabecera}]]></subreportExpression>
 			</subreport>
-			<textField>
-				<reportElement x="75" y="113" width="100" height="20" uuid="a679bb78-753d-40b8-824f-856c4a5ff89f"/>
-				<textFieldExpression><![CDATA[$P{fechainicio}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="281" y="113" width="100" height="20" uuid="ac6d3bbf-f255-4408-b8fe-7bdf7c66e664"/>
-				<textFieldExpression><![CDATA[$P{fechafin}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="7" y="113" width="68" height="20" uuid="7819bba4-eb89-4534-bd86-b8d6b99f6b4a"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Desde:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="231" y="113" width="50" height="20" uuid="48d66939-8103-4be0-9ae7-572e71f82c3c"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Hasta:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4" y="53" width="74" height="20" uuid="f16db097-36b2-49ca-a514-710cf754642d"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Tipo: ]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="78" y="53" width="100" height="20" uuid="fc87f1b5-92b0-4cfa-8d99-ecd9e831181c"/>
-				<textFieldExpression><![CDATA[$P{tipodocumento}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="4" y="73" width="74" height="20" uuid="04ea4e6c-b02b-491b-b21f-ff331861479f"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Cliente:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="78" y="73" width="303" height="20" uuid="5b00f0d0-065f-4bda-a421-0918f5a52a27"/>
-				<textFieldExpression><![CDATA[$P{cliente}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="604" y="71" width="100" height="20" uuid="aaa09409-9617-4a71-9e6d-3baadecb8fa4"/>
-				<textFieldExpression><![CDATA[$P{estadofactura}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="553" y="71" width="51" height="20" uuid="843c33df-970f-441f-b244-ee2dd6323bbe"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Estado:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="5" y="93" width="73" height="20" uuid="4052a83e-0e31-4603-9597-76ba37a2948f"/>
-				<text><![CDATA[Transportista:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="78" y="93" width="303" height="20" uuid="46627382-d888-4112-8bb0-7a98ab032c5b"/>
-				<textFieldExpression><![CDATA[$P{transportista}]]></textFieldExpression>
-			</textField>
 		</band>
 	</title>
 	<columnHeader>
@@ -163,7 +83,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[preimpreso]]></text>
@@ -177,7 +97,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[transportista]]></text>
@@ -191,7 +111,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[identificación]]></text>
@@ -205,7 +125,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[estado]]></text>
@@ -219,7 +139,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[fechaInicio]]></text>
@@ -233,7 +153,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[fechaFin]]></text>
@@ -247,7 +167,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[dirección partida]]></text>
@@ -261,7 +181,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[placa]]></text>
@@ -269,93 +189,117 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="14" splitType="Stretch">
+		<band height="13" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="100" height="13" uuid="dbc69398-56c0-463e-9b49-c37c96ff606b"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
 				</box>
+				<textElement>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{preimpreso}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="100" y="0" width="100" height="13" uuid="5b8887e0-e03c-41bc-adb5-0774499dd598"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
 				</box>
+				<textElement>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{transportista}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="200" y="0" width="100" height="13" uuid="822f7678-39c5-4170-93de-d473dc756213"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
 				</box>
+				<textElement>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{identififacion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="300" y="0" width="100" height="13" uuid="3afcda13-305c-4b6c-9a72-e10272cb0c34"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
 				</box>
+				<textElement>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="400" y="0" width="100" height="13" uuid="e654cce3-0822-4ea5-8c72-07a232ba6c67"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
 				</box>
+				<textElement>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{fechaInicio}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="500" y="0" width="100" height="13" uuid="4322a93c-e73e-473a-b6bc-ab8ec2b2344b"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
 				</box>
+				<textElement>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{fechaFin}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="600" y="0" width="100" height="13" uuid="459f5afc-8e0f-4a9a-b950-c517320e3c0d"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
 				</box>
+				<textElement>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{direccionPartida}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="700" y="0" width="100" height="13" uuid="94050a61-990b-4f46-af13-bb51f60748d9"/>
 				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
 				</box>
+				<textElement>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{placa}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -408,7 +352,51 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="29"/>
+		<band height="54">
+			<subreport>
+				<reportElement x="0" y="0" width="802" height="54" uuid="8164b426-8e43-4000-adb4-ebc8092dd4ab"/>
+				<subreportParameter name="pl_img_whatsapp">
+					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_logo_pie">
+					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_telefono">
+					<subreportParameterExpression><![CDATA[$P{pl_img_telefono}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_img_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_celular">
+					<subreportParameterExpression><![CDATA[$P{pl_celular}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_adicional">
+					<subreportParameterExpression><![CDATA[$P{pl_adicional}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{pl_url_piepagina}]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="680" y="34" width="79" height="20" uuid="82698b8d-aea1-486b-ab12-d82847c44f41"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="762" y="34" width="40" height="20" uuid="83cc33db-988c-4ccb-9551-122df7207b36"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
 	</lastPageFooter>
 	<summary>
 		<band height="72" splitType="Stretch"/>

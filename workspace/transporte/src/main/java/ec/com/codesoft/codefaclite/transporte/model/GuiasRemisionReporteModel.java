@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -21,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
 import ec.com.codesoft.codefaclite.transporte.data.GuiaTransporteData;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiasRemisionReportePanel;
@@ -83,6 +85,8 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         listenerBotones();
         listenerCheck();
         listenerFechas();
+        
+        this.validacionDatosIngresados=false; //Desactivar validaciones automaticas en el formulario
         
     }
 
@@ -211,7 +215,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
             
             listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal);
             mostrarReporteTabla();
-            imprimirReporte();
+            //imprimirReporte();
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -259,7 +263,8 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
                 public void pdf() {
                     InputStream path = RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("reporte_guiaRemision.jrxml");
                     Map parameters = new HashMap();
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listReporte, panelPadre, "Reporte Guía Remisión ");
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listReporte, panelPadre, "Reporte Guía Remisión ", OrientacionReporteEnum.HORIZONTAL);
+                    //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listReporte, panelPadre, "Reporte Guía Remisión ");
                     //dispose();
                     //setVisible(false);
                 }
