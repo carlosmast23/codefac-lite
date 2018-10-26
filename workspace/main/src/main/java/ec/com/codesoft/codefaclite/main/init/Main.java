@@ -40,7 +40,6 @@ import ec.com.codesoft.codefaclite.main.other.ArchivoDescarga;
 import ec.com.codesoft.codefaclite.main.other.BaseDatosCredenciales;
 import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
-import ec.com.codesoft.codefaclite.main.test.TestPruebaRMI;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servicios.controller.ControllerServiceUtil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -50,126 +49,18 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
-import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
-import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
-import ec.com.codesoft.codefaclite.servidor.service.CategoriaProductoService;
-import ec.com.codesoft.codefaclite.servidor.service.CompraDetalleService;
-import ec.com.codesoft.codefaclite.servidor.service.CompraService;
-import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
-import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
-import ec.com.codesoft.codefaclite.servidor.service.DepartamentoService;
-import ec.com.codesoft.codefaclite.servidor.service.EmpleadoService;
-import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
-import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
-import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
-import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
-import ec.com.codesoft.codefaclite.servidor.service.KardexDetalleService;
-import ec.com.codesoft.codefaclite.servidor.service.KardexItemEspecificoService;
-import ec.com.codesoft.codefaclite.servidor.service.KardexService;
-import ec.com.codesoft.codefaclite.servidor.service.NacionalidadService;
-import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
-import ec.com.codesoft.codefaclite.servidor.service.OrdenTrabajoDetalleService;
-import ec.com.codesoft.codefaclite.servidor.service.OrdenTrabajoService;
-import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
-import ec.com.codesoft.codefaclite.servidor.service.PerfilService;
-import ec.com.codesoft.codefaclite.servidor.service.PerfilUsuarioService;
-import ec.com.codesoft.codefaclite.servidor.service.PermisoVentanaService;
-import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
-import ec.com.codesoft.codefaclite.servidor.service.PresupuestoDetalleService;
-import ec.com.codesoft.codefaclite.servidor.service.PresupuestoService;
-import ec.com.codesoft.codefaclite.servidor.service.ProductoEnsambleService;
-import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
-import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
-import ec.com.codesoft.codefaclite.servidor.service.RecursosService;
-import ec.com.codesoft.codefaclite.servidor.service.RetencionService;
-import ec.com.codesoft.codefaclite.servidor.service.SmsService;
-import ec.com.codesoft.codefaclite.servidor.service.SriFormaPagoService;
-import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
-import ec.com.codesoft.codefaclite.servidor.service.SriRetencionIvaService;
-import ec.com.codesoft.codefaclite.servidor.service.SriRetencionRentaService;
-import ec.com.codesoft.codefaclite.servidor.service.SriRetencionService;
-import ec.com.codesoft.codefaclite.servidor.service.SriService;
-import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
-import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
-import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraCruceService;
-import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraDetalleService;
-import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
-import ec.com.codesoft.codefaclite.servidor.service.compra.OrdenCompraDetalleService;
-import ec.com.codesoft.codefaclite.servidor.service.compra.OrdenCompraService;
-import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.AulaService;
-import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.CatalogoProductoService;
-import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.EstudianteInscritoService;
-import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.EstudianteService;
-import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelAcademicoService;
-import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelService;
-import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.PeriodoService;
-import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudianteService;
-import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlantillaEstudianteService;
-import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlantillaService;
-import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubrosNivelService;
-import ec.com.codesoft.codefaclite.servidor.service.transporte.DestinatarioGuiaRemisionService;
-import ec.com.codesoft.codefaclite.servidor.service.transporte.DetalleProductoGuiaRemisionService;
-import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionAdicionalService;
-import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
-import ec.com.codesoft.codefaclite.servidor.service.transporte.TransportistaService;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraDetalleServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
+
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexDetalleServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexItemEspecificoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpleadoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraDetalleServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoDetalleServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PermisoVentanaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubrosNivelServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraCruceServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraDetalleServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaEstudianteServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -188,34 +79,19 @@ import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.DestinatarioGuiaRemisionServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.DetalleProductoGuiaRemisionServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionAdicionalServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.awt.Font;
 import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.LookAndFeel;
-import javax.swing.SwingUtilities;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /**
@@ -248,6 +124,7 @@ public class Main {
         //Verifica si se esta ejecutando la ultima version o manda a aactualizar
         verificarUltimaVersionCodefac();
         
+        //Configurar los log el directorio y donde se va a mandar a grabar los datos
         configurarLogs();
         /**
          * Configura el archivo para guardar la configuracion inicial en propertys de como va a iniciar el aplicativo
@@ -293,7 +170,7 @@ public class Main {
     private static void verificarUltimaVersionCodefac()
     {
         String path="http://www.cf.codesoft-ec.com/uploads/versiones/"; //directorio principal desde donde se van a bajar los archivos para actualizar
-        //String path="http://localhost/java/recursos/";
+        //String path="http://localhost:8080/codefac_pagina/uploads/versiones/";
         String carpetaDescarga="tmp"; //nombre de la carpeta para almacenar en el directoro TODO: Crear una variable global paa hacer referenca al directorio temporal
         
         String nameUltimaVersion="codefac.jar"; //Nombre del archivo de la nueva version de Codefac para descargar        
@@ -308,6 +185,7 @@ public class Main {
             try {
                 propiedadesIniciales.load(new FileReader(carpetaDescarga+"/"+nameVersionPropiedades));
                 String ultimaVersion=propiedadesIniciales.getProperty("version");
+                
                 //Solo actualizar si la version instalada es menor a la disponible en internet
                 if(UtilidadesSistema.compareVersion(ParametrosSistemaCodefac.VERSION,ultimaVersion)==-1)
                 {
@@ -322,7 +200,7 @@ public class Main {
                     UtilidadesWeb.descargarArchivo(nameUpdater, path + nameUpdater, "");
                     LOG.log(Level.INFO, "Descargado updater para instalar las actualizaciones");
                     
-                    //Descargar la ultima version disponible en el repositorio web
+                    //Lista para descargar la ultima version disponible en el repositorio web de los archivos de codefac
                     List<ArchivoDescarga> archivosDescargar=new ArrayList<ArchivoDescarga>();
                    
                     archivosDescargar.add(new ArchivoDescarga(nameUltimaVersion,path+nameUltimaVersion,carpetaDescarga));
@@ -334,7 +212,9 @@ public class Main {
                     //Ejecutar el updater para que se encargue de hacer la actualicacion de la nueva version
                     try {
                         //String carpeta = "";
-                        List<String> comando = Arrays.asList("java","-jar","updater.jar");
+                        String pid=obtenerPIDProcesoActual();
+                        //List<String> comando = Arrays.asList("java","-jar","updater.jar "+pid);
+                        List<String> comando = Arrays.asList("java","-jar","updater.jar",pid);
                         ProcessBuilder pb = new ProcessBuilder()
                                 .command(comando);
                         Process p = pb.start();
@@ -358,6 +238,14 @@ public class Main {
         }
         
         
+    }
+    
+    private static String obtenerPIDProcesoActual()
+    {
+        String id = ManagementFactory.getRuntimeMXBean().getName();
+        String[] ids = id.split("@");
+        //System.out.println(Integer.parseInt(ids[0]));
+        return ids[0];
     }
     
     private static List<ArchivoDescarga> buscarLibreriasActualizar(String path,String carpetaDescarga)

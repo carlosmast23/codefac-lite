@@ -47,6 +47,7 @@ workspace/main/codefac.ini
 /workspace/main/*.log
 /workspace/main/log/
 /workspace/main/tmp/
+/workspace/main/lib/
 /workspace/main/codefac.jar
 /workspace/main/updater.jar
 /workspace/main/key.codefac
