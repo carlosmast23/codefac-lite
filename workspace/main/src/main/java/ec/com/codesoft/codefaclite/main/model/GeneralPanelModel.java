@@ -1266,7 +1266,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             mostrarConsola(panel.consola,true);
             
             //Agregar ventana al combo de ventanas abiertas
-            agregarVentanaAbierta(panel);
+            agregarVentanaAbierta(panel,false);
             
 
                         
@@ -1279,14 +1279,22 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      * Metodo para agregar en un metodo todas las ventanas abiertas
      * @param panel 
      */
-    private void agregarVentanaAbierta(GeneralPanelInterface panel)
+    private void agregarVentanaAbierta(GeneralPanelInterface panel,Boolean reporte)
     {
         JMenuItem jmenuItem=mapPantallaAbiertas.get(panel);
         if(jmenuItem==null)
         {
-            jmenuItem=new JMenuItem(panel.toString());
+            if(reporte)
+            {
+                jmenuItem=new JMenuItem(panel.toString());
+            }
+            else
+            {    
+                jmenuItem=new JMenuItem(panel.toString());
+                seleccionarVentanaActivaMenu();
+            }
             //jmenuItem.setFont(new Font("Arial", Font.BOLD, 13));
-            seleccionarVentanaActivaMenu();
+            
             jmenuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -2299,12 +2307,113 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    //public GeneralPanelInterface pantallaReporte=new GeneralPanelInterface() {
+    //        
+    //}
 
     @Override
     public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla) {
         JRViewer viewer=new JRViewer(jasperPrint);
         viewer.setZoomRatio(0.6f);
-        JInternalFrame internal = new JInternalFrame("Un Internal Frame");
+        
+        GeneralPanelInterface internal = new GeneralPanelInterface() {
+            @Override
+            public void iniciar() throws ExcepcionCodefacLite, RemoteException {                
+            }
+
+            @Override
+            public void nuevo() throws ExcepcionCodefacLite, RemoteException {                
+            }
+
+            @Override
+            public void grabar() throws ExcepcionCodefacLite, RemoteException{                
+            }
+
+            @Override
+            public void editar() throws ExcepcionCodefacLite, RemoteException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void limpiar() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public String getURLAyuda() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public Map<Integer, Boolean> permisosFormulario() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public List<String> getPerfilesPermisos() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public BuscarDialogoModel obtenerDialogoBusqueda() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void cargarDatosPantalla(Object entidad) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public String toString() {
+                return nombrePantalla;
+            }
+            
+            
+            
+        };
+        
+        internal.addInternalFrameListener(new InternalFrameListener() {
+            @Override
+            public void internalFrameOpened(InternalFrameEvent e) {}
+
+            @Override
+            public void internalFrameClosing(InternalFrameEvent e) {}
+
+            @Override
+            public void internalFrameClosed(InternalFrameEvent e) {
+                quitarVentanaAbierta(internal); //
+            }
+
+            @Override
+            public void internalFrameIconified(InternalFrameEvent e) {}
+
+            @Override
+            public void internalFrameDeiconified(InternalFrameEvent e) {}
+
+            @Override
+            public void internalFrameActivated(InternalFrameEvent e) {}
+
+            @Override
+            public void internalFrameDeactivated(InternalFrameEvent e) {}
+        });
+        
         internal.setClosable(true);
         internal.setIconifiable(true);
         internal.setMaximizable(true);
@@ -2330,6 +2439,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         internal.add(viewer);
         getjDesktopPane1().add(internal);
         internal.show();
+        
+        //Agregar al menu cuando se abren reportes
+        agregarVentanaAbierta(internal,true);
+        //getjMenuVentanasActivas().add(internal);as
+        //asdasd
     }
 
     /**

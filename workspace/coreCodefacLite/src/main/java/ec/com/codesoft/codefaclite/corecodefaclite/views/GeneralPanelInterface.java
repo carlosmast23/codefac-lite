@@ -468,7 +468,11 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     @Override
     public String toString() {
         VentanaEnum ventanaEnum=VentanaEnum.getByClass(this.getClass());
-        return ventanaEnum.getNombre();
+        if(ventanaEnum!=null)
+        {
+            return ventanaEnum.getNombre();
+        }
+        return "";
     }
     
     public class PanelSecundario
