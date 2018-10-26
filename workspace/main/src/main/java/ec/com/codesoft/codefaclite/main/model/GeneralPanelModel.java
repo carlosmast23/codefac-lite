@@ -1910,15 +1910,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 cargarAyuda();
                                 mostrarPanelSecundario(false);
                                 e.getInternalFrame().dispose();
-                                quitarVentanaAbierta(panelCerrando); //
+                                //quitarVentanaAbierta(panelCerrando); //
                             }                                                        
                         }
 
                         @Override
                         public void internalFrameClosed(InternalFrameEvent e) {
-                            
+                            GeneralPanelInterface panelCerrando=(GeneralPanelInterface)e.getInternalFrame();
+                            quitarVentanaAbierta(panelCerrando); //
                             //if (verificarTodasPantallasMinimizadas(e.getInternalFrame())) {
-                                habilitarBotones(false);
+                            habilitarBotones(false);
                             //}
                             //Seleccionar la siguiente ventana por defecto
                             JInternalFrame[] ventanas=getjDesktopPane1().getAllFrames();
