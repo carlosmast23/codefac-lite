@@ -55,6 +55,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         jLabel8 = new javax.swing.JLabel();
         lblEspacioUtilidad = new javax.swing.JLabel();
         chkEnvioCorreo = new javax.swing.JCheckBox();
+        chkSeleccionarTodo = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -63,17 +64,6 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         setTitle("Utilidad Comprobante");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        tblComprobantes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         jScrollPane2.setViewportView(tblComprobantes);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -86,6 +76,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         gridBagConstraints.weighty = 1.0;
         getContentPane().add(jScrollPane2, gridBagConstraints);
 
+        btnSiguienteEtapa.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnSiguienteEtapa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnSiguienteEtapa.setText("Procesar");
         btnSiguienteEtapa.addActionListener(new java.awt.event.ActionListener() {
@@ -120,6 +111,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(cmbEstadoLimiteProcesar, gridBagConstraints);
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Carpetas Comprobantes:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -128,6 +120,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         getContentPane().add(jLabel1, gridBagConstraints);
 
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Etapa final procesar:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -162,6 +155,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         getContentPane().add(btnEliminarCorreo, gridBagConstraints);
 
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Correos Electronicos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
@@ -210,6 +204,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         gridBagConstraints.gridwidth = 14;
         getContentPane().add(lblEspacioUtilidad, gridBagConstraints);
 
+        chkEnvioCorreo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         chkEnvioCorreo.setText("Enviar Correo");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -217,6 +212,15 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         getContentPane().add(chkEnvioCorreo, gridBagConstraints);
+
+        chkSeleccionarTodo.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
+        chkSeleccionarTodo.setText("Seleccionar Todo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        getContentPane().add(chkSeleccionarTodo, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -231,6 +235,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
     private javax.swing.JButton btnEliminarCorreo;
     private javax.swing.JButton btnSiguienteEtapa;
     private javax.swing.JCheckBox chkEnvioCorreo;
+    private javax.swing.JCheckBox chkSeleccionarTodo;
     private javax.swing.JComboBox<String> cmbCarpetaComprobante;
     private javax.swing.JComboBox<String> cmbEstadoLimiteProcesar;
     private javax.swing.JLabel jLabel1;
@@ -304,6 +309,10 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
 
     public void setChkEnvioCorreo(JCheckBox chkEnvioCorreo) {
         this.chkEnvioCorreo = chkEnvioCorreo;
+    }
+
+    public JCheckBox getChkSeleccionarTodo() {
+        return chkSeleccionarTodo;
     }
     
     

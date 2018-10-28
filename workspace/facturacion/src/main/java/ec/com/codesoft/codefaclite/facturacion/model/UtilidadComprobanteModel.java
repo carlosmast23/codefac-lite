@@ -55,6 +55,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -67,6 +68,8 @@ import javax.swing.table.TableModel;
  * @author Carlos
  */
 public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
+    
+    private static final int COLUMNA_SELECCION=0;
 
     private UtilidadComprobanteModel formThis=this;
     
@@ -80,6 +83,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
         addBotonListener();
         addComboListener();
         addTableListener();
+        addCheckListener();
         frame = this;
     }
 
@@ -142,17 +146,18 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
 
     
     private void cargarDatosComprobantesTabla(List<ComprobanteElectronico> comprobantes) {
-        String[] titulo = new String[]{"Seleccion","Clave Acceso","Preimpreso","Fecha"};
+        String[] titulo = new String[]{"Seleccion","tipo Documento","Preimpreso","Fecha","Clave Acceso"};
 
-        this.tableModel=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{Boolean.class,String.class,String.class,String.class});
+        this.tableModel=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{Boolean.class,String.class,String.class,String.class,String.class});
         if(comprobantes!=null)
         {
             for (ComprobanteElectronico comprobante : comprobantes) {
                 Vector<Object> fila = new Vector<>();
                 fila.add(false);
-                fila.add(comprobante.getInformacionTributaria().getClaveAcceso());
+                fila.add(comprobante.getInformacionTributaria().getCodigoDocumentoEnum().getNombre());
                 fila.add(comprobante.getInformacionTributaria().getPreimpreso());
                 fila.add(comprobante.getFechaEmision());
+                fila.add(comprobante.getInformacionTributaria().getClaveAcceso());
                 this.tableModel.addRow(fila);
             }
         }
@@ -464,6 +469,19 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void addCheckListener() {
+        getChkSeleccionarTodo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean seleccion=getChkSeleccionarTodo().isSelected();
+                
+                for (int i=0;i<getTblComprobantes().getRowCount();i++) {
+                    getTblComprobantes().setValueAt(seleccion,i,COLUMNA_SELECCION);
+                }
+            }
+        });
     }
 
 }

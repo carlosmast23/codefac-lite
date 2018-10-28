@@ -5,9 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -135,5 +137,13 @@ public class InformacionTributaria implements Serializable{
         return this.puntoEmision+"-"+this.establecimiento+"-"+UtilidadesTextos.llenarCarateresIzquierda(this.secuencial,8,"0");
     }
     
+    /**
+     *=====================> METODOS ADICIONALES <======================
+     */
+    @XmlTransient
+    public ComprobanteEnum getCodigoDocumentoEnum()
+    {
+        return ComprobanteEnum.getEnumByCodigo(codigoDocumento);
+    }
 
 }

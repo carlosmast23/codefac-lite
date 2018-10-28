@@ -291,6 +291,7 @@ public class PerfilModel extends PerfilPanel{
             for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
                 Vector<String> fila = new Vector<String>();
                 fila.add(permisoVentana.getVentanaEnum().getNombre());
+                System.out.println(permisoVentana.getVentanaEnum().getNombre());
                 fila.add((permisoVentana.getPermisoGrabar().equals("s")) ? "x" : "");
                 fila.add((permisoVentana.getPermisoEditar().equals("s")) ? "x" : "");
                 fila.add((permisoVentana.getPermisoBuscar().equals("s")) ? "x" : "");

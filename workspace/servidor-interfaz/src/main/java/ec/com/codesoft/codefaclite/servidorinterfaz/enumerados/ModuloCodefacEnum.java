@@ -15,16 +15,36 @@ import javax.swing.ImageIcon;
  * @author Carlos
  */
 public enum ModuloCodefacEnum {
-    CONTABILIDAD("Contabilidad","CONT","o","modulo_contabilidad",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/contabilidad.png")),
-    FACTURACION("Facturacion","FAC","f","modulo_facturacion",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/facturacion.png")),
-    CRM("Crm","CRM","c","modulo_crm",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/crm.png")),
-    SERVICIOS("Servicios","SER","s","modulo_servicios",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/servicios.png")),
-    COMPRA("Compra","COM","b","modulo_compra",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/compra.png")),
-    CARTERA("Cartera","CAR","w","modulo_cartera",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/cartera.png")),
-    INVENTARIO("Inventario","INVS","i","modulo_inventario",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/inventario.png")),        
-    GESTIONA_ACADEMICA("Académico","ACAS","a","modulo_gestion_academica",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/gestion_academica.png")),
-    TRANSPORTE("Transporte","TRAN","a","modulo_transporte",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/transporte.png")),
-    SISTEMA("Sistema","SIST","t","modulo_sistema",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/sistema.png"));
+    CONTABILIDAD("Contabilidad","CONT",
+            "o","modulo_contabilidad",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/contabilidad.png")),
+    
+    FACTURACION("Facturacion","FAC",
+            "f","modulo_facturacion",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/facturacion.png")),
+    
+    CRM("Crm","CRM",
+            "c","modulo_crm",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/crm.png")),
+    
+    SERVICIOS("Servicios","SER",
+            "s","modulo_servicios",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/servicios.png")),
+    
+    COMPRA("Compra","COM",
+            "b","modulo_compra",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/compra.png")),
+    
+    CARTERA("Cartera","CAR",
+            "w","modulo_cartera",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/cartera.png")),
+    
+    INVENTARIO("Inventario","INVS",
+            "i","modulo_inventario",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/inventario.png")),        
+    
+    GESTIONA_ACADEMICA("Académico","ACAS",
+            "a","modulo_gestion_academica",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/gestion_academica.png")),
+    
+    TRANSPORTE("Transporte","TRAN",
+            "a","modulo_transporte",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/transporte.png")), //TODO: por el momento no modifico el valor de esa letra que esta duplicada porque por ejemplo con los clientes de la guarderia van a tener problemas , mejor verificar que saben las credenciales para actualizar
+    
+    SISTEMA("Sistema","SIST",
+            "t","modulo_sistema",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/sistema.png"));
+    
     private String nombre;
     private String codigo;
     private String nombrePropiedad;
