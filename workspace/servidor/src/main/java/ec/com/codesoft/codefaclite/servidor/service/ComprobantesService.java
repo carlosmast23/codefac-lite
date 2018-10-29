@@ -587,6 +587,10 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             }
             else
             {
+                comprobanteData.setNumeroAutorizacion(autorizacion.getNumeroAutorizacion());
+                ClaveAcceso claveAcceso= new ClaveAcceso(autorizacion.getNumeroAutorizacion());                
+                comprobanteData.setPreimpreso(claveAcceso.getPreimpreso());
+                
                 System.out.println("No se puede transformar el comprobante");
                 System.out.println(autorizacion.getComprobante());
             }
@@ -594,16 +598,19 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             //Compiar los mensajes
             Autorizacion.Mensajes mensajes=autorizacion.getMensajes();
             List<ComprobanteMensaje> mensajesData=new ArrayList<ComprobanteMensaje>();
-                    
-            for (Mensaje mensajeAutorizacion : mensajes.getMensaje()) 
+            
+            if(mensajes!=null && mensajes.getMensaje()!=null)
             {
-                ComprobanteMensaje comprobanteMensaje=new ComprobanteMensaje();
-                comprobanteMensaje.setIdentificador(mensajeAutorizacion.getIdentificador());
-                comprobanteMensaje.setInformacionAdicional(mensajeAutorizacion.getInformacionAdicional());
-                comprobanteMensaje.setMensaje(mensajeAutorizacion.getMensaje());
-                comprobanteMensaje.setTipo(mensajeAutorizacion.getTipo());
-                
-                mensajesData.add(comprobanteMensaje);
+                for (Mensaje mensajeAutorizacion : mensajes.getMensaje()) 
+                {
+                    ComprobanteMensaje comprobanteMensaje=new ComprobanteMensaje();
+                    comprobanteMensaje.setIdentificador(mensajeAutorizacion.getIdentificador());
+                    comprobanteMensaje.setInformacionAdicional(mensajeAutorizacion.getInformacionAdicional());
+                    comprobanteMensaje.setMensaje(mensajeAutorizacion.getMensaje());
+                    comprobanteMensaje.setTipo(mensajeAutorizacion.getTipo());
+
+                    mensajesData.add(comprobanteMensaje);
+                }
             }
             comprobanteData.setMensajes(mensajesData);
             comprobantes.add(comprobanteData);

@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.Comprobantes
 import static ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil.archivoToByte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.XStreamUtil;
+import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.codefaclite.ws.recepcion.RecepcionComprobantesOffline;
 import ec.com.codesoft.codefaclite.ws.recepcion.RecepcionComprobantesOfflineService;
@@ -33,6 +34,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -56,7 +58,7 @@ public class ServicioSri {
     
     public static final String AUTORIZADO="AUTORIZADO";
     
-    private static final Long TIEMPO_ESPERA_AUTORIZACION =400L;
+    private static final Long TIEMPO_ESPERA_AUTORIZACION =1000L;
     /**
      * Numeros de intento para esperar que el sri me devuelva la consulta de autorizacion de un documentos
      */
@@ -71,6 +73,11 @@ public class ServicioSri {
     
     private List<Mensaje> mensajes;
     private List<Autorizacion> autorizaciones ;
+    
+    /**
+     * En esta lista se van a grabar los comprobantes que tuvieron problemas al enviar al SRI para que les autoricen
+     */
+    private List<Comprobante> comprobantesNoRecibidos;
     /**
      * El modo con el que va a trabajar el web service
      */
@@ -151,6 +158,10 @@ public class ServicioSri {
         }
     }
     
+    /**
+     * Todo : Ver si en un futuro puedo usar el mismo metodo que enviar por lote
+     * @return 
+     */
     public Boolean enviar()
     {
         try {
@@ -173,6 +184,33 @@ public class ServicioSri {
             Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    } 
+    
+    
+    public void enviarLote()
+    {
+        try {
+            comprobantesNoRecibidos=new ArrayList<Comprobante>();
+            //File archivoXMLFirmado = new File("C:\\CodefacRecursos\\comprobantes\\pruebas\\firmados\\0103201801172421895100110010010000000010000000011.xml");
+            File archivoXMLFirmado = new File(urlFile);
+            RecepcionComprobantesOffline port= servicio.getRecepcionComprobantesOfflinePort();
+            RespuestaSolicitud respuestaSolicitud = port.validarComprobante(archivoToByte(archivoXMLFirmado));
+            //System.out.println(respuestaSolicitud.getEstado()); //RECIBIDA DEVUELTA         
+            comprobantesNoRecibidos=respuestaSolicitud.getComprobantes().getComprobante();
+            /*if(respuestaSolicitud.getComprobantes().getComprobante().size()==0)
+            {
+                return true;
+            }
+            else
+            {
+                mensajes=respuestaSolicitud.getComprobantes().getComprobante().get(0).getMensajes().getMensaje();
+                return false;
+            }*/
+            
+        } catch (IOException ex) {
+            Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       //comprobantesNoRecibidos return new ArrayList<Comprobante>();
     }    
    
     public boolean autorizar(String claveAcceso) throws ComprobanteElectronicoException
@@ -330,6 +368,10 @@ public class ServicioSri {
     
     public ComprobanteElectronico castComprobanteToAutorizacion(Autorizacion autorizacion)
     {
+        //Si no existe nada grabado en el campo de autorizacion entonces devuelvo nulo
+        if(autorizacion.getComprobante()==null)
+            return null;
+        
         try {
             
             JAXBContext jaxbContext = JAXBContext.newInstance(ComprobanteEnum.FACTURA.getClase());
@@ -412,6 +454,11 @@ public class ServicioSri {
     public List<Autorizacion> getAutorizacion() {
         return autorizaciones;
     }
+
+    public List<Comprobante> getComprobantesNoRecibidos() {
+        return comprobantesNoRecibidos;
+    }
+    
     
     
     

@@ -25,6 +25,8 @@ public class ClaveAcceso implements Serializable{
     public String identificacion;
     public String tipoAmbiente;
     public String valorDefecto;
+    public String puntoEstablecimiento;
+    public String puntoEmision;
     public String secuencial;
     public String codigoBatch;
 
@@ -41,6 +43,8 @@ public class ClaveAcceso implements Serializable{
        //this.identificacion=claveTemporal.substring(0,13);
        //this.tipoAmbiente=claveTemporal.substring(0,1);
        //this.valorDefecto=claveTemporal.substring(0,6);
+       this.puntoEstablecimiento=claveTemporal.substring(24,27);
+       this.puntoEmision=claveTemporal.substring(27,30);
        this.secuencial=claveTemporal.substring(30,39);
        //this.codigoBatch=claveTemporal.substring(0,8);
        
@@ -105,6 +109,11 @@ public class ClaveAcceso implements Serializable{
         claveAcceso.add(digito);
 
         return UtilidadesTextos.castVectorToString(claveAcceso);
+    }
+    
+    public String getPreimpreso()
+    {
+        return this.puntoEstablecimiento+"-"+this.puntoEmision+"-"+this.secuencial;
     }
     
 }

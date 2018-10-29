@@ -53,6 +53,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -418,8 +419,9 @@ public class ComprobanteElectronicoService implements Runnable {
             }
 
 
+            List<Comprobante> comprobanteConProblemasEnviar=new ArrayList<Comprobante>(); //Nota: Esta variable la pongo fuera por si el usuario solo manda a verificar desde la etapa final
             if (etapaActual.equals(ETAPA_ENVIAR)) {
-                enviarSriLote();
+                comprobanteConProblemasEnviar= enviarSriLote();
                 if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
                 System.out.println("enviarSri lote()");
                 if(etapaLimiteProcesar<=ETAPA_ENVIAR) {
@@ -429,24 +431,45 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
 
+            
             if (etapaActual.equals(ETAPA_AUTORIZAR)) {
                 autorizarSriLote();
                 if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
-                if(escuchaLote!=null)escuchaLote.datosAutorizados(servicioSri.getAutorizacion());
+                if(escuchaLote!=null)escuchaLote.datosAutorizados(listaLotesAutorizados(servicioSri.getAutorizacion(),comprobanteConProblemasEnviar));
                 System.out.println("autorizarSri lote()");
+                
                 if(etapaLimiteProcesar<=ETAPA_AUTORIZAR) {
-                    if(escuchaLote!=null)escuchaLote.termino(servicioSri.getAutorizacion());
+                    if(escuchaLote!=null)escuchaLote.termino(listaLotesAutorizados(servicioSri.getAutorizacion(),comprobanteConProblemasEnviar));
                     return;
                 }
                 etapaActual++;
             }
 
-            if(escuchaLote!=null)escuchaLote.termino(servicioSri.getAutorizacion());
+            if(escuchaLote!=null)escuchaLote.termino(listaLotesAutorizados(servicioSri.getAutorizacion(),comprobanteConProblemasEnviar));
         } catch (ComprobanteElectronicoException cee) {
             if(escuchaLote!=null)escuchaLote.error(cee);
         }
     
      }
+    
+    /**
+     * Metodo que me permite agregar tambien los mensajes de los no enviados a la lista de autorizados para informar al cliente
+     * @param autorizados
+     * @param ComprobantesNoEnviados
+     * @return 
+     */
+    private List<Autorizacion> listaLotesAutorizados(List<Autorizacion> autorizados,List<Comprobante> ComprobantesNoEnviados)
+    {
+        List<Autorizacion> autorizadosConNoEnviados=new ArrayList<Autorizacion>(autorizados);
+        for (Comprobante comprobantesNoEnviado : ComprobantesNoEnviados) {
+            Autorizacion autorizacion=new Autorizacion();
+            autorizacion.setEstado("NO_ENVIADO");
+            autorizacion.setNumeroAutorizacion(comprobantesNoEnviado.getClaveAcceso());
+            //autorizacion.setMensajes(value);
+            autorizadosConNoEnviados.add(autorizacion);
+        }
+        return autorizadosConNoEnviados;
+    }
 
     private void enviarComprobante() throws ComprobanteElectronicoException {
         //enviarComprobanteCorreo(this.claveAcceso);
@@ -994,7 +1017,18 @@ public class ComprobanteElectronicoService implements Runnable {
         }
     }
     
-    private void enviarSriLote() throws ComprobanteElectronicoException {
+    private Comprobante buscarComprobantesPorClaveAcceso(List<Comprobante> comprobantesConProblemas, String claveAcceso)
+    {
+        for (Comprobante comprobantesConProblema : comprobantesConProblemas) {
+            if(comprobantesConProblema.getClaveAcceso().equals(claveAcceso))
+            {
+                return comprobantesConProblema;
+            }
+        }
+        return null;
+    }
+    
+    private  List<Comprobante> enviarSriLote() throws ComprobanteElectronicoException {
         try {
             servicioSri = new ServicioSri();
             servicioSri.setUri_autorizacion(uriAutorizacion);
@@ -1003,34 +1037,46 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (servicioSri.verificarConexionRecepcion()) {
                 System.out.println("Existe conexion");
-                if (servicioSri.enviar()) {
+                servicioSri.enviarLote();
+                List<Comprobante> comprobantesConProblemas=servicioSri.getComprobantesNoRecibidos();
+                
+                //if (servicioSri.enviar()) {
                     System.out.println("Documento enviados");
                     for (String claveAccesoComprobante : clavesAccesoLote) {
-                        //Mover todos los archivos individuales
-                        String claveAccesoTemp=claveAccesoComprobante;
-                        ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp),getPathComprobanteConClaveAcceso(CARPETA_ENVIADOS,claveAccesoTemp));
-                        //ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp));
-                        ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS_SIN_ENVIAR,claveAccesoTemp));
+                        
+                        Comprobante comprobanteEncontrado=buscarComprobantesPorClaveAcceso(comprobantesConProblemas,claveAccesoComprobante);
+                        if(comprobanteEncontrado==null) //Si no encuentra en la lista significa porque no tiene problemas
+                        {
+                            //Mover todos los archivos individuales
+                            String claveAccesoTemp = claveAccesoComprobante;
+                            ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, claveAccesoTemp), getPathComprobanteConClaveAcceso(CARPETA_ENVIADOS, claveAccesoTemp));
+                            //ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp));
+                            ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS_SIN_ENVIAR, claveAccesoTemp));
+                        }                        
+                        
                     }                    
                     
                     //Mover el archivo que contiene todos los archivos en lote a la carpeta de enviados
                     //ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobante(CARPETA_FIRMADOS),getPathComprobante(CARPETA_ENVIADOS));
                     //ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_FIRMADOS));
                     
-                } else {
-                    String mensajeError = "";
-                    for (Mensaje mensaje : servicioSri.getMensajes()) {
-                        System.out.println(mensaje.getIdentificador() + "-" + mensaje.getMensaje() + "-" + mensaje.getInformacionAdicional());
-                        mensajeError += mensaje.getMensaje() + "\n" + mensaje.getInformacionAdicional();
-                    }
-                    throw new ComprobanteElectronicoException(mensajeError, "Enviar comprobante", ComprobanteElectronicoException.ERROR_COMPROBANTE);
-                }
+                //} else {
+                    //String mensajeError = "";
+                    //for (Mensaje mensaje : servicioSri.getMensajes()) {
+                    //    System.out.println(mensaje.getIdentificador() + "-" + mensaje.getMensaje() + "-" + mensaje.getInformacionAdicional());
+                    //    mensajeError += mensaje.getMensaje() + "\n" + mensaje.getInformacionAdicional();
+                    //}
+                    //throw new ComprobanteElectronicoException(mensajeError, "Enviar comprobante", ComprobanteElectronicoException.ERROR_COMPROBANTE);
+                //}
+                return comprobantesConProblemas;
             }
         } catch (ComprobanteElectronicoException cee) {
             cee.printStackTrace();
             throw new ComprobanteElectronicoException(cee);
         }
+        return new ArrayList<Comprobante>();
     }
+    
 
     private void autorizarSri() throws ComprobanteElectronicoException {
         servicioSri = new ServicioSri();
