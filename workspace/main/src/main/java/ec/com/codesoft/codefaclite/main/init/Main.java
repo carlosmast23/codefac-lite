@@ -242,6 +242,7 @@ public class Main {
     
     private static String obtenerPIDProcesoActual()
     {
+        //Todo: Hacer una validacion que si por algun motido no puede obtener el pid del proceso no lance ninguna excepcion
         String id = ManagementFactory.getRuntimeMXBean().getName();
         String[] ids = id.split("@");
         //System.out.println(Integer.parseInt(ids[0]));
