@@ -196,21 +196,28 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     
      public void cargarSecuencial()
     {
-        String secuencial="";
-        
-        boolean facturacionElectronica = session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
-        if (facturacionElectronica) {
-            secuencial = session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).valor;
-        } else {
-            secuencial = session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).valor;
-        }
+        //if(estadoFormulario.equals(ESTADO_GRABAR))
+        //{
+            String secuencial="";
+
+            boolean facturacionElectronica = session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
+            if (facturacionElectronica) {
+                secuencial = session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).valor;
+            } else {
+                secuencial = session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).valor;
+            }
 
 
-        String preimpreso = UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(), 8, "0");
-        String establecimiento = session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor;
-        String puntoEmision = session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor;
-        preimpreso=puntoEmision + "-" + establecimiento + "-" + preimpreso;
-        getLblSecuencial().setText(preimpreso);
+            String preimpreso = UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(), 8, "0");
+            String establecimiento = session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor;
+            String puntoEmision = session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor;
+            preimpreso=puntoEmision + "-" + establecimiento + "-" + preimpreso;
+            getLblSecuencial().setText(preimpreso);
+        //}
+        //else
+        //{
+            //getLblSecuencial().setText(guiaRemision.getPreimpreso());
+        //}
     }
 
 
@@ -253,6 +260,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         getCmbFechaFin().setDate(guiaRemision.getFechaFinTransporte());
         cargarDestinatariosAgregados();
         imprimirTabla();
+        getLblSecuencial().setText(guiaRemision.getPreimpreso());
         //cargarDatoFactura(guiaRemision.getre)
         
     }

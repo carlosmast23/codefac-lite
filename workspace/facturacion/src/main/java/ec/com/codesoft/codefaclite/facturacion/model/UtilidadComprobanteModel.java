@@ -5,49 +5,28 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
-import com.sun.glass.ui.Cursor;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaLoteImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteUtilidadImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.interfaz.InterfaceCallbakClient;
 import ec.com.codesoft.codefaclite.facturacion.panel.UtilidadComprobantePanel;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
-import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
-import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
-import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.rmi.RemoteException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,13 +34,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -70,6 +45,8 @@ import javax.swing.table.TableModel;
 public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
     
     private static final int COLUMNA_SELECCION=0;
+    private static final int COLUMNA_CLAVE_ACCESO=4;
+    
 
     private UtilidadComprobanteModel formThis=this;
     
@@ -140,7 +117,8 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
         permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, false);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, false);
-        permisos.put(GeneralPanelInterface.BOTON_AYUDA, false);
+        permisos.put(GeneralPanelInterface.BOTON_REFRESCAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
 
@@ -286,7 +264,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
         
         try {
             //Obtiene el nombre de la firma elecronica
-            String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), 1).toString().replace(".xml", "");
+            String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), COLUMNA_CLAVE_ACCESO).toString().replace(".xml", "");
             
             ComprobanteServiceIf comprobanteServiceIf=ServiceFactory.getFactory().getComprobanteServiceIf();
             ClienteUtilidadImplComprobante callBack=new ClienteUtilidadImplComprobante(this);
@@ -307,10 +285,10 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
             List<String> clavesAcceso=new ArrayList<String>();
             for (int i = 0; i < tableModel.getRowCount(); i++)
             {
-                Boolean opcion=(Boolean) tableModel.getValueAt(i, 0);
+                Boolean opcion=(Boolean) tableModel.getValueAt(i, COLUMNA_SELECCION);
                 if(opcion)
                 {
-                    String claveAcceso=tableModel.getValueAt(i, 1).toString();
+                    String claveAcceso=tableModel.getValueAt(i, COLUMNA_CLAVE_ACCESO).toString();
                     clavesAcceso.add(claveAcceso);
                     System.out.println(claveAcceso);
                 }
