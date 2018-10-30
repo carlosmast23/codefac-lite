@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsInt
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
@@ -594,6 +595,13 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     }
 
     private void enviarComunicados() {
+        
+        //Validación previa 
+        if (getTxtCorreoTitulo().getText().isEmpty()) {
+            DialogoCodefac.mensaje("Advertencia", "Porfavor ingrese un titulo para enviar el correo", DialogoCodefac.MENSAJE_INCORRECTO);
+            return;
+        }
+
         Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
         if (listaRubros.size() > 0) {
             //List<RubroEstudiante> rubrosEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosEstudiantesPorRubros(listaRubros);
@@ -626,7 +634,8 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                     generarReporte(estudianteInscrito, detalle, periodo);
                     //Enviar al correo
                     String mensaje = construirMensaje(estudianteInscrito);
-                    enviarCorreo(estudianteInscrito, mensaje);
+                    
+                    enviarCorreo(estudianteInscrito, mensaje,getTxtCorreoTitulo().getText());
                     System.out.println("estudiante: " + estudianteInscrito.getEstudiante().getNombreCompleto());
                     
                     double relacion = (double) contador / (double) mapRubrosEstudiante.size();
@@ -652,7 +661,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
     }
 
-    private void enviarCorreo(EstudianteInscrito estudianteInscrito, String mensaje) {
+    private void enviarCorreo(EstudianteInscrito estudianteInscrito, String mensaje,String titulo) {
         CorreoCodefac correoCodefac = new CorreoCodefac() {
             @Override
             public String getMensaje() {
@@ -661,7 +670,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
             @Override
             public String getTitulo() {
-                return "Comunicado deudas";
+                return titulo;
             }
 
             @Override

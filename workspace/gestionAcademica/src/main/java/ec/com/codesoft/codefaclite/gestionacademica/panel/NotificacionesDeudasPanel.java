@@ -17,10 +17,12 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  *
@@ -50,6 +52,10 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         btnEnviar = new javax.swing.JButton();
         btnImprimir = new javax.swing.JButton();
         cmbPeriodo = new javax.swing.JComboBox<>();
+        pnlCorreoConfigurar = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        txtCorreoTitulo = new javax.swing.JTextArea();
+        jLabel9 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         lblEspacio1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -102,6 +108,31 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
                 cmbPeriodoActionPerformed(evt);
             }
         });
+
+        pnlCorreoConfigurar.setLayout(new java.awt.GridBagLayout());
+
+        txtCorreoTitulo.setColumns(20);
+        txtCorreoTitulo.setLineWrap(true);
+        txtCorreoTitulo.setRows(5);
+        jScrollPane6.setViewportView(txtCorreoTitulo);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlCorreoConfigurar.add(jScrollPane6, gridBagConstraints);
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel9.setText("Titulo Correo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+        pnlCorreoConfigurar.add(jLabel9, gridBagConstraints);
 
         setClosable(true);
         setIconifiable(true);
@@ -419,6 +450,7 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -427,15 +459,18 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio5;
     private javax.swing.JLabel lblEspacio6;
     private javax.swing.JList<RubroPlantillaMes> lstFiltrosMes;
+    private javax.swing.JPanel pnlCorreoConfigurar;
     private javax.swing.JTabbedPane tabOpciones;
     private javax.swing.JTable tblEstudiantes;
     private javax.swing.JTable tblRubros;
+    private javax.swing.JTextArea txtCorreoTitulo;
     private javax.swing.JTextArea txtFormatoMensaje;
     // End of variables declaration//GEN-END:variables
 
@@ -590,8 +625,18 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
     public JCheckBox getChkSeleccionarTodos() {
         return chkSeleccionarTodos;
     }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Correo Configurar",visible = false)    
+    public JPanel getPnlCorreoConfigurar() {
+        return pnlCorreoConfigurar;
+    }
+
+    public JTextArea getTxtCorreoTitulo() {
+        return txtCorreoTitulo;
+    }
     
     
+
     
     
     
