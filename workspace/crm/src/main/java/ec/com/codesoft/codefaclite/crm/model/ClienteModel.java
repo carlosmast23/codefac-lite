@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.crm.model;
 
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteCorreoInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.componentes.ComponenteEnvioSmsData;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -81,7 +82,7 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author PC
  */
-public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Persona>, InterfazPostConstructPanel ,ComponenteEnvioSmsInterface{
+public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Persona>, InterfazPostConstructPanel ,ComponenteEnvioSmsInterface,ComponenteCorreoInterface{
 
     private static final Logger LOG = Logger.getLogger(ClienteModel.class.getName());
 
@@ -423,6 +424,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     private void cargarDatosIniciales() {
         getPnlSms().setControlador(this);
+        getPnlCorreo().setCorreoInterface(this);
         operadorNegocioDefault=OperadorNegocioEnum.CLIENTE;
         /**
          * Cargando los estados por defecto
@@ -658,6 +660,15 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     @Override
     public EnvioMensajesCallBackInterface getInterfaceCallback() {
         return null;
+    }
+
+    @Override
+    public String getCorreo() {
+        String correo="";
+        if(persona!=null)
+            correo=persona.getCorreoElectronico();
+                    
+        return correo;
     }
     
 }

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.crm.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioCorreoPanel;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CursorPorDefectoAnotacion;
@@ -36,6 +37,7 @@ import javax.swing.JTextField;
 public abstract class ClienteForm extends ControladorCodefacInterface {
     public static final String NOMBRE_VALIDADOR_IDENTIFICACION="Identificacion";
     private ComponenteEnvioSmsPanel pnlSms=new ComponenteEnvioSmsPanel();
+    private ComponenteEnvioCorreoPanel pnlCorreo=new ComponenteEnvioCorreoPanel();
     
     /**
      * Creates new form clienteForm
@@ -715,9 +717,14 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     
     
 
-    @ComponenteSecundarioAnotacion(nombreCategoria = "Mensajeria")
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Mensajeria",visible = false)
     public ComponenteEnvioSmsPanel getPnlSms() {
         return pnlSms;
+    }
+    
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Correo Electrónico",visible = false)
+    public ComponenteEnvioCorreoPanel getPnlCorreo() {
+        return pnlCorreo;
     }
     
 }

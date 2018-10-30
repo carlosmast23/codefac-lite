@@ -33,6 +33,12 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj ELIMINAR_COMPROBANTE_ELECTRONICO = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"El comprobante electronico se encuentra autorizada en el SRI , \nPorfavor elimine solo si tambien esta anulado en el SRI\nDesea eliminar la factura de todos modos?" ,DialogoCodefac.MENSAJE_INCORRECTO);
     }
     
+    public static abstract class CorreoElectronico {
+
+        public static final CodefacMsj CORREO_ENVIADO = new CodefacMsj(CodefacMsj.TITULO_CORRECTO, "El correo fue enviado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        
+    }
+    
     public static abstract class FacturasMensajes
     {
         public static final CodefacMsj ERROR_ELIMINAR_AFECTA_NOTA_CREDITO = new CodefacMsj(CodefacMsj.TITULO_ERROR,"La Factura no se puede eliminar porque hay una nota de credito que le afecta",DialogoCodefac.MENSAJE_INCORRECTO);
