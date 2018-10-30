@@ -14,7 +14,7 @@ create table IMPUESTO_DETALLE
     ID_IMPUESTO BIGINT,
     CODIGO integer,
     NOMBRE varchar(100),
-    PORCENTAJE decimal(7,2),
+    PORCENTAJE decimal(13,2),
     TARIFA integer,
     DESCRIPCION varchar(100),
     FECHA_INICIO date,

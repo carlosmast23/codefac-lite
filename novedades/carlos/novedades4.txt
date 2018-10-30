@@ -101,3 +101,5 @@ En los ats preguntar si se debe hacer el calculo de las ventas restando las nota
 
 Verifica en los ats en la seccion de anulados si este dato es el de la nota de credito o la factura que elimina , pero si son algunas no tiene sentido que sea el de la factura
 >Importante<: cuando existe un problema de claves repetidas en la pantalla de comprobantes los siguientes comprobantes que esten adjuntos si se autorizan pero el programa no me notifica , adicional de eso  no se termina de procesar el resto de proceso para eliminar en pendientes y tampoco se actualiza en la base para saber que ya fue procesado
+
+Hacer una prueba con un secuecial de lote duplicado haber que pasa

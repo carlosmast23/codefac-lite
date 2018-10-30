@@ -22,13 +22,13 @@ create table NOTA_CREDITO
     PUNTO_EMISION decimal,
     FECHA_EMISION date,
     FECHA_CREACION date,
-    SUBTOTAL_SIN_IMPUESTOS decimal(7,2),
-    SUBTOTAL_DOCE decimal(7,2),
-    SUBTOTAL_CERO decimal(7,2),
-    VALOR_IVA_DOCE decimal(7,2),
-    VALOR_IVA_CERO decimal(7,2),
+    SUBTOTAL_SIN_IMPUESTOS decimal(13,2),
+    SUBTOTAL_DOCE decimal(13,2),
+    SUBTOTAL_CERO decimal(13,2),
+    VALOR_IVA_DOCE decimal(13,2),
+    VALOR_IVA_CERO decimal(13,2),
     IVA_SRI_ID decimal,
-    TOTAL decimal(7,2),
+    TOTAL decimal(13,2),
     USUARIO_ID decimal,
     ESTADO varchar(1),
     RAZON_MODIFICADO varchar(128),
@@ -41,9 +41,9 @@ create table NOTA_CREDITO
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.1)*/
     OBLIGADO_LLEVAR_CONTABILIDAD varchar(2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.9.3)*/
-    DESCUENTO_IVA decimal(7,2),
+    DESCUENTO_IVA decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.9.3)*/
-    DESCUENTO_IVA_CERO decimal(7,2),
+    DESCUENTO_IVA_CERO decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.9.3)*/
     TIPO_DOCUMENTO varchar(3),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.9.3)*/
@@ -63,11 +63,11 @@ create table NOTA_CREDITO_DETALLE
     TIPO_REFERENCIA varchar(5),
     NOTA_CREDITO_ID BIGINT,
     CANTIDAD integer ,
-    PRECIO_UNITARIO decimal(7,3),
-    DESCUENTO decimal(7,2),
+    PRECIO_UNITARIO decimal(13,3),
+    DESCUENTO decimal(13,2),
     VALOR_ICE decimal,
-    IVA decimal(7,2),
-    TOTAL decimal(7,2),
+    IVA decimal(13,2),
+    TOTAL decimal(13,2),
     DESCRIPCION varchar(150),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.9.3)*/
     IVA_PORCENTAJE INT,

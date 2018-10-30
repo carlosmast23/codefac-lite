@@ -109,6 +109,7 @@ public class UtilidadesServidor {
     
      public static InputStream[] querys_update = {
          RecursoCodefac.SQL.getResourceInputStream("update/update.sql"),
+         RecursoCodefac.SQL.getResourceInputStream("update/update_tipo_datos_decimal.sql"),
      };
 
     public static void crearBaseDatos() throws SQLException {

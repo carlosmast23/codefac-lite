@@ -51,9 +51,9 @@ create table RETENCION_DETALLE
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1),
     RETENCION_ID BIGINT,
-    BASE_IMPONIBLE decimal(7,3),
-    PORCENTAJE_RETENER decimal(7,3),
-    VALOR_RETENIDO decimal(7,3),
+    BASE_IMPONIBLE decimal(13,3),
+    PORCENTAJE_RETENER decimal(13,3),
+    VALOR_RETENIDO decimal(13,3),
     CODIGO_SRI varchar(5),
     CODIGO_RETENCION_SRI varchar(5),
     primary key (ID)

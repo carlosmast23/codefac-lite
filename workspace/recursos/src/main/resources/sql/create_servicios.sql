@@ -92,10 +92,10 @@ create table PRESUPUESTO
     FECHA_CREACION date,
     FECHA_PRESUPUESTO date,
     FECHA_VALIDEZ date,
-    DESCUENTO_COMPRA decimal(7,2),
-    DESCUENTO_VENTA decimal(7,2),
-    TOTAL_COMPRA decimal(7,2),
-    TOTAL_VENTA decimal(7,2),
+    DESCUENTO_COMPRA decimal(13,2),
+    DESCUENTO_VENTA decimal(13,2),
+    TOTAL_COMPRA decimal(13,2),
+    TOTAL_VENTA decimal(13,2),
     
     ORDEN_TRABAJO_DETALLE_ID BIGINT,
     primary key(ID)
@@ -105,11 +105,11 @@ create table PRESUPUESTO
 create table PRESUPUESTO_DETALLE
 (
     ID BIGINT not null generated always as IDENTITY(start with 1),
-    PRECIO_COMPRA decimal(7,2),
-    DESCUENTO_COMPRA decimal(7,2),
-    PRECIO_VENTA decimal(7,2),
-    DESCUENTO_VENTA decimal(7,2),
-    CANTIDAD decimal(7,2),
+    PRECIO_COMPRA decimal(13,2),
+    DESCUENTO_COMPRA decimal(13,2),
+    PRECIO_VENTA decimal(13,2),
+    DESCUENTO_VENTA decimal(13,2),
+    CANTIDAD decimal(13,2),
     NUMERO_ORDEN_COMPRA INT,
     ESTADO varchar(1),
     PROVEEDOR_ID BIGINT,

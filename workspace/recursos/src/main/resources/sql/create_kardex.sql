@@ -5,9 +5,9 @@ create table KARDEX(
     BODEGA_ID BIGINT,
     FECHA_CREACION date, 
     FECHA_MODIFICACION date,
-    PRECIO_PROMEDIO decimal(7,2),
-    PRECIO_ULTIMO decimal(7,2),
-    PRECIO_TOTAL decimal(7,2),
+    PRECIO_PROMEDIO decimal(13,2),
+    PRECIO_ULTIMO decimal(13,2),
+    PRECIO_TOTAL decimal(13,2),
     STOCK BIGINT,
     RESERVA BIGINT,
     primary key (ID)
@@ -19,8 +19,8 @@ create table KARDEX_DETALLE(
     REFERENCIA_DOCUMENTO_ID BIGINT,
     CODIGO_TIPO_DOCUMENTO varchar(3),
     CANTIDAD Integer,
-    PRECIO_UNITARIO decimal(7,2),
-    PRECIO_TOTAL decimal(7,2),
+    PRECIO_UNITARIO decimal(13,3),
+    PRECIO_TOTAL decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.8)*/
     FECHA_CREACION date,
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.8)*/
