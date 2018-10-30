@@ -104,6 +104,16 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
         if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
             monitorData.getBarraProgreso().setValue(65);
             notaCreditoProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+            
+            monitorData.getBtnAbrir().setEnabled(true);
+            monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    generarReportePdf(clave.clave);
+                }
+            });
+            
         }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
@@ -159,6 +169,22 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void generarReportePdf(String clave) {
+        try {
+
+            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
+            JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
+            notaCreditoModel.panelPadre.crearReportePantalla(jasperPrint, clave);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }
