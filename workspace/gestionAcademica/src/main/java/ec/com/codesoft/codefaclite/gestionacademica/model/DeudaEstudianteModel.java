@@ -56,6 +56,12 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
     
     private final Integer COLUMNA_OBJETO=0;
     private final Integer COLUMNA_VALOR=3;
+
+    public DeudaEstudianteModel() {
+        //Setear propiedad para actualizar valores de editar apenas pierda el focus        
+    }
+    
+    
     
     
     
@@ -63,7 +69,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
     public void iniciar() throws ExcepcionCodefacLite {
         listenerBotones();
         listenerCombos();    
-        listenerTablas();
+        listenerTablas();        
         
         //Quitar validaciones para esta pantalla
         validacionDatosIngresados=false;
@@ -76,6 +82,9 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
+        
+        //Artificio para setear los datos de la tabla si no presiono enter
+        UtilidadesTablas.setearValoresEditadosTabla(getTblDatos());
         
         List<RubroEstudiante> rubrosActualizar = getRubroEstudianteSinAcciones();        
        
@@ -390,6 +399,8 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                 }
             }
         });
+        
+        //UtilidadesTablas.editarTablaEditarCuandoPierdeFoco(getTblDatos()); 
 
     }
     

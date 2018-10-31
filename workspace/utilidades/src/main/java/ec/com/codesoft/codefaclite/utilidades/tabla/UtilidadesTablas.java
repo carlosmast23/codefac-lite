@@ -200,8 +200,26 @@ public abstract class UtilidadesTablas {
             //columna.se
         }
         
-        
-        
+    }
+    
+    /**
+     * Cambiar propiedad de la tabla para editar la celda apenas pierda el focus
+     * TODO:Revisar porque esta funcionalidad no vale con el programa pero si vale con otro ejemplos
+     */
+    public static void editarTablaEditarCuandoPierdeFoco(JTable jtable)
+    {
+        jtable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+    }
+    
+    /**
+     * Esta funcion solo sirve para forzar que los datos de la tabla se actualicen por ejemplo cuando el usuario no presiona enter
+     * o cuando presiona enter
+     * @param jtable 
+     */
+    public static void setearValoresEditadosTabla(JTable jtable)
+    {
+        if (jtable.isEditing())
+            jtable.getCellEditor().stopCellEditing();
     }
    
 }
