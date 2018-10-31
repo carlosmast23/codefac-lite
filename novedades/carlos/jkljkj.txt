@@ -1,6 +1,0 @@
-                <p:columns var="dato" value="#{controllerCodefacMb.datosConsulta}"  >
-                    <f:facet name="header">
-                        <h:outputText value="#{controllerCodefacMb.columnasConsulta.get(index)}" />
-                    </f:facet>
-                    <h:outputText value="#{dato}"/>   
-                </p:columns>

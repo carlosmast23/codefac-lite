@@ -1,7 +1,3 @@
-1. En la pantalla de notificaciones academicas , cuando matricule un dato y deje
-la pantalla abierta de las notificaciones y volvi a generar el reporte se genero mal
-aparecieron las 2 deudas al mismo tiempo.
-
 4. Enviar correo al empleado despues que genere la orden de trabajo, ojo que por cada detalle asigno un empleado
 el empleado. 
 

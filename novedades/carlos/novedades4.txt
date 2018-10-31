@@ -1,13 +1,10 @@
 Ver si se puede tener o no se necesita un campo para especificar cuando un cliente es tambien un representante
 Analizar si unicamente el estudiante puede grabar cedulas o puede grabar otro tipo de documentos , ejemplo para instituciones educativas superiores
-Verificar que las despues de hacer alguna validacion el puntero por defecto aparesca en el campo para editar de forma generica
-Clsificar en rubros si se debe cobrar a todos como (matricula) o no , para tener mejor validacion
 
 En el reporte de clientes , falta filtrar solo por tipo de dato cliente o ambos , y ademas crear un reporte igual para proveedores
 Agregar en el reporte de clientes el nombre legal
 
 Agregar un campo adicional en el reporte de ordenes de trabajo para agregar una politica , reglamento o observacion que se desea imprimir en los reportes
-Agregar validacion para agregar alerta para cuando se busca desde un campo con esta opcion y al momento de cargar el registro se pierdon los datos ingresados anteriormente
 
 Revisar el tema de las sessiones , porque si algun cliente modifica se supone que se debe actualizar a todas las sesiones de los demas usuarios
 Revisar que para algunos clientes se debe validar que el usuario tiene que estar registrado como empleado y ver donde vincular
@@ -22,29 +19,16 @@ Revisar porque no se creo el campo de empleado_id en usuario y departamento:id e
 
 Revisar los detalles de la orden de trabajo cuando se intenta agregar se borran los campos de descripcion y notas
 
-Hacer un excepcion para avizar al usuario cuando no tiene datos del cliente y estan fallando los reportes
-
-Hacer el reporte de las ordenes de trabajo
-
 Agregar el numero de telefono en los reportes
 
 En la orden de trabajo me parece que cuando puse el signo + no podia validar, seria bueno que paresca un dialogo con el error para saber el tipo de validacion y analizar cual seria el tamanio del limite de los campos
 Terminar que los datos carguen correctamente
-Revisar un problema que despues de actualizar codefac se abre pero me parece que intenta actualizar la base de datos auque solo este e modo cliente
-
-ANALIZAR si se debe crear un catalago para definir si cobra o no iva al momento de crear los productos
 
 Agregar el tipo de cartera
-Analizar si la cartera puede activar cuentas por cobrar y cuentas por pagar de forma independiente
-
 
 Validar que el codigo del SRI no puede ser mas 30 caracteres
 
 Cuando se genera un error en la factura y se elimina ver como eliminar fisicamente para que no salga en la pantalla de utilidad de comprobantes
-
-Revisar porque no aparecen 2 productos en la base de datos de Codesoft
-Añadir un campo de autorizacion en las facturas el numero de autorizacion en especial para las facturas fisicas porque necesito para los ats
-
 
 Verificar en las clases data de los comprobantes en el atributo que dice obligado a llevar contabilidad estan seteados
 
@@ -58,40 +42,29 @@ es decir crear un proxi de reportes
 Agregar un campo para grabar novedades al momento de ingresar la mercaderia
 Verificar cual es el proceso si eleminan por ejemplo una alumno y luego quieren crear nuevamente cual deberia ser el proceso
 
-En la pantalla de ingreso de mercaderia esta cargando incorrectamente el preimpreso de las facturas de compra
-Hacer un nuevo instalador porque no va a funcionar por la carpeta de autorizacion
 Pensar en una forma de utilizar unidades de medidad y convertidores
 REVISAR QUE LOS REPORTES EN EXCEL FUNCIONE EN FORMATO ESTANDAR COMO POR EJEMPLO CVS
 
 En la pantalla de empresa y todas las demas donde toca validar la cedula verificar que se cumpla las 3 validaciones
 Aumentar el campo de contribuyente especial en los clientes porque necesito ese dato
-Revisar la forma de pago en la factura aveces no me deja agregar ni modificar
 Cuando estan en las pantallas de reporte no funciona el boton de ayuda para mostrar el panel secundario
 Revisar que no se agrego el campo de obligado allevar contabilidad en la tabla transporte , al parecer porque esa tabla es creada con una etiqueta
 
 Agregar un campo cargando antes de abrir cada ventana cuando se demora para que el usuario sepa que esta procesando
-Revisar que cuando solo se cierra la aplicacion sigue enviado mensajes uspuestamente , pero se supone que el celular me responde un mensaje para que me confirme que se envio el mensaje, pero aunque ya esta cerrado la palicacion en el ecelular me aparece como que me esta enviado una respuesta , ver que devuelve, y ver si hay como controlar tambien cuando escribo en el socket hacia el cliente
+Revisar que cuando solo se cierra la aplicacion sigue enviado mensajes supuestamente , pero se supone que el celular me responde un mensaje para que me confirme que se envio el mensaje, pero aunque ya esta cerrado la palicacion en el ecelular me aparece como que me esta enviado una respuesta , ver que devuelve, y ver si hay como controlar tambien cuando escribo en el socket hacia el cliente
 Investigar si necesito crear las Ordenes de venta (Pedidos)
 En el proyecto Web cuando trata de usar la propiedad de getByMap para las facturas service no funciona , pero otras entidades si funciona como por ejemplo los usuarios
 En el modulo web hacer 2 buscadores uno cuando implemente las propiedades y otro simple cuando no lo haga de esa manera
-En el reporte de ventas esta de ordenar por el impreso
-Ver si se puede hacer unos scripts que se ejecuten siempre para corregir datos en especial cuando son migrados , por ejemplo en MyGoldeWorld algunos clientes migrados no tenias estado
-Ver una manera de cambiar el valor de los rubros de algunos estudiantes.
 Hacer que cuando una ventana se abre como dialogo no se abran las pantallas secundarias
 Hacer que el tema de enviar los sms funcione en segundo plano , mejor hacer otro metodo con hilos
-Modificar el reporte de facturas para que aparescan ordenados por el preimpreso
-Ver si se agrega un reporte para los representates donde estene relacionados con los clientes
-En el reporte de las deudas pendientes
 Agregar la funcionalidad para eliminar todas las deudas solo seleccionado el rubro
 al momento de eliminar el dato adicional hacer validaciones para no poder eliminar algunos requeridos por ejemplo el codigo del estudiante
 Ver si a los rubros nivel que se generan desde la pagina plantilla mensual se les puede generar con una categoria por defecto porque , en la lista general se pueden acumular muchos rubros mensuales y puede ser confuso para el cliente
 Crear una pantalla para poder ingresar documentos de otros tipos para el inventario por ejemplo documento ingreso manual , documento por perdida, documento de translado
 Ver si agregar un campo en los detalles de la compra para ver si algunos productos no fueron ingresados praa tener mejor control.
 Ver si por cada producto se puede detallar si es una compra de gasto, de inventario o de servicios , porque puede existir compras combinadas y para reportes seria bueno tener bien clasificado
-------------- IMPORTANTE  -------------------------------
-Cambiar el tamanio de enteros de los valores a 12 unidades
 ------------- IMPORTANTE -------------------------------
-En las retenciones al momento de eliminar si tiene ligado una compra restaurar el 
+En las retenciones al momento de eliminar si tiene ligado una compra restaurar el estado a no enviado
 
 - Revisar las anulaciones del proceso academico para verificar saldos
 - Revisar que el precio promedio del kardex sea el mismo que lo que sale en el detalle es decir como calcula para grabar el facturas notas de credito y demas pantalla que pueden modificar
@@ -100,7 +73,6 @@ En las retenciones al momento de eliminar si tiene ligado una compra restaurar e
 En los ats preguntar si se debe hacer el calculo de las ventas restando las notas de credito que le afectan, y en los anulados solo deben ir datos de las facturas anuladas complentamente
 
 Verifica en los ats en la seccion de anulados si este dato es el de la nota de credito o la factura que elimina , pero si son algunas no tiene sentido que sea el de la factura
->Importante<: cuando existe un problema de claves repetidas en la pantalla de comprobantes los siguientes comprobantes que esten adjuntos si se autorizan pero el programa no me notifica , adicional de eso  no se termina de procesar el resto de proceso para eliminar en pendientes y tampoco se actualiza en la base para saber que ya fue procesado
 
 Hacer una prueba con un secuecial de lote duplicado haber que pasa
 

@@ -1,2 +1,0 @@
-Recomendacion: Ver una forma de validar que cuando existan datos aparesca una advertencia si desea salir sin guardar
-Error: 

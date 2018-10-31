@@ -5,5 +5,3 @@ Consultar para que sirve el rise porque queda comentado en la nota de credito
 
 Implementar el metodo de prevalidacion en la facturacion electronica
 
-Preguntar si una nota de credito puede anular una nota de credito o que se hace cuando quiero eliminar una nota de credito
-
