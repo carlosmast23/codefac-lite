@@ -927,7 +927,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
          * Cargar Los calculos de los totales
          */
         getTxtValorTotal().setText(notaCredito.getTotal() + "");
-        getLblIva12().setText(notaCredito.getSubtotalDoce() + "");
+        getLblIva12().setText(notaCredito.getIva() + "");
         getLblSubtotal0().setText(notaCredito.getSubtotalCero() + "");
         getLblSubtotal12().setText(notaCredito.getSubtotalDoce() + "");
     }

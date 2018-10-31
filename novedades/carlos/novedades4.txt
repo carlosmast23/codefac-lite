@@ -104,7 +104,10 @@ Verifica en los ats en la seccion de anulados si este dato es el de la nota de c
 
 Hacer una prueba con un secuecial de lote duplicado haber que pasa
 
-revisar que no tengan problemas al corregir el tipo de letra en los modulos que estab repetido ber
+revisar que no tengan problemas al corregir el tipo de letra en los modulos que estab repetido en el modulo de transporte
 
+En la compra eliminar el documento de retencion que aparece
 
+Ver que no me permita volver a facturar con secuaciales que ya estan autorizados
 
+Analizar opcion para corregir algun dato de la factura y volver a enviar reutilizando la clave de acceso

@@ -12,12 +12,6 @@ En las compras agregar un campo para saber si son electronicas o manuales
 
 Analizar el codigo private boolean validacionPersonalizadaPorModulos() en facturacion para validar correctamente con descuentos para los distintos modulos
 
-Revisar el instalador, se instalo en el directorio de la flash no tiene sentido
-Al momento de crear productos seguidos parese que salio error  (no se actualizo)
-
-Ver si al momento de buscar en la pantalla de cliente , producto como cumple dos funcione filtra los datos al momento de buscar
-
-Al momento de grabar los datos de la empresa en red no se mostrababa en la vista del otro usuario
 Ver si en una variable global del sistema se establece un metodo general de redondeo
 
 Ver la opcion de hacer una especie de servidor proxy y que el servidor de codefac se encargue de proporcionar el archivo actual de las actualizaciones
@@ -42,32 +36,15 @@ Pensar en como hacer un manejo de logs en una tabla para cosas importantes
 
 Cambiar el tipo de clave primaria de la tabla de usuario para grabar un id y poder reutilizar usuarios
 
-En el usuario da problemas cuando cambian el nick porque busco el dato anterior para comparar, lo que se resuelve creandole un id autogenerado a la tabla usuario
-
-
-En la pantalla de ventas diarias seleccionar con que modo quieren trabajar con productos libres o con inventario por defecto le dejo habilitado libre
+En el usuario da problemas cuando cambian el nick porque busco el dato anterior para comparar, lo que se resuelve creandole un id autogenerado a la tabla usuario-
 
 Analizar el tema de los vendedores
 
 Programar los menuItems del menu principal para dar funcinalidades como agregar accesos directos
 
-
-al momento de mandar en lote en la opcion de abrir la factura no carga el numero de secuencial
-
 Revisar el detalle de los presupuestos que tenga una referencia a la orden de compra para poder volver a generar si se edita desde el presupuest
 
-ver la posibilidad de cambiar los estados y procesos de cada modulo cuando se factura o se emite una nota de credito solo si esta autorizado el documento o ver que hacer si no se puede validar esa opcion
+y ver la posibilidad si se puede editar las formas de pago en la factura
 
-Ver el caso que cuando se quiere eliminar directamente una factura , ver que no este anulada por una nota de credito
-
-Ver si los reportes de consultas tiene que consultar y se queda en memoria y luego genero el reporte
-
-Areglar las formas de pago , esta validando mal cuando se requiere agregar nuevamente
-y ver la posibilidad si se puede editar
-
-Hacer que cuando cambie de tipo de documento se resetean los datos como el cliente
-o pensar como hacer para que la variable de cliente sea general porque siempre necesito
-
-El visualizador despues que se autoriza en lote desde utilidades no funciona para notas de credito
 
 Ver si se hace una super validacion para que las demas pantalla solo pueda usar cuando grabo los datos de la empresa

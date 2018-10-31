@@ -1,16 +1,13 @@
 ﻿Terminar el modulo de cartera
 Revisar porque no se guarda la cartera detalle en la facturacion en lote
 
-Verificar la modalidad de obligado a llevar contabilidad en las comprobantes electronicos
 Adicional ver una pantalla estandar cuando tenga que seleccionar varios resultados como para varios representantes
 
 En los rubros nivel agregar un lapso de tiempo para ver que rubros ya fueron vencidos
 
 Agregar un reporte o agregar una pantalla para informar sobre los rubros que sobrepasan el tiempo normal de pago
 
-
 Agregar un reporte de pagos vs deudas por curso y estudiantes
-
 
 Analisar si cambiar el nombre de nivel a academico a curso.
 
