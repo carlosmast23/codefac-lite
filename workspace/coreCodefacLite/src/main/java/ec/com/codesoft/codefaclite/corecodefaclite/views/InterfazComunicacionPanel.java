@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.util.Map;
+import javax.swing.JFrame;
 import net.sf.jasperreports.engine.JasperPrint;
 
 /**
@@ -68,6 +69,19 @@ public interface InterfazComunicacionPanel
      * Funcion que permite establecer el fondo de pantalla
      */
     public void establecerImagenFondo();
+    
+    /**
+     * Interfaz que me va a permitir poner el cursor de toda la aplicacione en espera
+     * @param frame 
+     */
+    public void cambiarCursorEspera();
+    
+    /**
+     * Interfaz que me permite volver a establecer el curso de forma normal
+     * @param frame 
+     */
+    public void cambiarCursorNormal();
+    
 
 
 }

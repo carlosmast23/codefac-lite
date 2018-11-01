@@ -18,7 +18,6 @@ import com.jtattoo.plaf.mcwin.McWinLookAndFeel;
 import com.jtattoo.plaf.mint.MintLookAndFeel;
 import com.jtattoo.plaf.smart.SmartLookAndFeel;
 import com.jtattoo.plaf.texture.TextureLookAndFeel;
-import com.seaglasslookandfeel.SeaGlassLookAndFeel;
 import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
 import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
@@ -79,6 +78,7 @@ import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -104,12 +104,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.sql.JDBCType;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -125,19 +123,16 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
@@ -145,11 +140,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.plaf.SplitPaneUI;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
-import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.JTextComponent;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -580,7 +572,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             menuControlador.getJmenuItem().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-
+                        cambiarCursorEspera();
                         ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
                         if(!verificarPantallaCargada(ventana))
                         {
@@ -602,7 +594,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
-                        
+                        cambiarCursorNormal();                        
                         
                 }
             });
@@ -3238,6 +3230,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
     }
     
+    public void cambiarCursorEspera()
+    {
+        //if (frame != null) {
+            RootPaneContainer root = (RootPaneContainer) getRootPane().getTopLevelAncestor();
+            root.getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            root.getGlassPane().setVisible(true);
+        //}
+    }
+    
+    /**
+     * Interfaz que me permite volver a establecer el curso de forma normal
+     * @param frame 
+     */
+    public void cambiarCursorNormal()
+    {
+        RootPaneContainer root = (RootPaneContainer) getRootPane().getTopLevelAncestor();
+        root.getGlassPane().setCursor(Cursor.getDefaultCursor());
+    }
     
 
    
