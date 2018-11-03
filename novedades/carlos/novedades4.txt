@@ -83,3 +83,9 @@ En la compra eliminar el documento de retencion que aparece
 Ver que no me permita volver a facturar con secuaciales que ya estan autorizados
 
 Analizar opcion para corregir algun dato de la factura y volver a enviar reutilizando la clave de acceso
+
+En la pantalla de utilidades ordenar los comprobantes por preimpreso me parece para que el usuario pueda buscar mas rapido
+
+Ver si en los comprobantes electronicos se crea un nuevo estado para saber si fue eliminada manualmente es decir el secuencial se tiene que reutilizar o se elimino desde el sri y ta no se tiene que usar el secuencial
+Ver si aunque no se autorize la clave de acceso porque se supone que existe desde que se genera y no tiene sentido no grabar porque despues se vuelve muy complicado hacer mantenimiento del software
+Hacer un reporte de los secuenciales no usados para evitar errores
