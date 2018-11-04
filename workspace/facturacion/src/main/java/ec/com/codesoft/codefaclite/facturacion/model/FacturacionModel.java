@@ -100,6 +100,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -1213,6 +1214,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Limpiar las variables de la facturacion
         setearVariablesIniciales();
         cargarSecuencial();
+        
+        getTxtValorRecibido().setText("");
+        getLblVuelto().setText("00.00");
         
 
     }
@@ -2415,6 +2419,32 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void addListenerCamposTexto() {
+        
+        getTxtValorRecibido().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                
+                String valorTextoRecibido=getTxtValorRecibido().getText();
+                
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) 
+                {
+                    if (valorTextoRecibido.isEmpty()) {
+                        return;//Si no existe nada ingresado no hago ningun calculo
+                    }
+                    
+                    BigDecimal valorTotal=new BigDecimal(getTxtValorTotal().getText());
+                    BigDecimal valorRecibido=new BigDecimal(valorTextoRecibido);
+                    getLblVuelto().setText(valorRecibido.subtract(valorTotal).toString());
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+        
         //Evento para buscar y cargar un cliente o abrir una nueva ventana para crear el cliente
         getTxtCliente().addKeyListener(new KeyListener() {
             @Override
