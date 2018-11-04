@@ -2684,7 +2684,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         parametros.put("pl_telefonos", sessionCodefac.getEmpresa().getTelefonos());
         parametros.put("pl_celular", sessionCodefac.getEmpresa().getCelular());
         parametros.put("pl_facebook", sessionCodefac.getEmpresa().getFacebook());
-        parametros.put("pl_adicional", sessionCodefac.getEmpresa().getAdicional());
+        
+        /**
+         * Agregado valdación cuando no llenen ningun dato que salgo información del sistema cuando el usuario tiene una licencia gratuita
+         * @author Carlos Sanchez
+         * @fecha 03/11/2018
+         */
+        if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
+        {
+            parametros.put("pl_adicional", "Reporte generado con Codefac versión gratuita, descargada en www.cf.codesoft-ec.com");
+        }
+        else
+        {
+            parametros.put("pl_adicional", sessionCodefac.getEmpresa().getAdicional());
+        }        
+        
         
         try {    
             RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
