@@ -2692,7 +2692,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
          */
         if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
         {
-            parametros.put("pl_adicional", "Reporte generado con Codefac versión gratuita, descargada en www.cf.codesoft-ec.com");
+            parametros.put("pl_adicional", ParametrosSistemaCodefac.MensajesSistemaCodefac.MENSAJE_PIE_PAGINA_GRATIS);
         }
         else
         {

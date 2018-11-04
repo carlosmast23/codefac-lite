@@ -55,4 +55,11 @@ public abstract class ParametrosSistemaCodefac {
     public static final String CODIGO_TELEFONO_ECUADOR="+593";
     
     public static final Integer LIMITE_CARACTERES_SMS=160;
+    
+    
+    
+    public abstract class MensajesSistemaCodefac
+    {
+        public static final String MENSAJE_PIE_PAGINA_GRATIS="Reporte generado con Codefac versión gratuita, descargada en www.cf.codesoft-ec.com";
+    }
 }

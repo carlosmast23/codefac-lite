@@ -1176,7 +1176,13 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         
         parametros.put("pl_celular", empresa.getCelular());
         parametros.put("pl_facebook", empresa.getFacebook());
-        parametros.put("pl_adicional", empresa.getAdicional());
+        //parametros.put("pl_adicional", empresa.getAdicional());
+        
+        if (UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS)) {
+            parametros.put("pl_adicional",ParametrosSistemaCodefac.MensajesSistemaCodefac.MENSAJE_PIE_PAGINA_GRATIS);
+        } else {
+            parametros.put("pl_adicional", empresa.getAdicional());
+        } 
 
 
         InputStream input=null;
