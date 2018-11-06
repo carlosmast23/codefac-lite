@@ -15,6 +15,13 @@ public class ComprobanteVentaData {
     private String cantidad;
     private String precioUnitario;
     private String total;
+    
+    /**
+     * Datos adicionales en especial para el reporte de las proformas
+     */
+    private String descripcion;
+    private String descuento;
+    
 
     public ComprobanteVentaData() {
     }
@@ -58,6 +65,29 @@ public class ComprobanteVentaData {
     public void setTotal(String total) {
         this.total = total;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(String descuento) {
+        this.descuento = descuento;
+    }
+    
+    /**
+     * Datos adicionales
+     */
+    
+    
+    
     
     
     

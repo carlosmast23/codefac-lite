@@ -1803,6 +1803,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         return txtValorRecibido;
     }
 
+    public JPanel getPnlVuelto() {
+        return pnlVuelto;
+    }
+
     
     
     

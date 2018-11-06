@@ -2633,6 +2633,62 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
     }
     
+    public List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando)
+    {
+        List<ComprobanteVentaData> dataReporte = new ArrayList<ComprobanteVentaData>();
+
+        for (FacturaDetalle detalle : facturaProcesando.getDetalles()) {
+
+            ComprobanteVentaData data = new ComprobanteVentaData();
+            data.setCantidad(detalle.getCantidad().toString());
+            data.setCodigo(detalle.getId().toString());
+            data.setNombre(detalle.getDescripcion().toString());
+            data.setPrecioUnitario(detalle.getPrecioUnitario().toString());
+            data.setTotal(detalle.getTotal().toString());
+
+            dataReporte.add(data);
+        }
+        return dataReporte;
+    }
+    
+    public Map<String,Object> getMapParametrosReporte(Factura facturaProcesando)
+    {
+        //map de los parametros faltantes
+            Map<String,Object> mapParametros=new HashMap<String, Object>();
+            mapParametros.put("codigo", facturaProcesando.getPreimpreso());
+            mapParametros.put("cedula", facturaProcesando.getIdentificacion());
+            mapParametros.put("cliente", facturaProcesando.getRazonSocial());
+            mapParametros.put("direccion", facturaProcesando.getDireccion());
+            mapParametros.put("telefonos", facturaProcesando.getTelefono());
+            mapParametros.put("fechaIngreso", facturaProcesando.getFechaEmision().toString());
+            mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().add(facturaProcesando.getSubtotalSinImpuestos()).toString());
+            mapParametros.put("iva", facturaProcesando.getIva().toString());
+            mapParametros.put("total", facturaProcesando.getTotal().toString());
+            mapParametros.put("autorizacion", facturaProcesando.getClaveAcceso());   
+            return mapParametros;
+            
+    }
+    
+    public  void imprimirComprobanteVenta(Factura facturaProcesando)
+    {
+
+        //if(DialogoCodefac.dialogoPregunta("Pregunta","Desea imprimir un comprobante de la venta",DialogoCodefac.MENSAJE_CORRECTO))
+        //{
+            List<ComprobanteVentaData> dataReporte=getDetalleDataReporte(facturaProcesando);
+            
+            //map de los parametros faltantes
+            Map<String,Object> mapParametros=getMapParametrosReporte(facturaProcesando);
+            
+            
+            InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
+            
+           ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ",OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.A5);
+            
+        //}
+        
+        
+    }
+    
     
     
 

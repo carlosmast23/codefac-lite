@@ -145,7 +145,8 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
                 public void actionPerformed(ActionEvent e) {
                     if(verificarImprimirComprobanteVenta())
                     {
-                        imprimirComprobanteVenta();
+                        facturacionModel.imprimirComprobanteVenta(facturaProcesando);
+                        //imprimirComprobanteVenta();
                     }
                     else
                     {
@@ -188,7 +189,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
                         public void actionPerformed(ActionEvent e) {
                             if(verificarImprimirComprobanteVenta())
                             {
-                                imprimirComprobanteVenta();
+                                facturacionModel.imprimirComprobanteVenta(facturaProcesando); //TODO:Verificar si este metodo no funciona
                             }
                             else
                             {
@@ -222,7 +223,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             
             if(verificarImprimirComprobanteVenta())
             {
-                imprimirComprobanteVenta();
+                facturacionModel.imprimirComprobanteVenta(facturaProcesando); //TODO:Verificar si este metodo no funciona
             }
             else
             {            
@@ -255,7 +256,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         }
         return true;
     }
-    
+    /*
     private  void imprimirComprobanteVenta()
     {
 
@@ -297,5 +298,6 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         
         
     }
+    */
 
 }
