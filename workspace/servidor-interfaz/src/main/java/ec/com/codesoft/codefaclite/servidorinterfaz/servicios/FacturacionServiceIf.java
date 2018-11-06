@@ -30,4 +30,5 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public void eliminarFactura(Factura factura) throws java.rmi.RemoteException;
     public Long obtenerSecuencialProformas() throws RemoteException;
     public Factura grabarProforma(Factura proforma) throws RemoteException;
+    public void eliminarProforma(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException;
 }

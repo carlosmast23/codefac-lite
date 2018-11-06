@@ -162,6 +162,33 @@ public class ProformaModel extends FacturacionModel{
         // mapParametros.put("estado",facturaProcesando.getEstadoEnum());
         return mapParametros;
     }
+
+    @Override
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+        try {
+            
+            if(!estadoFormulario.equals(ESTADO_EDITAR))
+            {
+                DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.NO_PERMITE_ELIMINAR);
+                throw new ExcepcionCodefacLite("Cancelar eliminar");
+            }
+            
+            Boolean confirmar=DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO);
+            if(!confirmar)
+            {
+                throw new ExcepcionCodefacLite("Cancelar eliminar");
+            }
+            
+            ServiceFactory.getFactory().getFacturacionServiceIf().eliminarProforma(factura);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            new ExcepcionCodefacLite("Error Eliminar");
+        }
+        
+    }
     
     
     

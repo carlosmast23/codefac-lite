@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -353,6 +354,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
         Long secuencial=getFacade().getSecuencialProforma();
         return (secuencial!=null)?(secuencial+1):1; //Si no existe ningun valor por defecto retorna 1
+    }
+    
+    public void eliminarProforma(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                factura.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                entityManager.merge(factura);
+            }
+        });
     }
 
 }

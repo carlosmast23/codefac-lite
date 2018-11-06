@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
 /**
@@ -33,14 +34,14 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>{
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 ";
-        
+        String queryString = "SELECT u FROM Factura u WHERE u.estado=?1 ";
+
         queryString+=" AND (u.codigoDocumento=?3) ";
         
         queryString+="AND ( LOWER(u.cliente.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
-        queryString+=" ORDER BY u.secuencial DESC ";
+        queryString+=" ORDER BY u.id DESC ";
         QueryDialog queryDialog=new QueryDialog(queryString);
-        queryDialog.agregarParametro(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+        queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2,filter);
         queryDialog.agregarParametro(3,DocumentoEnum.PROFORMA.getCodigo());
         
