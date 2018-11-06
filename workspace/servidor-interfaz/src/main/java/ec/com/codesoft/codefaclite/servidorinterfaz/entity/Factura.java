@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional.CampoDefectoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -538,6 +539,11 @@ public class Factura extends ComprobanteEntity implements Serializable {
         
         
     
+    }
+    
+    public GeneralEnumEstado getEnumEstadoProforma()
+    {
+        return GeneralEnumEstado.getEnum(estado);
     }
             
     

@@ -28,6 +28,6 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public List<Factura> obtenerFacturasActivas() throws java.rmi.RemoteException;
     public String getPreimpresoSiguiente() throws java.rmi.RemoteException;
     public void eliminarFactura(Factura factura) throws java.rmi.RemoteException;
-    public Integer obtenerSecuencialProformas() throws RemoteException;
+    public Long obtenerSecuencialProformas() throws RemoteException;
     public Factura grabarProforma(Factura proforma) throws RemoteException;
 }

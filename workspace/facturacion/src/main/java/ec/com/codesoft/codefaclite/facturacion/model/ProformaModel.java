@@ -18,11 +18,14 @@ import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ProformaDetalleData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import java.io.InputStream;
@@ -72,7 +75,7 @@ public class ProformaModel extends FacturacionModel{
     public void cargarSecuencial() {
         try {
             //Obtener los secuenciales para las proformas
-            Integer secuencial = ServiceFactory.getFactory().getFacturacionServiceIf().obtenerSecuencialProformas();
+            Long secuencial = ServiceFactory.getFactory().getFacturacionServiceIf().obtenerSecuencialProformas();
             getLblSecuencial().setText(secuencial.toString());
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -102,8 +105,10 @@ public class ProformaModel extends FacturacionModel{
             validacionesGrabar(); //Metodo que realiza validaciones previas antes de grabar
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
             setearValoresDefaultFactura();
+            factura.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
             factura = servicio.grabarProforma(factura);
             DialogoCodefac.mensaje("Correcto","Proforma generada correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            imprimirProforma();
         
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -119,18 +124,63 @@ public class ProformaModel extends FacturacionModel{
             DialogoCodefac.mensaje(MensajeCodefacSistema.Impresiones.IMPRESION_SECCION_INCORRECTA);
             return;
         }
-        
+        imprimirProforma();
+                      
+    }
+    
+    public void imprimirProforma()
+    {
         List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
 
         //map de los parametros faltantes
         Map<String, Object> mapParametros = getMapParametrosReporte(factura);
+        
+        InputStream path = RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("proforma.jrxml");
 
-        InputStream path = RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("presupuesto.jrxml");
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, dataReporte, this.panelPadre, "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
 
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, dataReporte, this.panelPadre, "Presupuesto", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
-
-              
     }
+    
+
+    @Override
+    public List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando) {
+        return super.getDetalleDataReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Map<String, Object> getMapParametrosReporte(Factura facturaProcesando) {
+        Map<String, Object> mapParametros= super.getMapParametrosReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
+        mapParametros.put("estado",factura.getEnumEstadoProforma().getNombre());        
+        //subtotal_cero
+        //Datos adicionales para las proformas
+        mapParametros.put("secuencial", facturaProcesando.getSecuencial().toString());
+        mapParametros.put("cliente_nombres", facturaProcesando.getRazonSocial());
+        mapParametros.put("cliente_identificacion", facturaProcesando.getIdentificacion());
+        mapParametros.put("fecha_emision", facturaProcesando.getFechaEmision().toString());
+        mapParametros.put("subtotal_cero",facturaProcesando.getSubtotalSinImpuestos().toString());
+        mapParametros.put("descuento",facturaProcesando.getDescuentoImpuestos().add(facturaProcesando.getDescuentoSinImpuestos()).toString());
+        // mapParametros.put("estado",facturaProcesando.getEstadoEnum());
+        return mapParametros;
+    }
+    
+    
+    
+    
+    /*
+    @Override
+    public Map<String, Object> getParametroReporte(DocumentoEnum documento) {
+        Map<String, Object> mapParametros= super.getParametroReporte(documento); //To change body of generated methods, choose Tools | Templates.
+        mapParametros.put("estado",factura.getEnumEstadoProforma().getNombre());
+        
+        return mapParametros;
+    }
+    */
+
+    @Override
+    public void cargarSecuencialConsulta() {
+        getLblSecuencial().setText(factura.getSecuencial().toString());
+    }
+    
     
     
 }

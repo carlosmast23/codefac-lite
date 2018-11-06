@@ -349,9 +349,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     }
     
     @Override
-    public Integer obtenerSecuencialProformas() throws RemoteException
+    public Long obtenerSecuencialProformas() throws RemoteException
     {
-        Integer secuencial=getFacade().getSecuencialProforma();
+        Long secuencial=getFacade().getSecuencialProforma();
         return (secuencial!=null)?(secuencial+1):1; //Si no existe ningun valor por defecto retorna 1
     }
 

@@ -1081,6 +1081,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaInterface);
         buscarDialogoModel.setVisible(true);
         Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
+        
         if (facturaTmp != null) {
             this.factura = facturaTmp;
             ///Cargar los datos de la factura segun el tipo de datos del primer detalle
@@ -1247,6 +1248,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         String establecimiento = session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor;
         String puntoEmision = session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor;
         preimpreso=puntoEmision + "-" + establecimiento + "-" + preimpreso;
+        
         getLblSecuencial().setText(preimpreso);
     }
 
@@ -1849,10 +1851,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         this.fechaMin = calendar.getTime();
 
     }
+    
+    public void cargarSecuencialConsulta()
+    {
+        getLblSecuencial().setText(factura.getPreimpreso().toString());
+    }
 
     private void cargarValoresAdicionales() {
         getLblEstadoFactura().setText((factura.getEstadoEnum()!=null)?factura.getEstadoEnum().getNombre():"Sin estado");
-        getLblSecuencial().setText(factura.getPreimpreso());
+        cargarSecuencialConsulta();
+        //getLblSecuencial().setText(factura.getPreimpreso());
         getjDateFechaEmision().setDate(factura.getFechaEmision());
     }
 
@@ -2645,6 +2653,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             data.setNombre(detalle.getDescripcion().toString());
             data.setPrecioUnitario(detalle.getPrecioUnitario().toString());
             data.setTotal(detalle.getTotal().toString());
+            
+            //Datos adicionales para las proformas
+            data.setDescuento(detalle.getDescuento().toString());
+            data.setDescripcion(detalle.getDescripcion());
 
             dataReporte.add(data);
         }
@@ -2664,7 +2676,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().add(facturaProcesando.getSubtotalSinImpuestos()).toString());
             mapParametros.put("iva", facturaProcesando.getIva().toString());
             mapParametros.put("total", facturaProcesando.getTotal().toString());
-            mapParametros.put("autorizacion", facturaProcesando.getClaveAcceso());   
+            mapParametros.put("autorizacion", facturaProcesando.getClaveAcceso());
+            
+            
             return mapParametros;
             
     }
