@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
@@ -239,7 +240,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return false;
     }
 
-    private void addListenerButtons() {        
+    private void addListenerButtons() {       
+        
+        getBtnCargarProforma().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProformaBusqueda proformaBusqueda = new ProformaBusqueda();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(proformaBusqueda);
+                buscarDialogoModel.setVisible(true);
+                if(buscarDialogoModel.getResultado()!=null)
+                {
+                    factura=(Factura) buscarDialogoModel.getResultado();
+                    factura.setId(null); //Con este artificio no tengo que copiar a un nuevo objeto y al grabar me reconoce como un nuevo dato
+                    cargarDatosBuscar();
+                    //DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO)
+                }
+            }
+        });
         
         getBtnBuscarReferenciaContacto().addActionListener(new ActionListener() {
             @Override
@@ -1074,6 +1091,55 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         FacturaBusqueda facturaBusqueda = new FacturaBusqueda();
         return facturaBusqueda;
     }
+    
+    private void cargarDatosBuscar()
+    {
+        ///Cargar los datos de la factura segun el tipo de datos del primer detalle
+        TipoDocumentoEnum tipoReferenciaEnum = factura.getDetalles().get(0).getTipoDocumentoEnum();
+        getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
+        seleccionarPanelTipoDocumento(tipoReferenciaEnum);
+
+        switch (tipoReferenciaEnum) {
+            case ACADEMICO:
+                try {
+                    //getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum)                        
+
+                    FacturaAdicional facturaAdicional = buscarCampoAdicionalPorNombre(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre());
+                    Long estudianteInscritoId = Long.parseLong(facturaAdicional.getValor());
+                    estudiante = ServiceFactory.getFactory().getEstudianteServiceIf().buscarPorId(estudianteInscritoId);
+
+                    //setearValoresAcademicos(estudiante);
+                    getTxtEstudiante().setText(estudiante.getNombreCompleto());
+                    getCmbRepresentante().removeAllItems();
+                    getCmbRepresentante().addItem(factura.getCliente());
+
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                break;
+
+            case PRESUPUESTOS:
+                //getTxtClientePresupuesto().setText(factura.getCliente().toString());
+                //getLblNombresClientePresupuesto().setText(factura.getCliente().toString());                    
+                break;
+
+            case INVENTARIO:
+            case LIBRE:
+                //getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.INVENTARIO);
+                setearValoresCliente();
+                break;
+
+        }
+
+        cargarDatosDetalles();
+        limpiarDetalleFactura();
+        cargarTotales();
+        cargarValoresAdicionales();
+        cargarFormasPagoTabla();
+        cargarTablaDatosAdicionales();
+        verificarActivarBtnCargarProforma(false);
+    }
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
@@ -1084,51 +1150,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         if (facturaTmp != null) {
             this.factura = facturaTmp;
-            ///Cargar los datos de la factura segun el tipo de datos del primer detalle
-            TipoDocumentoEnum tipoReferenciaEnum=factura.getDetalles().get(0).getTipoDocumentoEnum();
-            getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
-            seleccionarPanelTipoDocumento(tipoReferenciaEnum);
-            
-            switch(tipoReferenciaEnum)
-            {
-                case ACADEMICO:
-                    try {
-                        //getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum)                        
-
-                        FacturaAdicional facturaAdicional = buscarCampoAdicionalPorNombre(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre());
-                        Long estudianteInscritoId = Long.parseLong(facturaAdicional.getValor());
-                        estudiante = ServiceFactory.getFactory().getEstudianteServiceIf().buscarPorId(estudianteInscritoId);
-
-                        //setearValoresAcademicos(estudiante);
-                        getTxtEstudiante().setText(estudiante.getNombreCompleto());
-                        getCmbRepresentante().removeAllItems();
-                        getCmbRepresentante().addItem(factura.getCliente());
-
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                    break;
-                    
-                case PRESUPUESTOS:
-                    //getTxtClientePresupuesto().setText(factura.getCliente().toString());
-                    //getLblNombresClientePresupuesto().setText(factura.getCliente().toString());                    
-                    break;
-                    
-                case INVENTARIO: case LIBRE:
-                    //getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.INVENTARIO);
-                    setearValoresCliente();
-                    break;
-            
-            }            
-            
-                        
-            cargarDatosDetalles();
-            limpiarDetalleFactura();
-            cargarTotales();
-            cargarValoresAdicionales();
-            cargarFormasPagoTabla();
-            cargarTablaDatosAdicionales();
+            cargarDatosBuscar();
+           
         } else {
             throw new ExcepcionCodefacLite("cancelar ejecucion");
         }
@@ -1218,7 +1241,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getTxtValorRecibido().setText("");
         getLblVuelto().setText("00.00");
-        
+       
 
     }
     
@@ -1815,14 +1838,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        /*
-        if(factura.getCliente()!=null || (factura.getDetalles()!=null && factura.getDetalles().size()>0) )
-        {
-            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            if (!respuesta) {
-                throw new ExcepcionCodefacLite("Cancelacion usuario");
-            }
-        }*/
+        verificarActivarBtnCargarProforma(true);
+    }
+        
+    public void verificarActivarBtnCargarProforma(Boolean opcion)
+    {
+        //if(estadoFormulario.equals(ESTADO_GRABAR))
+        //{
+            getBtnCargarProforma().setEnabled(opcion);
+        //}
+        //else
+        //{
+        //    getBtnCargarProforma().setEnabled(false);            
+        //}
     }
 
     @Override

@@ -758,6 +758,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         {
                             try {
                                 frameInterface.grabar();
+                                frameInterface.nuevo();
                                 procesoTerminado=true;
                             } catch (ExcepcionCodefacLite ex) {
                                 //ex.printStackTrace();

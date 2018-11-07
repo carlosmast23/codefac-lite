@@ -53,6 +53,7 @@ public class ProformaModel extends FacturacionModel{
     public void iniciar() throws ExcepcionCodefacLite {
         super.iniciar(); //To change body of generated methods, choose Tools | Templates.
         valoresIniciales();
+        getBtnCargarProforma().setEnabled(false);
     }
     
     
@@ -207,6 +208,12 @@ public class ProformaModel extends FacturacionModel{
     public void cargarSecuencialConsulta() {
         getLblSecuencial().setText(factura.getSecuencial().toString());
     }
+
+    @Override
+    public void verificarActivarBtnCargarProforma(Boolean opcion) {
+        getBtnCargarProforma().setEnabled(false);
+    }
+    
     
     
     

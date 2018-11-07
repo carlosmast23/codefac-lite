@@ -90,3 +90,5 @@ En la pantalla de utilidades ordenar los comprobantes por preimpreso me parece p
 Ver si en los comprobantes electronicos se crea un nuevo estado para saber si fue eliminada manualmente es decir el secuencial se tiene que reutilizar o se elimino desde el sri y ta no se tiene que usar el secuencial
 Ver si aunque no se autorize la clave de acceso porque se supone que existe desde que se genera y no tiene sentido no grabar porque despues se vuelve muy complicado hacer mantenimiento del software
 Hacer un reporte de los secuenciales no usados para evitar errores
+
+Ver si se crea un metodo intermedio para hacer verificaciones cuando se cambie de estado del formulario esto me sirve en especial para habilitar y desahabilitar opciones cuando esta en modo grabar o editar
