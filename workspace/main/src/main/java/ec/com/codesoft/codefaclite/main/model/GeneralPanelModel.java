@@ -688,6 +688,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 String tituloOriginal=getTituloOriginal(frame.getTitle());
                 frame.setTitle(tituloOriginal+" [Nuevo]");
                 frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
+                frameInterface.eventoCambiarEstado();
                 limpiarAnotaciones(frameInterface);
                 
                 
@@ -758,8 +759,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         {
                             try {
                                 frameInterface.grabar();
-                                frameInterface.nuevo();
-                                procesoTerminado=true;
+                                frameInterface.nuevo(); //TODO: Ver si despues de grabar si se debe llamar al evento nuevo
+                                procesoTerminado=true;                                
                             } catch (ExcepcionCodefacLite ex) {
                                 //ex.printStackTrace();
                                 System.err.println(ex.getMessage());
@@ -816,6 +817,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         String tituloOriginal=getTituloOriginal(frame.getTitle());
                         frame.setTitle(tituloOriginal+" [Nuevo]");
                         frameInterface.estadoFormulario=ControladorCodefacInterface.ESTADO_GRABAR;
+                        frameInterface.eventoCambiarEstado();
                         limpiarAnotaciones(frameInterface);
                         frameInterface.limpiar();
                         limpiarCamposValidacion(frameInterface);
@@ -918,6 +920,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     String tituloOriginal=getTituloOriginal(frame.getTitle());                    
                     frameInterface.eliminar();
                     frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
+                    frameInterface.eventoCambiarEstado();
                     limpiarAnotaciones(frameInterface);
                     frameInterface.limpiar();
                     limpiarCamposValidacion(frameInterface);
@@ -1032,7 +1035,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     }
 
                     
-                    frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR;                   
+                    frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR; 
+                    frameInterface.eventoCambiarEstado();
                     busquedaInterface.buscar();
                     
                     
@@ -1045,6 +1049,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 catch (ExcepcionCodefacLite ex) 
                 {
                     frameInterface.estadoFormulario=estadoFomularioTemp; //Regresa al estado original si se lanza alguna excepcion
+                    frameInterface.eventoCambiarEstado();
                     LOG.log(Level.WARNING,ex.getMessage());
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1195,6 +1200,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
              */
            
             panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
+            panel.eventoCambiarEstado();
             panel.panelPadre=generalPanelModel;
             panel.session=sessionCodefac;
             //panel.reconstruirPantalla(); //Metodo adicional que construye las pantallas laterales

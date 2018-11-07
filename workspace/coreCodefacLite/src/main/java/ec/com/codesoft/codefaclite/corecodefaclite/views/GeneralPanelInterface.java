@@ -143,6 +143,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public abstract void imprimir() throws ExcepcionCodefacLite,RemoteException;
     public abstract void actualizar() throws ExcepcionCodefacLite,RemoteException;
     
+    
     /**
      * Metodo que se ejecuta despues de presionar el boton de buscar     * 
      * Es recomendable usar este metodo solo para buscar datos de la propia clase
@@ -464,6 +465,14 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
             }
         }
     }
+    
+    /**
+     * Evento que se activa cuando se realiza al cambio de estado en el formulario
+     */
+    public void eventoCambiarEstado()
+    {
+        //TODO: solo creo un metodo vacio para sobreescribir y no hacer una interfaz que me obligue a modificar a toditas las pantallas
+    }
 
     @Override
     public String toString() {
@@ -481,6 +490,9 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
         public List<Component> componentes;
         
     }
+    
+    
+
     
     
     

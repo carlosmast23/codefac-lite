@@ -1138,7 +1138,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         cargarValoresAdicionales();
         cargarFormasPagoTabla();
         cargarTablaDatosAdicionales();
-        verificarActivarBtnCargarProforma(false);
+        //verificarActivarBtnCargarProforma(false);
     }
 
     @Override
@@ -1838,20 +1838,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        verificarActivarBtnCargarProforma(true);
+        //verificarActivarBtnCargarProforma(true);
     }
         
-    public void verificarActivarBtnCargarProforma(Boolean opcion)
-    {
-        //if(estadoFormulario.equals(ESTADO_GRABAR))
-        //{
-            getBtnCargarProforma().setEnabled(opcion);
-        //}
-        //else
-        //{
-        //    getBtnCargarProforma().setEnabled(false);            
-        //}
-    }
 
     @Override
     public boolean salirSinGrabar() {
@@ -2729,6 +2718,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //}
         
         
+    }
+
+    @Override
+    public void eventoCambiarEstado() {
+        if(estadoFormulario.equals(ESTADO_GRABAR))
+        {
+            getBtnCargarProforma().setEnabled(true);
+        }
+        else
+        {
+            getBtnCargarProforma().setEnabled(false);
+        }
     }
     
     

@@ -210,11 +210,10 @@ public class ProformaModel extends FacturacionModel{
     }
 
     @Override
-    public void verificarActivarBtnCargarProforma(Boolean opcion) {
+    public void eventoCambiarEstado() {
         getBtnCargarProforma().setEnabled(false);
     }
-    
-    
+
     
     
 }
