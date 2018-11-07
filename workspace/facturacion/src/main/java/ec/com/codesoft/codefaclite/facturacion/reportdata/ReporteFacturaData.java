@@ -21,28 +21,33 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     
     public Boolean mostrarReferido=false;
 
-    private String numeroFactura;
-    private String fechaFactura;
-    private String identificacionCliente;
-    private String razonSocialCliente;
-    private String nombreLegalCliente;
-    private String estadoFactura;
-    private String tipoEmision;
-    private String documento;
-    private String subtotalDoceFactura;
-    private String subtotalCeroFactura;
-    private String descFactura;
-    private String ivaDoceFactura;
-    private String totalFactura;
-    private String valorAfecta;
-    private String referencia;
-    private String totalFinal;
+    protected String numeroFactura;
+    protected String fechaFactura;
+    protected String identificacionCliente;
+    protected String razonSocialCliente;
+    protected String nombreLegalCliente;
+    protected String estadoFactura;
+    protected String tipoEmision;
+    protected String documento;
+    protected String subtotalDoceFactura;
+    protected String subtotalCeroFactura;
+    protected String descFactura;
+    protected String ivaDoceFactura;
+    protected String totalFactura;
+    protected String valorAfecta;
+    protected String referencia;
+    protected String totalFinal;
     
     //============> Campos adicionales para los referidos <===================//
-    private String referido;
-    private String referidoIdentificacion;
-    private String referidoPorcentaje;
-    private String valorComision;
+    protected String referido;
+    protected String referidoIdentificacion;
+    protected String referidoPorcentaje;
+    protected String valorComision;
+
+    public ReporteFacturaData() {
+    }
+    
+    
 
     public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal,String referido,String referidoIdentificacion,String referidoPorcentaje,String valorComision) {
         this.numeroFactura = numeroFactura;

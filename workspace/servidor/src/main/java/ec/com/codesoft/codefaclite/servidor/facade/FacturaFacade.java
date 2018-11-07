@@ -8,7 +8,9 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.sql.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -132,5 +134,58 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             return null;
         }
     }
+      
+      public List<Factura> consultarProformasReporteFacade(Persona cliente,Date fechaInicial,Date fechaFinal,GeneralEnumEstado estado) 
+      {
+          Factura factura;
+          //factura.getCodigoDocumento()
+          //factura.getEstado();
+          //factura.getFechaEmision();
+          //factura.getCliente()
+          String queryString="SELECT F FROM Factura F WHERE F.codigoDocumento=?1 ";
+          if(fechaInicial!=null)
+          {
+              queryString+=" AND F.fechaEmision>= ?2";
+          }
+          
+          if(fechaFinal!=null)
+          {
+              queryString+=" AND F.fechaEmision<= ?3";
+          }
+          
+          if(cliente!=null)
+          {
+              queryString+=" AND F.cliente= ?4";
+          }
+          
+          if(estado!=null)
+          {
+              queryString+=" AND F.estado=?5 ";
+          }
+                    
+          //String queryString="SELECT F FROM FACTURA F WHERE F.CODIGO_DOCUMENTO=?1 AND F.cliente=?2";
+          Query query=getEntityManager().createQuery(queryString);
+          query.setParameter(1,DocumentoEnum.PROFORMA.getCodigo());
+          
+          if(fechaInicial!=null)
+          {
+              query.setParameter(2,fechaInicial);
+          }
+          
+          if (fechaFinal != null) {
+              query.setParameter(3,fechaFinal);
+          }
+          
+          if (cliente != null) {
+              query.setParameter(4,cliente);
+          }
+          
+          if (estado != null) {
+              query.setParameter(5, estado.getEstado());
+          }
+          
+          return query.getResultList();
+          
+      }
     //public Long obtenerSecuencialPresupuestos
 }

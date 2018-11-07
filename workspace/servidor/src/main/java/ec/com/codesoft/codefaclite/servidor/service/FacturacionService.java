@@ -366,5 +366,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             }
         });
     }
+    
+    public List<Factura> consultarProformasReporte(Persona cliente,Date fechaInicial,Date fechaFinal,GeneralEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        return getFacade().consultarProformasReporteFacade(cliente, fechaInicial, fechaFinal, estado);
+    }
 
 }
