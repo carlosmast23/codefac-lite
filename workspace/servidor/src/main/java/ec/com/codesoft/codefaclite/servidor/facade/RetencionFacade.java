@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -13,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -175,6 +177,35 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         } catch (NoResultException e) {
             return null;
         }
+    }
+    
+    public List<RetencionDetalle> obtenerRetencionesRentaPorCompraFacade(Compra compra,SriRetencion sriRetencion) throws RemoteException
+    {
+        String queryString="SELECT rd FROM RetencionDetalle rd WHERE rd.retencion.compra=?1 and rd.retencion.estado<>?2 and rd.codigoSri=?3 ";
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1,compra);
+        query.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+        query.setParameter(3, sriRetencion.getCodigo());
+        
+        return query.getResultList();
+    }
+    
+    public List<Object[]> obtenerRetencionesIvaPorCompraFacade(Compra compra,SriRetencion sriRetencion)throws RemoteException
+    {
+        RetencionDetalle rd;
+        //rd.getRetencion().getCompra();
+        //rd.setCodigoSri(claveDb);
+        //rd.getPorcentajeRetener();
+        //rd.getValorRetenido();
+        //rd.getRetencion().getEstado();
+       
+        String queryString="SELECT rd.porcentajeRetener,sum(rd.valorRetenido) FROM RetencionDetalle rd WHERE rd.retencion.compra=?1 and rd.retencion.estado<>?2 and rd.codigoSri=?3 group by rd.porcentajeRetener ";
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1,compra);
+        query.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+        query.setParameter(3, sriRetencion.getCodigo());
+        
+        return query.getResultList();
     }
 
     public List<Object[]> retencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, String tipo) {

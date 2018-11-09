@@ -5,11 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb;
 
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -70,8 +72,10 @@ public class CompraAts implements Serializable {
     private BigDecimal montoIva;
     private BigDecimal valRetBien10;
     private BigDecimal valRetServ20;
+    //30% valor de retenciones
     private BigDecimal valorRetBienes;
     private BigDecimal valRetServ50;
+    //70% valor de servicios
     private BigDecimal valorRetServicios;
     private BigDecimal valRetServ100;
     private BigDecimal totbasesImpReemb;
@@ -382,6 +386,17 @@ public class CompraAts implements Serializable {
     public void setPagoExteriorAts(PagoExteriorAts pagoExteriorAts) {
         this.pagoExteriorAts = pagoExteriorAts;
     }
+    
+    /**
+     * Metodos Adicionales
+     */
+    @XmlTransient
+    public String getPreimpreso()
+    {
+       return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(establecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
+    }
+    
+    
     
     
 

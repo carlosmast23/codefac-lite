@@ -62,6 +62,7 @@ public class ProformaReporteModel extends ProformaReportePanel {
         iniciarComponentes();
         listenerBotones();
         listenerChecks();
+        validacionDatosIngresados=false;
     }
 
     private void iniciarComponentes() {

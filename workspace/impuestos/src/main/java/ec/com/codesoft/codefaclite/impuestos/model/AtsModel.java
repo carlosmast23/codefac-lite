@@ -16,6 +16,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.CompraAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.VentaAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -55,7 +57,8 @@ public class AtsModel extends AtsPanel {
     private final static int COLUMNA_OBJETO=0;
     private final static int COLUMNA_VENTA_RET_RENTA=5;
     private final static int COLUMNA_VENTA_RET_IVA=6;
-
+    
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         listenerBotones();
@@ -172,6 +175,7 @@ public class AtsModel extends AtsPanel {
     {
         String titulo[] = {
             "",
+            "Preimpreso",
             "Identificación",
             "# Comprobantes",
             "Base Imponible",
@@ -187,9 +191,11 @@ public class AtsModel extends AtsPanel {
             String.class,
             String.class,
             String.class,
+            String.class,
         };
         
         Boolean editar[]={
+            false,
             false,
             false,
             false,
@@ -206,10 +212,11 @@ public class AtsModel extends AtsPanel {
             for (CompraAts compra : atsJaxb.getCompras()) {
                 modeloTabla.addRow(new Object[]{
                     compra,
+                    compra.getPreimpreso(),
                     compra.getIdProv(),
                     "1",
-                    compra.getBaseImpGrav().toString(),
-                    compra.getMontoIva().toString(),
+                    (compra.getBaseImpGrav()==null)?"Error":compra.getBaseImpGrav().toString(),
+                    (compra.getMontoIva()==null)?"Error":compra.getMontoIva().toString(),
                     "0",
                     "0",
                 });
@@ -438,6 +445,7 @@ public class AtsModel extends AtsPanel {
         int mesActual = UtilidadesFecha.obtenerMes(UtilidadesFecha.getFechaHoy());
         MesEnum mesEnum = MesEnum.obtenerPorNumero(mesActual);
         getCmbMes().setSelectedItem(mesEnum);
+        
     }
 
 }

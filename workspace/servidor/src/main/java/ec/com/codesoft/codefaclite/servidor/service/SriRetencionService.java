@@ -9,6 +9,9 @@ import ec.com.codesoft.codefaclite.servidor.facade.SriRetencionFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -18,6 +21,17 @@ public class SriRetencionService extends ServiceAbstract<SriRetencion,SriRetenci
 
     public SriRetencionService() throws RemoteException {
         super(SriRetencionFacade.class);
+    }
+    
+    public SriRetencion consultarPorNombre(String nombre) throws RemoteException
+    {
+       //SriRetencion sriRetencion=new SriRetencion();
+       //sriRetencion.getNombre()
+       Map<String,Object> mapParametros=new HashMap<String, Object>();
+       mapParametros.put("nombre",nombre);
+       
+       List<SriRetencion> resultados=getFacade().findByMap(mapParametros);
+       return resultados.get(0);
     }
     
 }

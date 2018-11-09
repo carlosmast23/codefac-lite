@@ -92,3 +92,6 @@ Ver si aunque no se autorize la clave de acceso porque se supone que existe desd
 Hacer un reporte de los secuenciales no usados para evitar errores
 
 Ver si se crea un metodo intermedio para hacer verificaciones cuando se cambie de estado del formulario esto me sirve en especial para habilitar y desahabilitar opciones cuando esta en modo grabar o editar
+
+Agregar validacion que para eliminar una compra se tiene que verificar que esten eliminados las retenciones
+En las compras validar que no pueda grabar si no tiene detalles

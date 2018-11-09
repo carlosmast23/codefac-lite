@@ -20,6 +20,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "SRI_RETENCION")
 public class SriRetencion implements Serializable{
+    public static final String NOMBRE_RETENCION_RENTA="RENTA";
+    public static final String NOMBRE_RETENCION_IVA="IVA";
+        
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")

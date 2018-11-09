@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AirAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AnuladoAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AtsJaxb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.CompraAts;
@@ -19,6 +20,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -30,6 +33,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
@@ -143,6 +147,10 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
     
     public List<CompraAts> consultarComprasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal) throws  RemoteException,ServicioCodefacException
     {
+        SriRetencionService sriRetencionService=new SriRetencionService();
+        SriRetencion sriRetencionIva=sriRetencionService.consultarPorNombre(SriRetencion.NOMBRE_RETENCION_IVA);//Variable que necesito para las retenciones
+        SriRetencion sriRetencionRenta=sriRetencionService.consultarPorNombre(SriRetencion.NOMBRE_RETENCION_RENTA);//Variable que necesito para las retenciones
+        
         List<CompraAts> comprasAts=new ArrayList<CompraAts>();
         CompraService compraService=new CompraService();
         List<Compra> compras=compraService.obtenerCompraReporte(null, fechaInicial, fechaFinal,null,null,GeneralEnumEstado.ACTIVO);
@@ -158,7 +166,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             compraAts.setTpIdProv(codigoSri);
             compraAts.setIdProv(identificacion);
             compraAts.setTipoComprobante("19");//Todo: Por el momento queda regitra ese codigo pero existen otro que toca preguntar para ver como funciona
-            compraAts.setParteRel("SI");
+            compraAts.setParteRel("SI"); //Todo: Me parece que esta parte toca implementar cuando es cliente final
             SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
             compraAts.setFechaRegistro(dateFormat.format(compra.getFechaCreacion()));
             compraAts.setEstablecimiento(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEstablecimiento(),3,"0"));
@@ -167,7 +175,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             compraAts.setFechaEmision(dateFormat.format(compra.getFechaFactura()));
             
             String autorizacion=(compra.getAutorizacion()!=null && !compra.getAutorizacion().isEmpty())?compra.getAutorizacion():"0000000000";
-            compraAts.setAutorizacion(autorizacion); //todo: revisar si para las comptas es lo mismo la clave de autorizacion y la autorizacion
+            compraAts.setAutorizacion(autorizacion); //todo: En caso de que los comprobantes con código 11, 19 y 20 no posean numeración, así como en convenios de débito y recaudación deberán completar sus datos con nueves (9999999999)
             compraAts.setBaseNoGraIva(BigDecimal.ZERO);
             compraAts.setBaseImponible(compra.getSubtotalSinImpuestos());
             compraAts.setBaseImpGrav(compra.getSubtotalImpuestos());
@@ -175,13 +183,14 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             compraAts.setMontoIce(BigDecimal.ZERO);
             compraAts.setMontoIva(compra.getIva());
             
+            Map<BigDecimal,BigDecimal> mapRetenciones=consultarRetencionesIva(compra,sriRetencionIva);
             ///=======> DATOS DE LAS RETENCIONES <============///
-            compraAts.setValRetBien10(BigDecimal.ZERO); //TODO:completar
-            compraAts.setValRetServ20(BigDecimal.ZERO); //TODO:completar
-            compraAts.setValorRetBienes(BigDecimal.ZERO); //TODO:completar
-            compraAts.setValRetServ50(BigDecimal.ZERO); //TODO:completar
-            compraAts.setValorRetServicios(BigDecimal.ZERO); //TODO:completar
-            compraAts.setValRetServ100(BigDecimal.ZERO); //TODO:completar
+            compraAts.setValRetBien10(obtenerValorMapRetenciones(mapRetenciones,10)); //10% TODO:completar
+            compraAts.setValRetServ20(obtenerValorMapRetenciones(mapRetenciones,20)); //20% TODO:completar
+            compraAts.setValorRetBienes(obtenerValorMapRetenciones(mapRetenciones,30)); //30% TODO:completar 
+            compraAts.setValRetServ50(obtenerValorMapRetenciones(mapRetenciones,50)); //50% TODO:completar
+            compraAts.setValorRetServicios(obtenerValorMapRetenciones(mapRetenciones,70));//70% //TODO:completar
+            compraAts.setValRetServ100(obtenerValorMapRetenciones(mapRetenciones,100)); //100% TODO:completar
             
             //========> COMPRAS DE REEMBOLSO <=================//
             compraAts.setTotbasesImpReemb(BigDecimal.ZERO); //TODO: Esto queda pendiente de programar
@@ -203,6 +212,19 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             formaPago.setFormaPago("01"); //Todo: Por defecto queda setear pago en efectivo(Sin utuizacion del sistema financiero)
             formasPago.add(formaPago);
             
+            
+            List<RetencionDetalle> retencionesRenta=consultarRetencionesRenta(compra, sriRetencionRenta);
+            List<AirAts> retencionesAts=new ArrayList<AirAts>();
+            for (RetencionDetalle retencionRenta : retencionesRenta) {
+                AirAts retencionRentaAts=new AirAts();
+                retencionRentaAts.setBaseImpAir(retencionRenta.getBaseImponible().setScale(2,BigDecimal.ROUND_UP));
+                retencionRentaAts.setCodRetAir(retencionRenta.getCodigoRetencionSri());
+                retencionRentaAts.setPorcentajeAir(retencionRenta.getPorcentajeRetener().setScale(2,BigDecimal.ROUND_UP));
+                retencionRentaAts.setValRetAir(retencionRenta.getValorRetenido().setScale(2,BigDecimal.ROUND_UP));
+                retencionesAts.add(retencionRentaAts);
+            }
+            compraAts.setDetalleAir(retencionesAts);
+            
             //TODO Falta completar los detalles de los impuestos a la renta
             
             //compraAts.setEstabRetencion1("");
@@ -214,6 +236,39 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         }
         
         return comprasAts;
+        
+    }
+    
+    private List<RetencionDetalle> consultarRetencionesRenta(Compra compra,SriRetencion sriRetencion) throws RemoteException
+    {
+        RetencionService retencionService=new RetencionService();
+        return retencionService.obtenerRetencionesRentaPorCompra(compra,sriRetencion);
+    }
+    
+    private BigDecimal obtenerValorMapRetenciones(Map<BigDecimal,BigDecimal> mapRetenciones,Integer porcentaje)
+    {
+        BigDecimal porcentajeRetener=new BigDecimal(porcentaje);
+        BigDecimal valorRetencion=BigDecimal.ZERO;
+        
+        if(mapRetenciones.get(porcentajeRetener)!=null)
+        {
+            return mapRetenciones.get(porcentajeRetener);
+        }
+        return valorRetencion;
+    }
+    
+    private Map<BigDecimal,BigDecimal> consultarRetencionesIva(Compra compra,SriRetencion sriRetencion) throws RemoteException
+    {
+        RetencionService retencionService=new RetencionService();
+        List<Object[]> retencionesLista=retencionService.obtenerRetencionesIvaPorCompra(compra,sriRetencion);
+        Map<BigDecimal,BigDecimal> mapValoresRetenciones=new HashMap<BigDecimal, BigDecimal>();
+        
+        for (Object[] objects : retencionesLista) {
+            BigDecimal porcentaje=(BigDecimal) objects[0];
+            BigDecimal valorRetener=(BigDecimal) objects[1];
+            mapValoresRetenciones.put(porcentaje.setScale(0), valorRetener.setScale(2,BigDecimal.ROUND_UP));            
+        }
+        return mapValoresRetenciones;
         
     }
     

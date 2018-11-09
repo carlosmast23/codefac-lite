@@ -116,6 +116,18 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         }
     }
     
+    public List<Object[]> obtenerRetencionesIvaPorCompra(Compra compra,SriRetencion sriRetencion)throws RemoteException
+    {
+        return retencionFacade.obtenerRetencionesIvaPorCompraFacade(compra,sriRetencion);
+        //compra.getSecuencial();
+    }
+    
+    public List<RetencionDetalle> obtenerRetencionesRentaPorCompra(Compra compra,SriRetencion sriRetencion)throws RemoteException
+    {
+        return retencionFacade.obtenerRetencionesRentaPorCompraFacade(compra,sriRetencion);
+        //compra.getSecuencial();
+    }
+    
     @Override
     public List<RetencionDetalle> obtenerRetencionesReportes(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion) throws RemoteException {
         //return retencionFacade.lista(persona, fi, ff, iva, renta,tipo);

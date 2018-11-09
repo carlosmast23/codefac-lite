@@ -131,13 +131,13 @@ public class CompraModel extends CompraPanel{
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
         
-        if(compra != null && compra.getDetalles().size()>0 || compra.getProveedor() != null || compra.getOrdenCompra() != null)
+        /*if(compra != null && compra.getDetalles().size()>0 || compra.getProveedor() != null || compra.getOrdenCompra() != null)
         {
             Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (!respuesta) {
                 throw new ExcepcionCodefacLite("Cancelacion usuario");
             }
-        }
+        }*/
     }
 
     @Override
@@ -302,6 +302,8 @@ public class CompraModel extends CompraPanel{
         }
         mostrarDatosTotales();
         desbloquearIngresoDetalleProducto();
+        
+        //getCmbRetencionIva().setSelectedItem(compra.get);
     }
     
     public String establecerSecuencial(String secuencial)
@@ -352,7 +354,10 @@ public class CompraModel extends CompraPanel{
         getCmbFechaCompra().setDate(new java.util.Date());
         this.compra = new Compra();
         this.compra.setDetalles(new ArrayList<CompraDetalle>());
-        bloquearIngresoDetalleProducto();    
+        bloquearIngresoDetalleProducto();   
+        
+        getCmbRetencionIva().setSelectedIndex(0);
+        getCmbRetencionRenta().setSelectedIndex(0);
     }
 
 //    @Override
@@ -629,6 +634,8 @@ public class CompraModel extends CompraPanel{
                 getTxtDescripcionItem().setText(compraDetalle.getDescripcion());
                 getTxtCantidadItem().setText(compraDetalle.getCantidad()+"");
                 getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
+                getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
+                getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
                 //compraDetalle.setPrecioUnitario
                 compraDetalle.getPrecioUnitario();
                 bloquearDesbloquearBotones(false);
