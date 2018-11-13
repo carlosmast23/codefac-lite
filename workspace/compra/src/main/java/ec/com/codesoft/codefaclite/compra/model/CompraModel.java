@@ -143,6 +143,12 @@ public class CompraModel extends CompraPanel{
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
+            
+            if(!validarDatosGrabar())
+            {
+                throw new ExcepcionCodefacLite("Error de validación");
+            }
+            
             CompraServiceIf servicio=ServiceFactory.getFactory().getCompraServiceIf();
             setearValores();
             servicio.grabarCompra(compra);
@@ -1058,5 +1064,15 @@ public class CompraModel extends CompraPanel{
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private boolean validarDatosGrabar() {
+        
+        if(compra.getDetalles()==null || compra.getDetalles().size()==0)
+        {
+            DialogoCodefac.mensaje("Error Validación","Ingrese detalles para poder grabar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }        
+        return true;
     }
 }
