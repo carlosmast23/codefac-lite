@@ -223,12 +223,13 @@ public class CompraModel extends CompraPanel{
                 
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
-                DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
+                DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             }
         }
         else
         {
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.NO_PERMITE_ELIMINAR);
+            throw new ExcepcionCodefacLite("No se puede eliminar");
         }
     }
 

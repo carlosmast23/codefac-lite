@@ -23,7 +23,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
@@ -135,6 +137,12 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
     }
     public List<Object[]> obtenerRetencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta,String tipo) {
         return retencionFacade.retencionesCodigo(persona, fi, ff, iva, renta, tipo);
+    }
+    
+    @Override
+    public List<Retencion> obtenerRetencionesPorCompra(Compra compra) throws ServicioCodefacException, RemoteException
+    {
+        return getFacade().obtenerRetencionesPorCompraFacade(compra);
     }
 
     /*

@@ -58,6 +58,17 @@ public abstract class UtilidadesTextos {
         return "";
     }
     
+    public static String quitarUltimaLetra(String texto)
+    {
+    
+        if(texto!=null && texto.length()>0)
+        {
+           return texto.substring(0,texto.length()-1);
+        }
+        
+        return "";
+    }
+    
     public static String getStringURLFile(InputStream input)
     {   
         String text = "";

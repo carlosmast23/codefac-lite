@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
@@ -269,6 +270,21 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         } catch (NoResultException e) {
             return null;
         }
+    }
+    
+    public List<Retencion> obtenerRetencionesPorCompraFacade(Compra compra)
+    {
+        Retencion retencion;
+        //retencion.getEstado();
+        //retencion.getCompra();
+        //retencion.getEs
+        
+        String queryString = "SELECT r FROM Retencion r WHERE r.estado<>?1 and r.compra=?2 ";
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+        query.setParameter(2, compra);
+        
+        return query.getResultList();
     }
 
 }

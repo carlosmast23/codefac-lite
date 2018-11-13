@@ -11,10 +11,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
@@ -73,8 +75,25 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                compra.setEstado(GeneralEnumEstado.ELIMINADO.getEstado()); //Cambiar el estado de la compra
-                entityManager.merge(compra);
+                RetencionService retencionService=new RetencionService();
+                List<Retencion> retencionesAsociadas= retencionService.obtenerRetencionesPorCompra(compra);
+                
+                if(retencionesAsociadas.size()==0)
+                {
+                    compra.setEstado(GeneralEnumEstado.ELIMINADO.getEstado()); //Cambiar el estado de la compra
+                    entityManager.merge(compra);                    
+                }
+                else
+                {
+                    //Obtener las retenciones asociadas
+                    String retencionesStr="";
+                    for (Retencion retencionesAsociada : retencionesAsociadas) {
+                        retencionesStr+=retencionesAsociada.getPreimpreso()+"  ";                        
+                    }
+                    //retencionesStr=UtilidadesTextos.quitarUltimaLetra(retencionesStr);
+                    
+                    throw new ServicioCodefacException("No se puede eliminar porque existe retenciones asociadas "+retencionesStr);
+                }
                 
             }
         });
