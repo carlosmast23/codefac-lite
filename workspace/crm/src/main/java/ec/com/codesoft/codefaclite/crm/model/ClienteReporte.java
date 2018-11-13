@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,8 +48,9 @@ public class ClienteReporte extends ControladorCodefacInterface{
             InputStream path = RecursoCodefac.JASPER_CRM.getResourceInputStream("reporteClientes.jrxml");
             Map parameters = new HashMap();
             List<ClienteData> data = new ArrayList<ClienteData>();
-            PersonaServiceIf service=ServiceFactory.getFactory().getPersonaServiceIf();
-            List<Persona> clientes=service.obtenerTodos(); //Todo: Obtener filtrar solo por clientes
+            //PersonaServiceIf service=ServiceFactory.getFactory().getPersonaServiceIf();
+            //List<Persona> clientes=service.obtenerTodos(); //Todo: Obtener filtrar solo por clientes
+            List<Persona> clientes=obtenerConsulta(); //Todo: Obtener filtrar solo por clientes
             
             for (Persona cliente : clientes) {
                 ClienteData clienteData=new ClienteData();
@@ -86,7 +88,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
 
                 @Override
                 public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Clientes ");
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, getNombreReporte());
                     dispose();
                     setVisible(false);
                 }
@@ -97,7 +99,20 @@ public class ClienteReporte extends ControladorCodefacInterface{
             Logger.getLogger(ClienteReporte.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public List<Persona> obtenerConsulta() throws RemoteException
+    {
+        /*Persona persona;
+        persona.getTipo()
+        persona.getTipoEnum().*/
+        PersonaServiceIf service=ServiceFactory.getFactory().getPersonaServiceIf();
+        return service.buscarPorTipo(OperadorNegocioEnum.CLIENTE); //Todo: Obtener filtrar solo por clientes
+    }
 
+    public String getNombreReporte()
+    {
+        return "Reporte Clientes";
+    }
     
     
     @Override

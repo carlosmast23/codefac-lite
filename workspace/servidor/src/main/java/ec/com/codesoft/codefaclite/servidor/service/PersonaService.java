@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -88,6 +89,12 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
     public List<Persona> buscar()
     {
         return personaFacade.findAll();
+    }
+    
+    @Override
+    public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum) throws java.rmi.RemoteException
+    {
+        return getFacade().buscarPorTipoFacade(tipoEnum);
     }
             
     

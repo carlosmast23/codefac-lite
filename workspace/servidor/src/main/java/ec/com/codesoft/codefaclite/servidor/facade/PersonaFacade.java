@@ -5,12 +5,16 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import java.util.List;
 //import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -36,6 +40,19 @@ public class PersonaFacade extends AbstractFacade<Persona>
     
     public int addNumbers(int numberA, int numberB) {
         return numberA - numberB;
+    }
+    
+    public List<Persona> buscarPorTipoFacade(OperadorNegocioEnum tipoEnum)
+    {
+        Persona persona;
+        //persona.getTipo();
+        String queryString = "SELECT p FROM Persona p WHERE p.tipo=?1 or p.tipo=?2 ";
+        Query query = getEntityManager().createQuery(queryString);
+        
+        query.setParameter(1,OperadorNegocioEnum.AMBOS.getLetra());
+        query.setParameter(2,tipoEnum.getLetra());
+        
+        return query.getResultList();
     }
 
     

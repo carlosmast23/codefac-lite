@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.rmi.Remote;
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface PersonaServiceIf extends ServiceAbstractIf<Persona>{
     public void eliminar(Persona p) throws java.rmi.RemoteException;
     
     public List<Persona> buscar() throws java.rmi.RemoteException;
+    
+    public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum) throws java.rmi.RemoteException;
 }

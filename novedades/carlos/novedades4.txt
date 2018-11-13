@@ -1,11 +1,6 @@
 Ver si se puede tener o no se necesita un campo para especificar cuando un cliente es tambien un representante
 Analizar si unicamente el estudiante puede grabar cedulas o puede grabar otro tipo de documentos , ejemplo para instituciones educativas superiores
 
-En el reporte de clientes , falta filtrar solo por tipo de dato cliente o ambos , y ademas crear un reporte igual para proveedores
-Agregar en el reporte de clientes el nombre legal
-
-Agregar un campo adicional en el reporte de ordenes de trabajo para agregar una politica , reglamento o observacion que se desea imprimir en los reportes
-
 Revisar el tema de las sessiones , porque si algun cliente modifica se supone que se debe actualizar a todas las sesiones de los demas usuarios
 Revisar que para algunos clientes se debe validar que el usuario tiene que estar registrado como empleado y ver donde vincular
 
@@ -19,10 +14,8 @@ Revisar porque no se creo el campo de empleado_id en usuario y departamento:id e
 
 Revisar los detalles de la orden de trabajo cuando se intenta agregar se borran los campos de descripcion y notas
 
-Agregar el numero de telefono en los reportes
 
 En la orden de trabajo me parece que cuando puse el signo + no podia validar, seria bueno que paresca un dialogo con el error para saber el tipo de validacion y analizar cual seria el tamanio del limite de los campos
-Terminar que los datos carguen correctamente
 
 Agregar el tipo de cartera
 
@@ -42,7 +35,7 @@ es decir crear un proxi de reportes
 Agregar un campo para grabar novedades al momento de ingresar la mercaderia
 Verificar cual es el proceso si eleminan por ejemplo una alumno y luego quieren crear nuevamente cual deberia ser el proceso
 
-Pensar en una forma de utilizar unidades de medidad y convertidores
+Pensar en una forma de utilizar unidades de medidad y convertidores para el tema de producción 
 REVISAR QUE LOS REPORTES EN EXCEL FUNCIONE EN FORMATO ESTANDAR COMO POR EJEMPLO CVS
 
 En la pantalla de empresa y todas las demas donde toca validar la cedula verificar que se cumpla las 3 validaciones
@@ -50,12 +43,9 @@ Aumentar el campo de contribuyente especial en los clientes porque necesito ese 
 Cuando estan en las pantallas de reporte no funciona el boton de ayuda para mostrar el panel secundario
 Revisar que no se agrego el campo de obligado allevar contabilidad en la tabla transporte , al parecer porque esa tabla es creada con una etiqueta
 
-Agregar un campo cargando antes de abrir cada ventana cuando se demora para que el usuario sepa que esta procesando
 Revisar que cuando solo se cierra la aplicacion sigue enviado mensajes supuestamente , pero se supone que el celular me responde un mensaje para que me confirme que se envio el mensaje, pero aunque ya esta cerrado la palicacion en el ecelular me aparece como que me esta enviado una respuesta , ver que devuelve, y ver si hay como controlar tambien cuando escribo en el socket hacia el cliente
-Investigar si necesito crear las Ordenes de venta (Pedidos)
 En el proyecto Web cuando trata de usar la propiedad de getByMap para las facturas service no funciona , pero otras entidades si funciona como por ejemplo los usuarios
 En el modulo web hacer 2 buscadores uno cuando implemente las propiedades y otro simple cuando no lo haga de esa manera
-Hacer que cuando una ventana se abre como dialogo no se abran las pantallas secundarias
 Hacer que el tema de enviar los sms funcione en segundo plano , mejor hacer otro metodo con hilos
 Agregar la funcionalidad para eliminar todas las deudas solo seleccionado el rubro
 al momento de eliminar el dato adicional hacer validaciones para no poder eliminar algunos requeridos por ejemplo el codigo del estudiante
@@ -84,14 +74,10 @@ Ver que no me permita volver a facturar con secuaciales que ya estan autorizados
 
 Analizar opcion para corregir algun dato de la factura y volver a enviar reutilizando la clave de acceso
 
-En la pantalla de facturas ver una modalidad para ingresar la cantidad que cancelan y ver cuanto tiene que dar de vuelto
 En la pantalla de utilidades ordenar los comprobantes por preimpreso me parece para que el usuario pueda buscar mas rapido
 
 Ver si en los comprobantes electronicos se crea un nuevo estado para saber si fue eliminada manualmente es decir el secuencial se tiene que reutilizar o se elimino desde el sri y ta no se tiene que usar el secuencial
 Ver si aunque no se autorize la clave de acceso porque se supone que existe desde que se genera y no tiene sentido no grabar porque despues se vuelve muy complicado hacer mantenimiento del software
 Hacer un reporte de los secuenciales no usados para evitar errores
 
-Ver si se crea un metodo intermedio para hacer verificaciones cuando se cambie de estado del formulario esto me sirve en especial para habilitar y desahabilitar opciones cuando esta en modo grabar o editar
-
-Agregar validacion que para eliminar una compra se tiene que verificar que esten eliminados las retenciones
-En las compras validar que no pueda grabar si no tiene detalles
+Ver si puede modificar el titulo y el contenido de correos de la pantalla de Codefac
