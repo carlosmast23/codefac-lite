@@ -240,7 +240,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return false;
     }
 
-    private void addListenerButtons() {       
+    private void addListenerButtons() {    
+        
+        getBtnReenviarCorreo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Boolean reenviarCorreo=DialogoCodefac.dialogoPregunta("Advertencia ","¿Está seguro que desea reenviar la información al correo? ",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if(reenviarCorreo)
+                {
+                
+                }
+            }
+        });
         
         getBtnCargarProforma().addActionListener(new ActionListener() {
             @Override
@@ -2725,10 +2736,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(estadoFormulario.equals(ESTADO_GRABAR))
         {
             getBtnCargarProforma().setEnabled(true);
+            getBtnReenviarCorreo().setEnabled(true);
         }
         else
         {
             getBtnCargarProforma().setEnabled(false);
+            getBtnReenviarCorreo().setEnabled(false);
         }
     }
     

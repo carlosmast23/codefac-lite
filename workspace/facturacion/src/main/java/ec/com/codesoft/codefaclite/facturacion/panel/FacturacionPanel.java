@@ -79,8 +79,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        btnCargarProforma = new javax.swing.JButton();
         btnCargarPedido = new javax.swing.JButton();
+        btnCargarProforma = new javax.swing.JButton();
+        btnReenviarCorreo = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         PanelDetalleFactura = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -207,13 +208,19 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         lblVuelto = new javax.swing.JLabel();
         jLabel45 = new javax.swing.JLabel();
 
-        btnCargarProforma.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnCargarProforma.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/buscar.png"))); // NOI18N
-        btnCargarProforma.setText("Proforma");
-
         btnCargarPedido.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnCargarPedido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/buscar.png"))); // NOI18N
         btnCargarPedido.setText("Pedido");
+
+        btnCargarProforma.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnCargarProforma.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/documentos_icono.png"))); // NOI18N
+        btnCargarProforma.setToolTipText("Cargar desde la proforma");
+        btnCargarProforma.setFocusable(false);
+        btnCargarProforma.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCargarProforma.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
+        btnReenviarCorreo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/email.png"))); // NOI18N
+        btnReenviarCorreo.setToolTipText("Reenviar Correo");
 
         setClosable(true);
         setIconifiable(true);
@@ -1325,6 +1332,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnCrearProducto;
     private javax.swing.JButton btnEditarDetalle;
     private javax.swing.JButton btnQuitarDetalle;
+    private javax.swing.JButton btnReenviarCorreo;
     private javax.swing.JCheckBox checkPorcentaje;
     private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
@@ -1794,15 +1802,22 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         return pnlVuelto;
     }
 
-    @ComponenteSecundarioAnotacion(nombreCategoria = "Facturar desde",visible = true)
+    @ComponenteSecundarioAnotacion(nombreCategoria = "",visible = true)
     public JButton getBtnCargarProforma() {
         return btnCargarProforma;
     }
+    
+    
 
     //@ComponenteSecundarioAnotacion(nombreCategoria = "Cargar",visible = true)
     //public JButton getBtnCargarPedido() {
     //    return btnCargarPedido;
     //}
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "",visible = true)
+    public JButton getBtnReenviarCorreo() {
+        return btnReenviarCorreo;
+    }
 
     
     
