@@ -112,7 +112,8 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             //Si alguna de estos datos fue modificado asumo que quiere editar la clave
             if (!clave.equals("") || !claveAnterior.equals("") || !claveRepetida.equals("")) {
                 if (validarEditarClave(clave, claveRepetida, claveAnterior)) {
-                    usuario=usuarioServicioIf.cambiarClave(usuario,claveAnterior,clave); //Todo : Mejorar esta parte para solo ejecutar cuando desean cambiar la clave
+                    Usuario usuarioTmp=usuarioServicioIf.cambiarClave(usuario,claveAnterior,clave); //Todo : Mejorar esta parte para solo ejecutar cuando desean cambiar la clave
+                    usuario=usuarioTmp;
                 } else {
                     throw new ExcepcionCodefacLite("Validacion incorrecta");
                 }
@@ -340,14 +341,16 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         usuario.setEstado(estadoEnum.getEstado());
 
         
-        if (estadoFormulario == ESTADO_GRABAR) { //Seteo la clave directo para guardar
+        if (estadoFormulario == ESTADO_GRABAR) 
+        { //Seteo la clave directo para guardar
             usuario.setClave(new String(getTxtClave().getPassword()));
-        } else if (estadoFormulario == ESTADO_EDITAR) {
-            String clave=new String(getTxtClave().getPassword());
+        } 
+        else if (estadoFormulario == ESTADO_EDITAR) {
+            /*String clave=new String(getTxtClave().getPassword());
             if(!clave.equals("")) //Setear la clave solo cuando es distinta de vacio
             {
                 usuario.setClave(new String(getTxtClave().getPassword()));
-            }
+            }*/
         }        
     }
 

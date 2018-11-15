@@ -79,10 +79,14 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() {
-                usuario.setClave(UtilidadesHash.generarHashBcrypt(claveNueva));
+                String claveHash=UtilidadesHash.generarHashBcrypt(claveNueva);
+                usuario.setClave(claveHash);
                 entityManager.merge(usuario);
+                entityManager.flush();
             }
         });
+        //usuario.setClave("Modificando clave");
+        System.out.println(usuario);
         return usuario;
 
     }
