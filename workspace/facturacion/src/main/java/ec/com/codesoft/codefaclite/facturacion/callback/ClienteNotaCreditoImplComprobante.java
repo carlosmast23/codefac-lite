@@ -48,7 +48,7 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
         this.notaCreditoModel = notaCreditoModel;
         this.notaCreditoProcesando = notaCreditoProcesando;
     }
-
+    
     @Override
     public void termino(byte[] byteJasperPrint) throws RemoteException {
 
@@ -58,13 +58,14 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
             monitorData.getBarraProgreso().setForeground(Color.GREEN);
             monitorData.getBtnAbrir().setEnabled(true);
             monitorData.getBtnCerrar().setEnabled(true);
-            monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+            //monitorData.getBtnAbrir().removeActionListener(l);
+            /*monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
                     notaCreditoModel.panelPadre.crearReportePantalla(jasperPrint, notaCreditoProcesando.getPreimpreso());
                 }
-            });
+            });*/
         } catch (IOException ex) {
             Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {

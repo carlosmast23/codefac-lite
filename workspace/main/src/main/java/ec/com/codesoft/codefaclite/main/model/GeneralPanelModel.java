@@ -759,7 +759,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         {
                             try {
                                 frameInterface.grabar();
-                                frameInterface.nuevo(); //TODO: Ver si despues de grabar si se debe llamar al evento nuevo
+                                
+                                /////==========> AGREGAR VALIDACION SI POR ALGUN MOTIVO NO ESTA IMPLEMENTADO LLAMAR AL METODO NUEVO =========////
+                                try
+                                {
+                                    frameInterface.nuevo(); //TODO: Ver si despues de grabar si se debe llamar al evento nuevo
+                                }
+                                catch(UnsupportedOperationException ex)
+                                {
+                                    LOG.log(Level.WARNING,"Metodo nuevo no implementeado en ventana "+frameInterface.getName());
+                                }
+                                
                                 procesoTerminado=true;                                
                             } catch (ExcepcionCodefacLite ex) {
                                 //ex.printStackTrace();

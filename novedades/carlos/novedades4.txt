@@ -81,3 +81,4 @@ Ver si aunque no se autorize la clave de acceso porque se supone que existe desd
 Hacer un reporte de los secuenciales no usados para evitar errores
 
 Ver si puede modificar el titulo y el contenido de correos de la pantalla de Codefac
+Ver la posibilidad solo de enviar el correo si todo el proceso fue enviado correctamente
