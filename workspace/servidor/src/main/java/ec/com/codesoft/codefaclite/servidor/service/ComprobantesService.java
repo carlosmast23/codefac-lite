@@ -93,6 +93,10 @@ import net.sf.jasperreports.engine.JasperReport;
  */
 public class ComprobantesService extends ServiceAbstract implements ComprobanteServiceIf{
 
+    private static final Logger LOG = Logger.getLogger(ComprobantesService.class.getName());
+    
+    
+
     /**
      * Graba una lista e clientes suscritos para responder
      */
@@ -279,50 +283,60 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         cargarConfiguraciones(comprobanteElectronico);
         
         comprobanteElectronico.setCorreosElectronicos(correos);
-
-        comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
-            @Override
-            public void termino() {
-                try {
-                    callbackClientObject.termino(null);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+    
+        if(callbackClientObject!=null)
+        {
+            comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
+                @Override
+                public void termino() {
+                    try {
+                        callbackClientObject.termino(null);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
 
-            @Override
-            public void iniciado(ComprobanteElectronico comprobante) {
-                try {
-                    callbackClientObject.iniciado();
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                @Override
+                public void iniciado(ComprobanteElectronico comprobante) {
+                    try {
+                        callbackClientObject.iniciado();
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
 
-            @Override
-            public void procesando(int etapa, ClaveAcceso clave) {
-                try {
-                    callbackClientObject.procesando(etapa, clave);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                @Override
+                public void procesando(int etapa, ClaveAcceso clave) {
+                    try {
+                        callbackClientObject.procesando(etapa, clave);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
 
-            @Override
-            public void error(ComprobanteElectronicoException cee) {
-                try {
-                    callbackClientObject.error(cee,"");
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                @Override
+                public void error(ComprobanteElectronicoException cee) {
+                    try {
+                        callbackClientObject.error(cee,"");
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
+            });
+        }
         
         comprobanteElectronico.setEtapaActual(etapaInicial);
         comprobanteElectronico.setClaveAcceso(claveAcceso);
         comprobanteElectronico.setEtapaLimiteProcesar(etapaLimite);
         //comprobanteElectronico
-        comprobanteElectronico.procesar(false);
+        if(callbackClientObject!=null) //Si  tiene comunicación bidereccional entonces ejecuta el proceso con hlos
+        {
+            comprobanteElectronico.procesar(false);
+        }
+        else //Si el proceso no requiere comunicación bidireccional ejecuto directamente en el hilo principal
+        {
+            comprobanteElectronico.procesarComprobante();
+        }
         return true;
     }
     
@@ -1145,7 +1159,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                 //servicio.pathLogoImagen = new File(pathImagen.get;
             } catch (FileNotFoundException ex) {
                 servicio.pathLogoImagen = UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
-                Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.log(Level.WARNING,"No esta definido el logo de la empresa");
+                //Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 try {
                     if (inputStream != null) {

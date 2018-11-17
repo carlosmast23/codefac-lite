@@ -92,6 +92,7 @@ public class ComprobanteElectronicoService implements Runnable {
     public static final String MODO_PRODUCCION = "producción";
     public static final String MODO_PRUEBAS = "pruebas";
 
+    //TODO: Ver mejor si estos estados se convierten a un enum fuera de esta clase para tener mejor organizado
     public static final Integer ETAPA_GENERAR = 1;
     public static final Integer ETAPA_PRE_VALIDAR = 2;
     public static final Integer ETAPA_FIRMAR = 3;

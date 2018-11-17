@@ -245,10 +245,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnReenviarCorreo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
+                if(!estadoFormulario.equals(ESTADO_EDITAR))
+                {
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ACCION_PERMITIDA_MODULO_EDITAR);
+                    return;
+                }
+                
                 Boolean reenviarCorreo=DialogoCodefac.dialogoPregunta("Advertencia ","¿Está seguro que desea reenviar la información al correo? ",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if(reenviarCorreo)
                 {
-                
+                    try {
+                        panelPadre.cambiarCursorEspera();
+                        ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesPendiente(
+                                ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
+                                ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
+                                factura.getClaveAcceso(),
+                                new ArrayList<String>(),
+                                null);
+                        panelPadre.cambiarCursorNormal();
+                        DialogoCodefac.mensaje(MensajeCodefacSistema.CorreoElectronico.CORREO_ENVIADO);
+                        
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
+                    }
                 }
             }
         });
@@ -2736,12 +2757,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(estadoFormulario.equals(ESTADO_GRABAR))
         {
             getBtnCargarProforma().setEnabled(true);
-            getBtnReenviarCorreo().setEnabled(true);
+            getBtnReenviarCorreo().setEnabled(false);
         }
         else
         {
             getBtnCargarProforma().setEnabled(false);
-            getBtnReenviarCorreo().setEnabled(false);
+            getBtnReenviarCorreo().setEnabled(true);
         }
     }
     
