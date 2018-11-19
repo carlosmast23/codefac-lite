@@ -688,7 +688,13 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
             }
         };
 
-        correoCodefac.enviarCorreo();
+        try {
+            correoCodefac.enviarCorreo();
+            //Todo:Ver si poner un mensaje para saber que el correo fue enviado correctamente
+        } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
+            Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error","No se pudo enviar el correo \n\nProblema:\n",DialogoCodefac.MENSAJE_INCORRECTO);
+        }
     }
     
     private void construirTablaEstudiantes() {

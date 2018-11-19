@@ -37,7 +37,7 @@ public abstract class CorreoCodefac {
         
     }
     
-    public void enviarCorreo() throws RuntimeException
+    public void enviarCorreo() throws ExcepcionCorreoCodefac
     {
         try
         {
@@ -59,11 +59,16 @@ public abstract class CorreoCodefac {
             }catch(RuntimeException e)
             {
                 e.printStackTrace();
-                throw new RuntimeException(e);
-            } catch (MessagingException ex) {
-                Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ExcepcionCorreoCodefac(e.getMessage());
+            //} catch (MessagingException ex) {
+            //    Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            //    throw new ExcepcionCorreoCodefac(ex.getMessage());
             } catch (SmtpNoExisteException ex) {
                 Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ExcepcionCorreoCodefac(ex.getMessage());
+            }catch (AuthenticationFailedException ex) {
+                Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ExcepcionCorreoCodefac("Error de autentificación de las credenciales del correo configurado en el sistema");
             }
             
             
@@ -72,10 +77,18 @@ public abstract class CorreoCodefac {
             Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCorreoCodefac(ex.getMessage());
         }
 
         
     }
     
+    public class ExcepcionCorreoCodefac extends Exception {
+
+        public ExcepcionCorreoCodefac(String message) {
+            super(message);
+        }
+    
+    }
     
 }

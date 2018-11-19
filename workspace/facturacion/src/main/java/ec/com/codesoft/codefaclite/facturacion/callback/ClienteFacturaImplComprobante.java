@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
+import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
@@ -70,7 +71,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     }
 
     @Override
-    public void termino(byte[] byteJasperPrint) throws RemoteException {
+    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas) throws RemoteException {
 
         try {
             
@@ -78,6 +79,20 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             monitorData.getBarraProgreso().setForeground(Color.GREEN);
             monitorData.getBtnAbrir().setEnabled(true);
             monitorData.getBtnCerrar().setEnabled(true);
+            
+            if(!monitorData.getBtnReporte().isEnabled() && alertas.size()>0)
+            {
+                monitorData.getBtnReporte().setEnabled(true);
+                monitorData.getBtnReporte().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        
+                        String mensajeCompleto = AlertaComprobanteElectronico.unirTodasAlertas(alertas);
+
+                        DialogoCodefac.mensaje("Alertas",mensajeCompleto,DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    }
+                });
+            }
             /*monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

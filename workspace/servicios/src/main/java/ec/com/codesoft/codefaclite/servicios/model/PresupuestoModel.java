@@ -1416,7 +1416,11 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             }
         };
 
-        correoCodefac.enviarCorreo();
+        try {
+            correoCodefac.enviarCorreo();
+        } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
+            Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void enviarComunicados()

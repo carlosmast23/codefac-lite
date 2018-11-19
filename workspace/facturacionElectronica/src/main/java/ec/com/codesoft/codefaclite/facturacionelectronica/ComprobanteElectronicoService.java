@@ -199,10 +199,13 @@ public class ComprobanteElectronicoService implements Runnable {
     private Map<String,String> mapCodeAndNameTipoRetecion;
         
     private Map<String,String> mapCodeAndNameTipoDocumento;
+    
+    private List<AlertaComprobanteElectronico> alertas;
 
     public ComprobanteElectronicoService() {
         this.etapaLimiteProcesar = 100;
         this.etapaActual = ETAPA_GENERAR;
+        this.alertas=new ArrayList<AlertaComprobanteElectronico>();
     }
 
     public ComprobanteElectronicoService(String pathBase, String nombreFirma, String claveFirma, String modoFacturacion, ComprobanteElectronico comprobante) {
@@ -213,6 +216,7 @@ public class ComprobanteElectronicoService implements Runnable {
         this.comprobante = comprobante;
         this.etapaActual = ETAPA_GENERAR;
         this.etapaLimiteProcesar = 100;
+        this.alertas=new ArrayList<AlertaComprobanteElectronico>();
     }
 
     public void procesar(Boolean enviarPorLotes) {
@@ -223,6 +227,7 @@ public class ComprobanteElectronicoService implements Runnable {
     
 
     public void procesarComprobante() {
+        alertas.clear(); //Limpiar todoas las alertas anteriores para empezar el nuevo proceso
         try {
             if(escucha!=null)escucha.iniciado(comprobante);
             
@@ -532,15 +537,25 @@ public class ComprobanteElectronicoService implements Runnable {
             } catch (Exception ex) {
                 Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
-                throw new ComprobanteElectronicoException("El comprobante se genero correctamente pero no se envio al cliente,\n Revise el correo y envie manualmente el RIDE", "Enviado correo", ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE);
+                //throw new ComprobanteElectronicoException("El comprobante se genero correctamente pero no se envio al cliente,\nRevise el correo y envie manualmente el RIDE \n\nProblema :\n "+ex.getMessage(), "Enviado correo", ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE);
+                alertas.add(new AlertaComprobanteElectronico("El comprobante se genero correctamente pero no se envio al cliente,\nRevise el correo y envie manualmente el RIDE \n\nProblema :\n "+ex.getMessage(),
+                        ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE, 
+                        AlertaComprobanteElectronico.TipoMensajeEnum.GRAVE));
             }
 
         } catch (JAXBException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ComprobanteElectronicoException(ex.getMessage(), "Enviar comprobante", ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE);
+            //throw new ComprobanteElectronicoException(ex.getMessage(), "Enviar comprobante", ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE);
+            alertas.add(new AlertaComprobanteElectronico("Error al enviar por correo el comprobante \n\nProblema :\n " + ex.getMessage(),
+            ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
+            AlertaComprobanteElectronico.TipoMensajeEnum.GRAVE));
+                            
         } catch (Exception ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ComprobanteElectronicoException(ex.getMessage(), "Enviar comprobante", ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE);
+            //throw new ComprobanteElectronicoException(ex.getMessage(), "Enviar comprobante", ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE);
+            alertas.add(new AlertaComprobanteElectronico("Error al enviar por correo el comprobante \n\nProblema :\n " + ex.getMessage(),
+            ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
+            AlertaComprobanteElectronico.TipoMensajeEnum.GRAVE));
         }
 
     }
@@ -1685,10 +1700,10 @@ public class ComprobanteElectronicoService implements Runnable {
     public void setMetodoEnvioSmsInterface(MetodoEnvioSmsInterface metodoEnvioSmsInterface) {
         this.metodoEnvioSmsInterface = metodoEnvioSmsInterface;
     }
-    
-    
-    
-    
+
+    public List<AlertaComprobanteElectronico> getAlertas() {
+        return alertas;
+    }
     
     
 

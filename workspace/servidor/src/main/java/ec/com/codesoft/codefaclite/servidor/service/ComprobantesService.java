@@ -9,6 +9,7 @@ import autorizacion.ws.sri.gob.ec.Autorizacion;
 import autorizacion.ws.sri.gob.ec.Mensaje;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
@@ -276,6 +277,29 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
     }
     
+    public List<AlertaComprobanteElectronico> procesarComprobantesPendienteSinCallBack(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos) throws RemoteException,ServicioCodefacException
+    {
+        ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
+        cargarConfiguraciones(comprobanteElectronico);
+        
+        comprobanteElectronico.setCorreosElectronicos(correos);
+        
+        comprobanteElectronico.setEtapaActual(etapaInicial);
+        comprobanteElectronico.setClaveAcceso(claveAcceso);
+        comprobanteElectronico.setEtapaLimiteProcesar(etapaLimite);
+        
+        comprobanteElectronico.procesarComprobante();
+        List<AlertaComprobanteElectronico> alertas=comprobanteElectronico.getAlertas();
+        for (AlertaComprobanteElectronico alerta : alertas) {
+            if(alerta.tipoMensaje.equals(AlertaComprobanteElectronico.TipoMensajeEnum.ERROR))
+            {
+                throw new ServicioCodefacException(alerta.mensaje); //Si encuentra algun error grave lanzo una excepcion
+            }
+        }
+        
+        return alertas;
+    }
+    
     public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject) throws RemoteException
     {
         
@@ -284,13 +308,13 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         
         comprobanteElectronico.setCorreosElectronicos(correos);
     
-        if(callbackClientObject!=null)
-        {
+        //if(callbackClientObject!=null)
+        //{
             comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
                 @Override
                 public void termino() {
                     try {
-                        callbackClientObject.termino(null);
+                        callbackClientObject.termino(null,comprobanteElectronico.getAlertas());
                     } catch (RemoteException ex) {
                         Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -323,20 +347,22 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     }
                 }
             });
-        }
+        //}
         
         comprobanteElectronico.setEtapaActual(etapaInicial);
         comprobanteElectronico.setClaveAcceso(claveAcceso);
         comprobanteElectronico.setEtapaLimiteProcesar(etapaLimite);
         //comprobanteElectronico
-        if(callbackClientObject!=null) //Si  tiene comunicación bidereccional entonces ejecuta el proceso con hlos
-        {
+        //if(callbackClientObject!=null) //Si  tiene comunicación bidereccional entonces ejecuta el proceso con hilos
+        //{
             comprobanteElectronico.procesar(false);
-        }
-        else //Si el proceso no requiere comunicación bidireccional ejecuto directamente en el hilo principal
-        {
-            comprobanteElectronico.procesarComprobante();
-        }
+        //}
+        //else //Si el proceso no requiere comunicación bidireccional ejecuto directamente en el hilo principal
+        //{
+            //TODO: Analizar el caso que sucede cuando 
+            //comprobanteElectronico.procesarComprobante();
+            //comprobanteElectronico.getAlertas();
+        //}
         return true;
     }
     
@@ -660,7 +686,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     }
                     
                     byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());                   
-                    callbackClientObject.termino(serializedPrint);
+                    callbackClientObject.termino(serializedPrint,comprobanteElectronico.getAlertas());
 
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -743,7 +769,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                 try {
                     //Si la factura termina corectamente grabo el estado y numero de autorizacion
                     byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());                   
-                    callbackClientObject.termino(serializedPrint);                    
+                    callbackClientObject.termino(serializedPrint,comprobanteElectronico.getAlertas());                    
                     
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -1278,7 +1304,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         });
     }
     
-    private void cargarConfiguracionesCorreo(ComprobanteElectronicoService servicio)
+    private void cargarConfiguracionesCorreo(ComprobanteElectronicoService servicio) throws RuntimeException
     {
         servicio.setMetodoEnvioInterface(new MetodosEnvioInterface() {
             @Override

@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFac
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
+import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_AUTORIZAR;
@@ -257,18 +258,28 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     try {
                         panelPadre.cambiarCursorEspera();
-                        ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesPendiente(
+                        List<AlertaComprobanteElectronico> alertas=ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesPendienteSinCallBack(
                                 ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
                                 ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
                                 factura.getClaveAcceso(),
-                                new ArrayList<String>(),
-                                null);
-                        panelPadre.cambiarCursorNormal();
-                        DialogoCodefac.mensaje(MensajeCodefacSistema.CorreoElectronico.CORREO_ENVIADO);
+                                new ArrayList<String>());
                         
+                        if(alertas.size()>0)
+                        {
+                            String mensajeCompleto = AlertaComprobanteElectronico.unirTodasAlertas(alertas);
+                            DialogoCodefac.mensaje("Alertas en el proceso ",mensajeCompleto,DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        }
+                        else
+                        {                            
+                            DialogoCodefac.mensaje(MensajeCodefacSistema.CorreoElectronico.CORREO_ENVIADO);
+                        }
+                        panelPadre.cambiarCursorNormal();
                     } catch (RemoteException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                         DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                     }
                 }
             }

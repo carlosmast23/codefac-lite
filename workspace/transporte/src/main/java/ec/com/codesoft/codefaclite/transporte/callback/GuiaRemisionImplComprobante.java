@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.transporte.callback;
 
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
+import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
@@ -22,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -44,7 +46,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
     }
 
     @Override
-    public void termino(byte[] byteJasperPrint) throws RemoteException {
+    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas) throws RemoteException {
 
         try {
             

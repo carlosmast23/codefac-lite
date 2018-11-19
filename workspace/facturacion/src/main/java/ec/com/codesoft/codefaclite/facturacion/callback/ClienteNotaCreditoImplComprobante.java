@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteDa
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
+import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -50,7 +52,7 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
     }
     
     @Override
-    public void termino(byte[] byteJasperPrint) throws RemoteException {
+    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas) throws RemoteException {
 
         try {
             

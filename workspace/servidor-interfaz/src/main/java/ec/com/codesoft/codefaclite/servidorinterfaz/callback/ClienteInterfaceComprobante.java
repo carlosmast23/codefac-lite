@@ -5,11 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.callback;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 import net.sf.jasperreports.engine.JasperPrint;
 
 /**
@@ -18,7 +20,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public interface ClienteInterfaceComprobante extends Remote{
     
-    public void termino(byte[] byteJasperPrint) throws RemoteException;
+    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas) throws RemoteException;
     
     public void iniciado() throws RemoteException;
     

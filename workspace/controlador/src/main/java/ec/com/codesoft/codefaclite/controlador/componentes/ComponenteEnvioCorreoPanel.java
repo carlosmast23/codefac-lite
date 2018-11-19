@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -133,8 +135,14 @@ public class ComponenteEnvioCorreoPanel extends javax.swing.JPanel {
                     }
                 };
 
-                correoCodefac.enviarCorreo();
-                DialogoCodefac.mensaje(MensajeCodefacSistema.CorreoElectronico.CORREO_ENVIADO);
+                try {
+                    correoCodefac.enviarCorreo();
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.CorreoElectronico.CORREO_ENVIADO);
+                } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
+                    Logger.getLogger(ComponenteEnvioCorreoPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje("Error","No se pudo enviar el correo \n\nProblema:\n",DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+                
                 
                 
             }
