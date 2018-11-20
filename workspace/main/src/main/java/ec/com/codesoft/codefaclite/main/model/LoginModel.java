@@ -50,8 +50,8 @@ public class LoginModel extends LoginFormDialog{
         initListenerBotones();
         this.usuarioServicio=ServiceFactory.getFactory().getUsuarioServicioIf();
         
-        Image fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoInicial.jpg")).getImage();
-        getPanelPrincipal().setBorder(new Fondo2(fondoImg));
+        //Image fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoInicial.jpg")).getImage();
+        //getPanelPrincipal().setBorder(new Fondo2(fondoImg));
         
         //Setear la versión del sistema
         getLblVersion().setText("Versión:"+ParametrosSistemaCodefac.VERSION+"   ");
