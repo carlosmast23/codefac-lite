@@ -24,3 +24,13 @@ create table EMPRESA
     TEXTO1 varchar(100),
     primary key (ID)
 )
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.6.9.6)*/
+create table SUCURSAL
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
+    EMPRESA_ID BIGINT,
+    NOMBRE varchar(120),
+    
+    primary key (ID)
+)

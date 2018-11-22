@@ -134,7 +134,7 @@ public class InformacionTributaria implements Serializable{
     
     public String getPreimpreso()
     {
-        return this.puntoEmision+"-"+this.establecimiento+"-"+UtilidadesTextos.llenarCarateresIzquierda(this.secuencial,8,"0");
+        return this.establecimiento+"-"+this.puntoEmision+"-"+UtilidadesTextos.llenarCarateresIzquierda(this.secuencial,8,"0");
     }
     
     /**

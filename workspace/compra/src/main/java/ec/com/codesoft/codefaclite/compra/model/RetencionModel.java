@@ -701,7 +701,7 @@ public class RetencionModel extends RetencionPanel{
         String preimpreso = UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(), 8, "0");
         String establecimiento = session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor;
         String puntoEmision = session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor;
-        preimpreso=puntoEmision + "-" + establecimiento + "-" + preimpreso;
+        preimpreso=establecimiento+"-"+puntoEmision + "-" + preimpreso;
         
         return preimpreso;
     }

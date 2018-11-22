@@ -41,7 +41,6 @@ public class SplashScreenFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(571, 270));
 
         panelContenedor.setBackground(new java.awt.Color(204, 204, 204));
         panelContenedor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153), 3));

@@ -236,7 +236,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             String secuencial = UtilidadesTextos.llenarCarateresIzquierda(secuencialSiguiente.toString(), 8, "0");
             String establecimiento = parametroCodefacService.getParametroByNombre(ParametroCodefac.ESTABLECIMIENTO).valor;
             String puntoEmision = parametroCodefacService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
-            return puntoEmision + "-" + establecimiento + "-" + secuencial;
+            return  establecimiento + "-" + puntoEmision + "-" + secuencial;
         } catch (RemoteException ex) {
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         }

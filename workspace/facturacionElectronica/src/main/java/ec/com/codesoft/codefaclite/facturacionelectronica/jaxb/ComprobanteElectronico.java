@@ -107,6 +107,12 @@ public abstract class ComprobanteElectronico implements Serializable{
     public void setCorreos(List<String> correos) {
         this.correos = correos;
     }
+    
+    @XmlTransient
+    public String getPreimpreso()
+    {
+        return informacionTributaria.getEstablecimiento()+"-"+informacionTributaria.getPuntoEmision()+"-"+informacionTributaria.getSecuencial();
+    }
 
     
 }
