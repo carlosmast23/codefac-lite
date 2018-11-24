@@ -9,10 +9,13 @@ import ec.com.codesoft.codefaclite.configuraciones.panel.SucursalPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JComponent;
 
 /**
  *
@@ -22,7 +25,7 @@ public class SucursalModel extends SucursalPanel {
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        //iniciar();
+        cargarValoresIniciales();
         
     }
 
@@ -91,6 +94,19 @@ public class SucursalModel extends SucursalPanel {
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void cargarValoresIniciales() {
+        
+        //Cargar los tipos de datos
+        getCmbTipo().removeAllItems();
+        for (Sucursal.TipoSucursalEnum tipo : Sucursal.TipoSucursalEnum.values()) {
+            getCmbTipo().addItem(tipo);
+        }
+        
+        //Cargar la empresa activa
+        getCmbEmpresa().removeAllItems();
+        getCmbEmpresa().addItem(session.getEmpresa());
     }
     
 }

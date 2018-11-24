@@ -45,6 +45,7 @@ import ec.com.codesoft.codefaclite.servidor.service.SriRetencionIvaService;
 import ec.com.codesoft.codefaclite.servidor.service.SriRetencionRentaService;
 import ec.com.codesoft.codefaclite.servidor.service.SriRetencionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
+import ec.com.codesoft.codefaclite.servidor.service.SucursalService;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraCruceService;
@@ -69,6 +70,7 @@ import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionAdici
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.TransportistaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
@@ -120,6 +122,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SucursalServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraCruceServiceIf;
@@ -218,6 +221,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(GuiaRemisionAdicionalService.class, GuiaRemisionAdicionalServiceIf.class);
             mapRecursos.put(SmsService.class, SmsServiceIf.class);
             mapRecursos.put(AtsService.class, AtsServiceIf.class);
+            mapRecursos.put(SucursalService.class, SucursalServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             LOG.log(Level.INFO,"Servidor Iniciado");

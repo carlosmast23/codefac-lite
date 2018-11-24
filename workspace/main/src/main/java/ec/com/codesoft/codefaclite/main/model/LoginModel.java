@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.main.panel.LoginFormDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
@@ -27,6 +28,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,60 +50,15 @@ public class LoginModel extends LoginFormDialog{
         super(null,true);
         valoresIniciales();
         initListenerBotones();
+        initListenerPantalla();
         this.usuarioServicio=ServiceFactory.getFactory().getUsuarioServicioIf();
         
         //Image fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoInicial.jpg")).getImage();
         //getPanelPrincipal().setBorder(new Fondo2(fondoImg));
         
         //Setear la versión del sistema
-        getLblVersion().setText("Versión:"+ParametrosSistemaCodefac.VERSION+"   ");
-        
-        addComponentListener(new ComponentListener() { //Artificio para setear en los dialogs el focus
-            @Override
-            public void componentResized(ComponentEvent e) {}
-
-            @Override
-            public void componentMoved(ComponentEvent e) {}
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-                getTxtUsuario().requestFocus();
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {}
-        });
-        
-        
-        addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {}
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-                salirAplicacion=true;
-                setVisible(false);
-            }
-
-            @Override
-            public void windowClosed(WindowEvent e) {
-                //salirAplicacion=true;
-                //setVisible(false);
-            }
-
-            @Override
-            public void windowIconified(WindowEvent e) {}
-
-            @Override
-            public void windowDeiconified(WindowEvent e) {}
-
-            @Override
-            public void windowActivated(WindowEvent e) {}
-
-            @Override
-            public void windowDeactivated(WindowEvent e) {}
-        });
-        
+        getLblVersion().setText("Versión:"+ParametrosSistemaCodefac.VERSION+"   ");        
+               
     }
 
     private void initListenerBotones() {
@@ -228,6 +185,66 @@ public class LoginModel extends LoginFormDialog{
     private void valoresIniciales() {
         String anioActualStr=UtilidadesFecha.obtenerAnioStr(UtilidadesFecha.getFechaHoy());
         getLblPiePagina().setText("Codefac software de facturación electrónica @ Codesoft "+anioActualStr);
+        
+        try {
+            //Setear valores de los combos
+            List<Empresa> empresas=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodos(); //Todo: Cambiar este metodo para solo obtener las empresas activas
+            getCmbEmpresa().removeAllItems();
+            for (Empresa empresa : empresas) {
+                getCmbEmpresa().addItem(empresa);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+
+    private void initListenerPantalla() {
+         addComponentListener(new ComponentListener() { //Artificio para setear en los dialogs el focus
+            @Override
+            public void componentResized(ComponentEvent e) {}
+
+            @Override
+            public void componentMoved(ComponentEvent e) {}
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                getTxtUsuario().requestFocus();
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {}
+        });
+        
+        
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {}
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                salirAplicacion=true;
+                setVisible(false);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                //salirAplicacion=true;
+                //setVisible(false);
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {}
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {}
+
+            @Override
+            public void windowActivated(WindowEvent e) {}
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {}
+        });
     }
     
 }

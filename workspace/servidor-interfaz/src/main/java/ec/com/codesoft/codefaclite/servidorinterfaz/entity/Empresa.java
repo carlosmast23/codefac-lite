@@ -148,6 +148,11 @@ public class Empresa implements Serializable {
     public void setAdicional(String adicional) {
         this.adicional = adicional;
     }
+
+    @Override
+    public String toString() {
+        return nombreLegal;
+    }
     
     
 
