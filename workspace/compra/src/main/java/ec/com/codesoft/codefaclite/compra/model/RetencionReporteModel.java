@@ -172,11 +172,12 @@ public class RetencionReporteModel extends RetencionReportePanel {
             List<ReporteRetencionesData> data = new ArrayList<ReporteRetencionesData>();
             for (RetencionDetalle retencion : dataretencion) {
                 data.add(new ReporteRetencionesData(
-                        retencion.getRetencion().getPreimpresoDocumentoFormato(),
+                        retencion.getRetencion().getPreimpreso(),
                         retencion.getBaseImponible().toString(),
                         retencion.getPorcentajeRetener().toString() + " %",
                         retencion.getCodigoRetencionSri(),
-                        retencion.getValorRetenido().toString()
+                        retencion.getValorRetenido().toString(),
+                        retencion.getRetencion().getPreimpresoDocumentoFormato()
                 ));
             }
 
@@ -259,7 +260,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                 public void excel() {
                     try{
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Preimpreso", "Base Imponible","Porcentaje", "Código", "Valor"};
+                        String nombreCabeceras[] = {"Preimpreso","Compra", "Base Imponible","Porcentaje", "Código", "Valor"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
                         excel.abrirDocumento();
                     }
@@ -514,10 +515,11 @@ public class RetencionReporteModel extends RetencionReportePanel {
     private void construirTablaRetenciones()
     {
         Vector<String> titulo = new Vector<>();
+        titulo.add("Preimpreso");
         titulo.add("Proveedor");
         titulo.add("Fecha");
         titulo.add("Tipo");
-        titulo.add("Preimpreso");
+        titulo.add("Compra Preimpreso");
         titulo.add("Base imponble");
         titulo.add("Porcentaje");
         titulo.add("Código");
@@ -527,6 +529,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
         
         for (RetencionDetalle retencion : dataretencion) {
             Vector<String> fila = new Vector<String>();
+            fila.add(retencion.getRetencion().getPreimpreso());
             fila.add(retencion.getRetencion().getRazonSocial());
             fila.add(retencion.getRetencion().getFechaEmision().toString());
             fila.add(mapTipoRetencion.get(retencion.getCodigoSri()).getNombre());

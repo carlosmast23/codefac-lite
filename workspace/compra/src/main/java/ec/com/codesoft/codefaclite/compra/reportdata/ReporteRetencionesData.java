@@ -18,17 +18,19 @@ import java.util.List;
 public class ReporteRetencionesData implements ExcelDatosInterface{
 
     private String preimpresoRetencion;
+    private String preimpresoRetencionCompra;
     private String baseRetencion;
     private String porcentajeRetencion;
     private String codigoRetencion;
     private String valorRetencion;
 
-    public ReporteRetencionesData(String preimpresoRetencion, String baseRetencion, String porcentajeRetencion, String codigoRetencion, String valorRetencion) {
+    public ReporteRetencionesData(String preimpresoRetencion, String baseRetencion, String porcentajeRetencion, String codigoRetencion, String valorRetencion,String preimpresoRetencionCompra) {
         this.preimpresoRetencion = preimpresoRetencion;
         this.baseRetencion = baseRetencion;
         this.porcentajeRetencion = porcentajeRetencion;
         this.codigoRetencion = codigoRetencion;
         this.valorRetencion = valorRetencion;
+        this.preimpresoRetencionCompra=preimpresoRetencionCompra;
     }
 
     
@@ -73,6 +75,14 @@ public class ReporteRetencionesData implements ExcelDatosInterface{
         this.valorRetencion = valorRetencion;
     }
 
+    public String getPreimpresoRetencionCompra() {
+        return preimpresoRetencionCompra;
+    }
+
+    public void setPreimpresoRetencionCompra(String preimpresoRetencionCompra) {
+        this.preimpresoRetencionCompra = preimpresoRetencionCompra;
+    }
+
     
     
     @Override
@@ -80,6 +90,7 @@ public class ReporteRetencionesData implements ExcelDatosInterface{
 
         List<TipoDato> datos = new ArrayList<>();
         datos.add(new TipoDato(this.preimpresoRetencion, Excel.TipoDataEnum.TEXTO));
+        datos.add(new TipoDato(this.preimpresoRetencionCompra, Excel.TipoDataEnum.TEXTO));
         datos.add(new TipoDato(this.baseRetencion, Excel.TipoDataEnum.NUMERO));
         datos.add(new TipoDato(this.porcentajeRetencion, Excel.TipoDataEnum.TEXTO));
         datos.add(new TipoDato(this.codigoRetencion, Excel.TipoDataEnum.TEXTO));
