@@ -92,8 +92,8 @@ public class EmpresaModel extends EmpresaForm
             getjTextRuc().setText(e.getIdentificacion());
             getjTextNombreSocial().setText(e.getRazonSocial());
             getjTextNombreComercial().setText(e.getNombreLegal());
-            getTxtDireccion().setText(e.getDireccion());
-            getjTextTelefono().setText(e.getTelefonos());
+            //getTxtDireccion().setText(e.getDireccion());
+            //getjTextTelefono().setText(e.getTelefonos());
             getTxtCelular().setText(e.getCelular());
             getTxtFacebook().setText(e.getFacebook());
             getTxtAdicional().setText(e.getAdicional());
@@ -201,10 +201,10 @@ public class EmpresaModel extends EmpresaForm
     public Empresa setDatosEmisor()
     {
         //empresa = new Empresa();
-        empresa.setTelefonos(getjTextTelefono().getText());
+        //empresa.setTelefonos(getjTextTelefono().getText());
         empresa.setRazonSocial(getjTextNombreSocial().getText());
         empresa.setNombreLegal(getjTextNombreComercial().getText());
-        empresa.setDireccion(getTxtDireccion().getText());
+        //empresa.setDireccion(getTxtDireccion().getText());
         empresa.setIdentificacion(getjTextRuc().getText());
         empresa.setContribuyenteEspecial(getjTextNumContribuyente().getText());
         empresa.setCelular(getTxtCelular().getText());
@@ -248,6 +248,7 @@ public class EmpresaModel extends EmpresaForm
     }
 
     private void agregarListener() {
+        /*
         getTxtDireccion().addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {}
@@ -258,7 +259,7 @@ public class EmpresaModel extends EmpresaForm
                 String textoNuevo=UtilidadesTextos.llenarCarateresIzquierda(texto,3,"0");
                 getTxtDireccion().setText(textoNuevo);
            }
-        });
+        });*/
         
         getBtnCargarImagen().addActionListener(new ActionListener() {
             @Override

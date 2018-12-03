@@ -5,26 +5,54 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 
 /**
  *
  * @author Carlos
  */
+@Entity
+@Table(name = "SUCURSAL")
 public class Sucursal implements Serializable{
     
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(name = "NOMBRE")
     private String nombre;
+    
+    @Column(name = "TIPO")
     private String tipo;
+    
+    @Column(name = "DIRECCION")
     private String direcccion;
+    
+    @Column(name = "TELEFONO")
     private String telefono;
+    
+    @Column(name = "EMAIL")
     private String email;    
+    
+    @Column(name = "ESTADO")
+    private String estado;    
     /**
      * Este es el codigo del sri para saber el numero de sucursal para emitir la factura
      */
-    private String codigoSucursal; 
+    @Column(name = "COD_SUCURSAL")
+    private Integer codigoSucursal; 
     
+    @JoinColumn(name ="EMPRESA_ID")
     private Empresa empresa;
 
     public Long getId() {
@@ -75,11 +103,11 @@ public class Sucursal implements Serializable{
         this.email = email;
     }
 
-    public String getCodigoSucursal() {
+    public Integer getCodigoSucursal() {
         return codigoSucursal;
     }
 
-    public void setCodigoSucursal(String codigoSucursal) {
+    public void setCodigoSucursal(Integer codigoSucursal) {
         this.codigoSucursal = codigoSucursal;
     }
 
@@ -90,6 +118,21 @@ public class Sucursal implements Serializable{
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
+    
+    
     
     //////////////////////////////////////////////////////////
     //------------------> METODOS PERSONALIZADOS 
@@ -97,6 +140,11 @@ public class Sucursal implements Serializable{
     public TipoSucursalEnum getTipoSucursalEnum()
     {
         return TipoSucursalEnum.getEnum(tipo);
+    }
+    
+    public GeneralEnumEstado getEstadoEnum()
+    {
+        return GeneralEnumEstado.getEnum(estado);
     }
 
     @Override
@@ -150,6 +198,19 @@ public class Sucursal implements Serializable{
             }
             return null;
         }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+
+        public String getCodigo() {
+            return codigo;
+        }
+        
+        
+        
+        
         
     }
 }

@@ -5,27 +5,25 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.facade.SucursalFacade;
-import ec.com.codesoft.codefaclite.servidor.facade.UsuarioFacade;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidor.facade.PuntoVentaFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoVenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SucursalServiceIf;
-import java.io.Serializable;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoVentaServiceIf;
 import java.rmi.RemoteException;
 
 /**
  *
  * @author Carlos
  */
-public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> implements SucursalServiceIf{
-
-    public SucursalService() throws RemoteException {
-        super(SucursalFacade.class);
+public class PuntoVentaService extends ServiceAbstract<PuntoVenta,PuntoVentaFacade> implements PuntoVentaServiceIf
+{
+    public PuntoVentaService() throws RemoteException {
+        super(PuntoVentaFacade.class);
     }
 
     @Override
-    public Sucursal grabar(Sucursal entity) throws ServicioCodefacException, RemoteException {
+    public PuntoVenta grabar(PuntoVenta entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
@@ -35,9 +33,6 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
         });
         return entity;
     }
-    
-    
-    
     
     
     

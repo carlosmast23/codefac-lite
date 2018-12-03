@@ -29,15 +29,16 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         this.jTextLogo.setEnabled(false);
     }
     
-    @LimpiarAnotacion
+    /*@LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido= false, min=7, max=10,expresionRegularMensaje = "Ingrese un numero valido", expresionRegular = "\\d+")
     public JTextField getjTextTelefono() {
         return jTextTelefono;
-    }
+    }*/
     
+    /*
     public void setjTextTelefono(JTextField jTextTelefono) {
         this.jTextTelefono = jTextTelefono;
-    }
+    }*/
     
     public JCheckBox getjCheckBLlevaContabilidad() {
         return jCheckBLlevaContabilidad;
@@ -54,7 +55,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     public void setjPanelConfiguracionEmisor(JPanel jPanelConfiguracionEmisor) {
         this.jPanelConfiguracionEmisor = jPanelConfiguracionEmisor;
     }
-
+/*
     public JTextField getjTextActividadComercial() {
         return jTextTelefono;
     }
@@ -72,7 +73,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
 
     public void setTxtDireccion(JTextArea jTxtDireccion) {
         this.txtDireccion = jTxtDireccion;
-    }
+    }*/
     
     
     @LimpiarAnotacion
@@ -134,20 +135,16 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jTextNombreSocial = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jTextNombreComercial = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtDireccion = new javax.swing.JTextArea();
         jLabel8 = new javax.swing.JLabel();
         jTextNumContribuyente = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jCheckBLlevaContabilidad = new javax.swing.JCheckBox();
         jLabel10 = new javax.swing.JLabel();
         jTextLogo = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jTextTelefono = new javax.swing.JTextField();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
         btnCargarImagen = new javax.swing.JButton();
+        lblEspacio3 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -170,6 +167,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jPanelConfiguracionEmisor.setName(""); // NOI18N
         jPanelConfiguracionEmisor.setLayout(new java.awt.GridBagLayout());
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("RUC:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
@@ -183,6 +181,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(jTextRuc, gridBagConstraints);
 
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Apellidos y Nombres | Razón Social:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -198,6 +197,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(jTextNombreSocial, gridBagConstraints);
 
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Nombre Comercial:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -213,28 +213,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(jTextNombreComercial, gridBagConstraints);
 
-        jLabel4.setText("Dirección:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
-        jPanelConfiguracionEmisor.add(jLabel4, gridBagConstraints);
-
-        txtDireccion.setColumns(20);
-        txtDireccion.setLineWrap(true);
-        txtDireccion.setRows(3);
-        jScrollPane1.setViewportView(txtDireccion);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 0);
-        jPanelConfiguracionEmisor.add(jScrollPane1, gridBagConstraints);
-
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("Contribuyente Especial | Nro. Resolución:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -249,6 +228,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(jTextNumContribuyente, gridBagConstraints);
 
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel9.setText("Obligado a Llevar Contabilidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -263,6 +243,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         jPanelConfiguracionEmisor.add(jCheckBLlevaContabilidad, gridBagConstraints);
 
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel10.setText("Logo(Imagen):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -277,22 +258,6 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(jTextLogo, gridBagConstraints);
-
-        jLabel7.setText("Telefono:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
-        jPanelConfiguracionEmisor.add(jLabel7, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 0);
-        jPanelConfiguracionEmisor.add(jTextTelefono, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -310,6 +275,13 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         jPanelConfiguracionEmisor.add(btnCargarImagen, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanelConfiguracionEmisor.add(lblEspacio3, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos generales", jPanelConfiguracionEmisor);
 
@@ -416,15 +388,12 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelConfiguracionEmisor;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextLogo;
@@ -432,12 +401,11 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JTextField jTextNombreSocial;
     private javax.swing.JTextField jTextNumContribuyente;
     private javax.swing.JTextField jTextRuc;
-    private javax.swing.JTextField jTextTelefono;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JLabel lblEspacio3;
     private javax.swing.JTextArea txtAdicional;
     private javax.swing.JTextField txtCelular;
-    private javax.swing.JTextArea txtDireccion;
     private javax.swing.JTextField txtFacebook;
     // End of variables declaration//GEN-END:variables
 

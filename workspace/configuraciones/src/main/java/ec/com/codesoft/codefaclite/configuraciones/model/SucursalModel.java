@@ -5,16 +5,24 @@
  */
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
+import ec.com.codesoft.codefaclite.configuraciones.busqueda.SucursalBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.panel.SucursalPanel;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 /**
@@ -22,6 +30,8 @@ import javax.swing.JComponent;
  * @author Carlos
  */
 public class SucursalModel extends SucursalPanel {
+    
+    private Sucursal sucursal;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -31,12 +41,20 @@ public class SucursalModel extends SucursalPanel {
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try {
+            setearDatos();
+            ServiceFactory.getFactory().getSucursalServiceIf().grabar(sucursal);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SucursalModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+        }
     }
 
     @Override
@@ -61,7 +79,10 @@ public class SucursalModel extends SucursalPanel {
 
     @Override
     public void limpiar() {
-        
+        sucursal = new Sucursal();
+        getTxtCodigoEstablecimiento().setValue(new Integer(0));
+        getCmbTipo().setSelectedIndex(0);
+        getCmbEmpresa().setSelectedIndex(0);
     }
 
     @Override
@@ -88,12 +109,39 @@ public class SucursalModel extends SucursalPanel {
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new BuscarDialogoModel(new SucursalBusquedaDialogo());
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Sucursal sucursal=(Sucursal) entidad;
+        getTxtNombre().setText(sucursal.getNombre());
+        getTxtTelefono().setText(sucursal.getTelefono());
+        getTxtDireccion().setText(sucursal.getDirecccion());
+        getTxtEmail().setText(sucursal.getEmail());
+        getTxtCodigoEstablecimiento().setValue(sucursal.getCodigoSucursal());
+        
+        Sucursal.TipoSucursalEnum tipoSucursal=sucursal.getTipoSucursalEnum();
+        getCmbTipo().setSelectedItem(tipoSucursal);
+        
+        getCmbEmpresa().setSelectedItem(sucursal.getEmpresa());
+    }
+    
+    private void setearDatos()
+    {
+        sucursal.setNombre(getTxtNombre().getText());
+        sucursal.setTelefono(getTxtTelefono().getText());
+        sucursal.setDirecccion(getTxtDireccion().getText());
+        sucursal.setEmail(getTxtEmail().getText());
+
+        sucursal.setCodigoSucursal((Integer) getTxtCodigoEstablecimiento().getValue());
+        Sucursal.TipoSucursalEnum tipoSucursalEnum=(Sucursal.TipoSucursalEnum) getCmbTipo().getSelectedItem();
+        sucursal.setTipo(tipoSucursalEnum.getCodigo());
+        
+        Empresa empresaSeleccionado=(Empresa) getCmbEmpresa().getSelectedItem();
+        sucursal.setEmpresa(empresaSeleccionado);
+        
+        
     }
 
     private void cargarValoresIniciales() {

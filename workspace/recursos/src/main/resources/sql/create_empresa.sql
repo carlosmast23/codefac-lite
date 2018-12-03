@@ -23,7 +23,7 @@ create table EMPRESA
     FACEBOOK varchar(50),
     TEXTO1 varchar(100),
     primary key (ID)
-)
+);
 
 /*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.6.9.6)*/
 create table SUCURSAL
@@ -31,6 +31,31 @@ create table SUCURSAL
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     EMPRESA_ID BIGINT,
     NOMBRE varchar(120),
+    TIPO varchar(1),
+    ESTADO varchar(1),
+    TELEFONO varchar(16),
+    DIRECCION varchar(100),
+    EMAIL varchar(100),
+    COD_SUCURSAL BIGINT,
+
+    primary key (ID)
+);
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.6.9.6)*/
+create table PUNTO_VENTA
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
+    SUCURSAL_ID BIGINT,
+    DESCRIPCION varchar(120),
+    PUNTO_EMISION BIGINT,
+    TIPO_FACTURACION varchar(1),
+    ESTADO varchar(1),
+    SECUENCIAL_FACTURA BIGINT,
+    SECUENCIAL_NOTA_CREDITO BIGINT,
+    SECUENCIAL_NOTA_DEBITO BIGINT,
+    SECUENCIAL_GUIA_REMISION BIGINT,
+    SECUENCIAL_RETENCIONES BIGINT,
+    SECUENCIAL_NOTA_VENTA BIGINT,
     
     primary key (ID)
-)
+);
