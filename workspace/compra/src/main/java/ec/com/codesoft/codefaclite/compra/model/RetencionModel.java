@@ -14,9 +14,11 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
+import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
@@ -243,75 +245,18 @@ public class RetencionModel extends RetencionPanel{
         }
     }
     
-    /**
-     * Metodo que permite cargar y actualizar los puntos de emision
-     */
-    private void cargarSecuencial()
-    {
-        int indiceSeleccionado=getCmbPuntoEmision().getSelectedIndex();
-        //Cargar Puntos de Venta disponibles para la sucursal
-
-        try {
-            List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(session.getSucursal());
-            getCmbPuntoEmision().removeAllItems();
-            //Canfigurar un cell render para las sucursales
-            //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
-
-            for (PuntoEmision puntoVenta : puntosVenta) {
-                getCmbPuntoEmision().addItem(puntoVenta);
-            }
-
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        if(indiceSeleccionado<0 && getCmbPuntoEmision().getModel().getSize()>0 )
-        {
-            getCmbPuntoEmision().setSelectedIndex(0); // Seleccionar el primero registro la primera vez
-        }
-        else
-        {
-            getCmbPuntoEmision().setSelectedIndex(indiceSeleccionado);
-        }
-        
-        
-        getLblEstablecimiento().setText(session.getSucursal().getCodigoSucursalFormatoTexto()+"-");
-        PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
-        if(puntoEmision!=null)
-        {
-            getLblSecuencial().setText("-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.getSecuencialRetenciones().toString(), 8, "0"));
-        }
-    }
+    
     
     private void cargarDatosRetencion() {
         //getLblSecuencial().setText(retencion.getPreimpreso());
-        cargarSecuencialConsulta();
+        ComprobanteElectronicoComponente.cargarSecuencialConsulta(retencion,getCmbPuntoEmision(),getLblEstablecimiento(),getLblSecuencial());
         getjDateFechaEmision().setDate(retencion.getFechaEmision());
         
         cargarDatosCompra();
         cargarTablaDatosAdicionales(retencion);
     }
     
-    public void cargarSecuencialConsulta()
-    {        
-        try {        
-            PuntoEmision puntoEmision=ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerPorCodigo(Integer.valueOf(retencion.getPuntoEmision()));
-            getCmbPuntoEmision().setSelectedItem((PuntoEmision)puntoEmision); //TODO: Analizar para todos los casos porque aveces no me va a permitir cargagar cuando pertenece a otra sucursal
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex); 
-            PuntoEmision puntoEmisionTmp=new PuntoEmision();
-            puntoEmisionTmp.setPuntoEmision(Integer.valueOf(retencion.getPuntoEmision()));
-            getCmbPuntoEmision().addItem(puntoEmisionTmp); //TODO: Revisar que salga bien
-        } catch (RemoteException ex) {
-            Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        getLblEstablecimiento().setText(ComprobantesUtilidades.formatoEstablecimiento(retencion.getPuntoEstablecimiento()));
-        getLblSecuencial().setText(ComprobantesUtilidades.formatoSecuencial(retencion.getSecuencial().toString()));
-        
-    }
+
     
     /**
      * Esta funcion permite verificar si la retencion tiene referencia y si no tiene simplementa la crea para poder mostrar es decir la compra
@@ -737,7 +682,7 @@ public class RetencionModel extends RetencionPanel{
         getLblTelefonos().setText(empresa.getTelefonos());                
 
         //getLblSecuencial().setText(obtenerSecuencial());
-        cargarSecuencial();
+        ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
         
     }
     
@@ -935,7 +880,7 @@ public class RetencionModel extends RetencionPanel{
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargarSecuencial();
+                ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
         

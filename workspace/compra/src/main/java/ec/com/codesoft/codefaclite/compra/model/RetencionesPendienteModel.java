@@ -8,8 +8,10 @@ package ec.com.codesoft.codefaclite.compra.model;
 import ec.com.codesoft.codefaclite.compra.callback.RetencionImplCallBack;
 import ec.com.codesoft.codefaclite.compra.panel.RetencionesPendientePanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
@@ -98,7 +100,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
 
     @Override
     public void limpiar() {
-        cargarSecuencial();
+        ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
     }
 
 //    @Override
@@ -148,7 +150,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargarSecuencial();
+                ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
         
@@ -164,7 +166,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
                 Boolean confirmacion = DialogoCodefac.dialogoPregunta("Alerta", "Está seguro que desea realizar la retención?", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if (confirmacion) {
                     enviar();
-                    cargarSecuencial(); //Carga nuevamente el secuencial proximo
+                    ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
                 }
             
             }
@@ -273,49 +275,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
         return (PuntoEmision) getCmbPuntoEmision().getSelectedItem();
     }
     
-    /**
-     * Metodo que permite cargar y actualizar los puntos de emision
-     */
-    private void cargarSecuencial()
-    {
-        int indiceSeleccionado=getCmbPuntoEmision().getSelectedIndex();
-        //Cargar Puntos de Venta disponibles para la sucursal
-
-        try {
-            List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(session.getSucursal());
-            getCmbPuntoEmision().removeAllItems();
-            //Canfigurar un cell render para las sucursales
-            //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
-
-            for (PuntoEmision puntoVenta : puntosVenta) {
-                getCmbPuntoEmision().addItem(puntoVenta);
-            }
-
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(RetencionesPendienteModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(RetencionesPendienteModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        if(indiceSeleccionado<0 && getCmbPuntoEmision().getModel().getSize()>0 )
-        {
-            getCmbPuntoEmision().setSelectedIndex(0); // Seleccionar el primero registro la primera vez
-        }
-        else
-        {
-            getCmbPuntoEmision().setSelectedIndex(indiceSeleccionado);
-        }
-        
-        
-        getLblEstablecimiento().setText(session.getSucursal().getCodigoSucursalFormatoTexto()+"-");
-        PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
-        if(puntoEmision!=null)
-        {
-            getLblSecuencial().setText("-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.getSecuencialRetenciones().toString(), 8, "0"));
-        }
-    }
-    
+       
     
     private void setearDatos() {
         //retencion=new Retencion();

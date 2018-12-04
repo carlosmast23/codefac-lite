@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Profor
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
@@ -42,6 +43,7 @@ import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElec
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_FIRMAR;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_PRE_VALIDAR;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_RIDE;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
@@ -555,6 +557,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
 
+    }
+    
+    public void cargarSecuencial()
+    {        
+        ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.FACTURA,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+    }
+    
+    public void cargarSecuencialConsulta()
+    {
+        ComprobanteElectronicoComponente.cargarSecuencialConsulta(factura,getCmbPuntoEmision(),getLblEstablecimiento(),getLblSecuencial());
     }
     
     private void btnListenerEditar()
@@ -1292,43 +1304,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     }
     
-    public void cargarSecuencial()
-    {
-        //DocumentoEnum tipoDocumentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
-        //String secuencial="";
-        //boolean facturacionElectronica=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
-        /*
-        switch(tipoDocumentoEnum)
-        {
-            case FACTURA:
-                if(facturacionElectronica)
-                    secuencial=session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor; 
-                else
-                    secuencial = session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor;
-                    
-                break;
-                
-            case NOTA_VENTA:
-                    secuencial = session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA).valor;                    
-                    break;
-        }*/
-        
-     
-        //String secuencial = UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(), 8, "0");
-        //String establecimiento = session.getSucursal();
-        //String puntoEmision = session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor;
-        //preimpreso=establecimiento+ "-" +puntoEmision + "-" + preimpreso;
-        
-        getLblEstablecimiento().setText(session.getSucursal().getCodigoSucursalFormatoTexto()+"-");
-        PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
-        if(puntoEmision!=null)
-        {
-            getLblSecuencial().setText("-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.getSecuencialFactura().toString(), 8, "0"));
-        }
-        
-        //getLblSecuencial().setText("-"+secuencial);
-    }
-
+    
 //    @Override
     public String getNombre() {
         return "Facturacion";
@@ -1930,27 +1906,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     }
     
-    public void cargarSecuencialConsulta()
-    {        
-        try {        
-            PuntoEmision puntoEmision=ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerPorCodigo(Integer.valueOf(factura.getPuntoEmision()));
-            getCmbPuntoEmision().setSelectedItem((PuntoEmision)puntoEmision); //TODO: Analizar para todos los casos porque aveces no me va a permitir cargagar cuando pertenece a otra sucursal
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex); 
-            PuntoEmision puntoEmisionTmp=new PuntoEmision();
-            puntoEmisionTmp.setPuntoEmision(Integer.valueOf(factura.getPuntoEmision()));
-            getCmbPuntoEmision().addItem(puntoEmisionTmp); //TODO: Revisar que salga bien
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        getLblEstablecimiento().setText(ComprobantesUtilidades.formatoEstablecimiento(factura.getPuntoEstablecimiento()));
-        getLblSecuencial().setText(ComprobantesUtilidades.formatoSecuencial(factura.getSecuencial().toString()));
-        
-    }
+
 
     private void cargarValoresAdicionales() {
         getLblEstadoFactura().setText((factura.getEstadoEnum()!=null)?factura.getEstadoEnum().getNombre():"Sin estado");
-        cargarSecuencialConsulta();
+        
+        //Solo cargar el secuencial cuando no es una proforma
+        if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
+        {
+            cargarSecuencialConsulta();
+        }
         getjDateFechaEmision().setDate(factura.getFechaEmision());
     }
 

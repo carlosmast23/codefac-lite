@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaNotaCredito;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.NotaCreditoBusqueda;
@@ -24,6 +25,7 @@ import ec.com.codesoft.codefaclite.facturacion.callback.ClienteNotaCreditoImplCo
 import ec.com.codesoft.codefaclite.facturacion.panel.NotaCreditoPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
@@ -289,7 +291,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             //Cargar el secuncial correspondiente
             //NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
             //getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
-            cargarSecuencial();
+            ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.NOTA_CREDITO,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             
             getCmbTipoDocumento().setSelectedItem(TipoDocumentoEnum.VENTA);
             
@@ -303,48 +305,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         //}
     }
     
-    /**
-     * Metodo que permite cargar y actualizar los puntos de emision
-     */
-    private void cargarSecuencial()
-    {
-        int indiceSeleccionado=getCmbPuntoEmision().getSelectedIndex();
-        //Cargar Puntos de Venta disponibles para la sucursal
-
-        try {
-            List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(session.getSucursal());
-            getCmbPuntoEmision().removeAllItems();
-            //Canfigurar un cell render para las sucursales
-            //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
-
-            for (PuntoEmision puntoVenta : puntosVenta) {
-                getCmbPuntoEmision().addItem(puntoVenta);
-            }
-
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        if(indiceSeleccionado<0 && getCmbPuntoEmision().getModel().getSize()>0 )
-        {
-            getCmbPuntoEmision().setSelectedIndex(0); // Seleccionar el primero registro la primera vez
-        }
-        else
-        {
-            getCmbPuntoEmision().setSelectedIndex(indiceSeleccionado);
-        }
-        
-        
-        getLblEstablecimiento().setText(session.getSucursal().getCodigoSucursalFormatoTexto()+"-");
-        PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
-        if(puntoEmision!=null)
-        {
-            getLblSecuencial().setText("-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.getSecuencialNotaCredito().toString(), 8, "0"));
-        }
-    }
+    
     
     private void limpiarCampos()
     {
@@ -978,7 +939,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         //Cargar el preimpreso solo cuando el estado sea editar
         if(estadoFormulario.equals(ESTADO_EDITAR))
         {
-            cargarSecuencialConsulta();
+            ComprobanteElectronicoComponente.cargarSecuencialConsulta(notaCredito,getCmbPuntoEmision(),getLblEstablecimiento(),getLblSecuencial());
         }
 
         /**
@@ -990,24 +951,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getLblSubtotal12().setText(notaCredito.getSubtotalDoce() + "");
     }
     
-    public void cargarSecuencialConsulta()
-    {        
-        try {        
-            PuntoEmision puntoEmision=ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerPorCodigo(Integer.valueOf(notaCredito.getPuntoEmision()));
-            getCmbPuntoEmision().setSelectedItem((PuntoEmision)puntoEmision); //TODO: Analizar para todos los casos porque aveces no me va a permitir cargagar cuando pertenece a otra sucursal
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex); 
-            PuntoEmision puntoEmisionTmp=new PuntoEmision();
-            puntoEmisionTmp.setPuntoEmision(Integer.valueOf(notaCredito.getPuntoEmision()));
-            getCmbPuntoEmision().addItem(puntoEmisionTmp); //TODO: Revisar que salga bien
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        getLblEstablecimiento().setText(ComprobantesUtilidades.formatoEstablecimiento(notaCredito.getPuntoEstablecimiento()));
-        getLblSecuencial().setText(ComprobantesUtilidades.formatoSecuencial(notaCredito.getSecuencial().toString()));
-        
-    }
-
+    
 
     private void crearDetalleTabla() {
         Vector<String> titulo = new Vector<>();
@@ -1354,7 +1298,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargarSecuencial();
+                ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.NOTA_CREDITO,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
         

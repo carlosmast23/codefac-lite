@@ -54,6 +54,8 @@ public class ProformaModel extends FacturacionModel{
         super.iniciar(); //To change body of generated methods, choose Tools | Templates.
         valoresIniciales();
         getBtnCargarProforma().setEnabled(false);
+        getCmbPuntoEmision().setVisible(false);
+        getLblEstablecimiento().setVisible(false);
     }
     
     

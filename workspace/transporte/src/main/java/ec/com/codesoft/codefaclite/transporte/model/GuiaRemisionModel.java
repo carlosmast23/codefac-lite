@@ -11,10 +11,12 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.GuiaRe
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.DetalleGuiaRemisionComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataNotaCredito;
@@ -163,7 +165,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblCantidadProductos().setText("0");
-        cargarSecuencial();
+        ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
         
         ///Limpiar Variables
         guiaRemision=new GuiaRemision();
@@ -196,46 +198,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         
         
     }
-    
-     public void cargarSecuencial()
-    {
-        int indiceSeleccionado=getCmbPuntoEmision().getSelectedIndex();
-        //Cargar Puntos de Venta disponibles para la sucursal
-
-        try {
-            List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(session.getSucursal());
-            getCmbPuntoEmision().removeAllItems();
-            //Canfigurar un cell render para las sucursales
-            //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
-
-            for (PuntoEmision puntoVenta : puntosVenta) {
-                getCmbPuntoEmision().addItem(puntoVenta);
-            }
-
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
-        
-        if(indiceSeleccionado<0 && getCmbPuntoEmision().getModel().getSize()>0 )
-        {
-            getCmbPuntoEmision().setSelectedIndex(0); // Seleccionar el primero registro la primera vez
-        }
-        else
-        {
-            getCmbPuntoEmision().setSelectedIndex(indiceSeleccionado);
-        }
-        
-        
-        getLblEstablecimiento().setText(session.getSucursal().getCodigoSucursalFormatoTexto()+"-");
-        PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
-        if(puntoEmision!=null)
-        {
-            getLblSecuencial().setText("-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.getSecuencialGuiaRemision().toString(), 8, "0"));
-        }
-    }
 
 
     @Override
@@ -278,7 +241,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         cargarDestinatariosAgregados();
         imprimirTabla();
         //getLblSecuencial().setText(guiaRemision.getPreimpreso());
-        cargarSecuencialConsulta();
+        ComprobanteElectronicoComponente.cargarSecuencialConsulta(guiaRemision,getCmbPuntoEmision(),getLblEstablecimiento(),getLblSecuencial());
+
         //cargarDatoFactura(guiaRemision.getre)
         
     }
@@ -569,29 +533,13 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         
     }
     
-    public void cargarSecuencialConsulta() {
-        try {
-            PuntoEmision puntoEmision = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerPorCodigo(Integer.valueOf(guiaRemision.getPuntoEmision()));
-            getCmbPuntoEmision().setSelectedItem((PuntoEmision) puntoEmision); //TODO: Analizar para todos los casos porque aveces no me va a permitir cargagar cuando pertenece a otra sucursal
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(GuiaRemision.class.getName()).log(Level.SEVERE, null, ex);
-            PuntoEmision puntoEmisionTmp = new PuntoEmision();
-            puntoEmisionTmp.setPuntoEmision(Integer.valueOf(guiaRemision.getPuntoEmision()));
-            getCmbPuntoEmision().addItem(puntoEmisionTmp); //TODO: Revisar que salga bien
-        } catch (RemoteException ex) {
-            Logger.getLogger(GuiaRemision.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        getLblEstablecimiento().setText(ComprobantesUtilidades.formatoEstablecimiento(guiaRemision.getPuntoEstablecimiento()));
-        getLblSecuencial().setText(ComprobantesUtilidades.formatoSecuencial(guiaRemision.getSecuencial().toString()));
-
-    }
 
 
     private void listenerCombos() {
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargarSecuencial();
+                ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
     }
