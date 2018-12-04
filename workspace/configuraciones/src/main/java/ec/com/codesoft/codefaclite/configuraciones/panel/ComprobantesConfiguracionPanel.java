@@ -41,29 +41,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        panelSecuenciales = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        txtFacturaSecuencial = new javax.swing.JTextField();
-        txtNotaCreditoSecuencial = new javax.swing.JTextField();
-        txtNotaDebitoSecuencial = new javax.swing.JTextField();
-        txtGuiaRemisionSecuencial = new javax.swing.JTextField();
-        txtRetencionesSecuencial = new javax.swing.JTextField();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        txtFacturaSecuencialFisico = new javax.swing.JTextField();
-        jLabel27 = new javax.swing.JLabel();
-        jLabel30 = new javax.swing.JLabel();
-        txtNotaCreditoSecuencialFisico = new javax.swing.JTextField();
-        txtNotaDebitoSecuencialFisico = new javax.swing.JTextField();
-        txtGuiaRemisionSecuencialFisico = new javax.swing.JTextField();
-        txtRetencionesSecuencialFisico = new javax.swing.JTextField();
-        jLabel25 = new javax.swing.JLabel();
-        txtNotaVentaSecuencialFisico = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
         panelFacturacionElectronica = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         cmbModoFacturacion = new javax.swing.JComboBox<>();
@@ -80,11 +57,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         txtDirectorioRecurso = new javax.swing.JTextField();
         txtCorreoElectronico = new javax.swing.JTextField();
         txtPasswordCorreo = new javax.swing.JPasswordField();
-        txtEstablecimiento = new javax.swing.JTextField();
-        lblPuntoEmision = new javax.swing.JLabel();
-        txtPuntoEmision = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -100,6 +73,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         jLabel18 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
+        lblEspacio1 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -108,212 +82,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         setTitle("Configuraciones");
         setToolTipText("");
         getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        panelSecuenciales.setBorder(javax.swing.BorderFactory.createTitledBorder("Secuenciales Comprobantes"));
-        panelSecuenciales.setLayout(new java.awt.GridBagLayout());
-
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Factura:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(jLabel1, gridBagConstraints);
-
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Nota  de Crédito:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(jLabel2, gridBagConstraints);
-
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel3.setText("Nota de Débito:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(jLabel3, gridBagConstraints);
-
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Guia Remisión:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(jLabel4, gridBagConstraints);
-
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Retenciones:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(jLabel5, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(txtFacturaSecuencial, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(txtNotaCreditoSecuencial, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(txtNotaDebitoSecuencial, gridBagConstraints);
-
-        txtGuiaRemisionSecuencial.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtGuiaRemisionSecuencialActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(txtGuiaRemisionSecuencial, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(txtRetencionesSecuencial, gridBagConstraints);
-
-        jLabel14.setText("                                                            ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.4;
-        panelSecuenciales.add(jLabel14, gridBagConstraints);
-
-        jLabel15.setText("                                                            ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.4;
-        panelSecuenciales.add(jLabel15, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(txtFacturaSecuencialFisico, gridBagConstraints);
-
-        jLabel27.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel27.setText("Electronicos");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(jLabel27, gridBagConstraints);
-
-        jLabel30.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel30.setText("    Fisicos    ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(jLabel30, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(txtNotaCreditoSecuencialFisico, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(txtNotaDebitoSecuencialFisico, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(txtGuiaRemisionSecuencialFisico, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(txtRetencionesSecuencialFisico, gridBagConstraints);
-
-        jLabel25.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel25.setText("Nota de Venta:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(jLabel25, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(txtNotaVentaSecuencialFisico, gridBagConstraints);
-
-        jTextField2.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelSecuenciales.add(jTextField2, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(panelSecuenciales, gridBagConstraints);
-        panelSecuenciales.getAccessibleContext().setAccessibleDescription("");
 
         panelFacturacionElectronica.setBorder(javax.swing.BorderFactory.createTitledBorder("Comprobantes Electrónicos"));
         panelFacturacionElectronica.setLayout(new java.awt.GridBagLayout());
@@ -439,44 +207,11 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.weightx = 0.1;
         panelConfiguracionesGenerales.add(txtPasswordCorreo, gridBagConstraints);
 
-        txtEstablecimiento.setText("                                    ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        panelConfiguracionesGenerales.add(txtEstablecimiento, gridBagConstraints);
-
-        lblPuntoEmision.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblPuntoEmision.setText("Punto Emisión:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelConfiguracionesGenerales.add(lblPuntoEmision, gridBagConstraints);
-
-        txtPuntoEmision.setText("                                    ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        panelConfiguracionesGenerales.add(txtPuntoEmision, gridBagConstraints);
-
         jLabel20.setText("                              ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
         panelConfiguracionesGenerales.add(jLabel20, gridBagConstraints);
-
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel7.setText("Establecimiento: ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelConfiguracionesGenerales.add(jLabel7, gridBagConstraints);
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel11.setText("IVA Defecto:");
@@ -598,13 +333,16 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
         getContentPane().add(jLabel26, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(lblEspacio1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtGuiaRemisionSecuencialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGuiaRemisionSecuencialActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtGuiaRemisionSecuencialActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -613,87 +351,37 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JComboBox<ImpuestoDetalle> cmbIvaDefault;
     private javax.swing.JComboBox<String> cmbModoFacturacion;
     private javax.swing.JComboBox<ComprobanteEntity.TipoEmisionEnum> cmbTipoFacturacion;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JLabel lblPuntoEmision;
+    private javax.swing.JLabel lblEspacio1;
     private javax.swing.JPanel panelConfiguracionesGenerales;
     private javax.swing.JPanel panelFacturacionElectronica;
-    private javax.swing.JPanel panelSecuenciales;
     private javax.swing.JPasswordField txtClaveFirma;
     private javax.swing.JTextField txtCorreoElectronico;
     private javax.swing.JTextField txtDirectorioRecurso;
-    private javax.swing.JTextField txtEstablecimiento;
-    private javax.swing.JTextField txtFacturaSecuencial;
-    private javax.swing.JTextField txtFacturaSecuencialFisico;
     private javax.swing.JTextField txtFondoEscritorio;
-    private javax.swing.JTextField txtGuiaRemisionSecuencial;
-    private javax.swing.JTextField txtGuiaRemisionSecuencialFisico;
     private javax.swing.JTextField txtNombreFirma;
-    private javax.swing.JTextField txtNotaCreditoSecuencial;
-    private javax.swing.JTextField txtNotaCreditoSecuencialFisico;
-    private javax.swing.JTextField txtNotaDebitoSecuencial;
-    private javax.swing.JTextField txtNotaDebitoSecuencialFisico;
-    private javax.swing.JTextField txtNotaVentaSecuencialFisico;
     private javax.swing.JPasswordField txtPasswordCorreo;
-    private javax.swing.JTextField txtPuntoEmision;
-    private javax.swing.JTextField txtRetencionesSecuencial;
-    private javax.swing.JTextField txtRetencionesSecuencialFisico;
     // End of variables declaration//GEN-END:variables
 
-    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = "Factura Secuencial")
-    public JTextField getTxtFacturaSecuencial() {
-        return txtFacturaSecuencial;
-    }
-    
-    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = "Guia remisión" )
-    public JTextField getTxtGuiaRemisionSecuencial() {
-        return txtGuiaRemisionSecuencial;
-    }
-
-    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = "Nota Credito")
-    public JTextField getTxtNotaCreditoSecuencial() {
-        return txtNotaCreditoSecuencial;
-    }
-
-    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = "Nota Debito")
-    public JTextField getTxtNotaDebitoSecuencial() {
-        return txtNotaDebitoSecuencial;
-    }
-
-    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = "Retencion Secuencial")
-    public JTextField getTxtRetencionesSecuencial() {
-        return txtRetencionesSecuencial;
-    }
-
+   
 
 
     public JComboBox<String> getCmbModoFacturacion() {
@@ -751,24 +439,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         this.cmbIvaDefault = cmbIvaDefault;
     }
     
-    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = " Establecimiento" )
-    public JTextField getTxtEstablecimiento() {
-        return txtEstablecimiento;
-    }
-
-    public void setTxtEstablecimiento(JTextField txtEstablecimiento) {
-        this.txtEstablecimiento = txtEstablecimiento;
-    }
-
-    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$" , nombre = "Punto Emisión")
-    public JTextField getTxtPuntoEmision() {
-        return txtPuntoEmision;
-    }
-
-    public void setTxtPuntoEmision(JTextField txtPuntoEmision) {
-        this.txtPuntoEmision = txtPuntoEmision;
-    }
-
     public JButton getBtnFirmaElectronica() {
         return btnFirmaElectronica;
     }
@@ -800,47 +470,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     public void setCmbTipoFacturacion(JComboBox<ComprobanteEntity.TipoEmisionEnum> cmbTipoFacturacion) {
         this.cmbTipoFacturacion = cmbTipoFacturacion;
     }
-
-    public JTextField getTxtFacturaSecuencialFisico() {
-        return txtFacturaSecuencialFisico;
-    }
-
-    public void setTxtFacturaSecuencialFisico(JTextField txtFacturaSecuencialFisico) {
-        this.txtFacturaSecuencialFisico = txtFacturaSecuencialFisico;
-    }
-
-    public JTextField getTxtGuiaRemisionSecuencialFisico() {
-        return txtGuiaRemisionSecuencialFisico;
-    }
-
-    public void setTxtGuiaRemisionSecuencialFisico(JTextField txtGuiaRemisionSecuencialFisico) {
-        this.txtGuiaRemisionSecuencialFisico = txtGuiaRemisionSecuencialFisico;
-    }
-
-    public JTextField getTxtNotaCreditoSecuencialFisico() {
-        return txtNotaCreditoSecuencialFisico;
-    }
-
-    public void setTxtNotaCreditoSecuencialFisico(JTextField txtNotaCreditoSecuencialFisico) {
-        this.txtNotaCreditoSecuencialFisico = txtNotaCreditoSecuencialFisico;
-    }
-
-    public JTextField getTxtNotaDebitoSecuencialFisico() {
-        return txtNotaDebitoSecuencialFisico;
-    }
-
-    public void setTxtNotaDebitoSecuencialFisico(JTextField txtNotaDebitoSecuencialFisico) {
-        this.txtNotaDebitoSecuencialFisico = txtNotaDebitoSecuencialFisico;
-    }
-
-    public JTextField getTxtRetencionesSecuencialFisico() {
-        return txtRetencionesSecuencialFisico;
-    }
-
-    public void setTxtRetencionesSecuencialFisico(JTextField txtRetencionesSecuencialFisico) {
-        this.txtRetencionesSecuencialFisico = txtRetencionesSecuencialFisico;
-    }
-
+    
     public JPanel getPanelFacturacionElectronica() {
         return panelFacturacionElectronica;
     }
@@ -849,15 +479,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         this.panelFacturacionElectronica = panelFacturacionElectronica;
     }
 
-    public JTextField getTxtNotaVentaSecuencialFisico() {
-        return txtNotaVentaSecuencialFisico;
-    }
-
-    public void setTxtNotaVentaSecuencialFisico(JTextField txtNotaVentaSecuencialFisico) {
-        this.txtNotaVentaSecuencialFisico = txtNotaVentaSecuencialFisico;
-    }
-
-    
+   
     
     
 

@@ -9,6 +9,7 @@ import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -47,7 +48,6 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         panelDatosGenerales = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
-        lblSecuencial = new javax.swing.JLabel();
         jDateFechaEmision = new com.toedter.calendar.JDateChooser();
         jLabel38 = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
@@ -63,6 +63,10 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         lblTelefonos = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         cmbTipoDocumento = new javax.swing.JComboBox<>();
+        jToolBar3 = new javax.swing.JToolBar();
+        lblEstablecimiento = new javax.swing.JLabel();
+        cmbPuntoEmision = new javax.swing.JComboBox<>();
+        lblSecuencial = new javax.swing.JLabel();
         PanelDatosNotaCredito = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -168,14 +172,6 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelDatosGenerales.add(jLabel36, gridBagConstraints);
-
-        lblSecuencial.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblSecuencial.setText("001-002-9213912939");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelDatosGenerales.add(lblSecuencial, gridBagConstraints);
 
         jDateFechaEmision.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -307,6 +303,26 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.05;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelDatosGenerales.add(cmbTipoDocumento, gridBagConstraints);
+
+        jToolBar3.setBorder(null);
+        jToolBar3.setRollover(true);
+
+        lblEstablecimiento.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        lblEstablecimiento.setText("001-");
+        jToolBar3.add(lblEstablecimiento);
+
+        cmbPuntoEmision.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        jToolBar3.add(cmbPuntoEmision);
+
+        lblSecuencial.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        lblSecuencial.setText("-000000009");
+        jToolBar3.add(lblSecuencial);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
+        panelDatosGenerales.add(jToolBar3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1023,6 +1039,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnQuitarDetalle;
     private javax.swing.JCheckBox checkPorcentaje;
     private com.toedter.calendar.JDateChooser cmbFechaCompra;
+    private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision> cmbPuntoEmision;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JCheckBox jCheckBox1;
     private com.toedter.calendar.JDateChooser jDateFechaEmision;
@@ -1067,12 +1084,14 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JToolBar jToolBar3;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDireccionCliente;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio4;
+    private javax.swing.JLabel lblEstablecimiento;
     private javax.swing.JLabel lblIva12;
     private javax.swing.JLabel lblNombreCliente;
     private javax.swing.JLabel lblNombreComercial;
@@ -1363,6 +1382,14 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
 
     public JDateChooser getCmbFechaCompra() {
         return cmbFechaCompra;
+    }
+
+    public JComboBox<PuntoEmision> getCmbPuntoEmision() {
+        return cmbPuntoEmision;
+    }
+
+    public JLabel getLblEstablecimiento() {
+        return lblEstablecimiento;
     }
     
     

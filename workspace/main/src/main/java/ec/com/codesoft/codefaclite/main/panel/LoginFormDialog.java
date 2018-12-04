@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.panel;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -32,7 +33,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
         //getPanelPrincipal().setPreferredSize(new Dimension(571, 259));
         //setPreferredSize(new Dimension(571, 259));
         //setPreferredSize(new Dimension(250, 210));
-        setSize(new Dimension(562, 290));
+        setSize(new Dimension(562, 290));        
     }
 
     /**
@@ -313,7 +314,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<Empresa> cmbEmpresa;
-    private javax.swing.JComboBox<String> cmbSucursal;
+    private javax.swing.JComboBox<Sucursal> cmbSucursal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -390,6 +391,11 @@ public class LoginFormDialog extends javax.swing.JDialog {
     public JComboBox<Empresa> getCmbEmpresa() {
         return cmbEmpresa;
     }
+
+    public JComboBox<Sucursal> getCmbSucursal() {
+        return cmbSucursal;
+    }
+    
     
     
 

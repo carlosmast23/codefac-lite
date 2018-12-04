@@ -5,8 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
-import ec.com.codesoft.codefaclite.configuraciones.busqueda.PuntoVentaBusquedaDialogo;
-import ec.com.codesoft.codefaclite.configuraciones.panel.PuntoVentaPanel;
+import ec.com.codesoft.codefaclite.configuraciones.busqueda.PuntoEmisionBusquedaDialogo;
+import ec.com.codesoft.codefaclite.configuraciones.panel.PuntoEmisionPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoVenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.RemoteException;
@@ -28,9 +28,9 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class PuntoVentaModel extends PuntoVentaPanel{
+public class PuntoEmisionModel extends PuntoEmisionPanel{
     
-    PuntoVenta puntoVenta;
+    PuntoEmision puntoEmision;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -46,7 +46,7 @@ public class PuntoVentaModel extends PuntoVentaPanel{
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try {
             setearDatos();
-            ServiceFactory.getFactory().getPuntoVentaServiceIf().grabar(puntoVenta);
+            ServiceFactory.getFactory().getPuntoVentaServiceIf().grabar(puntoEmision);
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(SucursalModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -56,12 +56,21 @@ public class PuntoVentaModel extends PuntoVentaPanel{
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
-        
+        try {
+            setearDatos();
+            ServiceFactory.getFactory().getPuntoVentaServiceIf().editar(puntoEmision);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SucursalModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+        }
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        setearDatos();
+        ServiceFactory.getFactory().getPuntoVentaServiceIf().eliminar(puntoEmision);
+        DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
     }
 
     @Override
@@ -76,7 +85,7 @@ public class PuntoVentaModel extends PuntoVentaPanel{
 
     @Override
     public void limpiar() {
-        puntoVenta=new PuntoVenta();
+        puntoEmision=new PuntoEmision();
         
         getCmbSucursal().setSelectedIndex(0);
         getCmbTipoFacturacion().setSelectedIndex(0);
@@ -118,24 +127,24 @@ public class PuntoVentaModel extends PuntoVentaPanel{
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        return new BuscarDialogoModel(new PuntoVentaBusquedaDialogo());
+        return new BuscarDialogoModel(new PuntoEmisionBusquedaDialogo());
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        PuntoVenta puntoVenta=(PuntoVenta) entidad;
+        puntoEmision=(PuntoEmision) entidad;
         
-        getTxtDescripcion().setText(puntoVenta.getDescripcion());
-        getTxtPuntoEmision().setValue(puntoVenta.getPuntoEmision());
-        getTxtFactura().setValue(puntoVenta.getSecuencialFactura());
-        getTxtNotaCredito().setValue(puntoVenta.getSecuencialFactura());
-        getTxtNotaDebito().setValue(puntoVenta.getSecuencialFactura());
-        getTxtGuiaRemision().setValue(puntoVenta.getSecuencialFactura());
-        getTxtRetenciones().setValue(puntoVenta.getSecuencialFactura());
-        getTxtNotaVenta().setValue(puntoVenta.getSecuencialFactura());
+        getTxtDescripcion().setText(puntoEmision.getDescripcion());
+        getTxtPuntoEmision().setValue(puntoEmision.getPuntoEmision());
+        getTxtFactura().setValue(puntoEmision.getSecuencialFactura());
+        getTxtNotaCredito().setValue(puntoEmision.getSecuencialNotaCredito());
+        getTxtNotaDebito().setValue(puntoEmision.getSecuencialNotaDebito());
+        getTxtGuiaRemision().setValue(puntoEmision.getSecuencialGuiaRemision());
+        getTxtRetenciones().setValue(puntoEmision.getSecuencialRetenciones());
+        getTxtNotaVenta().setValue(puntoEmision.getSecuencialNotaVenta());
         
-        getCmbSucursal().setSelectedItem(puntoVenta.getSucursal());
-        getCmbTipoFacturacion().setSelectedItem(puntoVenta.getTipoFacturacionEnum());
+        getCmbSucursal().setSelectedItem(puntoEmision.getSucursal());
+        getCmbTipoFacturacion().setSelectedItem(puntoEmision.getTipoFacturacionEnum());
         
     }
 
@@ -155,27 +164,27 @@ public class PuntoVentaModel extends PuntoVentaPanel{
             }
             
         } catch (RemoteException ex) {
-            Logger.getLogger(PuntoVentaModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PuntoEmisionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
 
     private void setearDatos() {
-        puntoVenta.setDescripcion(getTxtDescripcion().getText());
-        puntoVenta.setPuntoEmision((Integer) getTxtPuntoEmision().getValue());
+        puntoEmision.setDescripcion(getTxtDescripcion().getText());
+        puntoEmision.setPuntoEmision((Integer) getTxtPuntoEmision().getValue());
         
-        puntoVenta.setSecuencialFactura((Integer) getTxtPuntoEmision().getValue());
-        puntoVenta.setSecuencialNotaCredito((Integer) getTxtNotaCredito().getValue());
-        puntoVenta.setSecuencialNotaDebito((Integer) getTxtNotaDebito().getValue());
-        puntoVenta.setSecuencialGuiaRemision((Integer) getTxtGuiaRemision().getValue());
-        puntoVenta.setSecuencialRetenciones((Integer) getTxtRetenciones().getValue());
-        puntoVenta.setSecuencialNotaVenta((Integer) getTxtNotaVenta().getValue());
+        puntoEmision.setSecuencialFactura((Integer) getTxtFactura().getValue());
+        puntoEmision.setSecuencialNotaCredito((Integer) getTxtNotaCredito().getValue());
+        puntoEmision.setSecuencialNotaDebito((Integer) getTxtNotaDebito().getValue());
+        puntoEmision.setSecuencialGuiaRemision((Integer) getTxtGuiaRemision().getValue());
+        puntoEmision.setSecuencialRetenciones((Integer) getTxtRetenciones().getValue());
+        puntoEmision.setSecuencialNotaVenta((Integer) getTxtNotaVenta().getValue());
         
         Sucursal sucursal=(Sucursal) getCmbSucursal().getSelectedItem();
-        puntoVenta.setSucursal(sucursal);
+        puntoEmision.setSucursal(sucursal);
         
         ComprobanteEntity.TipoEmisionEnum tipoEmisionEnum=(ComprobanteEntity.TipoEmisionEnum) getCmbTipoFacturacion().getSelectedItem();
-        puntoVenta.setTipoFacturacion(tipoEmisionEnum.getCodigoSri());
+        puntoEmision.setTipoFacturacion(tipoEmisionEnum.getLetra());
         
         
     }

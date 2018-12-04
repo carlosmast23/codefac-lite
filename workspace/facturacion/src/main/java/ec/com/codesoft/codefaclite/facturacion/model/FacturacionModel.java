@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
+import ec.com.codesoft.codefaclite.facturacion.other.RenderPersonalizadoCombo;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
@@ -67,6 +68,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
@@ -82,6 +84,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.tabla.ButtonColumn;
@@ -961,6 +964,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
     }
     
     
@@ -1224,7 +1229,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
-        //getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
         getLblEstadoFactura().setText("Procesando");
 
         //datosAdicionales = new HashMap<String, String>();
@@ -1290,10 +1294,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     public void cargarSecuencial()
     {
-        DocumentoEnum tipoDocumentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
-        String secuencial="";
-        boolean facturacionElectronica=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
-        
+        //DocumentoEnum tipoDocumentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
+        //String secuencial="";
+        //boolean facturacionElectronica=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
+        /*
         switch(tipoDocumentoEnum)
         {
             case FACTURA:
@@ -1307,15 +1311,22 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             case NOTA_VENTA:
                     secuencial = session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA).valor;                    
                     break;
-        }
+        }*/
         
      
-        String preimpreso = UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(), 8, "0");
-        String establecimiento = session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor;
-        String puntoEmision = session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor;
-        preimpreso=establecimiento+ "-" +puntoEmision + "-" + preimpreso;
+        //String secuencial = UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(), 8, "0");
+        //String establecimiento = session.getSucursal();
+        //String puntoEmision = session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor;
+        //preimpreso=establecimiento+ "-" +puntoEmision + "-" + preimpreso;
         
-        getLblSecuencial().setText(preimpreso);
+        getLblEstablecimiento().setText(session.getSucursal().getCodigoSucursalFormatoTexto()+"-");
+        PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
+        if(puntoEmision!=null)
+        {
+            getLblSecuencial().setText("-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.getSecuencialFactura().toString(), 8, "0"));
+        }
+        
+        //getLblSecuencial().setText("-"+secuencial);
     }
 
 //    @Override
@@ -1785,18 +1796,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         factura.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));
         //factura.setIvaSriId(iva);
-        factura.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
-        factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
+        factura.setPuntoEmision(getPuntoEmisionSeleccionado().getPuntoEmision().toString());
+        factura.setPuntoEstablecimiento(session.getSucursal().getCodigoSucursal().toString());
         
         //Cuando la facturacion es electronica
-        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
-        {
-            factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
-        }
-        else //cuando la facturacion es normal
-        {
-            factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor));
-        }
+        PuntoEmision puntoEmisionSeleccionada=getPuntoEmisionSeleccionado();
+        //factura.setTipoFacturacion(puntoEmisionSeleccionada.getTipoFacturacion());
+        //if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
+        //{
+        //    factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
+        //}
+        //else //cuando la facturacion es normal
+        //{
+        //    factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor));
+        //}
         
         factura.setSubtotalSinImpuestos(BigDecimal.ZERO);
 
@@ -1824,6 +1837,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             facturaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2,RoundingMode.HALF_UP));
         }
 
+    }
+    
+    private PuntoEmision getPuntoEmisionSeleccionado()
+    {
+        return (PuntoEmision) getCmbPuntoEmision().getSelectedItem();
     }
 
     private void initComponenesGraficos() {
@@ -1913,14 +1931,26 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     public void cargarSecuencialConsulta()
-    {
-        getLblSecuencial().setText(factura.getPreimpreso().toString());
+    {        
+        try {        
+            PuntoEmision puntoEmision=ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerPorCodigo(Integer.valueOf(factura.getPuntoEmision()));
+            getCmbPuntoEmision().setSelectedItem((PuntoEmision)puntoEmision); //TODO: Analizar para todos los casos porque aveces no me va a permitir cargagar cuando pertenece a otra sucursal
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex); 
+            PuntoEmision puntoEmisionTmp=new PuntoEmision();
+            puntoEmisionTmp.setPuntoEmision(Integer.valueOf(factura.getPuntoEmision()));
+            getCmbPuntoEmision().addItem(puntoEmisionTmp); //TODO: Revisar que salga bien
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        getLblEstablecimiento().setText(ComprobantesUtilidades.formatoEstablecimiento(factura.getPuntoEstablecimiento()));
+        getLblSecuencial().setText(ComprobantesUtilidades.formatoSecuencial(factura.getSecuencial().toString()));
+        
     }
 
     private void cargarValoresAdicionales() {
         getLblEstadoFactura().setText((factura.getEstadoEnum()!=null)?factura.getEstadoEnum().getNombre():"Sin estado");
         cargarSecuencialConsulta();
-        //getLblSecuencial().setText(factura.getPreimpreso());
         getjDateFechaEmision().setDate(factura.getFechaEmision());
     }
 
@@ -2299,10 +2329,49 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbIva().addItem(EnumSiNo.SI);
         getCmbIva().addItem(EnumSiNo.NO);
         
+        
+        cargarComboPuntosVenta();
+       
+    }
+    
+    private void actualizaCombosPuntoVenta()
+    {
+        int indiceSeleccionado=getCmbPuntoEmision().getSelectedIndex();
+        cargarComboPuntosVenta();
+        getCmbPuntoEmision().setSelectedIndex(indiceSeleccionado);
+    }
+    
+    private void cargarComboPuntosVenta()
+    {
+                
+        //Cargar Puntos de Venta disponibles para la sucursal
+
+        try {
+            List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(session.getSucursal());
+            getCmbPuntoEmision().removeAllItems();
+            //Canfigurar un cell render para las sucursales
+            //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
+
+            for (PuntoEmision puntoVenta : puntosVenta) {
+                getCmbPuntoEmision().addItem(puntoVenta);
+            }
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
     }
 
     private void addListenerCombos() {
         
+        getCmbPuntoEmision().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarSecuencial();
+            }
+        });
         
         getCmbTipoDocumento().addActionListener(new ActionListener() {
             @Override

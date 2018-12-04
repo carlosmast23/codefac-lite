@@ -190,45 +190,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     private void actualizarDatosVista() {
         parametrosEditar=new ArrayList<ParametroCodefac>();
-        parametros.get(ParametroCodefac.SECUENCIAL_FACTURA).setValor(getTxtFacturaSecuencial().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA));
-                
-        parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).setValor(getTxtNotaCreditoSecuencial().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO));
-        
-        parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO).setValor(getTxtNotaDebitoSecuencial().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO));        
-        
-        parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).setValor(getTxtGuiaRemisionSecuencial().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION));
-        
-        parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).setValor(getTxtRetencionesSecuencial().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION));
-        
-        parametros.get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).setValor(getTxtFacturaSecuencialFisico().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA));
-        
-        parametros.get(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA).setValor(getTxtNotaVentaSecuencialFisico().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA));
-        
-        parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA).setValor(getTxtNotaCreditoSecuencialFisico().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA));
-        
-        parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO_FISICA).setValor(getTxtNotaDebitoSecuencialFisico().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO_FISICA));
-        
-        parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).setValor(getTxtGuiaRemisionSecuencialFisico().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA));
-        
-        parametros.get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA).setValor(getTxtRetencionesSecuencialFisico().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA));
-        
-        parametros.get(ParametroCodefac.ESTABLECIMIENTO).setValor(getTxtEstablecimiento().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.ESTABLECIMIENTO));
-        
-        parametros.get(ParametroCodefac.PUNTO_EMISION).setValor(getTxtPuntoEmision().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.PUNTO_EMISION));
-        
+               
         String ivaDefacto = ((ImpuestoDetalle) getCmbIvaDefault().getSelectedItem()).getTarifa().toString();
         parametros.get(ParametroCodefac.IVA_DEFECTO).setValor(ivaDefacto);
         parametrosEditar.add(parametros.get(ParametroCodefac.IVA_DEFECTO));
@@ -256,27 +218,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private void cargarDatosConfiguraciones() {
         try {
             parametros = parametroCodefacService.getParametrosMap();
-            ParametroCodefac param = parametros.get(ParametroCodefac.SECUENCIAL_FACTURA);
-            
-            getTxtFacturaSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA).getValor());
-            getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
-            getTxtNotaCreditoSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).getValor());
-            getTxtNotaDebitoSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO).getValor());
-            getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
-            getTxtRetencionesSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).getValor());
-            
-            getTxtFacturaSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).getValor());
-            getTxtNotaVentaSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA).getValor());
-            getTxtGuiaRemisionSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).getValor());
-            getTxtNotaCreditoSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA).getValor());
-            getTxtNotaDebitoSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO_FISICA).getValor());
-            getTxtGuiaRemisionSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).getValor());
-            getTxtRetencionesSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA).getValor());
+            //ParametroCodefac param = parametros.get(ParametroCodefac.SECUENCIAL_FACTURA);
             
             
             //getTxtDirectorioRecurso().setText(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
-            getTxtEstablecimiento().setText(parametros.get(ParametroCodefac.ESTABLECIMIENTO).getValor());
-            getTxtPuntoEmision().setText(parametros.get(ParametroCodefac.PUNTO_EMISION).getValor());
+            //getTxtEstablecimiento().setText(parametros.get(ParametroCodefac.ESTABLECIMIENTO).getValor());
+            //getTxtPuntoEmision().setText(parametros.get(ParametroCodefac.PUNTO_EMISION).getValor());
             getTxtCorreoElectronico().setText(parametros.get(ParametroCodefac.CORREO_USUARIO).getValor());
             getTxtPasswordCorreo().setText(UtilidadesEncriptar.desencriptar(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             getTxtNombreFirma().setText(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor());
@@ -476,7 +423,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private void activarOpcionesFacturarElectronica(boolean opcion)
     {
         getPanelFacturacionElectronica().setVisible(opcion);
-        getTxtFacturaSecuencialFisico().setEnabled(!opcion);
+        /*().setEnabled(!opcion);
         getTxtGuiaRemisionSecuencialFisico().setEnabled(!opcion);
         getTxtNotaCreditoSecuencialFisico().setEnabled(!opcion);
         getTxtNotaDebitoSecuencialFisico().setEnabled(!opcion);
@@ -489,7 +436,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         getTxtNotaCreditoSecuencial().setEnabled(opcion);
         getTxtNotaDebitoSecuencial().setEnabled(opcion);
         getTxtGuiaRemisionSecuencial().setEnabled(opcion);
-        getTxtRetencionesSecuencial().setEnabled(opcion);        
+        getTxtRetencionesSecuencial().setEnabled(opcion);        */
 
     }
 

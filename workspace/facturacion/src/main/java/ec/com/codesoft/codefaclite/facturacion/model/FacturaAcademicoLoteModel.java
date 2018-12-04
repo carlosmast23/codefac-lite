@@ -451,6 +451,8 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
         factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
         factura.setIdentificacion(estudianteInscrito.getEstudiante().getRepresentante().getIdentificacion());
 
+        //TODO: Revisar esta parte para ver la facturacion en lote
+        /*
         factura.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
 
@@ -461,6 +463,8 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
         {
             factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor));
         }
+        */
+        //FIN COMENTADO PARA REVISAR
 
         factura.setRazonSocial(session.getEmpresa().getRazonSocial());
         factura.setTelefono(estudianteInscrito.getEstudiante().getRepresentante().getTelefonoConvencional());

@@ -31,7 +31,7 @@ public interface ComprobanteServiceIf extends Remote {
     
     public void procesarComprobanteOffline(ComprobanteDataInterface comprobanteData,Factura factura,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException ;
     
-    public Integer obtenerSecuencialFacturaYAvanzar() throws RemoteException;
+    //public Integer obtenerSecuencialFacturaYAvanzar() throws RemoteException;
     
     public boolean verificarCredencialesFirma(String claveFirma) throws RemoteException;
 

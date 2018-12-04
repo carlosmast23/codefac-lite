@@ -282,6 +282,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return facturaFacade.getFacturaEnable();
     }
     
+    /*
     public String getPreimpresoSiguiente() {
         try {
             Integer secuencialSiguiente=0;
@@ -303,7 +304,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
-    }
+    }*/
     
     public void eliminarFactura(Factura factura)
     {

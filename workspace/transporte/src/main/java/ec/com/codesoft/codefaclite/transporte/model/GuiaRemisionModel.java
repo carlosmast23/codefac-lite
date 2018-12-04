@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
@@ -35,6 +36,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteService
 import ec.com.codesoft.codefaclite.transporte.callback.GuiaRemisionImplComprobante;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiaRemisionPanel;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -73,6 +75,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         listenerTextBox();
         listenerBotones();
+        listenerCombos();
         iniciarComponentesPantalla();
     }
 
@@ -196,28 +199,42 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     
      public void cargarSecuencial()
     {
-        //if(estadoFormulario.equals(ESTADO_GRABAR))
-        //{
-            String secuencial="";
+        int indiceSeleccionado=getCmbPuntoEmision().getSelectedIndex();
+        //Cargar Puntos de Venta disponibles para la sucursal
 
-            boolean facturacionElectronica = session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
-            if (facturacionElectronica) {
-                secuencial = session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).valor;
-            } else {
-                secuencial = session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).valor;
+        try {
+            List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(session.getSucursal());
+            getCmbPuntoEmision().removeAllItems();
+            //Canfigurar un cell render para las sucursales
+            //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
+
+            for (PuntoEmision puntoVenta : puntosVenta) {
+                getCmbPuntoEmision().addItem(puntoVenta);
             }
 
-
-            String preimpreso = UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(), 8, "0");
-            String establecimiento = session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor;
-            String puntoEmision = session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor;
-            preimpreso=establecimiento+"-"+puntoEmision + "-" + preimpreso;
-            getLblSecuencial().setText(preimpreso);
-        //}
-        //else
-        //{
-            //getLblSecuencial().setText(guiaRemision.getPreimpreso());
-        //}
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        if(indiceSeleccionado<0 && getCmbPuntoEmision().getModel().getSize()>0 )
+        {
+            getCmbPuntoEmision().setSelectedIndex(0); // Seleccionar el primero registro la primera vez
+        }
+        else
+        {
+            getCmbPuntoEmision().setSelectedIndex(indiceSeleccionado);
+        }
+        
+        
+        getLblEstablecimiento().setText(session.getSucursal().getCodigoSucursalFormatoTexto()+"-");
+        PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
+        if(puntoEmision!=null)
+        {
+            getLblSecuencial().setText("-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.getSecuencialGuiaRemision().toString(), 8, "0"));
+        }
     }
 
 
@@ -260,7 +277,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         getCmbFechaFin().setDate(guiaRemision.getFechaFinTransporte());
         cargarDestinatariosAgregados();
         imprimirTabla();
-        getLblSecuencial().setText(guiaRemision.getPreimpreso());
+        //getLblSecuencial().setText(guiaRemision.getPreimpreso());
+        cargarSecuencialConsulta();
         //cargarDatoFactura(guiaRemision.getre)
         
     }
@@ -415,6 +433,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     
     private void listenerBotones() {
         
+        
         getBtnBuscarTransportista().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -524,6 +543,11 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         }
         
     }
+    
+    private PuntoEmision obtenerPuntoEmisionSeleccionado()
+    {
+        return (PuntoEmision) getCmbPuntoEmision().getSelectedItem();
+    }
 
     private void setearValores() {
         Transportista transportista=guiaRemision.getTransportista();
@@ -537,11 +561,39 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         guiaRemision.setFechaEmision(new java.sql.Date(getCmbFechaInicio().getDate().getTime())); //Esto esta variable porque necesito para volver a generar la clave de acceso
         guiaRemision.setFechaFinTransporte(new java.sql.Date(getCmbFechaFin().getDate().getTime()));
         guiaRemision.setPlaca(transportista.getPlacaVehiculo());
-        guiaRemision.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
-        guiaRemision.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
+        PuntoEmision puntoEmisionSeleccionado= obtenerPuntoEmisionSeleccionado();
+        guiaRemision.setPuntoEstablecimiento(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString());
+        guiaRemision.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision().toString());
         guiaRemision.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
   ;
         
+    }
+    
+    public void cargarSecuencialConsulta() {
+        try {
+            PuntoEmision puntoEmision = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerPorCodigo(Integer.valueOf(guiaRemision.getPuntoEmision()));
+            getCmbPuntoEmision().setSelectedItem((PuntoEmision) puntoEmision); //TODO: Analizar para todos los casos porque aveces no me va a permitir cargagar cuando pertenece a otra sucursal
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GuiaRemision.class.getName()).log(Level.SEVERE, null, ex);
+            PuntoEmision puntoEmisionTmp = new PuntoEmision();
+            puntoEmisionTmp.setPuntoEmision(Integer.valueOf(guiaRemision.getPuntoEmision()));
+            getCmbPuntoEmision().addItem(puntoEmisionTmp); //TODO: Revisar que salga bien
+        } catch (RemoteException ex) {
+            Logger.getLogger(GuiaRemision.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        getLblEstablecimiento().setText(ComprobantesUtilidades.formatoEstablecimiento(guiaRemision.getPuntoEstablecimiento()));
+        getLblSecuencial().setText(ComprobantesUtilidades.formatoSecuencial(guiaRemision.getSecuencial().toString()));
+
+    }
+
+
+    private void listenerCombos() {
+        getCmbPuntoEmision().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarSecuencial();
+            }
+        });
     }
     
     

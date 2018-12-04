@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.configuraciones.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoVenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
@@ -16,7 +16,7 @@ import java.util.Vector;
  *
  * @author Carlos
  */
-public class PuntoVentaBusquedaDialogo implements InterfaceModelFind<PuntoVenta>{
+public class PuntoEmisionBusquedaDialogo implements InterfaceModelFind<PuntoEmision>{
 
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
@@ -29,11 +29,11 @@ public class PuntoVentaBusquedaDialogo implements InterfaceModelFind<PuntoVenta>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        PuntoVenta pv;
+        //PuntoEmision pv;
         //pv.getEstado();
         //pv.getDescripcion();
         //pv.getDescripcion()
-        String queryString = "SELECT pv FROM PuntoVenta pv WHERE pv.estado=?1 or ";
+        String queryString = "SELECT pv FROM PuntoEmision pv WHERE pv.estado=?1 AND ";
         queryString += "(LOWER(pv.descripcion) like ?2) ";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
@@ -44,7 +44,7 @@ public class PuntoVentaBusquedaDialogo implements InterfaceModelFind<PuntoVenta>
     }
 
     @Override
-    public void agregarObjeto(PuntoVenta t, Vector dato) {
+    public void agregarObjeto(PuntoEmision t, Vector dato) {
         dato.add(t.getDescripcion());
         dato.add(t.getPuntoEmision());
         //dato.add(t.getPuntoEmision());

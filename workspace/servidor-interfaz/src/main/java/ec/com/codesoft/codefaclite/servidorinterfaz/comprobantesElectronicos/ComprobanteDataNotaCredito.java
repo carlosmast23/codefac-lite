@@ -296,5 +296,15 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
     public Long getComprobanteId() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public String getPuntoEmision() {
+        return notaCredito.getPuntoEmision();
+    }
+
+    @Override
+    public String getEstablecimiento() {
+        return notaCredito.getPuntoEstablecimiento();
+    }
     
 }

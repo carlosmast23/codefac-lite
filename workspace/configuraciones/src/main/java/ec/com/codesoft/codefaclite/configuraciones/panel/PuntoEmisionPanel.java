@@ -18,12 +18,12 @@ import javax.swing.JTextField;
  *
  * @author Carlos
  */
-public abstract class PuntoVentaPanel extends ControladorCodefacInterface {
+public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
 
     /**
      * Creates new form PuntoVentaPanel
      */
-    public PuntoVentaPanel() {
+    public PuntoEmisionPanel() {
         initComponents();
     }
 
@@ -67,7 +67,7 @@ public abstract class PuntoVentaPanel extends ControladorCodefacInterface {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Punto de Venta");
+        setTitle("Punto de Emision");
         setPreferredSize(new java.awt.Dimension(409, 361));
 
         jPanel1.setLayout(new java.awt.GridBagLayout());

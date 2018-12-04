@@ -59,12 +59,21 @@ public class SucursalModel extends SucursalPanel {
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         try {
+            setearDatos();
+            ServiceFactory.getFactory().getSucursalServiceIf().editar(sucursal);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SucursalModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+        }
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        setearDatos();
+        ServiceFactory.getFactory().getSucursalServiceIf().eliminar(sucursal);
+        DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
     }
 
     @Override
@@ -82,7 +91,7 @@ public class SucursalModel extends SucursalPanel {
         sucursal = new Sucursal();
         getTxtCodigoEstablecimiento().setValue(new Integer(0));
         getCmbTipo().setSelectedIndex(0);
-        getCmbEmpresa().setSelectedIndex(0);
+        getCmbEmpresa().setSelectedIndex(0);        
     }
 
     @Override
@@ -114,7 +123,7 @@ public class SucursalModel extends SucursalPanel {
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        Sucursal sucursal=(Sucursal) entidad;
+        sucursal=(Sucursal) entidad;
         getTxtNombre().setText(sucursal.getNombre());
         getTxtTelefono().setText(sucursal.getTelefono());
         getTxtDireccion().setText(sucursal.getDirecccion());

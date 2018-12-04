@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.compra.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
@@ -66,6 +68,10 @@ public abstract class RetencionesPendientePanel extends ControladorCodefacInterf
         labelTotalRetencionIva = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        jToolBar3 = new javax.swing.JToolBar();
+        lblEstablecimiento = new javax.swing.JLabel();
+        cmbPuntoEmision = new javax.swing.JComboBox<>();
+        lblSecuencial = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -227,12 +233,34 @@ public abstract class RetencionesPendientePanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         getContentPane().add(jLabel9, gridBagConstraints);
 
+        jToolBar3.setBorder(null);
+        jToolBar3.setRollover(true);
+
+        lblEstablecimiento.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        lblEstablecimiento.setText("001-");
+        jToolBar3.add(lblEstablecimiento);
+
+        cmbPuntoEmision.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        jToolBar3.add(cmbPuntoEmision);
+
+        lblSecuencial.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        lblSecuencial.setText("-000000009");
+        jToolBar3.add(lblSecuencial);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
+        getContentPane().add(jToolBar3, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviarRetencion;
+    private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision> cmbPuntoEmision;
     private com.toedter.calendar.JDateChooser jDateFechaEmision;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -242,10 +270,13 @@ public abstract class RetencionesPendientePanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JToolBar jToolBar3;
     private javax.swing.JLabel labelTotalRetencionIva;
     private javax.swing.JLabel labelTotalRetencionRenta;
     private javax.swing.JLabel labelTotalRetenciones;
     private javax.swing.JLabel lblEspacio1;
+    private javax.swing.JLabel lblEstablecimiento;
+    private javax.swing.JLabel lblSecuencial;
     private javax.swing.JTable tblComprasPendientes;
     private javax.swing.JTable tblDetalleRetenciones;
     // End of variables declaration//GEN-END:variables
@@ -289,6 +320,19 @@ public abstract class RetencionesPendientePanel extends ControladorCodefacInterf
     public void setLabelTotalRetenciones(JLabel labelTotalRetenciones) {
         this.labelTotalRetenciones = labelTotalRetenciones;
     }
+
+    public JComboBox<PuntoEmision> getCmbPuntoEmision() {
+        return cmbPuntoEmision;
+    }
+
+    public JLabel getLblEstablecimiento() {
+        return lblEstablecimiento;
+    }
+
+    public JLabel getLblSecuencial() {
+        return lblSecuencial;
+    }
+    
     
     
 }

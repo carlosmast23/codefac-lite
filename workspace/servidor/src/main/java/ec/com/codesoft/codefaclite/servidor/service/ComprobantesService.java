@@ -54,9 +54,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -112,7 +114,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
      * Obtiene el siguiente secuencial y setea ese valor
      * @return 
      */
-    public Integer obtenerSecuencialFacturaYAvanzar() throws RemoteException
+    /*public Integer obtenerSecuencialFacturaYAvanzar() throws RemoteException
     {
         try {
             ParametroCodefacService servicio=new ParametroCodefacService();
@@ -130,7 +132,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    }
+    }*/
     
     public boolean verificarCredencialesFirma(String claveFirma) throws RemoteException
     {
@@ -936,6 +938,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
     private InformacionTributaria getInfoInformacionTributaria(ComprobanteDataInterface comprobanteData) throws RemoteException {
         InformacionTributaria infoTributaria = new InformacionTributaria();
+        //InformacionTributaria infoTributaria = comprobanteData.getComprobante().getInformacionTributaria();
         ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
         EmpresaService empresaService = new EmpresaService();
         Empresa empresa = empresaService.obtenerTodos().get(0);
@@ -951,12 +954,12 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         infoTributaria.setCodigoDocumento(comprobanteData.getCodigoComprobante());
         infoTributaria.setDirecionMatriz(empresa.getDireccion());
 
-        String establecimiento = parametroCodefacMap.get(ParametroCodefac.ESTABLECIMIENTO).valor;
-        infoTributaria.setEstablecimiento(establecimiento);
+        //String establecimiento = parametroCodefacMap.get(ParametroCodefac.ESTABLECIMIENTO).valor;
+        infoTributaria.setEstablecimiento(ComprobantesUtilidades.formatoEstablecimiento( comprobanteData.getEstablecimiento()));
         infoTributaria.setNombreComercial(empresa.getNombreLegal());
 
-        String puntoEmision = parametroCodefacMap.get(ParametroCodefac.PUNTO_EMISION).valor;
-        infoTributaria.setPuntoEmision(puntoEmision);
+        //String puntoEmision = parametroCodefacMap.get(ParametroCodefac.PUNTO_EMISION).valor;
+        infoTributaria.setPuntoEmision(ComprobantesUtilidades.formatoEstablecimiento( comprobanteData.getPuntoEmision()));
 
         infoTributaria.setRazonSocial(empresa.getRazonSocial());
         infoTributaria.setRuc(empresa.getIdentificacion());
@@ -1366,12 +1369,13 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         }
     }
 
-    public void setearSecuencialComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException
+    public void setearSecuencialComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
     {
-        ParametroCodefacService parametroService=new ParametroCodefacService();
-        ParametroCodefac parametro = null;
+        //ParametroCodefacService parametroService=new ParametroCodefacService();
+        //ParametroCodefac parametro = null;
         
         //Cuando la factura es electronica
+        /*
         ParametroCodefac parametroTipoFacturacion=parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION);
         if (parametroTipoFacturacion.valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra())) {
             comprobante.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
@@ -1429,16 +1433,51 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     break;
             }
 
+        }*/
+        
+        PuntoEmisionService puntoEmisionService=new PuntoEmisionService();
+        PuntoEmision puntoEmision=puntoEmisionService.obtenerPorCodigo(Integer.parseInt(comprobante.getPuntoEmision()));
+        comprobante.setTipoFacturacion(puntoEmision.getTipoFacturacion());
+        
+        //Obtiene los secuenciales eletronicos
+        DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
+        Integer secuencial=null;
+        
+        switch (documentoEnum) {
+            case FACTURA:
+                secuencial = puntoEmision.getSecuencialFactura();
+                puntoEmision.setSecuencialFactura(secuencial+1);
+                break;
+
+            case NOTA_VENTA:
+                secuencial = puntoEmision.getSecuencialNotaVenta();
+                puntoEmision.setSecuencialNotaVenta(secuencial+1);
+                break;
+
+            case RETENCIONES:
+                secuencial = puntoEmision.getSecuencialRetenciones();
+                puntoEmision.setSecuencialRetenciones(secuencial+1);
+                break;
+
+            case NOTA_CREDITO:
+                secuencial = puntoEmision.getSecuencialNotaCredito();
+                puntoEmision.setSecuencialNotaCredito(secuencial+1);
+                break;
+
+            case GUIA_REMISION:
+                secuencial = puntoEmision.getSecuencialGuiaRemision();
+                puntoEmision.setSecuencialGuiaRemision(secuencial+1);
+                break;
         }
         
         /**
          * Aumentar el codigo de la numeracion en los parametros
          */
-        comprobante.setSecuencial(Integer.parseInt(parametro.valor));
+        comprobante.setSecuencial(secuencial);
 
-        parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
+        //parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
         //parametroService.editar(parametro);
-        entityManager.merge(parametro);
+        entityManager.merge(puntoEmision);
     }
 
 }

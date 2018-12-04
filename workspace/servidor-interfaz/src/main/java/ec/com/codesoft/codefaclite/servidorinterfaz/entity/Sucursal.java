@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -47,7 +48,7 @@ public class Sucursal implements Serializable{
     @Column(name = "ESTADO")
     private String estado;    
     /**
-     * Este es el codigo del sri para saber el numero de sucursal para emitir la factura
+     * Este es el codigo del sri para saber el numero de sucursal para emitir la factura el establecimiento
      */
     @Column(name = "COD_SUCURSAL")
     private Integer codigoSucursal; 
@@ -145,6 +146,11 @@ public class Sucursal implements Serializable{
     public GeneralEnumEstado getEstadoEnum()
     {
         return GeneralEnumEstado.getEnum(estado);
+    }
+    
+    public String getCodigoSucursalFormatoTexto()
+    {
+        return UtilidadesTextos.llenarCarateresIzquierda(codigoSucursal.toString(),3,"0");
     }
 
     @Override

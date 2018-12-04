@@ -5,19 +5,16 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.facade.SucursalFacade;
-import ec.com.codesoft.codefaclite.servidor.facade.UsuarioFacade;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidor.facade.PuntoEmisionFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SucursalServiceIf;
-import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServiceIf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,14 +22,14 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> implements SucursalServiceIf{
-
-    public SucursalService() throws RemoteException {
-        super(SucursalFacade.class);
+public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisionFacade> implements PuntoEmisionServiceIf
+{
+    public PuntoEmisionService() throws RemoteException {
+        super(PuntoEmisionFacade.class);
     }
 
     @Override
-    public Sucursal grabar(Sucursal entity) throws ServicioCodefacException, RemoteException {
+    public PuntoEmision grabar(PuntoEmision entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
@@ -44,43 +41,43 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
     }
     
     @Override
-    public List<Sucursal> consultarActivosPorEmpresa(Empresa empresa)  throws ServicioCodefacException, RemoteException
-    {
-        //Sucursal sucursal;
-        //sucursal.getEmpresa();
-        //sucursal.getEstado();
+    public List<PuntoEmision> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException, RemoteException {
+       // ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+       PuntoEmision pv;
+       //pv.getS
         Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("empresa", empresa);
-        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-        return getFacade().findByMap(mapParametros);        
+        mapParametros.put("sucursal",sucursal);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+            
     }
 
     @Override
-    public void eliminar(Sucursal entity) throws RemoteException {
+    public void eliminar(PuntoEmision entity) throws RemoteException {
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion() throws ServicioCodefacException, RemoteException {
-                    entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                    entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                     entityManager.merge(entity);
                 }
             });
         } catch (ServicioCodefacException ex) {
-            Logger.getLogger(SucursalService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PuntoEmisionService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+
     @Override
-    public Sucursal obtenerPorCodigo(Integer codigo) throws ServicioCodefacException, RemoteException {
+    public PuntoEmision obtenerPorCodigo(Integer codigo) throws ServicioCodefacException, RemoteException {
        Map<String,Object> mapParametros=new HashMap<String,Object>();
-       //Sucursal sucursal;
-       //sucursal.getCodigoSucursal()
+      
        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-       mapParametros.put("codigoSucursal",codigo);
-       List<Sucursal> sucursales=getFacade().findByMap(mapParametros);
-       if(sucursales.size()>0)
+       mapParametros.put("puntoEmision",codigo);
+       List<PuntoEmision> resultados=getFacade().findByMap(mapParametros);
+       if(resultados.size()>0)
        {
-            return sucursales.get(0);
+            return resultados.get(0);
        }
        return null;
     }

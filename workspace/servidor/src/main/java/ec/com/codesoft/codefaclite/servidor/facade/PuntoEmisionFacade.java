@@ -5,16 +5,16 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoVenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 
 /**
  *
  * @author Carlos
  */
-public class PuntoVentaFacade extends AbstractFacade<PuntoVenta> {
+public class PuntoEmisionFacade extends AbstractFacade<PuntoEmision> {
         
-    public PuntoVentaFacade() {
-        super(PuntoVenta.class);
+    public PuntoEmisionFacade() {
+        super(PuntoEmision.class);
     }
         
 }

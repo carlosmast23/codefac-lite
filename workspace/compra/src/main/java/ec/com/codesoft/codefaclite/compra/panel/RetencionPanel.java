@@ -9,6 +9,7 @@ import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -66,7 +67,6 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         panelDatosGenerales = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
-        lblSecuencial = new javax.swing.JLabel();
         jDateFechaEmision = new com.toedter.calendar.JDateChooser();
         jLabel38 = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
@@ -82,6 +82,10 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         lblTelefonos = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         cmbTipoDocumento = new javax.swing.JComboBox<>();
+        jToolBar3 = new javax.swing.JToolBar();
+        lblEstablecimiento = new javax.swing.JLabel();
+        cmbPuntoEmision = new javax.swing.JComboBox<>();
+        lblSecuencial = new javax.swing.JLabel();
         PanelValores = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -272,14 +276,6 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelDatosGenerales.add(jLabel36, gridBagConstraints);
 
-        lblSecuencial.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblSecuencial.setText("001-002-9213912939");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelDatosGenerales.add(lblSecuencial, gridBagConstraints);
-
         jDateFechaEmision.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
@@ -405,6 +401,26 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.05;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
         panelDatosGenerales.add(cmbTipoDocumento, gridBagConstraints);
+
+        jToolBar3.setBorder(null);
+        jToolBar3.setRollover(true);
+
+        lblEstablecimiento.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        lblEstablecimiento.setText("001-");
+        jToolBar3.add(lblEstablecimiento);
+
+        cmbPuntoEmision.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        jToolBar3.add(cmbPuntoEmision);
+
+        lblSecuencial.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        lblSecuencial.setText("-000000009");
+        jToolBar3.add(lblSecuencial);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
+        panelDatosGenerales.add(jToolBar3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -740,6 +756,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarProveedor;
     private javax.swing.JButton btnEditar;
     private org.jdesktop.swingx.JXDatePicker cmbFechaDocumento;
+    private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision> cmbPuntoEmision;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
@@ -769,6 +786,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar3;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDireccionCliente;
     private javax.swing.JLabel lblEspacio1;
@@ -778,6 +796,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblEspacio5;
     private javax.swing.JLabel lblEspacio6;
+    private javax.swing.JLabel lblEstablecimiento;
     private javax.swing.JLabel lblNombreCliente;
     private javax.swing.JLabel lblNombreComercial;
     private javax.swing.JTextField lblRetencionTotal;
@@ -1009,6 +1028,14 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
 
     public JPanel getPanelDatosDetalles() {
         return PanelDatosDetalles;
+    }
+
+    public JComboBox<PuntoEmision> getCmbPuntoEmision() {
+        return cmbPuntoEmision;
+    }
+
+    public JLabel getLblEstablecimiento() {
+        return lblEstablecimiento;
     }
     
     

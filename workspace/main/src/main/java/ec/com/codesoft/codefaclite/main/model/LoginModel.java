@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
@@ -50,6 +51,7 @@ public class LoginModel extends LoginFormDialog{
         super(null,true);
         valoresIniciales();
         initListenerBotones();
+        initListenerCombos();
         initListenerPantalla();
         this.usuarioServicio=ServiceFactory.getFactory().getUsuarioServicioIf();
         
@@ -97,6 +99,16 @@ public class LoginModel extends LoginFormDialog{
     public Usuario getUsuarioLogin()
     {
         return usuario;
+    }
+    
+    public DatosLogin getDatosLogin()
+    {
+        DatosLogin datosLogin=new DatosLogin();
+        datosLogin.empresa=obtenerEmpresaSeleccionada();
+        datosLogin.sucursal=obtenerSucursalSeleccionada();
+        datosLogin.usuario=getUsuarioLogin();
+        return datosLogin;
+        
     }
     
     private void ingresarSistema()
@@ -197,6 +209,25 @@ public class LoginModel extends LoginFormDialog{
             Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        cargarSucursalesPorEmpresa();        
+        
+    }
+    
+    private void cargarSucursalesPorEmpresa()
+    {
+        try {
+            //Setear valores de los combos
+            
+            List<Sucursal> sucursales=ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(obtenerEmpresaSeleccionada()); //Todo: Cambiar este metodo para solo obtener las empresas activas
+            getCmbSucursal().removeAllItems();
+            for (Sucursal sucursal : sucursales) {
+                getCmbSucursal().addItem(sucursal);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (ServicioCodefacException ex) {
+            Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void initListenerPantalla() {
@@ -246,5 +277,39 @@ public class LoginModel extends LoginFormDialog{
             public void windowDeactivated(WindowEvent e) {}
         });
     }
+    
+    private Empresa obtenerEmpresaSeleccionada()
+    {
+        return (Empresa) getCmbEmpresa().getSelectedItem();
+    }
+
+    private void initListenerCombos() {
+        getCmbEmpresa().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(obtenerEmpresaSeleccionada()!=null)
+                {
+                    cargarSucursalesPorEmpresa();     
+                }
+            }
+        });
+    }
+    
+    //TODO: Metodo Temporal para obtener la sucursal que el usuario accedio
+    public Sucursal obtenerSucursalSeleccionada()
+    {
+        return (Sucursal) getCmbSucursal().getSelectedItem();
+    }
+    
+    /**
+     * Clase de envoltorio solo para agrupar un conjunto de resultados de la pantalla Login
+     */
+    public class DatosLogin
+    {
+        public Empresa empresa;
+        public Sucursal sucursal;
+        public Usuario usuario;
+    }
+    
     
 }

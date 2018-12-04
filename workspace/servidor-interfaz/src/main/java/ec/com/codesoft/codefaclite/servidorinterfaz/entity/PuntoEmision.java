@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,8 +23,8 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "PUNTO_VENTA")
-public class PuntoVenta implements Serializable{
+@Table(name = "PUNTO_EMISION")
+public class PuntoEmision implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,7 +65,7 @@ public class PuntoVenta implements Serializable{
     @JoinColumn(name = "SUCURSAL_ID")
     private Sucursal sucursal;
 
-    public PuntoVenta() {
+    public PuntoEmision() {
     }
 
     public Long getId() {
@@ -153,10 +155,49 @@ public class PuntoVenta implements Serializable{
     public void setSecuencialNotaVenta(Integer secuencialNotaVenta) {
         this.secuencialNotaVenta = secuencialNotaVenta;
     }
+
+    @Override
+    public String toString() {
+        return puntoEmisionFormatoTexto();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 71 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PuntoEmision other = (PuntoEmision) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+   
+    
     
     /**
      * Metodos Personalizados
      */
+    
+    public String puntoEmisionFormatoTexto()
+    {
+        return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.toString(),3,"0");
+    }
+    
     public GeneralEnumEstado getEstadoEnum()
     {
         return GeneralEnumEstado.getEnum(estado);
@@ -172,9 +213,10 @@ public class PuntoVenta implements Serializable{
     
     public ComprobanteEntity.TipoEmisionEnum getTipoFacturacionEnum()
     {
-        return ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(estado);
+        return ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(tipoFacturacion);
     }
     
+
     
     
     

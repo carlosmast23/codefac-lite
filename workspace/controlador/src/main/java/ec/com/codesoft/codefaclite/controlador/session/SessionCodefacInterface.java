@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.controlador.session;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
@@ -34,6 +35,8 @@ public interface SessionCodefacInterface {
      * Metodo que devuelve todos los permisos habilitados para ese usuario
      * @return 
      */
+    
+    public Sucursal getSucursal();
     
     public void setUsuario(Usuario usuario);
     public void setEmpresa(Empresa empresa);

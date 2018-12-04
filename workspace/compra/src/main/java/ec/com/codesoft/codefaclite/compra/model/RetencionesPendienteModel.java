@@ -16,10 +16,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
@@ -96,7 +98,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        cargarSecuencial();
     }
 
 //    @Override
@@ -143,6 +145,13 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
     
     private void addListener()
     {
+        getCmbPuntoEmision().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarSecuencial();
+            }
+        });
+        
         //Evento para botones
         getBtnEnviarRetencion().addActionListener(new ActionListener() {
             @Override
@@ -155,6 +164,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
                 Boolean confirmacion = DialogoCodefac.dialogoPregunta("Alerta", "Está seguro que desea realizar la retención?", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if (confirmacion) {
                     enviar();
+                    cargarSecuencial(); //Carga nuevamente el secuencial proximo
                 }
             
             }
@@ -219,7 +229,8 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
             retencion=ServiceFactory.getFactory().getRetencionServiceIf().grabar(retencion);
             DialogoCodefac.mensaje("Correcto","La retenecion fue grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             CompraServiceIf service=ServiceFactory.getFactory().getCompraServiceIf();
-            service.editar(retencion.getCompra());
+            service.editar(retencion.getCompra()); //Permite hacer mofici
+            
             cargarComprasPendientes();
             RetencionImplCallBack ric=new RetencionImplCallBack(retencion, this);
             ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
@@ -257,6 +268,55 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
         }
     }
     
+    private PuntoEmision obtenerPuntoEmisionSeleccionado()
+    {
+        return (PuntoEmision) getCmbPuntoEmision().getSelectedItem();
+    }
+    
+    /**
+     * Metodo que permite cargar y actualizar los puntos de emision
+     */
+    private void cargarSecuencial()
+    {
+        int indiceSeleccionado=getCmbPuntoEmision().getSelectedIndex();
+        //Cargar Puntos de Venta disponibles para la sucursal
+
+        try {
+            List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(session.getSucursal());
+            getCmbPuntoEmision().removeAllItems();
+            //Canfigurar un cell render para las sucursales
+            //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
+
+            for (PuntoEmision puntoVenta : puntosVenta) {
+                getCmbPuntoEmision().addItem(puntoVenta);
+            }
+
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RetencionesPendienteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(RetencionesPendienteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        if(indiceSeleccionado<0 && getCmbPuntoEmision().getModel().getSize()>0 )
+        {
+            getCmbPuntoEmision().setSelectedIndex(0); // Seleccionar el primero registro la primera vez
+        }
+        else
+        {
+            getCmbPuntoEmision().setSelectedIndex(indiceSeleccionado);
+        }
+        
+        
+        getLblEstablecimiento().setText(session.getSucursal().getCodigoSucursalFormatoTexto()+"-");
+        PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
+        if(puntoEmision!=null)
+        {
+            getLblSecuencial().setText("-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.getSecuencialRetenciones().toString(), 8, "0"));
+        }
+    }
+    
+    
     private void setearDatos() {
         //retencion=new Retencion();
         //retencion.setCompra(compra);
@@ -264,19 +324,21 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
         retencion.setFechaEmision(new java.sql.Date(getjDateFechaEmision().getDate().getTime()));
         retencion.setProveedor(retencion.getCompra().getProveedor());
         
-        retencion.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
-        retencion.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
-        
+        PuntoEmision puntoEmisionSeleccionado= obtenerPuntoEmisionSeleccionado();
+        retencion.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision().toString());
+        retencion.setPuntoEstablecimiento(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString());
+        retencion.setTipoDocumento(TipoDocumentoEnum.COMPRA_GASTOS.getCodigo()); //TODO: Falta definir exactamente el tipo de documento que se va a usar
+        retencion.setFechaEmisionDocumento(retencion.getCompra().getFechaFactura());
         
         //Cuando la facturacion es electronica
-        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
+        /*if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
         {
             retencion.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_RETENCION).valor));
         }
         else //cuando la facturacion es normal
         {
             retencion.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA).valor));
-        }
+        }*/
         
         //Llenar los detalles de la retencion
         for (CompraDetalle compraDetalle : retencion.getCompra().getDetalles()) {

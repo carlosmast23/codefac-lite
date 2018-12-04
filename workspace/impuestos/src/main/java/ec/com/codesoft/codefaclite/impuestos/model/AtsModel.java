@@ -156,7 +156,7 @@ public class AtsModel extends AtsPanel {
                 try {
                     Integer anio=(Integer)getTxtAnio().getValue();
                     MesEnum mesEnum=(MesEnum)getCmbMes().getSelectedItem();
-                    String establecimiento=session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor;
+                    String establecimiento=session.getSucursal().getCodigoSucursalFormatoTexto();
                     atsJaxb = ServiceFactory.getFactory().getAtsServiceIf().consultarAts(anio,mesEnum,session.getEmpresa(),establecimiento,getRdbCompras().isSelected(),getRdbVentas().isSelected(),getRdbAnulados().isSelected());
                     construirTablaVenta();
                     construirTablaCompra();

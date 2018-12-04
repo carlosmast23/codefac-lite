@@ -616,14 +616,15 @@ public class Main {
             /**
              * Si el usuario devuuelto es incorrecto terminar el aplicativo
              */
-            Usuario usuarioLogin= cargarLoginUsuario();
-            if (usuarioLogin == null) {
+            LoginModel.DatosLogin  datosLogin= cargarLoginUsuario();
+            if (datosLogin.usuario == null) {
                 LOG.log(Level.WARNING, "Error en la licencia ");
                 return;
             }
 
-            session.setUsuario(usuarioLogin);
-            session.setPerfiles(obtenerPerfilesUsuario(usuarioLogin));
+            session.setUsuario(datosLogin.usuario);
+            session.setPerfiles(obtenerPerfilesUsuario(datosLogin.usuario));
+            session.setSucursal(datosLogin.sucursal);
             panel.setVentanasMenuList(null);
 
             /**
@@ -657,14 +658,14 @@ public class Main {
 
     }
     
-    public static Usuario cargarLoginUsuario() {
+    public static LoginModel.DatosLogin cargarLoginUsuario() {
         frameAplicacion.setVisible(true); //muestro el hilo de ejcucion porque el login es un dialog que no tiene icono en la barra de tareas
         LoginModel loginModel = new LoginModel();
         loginModel.setVisible(true);
         
         if(loginModel.salirAplicacion)System.exit(0);
         
-        Usuario usuarioLogin = loginModel.getUsuarioLogin();
+        LoginModel.DatosLogin usuarioLogin = loginModel.getDatosLogin();
         frameAplicacion.dispose();
         loginModel.getTxtUsuario().requestFocus();
         loginModel.dispose();

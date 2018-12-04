@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -101,6 +102,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         } catch (DatabaseException ex) {
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
+            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return notaCredito;
@@ -230,6 +233,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     
     }
     
+    /*
     public String getPreimpresoSiguiente() {
         try {
             Integer secuencialSiguiente = Integer.parseInt(parametroCodefacService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor);
@@ -241,7 +245,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
-    }
+    }*/
 
     public void editar(NotaCredito notaCredito) {
         notaCreditoFacade.edit(notaCredito);

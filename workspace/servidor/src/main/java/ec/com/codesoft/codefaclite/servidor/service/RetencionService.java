@@ -62,6 +62,10 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                     entityManager.merge(compra);
                 }
                 
+                entity.setCodigoDocumento(DocumentoEnum.RETENCIONES.getCodigo());
+                ComprobantesService servicioComprobante = new ComprobantesService();
+                servicioComprobante.setearSecuencialComprobanteSinTransaccion(entity);
+               /* 
                 ParametroCodefacService parametroService = new ParametroCodefacService();
                 ParametroCodefac parametro = null;
                 if (parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra())) {
@@ -72,6 +76,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                     entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
                     parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION_FISICA);
                 }
+                */
 
                 for (RetencionDetalle retencionDetalle : entity.getDetalles()) {
                     entityManager.persist(retencionDetalle);
@@ -80,8 +85,8 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 entityManager.persist(entity);
 
                 //Aumentar el secuencial para facturar
-                parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
-                entityManager.merge(parametro);
+                //parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
+                //entityManager.merge(parametro);
                 
                 
 

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
@@ -28,6 +29,7 @@ public class SessionCodefac implements SessionCodefacInterface{
     
     private Usuario usuario;
     private Empresa empresa;
+    private Sucursal sucursal;
     private Map<String,ParametroCodefac>  parametrosCodefac;
     private List<Perfil> perfiles;
     private TipoLicenciaEnum tipoLicenciaEnum;
@@ -127,6 +129,15 @@ public class SessionCodefac implements SessionCodefacInterface{
     public void setModulos(List<ModuloCodefacEnum> modulos) {
         this.modulos = modulos;
     }
+
+    public Sucursal getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(Sucursal sucursal) {
+        this.sucursal = sucursal;
+    }
+    
     
     
     

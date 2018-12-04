@@ -36,7 +36,7 @@ import ec.com.codesoft.codefaclite.servidor.service.PresupuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoEnsambleService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
-import ec.com.codesoft.codefaclite.servidor.service.PuntoVentaService;
+import ec.com.codesoft.codefaclite.servidor.service.PuntoEmisionService;
 import ec.com.codesoft.codefaclite.servidor.service.RecursosService;
 import ec.com.codesoft.codefaclite.servidor.service.RetencionService;
 import ec.com.codesoft.codefaclite.servidor.service.SmsService;
@@ -112,7 +112,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoService
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoVentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
@@ -142,6 +141,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServiceIf;
 
 /**
  *
@@ -224,7 +224,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(SmsService.class, SmsServiceIf.class);
             mapRecursos.put(AtsService.class, AtsServiceIf.class);
             mapRecursos.put(SucursalService.class, SucursalServiceIf.class);
-            mapRecursos.put(PuntoVentaService.class, PuntoVentaServiceIf.class);
+            mapRecursos.put(PuntoEmisionService.class, PuntoEmisionServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             LOG.log(Level.INFO,"Servidor Iniciado");

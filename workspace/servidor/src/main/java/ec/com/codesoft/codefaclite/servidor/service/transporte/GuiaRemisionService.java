@@ -60,6 +60,8 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                     entityManager.persist(entity);
                 } catch (RemoteException ex) {
                     Logger.getLogger(GuiaRemisionService.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(GuiaRemisionService.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });

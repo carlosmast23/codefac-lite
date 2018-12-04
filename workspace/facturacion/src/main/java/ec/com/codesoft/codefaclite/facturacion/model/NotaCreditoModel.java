@@ -47,6 +47,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -56,9 +57,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -110,6 +113,11 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         super.validacionDatosIngresados=false;
     }
     
+    private PuntoEmision obtenerPuntoEmisionSeleccionado()
+    {
+        return (PuntoEmision)getCmbPuntoEmision().getSelectedItem();
+    }
+    
     private void setearValoresNotaCredito()
     {
         notaCredito.setEmpresaId(0l);
@@ -118,9 +126,13 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         notaCredito.setRazonModificado(getTxtMotivoAnulacion().getText());
         notaCredito.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));
         
-        notaCredito.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
-        notaCredito.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
-        notaCredito.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor));
+        PuntoEmision puntoEmisionSeleccionado= obtenerPuntoEmisionSeleccionado();
+        //notaCredito.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
+        //notaCredito.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
+        notaCredito.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision().toString());
+        notaCredito.setPuntoEstablecimiento(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString());
+        
+        //notaCredito.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor));
         notaCredito.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
         //notaCredito.setSubtotalCero(BigDecimal.ZERO);
         
@@ -260,7 +272,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
 
     @Override
     public void limpiar() {
-        try {
+        //try {
             /**
              * Cargar Datos de la empresa
              */
@@ -275,8 +287,9 @@ public class NotaCreditoModel extends NotaCreditoPanel {
                         
             
             //Cargar el secuncial correspondiente
-            NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
-            getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
+            //NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
+            //getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
+            cargarSecuencial();
             
             getCmbTipoDocumento().setSelectedItem(TipoDocumentoEnum.VENTA);
             
@@ -285,8 +298,51 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             notaCredito = new NotaCredito();
             crearDetalleTabla();
             limpiarCampos();
+        //} catch (RemoteException ex) {
+        //    Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+        //}
+    }
+    
+    /**
+     * Metodo que permite cargar y actualizar los puntos de emision
+     */
+    private void cargarSecuencial()
+    {
+        int indiceSeleccionado=getCmbPuntoEmision().getSelectedIndex();
+        //Cargar Puntos de Venta disponibles para la sucursal
+
+        try {
+            List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(session.getSucursal());
+            getCmbPuntoEmision().removeAllItems();
+            //Canfigurar un cell render para las sucursales
+            //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
+
+            for (PuntoEmision puntoVenta : puntosVenta) {
+                getCmbPuntoEmision().addItem(puntoVenta);
+            }
+
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
-            Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        if(indiceSeleccionado<0 && getCmbPuntoEmision().getModel().getSize()>0 )
+        {
+            getCmbPuntoEmision().setSelectedIndex(0); // Seleccionar el primero registro la primera vez
+        }
+        else
+        {
+            getCmbPuntoEmision().setSelectedIndex(indiceSeleccionado);
+        }
+        
+        
+        getLblEstablecimiento().setText(session.getSucursal().getCodigoSucursalFormatoTexto()+"-");
+        PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
+        if(puntoEmision!=null)
+        {
+            getLblSecuencial().setText("-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.getSecuencialNotaCredito().toString(), 8, "0"));
         }
     }
     
@@ -921,7 +977,9 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         
         //Cargar el preimpreso solo cuando el estado sea editar
         if(estadoFormulario.equals(ESTADO_EDITAR))
-            getLblSecuencial().setText(notaCredito.getPreimpreso());
+        {
+            cargarSecuencialConsulta();
+        }
 
         /**
          * Cargar Los calculos de los totales
@@ -931,6 +989,25 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getLblSubtotal0().setText(notaCredito.getSubtotalCero() + "");
         getLblSubtotal12().setText(notaCredito.getSubtotalDoce() + "");
     }
+    
+    public void cargarSecuencialConsulta()
+    {        
+        try {        
+            PuntoEmision puntoEmision=ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerPorCodigo(Integer.valueOf(notaCredito.getPuntoEmision()));
+            getCmbPuntoEmision().setSelectedItem((PuntoEmision)puntoEmision); //TODO: Analizar para todos los casos porque aveces no me va a permitir cargagar cuando pertenece a otra sucursal
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex); 
+            PuntoEmision puntoEmisionTmp=new PuntoEmision();
+            puntoEmisionTmp.setPuntoEmision(Integer.valueOf(notaCredito.getPuntoEmision()));
+            getCmbPuntoEmision().addItem(puntoEmisionTmp); //TODO: Revisar que salga bien
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        getLblEstablecimiento().setText(ComprobantesUtilidades.formatoEstablecimiento(notaCredito.getPuntoEstablecimiento()));
+        getLblSecuencial().setText(ComprobantesUtilidades.formatoSecuencial(notaCredito.getSecuencial().toString()));
+        
+    }
+
 
     private void crearDetalleTabla() {
         Vector<String> titulo = new Vector<>();
@@ -1274,6 +1351,14 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     }
 
     private void addListenerCombos() {
+        getCmbPuntoEmision().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarSecuencial();
+            }
+        });
+        
+        
         getCmbTipoDocumento().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

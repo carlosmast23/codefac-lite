@@ -163,6 +163,16 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
     public void setMapInfoAdicional(Map<String, String> mapInfoAdicional) {
         this.mapInfoAdicional = mapInfoAdicional;
     }
+
+    @Override
+    public String getPuntoEmision() {
+        return retencion.getPuntoEmision();
+    }
+
+    @Override
+    public String getEstablecimiento() {
+        return retencion.getPuntoEstablecimiento();
+    }
     
     
     

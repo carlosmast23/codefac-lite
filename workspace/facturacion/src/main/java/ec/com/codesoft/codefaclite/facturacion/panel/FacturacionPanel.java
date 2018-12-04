@@ -5,19 +5,16 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.panel;
 
-import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
-import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CursorPorDefectoAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
-import java.util.Calendar;
-import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -26,9 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import org.jdesktop.swingx.JXDatePicker;
 
 /**
@@ -152,7 +146,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         panelDatosFactura = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
-        lblSecuencial = new javax.swing.JLabel();
         jLabel38 = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
@@ -172,6 +165,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel28 = new javax.swing.JLabel();
         cmbTipoDocumento = new javax.swing.JComboBox<>();
         jDateFechaEmision = new org.jdesktop.swingx.JXDatePicker();
+        jToolBar3 = new javax.swing.JToolBar();
+        lblEstablecimiento = new javax.swing.JLabel();
+        cmbPuntoEmision = new javax.swing.JComboBox<>();
+        lblSecuencial = new javax.swing.JLabel();
         panelTabDatos = new javax.swing.JTabbedPane();
         panelProductos = new javax.swing.JPanel();
         panelDatosEmpresa1 = new javax.swing.JPanel();
@@ -848,15 +845,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
         panelDatosFactura.add(jLabel36, gridBagConstraints);
 
-        lblSecuencial.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblSecuencial.setText("001-002-9213912939");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
-        panelDatosFactura.add(lblSecuencial, gridBagConstraints);
-
         jLabel38.setText("             ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1013,6 +1001,26 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
         panelDatosFactura.add(jDateFechaEmision, gridBagConstraints);
+
+        jToolBar3.setBorder(null);
+        jToolBar3.setRollover(true);
+
+        lblEstablecimiento.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        lblEstablecimiento.setText("001-");
+        jToolBar3.add(lblEstablecimiento);
+
+        cmbPuntoEmision.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        jToolBar3.add(cmbPuntoEmision);
+
+        lblSecuencial.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        lblSecuencial.setText("-000000009");
+        jToolBar3.add(lblSecuencial);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
+        panelDatosFactura.add(jToolBar3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1337,6 +1345,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private javax.swing.JComboBox<EnumSiNo> cmbIva;
+    private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision> cmbPuntoEmision;
     private javax.swing.JComboBox<Persona> cmbRepresentante;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JCheckBox jCheckBox1;
@@ -1392,11 +1401,13 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JToolBar jToolBar3;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDireccionCliente;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JPanel lblEspacioVertical;
+    private javax.swing.JLabel lblEstablecimiento;
     private javax.swing.JLabel lblEstadoFactura;
     private javax.swing.JLabel lblIva12;
     private javax.swing.JLabel lblNombreCliente;
@@ -1816,7 +1827,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     @ComponenteSecundarioAnotacion(nombreCategoria = "",visible = true)
     public JButton getBtnReenviarCorreo() {
-        return btnReenviarCorreo;
+        return btnReenviarCorreo; 
+    }
+
+    public JComboBox<PuntoEmision> getCmbPuntoEmision() {
+        return cmbPuntoEmision;
+    }
+
+    public JLabel getLblEstablecimiento() {
+        return lblEstablecimiento;
     }
 
     

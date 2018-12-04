@@ -86,3 +86,10 @@ Implementar en todos los comprobantes adicional de la factura la modalidad para 
 Ver si al finalizar el proceso de factura electronica  si existen novedades que les lanze una alerta en toda la aplicacion para informar al cliente
 
 En la pantalla de factura analizar si  establecer por defecto que cargue el cliente final
+
+En las retenciones verificar que se esta grabando el tipo documento como compra gasto o libre , pero eso no me dice nada toca ver si toca especificar como tipo de documento retencion y analizar que ese tipo de documento del tipo de la compra si me sirve pero eso debe estar identificado en la compra
+ver si se aumenta una funcionalidad para cerrar lo formularios con una convinacion de botoness
+
+En la pantalla de retenciones verificar funcionalidad que graba primero la retencion y luego el estado de la compra , lo cual esta mal porque deberia grabar todo como una transaccion 
+Revisar como va a funcionar el tema de las notas de venta con el secuencial porque ya se cambio de funcionalidad
+en las guia de remision agregar validaciones por ejemplo en el motivo de traslado

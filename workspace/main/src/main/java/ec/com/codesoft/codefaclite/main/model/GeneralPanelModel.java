@@ -148,6 +148,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.swing.JRViewer;
+import org.jfree.util.Log;
 
 /**
  *
@@ -295,9 +296,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             case 1: //opcion cambiar de usuario
                 cerrarTodasPantallas();
                 setVisible(false);
-                Usuario usuario = Main.cargarLoginUsuario();
-                sessionCodefac.setUsuario(usuario);
-                sessionCodefac.setPerfiles(Main.obtenerPerfilesUsuario(usuario));
+                LoginModel.DatosLogin datosLogin = Main.cargarLoginUsuario();
+                sessionCodefac.setUsuario(datosLogin.usuario);
+                sessionCodefac.setSucursal(datosLogin.sucursal);
+                sessionCodefac.setPerfiles(Main.obtenerPerfilesUsuario(datosLogin.usuario));
                 setVentanasMenuList(null);
                 setearEtiquetasPantallaPrincipal();
                 setVisible(true);
@@ -862,7 +864,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             //Este metodo se ejecuta si no existe implementacion del metodo buscar
                             ejectutarDialogoBusqueda(frameInterface.obtenerDialogoBusqueda(),true,frameInterface,false);
                         }catch (ExcepcionCodefacLite ex) {
-                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                            LOG.log(Level.SEVERE,"Mensaje:"+ex.getMessage());
+                            //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                             throw ex;
                         } catch (RemoteException ex) {
                             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1061,7 +1064,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     frameInterface.estadoFormulario=estadoFomularioTemp; //Regresa al estado original si se lanza alguna excepcion
                     frameInterface.eventoCambiarEstado();
                     LOG.log(Level.WARNING,ex.getMessage());
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
     }

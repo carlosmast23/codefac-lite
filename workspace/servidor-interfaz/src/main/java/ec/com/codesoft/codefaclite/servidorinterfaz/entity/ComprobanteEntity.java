@@ -293,6 +293,9 @@ public class ComprobanteEntity implements Serializable{
             this.codigoSri=codigoSri;
         }
 
+        /**
+         * Este va a ser el codigo principal que voy a grabar en la base de datos para todo los casos
+         */
         private String letra;
         private String nombre;
         private String codigoSri;

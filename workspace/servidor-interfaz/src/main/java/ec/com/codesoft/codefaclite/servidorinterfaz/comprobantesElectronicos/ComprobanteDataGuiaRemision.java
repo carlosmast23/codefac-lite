@@ -187,6 +187,16 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
     public void setMapInfoAdicional(Map<String, String> mapInfoAdicional) {
         this.mapInfoAdicional = mapInfoAdicional;
     }
+
+    @Override
+    public String getPuntoEmision() {
+        return this.guiaRemision.getPuntoEmision();
+    }
+
+    @Override
+    public String getEstablecimiento() {
+        return this.guiaRemision.getPuntoEstablecimiento();
+    }
     
     
     

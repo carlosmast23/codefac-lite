@@ -328,6 +328,16 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
     public Long getComprobanteId() {
         return this.factura.getId();
     }
+
+    @Override
+    public String getPuntoEmision() {
+        return this.factura.getPuntoEmision();
+    }
+
+    @Override
+    public String getEstablecimiento() {
+        return this.factura.getPuntoEstablecimiento();
+    }
    
     
     

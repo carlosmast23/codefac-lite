@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +19,13 @@ import java.util.Map;
 public interface ComprobanteDataInterface {
     public String getCodigoComprobante();
 
-
+    public String getPuntoEmision();
+    
+    public String getEstablecimiento();
+    
     public String getSecuencial();
+    
+    //public ComprobanteEntity.TipoEmisionEnum getTipoEmisionEnum();
 
 
     public Map<String, String> getMapAdicional();
