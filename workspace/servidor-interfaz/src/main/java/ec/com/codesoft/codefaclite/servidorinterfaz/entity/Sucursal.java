@@ -47,6 +47,9 @@ public class Sucursal implements Serializable{
     
     @Column(name = "ESTADO")
     private String estado;    
+    
+    @Column(name = "CELULAR")
+    private String celular;
     /**
      * Este es el codigo del sri para saber el numero de sucursal para emitir la factura el establecimiento
      */
@@ -127,6 +130,16 @@ public class Sucursal implements Serializable{
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+    
+    
 
     @Override
     public String toString() {

@@ -34,6 +34,7 @@ create table SUCURSAL
     TIPO varchar(1),
     ESTADO varchar(1),
     TELEFONO varchar(16),
+    CELULAR varchar(32),    
     DIRECCION varchar(100),
     EMAIL varchar(100),
     COD_SUCURSAL BIGINT,

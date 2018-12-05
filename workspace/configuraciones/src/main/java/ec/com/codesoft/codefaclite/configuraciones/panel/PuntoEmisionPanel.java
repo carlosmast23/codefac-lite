@@ -106,7 +106,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         jPanel1.add(txtFactura, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel3.setText("Sucursal Nota  de Crédito:");
+        jLabel3.setText("Secuencial Nota  de Crédito:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -115,7 +115,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         jPanel1.add(jLabel3, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Sucursal Nota de Débito:");
+        jLabel4.setText("Secuencial Nota de Débito:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -124,7 +124,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         jPanel1.add(jLabel4, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Sucursal Guia Remisión:");
+        jLabel5.setText("Secuencial Guia Remisión:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -133,7 +133,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         jPanel1.add(jLabel5, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Sucursal Retenciones:");
+        jLabel6.setText("Secuencial Retenciones:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -142,7 +142,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         jPanel1.add(jLabel6, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel7.setText("Sucursal Nota de Venta:");
+        jLabel7.setText("Secuencial Nota de Venta:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
@@ -151,7 +151,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         jPanel1.add(jLabel7, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel10.setText("Sucursal Factura:");
+        jLabel10.setText("Secuencial Factura:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;

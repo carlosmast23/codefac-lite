@@ -85,11 +85,41 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    private boolean validarFormulario()
+    {
+        if(guiaRemision.getTransportista()==null)
+        {
+            DialogoCodefac.mensaje("Error Validación","Porfavor ingrese un transportista",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        
+        if(guiaRemision.getDestinatarios()==null || guiaRemision.getDestinatarios().size()==0)
+        {
+            DialogoCodefac.mensaje("Error Validación","Porfavor ingrese detalles a la guía de remisión",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        
+        System.out.println(guiaRemision.getDireccionPartida());
+        if(guiaRemision.getDireccionPartida()==null || guiaRemision.getDireccionPartida().isEmpty())
+        {
+            DialogoCodefac.mensaje("Error Validación","Porfavor ingrese la dirección de partida",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try {
-            setearValores();
+           
+            setearValores();           
+                        
+            if(!validarFormulario())
+            {
+                throw new ExcepcionCodefacLite("Error de validación");
+            }
+            
             guiaRemision=ServiceFactory.getFactory().getGuiaRemisionServiceIf().grabar(guiaRemision);            
             
             ComprobanteDataGuiaRemision comprobanteData = new ComprobanteDataGuiaRemision(this.guiaRemision);
@@ -417,9 +447,12 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 DestinatarioGuiaRemision destinatarioGuiaRemision=crearDestinatario();
-                guiaRemision.addDestinario(destinatarioGuiaRemision); 
-                cargarDestinatariosAgregados();
-                imprimirTabla();
+                if(validarDestinarioGuiaRemision(destinatarioGuiaRemision))
+                {
+                    guiaRemision.addDestinario(destinatarioGuiaRemision); 
+                    cargarDestinatariosAgregados();
+                    imprimirTabla();
+                }
             }
         });
         
@@ -456,6 +489,17 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
                 
             }
         });
+    }
+    
+    private boolean validarDestinarioGuiaRemision(DestinatarioGuiaRemision destinatarioGuiaRemision)
+    {
+        if(destinatarioGuiaRemision.getMotivoTranslado().isEmpty())
+        {
+            DialogoCodefac.mensaje("Error Validación","Porfavor ingrese un motivo de translado",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        
+        return true;
     }
     
     private void imprimirTabla()

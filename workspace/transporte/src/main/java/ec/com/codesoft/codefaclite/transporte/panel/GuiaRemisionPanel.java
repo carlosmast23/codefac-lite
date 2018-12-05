@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.transporte.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import javax.swing.JButton;
@@ -894,6 +895,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         return lblPlacaTransportista;
     }
 
+    @ValidacionCodefacAnotacion
     public JTextField getTxtDireccionPartida() {
         return txtDireccionPartida;
     }
