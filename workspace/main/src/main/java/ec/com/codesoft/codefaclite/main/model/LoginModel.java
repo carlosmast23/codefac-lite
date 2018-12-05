@@ -115,12 +115,15 @@ public class LoginModel extends LoginFormDialog{
     {
         Sucursal sucursal=(Sucursal) getCmbSucursal().getSelectedItem();
         Sucursal matriz=null;
-        try {
-            matriz = ServiceFactory.getFactory().getSucursalServiceIf().obtenerMatrizPorSucursal(sucursal.getEmpresa());
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+        if(sucursal!=null)
+        {
+            try {
+                matriz = ServiceFactory.getFactory().getSucursalServiceIf().obtenerMatrizPorSucursal(sucursal.getEmpresa());
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return matriz;
     }
