@@ -148,12 +148,18 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             case LIBRE:
                 //TODO: Validar que estos campos en la nota de credito esten ingresados correctamente
                 notaCredito.setNumDocModificado(getTxtPreimpresoProveedor().getText());
-                notaCredito.setFechaEmisionDocSustento(new java.sql.Date(getCmbFechaCompra().getDate().getTime()));
+                if(getCmbFechaCompra().getDate()!=null)
+                {
+                    notaCredito.setFechaEmisionDocSustento(new java.sql.Date(getCmbFechaCompra().getDate().getTime()));
+                }
                 break;
                 
             case VENTA:
-                notaCredito.setNumDocModificado(notaCredito.getFactura().getPreimpreso());
-                notaCredito.setFechaEmisionDocSustento(notaCredito.getFactura().getFechaEmision());
+                if(notaCredito.getFactura()!=null)
+                {
+                    notaCredito.setNumDocModificado(notaCredito.getFactura().getPreimpreso());
+                    notaCredito.setFechaEmisionDocSustento(notaCredito.getFactura().getFechaEmision());
+                }
                 break;
         
         }
@@ -167,6 +173,42 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         {
             notaCredito.getFactura().setEstado(FacturaEnumEstado.ANULADO_TOTAL.getEstado());
         }*/
+    }
+    
+    private boolean validarDatosNotaCredito()
+    {
+        if(notaCredito.getCliente()==null)
+        {
+            DialogoCodefac.mensaje("Error Validación","Porfavor seleccione un cliente",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        
+        if(notaCredito.getDetalles()==null || notaCredito.getDetalles().size()==0)
+        {
+            DialogoCodefac.mensaje("Error Validación","Porfavor ingrese detalles al comprobante",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        
+        
+        //Actualizar en el documento de nota_credito el nuevo tipo de documento
+        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
+        {
+            if(notaCredito.getFechaEmisionDocSustento()==null)
+            {
+                DialogoCodefac.mensaje("Error Validación","Porfavor seleccione la fecha de emisión",DialogoCodefac.MENSAJE_INCORRECTO);
+                return false;
+            }
+            
+            if(notaCredito.getNumDocModificado().replaceAll("-","").replaceAll(" ","").isEmpty())
+            {
+                DialogoCodefac.mensaje("Error Validación","Porfavor ingrese el preimpreso de la factura",DialogoCodefac.MENSAJE_INCORRECTO);
+                return false;
+            }
+        }
+        
+        
+        return true;    
     }
 
     @Override
@@ -182,6 +224,12 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             NotaCredito notaCreditoGrabada;
             NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
             setearValoresNotaCredito();
+            
+            if(!validarDatosNotaCredito())
+            {
+                throw new ExcepcionCodefacLite("Error Validación");
+            }
+            
             notaCredito=servicio.grabar(notaCredito);
             notaCreditoGrabada=notaCredito;//graba una referencia con ambiento del metodo para los listener
             

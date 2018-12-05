@@ -56,56 +56,63 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         parametroCodefacService = new ParametroCodefacService();
     }
 
-    public NotaCredito grabar(NotaCredito notaCredito) {        
-        try {
-            EntityTransaction transaccion=getTransaccion();
-            transaccion.begin();
-            
-            notaCredito.setCodigoDocumento(DocumentoEnum.NOTA_CREDITO.getCodigo());
-            
-            ComprobantesService servicioComprobante = new ComprobantesService();
-            servicioComprobante.setearSecuencialComprobanteSinTransaccion(notaCredito);    
-           
-            //notaCredito.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-            entityManager.persist(notaCredito);
-           
-            /**
-             * Actualizar la logica de cada modulo dependiendo del tipo de documento de cada detalle
-             */
-            
-            for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {                
-                anularProcesoNotCredito(detalle);
+    public NotaCredito grabar(NotaCredito notaCredito) throws ServicioCodefacException {      
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                try {
+                    //EntityTransaction transaccion=getTransaccion();
+                    //transaccion.begin();
 
-            }
-            
-            /**
-             * Actualizar el estado de la nota de credito de la factura dependiendo del tipo anuluacion parcial o total
-             * Y validando si tiene referencia a la factura o fue creada en la modalidad libre
-             */
-            if(notaCredito.getTipoDocumento()!=null && notaCredito.getTipoDocumentoEnum().equals(TipoDocumentoEnum.VENTA))
-            {
-                if (notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal()) < 0) 
-                {
-                    notaCredito.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.ANULADO_PARCIAL.getEstado());
-                } 
-                else 
-                {
-                    notaCredito.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.getEstado());
+                    notaCredito.setCodigoDocumento(DocumentoEnum.NOTA_CREDITO.getCodigo());
+
+                    ComprobantesService servicioComprobante = new ComprobantesService();
+                    servicioComprobante.setearSecuencialComprobanteSinTransaccion(notaCredito);    
+
+                    //notaCredito.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                    entityManager.persist(notaCredito);
+
+                    /**
+                     * Actualizar la logica de cada modulo dependiendo del tipo de documento de cada detalle
+                     */
+
+                    for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {                
+                        anularProcesoNotCredito(detalle);
+
+                    }
+
+                    /**
+                     * Actualizar el estado de la nota de credito de la factura dependiendo del tipo anuluacion parcial o total
+                     * Y validando si tiene referencia a la factura o fue creada en la modalidad libre
+                     */
+                    if(notaCredito.getTipoDocumento()!=null && notaCredito.getTipoDocumentoEnum().equals(TipoDocumentoEnum.VENTA))
+                    {
+                        if (notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal()) < 0) 
+                        {
+                            notaCredito.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.ANULADO_PARCIAL.getEstado());
+                        } 
+                        else 
+                        {
+                            notaCredito.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.getEstado());
+                        }
+                        //Actualizar la referencia de la factura con el nuevo estado
+                        entityManager.merge(notaCredito.getFactura());
+                    }
+
+
+                    //transaccion.commit();
+
+                } catch (DatabaseException ex) {
+                    Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                //Actualizar la referencia de la factura con el nuevo estado
-                entityManager.merge(notaCredito.getFactura());
             }
-            
-            
-            transaccion.commit();
-
-        } catch (DatabaseException ex) {
-            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        });
+        
         return notaCredito;
     }
     
