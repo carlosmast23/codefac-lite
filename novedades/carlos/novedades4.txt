@@ -104,3 +104,4 @@ Agregar el campo de celular (whatsapp) en las sucursales
 INSERT INTO SUCURSAL (EMPRESA_ID,NOMBRE,TIPO,ESTADO,TELEFONO,DIRECCION,EMAIL,COD_SUCURSAL) 
 VALUES 
 ((SELECT ID FROM EMPRESA),(SELECT NOMBRE_LEGAL FROM EMPRESA),'m','A',(SELECT TELEFONOS FROM EMPRESA),(SELECT DIRECCION FROM EMPRESA),'',(SELECT CAST(VALOR AS BIGINT) FROM PARAMETRO WHERE NOMBRE='establecimiento'));
+En la pantalla de Notas de Credito revisar el metodo grabar que no retorna una excepcion y puede generar problemas al no avizar al usuario
