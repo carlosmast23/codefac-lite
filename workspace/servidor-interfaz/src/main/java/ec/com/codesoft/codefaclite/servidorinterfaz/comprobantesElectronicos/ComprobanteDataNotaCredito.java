@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.NotaC
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
@@ -305,6 +306,11 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
     @Override
     public String getEstablecimiento() {
         return notaCredito.getPuntoEstablecimiento();
+    }
+
+    @Override
+    public Empresa getEmpresa() {
+        return notaCredito.getEmpresa();
     }
     
 }

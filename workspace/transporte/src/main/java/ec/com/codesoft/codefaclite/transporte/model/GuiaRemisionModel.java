@@ -163,7 +163,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         getLblRuc().setText(session.getEmpresa().getIdentificacion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
-        getLblDireccion().setText(session.getEmpresa().getDireccion());
+        getLblDireccion().setText(session.getSucursal().getDirecccion());
         getLblCantidadProductos().setText("0");
         ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
         
@@ -529,6 +529,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         guiaRemision.setPuntoEstablecimiento(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString());
         guiaRemision.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision().toString());
         guiaRemision.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
+        guiaRemision.setEmpresa(session.getEmpresa());
   ;
         
     }

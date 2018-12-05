@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.Informa
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.RetencionComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
@@ -172,6 +173,11 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
     @Override
     public String getEstablecimiento() {
         return retencion.getPuntoEstablecimiento();
+    }
+
+    @Override
+    public Empresa getEmpresa() {
+        return retencion.getEmpresa();
     }
     
     

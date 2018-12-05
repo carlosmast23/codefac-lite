@@ -11,7 +11,9 @@ import ec.com.codesoft.codefaclite.servidor.facade.EmpresaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -76,5 +78,18 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     {
         return empresaFacade.findAll();
     } 
+    
+    public Empresa buscarPorIdentificacion(String identificacion) throws RemoteException 
+    {
+        //Empresa empresa;       
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("identificacion", identificacion);
+        List<Empresa> empresas=getFacade().findByMap(mapParametros);
+        if(empresas.size()>0)
+        {
+            return empresas.get(0);
+        }
+        return null;
+    }
         
 }

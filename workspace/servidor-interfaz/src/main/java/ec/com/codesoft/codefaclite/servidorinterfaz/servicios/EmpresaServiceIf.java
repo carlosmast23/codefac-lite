@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,4 +25,5 @@ public interface EmpresaServiceIf extends ServiceAbstractIf<Empresa>
     public void editar(Empresa p) throws java.rmi.RemoteException;
     public void eliminar(Empresa p) throws java.rmi.RemoteException;   
     public List<Empresa> buscar() throws java.rmi.RemoteException;
+    public Empresa buscarPorIdentificacion(String identificacion) throws RemoteException;
 }

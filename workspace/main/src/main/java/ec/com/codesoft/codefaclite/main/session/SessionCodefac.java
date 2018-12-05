@@ -29,6 +29,7 @@ public class SessionCodefac implements SessionCodefacInterface{
     
     private Usuario usuario;
     private Empresa empresa;
+    private Sucursal matriz;
     private Sucursal sucursal;
     private Map<String,ParametroCodefac>  parametrosCodefac;
     private List<Perfil> perfiles;
@@ -137,6 +138,15 @@ public class SessionCodefac implements SessionCodefacInterface{
     public void setSucursal(Sucursal sucursal) {
         this.sucursal = sucursal;
     }
+
+    public Sucursal getMatriz() {
+        return matriz;
+    }
+
+    public void setMatriz(Sucursal matriz) {
+        this.matriz = matriz;
+    }
+
     
     
     

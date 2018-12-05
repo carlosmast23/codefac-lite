@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.sql.Date;
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -31,8 +32,8 @@ public class ComprobanteEntity implements Serializable{
     @Column(name = "PUNTO_EMISION")
     protected String puntoEmision;
     
-    @Column(name = "EMPRESA_ID")
-    protected Long empresaId;
+    //@Column(name = "EMPRESA_ID")
+    //protected Long empresaId;
     
     @Column(name = "USUARIO_ID")
     protected Long usuarioId;
@@ -69,7 +70,8 @@ public class ComprobanteEntity implements Serializable{
     @Column(name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
     
-    
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
 
     public ComprobanteEntity() {
     }
@@ -106,13 +108,13 @@ public class ComprobanteEntity implements Serializable{
         this.puntoEmision = puntoEmision;
     }
 
-    public Long getEmpresaId() {
+    /*public Long getEmpresaId() {
         return empresaId;
     }
 
     public void setEmpresaId(Long empresaId) {
         this.empresaId = empresaId;
-    }
+    }*/
 
     public Long getUsuarioId() {
         return usuarioId;
@@ -201,6 +203,14 @@ public class ComprobanteEntity implements Serializable{
 
     public void setObligadoLlevarContabilidad(String obligadoLlevarContabilidad) {
         this.obligadoLlevarContabilidad = obligadoLlevarContabilidad;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
     
     

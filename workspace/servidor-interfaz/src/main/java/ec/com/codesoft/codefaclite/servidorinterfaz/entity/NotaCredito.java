@@ -143,13 +143,13 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
         this.claveAcceso = claveAcceso;
     }
 
-    public Long getEmpresaId() {
+    /*public Long getEmpresaId() {
         return empresaId;
     }
 
     public void setEmpresaId(Long empresaId) {
         this.empresaId = empresaId;
-    }
+    }*/
 
     public Long getTipoClienteId() {
         return tipoClienteId;

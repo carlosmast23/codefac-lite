@@ -625,6 +625,7 @@ public class Main {
             session.setUsuario(datosLogin.usuario);
             session.setPerfiles(obtenerPerfilesUsuario(datosLogin.usuario));
             session.setSucursal(datosLogin.sucursal);
+            session.setMatriz(datosLogin.matriz);
             panel.setVentanasMenuList(null);
 
             /**

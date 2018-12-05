@@ -23,11 +23,11 @@ public class EmpresaBusquedaDialogo implements InterfaceModelFind<Empresa>
     {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("RUC", 0.3d));
-        titulo.add(new ColumnaDialogo("Nombre Social", 0.3d));
-        titulo.add(new ColumnaDialogo("Nombre Comercial", 0.3d));
-        titulo.add(new ColumnaDialogo("Direccion Matriz", 0.3d));
-        titulo.add(new ColumnaDialogo("Direccion Establecimiento", 0.3d));
-        titulo.add(new ColumnaDialogo("Cod Establecimiento", 0.3d));
+        titulo.add(new ColumnaDialogo("Razon Social", 0.3d));
+        //titulo.add(new ColumnaDialogo("Nombre Comercial", 0.3d));
+        titulo.add(new ColumnaDialogo("Contribuyente especial", 0.3d));
+        titulo.add(new ColumnaDialogo("Contabilidad", 0.3d));
+        titulo.add(new ColumnaDialogo("Nombre Legal", 0.3d));
         
         return titulo;
         
@@ -39,7 +39,7 @@ public class EmpresaBusquedaDialogo implements InterfaceModelFind<Empresa>
     {
         dato.add(t.getIdentificacion());
         dato.add(t.getRazonSocial());
-        dato.add(t.getDireccion());
+        //dato.add(t.getDireccion());
         dato.add(t.getContribuyenteEspecial());
         dato.add(t.getObligadoLlevarContabilidad());
         dato.add(t.getNombreLegal());

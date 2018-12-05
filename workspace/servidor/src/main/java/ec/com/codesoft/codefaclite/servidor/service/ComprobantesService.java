@@ -55,6 +55,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEs
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
@@ -158,8 +159,9 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
     
     public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,String ruc,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException
     {
+        Empresa empresa=obtenerEmpresaPorClaveAcceso(clavesAcceso.get(0));
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
-        cargarConfiguraciones(comprobanteElectronico);
+        cargarConfiguraciones(comprobanteElectronico,empresa);
         comprobanteElectronico.setEtapaActual(etapaInicial);
         //comprobanteElectronico.setClaveAcceso(claveAcceso);
         comprobanteElectronico.setEtapaLimiteProcesar(etapaLimite);
@@ -279,10 +281,20 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
     }
     
+    private Empresa obtenerEmpresaPorClaveAcceso(String claveAcceso) throws RemoteException
+    {
+        ClaveAcceso claveAccesoObj=new ClaveAcceso(claveAcceso);
+        EmpresaService empresaService=new EmpresaService();
+        Empresa empresa=empresaService.buscarPorIdentificacion(claveAccesoObj.identificacion);
+        return empresa;
+    }
+    
     public List<AlertaComprobanteElectronico> procesarComprobantesPendienteSinCallBack(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos) throws RemoteException,ServicioCodefacException
     {
+        Empresa empresa=obtenerEmpresaPorClaveAcceso(claveAcceso);
+        
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
-        cargarConfiguraciones(comprobanteElectronico);
+        cargarConfiguraciones(comprobanteElectronico,empresa);
         
         comprobanteElectronico.setCorreosElectronicos(correos);
         
@@ -304,9 +316,9 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
     
     public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject) throws RemoteException
     {
-        
+        Empresa empresa=obtenerEmpresaPorClaveAcceso(claveAcceso);
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
-        cargarConfiguraciones(comprobanteElectronico);
+        cargarConfiguraciones(comprobanteElectronico,empresa);
         
         comprobanteElectronico.setCorreosElectronicos(correos);
     
@@ -392,11 +404,16 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
     public byte[] getReporteComprobante(String claveAcceso) throws RemoteException
     {
         try {
+            //Metodos para obtener la empresa para hacer el pie de pagina con esos datos
+            ClaveAcceso claveAccesoObj=new ClaveAcceso(claveAcceso);
+            EmpresaService empresaService=new EmpresaService();
+            Empresa empresa=empresaService.buscarPorIdentificacion( claveAccesoObj.identificacion);
+            
             ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
             //Cargar recursos para el reporte
-            cargarDatosRecursos(comprobanteElectronico);
-            mapReportePlantilla(null);
-            cargarConfiguraciones(comprobanteElectronico);
+            cargarDatosRecursos(comprobanteElectronico,empresa);
+            //mapReportePlantilla(empresa);
+            cargarConfiguraciones(comprobanteElectronico,empresa);
             comprobanteElectronico.setClaveAcceso(claveAcceso);
             JasperPrint jasperPrint=comprobanteElectronico.getPrintJasper();
             return UtilidadesRmi.serializar(jasperPrint);
@@ -884,7 +901,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             comprobantesElectronico.add(comprobante);
         }        
         //Agregar datos adicionales del Reporte
-        comprobanteElectronico.setMapAdicionalReporte(mapReportePlantilla(usuario));
+        comprobanteElectronico.setMapAdicionalReporte(mapReportePlantilla(null));
         
         //Cargar los correos que se van a usar para enviar los datos
         //comprobanteElectronico.setCorreosElectronicos(comprobanteData.getCorreos());
@@ -893,7 +910,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         comprobanteElectronico.setComprobantesLote(comprobantesElectronico);
         
         //Cargar configuraciones por defecto para los comprobantes
-        cargarConfiguraciones(comprobanteElectronico);
+        cargarConfiguraciones(comprobanteElectronico,comprobantesData.get(0).getEmpresa());
 
         //Etapa desde la cual va a procesar los comprobantes
         comprobanteElectronico.setEtapaActual(ComprobanteElectronicoService.ETAPA_GENERAR);
@@ -920,7 +937,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         }
         
         //Agregar datos adicionales del Reporte
-        comprobanteElectronico.setMapAdicionalReporte(mapReportePlantilla(usuario));
+        comprobanteElectronico.setMapAdicionalReporte(mapReportePlantilla(comprobanteData.getEmpresa()));
         
         //Cargar los correos que se van a usar para enviar los datos
         comprobanteElectronico.setCorreosElectronicos(comprobanteData.getCorreos());
@@ -928,7 +945,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         comprobanteElectronico.setComprobante(comprobante);
         
         //Cargar configuraciones por defecto para los comprobantes
-        cargarConfiguraciones(comprobanteElectronico);
+        cargarConfiguraciones(comprobanteElectronico,comprobanteData.getEmpresa());
 
         //Etapa desde la cual va a procesar los comprobantes
         comprobanteElectronico.setEtapaActual(ComprobanteElectronicoService.ETAPA_GENERAR);
@@ -940,8 +957,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         InformacionTributaria infoTributaria = new InformacionTributaria();
         //InformacionTributaria infoTributaria = comprobanteData.getComprobante().getInformacionTributaria();
         ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
-        EmpresaService empresaService = new EmpresaService();
-        Empresa empresa = empresaService.obtenerTodos().get(0);
+        //EmpresaService empresaService = new EmpresaService();
+        Empresa empresa = comprobanteData.getEmpresa();
         Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
 
         if (parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION).valor.equals(ComprobanteElectronicoService.MODO_PRODUCCION)) {
@@ -952,7 +969,19 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
         infoTributaria.setClaveAcceso("");
         infoTributaria.setCodigoDocumento(comprobanteData.getCodigoComprobante());
-        infoTributaria.setDirecionMatriz(empresa.getDireccion());
+        
+        /**
+         * Obtener la direccion de la matriz de la empresa seleccionada
+         */
+        SucursalService sucursalService=new SucursalService();
+        Sucursal matriz=null;
+        try {
+            matriz = sucursalService.obtenerMatrizPorSucursal(empresa);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        infoTributaria.setDirecionMatriz((matriz!=null && matriz.getDirecccion()!=null && !matriz.getDirecccion().isEmpty())?matriz.getDirecccion():"SIN DIRECCION");
 
         //String establecimiento = parametroCodefacMap.get(ParametroCodefac.ESTABLECIMIENTO).valor;
         infoTributaria.setEstablecimiento(ComprobantesUtilidades.formatoEstablecimiento( comprobanteData.getEstablecimiento()));
@@ -1016,7 +1045,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
     }
 
-    private void cargarConfiguraciones(ComprobanteElectronicoService servicio) {
+    private void cargarConfiguraciones(ComprobanteElectronicoService servicio,Empresa empresa) {
         try {
             ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
             Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
@@ -1029,7 +1058,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             String modoFacturacion = parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION).valor;
             servicio.setModoFacturacion(modoFacturacion);
 
-            cargarDatosRecursos(servicio);
+            cargarDatosRecursos(servicio,empresa);
 
             /**
              * Cargar los web services dependiendo el modo de facturacion
@@ -1098,12 +1127,12 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
     }
 
-    private void cargarDatosRecursos(ComprobanteElectronicoService servicio) throws RemoteException {
+    private void cargarDatosRecursos(ComprobanteElectronicoService servicio,Empresa empresa) throws RemoteException {
         ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
         RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
         
-        EmpresaService empresaService = new EmpresaService();
-        Empresa empresa = empresaService.obtenerTodos().get(0);
+        //EmpresaService empresaService = new EmpresaService();
+        //Empresa empresa = empresaService.obtenerTodos().get(0);
         Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
         /**
          * Setear variables de configuracion para los reportes
@@ -1156,7 +1185,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         }
 
         servicio.setReporteInfoAdicional(reportDatosAdicionales);
-        servicio.setMapAdicionalReporte(mapReportePlantilla(null));
+        servicio.setMapAdicionalReporte(mapReportePlantilla(empresa)); //Todo: revisar si esto esta bien
         //servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg").getPath();
         //Segun el tipo de licencia cargar los recursos
         servicio.pathLogoImagen = UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
@@ -1203,19 +1232,29 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
     }
 
-    private Map<String, Object> mapReportePlantilla(Usuario usuario) throws RemoteException {
+    private Map<String, Object> mapReportePlantilla(Empresa empresa) throws RemoteException {
         RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
         ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
-        EmpresaService empresaService = new EmpresaService();
-        Empresa empresa = empresaService.obtenerTodos().get(0);
+        //EmpresaService empresaService = new EmpresaService();
+        //Empresa empresa = empresaService.obtenerTodos().get(0);
         Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
+        
+        /*
+        SucursalService sucursalService=new SucursalService();
+        Sucursal matriz=null;
+        try {
+            matriz= sucursalService.obtenerMatrizPorSucursal(empresa);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        */
 
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
         Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("pl_fecha_hora", formateador.format(new Date()));
-        parametros.put("pl_usuario", (usuario==null)?"":usuario.getNick());
-        parametros.put("pl_direccion", empresa.getDireccion());
-        parametros.put("pl_nombre_empresa", empresa.getNombreLegal());
+        //parametros.put("pl_fecha_hora", formateador.format(new Date()));
+        //parametros.put("pl_usuario", (usuario==null)?"":usuario.getNick());
+        //parametros.put("pl_direccion",(matriz==null)?"SIN DIRECCION" :matriz.getDirecccion());
+        //parametros.put("pl_nombre_empresa", empresa.getNombreLegal());
         parametros.put("pl_telefonos", empresa.getTelefonos());
         
         parametros.put("pl_celular", empresa.getCelular());

@@ -22,4 +22,5 @@ public interface SucursalServiceIf  extends ServiceAbstractIf<Sucursal>{
     
     public abstract List<Sucursal> consultarActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException; 
     public abstract Sucursal obtenerPorCodigo(Integer codigo) throws ServicioCodefacException, RemoteException;
+    public abstract Sucursal obtenerMatrizPorSucursal(Empresa empresa) throws ServicioCodefacException, RemoteException;
 }

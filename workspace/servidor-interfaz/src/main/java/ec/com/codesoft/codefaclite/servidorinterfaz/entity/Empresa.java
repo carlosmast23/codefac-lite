@@ -36,8 +36,8 @@ public class Empresa implements Serializable {
     private String razonSocial;
     @Column(name = "NOMBRE_LEGAL")
     private String nombreLegal;
-    @Column(name = "DIRECCION")
-    private String direccion;
+    //@Column(name = "DIRECCION")
+    //private String direccion;
     @Column(name = "IDENTIFICACION")
     private String identificacion;
     @Column(name = "OBLIGADO_LLEVAR_CONTABILIDAD")
@@ -69,13 +69,14 @@ public class Empresa implements Serializable {
         this.telefonos = telefonos;
     }
 
+    /*
     public String getDireccion() {
         return direccion;
     }
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
-    }
+    }*/
 
     public String getIdentificacion() {
         return identificacion;

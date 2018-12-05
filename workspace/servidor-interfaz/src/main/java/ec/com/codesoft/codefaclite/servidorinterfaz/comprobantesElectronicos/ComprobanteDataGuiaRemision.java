@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.Inf
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.InformacionRetencion;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
@@ -196,6 +197,11 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
     @Override
     public String getEstablecimiento() {
         return this.guiaRemision.getPuntoEstablecimiento();
+    }
+
+    @Override
+    public Empresa getEmpresa() {
+        return guiaRemision.getEmpresa();
     }
     
     

@@ -93,3 +93,7 @@ ver si se aumenta una funcionalidad para cerrar lo formularios con una convinaci
 En la pantalla de retenciones verificar funcionalidad que graba primero la retencion y luego el estado de la compra , lo cual esta mal porque deberia grabar todo como una transaccion 
 Revisar como va a funcionar el tema de las notas de venta con el secuencial porque ya se cambio de funcionalidad
 en las guia de remision agregar validaciones por ejemplo en el motivo de traslado
+
+Revisar la linea que dice en la clase ComprobantesService
+private Map<String, Object> mapReportePlantilla(Empresa empresa) throws RemoteException {
+Porque se repite muchas veces cuando se reimprime un reporte o cuando se procesa la factura , lo cual puede estar haciendo lento el proceso de enivar comprobantes electronicos

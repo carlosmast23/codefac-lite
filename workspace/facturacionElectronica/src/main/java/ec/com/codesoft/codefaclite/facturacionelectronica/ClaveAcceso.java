@@ -40,7 +40,7 @@ public class ClaveAcceso implements Serializable{
        String claveTemporal=this.clave;
        this.fecha=claveTemporal.substring(0,8);
        this.tipoComprobante=claveTemporal.substring(8,10);
-       //this.identificacion=claveTemporal.substring(0,13);
+       this.identificacion=claveTemporal.substring(10,23);
        //this.tipoAmbiente=claveTemporal.substring(0,1);
        //this.valorDefecto=claveTemporal.substring(0,6);
        this.puntoEstablecimiento=claveTemporal.substring(24,27);

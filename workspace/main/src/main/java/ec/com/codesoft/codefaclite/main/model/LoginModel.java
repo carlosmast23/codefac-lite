@@ -106,9 +106,23 @@ public class LoginModel extends LoginFormDialog{
         DatosLogin datosLogin=new DatosLogin();
         datosLogin.empresa=obtenerEmpresaSeleccionada();
         datosLogin.sucursal=obtenerSucursalSeleccionada();
+        datosLogin.matriz=obtenerMatriz();
         datosLogin.usuario=getUsuarioLogin();
-        return datosLogin;
-        
+        return datosLogin;        
+    }
+    
+    private Sucursal obtenerMatriz()
+    {
+        Sucursal sucursal=(Sucursal) getCmbSucursal().getSelectedItem();
+        Sucursal matriz=null;
+        try {
+            matriz = ServiceFactory.getFactory().getSucursalServiceIf().obtenerMatrizPorSucursal(sucursal.getEmpresa());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return matriz;
     }
     
     private void ingresarSistema()
@@ -308,7 +322,9 @@ public class LoginModel extends LoginFormDialog{
     {
         public Empresa empresa;
         public Sucursal sucursal;
+        public Sucursal matriz;
         public Usuario usuario;
+        
     }
     
     

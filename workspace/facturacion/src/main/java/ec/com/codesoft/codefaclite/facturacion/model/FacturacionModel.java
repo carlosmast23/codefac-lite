@@ -1237,7 +1237,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
         //Setear los valores de la empresa 
         getLblRuc().setText(session.getEmpresa().getIdentificacion());
-        getLblDireccion().setText(session.getEmpresa().getDireccion());
+        getLblDireccion().setText(session.getSucursal().getDirecccion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
@@ -1767,7 +1767,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         Persona.TipoIdentificacionEnum tipoIdentificacionEnum=factura.getCliente().getTipoIdentificacionEnum();
         String codigoSri=tipoIdentificacionEnum.getCodigoSriVenta();
         factura.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
-        factura.setEmpresaId(session.getEmpresa().getId());
+        factura.setEmpresa(session.getEmpresa());
         factura.setEstado(Factura.ESTADO_FACTURADO);
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         factura.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));

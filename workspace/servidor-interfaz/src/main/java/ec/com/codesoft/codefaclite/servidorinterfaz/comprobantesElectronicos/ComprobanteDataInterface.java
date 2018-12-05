@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import java.util.List;
 import java.util.Map;
@@ -42,5 +43,7 @@ public interface ComprobanteDataInterface {
      * Devuelve el id fisico del comprobante que se esta procesando para cambiar de estados
      */
     public Long getComprobanteId();
+    
+    public Empresa getEmpresa();
 
 }

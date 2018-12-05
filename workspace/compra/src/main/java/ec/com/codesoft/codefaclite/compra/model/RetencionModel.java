@@ -678,7 +678,7 @@ public class RetencionModel extends RetencionPanel{
         Empresa empresa=session.getEmpresa();
         getLblRuc().setText(empresa.getIdentificacion());
         getLblNombreComercial().setText(empresa.getNombreLegal());
-        getLblDireccion().setText(empresa.getDireccion());
+        getLblDireccion().setText(session.getSucursal().getDirecccion());
         getLblTelefonos().setText(empresa.getTelefonos());                
 
         //getLblSecuencial().setText(obtenerSecuencial());
@@ -761,8 +761,9 @@ public class RetencionModel extends RetencionPanel{
         //retencion.setCompra(compra);
         retencion.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         retencion.setFechaEmision(new java.sql.Date(getjDateFechaEmision().getDate().getTime()));
-        retencion.setProveedor(retencion.getCompra().getProveedor());
+        retencion.setProveedor(retencion.getProveedor());
         retencion.setIdentificacion(retencion.getProveedor().getIdentificacion());
+        retencion.setEmpresa(session.getEmpresa());
         //retencion.setIdentificacion(retencion.getProveedor().getIdentificacion());
         
         PuntoEmision puntoEmisionSeleccionado= obtenerPuntoEmisionSeleccionado();

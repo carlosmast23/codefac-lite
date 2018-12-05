@@ -283,6 +283,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
         retencion.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         retencion.setFechaEmision(new java.sql.Date(getjDateFechaEmision().getDate().getTime()));
         retencion.setProveedor(retencion.getCompra().getProveedor());
+        retencion.setEmpresa(session.getEmpresa());
         
         PuntoEmision puntoEmisionSeleccionado= obtenerPuntoEmisionSeleccionado();
         retencion.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision().toString());

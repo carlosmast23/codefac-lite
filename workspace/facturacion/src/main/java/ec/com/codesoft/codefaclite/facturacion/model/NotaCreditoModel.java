@@ -122,7 +122,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     
     private void setearValoresNotaCredito()
     {
-        notaCredito.setEmpresaId(0l);
+        notaCredito.setEmpresa(session.getEmpresa());
         //notaCredito.setEstado(Factura.ESTADO_FACTURADO);
         notaCredito.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         notaCredito.setRazonModificado(getTxtMotivoAnulacion().getText());
@@ -279,7 +279,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
              * Cargar Datos de la empresa
              */
             getLblRuc().setText(session.getEmpresa().getIdentificacion());
-            getLblDireccion().setText(session.getEmpresa().getDireccion());
+            getLblDireccion().setText(session.getSucursal().getDirecccion());
             getLblTelefonos().setText(session.getEmpresa().getTelefonos());
             getLblNombreComercial().setText(session.getEmpresa().getRazonSocial());
             

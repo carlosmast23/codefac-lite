@@ -338,6 +338,11 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
     public String getEstablecimiento() {
         return this.factura.getPuntoEstablecimiento();
     }
+
+    @Override
+    public Empresa getEmpresa() {
+        return factura.getEmpresa();
+    }
    
     
     

@@ -38,6 +38,8 @@ public interface SessionCodefacInterface {
     
     public Sucursal getSucursal();
     
+     public Sucursal getMatriz();
+    
     public void setUsuario(Usuario usuario);
     public void setEmpresa(Empresa empresa);
     public void setParametrosCodefac(Map<String,ParametroCodefac> parametros);

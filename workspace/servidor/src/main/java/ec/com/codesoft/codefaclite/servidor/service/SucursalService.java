@@ -85,5 +85,21 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
        return null;
     }
     
+    public Sucursal obtenerMatrizPorSucursal(Empresa empresa) throws ServicioCodefacException, RemoteException
+    {
+       Map<String,Object> mapParametros=new HashMap<String,Object>();
+       //Sucursal sucursal;
+       //sucursal.getT
+       mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+       mapParametros.put("tipo",Sucursal.TipoSucursalEnum.MATRIZ.getCodigo());
+       List<Sucursal> sucursales=getFacade().findByMap(mapParametros);
+       
+       if(sucursales.size()>0)
+       {
+           return sucursales.get(0);
+       }
+       return null;
+    }
+    
     
 }

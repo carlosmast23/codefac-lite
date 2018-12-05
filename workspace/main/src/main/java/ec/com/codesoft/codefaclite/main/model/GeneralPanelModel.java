@@ -299,6 +299,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 LoginModel.DatosLogin datosLogin = Main.cargarLoginUsuario();
                 sessionCodefac.setUsuario(datosLogin.usuario);
                 sessionCodefac.setSucursal(datosLogin.sucursal);
+                sessionCodefac.setMatriz(datosLogin.matriz);
                 sessionCodefac.setPerfiles(Main.obtenerPerfilesUsuario(datosLogin.usuario));
                 setVentanasMenuList(null);
                 setearEtiquetasPantallaPrincipal();
@@ -2699,7 +2700,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("pl_fecha_hora", formateador.format(new Date()));
         parametros.put("pl_usuario", sessionCodefac.getUsuario().getNick());
-        parametros.put("pl_direccion", sessionCodefac.getEmpresa().getDireccion());
+        parametros.put("pl_direccion", sessionCodefac.getSucursal().getDirecccion()); //TODO: Ver si agregar la direccion general de la matriz
         parametros.put("pl_nombre_empresa", sessionCodefac.getEmpresa().getNombreLegal());
         parametros.put("pl_telefonos", sessionCodefac.getEmpresa().getTelefonos());
         parametros.put("pl_celular", sessionCodefac.getEmpresa().getCelular());

@@ -75,7 +75,7 @@ public class ConsultaFacturasMb implements Serializable {
     public void imprimirFactura(Factura factura) {
         try {           
             System.out.println("consultando RIDE factura..");
-            byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura.getClaveAcceso());
+            byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura.getClaveAcceso()); //Todo: revisar este caso porque debe mandar a imprimir con informacion de alguna empresa
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
             UtilidadesWeb.exportarPDF(jasperPrint);
             System.out.println("Imprimiendo factura..");
