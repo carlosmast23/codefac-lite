@@ -491,6 +491,27 @@ public class Factura extends ComprobanteEntity implements Serializable {
     
     }
     
+    /**
+     * Metodo que permite saber si en la factura fueron ingresados correos
+     * @return 
+     */
+    public boolean verificarExistenCorreosIngresados()
+    {
+        if(datosAdicionales!=null)
+        {
+            for (FacturaAdicional datosAdicional : datosAdicionales) {
+                if(datosAdicional.getTipo().equals(FacturaAdicional.Tipo.TIPO_CORREO.getLetra()))
+                {
+                    if(datosAdicional.getValor()!=null && !datosAdicional.getValor().isEmpty())
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
     
     
     public enum EstadoNotaCreditoEnum

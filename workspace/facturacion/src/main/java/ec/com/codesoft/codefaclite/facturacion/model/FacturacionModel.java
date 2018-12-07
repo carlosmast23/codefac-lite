@@ -902,7 +902,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                DialogoCodefac.mensaje("Alerta","El Monto no puede ser superior a 200$ para el CLIENTE FINAL",DialogoCodefac.MENSAJE_ADVERTENCIA);
                throw new ExcepcionCodefacLite("El Monto no puede ser superior a 200$ para el CLIENTE FINAL");
            }
+           
         }
+        else
+        {
+            //Advertir cuando no exista ningun correo para que el usuario pueda ingresar antes de enviar al cliente
+            if (!factura.verificarExistenCorreosIngresados()) {
+                if (!DialogoCodefac.dialogoPregunta("Advertencia", "No esta ningun correo ingresado para informar al cliente.\nDesea continuar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
+                    throw new ExcepcionCodefacLite("Cancelado por el usuario");
+                }
+            }
+        }
+        
 
     }
 
