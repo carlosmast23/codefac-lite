@@ -106,6 +106,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
      */
     private Vector<ClienteInterfaceComprobante> clientesLista;
     
+    
     public ComprobantesService() throws RemoteException {
         super();
         clientesLista=new Vector<ClienteInterfaceComprobante>();
@@ -134,6 +135,18 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         }
         return null;
     }*/
+    
+    public void autorizarComprobante(ComprobanteEntity comprobanteElectronica) throws RemoteException,ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                comprobanteElectronica.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                entityManager.merge(comprobanteElectronica);
+            }
+        });        
+    }
+    
     
     public boolean verificarCredencialesFirma(String claveFirma) throws RemoteException
     {

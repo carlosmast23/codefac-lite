@@ -27,6 +27,7 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj NO_PERMITE_EDITAR = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La pantalla no permite modificaciones",DialogoCodefac.MENSAJE_INCORRECTO);
         public static final CodefacMsj NO_PERMITE_ELIMINAR = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"Solo se puede eliminar en modo edición",DialogoCodefac.MENSAJE_INCORRECTO);
         public static final CodefacMsj ACCION_PERMITIDA_MODULO_EDITAR = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"Esta funcionalidad solo esta disponible en el modo editar",DialogoCodefac.MENSAJE_INCORRECTO);
+        public static final CodefacMsj PROCESO_CORRECTO = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"El proceso finalizo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
     }
     
     public static abstract class Preguntas

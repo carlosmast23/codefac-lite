@@ -28,6 +28,8 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public interface ComprobanteServiceIf extends Remote {
     
+    public void autorizarComprobante(ComprobanteEntity comprobanteElectronica) throws RemoteException,ServicioCodefacException;
+    
     public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,String ruc,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException;
     
     public void procesarComprobanteOffline(ComprobanteDataInterface comprobanteData,Factura factura,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException ;

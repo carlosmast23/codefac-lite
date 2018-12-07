@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
@@ -247,6 +248,27 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void addListenerButtons() {    
+        
+        getBtnAutorizarComprobante().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(estadoFormulario.equals(ESTADO_EDITAR))
+                {
+                    if(DialogoCodefac.dialogoPregunta("Advertencia","Esta opción solo debe ser usada para corregir problemas, Por ejemplo:\n-Si el comprobante está  autorizada en el sri pero no en el sistema.\n-Para corregir cualquier problema con el sistema. \n\n Está  seguro que desea continuar de todos modos  ",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                    {
+                        try {
+                            ServiceFactory.getFactory().getComprobanteServiceIf().autorizarComprobante(factura);
+                            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
+                            getBtnAutorizarComprobante().setEnabled(false);
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ServicioCodefacException ex) {
+                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });
         
         getBtnReenviarCorreo().addActionListener(new ActionListener() {
             @Override
@@ -1209,6 +1231,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         cargarValoresAdicionales();
         cargarFormasPagoTabla();
         cargarTablaDatosAdicionales();
+        
+        //Activar el boton de autorizar el comprobante solo si no esta autorizado
+        if (factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR)) {
+            getBtnAutorizarComprobante().setEnabled(true);
+        }
+        else
+        {
+            getBtnAutorizarComprobante().setEnabled(false);
+        }
+        
+            
         //verificarActivarBtnCargarProforma(false);
     }
 
@@ -2814,11 +2847,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         {
             getBtnCargarProforma().setEnabled(true);
             getBtnReenviarCorreo().setEnabled(false);
+            getBtnAutorizarComprobante().setEnabled(false);
         }
         else
         {
             getBtnCargarProforma().setEnabled(false);
             getBtnReenviarCorreo().setEnabled(true);
+            //getBtnAutorizarComprobante().setEnabled(true);
+
         }
     }
     

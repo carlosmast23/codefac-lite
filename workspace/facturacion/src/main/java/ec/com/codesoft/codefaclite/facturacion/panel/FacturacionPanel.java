@@ -76,6 +76,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnCargarPedido = new javax.swing.JButton();
         btnCargarProforma = new javax.swing.JButton();
         btnReenviarCorreo = new javax.swing.JButton();
+        btnAutorizarComprobante = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         PanelDetalleFactura = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -218,6 +219,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         btnReenviarCorreo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/email.png"))); // NOI18N
         btnReenviarCorreo.setToolTipText("Reenviar Correo");
+
+        btnAutorizarComprobante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/visto.png"))); // NOI18N
+        btnAutorizarComprobante.setToolTipText("Autorizar documento");
 
         setClosable(true);
         setIconifiable(true);
@@ -1332,6 +1336,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarDetalleFactura;
     private javax.swing.JButton btnAgregarFormaPago;
     private javax.swing.JButton btnAgregarProducto;
+    private javax.swing.JButton btnAutorizarComprobante;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnBuscarEstudiante;
     private javax.swing.JButton btnBuscarReferenciaContacto;
@@ -1837,6 +1842,13 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public JLabel getLblEstablecimiento() {
         return lblEstablecimiento;
     }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "",visible = true)
+    public JButton getBtnAutorizarComprobante() {
+        return btnAutorizarComprobante;
+    }
+    
+    
 
     
     

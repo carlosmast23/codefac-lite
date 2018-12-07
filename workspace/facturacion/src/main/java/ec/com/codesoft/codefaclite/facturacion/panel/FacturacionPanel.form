@@ -35,6 +35,14 @@
         <Property name="toolTipText" type="java.lang.String" value="Reenviar Correo"/>
       </Properties>
     </Component>
+    <Component class="javax.swing.JButton" name="btnAutorizarComprobante">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/img/iconos/32Pixeles/visto.png"/>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Autorizar documento"/>
+      </Properties>
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="closable" type="boolean" value="true"/>
