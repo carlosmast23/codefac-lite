@@ -61,7 +61,7 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion() throws ServicioCodefacException, RemoteException {
-                    entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                    entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                     entityManager.merge(entity);
                 }
             });

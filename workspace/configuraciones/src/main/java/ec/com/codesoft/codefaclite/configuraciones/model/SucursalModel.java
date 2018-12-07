@@ -71,9 +71,17 @@ public class SucursalModel extends SucursalPanel {
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        setearDatos();
-        ServiceFactory.getFactory().getSucursalServiceIf().eliminar(sucursal);
-        DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+        //setearDatos();
+        if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
+        {            
+            ServiceFactory.getFactory().getSucursalServiceIf().eliminar(sucursal);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+        }  
+        else
+        {
+            throw new ExcepcionCodefacLite("Cancelado eliminar metodo por el usuario");
+        }
+        
     }
 
     @Override

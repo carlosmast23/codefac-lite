@@ -34,7 +34,7 @@ public class SucursalBusquedaDialogo implements InterfaceModelFind<Sucursal> {
         Sucursal s;
         //s.getNombre();
         //pv.getDescripcion()
-        String queryString = "SELECT s FROM Sucursal s WHERE s.estado=?1 or ";
+        String queryString = "SELECT s FROM Sucursal s WHERE s.estado=?1 and ";
         queryString += "(LOWER(s.nombre) like ?2) ";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
