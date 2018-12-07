@@ -40,10 +40,12 @@ public abstract class UtilidadValidador {
      */
     public static String normalizarTextoCorreo(String s) {
 
+        //()<>@,;:"[]ç%&
         // Cadena de caracteres original a sustituir.
-        String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ[]{}^\\-¿";
+        //String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ[]{}^\\-¿";
+        String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ";
         // Cadena de caracteres ASCII que reemplazarán los originales.
-        String ascii = "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC()()    ";
+        String ascii = "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC";
         String output = s;
         for (int i = 0; i < original.length(); i++) {
             // Reemplazamos los caracteres especiales.
