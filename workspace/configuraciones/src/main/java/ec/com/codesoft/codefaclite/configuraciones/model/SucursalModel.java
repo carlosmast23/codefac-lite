@@ -134,7 +134,8 @@ public class SucursalModel extends SucursalPanel {
         sucursal=(Sucursal) entidad;
         getTxtNombre().setText(sucursal.getNombre());
         getTxtTelefono().setText(sucursal.getTelefono());
-        getTxtDireccion().setText(sucursal.getDirecccion());
+        getTxtCelular().setText(sucursal.getCelular());
+       getTxtDireccion().setText(sucursal.getDirecccion());
         getTxtEmail().setText(sucursal.getEmail());
         getTxtCodigoEstablecimiento().setValue(sucursal.getCodigoSucursal());
         
@@ -148,6 +149,7 @@ public class SucursalModel extends SucursalPanel {
     {
         sucursal.setNombre(getTxtNombre().getText());
         sucursal.setTelefono(getTxtTelefono().getText());
+        sucursal.setCelular(getTxtCelular().getText());
         sucursal.setDirecccion(getTxtDireccion().getText());
         sucursal.setEmail(getTxtEmail().getText());
 

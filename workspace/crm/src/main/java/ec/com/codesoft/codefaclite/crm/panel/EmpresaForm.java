@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -146,7 +147,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         btnCargarImagen = new javax.swing.JButton();
         lblEspacio3 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        lblCelular = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtCelular = new javax.swing.JTextField();
         txtFacebook = new javax.swing.JTextField();
@@ -285,7 +286,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
 
         jTabbedPane1.addTab("Datos generales", jPanelConfiguracionEmisor);
 
-        jLabel6.setText("WhatsApp:");
+        lblCelular.setText("WhatsApp:");
 
         jLabel5.setText("Facebook:");
 
@@ -310,7 +311,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel11)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6))
+                    .addComponent(lblCelular))
                 .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -324,7 +325,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
+                    .addComponent(lblCelular)
                     .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -389,7 +390,6 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -401,6 +401,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JTextField jTextNombreSocial;
     private javax.swing.JTextField jTextNumContribuyente;
     private javax.swing.JTextField jTextRuc;
+    private javax.swing.JLabel lblCelular;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio3;
@@ -417,5 +418,10 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         this.btnCargarImagen = btnCargarImagen;
     }
 
+    public JLabel getLblCelular() {
+        return lblCelular;
+    }
+
+    
     
 }

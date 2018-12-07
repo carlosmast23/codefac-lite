@@ -1277,7 +1277,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         //Empresa empresa = empresaService.obtenerTodos().get(0);
         Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
         
-        /*
+        //TODO:Revisar esta parte porque va a salir con la informacion de la matriz princiapl ,talvez deberia salir con la informacion de la sucursal que estan usando
         SucursalService sucursalService=new SucursalService();
         Sucursal matriz=null;
         try {
@@ -1285,24 +1285,24 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        */
-
+        
+        
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
         Map<String, Object> parametros = new HashMap<String, Object>();
         //parametros.put("pl_fecha_hora", formateador.format(new Date()));
         //parametros.put("pl_usuario", (usuario==null)?"":usuario.getNick());
         //parametros.put("pl_direccion",(matriz==null)?"SIN DIRECCION" :matriz.getDirecccion());
         //parametros.put("pl_nombre_empresa", empresa.getNombreLegal());
-        parametros.put("pl_telefonos", empresa.getTelefonos());
+        parametros.put("pl_telefonos",(matriz.getTelefono()!=null)?matriz.getTelefono():matriz.getTelefono());
         
-        parametros.put("pl_celular", empresa.getCelular());
-        parametros.put("pl_facebook", empresa.getFacebook());
+        parametros.put("pl_celular", (matriz.getCelular()!=null)?matriz.getCelular():matriz.getCelular());
+        parametros.put("pl_facebook",(empresa.getFacebook()!=null)?empresa.getFacebook():"");
         //parametros.put("pl_adicional", empresa.getAdicional());
         
         if (UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS)) {
             parametros.put("pl_adicional",ParametrosSistemaCodefac.MensajesSistemaCodefac.MENSAJE_PIE_PAGINA_GRATIS);
         } else {
-            parametros.put("pl_adicional", empresa.getAdicional());
+            parametros.put("pl_adicional",(empresa.getAdicional()!=null)?empresa.getAdicional():"");
         } 
 
 

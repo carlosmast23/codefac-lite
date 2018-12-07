@@ -66,6 +66,10 @@ public class EmpresaModel extends EmpresaForm
          * Desactivo el ciclo de vida para controlar manualmente
          */
         super.cicloVida = false;
+        
+        //Todo: Por el momento oculto estos 2 campos porque se los va a coger de la sucursal matriz
+        getLblCelular().setVisible(false); 
+        getTxtCelular().setVisible(false);
  
     }
     
