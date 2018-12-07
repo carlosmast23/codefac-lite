@@ -46,6 +46,7 @@ public class UtilidadesServidor {
     public static final String ETIQUETA_AGREGAR_COLUMNA = "@AGREGAR_COLUMNA";
     public static final String ETIQUETA_AGREGAR_TABLA = "@AGREGAR_TABLA";
     public static final String ETIQUETA_VERSION = "VERSION_SISTEMA";
+    public static final String ETIQUETA_MOSTRAR_ERROR = "MOSTRAR_ERROR";
 
     //Listado de conexiones en el Servidor
     public static List<String> hostConectados = new ArrayList<String>();
@@ -287,18 +288,19 @@ public class UtilidadesServidor {
                                 
                                 String etiqueta = etiquetas[i];
                                 String version = obtenerPropiedad(etiqueta, ETIQUETA_VERSION);
+                                String mostrarAdvertencia = obtenerPropiedad(etiqueta, ETIQUETA_MOSTRAR_ERROR);
                                 //String nombreTabla = obtenerNombreTabla(queryTabla);
                                 String queryNuevo = obtenerQuery(etiqueta);
 
                                 //Agregar al Map los querys si no existe ninguno con ese numero de version
                                 if (mapQuerysVersion.get(version) == null) {
                                     List<ScriptCodefac> listaQuerys = new ArrayList<ScriptCodefac>();
-                                    listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.OTHER_SCRIPT));
+                                    listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.OTHER_SCRIPT,mostrarAdvertencia));
                                     mapQuerysVersion.put(version, listaQuerys);
                                 } else //Obtiene la lista de los querys anteriormente agregados para ingresar el nuevo query
                                 {
                                     List<ScriptCodefac> listaQuerys = mapQuerysVersion.get(version);
-                                    listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.OTHER_SCRIPT));
+                                    listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.OTHER_SCRIPT,mostrarAdvertencia));
                                     mapQuerysVersion.put(version, listaQuerys);
                                 }
                             }
@@ -334,7 +336,10 @@ public class UtilidadesServidor {
                                     pstm.close();
                                 } catch (SQLException ex) {
                                     LOG.log(Level.SEVERE, "Query Error:" + query.getQuery());
-                                    JOptionPane.showMessageDialog(null,"Error al actualizar la base de datos en el Query: \n"+query.getQuery()+"\n\n CAUSA:\n"+ex.getCause().toString(),"ERROR",JOptionPane.WARNING_MESSAGE);
+                                    if(query.isMostrarAdvertencia())
+                                    {
+                                        JOptionPane.showMessageDialog(null,"Error al actualizar la base de datos en el Query: \n"+query.getQuery()+"\n\n CAUSA:\n"+ex.getCause().toString(),"ERROR",JOptionPane.WARNING_MESSAGE);
+                                    }
                                     Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }

@@ -11,12 +11,39 @@ package ec.com.codesoft.codefaclite.servidor.util;
  */
 public class ScriptCodefac {
     private String query;
-    private PrioridadQueryEnum prioridad;
+   private PrioridadQueryEnum prioridad;
+    /**
+     * Variable que sirve cuando el usuario no quiere mostrar las alertas al usuario de determinado query si se produce un error
+     */
+    private boolean mostrarAdvertencia;
 
     public ScriptCodefac(String query, PrioridadQueryEnum prioridad) {
         this.query = query;
         this.prioridad = prioridad;
+        this.mostrarAdvertencia=true;
     }
+
+    public ScriptCodefac(String query, PrioridadQueryEnum prioridad, String mostrarAdvertencia) {
+        this.query = query;
+        this.prioridad = prioridad;
+        this.mostrarAdvertencia =convertirTextoBoolean(mostrarAdvertencia);
+    }
+    
+    private boolean convertirTextoBoolean(String mostrarAdvertencia)
+    {
+        if(mostrarAdvertencia.toUpperCase().equals("NO"))
+        {
+            return false;
+        }
+        
+        if(mostrarAdvertencia.toUpperCase().equals("N"))
+        {
+            return false;
+        }
+        
+        return true;
+    }
+    
 
     public String getQuery() {
         return query;
@@ -32,6 +59,14 @@ public class ScriptCodefac {
 
     public void setPrioridad(PrioridadQueryEnum prioridad) {
         this.prioridad = prioridad;
+    }
+
+    public boolean isMostrarAdvertencia() {
+        return mostrarAdvertencia;
+    }
+
+    public void setMostrarAdvertencia(boolean mostrarAdvertencia) {
+        this.mostrarAdvertencia = mostrarAdvertencia;
     }
     
     
