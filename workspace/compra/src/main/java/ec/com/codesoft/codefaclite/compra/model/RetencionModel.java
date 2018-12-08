@@ -679,7 +679,7 @@ public class RetencionModel extends RetencionPanel{
         getLblRuc().setText(empresa.getIdentificacion());
         getLblNombreComercial().setText(empresa.getNombreLegal());
         getLblDireccion().setText(session.getSucursal().getDirecccion());
-        getLblTelefonos().setText(empresa.getTelefonos());                
+        getLblTelefonos().setText(session.getMatriz().getTelefono());                
 
         //getLblSecuencial().setText(obtenerSecuencial());
         ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());

@@ -30,8 +30,8 @@ public class Empresa implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     public long id;
-    @Column(name = "TELEFONOS")
-    private String telefonos;
+    //@Column(name = "TELEFONOS")
+    //private String telefonos;
     @Column(name = "RAZON_SOCIAL")
     private String razonSocial;
     @Column(name = "NOMBRE_LEGAL")
@@ -46,8 +46,8 @@ public class Empresa implements Serializable {
     private String contribuyenteEspecial;
     @Column(name = "LOGO_IMAGEN_PATH")
     private String imagenLogoPath;
-    @Column(name = "CELULAR")
-    private String celular;
+    //@Column(name = "CELULAR")
+    //private String celular;
     @Column(name = "FACEBOOK")
     private String facebook;
     @Column(name = "TEXTO1")
@@ -61,13 +61,13 @@ public class Empresa implements Serializable {
         this.id = id;
     }
 
-    public String getTelefonos() {
-        return telefonos;
-    }
+    //public String getTelefonos() {
+    //    return telefonos;
+    //}
 
-    public void setTelefonos(String telefonos) {
-        this.telefonos = telefonos;
-    }
+    //public void setTelefonos(String telefonos) {
+    //    this.telefonos = telefonos;
+    //}
 
     /*
     public String getDireccion() {
@@ -126,13 +126,14 @@ public class Empresa implements Serializable {
         this.imagenLogoPath = imagenLogoPath;
     }
 
+    /*
     public String getCelular() {
         return celular;
     }
 
     public void setCelular(String celular) {
         this.celular = celular;
-    }
+    }*/
 
     public String getFacebook() {
         return facebook;

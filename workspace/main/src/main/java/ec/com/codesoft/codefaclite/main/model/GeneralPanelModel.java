@@ -2702,8 +2702,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         parametros.put("pl_usuario", sessionCodefac.getUsuario().getNick());
         parametros.put("pl_direccion", sessionCodefac.getSucursal().getDirecccion()); //TODO: Ver si agregar la direccion general de la matriz
         parametros.put("pl_nombre_empresa", sessionCodefac.getEmpresa().getNombreLegal());
-        parametros.put("pl_telefonos", sessionCodefac.getEmpresa().getTelefonos());
-        parametros.put("pl_celular", sessionCodefac.getEmpresa().getCelular());
+        parametros.put("pl_telefonos", sessionCodefac.getMatriz().getTelefono());
+        parametros.put("pl_celular", sessionCodefac.getMatriz().getCelular());
         parametros.put("pl_facebook", sessionCodefac.getEmpresa().getFacebook());
         
         /**

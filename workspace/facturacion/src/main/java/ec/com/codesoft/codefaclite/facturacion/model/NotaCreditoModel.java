@@ -328,7 +328,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
              */
             getLblRuc().setText(session.getEmpresa().getIdentificacion());
             getLblDireccion().setText(session.getSucursal().getDirecccion());
-            getLblTelefonos().setText(session.getEmpresa().getTelefonos());
+            getLblTelefonos().setText(session.getMatriz().getTelefono());
             getLblNombreComercial().setText(session.getEmpresa().getRazonSocial());
             
             getTxtProveedor().setText("");

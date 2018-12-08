@@ -191,7 +191,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     @Override
     public void limpiar() {
         getLblRuc().setText(session.getEmpresa().getIdentificacion());
-        getLblTelefonos().setText(session.getEmpresa().getTelefonos());
+        getLblTelefonos().setText(session.getSucursal().getTelefono());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         getLblDireccion().setText(session.getSucursal().getDirecccion());
         getLblCantidadProductos().setText("0");

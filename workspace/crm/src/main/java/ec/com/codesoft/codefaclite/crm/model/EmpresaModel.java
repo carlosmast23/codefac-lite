@@ -98,7 +98,7 @@ public class EmpresaModel extends EmpresaForm
             getjTextNombreComercial().setText(e.getNombreLegal());
             //getTxtDireccion().setText(e.getDireccion());
             //getjTextTelefono().setText(e.getTelefonos());
-            getTxtCelular().setText(e.getCelular());
+            //getTxtCelular().setText(e.getCelular());
             getTxtFacebook().setText(e.getFacebook());
             getTxtAdicional().setText(e.getAdicional());
             getjTextNumContribuyente().setText(e.getContribuyenteEspecial());
@@ -211,7 +211,7 @@ public class EmpresaModel extends EmpresaForm
         //empresa.setDireccion(getTxtDireccion().getText());
         empresa.setIdentificacion(getjTextRuc().getText());
         empresa.setContribuyenteEspecial(getjTextNumContribuyente().getText());
-        empresa.setCelular(getTxtCelular().getText());
+        //empresa.setCelular(getTxtCelular().getText());
         empresa.setFacebook(getTxtFacebook().getText());
         empresa.setAdicional(getTxtAdicional().getText());
         

@@ -1313,7 +1313,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Setear los valores de la empresa 
         getLblRuc().setText(session.getEmpresa().getIdentificacion());
         getLblDireccion().setText(session.getSucursal().getDirecccion());
-        getLblTelefonos().setText(session.getEmpresa().getTelefonos());
+        getLblTelefonos().setText(session.getMatriz().getTelefono());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
         getLblEstadoFactura().setText("Procesando");
