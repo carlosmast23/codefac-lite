@@ -3228,6 +3228,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 System.out.println("Ejemplo:"+ventanaClase.getName());
                 Constructor contructor = ventanaClase.getConstructor();
                 ControladorCodefacInterface ventana = (ControladorCodefacInterface) contructor.newInstance();
+                ventana.reconstruirPantalla(); //Esto sirve para la pantalla se reconstruya con los menus secundarios
                 agregarListenerMenu(ventana,maximizado);
             } catch (NoSuchMethodException ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
