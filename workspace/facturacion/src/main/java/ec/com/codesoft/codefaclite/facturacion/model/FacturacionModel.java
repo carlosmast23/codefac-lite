@@ -249,12 +249,34 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     private void addListenerButtons() {    
         
+        getBtnReProcesarComprobante().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+               if(estadoFormulario.equals(ESTADO_EDITAR))
+                {
+                    if(DialogoCodefac.dialogoPregunta("Advertencia","Esta opción solo debe ser usada para corregir problemas, Por ejemplo:\n-No se genero ninguna etapa al procesar el comprobante electrónico.\n-No existen en la carpeta de recursos ningun XML  ni RIDE. \n\n Está  seguro que desea continuar de todos modos ?  ",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                    {                        
+                        try {
+                            ClienteFacturaImplComprobante cic = new ClienteFacturaImplComprobante((FacturacionModel) formularioActual, factura, false);
+                            ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobante(obtenerComprobanteDataFactura(), factura, session.getUsuario(), cic);
+                            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_EN_CURSO);
+                            getBtnReProcesarComprobante().setEnabled(false);
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                         
+                    }
+                }
+            }
+        });
+        
         getBtnAutorizarComprobante().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(estadoFormulario.equals(ESTADO_EDITAR))
                 {
-                    if(DialogoCodefac.dialogoPregunta("Advertencia","Esta opción solo debe ser usada para corregir problemas, Por ejemplo:\n-Si el comprobante está  autorizada en el sri pero no en el sistema.\n-Para corregir cualquier problema con el sistema. \n\n Está  seguro que desea continuar de todos modos  ",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                    if(DialogoCodefac.dialogoPregunta("Advertencia","Esta opción solo debe ser usada para corregir problemas, Por ejemplo:\n-Si el comprobante está  autorizada en el sri pero no en el sistema.\n-Para corregir cualquier problema con el sistema. \n\n Está  seguro que desea continuar de todos modos ? ",DialogoCodefac.MENSAJE_ADVERTENCIA))
                     {
                         try {
                             ServiceFactory.getFactory().getComprobanteServiceIf().autorizarComprobante(factura);
@@ -938,6 +960,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
 
     }
+    
+    private ComprobanteDataFactura obtenerComprobanteDataFactura()
+    {
+        ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+        comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
+        return comprobanteData;
+    }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
@@ -970,8 +999,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             else
             {
 
-                ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
-                comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
+                ComprobanteDataFactura comprobanteData = obtenerComprobanteDataFactura();
+                //comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
                 ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this,facturaProcesando,true);
                 ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
                 
@@ -1235,10 +1264,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Activar el boton de autorizar el comprobante solo si no esta autorizado
         if (factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR)) {
             getBtnAutorizarComprobante().setEnabled(true);
+            getBtnReProcesarComprobante().setEnabled(true);
         }
         else
         {
             getBtnAutorizarComprobante().setEnabled(false);
+            getBtnReProcesarComprobante().setEnabled(false);
         }
         
             
@@ -2847,7 +2878,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         {
             getBtnCargarProforma().setEnabled(true);
             getBtnReenviarCorreo().setEnabled(false);
+            
             getBtnAutorizarComprobante().setEnabled(false);
+            getBtnReProcesarComprobante().setEnabled(false);
         }
         else
         {

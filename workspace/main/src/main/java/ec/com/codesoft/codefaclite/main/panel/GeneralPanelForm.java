@@ -82,6 +82,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         itemBuscar = new javax.swing.JMenuItem();
         itemActualizar = new javax.swing.JMenuItem();
         itemImprimir = new javax.swing.JMenuItem();
+        itemCerrarVentana = new javax.swing.JMenuItem();
         itemAyuda = new javax.swing.JMenuItem();
         jMenuItemSalir = new javax.swing.JMenuItem();
         jMenuUtilidades = new javax.swing.JMenu();
@@ -340,6 +341,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuInicio.add(itemImprimir);
 
+        itemCerrarVentana.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        itemCerrarVentana.setText("Cerrar Ventana");
+        jMenuInicio.add(itemCerrarVentana);
+
         itemAyuda.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         itemAyuda.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         itemAyuda.setText("Ayuda");
@@ -538,6 +543,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem itemActualizar;
     private javax.swing.JMenuItem itemAyuda;
     private javax.swing.JMenuItem itemBuscar;
+    private javax.swing.JMenuItem itemCerrarVentana;
     private javax.swing.JMenuItem itemEliminar;
     private javax.swing.JMenuItem itemGuardar;
     private javax.swing.JMenuItem itemImprimir;
@@ -876,5 +882,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         return jmenuTemas;
     }
 
+    public JMenuItem getItemCerrarVentana() {
+        return itemCerrarVentana;
+    }
+    
+    
     
 }

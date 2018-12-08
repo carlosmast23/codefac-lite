@@ -3194,6 +3194,27 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 getBtnNuevo().doClick();
             }
         });
+        
+        getItemCerrarVentana().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ControladorCodefacInterface pantalla =getPanelActivo();
+                if(pantalla!=null)
+                {
+                    boolean respuesta=true;
+                    if(!pantalla.salirSinGrabar())
+                    {
+                        respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , está seguro que desea salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        if(!respuesta)
+                        {
+                            return;
+                        }
+                    }
+                    pantalla.dispose();
+                    
+                }
+            }
+        });
     }
     
     public void setearEtiquetasPantallaPrincipal()
