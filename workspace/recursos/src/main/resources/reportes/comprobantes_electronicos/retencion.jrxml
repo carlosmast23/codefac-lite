@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.2100000000000255"/>
+	<property name="ireport.zoom" value="0.9090909090909288"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
@@ -79,17 +79,17 @@
 	<title>
 		<band height="391" splitType="Stretch">
 			<image hAlign="Center">
-				<reportElement x="0" y="20" width="313" height="152" uuid="0b0aecb9-e33e-4335-9a20-b132c3621bbf"/>
+				<reportElement x="0" y="20" width="297" height="152" uuid="0b0aecb9-e33e-4335-9a20-b132c3621bbf"/>
 				<imageExpression><![CDATA[$P{imagen_logo}]]></imageExpression>
 			</image>
 			<rectangle radius="10">
-				<reportElement x="323" y="20" width="232" height="309" uuid="ff7501c2-32ef-49f6-ab70-46f28b26a58d"/>
+				<reportElement x="312" y="20" width="243" height="309" uuid="ff7501c2-32ef-49f6-ab70-46f28b26a58d"/>
 			</rectangle>
 			<rectangle radius="10">
-				<reportElement x="0" y="183" width="313" height="146" uuid="128a1725-5c7e-4bc8-b27b-142a8c3698f1"/>
+				<reportElement x="0" y="183" width="297" height="146" uuid="128a1725-5c7e-4bc8-b27b-142a8c3698f1"/>
 			</rectangle>
 			<componentElement>
-				<reportElement x="333" y="272" width="212" height="50" uuid="40b8dc45-f9bd-4178-84ea-1fab32e8b949"/>
+				<reportElement x="323" y="272" width="222" height="50" uuid="40b8dc45-f9bd-4178-84ea-1fab32e8b949"/>
 				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
 					<jr:codeExpression><![CDATA[$P{autorizacion}]]></jr:codeExpression>
 				</jr:Code128>
@@ -160,14 +160,14 @@
 				<text><![CDATA[CLAVE DE ACCESO]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="5" y="188" width="303" height="18" uuid="6e491e25-7c7e-4daf-ab1c-7340453eb3ed"/>
+				<reportElement x="5" y="188" width="282" height="18" uuid="6e491e25-7c7e-4daf-ab1c-7340453eb3ed"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{razon_social}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5" y="206" width="303" height="18" uuid="20edfeb2-f06d-4a3b-a278-010049807845"/>
+				<reportElement x="5" y="206" width="282" height="18" uuid="20edfeb2-f06d-4a3b-a278-010049807845"/>
 				<textElement textAlignment="Center">
 					<font size="11" isItalic="true"/>
 				</textElement>
@@ -181,7 +181,7 @@
 				<text><![CDATA[Dirección Matriz:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="100" y="233" width="208" height="20" uuid="369ab1d6-f0d1-4c79-90e5-a828e3fe1cf9"/>
+				<reportElement x="100" y="233" width="187" height="20" uuid="369ab1d6-f0d1-4c79-90e5-a828e3fe1cf9"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -195,7 +195,7 @@
 				<text><![CDATA[Dirección Sucursal:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="100" y="252" width="208" height="20" uuid="c6e18b02-c339-4ac2-a0ef-df874a62768c"/>
+				<reportElement x="100" y="252" width="187" height="20" uuid="c6e18b02-c339-4ac2-a0ef-df874a62768c"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -209,7 +209,7 @@
 				<text><![CDATA[Contribuyente Especial No]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="100" y="272" width="208" height="20" uuid="f9902681-6a04-4d2b-9fa1-d968cd848025"/>
+				<reportElement x="100" y="272" width="187" height="20" uuid="f9902681-6a04-4d2b-9fa1-d968cd848025"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -223,7 +223,7 @@
 				<text><![CDATA[Obligado a llevar Contabilidad]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="100" y="303" width="208" height="20" uuid="830f3c58-e5f5-41be-850d-110f21ea3892"/>
+				<reportElement x="100" y="303" width="187" height="20" uuid="830f3c58-e5f5-41be-850d-110f21ea3892"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>

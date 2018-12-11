@@ -106,3 +106,6 @@ VALUES
 ((SELECT ID FROM EMPRESA),(SELECT NOMBRE_LEGAL FROM EMPRESA),'m','A',(SELECT TELEFONOS FROM EMPRESA),(SELECT DIRECCION FROM EMPRESA),'',(SELECT CAST(VALOR AS BIGINT) FROM PARAMETRO WHERE NOMBRE='establecimiento'));
 En la pantalla de Notas de Credito revisar el metodo grabar que no retorna una excepcion y puede generar problemas al no avizar al usuario
 Agregar la advertencia en todos los comprobantes electronicos cuando no tienen correo , ahora solo esta agregado en las facturas
+
+Ver como hacer que le permita elegir un destino diferente del por defecto del usuario en el instalador de Codefac
+Revisar funcionalidad para poder cambiar o agregar correos para reenviar desde la pantalla de factura nuevamente
