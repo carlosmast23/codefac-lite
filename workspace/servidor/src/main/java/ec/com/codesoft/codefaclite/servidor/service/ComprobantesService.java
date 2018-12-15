@@ -326,6 +326,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         comprobanteElectronico.setEtapaActual(etapaInicial);
         comprobanteElectronico.setClaveAcceso(claveAcceso);
         comprobanteElectronico.setEtapaLimiteProcesar(etapaLimite);
+        comprobanteElectronico.enviarSoloCorreosAdjuntos=true;
         
         comprobanteElectronico.procesarComprobante();
         List<AlertaComprobanteElectronico> alertas=comprobanteElectronico.getAlertas();

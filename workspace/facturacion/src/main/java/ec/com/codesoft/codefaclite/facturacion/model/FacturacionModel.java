@@ -255,6 +255,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         return false;
     }
+    
+    private List<String>obtenerCorreosFactura()
+    {
+        ArrayList<String> correos=new ArrayList<String>();
+        
+        if(factura.getDatosAdicionales()!=null)
+        {
+            for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) {
+               if(FacturaAdicional.Tipo.TIPO_CORREO.getLetra().equals(datoAdicional.getTipo()))
+               {
+ 
+                   correos.add(datoAdicional.getValor());
+
+               }
+            }
+        }
+        return correos;
+    }
 
     private void addListenerButtons() {    
         
@@ -357,7 +375,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
                                 ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
                                 factura.getClaveAcceso(),
-                                new ArrayList<String>());
+                                obtenerCorreosFactura()); //TOdo:Verificar si puedo hacer alguna manera para solo enviar a los correos que esten escritos
                         
                         if(alertas.size()>0)
                         {

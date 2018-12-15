@@ -201,11 +201,17 @@ public class ComprobanteElectronicoService implements Runnable {
     private Map<String,String> mapCodeAndNameTipoDocumento;
     
     private List<AlertaComprobanteElectronico> alertas;
+    
+    /**
+     * Variable que sirve para saber si envio los correos adjuntos en el comprobante o tambien los adicionales
+     */
+    public boolean enviarSoloCorreosAdjuntos;
 
     public ComprobanteElectronicoService() {
         this.etapaLimiteProcesar = 100;
         this.etapaActual = ETAPA_GENERAR;
         this.alertas=new ArrayList<AlertaComprobanteElectronico>();
+        enviarSoloCorreosAdjuntos=false;
     }
 
     public ComprobanteElectronicoService(String pathBase, String nombreFirma, String claveFirma, String modoFacturacion, ComprobanteElectronico comprobante) {
@@ -217,6 +223,7 @@ public class ComprobanteElectronicoService implements Runnable {
         this.etapaActual = ETAPA_GENERAR;
         this.etapaLimiteProcesar = 100;
         this.alertas=new ArrayList<AlertaComprobanteElectronico>();
+        enviarSoloCorreosAdjuntos=false;
     }
 
     public void procesar(Boolean enviarPorLotes) {
@@ -510,8 +517,12 @@ public class ComprobanteElectronicoService implements Runnable {
                 if(comprobante.getInformacionAdicional()!=null)
                 {
                     for (InformacionAdicional infoAdicional : comprobante.getInformacionAdicional()) {
-                        if (infoAdicional.getNombre().indexOf("correo") >= 0) { //TODO: Setear a una variable global para poder modificar
-                            correosElectronicosTemp.add(infoAdicional.getValor());
+                        
+                        if(!enviarSoloCorreosAdjuntos)
+                        {
+                            if (infoAdicional.getNombre().indexOf("correo") >= 0) { //TODO: Setear a una variable global para poder modificar
+                                correosElectronicosTemp.add(infoAdicional.getValor());
+                            }
                         }
                         
                         //Buscar numeros de celular para enviar el correo
