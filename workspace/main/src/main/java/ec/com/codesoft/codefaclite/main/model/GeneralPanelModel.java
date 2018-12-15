@@ -965,20 +965,23 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
                 try
                 {
-                    JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
-                    ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
-                    
+                    cambiarCursorEspera();
+                    JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
+                    ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
+                
                     /**
                      * Si ciclo de vida esta desactivado controlo manualmente el
                      * ciclo de vida
                      */
                     if (!frameInterface.cicloVida) {
                         frameInterface.imprimir();
+                        cambiarCursorNormal();
                         return;
                     }
                     
                     frameInterface.imprimir();
                     limpiarCamposValidacion(frameInterface);
+                    
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -988,8 +991,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 } catch (RemoteException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     FuncionesSistemaCodefac.servidorConexionPerdida();
-                }
-                               
+                }                
+                cambiarCursorNormal();
+                
             }
         });
         
