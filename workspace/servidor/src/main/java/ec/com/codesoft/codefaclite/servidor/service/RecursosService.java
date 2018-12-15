@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.Direct
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesZip;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -100,7 +101,9 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
             OutputStream outputStream = new FileOutputStream(fileDestino);            
                         
             InputStream inputStream = RemoteInputStreamClient.wrap(recurso);
-
+            
+            UtilidadesArchivos.grabarInputStreamEnArchivo(inputStream, outputStream);
+/*
             int read = 0;
             byte[] bytes = new byte[1024];
 
@@ -109,6 +112,7 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
             }
             inputStream.close();
             outputStream.close();
+*/
         } catch (IOException ex) {
             Logger.getLogger(RecursosService.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -9,6 +9,7 @@ import autorizacion.ws.sri.gob.ec.Autorizacion;
 import autorizacion.ws.sri.gob.ec.Mensaje;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -1101,8 +1102,6 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
             Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
             //String pathBase de los directorios
-
-            //servicio.setPathBase(parametroCodefacMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
             servicio.setPathBase(UtilidadesServidor.pathRecursos);
             servicio.setNombreFirma(parametroCodefacMap.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
             servicio.setClaveFirma(UtilidadesEncriptar.desencriptar(parametroCodefacMap.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
@@ -1568,6 +1567,25 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         //parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
         //parametroService.editar(parametro);
         entityManager.merge(puntoEmision);
+    }
+    
+    public RemoteInputStream obtenerXmlFirmadoComprobante(Empresa empresa,String claveAcceso) throws RemoteException, ServicioCodefacException
+    {
+        try {
+            ComprobanteElectronicoService comprobanteService=new ComprobanteElectronicoService();
+            
+            cargarConfiguraciones(comprobanteService,empresa);
+            String pathXml=comprobanteService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_FIRMADOS,claveAcceso);
+            File file=new File(pathXml);
+            
+            SimpleRemoteInputStream istream = new SimpleRemoteInputStream(new FileInputStream(file));
+            return istream;
+            
+            //return UtilidadesRmi.serializar(file);
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        throw new ServicioCodefacException("Xml no disponible");
     }
 
 }

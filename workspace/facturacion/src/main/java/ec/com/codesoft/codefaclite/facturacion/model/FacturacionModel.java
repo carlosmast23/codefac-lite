@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import com.healthmarketscience.rmiio.RemoteInputStream;
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
@@ -85,8 +87,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import static ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac.CARPETA_DATOS_TEMPORALES;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
@@ -94,6 +98,7 @@ import ec.com.codesoft.codefaclite.utilidades.tabla.ButtonColumn;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.Color;
@@ -104,8 +109,12 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -248,6 +257,43 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void addListenerButtons() {    
+        
+        getBtnGenerarXml().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                try {
+                    RemoteInputStream remoteInputStream =ServiceFactory.getFactory().getComprobanteServiceIf().obtenerXmlFirmadoComprobante(session.getEmpresa(),factura.getClaveAcceso());
+                    
+                    String nombreArchivoFinal=UtilidadesArchivos.generarNombreArchivoUnico("firma","xml");
+                    File fileDestino = new File(ParametrosSistemaCodefac.CARPETA_DATOS_TEMPORALES+"/"+nombreArchivoFinal); //Ver si parametrizar el backslash 
+                    //crear toda la ruta si no existe
+                    if (!fileDestino.exists()) {
+                        fileDestino.getParentFile().mkdirs();
+                        //file.mkdir();
+                    }
+
+                    OutputStream outputStream = new FileOutputStream(fileDestino);
+
+                    InputStream inputStream = RemoteInputStreamClient.wrap(remoteInputStream);
+
+                    UtilidadesArchivos.grabarInputStreamEnArchivo(inputStream, outputStream);
+                    UtilidadesSistema.abrirDocumento(fileDestino);
+                    
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+                
+        });
         
         getBtnReProcesarComprobante().addActionListener(new ActionListener() {
             @Override
@@ -2878,14 +2924,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         {
             getBtnCargarProforma().setEnabled(true);
             getBtnReenviarCorreo().setEnabled(false);
+            getBtnGenerarXml().setEnabled(false);
             
             getBtnAutorizarComprobante().setEnabled(false);
             getBtnReProcesarComprobante().setEnabled(false);
+            
         }
         else
         {
             getBtnCargarProforma().setEnabled(false);
             getBtnReenviarCorreo().setEnabled(true);
+            getBtnGenerarXml().setEnabled(true);
             //getBtnAutorizarComprobante().setEnabled(true);
 
         }

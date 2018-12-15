@@ -78,6 +78,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnReenviarCorreo = new javax.swing.JButton();
         btnAutorizarComprobante = new javax.swing.JButton();
         btnReProcesarComprobante = new javax.swing.JButton();
+        btnGenerarXml = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         PanelDetalleFactura = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -226,6 +227,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         btnReProcesarComprobante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/enviar.png"))); // NOI18N
         btnReProcesarComprobante.setToolTipText("Procesar nuevamente comprobante");
+
+        btnGenerarXml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/xml.png"))); // NOI18N
+        btnGenerarXml.setToolTipText("Generar Xml ");
 
         setClosable(true);
         setIconifiable(true);
@@ -1348,6 +1352,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnCargarProforma;
     private javax.swing.JButton btnCrearProducto;
     private javax.swing.JButton btnEditarDetalle;
+    private javax.swing.JButton btnGenerarXml;
     private javax.swing.JButton btnQuitarDetalle;
     private javax.swing.JButton btnReProcesarComprobante;
     private javax.swing.JButton btnReenviarCorreo;
@@ -1857,6 +1862,13 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public JButton getBtnReProcesarComprobante() {
         return btnReProcesarComprobante;
     }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Otros",visible = true)
+    public JButton getBtnGenerarXml() {
+        return btnGenerarXml;
+    }
+    
+    
     
     
     

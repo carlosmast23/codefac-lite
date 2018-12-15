@@ -5,13 +5,17 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.file;
 
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -85,5 +89,29 @@ public class UtilidadesArchivos {
             }
         }
         return resultado;
+    }
+    
+    /**
+     * Metodo que permite grabar un flujo de datos en un archivo
+     * @param inputStream //Datos del stream para grabar en un archivo
+     * @param outputStream  //Destino final donde se van a guardar los datos
+     */
+    public static void grabarInputStreamEnArchivo(InputStream inputStream,OutputStream outputStream) throws IOException
+    {
+        int read = 0;
+        byte[] bytes = new byte[1024];
+
+        while ((read = inputStream.read(bytes)) != -1) {
+            outputStream.write(bytes, 0, read);
+        }
+        inputStream.close();
+        outputStream.close();
+    }
+    
+    public static String generarNombreArchivoUnico(String nombrePrincipal,String formato)
+    {
+        String pattern = "MMddyyyyHHmmssSSSSSSSS";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return nombrePrincipal+"-"+simpleDateFormat.format(UtilidadesFecha.getFechaHoy())+"."+formato;
     }
 }

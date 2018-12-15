@@ -56,6 +56,11 @@ public abstract class ParametrosSistemaCodefac {
     
     public static final Integer LIMITE_CARACTERES_SMS=160;
     
+    /**
+     * 
+     */
+    public static final String CARPETA_DATOS_TEMPORALES="tmp";
+    
     
     
     public abstract class MensajesSistemaCodefac

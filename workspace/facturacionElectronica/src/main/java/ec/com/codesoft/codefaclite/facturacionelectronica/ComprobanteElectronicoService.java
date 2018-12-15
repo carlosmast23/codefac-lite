@@ -1399,11 +1399,11 @@ public class ComprobanteElectronicoService implements Runnable {
         return null;
     }
 
-    private String getPathComprobante(String carpeta) {
+    public String getPathComprobante(String carpeta) {
         return pathBase + "/comprobantes/"+modoFacturacion+"/" + carpeta + "/" + claveAcceso + ".xml";
     }
     
-    private String getPathComprobanteConClaveAcceso(String carpeta,String claveAcceso) {
+    public String getPathComprobanteConClaveAcceso(String carpeta,String claveAcceso) {
         return pathBase + "/comprobantes/"+modoFacturacion+"/" + carpeta + "/" + claveAcceso + ".xml";
     }
 
