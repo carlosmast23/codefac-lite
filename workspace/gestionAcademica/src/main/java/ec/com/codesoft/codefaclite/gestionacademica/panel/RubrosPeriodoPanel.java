@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
@@ -95,7 +96,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         getContentPane().add(txtNombre, gridBagConstraints);
 
         txtValor.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtValor.setText("0.00");
+        txtValor.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -175,6 +176,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         getContentPane().add(jLabel6, gridBagConstraints);
 
         txtDiasCredito.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtDiasCredito.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -249,7 +251,8 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
     public void setCmbPeriodo(JComboBox<Periodo> cmbPeriodo) {
         this.cmbPeriodo = cmbPeriodo;
     }
-
+    
+    @ValidacionCodefacAnotacion(requerido =true)
     @LimpiarAnotacion
     public JTextField getTxtNombre() {
         return txtNombre;
@@ -259,6 +262,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         this.txtNombre = txtNombre;
     }
 
+    @ValidacionCodefacAnotacion(requerido =true)
     @LimpiarAnotacion
     public JTextField getTxtValor() {
         return txtValor;
@@ -293,6 +297,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         this.btnAgregarRubro = btnAgregarRubro;
     }
 
+    @ValidacionCodefacAnotacion(requerido =true)
     @LimpiarAnotacion
     public JTextField getTxtDiasCredito() {
         return txtDiasCredito;

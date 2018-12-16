@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubrosNivelServiceIf;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,6 +131,24 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
             throw new ServicioCodefacException("El rubro no se puede eliminar porque existen estudiantes asignados este valor");
         }       
         
+    }
+
+    @Override
+    public RubrosNivel grabar(RubrosNivel entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                //Si el valor es 0 lanzar una excepcion
+                if(entity.getValor().compareTo(BigDecimal.ZERO)<=0)
+                {
+                    throw new ServicioCodefacException("El valor tiene que ser mayor a 0");
+                }
+                
+                entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                entityManager.persist(entity);
+            }
+        });
+        return entity;
     }
     
     

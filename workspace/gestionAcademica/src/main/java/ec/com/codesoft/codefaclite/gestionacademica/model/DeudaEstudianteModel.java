@@ -374,13 +374,21 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                         
                         BigDecimal nuevoValor = new BigDecimal(getTblDatos().getValueAt(fila, COLUMNA_VALOR).toString());
                         
+                        //Si el valor ingresado es 0 no permite cambiar
+                        if(nuevoValor.compareTo(BigDecimal.ZERO)==0)
+                        {
+                            getTblDatos().getModel().setValueAt(rubroEstudiante.getValor().toString(),fila,COLUMNA_VALOR);
+                            return ;
+                        }   
+                        
+                        
                         //Verificar que los valores ingresados y del objeto son diferente para actualizar
                         if (nuevoValor.compareTo(rubroEstudiante.getValor()) != 0) {
                             
                             if (rubroEstudiante.getValor().compareTo(rubroEstudiante.getSaldo()) == 0) 
                             {
                                 rubroEstudiante.setValor(nuevoValor);
-                                rubroEstudiante.setSaldo(nuevoValor);
+                                rubroEstudiante.setSaldo(nuevoValor); //Todo: Verificar este caso porque si tiene saldo ingresado no me deberia dejar setear
                             }
                             else
                             {

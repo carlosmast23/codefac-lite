@@ -72,7 +72,9 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
             ServiceFactory.getFactory().getRubrosNivelServiceIf().grabar(rubrosNivel);
             DialogoCodefac.mensaje("Correcto","El rubro se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
-            Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);            
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (RemoteException ex) {
             Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -139,6 +141,8 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
     @Override
     public void limpiar() {
         rubrosNivel=new RubrosNivel();
+        getTxtDiasCredito().setText("0");
+        getTxtValor().setText("0");
     }
 
 //    @Override
