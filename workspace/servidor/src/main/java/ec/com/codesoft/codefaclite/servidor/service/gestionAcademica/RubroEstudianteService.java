@@ -180,6 +180,16 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
                     continue; //Pasa al siguiente registro
                 }
                 
+                //Si existen los valores del estudiante ingresado son los mismos , si no existen obtengo la valor general
+                BigDecimal valorDeudaEstudiante=(estudiateInscrito.getValorPlantilla()!=null)?estudiateInscrito.getValorPlantilla():rubroNivel.getValor();
+                
+                //Si el valor de la deuda esta ingresada como 0 entonces no grabo
+                if(valorDeudaEstudiante.compareTo(BigDecimal.ZERO)==0)
+                {
+                    continue;
+                }
+                
+                
                 RubroEstudiante rubroEstudiante = new RubroEstudiante();
                 
                 rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
@@ -188,8 +198,6 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
                 rubroEstudiante.setEstudianteInscrito(estudiateInscrito.getEstudianteInscrito());
                 rubroEstudiante.setRubroNivel(rubroNivel);
 
-                //Si existen los valores del estudiante ingresado son los mismos , si no existen obtengo la valor general
-                BigDecimal valorDeudaEstudiante=(estudiateInscrito.getValorPlantilla()!=null)?estudiateInscrito.getValorPlantilla():rubroNivel.getValor();
                 rubroEstudiante.setSaldo(valorDeudaEstudiante);
                 rubroEstudiante.setValor(valorDeudaEstudiante);
 
