@@ -220,6 +220,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             parametros = parametroCodefacService.getParametrosMap();
             //ParametroCodefac param = parametros.get(ParametroCodefac.SECUENCIAL_FACTURA);
             
+            getTxtDirectorioRecurso().setText((parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS)!=null)?parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor():"");
             
             //getTxtDirectorioRecurso().setText(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
             //getTxtEstablecimiento().setText(parametros.get(ParametroCodefac.ESTABLECIMIENTO).getValor());
