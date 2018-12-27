@@ -109,3 +109,5 @@ Agregar la advertencia en todos los comprobantes electronicos cuando no tienen c
 
 Ver como hacer que le permita elegir un destino diferente del por defecto del usuario en el instalador de Codefac
 Revisar funcionalidad para poder cambiar o agregar correos para reenviar desde la pantalla de factura nuevamente
+
+Agregar a todos los metodos de eliminar en el servidor la posibilidad de lanzar una expecion al cliente para comunicar algun error

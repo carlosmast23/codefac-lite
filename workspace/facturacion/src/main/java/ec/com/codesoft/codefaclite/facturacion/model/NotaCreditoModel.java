@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaNotaCredito;
@@ -268,8 +269,21 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     }
 
     @Override
-    public void eliminar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+        if (estadoFormulario.equals(ESTADO_EDITAR)) {
+            if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_COMPROBANTE_ELECTRONICO))
+            {
+                ServiceFactory.getFactory().getNotaCreditoServiceIf().eliminar(notaCredito);
+                DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);                        
+            }
+            else
+            {
+                throw new ExcepcionCodefacLite("Cancelado por el usuario");
+            }
+        }else
+        {
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ACCION_PERMITIDA_MODULO_EDITAR);
+        }
     }
 
     @Override

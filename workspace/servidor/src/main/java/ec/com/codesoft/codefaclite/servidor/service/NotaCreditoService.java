@@ -265,4 +265,22 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,String estado) {
         return notaCreditoFacade.lista(persona, fi, ff,estado);
     }
+
+    @Override
+    public void eliminar(NotaCredito entity) throws RemoteException {
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+                    entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+                    entityManager.merge(entity);
+                    
+                }
+            });
+        } catch (ServicioCodefacException ex) { //TODO: FALTA IMPLEMENTAR QUE LOS METODOS ELIMINAR PUEDAN DEVOLVER ALGUNA ALERTA AL CLIENTE
+            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
 }
