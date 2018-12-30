@@ -48,6 +48,7 @@ public enum VentanaEnum {
     INVENTARIO_ENSAMBLE("ec.com.codesoft.codefaclite.inventario.model.InventarioEnsambleModel", "INVE", "Inventario Ensamble", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,null),
     AULA("ec.com.codesoft.codefaclite.gestionacademica.model.AulaModel", "AULA", "Aula", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR,null),
     NIVEL("ec.com.codesoft.codefaclite.gestionacademica.model.NivelModel", "NIVE", "Nivel", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR,null),
+    MIGRAR_ESTUDIANTES("ec.com.codesoft.codefaclite.gestionacademica.model.MigrarEstudiantesModel", "MIES", "Migrar Estudiantes", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.MIGRAR,null),
     PERIODO("ec.com.codesoft.codefaclite.gestionacademica.model.PeriodoModel", "PERI", "Periodo", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR,null),
     PERFILES("ec.com.codesoft.codefaclite.configuraciones.model.PerfilModel", "PERF", "Perfiles", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null),
     USUARIOS("ec.com.codesoft.codefaclite.configuraciones.model.PerfilUsuarioModel", "PEUM", "Usuario", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null),

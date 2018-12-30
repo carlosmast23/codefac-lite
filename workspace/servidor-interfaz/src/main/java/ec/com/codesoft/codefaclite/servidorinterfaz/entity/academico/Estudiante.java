@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
@@ -258,6 +259,16 @@ public class Estudiante implements Serializable {
 
     public void setRepresentante2(Persona representante2) {
         this.representante2 = representante2;
+    }
+    
+    public GeneralEnumEstado getEstadoEnum()
+    {        
+        return GeneralEnumEstado.getEnum(estado);
+    }
+    
+    public void setEstadoEnum(GeneralEnumEstado estado)
+    {
+         setEstado(estado.getEstado());
     }
     
         ///Metodos personalizados 

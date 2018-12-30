@@ -51,6 +51,30 @@ public class EstudianteService extends ServiceAbstract<Estudiante, EstudianteFac
                 
     }
 
+    @Override
+    public Estudiante grabar(Estudiante entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                EstudianteService servicio=new EstudianteService();
+                Estudiante estudiante=servicio.buscarPorCedulayEstado(entity.getCedula(), GeneralEnumEstado.ACTIVO);
+                
+                /////
+                if(estudiante!=null)
+                {
+                    throw new ServicioCodefacException("El estudiante ya existe en el sistema");
+                }                        
+               
+                entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                entityManager.persist(entity);
+            }
+        });
+        return entity;
+    }
+    
+    
+
     public void eliminarEstudiante(Estudiante e)  throws RemoteException ,ServicioCodefacException {
         try {
             EstudianteInscritoService service=new EstudianteInscritoService();
@@ -74,6 +98,20 @@ public class EstudianteService extends ServiceAbstract<Estudiante, EstudianteFac
         } catch (RemoteException ex) {
             Logger.getLogger(EstudianteService.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public Estudiante buscarPorCedulayEstado(String cedula, GeneralEnumEstado estado) throws RemoteException, ServicioCodefacException {
+        Map<String,Object> mapParametro=new HashMap<String,Object>();
+        mapParametro.put("cedula",cedula);
+        mapParametro.put("estado",estado.getEstado());
+        
+        List<Estudiante> resueltos=getFacade().findByMap(mapParametro);
+        if(resueltos.size()==0)
+            return null;
+        else
+            return resueltos.get(0);
+        
     }
 
 }

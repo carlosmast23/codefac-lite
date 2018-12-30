@@ -19,6 +19,7 @@ public enum CategoriaMenuEnum {
     DEUDAS_ACADEMICOS("Rubros",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/deudas.png")),
     MATRICULA("Matricula",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/inscripcion.png")),
     REPORTES("Reportes",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/reporte.png")),
+    MIGRAR("Migrar",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/carpeta.png")),
     UTILIDADES("Utilidades",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/utilidades.png"));  ;
     
     private String nombre;
