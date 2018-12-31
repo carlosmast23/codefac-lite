@@ -43,7 +43,7 @@ public abstract class ExcelMigrar {
     /**
      * Cabecera con los tipos de datos
      */
-    private Class[] tiposDatosCabecera;
+    //private Class[] tiposDatosCabecera;
     
     /**
      * Nombre de la hoja actual para trabajar
@@ -53,14 +53,24 @@ public abstract class ExcelMigrar {
     /**
      * Metodo que va a almacenar la cabecera de las tablas
      */
-    private String[] tituloTabla;
+    //private CampoMigrarInterface[] camposEnum;
+    //private String[] tituloTabla;
     
     /**
      * Datos de la consulta donde se van a almacenar
      */
     private List<FilaResultado> datosResultado;
     
-    public abstract int getIndiceEstado();
+    
+
+    
+    
+    public abstract CampoMigrarInterface[] obtenerCampos();
+    public abstract CampoMigrarInterface getCampoEstado();
+
+    public ExcelMigrar() {
+        this.hojaActual=0;
+    }
     
 
     public ExcelMigrar(File archivoExel) {
@@ -82,20 +92,22 @@ public abstract class ExcelMigrar {
         for (int i = 0; i < primeraFila.getLastCellNum(); i++) {
             Cell celda = primeraFila.getCell(i);
             //System.out.println(celda.getCellTypeEnum().name());
+            
+            List<Class> tiposDatosCabecera= getTipoDatos();
             switch (celda.getCellTypeEnum()) {
                 case STRING:
                     //System.out.println(celda.getStringCellValue());
-                    if(!tiposDatosCabecera[i].equals(String.class))
+                    if(!tiposDatosCabecera.get(i).equals(String.class))
                     {
-                       throw new ExcepcionMigrar("La columna "+i+" tiene un tipo de dato diferente de "+tiposDatosCabecera[i].getName());
+                       throw new ExcepcionMigrar("La columna "+i+" tiene un tipo de dato diferente de "+tiposDatosCabecera.get(i).getName());
                     }
                     break;
 
                 case NUMERIC:
                     //System.out.println(celda.getNumericCellValue());
-                    if(!tiposDatosCabecera[i].equals(Double.class))
+                    if(!tiposDatosCabecera.get(i).equals(Double.class))
                     {
-                       throw new ExcepcionMigrar("La columna "+i+" tiene un tipo de dato diferente de "+tiposDatosCabecera[i].getName());
+                       throw new ExcepcionMigrar("La columna "+i+" tiene un tipo de dato diferente de "+tiposDatosCabecera.get(i).getName());
                     }
                     break;
             }
@@ -103,6 +115,19 @@ public abstract class ExcelMigrar {
         }
         
         
+    }
+    
+    public List<Class> getTipoDatos()
+    {
+        List<Class> tiposDatos=new ArrayList<Class>() ;
+
+        for (CampoMigrarInterface dato : obtenerCampos()) 
+        {
+            tiposDatos.add(dato.getPosicion(),dato.getTipoDato());
+        }
+        
+        return tiposDatos;
+
     }
     
     public void migrar(MigrarInterface interfaz)
@@ -151,23 +176,27 @@ public abstract class ExcelMigrar {
                 Cell cell;
                 //se recorre cada celda
                 FilaResultado filaResultado=new FilaResultado();
+                
+                int i=0;
                 while (cellIterator.hasNext()) {
+                    
                     
                     // se obtiene la celda en específico y se la imprime
                     cell = cellIterator.next();
                     
                     switch (cell.getCellTypeEnum()) {
                         case STRING:
-                            filaResultado.agregarDato(new CampoResultado<String>(String.class,cell.getStringCellValue()),false);
+                            filaResultado.agregarDato(new CampoResultado<String>(String.class,cell.getStringCellValue(),obtenerCampos()[i]),false);
                             //System.out.print(cell.getStringCellValue() + " | ");
                             break;
                         case NUMERIC:
-                            filaResultado.agregarDato(new CampoResultado<Double>(Double.class,cell.getNumericCellValue()),false);
+                            filaResultado.agregarDato(new CampoResultado<Double>(Double.class,cell.getNumericCellValue(),obtenerCampos()[i]),false);
                             System.out.print(cell.getNumericCellValue() + " | ");
                             break;
                             
                     }
                     
+                    i++;
                 }
                 datosResultado.add(filaResultado);
                 
@@ -190,9 +219,26 @@ public abstract class ExcelMigrar {
         return datosResultado;
     }
     
+    /*public void setEnumCampos(CampoMigrarInterface[] campos)
+    {
+        this.camposEnum=campos;
+    }*/
+    
+    private Vector<String> obtenerTituloTabla()
+    {
+       Vector<String> datosTitulo=new Vector<String>();
+       CampoMigrarInterface[] camposEnum=obtenerCampos();
+        for (CampoMigrarInterface campo : camposEnum) {
+            datosTitulo.add(campo.getNombre());
+        }
+        //datosTitulo.add("Estado");
+        
+        return datosTitulo;
+    }
+    
     public void construirTabla(JTable tabla)
     {
-        DefaultTableModel  modeloDefecto=new DefaultTableModel(tituloTabla,0);
+        DefaultTableModel  modeloDefecto=new DefaultTableModel(obtenerTituloTabla(),0);
                 
         for (FilaResultado fila : datosResultado) {
             Object[] datos=fila.fila.toArray();
@@ -232,7 +278,7 @@ public abstract class ExcelMigrar {
             @Override
             public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 
-                if (column == getIndiceEstado()) {
+                if (column == getCampoEstado().getPosicion()) {
                     if (value.toString().equals(ESTADO_SIN_MIGRADO)) {
                         setBackground(Color.white);
                     } else if (value.toString().equals(ESTADO_MIGRADO)) {
@@ -244,20 +290,23 @@ public abstract class ExcelMigrar {
                     setBackground(Color.white);
                 }
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); //To change body of generated methods, choose Tools | Templates.
-            }
+            }          
             
         });
 
     }
     
     
-    
-    public void setTiposDatosCabecera(Class[] tiposDatosCabecera) {
-        this.tiposDatosCabecera = tiposDatosCabecera;
-    }
+    //public void setTiposDatosCabecera(Class[] tiposDatosCabecera) {
+    //    this.tiposDatosCabecera = tiposDatosCabecera;
+    //}
 
-    public void setTituloTabla(String[] tituloTabla) {
-        this.tituloTabla = tituloTabla;
+    //public void setTituloTabla(String[] tituloTabla) {
+    //    this.tituloTabla = tituloTabla;
+    //}
+
+    public void setArchivoExel(File archivoExel) {
+        this.archivoExel = archivoExel;
     }
     
     
@@ -299,6 +348,19 @@ public abstract class ExcelMigrar {
             return fila.get(posicion);
         }
         
+        public CampoResultado getByEnum(CampoMigrarInterface campoEnum)
+        {
+            for (CampoResultado campoResultado : fila) 
+            {
+                System.out.println(campoResultado.campoEnum.getNombre());
+                if(campoEnum.getNombre().equals(campoResultado.campoEnum.getNombre()))
+                {
+                    return campoResultado;
+                }                
+            }
+            return null;
+        }
+        
         
     }
     
@@ -308,12 +370,14 @@ public abstract class ExcelMigrar {
      */
     public class CampoResultado<T>
     {
+        public CampoMigrarInterface campoEnum;
         public Class clase;
         public T valor;
 
-        public CampoResultado(Class clase, T valor) {
+        public CampoResultado(Class clase, T valor,CampoMigrarInterface campoEnum) {
             this.clase = clase;
             this.valor = valor;
+            this.campoEnum=campoEnum;
         }
 
         @Override
@@ -323,8 +387,24 @@ public abstract class ExcelMigrar {
         
     }
     
+    public interface CampoMigrarInterface
+    {
+        public abstract String getNombre();
+        public abstract int getPosicion();
+        public abstract Class getTipoDato();
+    };
+    
     public interface MigrarInterface 
     {
-        public boolean procesar(FilaResultado fila) throws Exception; 
-    }
+        public boolean procesar(FilaResultado fila) throws ExcepcionExcel; 
+    };
+    
+    public static class ExcepcionExcel extends Exception {
+
+        public ExcepcionExcel(String message) {
+            super(message);
+        }
+    };
+    
+
 }

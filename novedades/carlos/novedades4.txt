@@ -111,3 +111,6 @@ Ver como hacer que le permita elegir un destino diferente del por defecto del us
 Revisar funcionalidad para poder cambiar o agregar correos para reenviar desde la pantalla de factura nuevamente
 
 Agregar a todos los metodos de eliminar en el servidor la posibilidad de lanzar una expecion al cliente para comunicar algun error
+
+Ver si en las pantallas de migracion se agrega la opcion que puedan descargar el formato de excel
+Hacer el modelo simplificado de la guia de remision

@@ -132,6 +132,10 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setTipCliente(String tipCliente) {
         this.tipCliente = tipCliente;
     }
+    
+    public void setTipClienteEnum(TipoClienteEnum enumerador) {
+        this.tipCliente = enumerador.nombre;
+    }
 
     public String getDireccion() {
         return direccion;
@@ -242,6 +246,10 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setTipoIdentificacion(String tipoIdentificacion) {
         this.tipoIdentificacion = tipoIdentificacion;
     }
+    
+    public void setTipoIdentificacionEnum(TipoIdentificacionEnum enumerador) {
+        this.tipoIdentificacion = enumerador.letra;
+    }
 
     public String getContactoCliente() {
         return contactoCliente;
@@ -249,6 +257,10 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     public void setContactoCliente(String contactoCliente) {
         this.contactoCliente = contactoCliente;
+    }
+    
+    public void setContactoClienteEnum(EnumSiNo enumSiNO) {
+        this.contactoCliente = enumSiNO.getLetra();
     }
 
     public BigDecimal getContactoClientePorcentaje() {
@@ -259,7 +271,9 @@ public class Persona implements Serializable, Comparable<Persona> {
         this.contactoClientePorcentaje = contactoClientePorcentaje;
     }
     
-    
+    public void setObligadoLlevarContabilidadEnum(EnumSiNo enumSiNo) {
+        this.obligadoLlevarContabilidad = enumSiNo.getLetra();
+    }
 
     ///Metodos personalizados
     public String getNombresCompletos() {
@@ -304,6 +318,11 @@ public class Persona implements Serializable, Comparable<Persona> {
     {
         return EnumSiNo.getEnumByLetra(contactoCliente);
     }
+    
+    public void setTipoEnum(OperadorNegocioEnum operadorEnum)
+    {
+        this.tipo=operadorEnum.getLetra();
+    }
 
     @Override
     public int hashCode() {
@@ -343,6 +362,20 @@ public class Persona implements Serializable, Comparable<Persona> {
     public int compareTo(Persona o) {
         return this.getIdCliente().compareTo(o.getIdCliente());
     }
+    
+    public enum TipoClienteEnum
+    {
+        CLIENTE("CLIENTE"),
+        SUJETO_RETENIDO("SUJETO RETENIDO"),
+        DESTINATARIO("DESTINATARIO");
+
+        private TipoClienteEnum(String nombre) {
+            this.nombre = nombre;
+        }
+        
+        public String nombre;
+        
+    };
 
     public enum TipoIdentificacionEnum {
         RUC("R", "Ruc","04","01"),

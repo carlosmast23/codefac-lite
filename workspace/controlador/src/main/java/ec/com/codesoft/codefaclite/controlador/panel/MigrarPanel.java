@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.gestionacademica.panel;
+package ec.com.codesoft.codefaclite.controlador.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
@@ -18,12 +18,12 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author Carlos
  */
-public abstract class MigrarEstudiantesPanel extends ControladorCodefacInterface {
+public abstract class MigrarPanel extends ControladorCodefacInterface {
 
     /**
      * Creates new form MigrarEstudiantesPanel
      */
-    public MigrarEstudiantesPanel() {
+    public MigrarPanel() {
         initComponents();
     }
 
@@ -68,6 +68,7 @@ public abstract class MigrarEstudiantesPanel extends ControladorCodefacInterface
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtRutaArchivo, gridBagConstraints);
 
+        btnCargarExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnCargarExcel.setText("Cargar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);

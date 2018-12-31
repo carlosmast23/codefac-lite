@@ -12,7 +12,9 @@ import java.io.File;
  *
  * @author Carlos
  */
-public class ExcelMigrarEstudiantes extends ExcelMigrar{
+public class ExcelMigrarRepresentantes  extends ExcelMigrar{
+
+    
 
     @Override
     public CampoMigrarInterface[] obtenerCampos() {
@@ -24,25 +26,27 @@ public class ExcelMigrarEstudiantes extends ExcelMigrar{
         return Enum.ESTADO;
     }
     
-    
     public enum Enum implements CampoMigrarInterface
     {
-        IDENTIFICACION("Identificacion",0),
-        NOMBRES("Nombres",1),
-        APELLIDOS("Apellidos",2),
-        GENERO("genero",3),
-        IDENTIFICACION_REPRESENTATE_1("representante1",4),
-        IDENTIFICACION_REPRESENTATE_2("representante2",5),
-        CURSO_ACTUAL("curso",6),
-        ESTADO("estado",7);
+        IDENTIFICACION("Identificación",0,String.class),
+        NOMBRES("Nombres",1,String.class),
+        APELLIDOS("Apellidos",2,String.class),
+        RAZON_SOCIAL("Razon Social",3,String.class),
+        DIRECCION("Direccion",4,String.class),
+        TELEFONO("Telefono",5,String.class),
+        CELULAR("Celular",6,String.class),
+        CORREO("Correo",7,String.class),
+        ESTADO("Estado",8,String.class);
 
-        private Enum(String nombre,Integer posicion) {
+        private Enum(String nombre,Integer posicion,Class tipoDato) {
             this.nombre = nombre;
             this.posicion=posicion;
+            this.tipoDato=tipoDato;
         }
         
         public String nombre;
         public Integer posicion;
+        public Class tipoDato;
 
         @Override
         public String getNombre() {
@@ -56,9 +60,10 @@ public class ExcelMigrarEstudiantes extends ExcelMigrar{
 
         @Override
         public Class getTipoDato() {
-            return String.class;
+            return tipoDato;
         }
         
     }
+    
     
 }

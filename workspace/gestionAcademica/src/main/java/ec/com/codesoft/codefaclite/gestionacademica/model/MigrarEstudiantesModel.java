@@ -9,9 +9,10 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
 import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarEstudiantes;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.controlador.model.MigrarModel;
+import ec.com.codesoft.codefaclite.controlador.panel.MigrarPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.gestionacademica.panel.MigrarEstudiantesPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -49,7 +50,7 @@ import org.apache.xalan.xsltc.compiler.util.StringStack;
  *
  * @author Carlos
  */
-public class MigrarEstudiantesModel extends MigrarEstudiantesPanel{
+public class MigrarEstudiantesModel extends MigrarModel{
     
     private List<Estudiante> estudiantes;
     private ExcelMigrarEstudiantes excelMigrarEstudiantes;
@@ -57,9 +58,7 @@ public class MigrarEstudiantesModel extends MigrarEstudiantesPanel{
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        listenerBotones();
-        
-        
+       super.iniciar();
     }
 
     @Override
@@ -122,126 +121,49 @@ public class MigrarEstudiantesModel extends MigrarEstudiantesPanel{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private void listenerBotones() {
-        
-        getBtnMigrar().addActionListener(new ActionListener() {
+    
+
+    @Override
+    public ExcelMigrar.MigrarInterface getInterfaceMigrar() {
+        ExcelMigrar.MigrarInterface interfaceMigrar = new ExcelMigrar.MigrarInterface() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                excelMigrarEstudiantes.migrar(interfaceMigrar);
-                //DefaultTableModel modelo=excelMigrarEstudiantes.construirTabla();
-                excelMigrarEstudiantes.construirTabla(getTblDatos());
-                //getTblDatos().setModel(modelo);
-                
-                
-                                
-                
-            }
-        });
-        
-        getBtnCargarExcel().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                String ubicacionRespaldo="";
-                JFileChooser fileChooser = new JFileChooser();
-                FileFilter filter2 = new FileNameExtensionFilter("Archivo Excel", "xls");
-                FileFilter filter = new FileNameExtensionFilter("Archivo Excel Nuevo", "xlsx");
-                fileChooser.setFileFilter(filter);
-                fileChooser.addChoosableFileFilter(filter2);
-                int seleccion = fileChooser.showDialog(null, "Seleccionar el archivo");
-                switch (seleccion) {
-                    case JFileChooser.APPROVE_OPTION:
-                        ubicacionRespaldo = "" + fileChooser.getSelectedFile();
-                        getTxtRutaArchivo().setText("" + ubicacionRespaldo);
-                        construirDatosExcel(fileChooser.getSelectedFile());
-                        //construirTabla();
-                        break;
-                    case JFileChooser.CANCEL_OPTION:
+            public boolean procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel {
+                try {
+                    Estudiante estudiante = new Estudiante();
+                    estudiante.setCedula((String) fila.get(ExcelMigrarEstudiantes.Enum.IDENTIFICACION.posicion).valor);
+                    estudiante.setNombres((String) fila.get(ExcelMigrarEstudiantes.Enum.NOMBRES.posicion).valor);
+                    estudiante.setApellidos((String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor);
 
-                        break;
-                    case JFileChooser.ERROR_OPTION:
+                    String genero = (String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor;
 
-                        break;
+                    if (genero.toLowerCase().equals("femenino")) {
+                        estudiante.setGenero(GeneroEnum.FEMENINO.getEstado());
+                    } else {
+                        estudiante.setGenero(GeneroEnum.FEMENINO.getEstado());
+                    }
+
+                    estudiante.setApellidos((String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor);
+                    ServiceFactory.getFactory().getEstudianteServiceIf().grabar(estudiante);
+
+                    return true;
+                } catch (ServicioCodefacException ex) {
+                    //Logger.getLogger(MigrarEstudiantesModel.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(MigrarEstudiantesModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                return false;
 
             }
-        });
+        };
+        return interfaceMigrar;
     }
-    
-    private void construirDatosExcel(File archivo)
-    {
-        try {
-            estudiantes=new ArrayList<Estudiante>();
-            
-            excelMigrarEstudiantes=new ExcelMigrarEstudiantes(archivo);
-                        
-            List<ExcelMigrar.FilaResultado> resultado=excelMigrarEstudiantes.leerDatos();
-            //getTblDatos().setModel(excelMigrarEstudiantes.construirTabla());
-            excelMigrarEstudiantes.construirTabla(getTblDatos());
-            
-                       
-            
-            /*for (ExcelMigrar.FilaResultado filaResultado : resultado) {
-                Estudiante estudiante=new Estudiante();
-                estudiante.setCedula((String) filaResultado.fila.get(0).valor);
-                estudiante.setNombres((String) filaResultado.fila.get(1).valor);
-                estudiante.setApellidos((String) filaResultado.fila.get(2).valor);
-                estudiantes.add(estudiante);
-            }*/
-        } catch (ExcelMigrar.ExcepcionMigrar ex) {
-            Logger.getLogger(MigrarEstudiantesModel.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
-        }
-        
+
+    @Override
+    public ExcelMigrar getExcelMigrar() {
+        return new ExcelMigrarEstudiantes();
     }
-    
-    private ExcelMigrar.MigrarInterface interfaceMigrar=new ExcelMigrar.MigrarInterface() {
-        @Override
-        public boolean procesar(ExcelMigrar.FilaResultado fila) throws Exception {
-            try {
-                Estudiante estudiante=new Estudiante();
-                estudiante.setCedula((String) fila.get(ExcelMigrarEstudiantes.Enum.IDENTIFICACION.posicion).valor);
-                estudiante.setNombres((String) fila.get(ExcelMigrarEstudiantes.Enum.NOMBRES.posicion).valor);
-                estudiante.setApellidos((String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor);
-                
-                String genero=(String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor;
-                
-                if(genero.toLowerCase().equals("femenino"))
-                {
-                    estudiante.setGenero(GeneroEnum.FEMENINO.getEstado());
-                }
-                else
-                {
-                    estudiante.setGenero(GeneroEnum.FEMENINO.getEstado());
-                }
-                
-                estudiante.setApellidos((String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor);
-                ServiceFactory.getFactory().getEstudianteServiceIf().grabar(estudiante);                
-                
-                return true;
-            } catch (ServicioCodefacException ex) {
-                //Logger.getLogger(MigrarEstudiantesModel.class.getName()).log(Level.SEVERE, null, ex);
-                throw new Exception(ex.getMessage());
-                
-            } catch (RemoteException ex) {
-                Logger.getLogger(MigrarEstudiantesModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            return false;
-            
-        }
-    };
-    /*
-    private void construirTabla()
-    {
-        DefaultTableModel  modeloDefecto=new DefaultTableModel(tituloTabla,0);
-         
-        for (int i = 0; i < 10; i++) {
-            modeloDefecto.addRow(new String[]{"1","2","3"});
-        }
-        
-        getTblDatos().setModel(modeloDefecto);
-        
-    }*/
-    
+
     
 }

@@ -67,6 +67,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnCargarExcel">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/img/iconos/find2-ico.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Cargar"/>
           </Properties>
           <Constraints>
