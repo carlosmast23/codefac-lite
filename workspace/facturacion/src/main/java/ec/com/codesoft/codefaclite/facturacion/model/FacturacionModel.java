@@ -753,7 +753,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void updateInterface(Producto entity) {
                 if (entity != null) {
                     productoSeleccionado = entity;
-                    setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado());
+                    setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
                     //Establecer puntero en la cantidad para agregar
                     getTxtCantidad().requestFocus();
                     getTxtCantidad().selectAll();
@@ -884,7 +884,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             presupuestoSeleccionado=presupuestoTmp;
             
             String descripcion="P"+presupuestoSeleccionado.getId()+" OT"+presupuestoSeleccionado.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoSeleccionado.getDescripcion();
-            setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString());
+            setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString(),presupuestoSeleccionado.getCatalogoProducto());
         }
     }
     
@@ -904,7 +904,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }            
             
             rubroSeleccionado=rubroEstudianteTmp;
-            setearValoresProducto(rubroEstudianteTmp.getSaldo(),rubroEstudianteTmp.getRubroNivel().getNombre(),rubroEstudianteTmp.getId().toString());
+            setearValoresProducto(rubroEstudianteTmp.getSaldo(),rubroEstudianteTmp.getRubroNivel().getNombre(),rubroEstudianteTmp.getId().toString(),rubroEstudianteTmp.getRubroNivel().getCatalogoProducto());
         }
         
     }
@@ -982,7 +982,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         this.productoSeleccionado=productoSeleccionado;
-        setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado());
+        setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
     }
     
     public void validacionesGrabar() throws ExcepcionCodefacLite
@@ -1887,7 +1887,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //cargarDatosAdicionales();
     }
 
-    private void setearValoresProducto(BigDecimal valorUnitario,String descripcion,String codigo) {
+    private void setearValoresProducto(BigDecimal valorUnitario,String descripcion,String codigo,CatalogoProducto catologoProducto) {
         getTxtValorUnitario().setText(valorUnitario+"");
         getTxtDescripcion().setText(descripcion);
         //getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
@@ -1897,6 +1897,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtCodigoDetalle().setText(codigo);
         getTxtCantidad().requestFocus();
         getTxtCantidad().selectAll();
+        
+        if(catologoProducto.getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
+        {
+            getCmbIva().setSelectedItem(EnumSiNo.NO);
+            getCmbIva().setEnabled(false);
+        }
+        else
+        {
+            //TODO: Ver alguna forma de cargar por defecto el precio guardado en la base de datos
+            getCmbIva().setSelectedItem(EnumSiNo.NO);
+            getCmbIva().setEnabled(true);
+        }
     }
 
     protected void setearValoresDefaultFactura() {
