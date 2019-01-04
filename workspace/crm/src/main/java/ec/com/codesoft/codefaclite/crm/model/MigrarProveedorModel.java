@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.gestionacademica.model;
+package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
-import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar.ExcepcionExcel;
 import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarClientes;
 import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarRepresentantes;
 import ec.com.codesoft.codefaclite.controlador.model.MigrarModel;
@@ -28,19 +27,18 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class MigrarRepresentantesModel extends MigrarModel {
+public class MigrarProveedorModel extends MigrarModel{
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         super.iniciar(); //To change body of generated methods, choose Tools | Templates.
-        setTitle("Migrar Representantes");
+        setTitle("Migrar Proveedor");
     }
     
     
 
     @Override
     public ExcelMigrar.MigrarInterface getInterfaceMigrar() {
-        
         return new ExcelMigrar.MigrarInterface()  {
             @Override
             public boolean procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel{
@@ -82,11 +80,11 @@ public class MigrarRepresentantesModel extends MigrarModel {
                     ServiceFactory.getFactory().getPersonaServiceIf().grabar(representante);
                     return true;
                 } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(MigrarRepresentantesModel.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MigrarProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
                     throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());
                     
                 } catch (RemoteException ex) {
-                    Logger.getLogger(MigrarRepresentantesModel.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MigrarProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return false;
             }
@@ -157,5 +155,7 @@ public class MigrarRepresentantesModel extends MigrarModel {
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    
     
 }

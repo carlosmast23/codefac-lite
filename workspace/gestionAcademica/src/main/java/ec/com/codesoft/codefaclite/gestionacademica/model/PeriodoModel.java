@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_GRABAR;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.PeriodoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.PeriodoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -68,8 +69,11 @@ public class PeriodoModel extends PeriodoPanel {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if ("date".equals(evt.getPropertyName())) {
-                        if (getDateFechaInicio().getDate() != null || getDateFechaFin().getDate() != null) {
-                            getTxtNombre().setText(formatDate(getDateFechaInicio().getDate(), "yyyy MMMMM") + " - " + formatDate(getDateFechaFin().getDate(), "MMMMM"));
+                        if(estadoFormulario.equals(ESTADO_GRABAR))
+                        {
+                            if (getDateFechaInicio().getDate() != null || getDateFechaFin().getDate() != null) {
+                                getTxtNombre().setText(formatDate(getDateFechaInicio().getDate(), "yyyy MMMMM") + " - " + formatDate(getDateFechaFin().getDate(), "MMMMM"));
+                            }
                         }
                     }
                 }
@@ -79,8 +83,11 @@ public class PeriodoModel extends PeriodoPanel {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if ("date".equals(evt.getPropertyName())) {
-                        if (getDateFechaInicio().getDate() != null || getDateFechaFin().getDate() != null) {
-                            getTxtNombre().setText(formatDate(getDateFechaInicio().getDate(), "yyyy MMMMM") + " - " + formatDate(getDateFechaFin().getDate(), "MMMMM"));
+                        if(estadoFormulario.equals(ESTADO_GRABAR))
+                        {
+                            if (getDateFechaInicio().getDate() != null || getDateFechaFin().getDate() != null) {
+                                getTxtNombre().setText(formatDate(getDateFechaInicio().getDate(), "yyyy MMMMM") + " - " + formatDate(getDateFechaFin().getDate(), "MMMMM"));
+                            }
                         }
                     }
                 }
@@ -100,7 +107,7 @@ public class PeriodoModel extends PeriodoPanel {
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override

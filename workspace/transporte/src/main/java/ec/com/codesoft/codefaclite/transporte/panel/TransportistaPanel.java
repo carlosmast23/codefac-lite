@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TransportistaEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 /**
@@ -328,11 +329,44 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
         this.txtCorreo = txtCorreo;
     }
 
+    @ValidacionCodefacAnotacion(requerido = true)
     @LimpiarAnotacion
     public JTextField getTxtDireccion() {
         return txtDireccion;
     }
 
+    public TransportistaPanel(JComboBox<TransportistaEnumEstado> cmbEstado, JComboBox<Persona.TipoIdentificacionEnum> cmbIdentificacion, JLabel jLabel1, JLabel jLabel10, JLabel jLabel11, JLabel jLabel12, JLabel jLabel2, JLabel jLabel3, JLabel jLabel4, JLabel jLabel5, JLabel jLabel6, JLabel jLabel7, JLabel jLabel8, JLabel jLabel9, JLabel lblEspacio1, JLabel lblEspacio2, JLabel lblEspacio3, JLabel lblEspacio4, JTextField txtApellidos, JTextField txtCelular, JTextField txtCorreo, JTextField txtDireccion, JTextField txtIdentificacion, JTextField txtNombreComercial, JTextField txtNombres, JTextField txtPlaca, JTextField txtRazonSocial, JTextField txtTelefono) {
+        this.cmbEstado = cmbEstado;
+        this.cmbIdentificacion = cmbIdentificacion;
+        this.jLabel1 = jLabel1;
+        this.jLabel10 = jLabel10;
+        this.jLabel11 = jLabel11;
+        this.jLabel12 = jLabel12;
+        this.jLabel2 = jLabel2;
+        this.jLabel3 = jLabel3;
+        this.jLabel4 = jLabel4;
+        this.jLabel5 = jLabel5;
+        this.jLabel6 = jLabel6;
+        this.jLabel7 = jLabel7;
+        this.jLabel8 = jLabel8;
+        this.jLabel9 = jLabel9;
+        this.lblEspacio1 = lblEspacio1;
+        this.lblEspacio2 = lblEspacio2;
+        this.lblEspacio3 = lblEspacio3;
+        this.lblEspacio4 = lblEspacio4;
+        this.txtApellidos = txtApellidos;
+        this.txtCelular = txtCelular;
+        this.txtCorreo = txtCorreo;
+        this.txtDireccion = txtDireccion;
+        this.txtIdentificacion = txtIdentificacion;
+        this.txtNombreComercial = txtNombreComercial;
+        this.txtNombres = txtNombres;
+        this.txtPlaca = txtPlaca;
+        this.txtRazonSocial = txtRazonSocial;
+        this.txtTelefono = txtTelefono;
+    }
+
+    
     public void setTxtDireccion(JTextField txtDireccion) {
         this.txtDireccion = txtDireccion;
     }
