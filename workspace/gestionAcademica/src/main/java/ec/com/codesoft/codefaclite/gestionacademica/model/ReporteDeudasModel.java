@@ -206,7 +206,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                                 estudiante.getEstudiante().getCedula(),
                                 estudiante.getEstudiante().getNombreCompleto(),
                                 re.getRubroNivel().getNombre(),
-                                re.getValor().toString()
+                                re.getSaldo().toString()
                         ));
                     }
                 }
@@ -419,7 +419,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                                 fila2.add("-");
                                 fila2.add("-");
                                 fila2.add(re.getRubroNivel().getNombre());
-                                fila2.add(re.getValor().toString());
+                                fila2.add(re.getSaldo().toString());
                                 modeloTablaDeudas.addRow(fila2);
                             }
                         }
