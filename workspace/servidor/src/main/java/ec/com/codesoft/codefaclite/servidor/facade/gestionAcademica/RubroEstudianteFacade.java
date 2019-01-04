@@ -245,4 +245,14 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
         query.setParameter(2,rubroNivel);
         return (Long) query.getSingleResult();
     }
+    
+    public List<RubroEstudiante> consultarPorEstudianteInscritoSinFacturarFacade(EstudianteInscrito estudianteInscrito) throws RemoteException
+    {
+        String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estudianteInscrito=?1 and u.estadoFactura<>?2 and u.estado=?3 ";
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1, estudianteInscrito);
+        query.setParameter(2,RubroEstudiante.FacturacionEstadoEnum.FACTURADO.getLetra());
+        query.setParameter(3,GeneralEnumEstado.ACTIVO.getEstado());        
+        return query.getResultList();
+    }
 }

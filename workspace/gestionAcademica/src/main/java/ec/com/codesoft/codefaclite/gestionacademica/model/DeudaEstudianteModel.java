@@ -56,6 +56,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
     
     private final Integer COLUMNA_OBJETO=0;
     private final Integer COLUMNA_VALOR=3;
+    private final Integer COLUMNA_SALDO=4;
 
     public DeudaEstudianteModel() {
         //Setear propiedad para actualizar valores de editar apenas pierda el focus        
@@ -234,13 +235,14 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                     try {
                         estudianteInscrito=estudiante;
                         
-                        Map<String,Object> parametroMap=new HashMap<String,Object>();
+                        /*Map<String,Object> parametroMap=new HashMap<String,Object>();
                         parametroMap.put("estudianteInscrito",estudianteInscrito);
                         parametroMap.put("estadoFactura",RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
-                        parametroMap.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+                        parametroMap.put("estado",GeneralEnumEstado.ACTIVO.getEstado());*/
                         
                         
-                        List<RubroEstudiante> listaRubros=ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerPorMap(parametroMap);
+                        //List<RubroEstudiante> listaRubros=ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerPorMap(parametroMap);
+                        List<RubroEstudiante> listaRubros=ServiceFactory.getFactory().getRubroEstudianteServiceIf().consultarPorEstudianteInscritoSinFacturar(estudianteInscrito);
                         rubrosEstudiante=listaRubros; 
                         cargarDatosTabla();
                         
@@ -253,9 +255,9 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                         
                     } catch (RemoteException ex) {
                         Logger.getLogger(DeudaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
+                    }/* catch (ServicioCodefacException ex) {
                         Logger.getLogger(DeudaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    }*/
                     
                 }
 
@@ -327,7 +329,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
     
     private void cargarDatosTabla()
     {
-        Object[] titulo={"Objeto","Nombre","Curso","Valor"};
+        Object[] titulo={"Objeto","Nombre","Rubro","Valor","Saldo"};
         DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
         
         if(rubrosEstudiante!=null)
@@ -342,6 +344,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                     fila.add(rubroEstudiante.getEstudianteInscrito().getEstudiante().getNombreCompleto());
                     fila.add(rubroEstudiante.getRubroNivel().getNombre());
                     fila.add(rubroEstudiante.getValor());
+                    fila.add(rubroEstudiante.getSaldo());
                     
                      modeloTabla.addRow(fila);
                 }
@@ -366,49 +369,90 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                 //Solo editar el valor del objeto si es de la columna del valor
                 if(colummna==COLUMNA_VALOR)
                 {
-                    
-                    RubroEstudiante rubroEstudiante=(RubroEstudiante) getTblDatos().getModel().getValueAt(fila,COLUMNA_OBJETO);
-                    
-                    try
+                    editarValorTabla(fila,colummna);                    
+                }
+                else
+                {
+                    if(colummna==COLUMNA_SALDO)
                     {
-                        
-                        BigDecimal nuevoValor = new BigDecimal(getTblDatos().getValueAt(fila, COLUMNA_VALOR).toString());
-                        
-                        //Si el valor ingresado es 0 no permite cambiar
-                        if(nuevoValor.compareTo(BigDecimal.ZERO)==0)
-                        {
-                            getTblDatos().getModel().setValueAt(rubroEstudiante.getValor().toString(),fila,COLUMNA_VALOR);
-                            return ;
-                        }   
-                        
-                        
-                        //Verificar que los valores ingresados y del objeto son diferente para actualizar
-                        if (nuevoValor.compareTo(rubroEstudiante.getValor()) != 0) {
-                            
-                            if (rubroEstudiante.getValor().compareTo(rubroEstudiante.getSaldo()) == 0) 
-                            {
-                                rubroEstudiante.setValor(nuevoValor);
-                                rubroEstudiante.setSaldo(nuevoValor); //Todo: Verificar este caso porque si tiene saldo ingresado no me deberia dejar setear
-                            }
-                            else
-                            {
-                                DialogoCodefac.mensaje("Advertencia", "No se puede modificar el rubro porque tiene valores que le afectan ", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                                getTblDatos().getModel().setValueAt(rubroEstudiante.getValor().toString(),fila,COLUMNA_VALOR);
-                            }
-                            
-                        }
+                        editarValorSaldo(fila,colummna);
                     }
-                    catch(java.lang.NumberFormatException nfe)
-                    {
-                        getTblDatos().getModel().setValueAt(rubroEstudiante.getValor().toString(),fila,COLUMNA_VALOR);
-                        nfe.printStackTrace();
-                    }
-
                 }
             }
         });
         
         //UtilidadesTablas.editarTablaEditarCuandoPierdeFoco(getTblDatos()); 
+
+    }
+    
+    private void editarValorSaldo(int fila , int columna)
+    {
+        RubroEstudiante rubroEstudiante = (RubroEstudiante) getTblDatos().getModel().getValueAt(fila, COLUMNA_OBJETO);
+        BigDecimal nuevoSaldo = new BigDecimal(getTblDatos().getValueAt(fila, COLUMNA_SALDO).toString());
+        
+        //Solo editar cuando el valor es distinto del ingresado
+        if(nuevoSaldo.compareTo(rubroEstudiante.getSaldo())!=0)
+        {
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "El rubro ya tiene saldo que le afecta y puede generar incosistencias \nDesea modificar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if(respuesta)
+            {
+                if (nuevoSaldo.compareTo(rubroEstudiante.getValor()) > 0) {
+                    DialogoCodefac.mensaje("Error", "No se puede asignar un saldo mayor que el valor del rubro ",DialogoCodefac.MENSAJE_INCORRECTO);
+                    getTblDatos().getModel().setValueAt(rubroEstudiante.getSaldo().toString(), fila, COLUMNA_SALDO);
+                } else {
+                    rubroEstudiante.setSaldo(nuevoSaldo);
+                }
+            
+            }else
+            {
+                getTblDatos().getModel().setValueAt(rubroEstudiante.getSaldo().toString(), fila, COLUMNA_SALDO);
+            }
+        }
+    }
+    
+    private void editarValorTabla(int fila , int columna) {
+        RubroEstudiante rubroEstudiante = (RubroEstudiante) getTblDatos().getModel().getValueAt(fila, COLUMNA_OBJETO);
+
+        try {
+
+            BigDecimal nuevoValor = new BigDecimal(getTblDatos().getValueAt(fila, COLUMNA_VALOR).toString());
+
+            //Si el valor ingresado es 0 no permite cambiar
+            if (nuevoValor.compareTo(BigDecimal.ZERO) == 0) {
+                getTblDatos().getModel().setValueAt(rubroEstudiante.getValor().toString(), fila, COLUMNA_VALOR);
+                return;
+            }
+
+            //Verificar que los valores ingresados y del objeto son diferente para actualizar
+            if (nuevoValor.compareTo(rubroEstudiante.getValor()) != 0) {
+
+                //Verifica que el saldo y el valor son lo mismo lo que significa que aun no afecta ningun valor
+                if (rubroEstudiante.getValor().compareTo(rubroEstudiante.getSaldo()) == 0) {
+                    rubroEstudiante.setValor(nuevoValor);
+                    rubroEstudiante.setSaldo(nuevoValor); //Todo: Verificar este caso porque si tiene saldo ingresado no me deberia dejar setear
+                } else //En este caso significa que tiene otro valores que le afectan
+                {
+                    //DialogoCodefac.mensaje("Advertencia", "No se puede modificar el rubro porque tiene valores que le afectan ", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    //getTblDatos().getModel().setValueAt(rubroEstudiante.getValor().toString(),fila,COLUMNA_VALOR);
+
+                    Boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "El rubro ya tiene valores que le afectan y puede generar incosistencias \nDesea modificar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    if (respuesta) {
+                        if (nuevoValor.compareTo(rubroEstudiante.getSaldo()) < 0) {
+                            DialogoCodefac.mensaje("Error", "No se puede asignar un valor menor al saldo ya facturado de " + rubroEstudiante.getSaldo().toString(), DialogoCodefac.MENSAJE_INCORRECTO);
+                            getTblDatos().getModel().setValueAt(rubroEstudiante.getValor().toString(), fila, COLUMNA_VALOR);
+                        } else {
+                            rubroEstudiante.setValor(nuevoValor);
+                        }
+                    } else {
+                        getTblDatos().getModel().setValueAt(rubroEstudiante.getValor().toString(), fila, COLUMNA_VALOR);
+                    }
+                }
+
+            }
+        } catch (java.lang.NumberFormatException nfe) {
+            getTblDatos().getModel().setValueAt(rubroEstudiante.getValor().toString(), fila, COLUMNA_VALOR);
+            nfe.printStackTrace();
+        }
 
     }
     

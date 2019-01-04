@@ -298,5 +298,10 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     {
         return getFacade().contarRubrosEstudiantePorRubroNivelFacade(rubroNivel);
     }
+    
+    public List<RubroEstudiante> consultarPorEstudianteInscritoSinFacturar(EstudianteInscrito estudianteInscrito) throws RemoteException
+    {
+        return getFacade().consultarPorEstudianteInscritoSinFacturarFacade(estudianteInscrito);
+    }
 
 }
