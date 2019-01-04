@@ -55,23 +55,6 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         setTitle("Deudas por Estudiante");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        tblDeudas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Rubro", "Valor"
-            }
-        ));
         jScrollPane1.setViewportView(tblDeudas);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -118,7 +101,7 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscarEstudiante, gridBagConstraints);
 
-        lblDeuda.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDeuda.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblDeuda.setText("Total Deuda:");
         lblDeuda.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -128,7 +111,7 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         gridBagConstraints.insets = new java.awt.Insets(23, 78, 0, 0);
         getContentPane().add(lblDeuda, gridBagConstraints);
 
-        lblTotalDeuda.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblTotalDeuda.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblTotalDeuda.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalDeuda.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();

@@ -117,6 +117,7 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
             Vector<String> titulo = new Vector<>();
             titulo.add("Rubro");
             titulo.add("Valor");
+            titulo.add("Saldo");
 
             DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
             RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
@@ -130,8 +131,9 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
                     Vector<String> fila2 = new Vector<String>();
                     fila2.add(re.getRubroNivel().getNombre());
                     fila2.add(re.getValor().toString());
+                    fila2.add(re.getSaldo().toString());
 
-                    acum = acum.add(re.getValor());
+                    acum = acum.add(re.getSaldo());
                     modeloTablaDeudas.addRow(fila2);
                 }
             }
@@ -185,12 +187,12 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
                 for (RubroEstudiante re : dataRubro) {
                     data.add(new ReporteDeudasEstudianteData(
                             re.getRubroNivel().getNombre(),
-                            re.getRubroNivel().getValor().toString(),
+                            re.getSaldo().toString(),
                             re.getEstudianteInscrito().getNivelAcademico().getPeriodo().getNombre(),
                             re.getValor().toString()
                     ));
 
-                    acum = acum.add(re.getValor());
+                    acum = acum.add(re.getSaldo());
                 }
             }
 
