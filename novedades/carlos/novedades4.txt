@@ -114,3 +114,5 @@ Agregar a todos los metodos de eliminar en el servidor la posibilidad de lanzar 
 
 Ver si en las pantallas de migracion se agrega la opcion que puedan descargar el formato de excel
 Hacer el modelo simplificado de la guia de remision
+
+Agregar advertencia al iniciar el software que no existe ninguna sucursal matriz activa y tambien de otras notificaciones
