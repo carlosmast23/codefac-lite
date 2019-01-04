@@ -62,6 +62,11 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         lblEspacioHorizontal = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         cmbActivarComprobanteVenta = new javax.swing.JComboBox<>();
+        jPanel5 = new javax.swing.JPanel();
+        lblEspacioVertical1 = new javax.swing.JLabel();
+        lblEspacioHorizontal1 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        cmbActivarReporteSimpleGuiaRemision = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -232,6 +237,36 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jTabbedPane1.addTab("Facturas", jPanel4);
 
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 0.1;
+        jPanel5.add(lblEspacioVertical1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel5.add(lblEspacioHorizontal1, gridBagConstraints);
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel6.setText("Reporte Simplificado Guia Retención:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jLabel6, gridBagConstraints);
+
+        cmbActivarReporteSimpleGuiaRemision.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(cmbActivarReporteSimpleGuiaRemision, gridBagConstraints);
+
+        jTabbedPane1.addTab("Transporte", jPanel5);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -241,6 +276,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<EnumSiNo> cmbActivarComprobanteVenta;
     private javax.swing.JComboBox<EnumSiNo> cmbActivarModuloCartera;
+    private javax.swing.JComboBox<EnumSiNo> cmbActivarReporteSimpleGuiaRemision;
     private javax.swing.JComboBox<FormatoHojaEnum> cmbFormatoHojas;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumentoCompra;
@@ -250,10 +286,12 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblEspacio1;
@@ -264,7 +302,9 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JLabel lblEspacioBlanco2;
     private javax.swing.JLabel lblEspacioHorizontal;
+    private javax.swing.JLabel lblEspacioHorizontal1;
     private javax.swing.JLabel lblEspacioVertical;
+    private javax.swing.JLabel lblEspacioVertical1;
     private javax.swing.JTextArea txtOrdenTrabajoReporte;
     // End of variables declaration//GEN-END:variables
 
@@ -314,6 +354,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbActivarComprobanteVenta(JComboBox<EnumSiNo> cmbActivarComprobanteVenta) {
         this.cmbActivarComprobanteVenta = cmbActivarComprobanteVenta;
+    }
+
+    public JComboBox<EnumSiNo> getCmbActivarReporteSimpleGuiaRemision() {
+        return cmbActivarReporteSimpleGuiaRemision;
+    }
+
+    public void setCmbActivarReporteSimpleGuiaRemision(JComboBox<EnumSiNo> cmbActivarReporteSimpleGuiaRemision) {
+        this.cmbActivarReporteSimpleGuiaRemision = cmbActivarReporteSimpleGuiaRemision;
     }
     
     

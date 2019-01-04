@@ -14,7 +14,9 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteE
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.transporte.model.GuiaRemisionModel;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
@@ -54,13 +56,13 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
             monitorData.getBarraProgreso().setForeground(Color.GREEN);
             monitorData.getBtnAbrir().setEnabled(true);
             monitorData.getBtnCerrar().setEnabled(true);
-            monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+            /*monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
                     guiaRemisionModel.panelPadre.crearReportePantalla(jasperPrint, guiaRemision.getPreimpreso());
                 }
-            });
+            });*/
         } catch (IOException ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -140,7 +142,8 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
                     monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            guiaRemisionModel.panelPadre.crearReportePantalla(jasperPrint, guiaRemision.getPreimpreso());
+                            generarReportePdf(claveAcceso);
+                            //guiaRemisionModel.panelPadre.crearReportePantalla(jasperPrint, guiaRemision.getPreimpreso());
                             //JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
                             //panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
                         }
@@ -166,7 +169,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
     }
 
     private void generarReportePdf(String clave) {
-        try {
+        /*try {
 
                 byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
@@ -177,7 +180,43 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        
+        try {
+            
+            if(verificarImprimirComprobante())
+            {
+                guiaRemisionModel.imprimirComprobanteGuiaRemision(guiaRemision); //TODO:Verificar si este metodo no funciona
+            }
+            else
+            {            
+                byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
+                JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
+                guiaRemisionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
+            }
+            //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
+        } catch (RemoteException ex) {
+            Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }    
+    
+    
+    private boolean verificarImprimirComprobante() {
+        ParametroCodefac parametroCodefac = guiaRemisionModel.session.getParametrosCodefac().get(ParametroCodefac.COMPROBANTE_GUIA_REMISION_ACTIVAR);
+        if (parametroCodefac == null) {
+            //Si no esta tiene ningun dato por defecto no habilito la opcion de comprobante de venta
+            return false;
+        } else {
+            if (EnumSiNo.getEnumByLetra(parametroCodefac.getValor()).equals(EnumSiNo.NO)) {
+                //Si esta marcado la opcion no entonce no genero la opcion de imprimir el comprobante de venta
+                return false;
+            }
+        }
+        return true;
+    }
 }

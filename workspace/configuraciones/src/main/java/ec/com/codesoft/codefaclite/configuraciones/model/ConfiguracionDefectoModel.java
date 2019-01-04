@@ -152,6 +152,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         getCmbActivarComprobanteVenta().addItem(EnumSiNo.NO);
         getCmbActivarComprobanteVenta().addItem(EnumSiNo.SI);
         
+        //Agregar las opcion para esocger si o no en activar los comprobantes de venta
+        getCmbActivarReporteSimpleGuiaRemision().removeAllItems();
+        getCmbActivarReporteSimpleGuiaRemision().addItem(EnumSiNo.NO);
+        getCmbActivarReporteSimpleGuiaRemision().addItem(EnumSiNo.SI);
+        
     }
 
     private void cargarDatos() {
@@ -183,7 +188,19 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
             
             ParametroCodefac parametroComprobanteVenta= parametrosTodos.get(ParametroCodefac.COMPROBANTE_VENTA_ACTIVAR);
             enumSiNo=EnumSiNo.getEnumByLetra((parametroComprobanteVenta!=null)?parametroComprobanteVenta.getValor():null);
-            getCmbActivarComprobanteVenta().setSelectedItem(enumSiNo);
+            if (parametroComprobanteVenta != null) {
+                getCmbActivarComprobanteVenta().setSelectedItem(enumSiNo);
+            } else {
+                getCmbActivarComprobanteVenta().setSelectedItem(EnumSiNo.NO);
+            }
+            
+            
+            ParametroCodefac parametroComprobanteGuiaRemision= parametrosTodos.get(ParametroCodefac.COMPROBANTE_GUIA_REMISION_ACTIVAR);
+            enumSiNo=EnumSiNo.getEnumByLetra((parametroComprobanteGuiaRemision!=null)?parametroComprobanteGuiaRemision.getValor():null);
+            if(parametroComprobanteGuiaRemision!=null)
+                getCmbActivarReporteSimpleGuiaRemision().setSelectedItem(enumSiNo);
+            else
+                getCmbActivarReporteSimpleGuiaRemision().setSelectedItem(EnumSiNo.NO);
             
             
             
@@ -216,6 +233,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         enumSiNo = (EnumSiNo) getCmbActivarComprobanteVenta().getSelectedItem();
         agregarParametro(ParametroCodefac.COMPROBANTE_VENTA_ACTIVAR, (enumSiNo!=null)?enumSiNo.getLetra():null);
         parametrosEditar.add(parametrosTodos.get(ParametroCodefac.COMPROBANTE_VENTA_ACTIVAR));
+        
+        enumSiNo = (EnumSiNo) getCmbActivarReporteSimpleGuiaRemision().getSelectedItem();
+        agregarParametro(ParametroCodefac.COMPROBANTE_GUIA_REMISION_ACTIVAR, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        parametrosEditar.add(parametrosTodos.get(ParametroCodefac.COMPROBANTE_GUIA_REMISION_ACTIVAR));
         /*ParametroCodefac parametroCodefac=parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)
         {

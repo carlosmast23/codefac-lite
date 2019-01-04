@@ -36,6 +36,8 @@ public class DestinatarioGuiaRemision implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(name = "IDENTIFICACION")
+    private String identificacion;
     @Column(name = "RAZON_SOCIAL")
     private String razonSocial;
     @Column(name = "DIRECCION_DESTINO")
@@ -173,6 +175,14 @@ public class DestinatarioGuiaRemision implements Serializable{
 
     public void setReferenciaDocumentoId(Long referenciaDocumentoId) {
         this.referenciaDocumentoId = referenciaDocumentoId;
+    }
+
+    public String getIdentificacion() {
+        return identificacion;
+    }
+
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
     }
     
     

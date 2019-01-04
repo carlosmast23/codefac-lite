@@ -20,7 +20,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PARAMETRO")
 public class ParametroCodefac implements Serializable {
-    
+    /**
+     * NOTA: NO MODIFICAR ESTOS NOMBRES PORQUE YA ESTAN EN LA BASE DE DATOS , Y MODIFICARLOS PUEDE OCACIONAR PROBLEMAS
+     */
     public static final String NOMBRE_FIRMA_ELECTRONICA= "firma_electronica";
     public static final String CLAVE_FIRMA_ELECTRONICA= "clave_firma_electronica";
     public static final String DIRECTORIO_RECURSOS= "directorio_recursos";
@@ -72,6 +74,11 @@ public class ParametroCodefac implements Serializable {
      * Parametro para activar los comporbante de venta para imprimir en las facturas electronicas
      */
     public static final String COMPROBANTE_VENTA_ACTIVAR="comprobante_venta_activar";
+    
+    /** Parametro para activar los comporbante de venta para imprimir en las facturas electronicas
+     *
+    */
+    public static final String COMPROBANTE_GUIA_REMISION_ACTIVAR="comprobante_guia_remision_activar";
     
     @Id
     @Column(name = "ID")

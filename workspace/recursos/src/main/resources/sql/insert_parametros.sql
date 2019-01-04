@@ -43,3 +43,5 @@ INSERT INTO PARAMETRO (NOMBRE) VALUES('directorio_respaldo');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('ultima_fecha_validacion',CURRENT_DATE);
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('formato_orden_trabajo','A4');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('cartera_activa','s');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('comprobante_guia_remision_activar','n');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('comprobante_venta_activar','n');

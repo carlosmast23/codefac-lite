@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.transporte.model;
 
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.GuiaRemisionBusqueda;
@@ -14,10 +15,13 @@ import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.DetalleGuiaRemisionComprobante;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataNotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -32,10 +36,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.transporte.callback.GuiaRemisionImplComprobante;
+import ec.com.codesoft.codefaclite.transporte.data.ComprobanteGuiaTransporteData;
+import ec.com.codesoft.codefaclite.transporte.data.ComprobanteGuiaTransporteDetalleData;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiaRemisionPanel;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
@@ -49,7 +56,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +67,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.collections4.map.HashedMap;
 
 /**
@@ -400,6 +413,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         destinatario.setRazonSocial(this.destinatario.getRazonSocial());
         destinatario.setRuta(destinatario.getRuta());
         destinatario.setReferenciaDocumentoId(facturaSeleccionada.getId());
+        destinatario.setIdentificacion(this.destinatario.getIdentificacion());
         
         ///Agregado detalle  de los productos de la factura enlazada
         for (FacturaDetalle facturaDetalle : facturaSeleccionada.getDetalles()) {
@@ -574,6 +588,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         guiaRemision.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision().toString());
         guiaRemision.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
         guiaRemision.setEmpresa(session.getEmpresa());
+        
   ;
         
     }
@@ -587,6 +602,84 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
                 ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
+    }
+    
+    public void imprimirComprobanteGuiaRemision(GuiaRemision guiaRemision) {
+
+         List<ComprobanteGuiaTransporteData> dataReporte=getDetalleDataReporte(guiaRemision);
+            
+            //map de los parametros faltantes
+            Map<String,Object> mapParametros=getMapParametrosReporte(guiaRemision);
+            
+            
+            InputStream path = RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("comprobante_guia_remision.jrxml");            
+           
+            
+           ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, dataReporte, this.panelPadre, "Comprobante Guía Remisión ",OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.A5);
+    }
+    
+    /**
+     * TODO: Ver si estos metodos se pueden unir con los de la factura
+     * @param guiaRemision
+     * @return 
+     */
+    public Map<String, Object> getMapParametrosReporte(GuiaRemision guiaRemision) {
+        //map de los parametros faltantes
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("cliente", guiaRemision.getRazonSocial());
+        mapParametros.put("cedula", guiaRemision.getIdentificacion());
+        mapParametros.put("direccion", guiaRemision.getDireccion());
+        mapParametros.put("telefonos", guiaRemision.getTelefono());
+        mapParametros.put("fechaIngreso", UtilidadesFecha.formatoDiaMesAño(guiaRemision.getFechaEmision()));
+        mapParametros.put("codigo", guiaRemision.getPreimpreso().toString());
+        mapParametros.put("autorizacion", guiaRemision.getClaveAcceso());
+        mapParametros.put("origen", guiaRemision.getDireccionPartida());
+        
+        
+        InputStream inputStreamSubReporte = RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("comprobanteGuiaRemisionDetalle.jrxml");
+        try {
+            JasperReport reportDetalle = JasperCompileManager.compileReport(inputStreamSubReporte);
+            mapParametros.put("pl_url_detalle",reportDetalle);
+        } catch (JRException ex) {
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return mapParametros;
+
+    }
+    
+    public List<ComprobanteGuiaTransporteData> getDetalleDataReporte(GuiaRemision guiaRemision)
+    {
+        List<ComprobanteGuiaTransporteData> dataReporte = new ArrayList<ComprobanteGuiaTransporteData>();
+        
+        guiaRemision.getDestinatarios();
+
+        for (DestinatarioGuiaRemision detalle : guiaRemision.getDestinatarios()) {
+
+            ComprobanteGuiaTransporteData data = new ComprobanteGuiaTransporteData();
+            
+            data.setDestino(detalle.getDireccionDestino());
+            data.setIdentificacion_persona(detalle.getIdentificacion());
+            data.setMotivo_traslado(detalle.getMotivoTranslado());
+            data.setPreimpreso(detalle.getPreimpreso());
+            data.setRazon_social_persona(detalle.getRazonSocial());
+            
+            List<ComprobanteGuiaTransporteDetalleData> productosData=new ArrayList<ComprobanteGuiaTransporteDetalleData>();
+            //List<DetalleProductoGuiaRemision> detallesProductos= detalle.getDetallesProductos();
+            //Detalle detalle.getDetallesProductos();
+            for (DetalleProductoGuiaRemision detalleProducto : detalle.getDetallesProductos()) {
+                ComprobanteGuiaTransporteDetalleData detalleProductoData=new ComprobanteGuiaTransporteDetalleData();
+                detalleProductoData.setCantidad(detalleProducto.getCantidad().toString());
+                detalleProductoData.setCodigo_principal(detalleProducto.getCodigoInterno());
+                detalleProductoData.setDescripcion(detalleProducto.getDescripcion());
+                productosData.add(detalleProductoData);
+            }
+
+            data.setProductos(new JRBeanCollectionDataSource(productosData));            
+            
+            dataReporte.add(data);
+        }
+        return dataReporte;
     }
     
     
