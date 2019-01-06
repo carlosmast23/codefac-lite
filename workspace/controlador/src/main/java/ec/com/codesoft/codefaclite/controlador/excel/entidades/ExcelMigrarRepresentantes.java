@@ -42,11 +42,13 @@ public class ExcelMigrarRepresentantes  extends ExcelMigrar{
             this.nombre = nombre;
             this.posicion=posicion;
             this.tipoDato=tipoDato;
+            this.requerido=true;
         }
         
         public String nombre;
         public Integer posicion;
         public Class tipoDato;
+        private boolean requerido;
 
         @Override
         public String getNombre() {
@@ -61,6 +63,16 @@ public class ExcelMigrarRepresentantes  extends ExcelMigrar{
         @Override
         public Class getTipoDato() {
             return tipoDato;
+        }
+
+        @Override
+        public Boolean getCampoRequerido() {
+            return this.requerido;
+        }
+
+        @Override
+        public void setCampoRequerido(boolean requerido) {
+            this.requerido=requerido;
         }
         
     }

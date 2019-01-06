@@ -10,6 +10,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundar
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.TableCellRenderer;
@@ -38,6 +40,7 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
         java.awt.GridBagConstraints gridBagConstraints;
 
         btnMigrar = new javax.swing.JButton();
+        pnlCamposRequeridos = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtRutaArchivo = new javax.swing.JTextField();
@@ -45,9 +48,15 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDatos = new javax.swing.JTable();
         lblEspacio1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        cmbNumeroHoja = new javax.swing.JComboBox<>();
+        btnRecargarDatos = new javax.swing.JButton();
 
         btnMigrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/play.png"))); // NOI18N
+        btnMigrar.setText("Migrar Datos");
         btnMigrar.setToolTipText("Empezar migración");
+
+        pnlCamposRequeridos.setLayout(new org.jdesktop.swingx.VerticalLayout());
 
         setClosable(true);
         setIconifiable(true);
@@ -60,17 +69,23 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Directorio Archivo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtRutaArchivo, gridBagConstraints);
 
         btnCargarExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnCargarExcel.setText("Cargar");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnCargarExcel, gridBagConstraints);
 
@@ -79,16 +94,45 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jScrollPane1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(lblEspacio1, gridBagConstraints);
+
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel2.setText("Número Hoja:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel2, gridBagConstraints);
+
+        cmbNumeroHoja.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 1,2,3,4,5,6,7,8,9 }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbNumeroHoja, gridBagConstraints);
+
+        btnRecargarDatos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/FacturaCeleste.png"))); // NOI18N
+        btnRecargarDatos.setText("Recargar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(btnRecargarDatos, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -99,10 +143,14 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargarExcel;
     private javax.swing.JButton btnMigrar;
+    private javax.swing.JButton btnRecargarDatos;
+    private javax.swing.JComboBox<Integer> cmbNumeroHoja;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEspacio1;
+    private javax.swing.JPanel pnlCamposRequeridos;
     private javax.swing.JTable tblDatos;
     private javax.swing.JTextField txtRutaArchivo;
     // End of variables declaration//GEN-END:variables
@@ -122,6 +170,19 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
     @ComponenteSecundarioAnotacion(nombreCategoria = "Migrar",visible = true)
     public JButton getBtnMigrar() {
         return btnMigrar;
+    }
+
+    public JComboBox<Integer> getCmbNumeroHoja() {
+        return cmbNumeroHoja;
+    }
+
+    public JButton getBtnRecargarDatos() {
+        return btnRecargarDatos;
+    }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Campos Requeridos",visible = true)
+    public JPanel getPnlCamposRequeridos() {
+        return pnlCamposRequeridos;
     }
     
     

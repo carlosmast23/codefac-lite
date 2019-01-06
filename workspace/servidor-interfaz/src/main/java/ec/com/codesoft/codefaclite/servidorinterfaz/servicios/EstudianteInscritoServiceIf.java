@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
@@ -44,4 +45,5 @@ public interface EstudianteInscritoServiceIf extends ServiceAbstractIf<Estudiant
     
     public List<Object[]> consultarRepresentanteConEstudiantesYCursos() throws RemoteException;
     
+    public EstudianteInscrito obtenerPorEstudianteYNivelYEstado(Estudiante estudiante,NivelAcademico nivel,GeneralEnumEstado estado ) throws RemoteException;
 }

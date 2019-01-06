@@ -14,8 +14,12 @@ import ec.com.codesoft.codefaclite.controlador.panel.MigrarPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
 import java.awt.Color;
 import java.awt.Component;
@@ -52,8 +56,8 @@ import org.apache.xalan.xsltc.compiler.util.StringStack;
  */
 public class MigrarEstudiantesModel extends MigrarModel{
     
-    private List<Estudiante> estudiantes;
-    private ExcelMigrarEstudiantes excelMigrarEstudiantes;
+    //private List<Estudiante> estudiantes;
+    //private ExcelMigrarEstudiantes excelMigrarEstudiantes;
     
     
     @Override
@@ -127,25 +131,61 @@ public class MigrarEstudiantesModel extends MigrarModel{
     public ExcelMigrar.MigrarInterface getInterfaceMigrar() {
         ExcelMigrar.MigrarInterface interfaceMigrar = new ExcelMigrar.MigrarInterface() {
             @Override
-            public boolean procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel {
+            public void procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel,ExcelMigrar.ExcepcionExcelRegistroDuplicado {
                 try {
                     Estudiante estudiante = new Estudiante();
                     estudiante.setCedula((String) fila.get(ExcelMigrarEstudiantes.Enum.IDENTIFICACION.posicion).valor);
                     estudiante.setNombres((String) fila.get(ExcelMigrarEstudiantes.Enum.NOMBRES.posicion).valor);
                     estudiante.setApellidos((String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor);
+                    estudiante.setEstadoEnum(GeneralEnumEstado.ACTIVO);
 
-                    String genero = (String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor;
+                    procesarGenero(fila.getByEnum(ExcelMigrarEstudiantes.Enum.GENERO),estudiante);
+                    
 
-                    if (genero.toLowerCase().equals("femenino")) {
-                        estudiante.setGenero(GeneroEnum.FEMENINO.getEstado());
-                    } else {
-                        estudiante.setGenero(GeneroEnum.FEMENINO.getEstado());
+                    //Verificar si existe el representante1
+                    procesarRepresentantes1(fila.getByEnum(ExcelMigrarEstudiantes.Enum.IDENTIFICACION_REPRESENTATE_1), estudiante);
+                    
+                    //Verificar si existe el representante1
+                   // String identificacionRepresentante2=(String) fila.getByEnum(ExcelMigrarEstudiantes.Enum.IDENTIFICACION_REPRESENTATE_2).valor;
+                    procesarRepresentantes2(fila.getByEnum(ExcelMigrarEstudiantes.Enum.IDENTIFICACION_REPRESENTATE_2), estudiante);
+                    
+                    
+                    
+                    //Verificar si existe el curso a inscribir
+                    String nombreCurso=(String) fila.getByEnum(ExcelMigrarEstudiantes.Enum.CURSO_ACTUAL).valor;
+                    NivelAcademico nivelAcademico=ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerPorNombreYEstado(nombreCurso,GeneralEnumEstado.ACTIVO); //TODO: Verificarsi para esta migracion tengo que mandar tambien el periodo
+                    
+                    if(nivelAcademico==null)
+                    {
+                        throw new ExcelMigrar.ExcepcionExcel("El curso ingresado no existe para registrar el estudiante");
                     }
+                    
+                    //Verificar que no este creado el estudiante
+                    Estudiante estudianteTmp=ServiceFactory.getFactory().getEstudianteServiceIf().buscarPorCedulayEstado(estudiante.getCedula(), GeneralEnumEstado.ACTIVO);
+                    if(estudianteTmp==null)
+                    {
+                        estudiante=ServiceFactory.getFactory().getEstudianteServiceIf().grabar(estudiante);
+                    }
+                    else
+                    {
+                        estudiante=estudianteTmp;
+                    }                    
+                    
+                    EstudianteInscrito estudianteInscritoTmp= ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerPorEstudianteYNivelYEstado(estudiante, nivelAcademico, GeneralEnumEstado.ACTIVO);
+                    
+                    if(estudianteInscritoTmp!=null)
+                    {
+                        throw new ExcelMigrar.ExcepcionExcelRegistroDuplicado("El estudiante ya esta inscrito");
+                    }
+                    
+                    //Incribir al estudiante en el curso
+                    EstudianteInscrito estudianteInscrito=new EstudianteInscrito();
+                    estudianteInscrito.setEstudiante(estudiante);
+                    estudianteInscrito.setNivelAcademico(nivelAcademico);
+                    estudianteInscrito.setEstado(GeneralEnumEstado.ACTIVO.getEstado());                    
+                    ServiceFactory.getFactory().getEstudianteInscritoServiceIf().grabar(estudianteInscrito);
+ 
 
-                    estudiante.setApellidos((String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor);
-                    ServiceFactory.getFactory().getEstudianteServiceIf().grabar(estudiante);
-
-                    return true;
                 } catch (ServicioCodefacException ex) {
                     //Logger.getLogger(MigrarEstudiantesModel.class.getName()).log(Level.SEVERE, null, ex);
                     throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());
@@ -153,9 +193,69 @@ public class MigrarEstudiantesModel extends MigrarModel{
                 } catch (RemoteException ex) {
                     Logger.getLogger(MigrarEstudiantesModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                return false;
+
 
             }
+            
+            
+            
+            public void procesarGenero(ExcelMigrar.CampoResultado campo,Estudiante estudiante) throws ExcelMigrar.ExcepcionExcel,ExcelMigrar.ExcepcionExcelRegistroDuplicado
+            {
+                String genero = (String) campo.valor;
+
+                if (genero.trim().toLowerCase().equals("femenino")) {
+                    estudiante.setGenero(GeneroEnum.FEMENINO.getEstado());
+                } else if (genero.trim().toLowerCase().equals("masculino")) {
+                    estudiante.setGenero(GeneroEnum.MASCULINO.getEstado());
+                } else {
+                    throw new ExcelMigrar.ExcepcionExcel("No se reconece un formato valido para el campo genero");
+                }
+            }
+            
+            
+            public void procesarRepresentantes2(ExcelMigrar.CampoResultado campo,Estudiante estudiante) throws ExcelMigrar.ExcepcionExcel,ExcelMigrar.ExcepcionExcelRegistroDuplicado, RemoteException, ServicioCodefacException
+            {
+                //Si no es campo requerido no hago la validacion
+                if(!campo.campoEnum.getCampoRequerido())
+                {
+                    return;
+                }
+                
+                String identificacionRepresentante2 = (String) campo.valor;
+
+                if (!identificacionRepresentante2.isEmpty()) {
+                    Persona representante2 = ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacionYestado(identificacionRepresentante2, GeneralEnumEstado.ACTIVO);
+
+                    if (representante2 == null) {
+                        throw new ExcelMigrar.ExcepcionExcel("El presentante 2 ingresado no existe en el sistema");
+                    } else {
+                        estudiante.setRepresentante2(representante2);
+                    }
+                }
+            }
+            
+            
+            public void procesarRepresentantes1(ExcelMigrar.CampoResultado campo,Estudiante estudiante) throws ExcelMigrar.ExcepcionExcel,ExcelMigrar.ExcepcionExcelRegistroDuplicado, RemoteException, ServicioCodefacException
+            {
+                //Si no es campo requerido no hago la validacion
+                if (!campo.campoEnum.getCampoRequerido()) {
+                    return;
+                }
+                
+                String identificacionRepresentante1 = (String) campo.valor;
+
+                if (!identificacionRepresentante1.isEmpty()) {
+                    Persona representante1 = ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacionYestado(identificacionRepresentante1, GeneralEnumEstado.ACTIVO);
+
+                    if (representante1 == null) {
+                        throw new ExcelMigrar.ExcepcionExcel("El presentante 1 ingresado no existe en el sistema");
+                    } else {
+                        estudiante.setRepresentante(representante1);
+                    }
+                }
+            }
+            
+            
         };
         return interfaceMigrar;
     }

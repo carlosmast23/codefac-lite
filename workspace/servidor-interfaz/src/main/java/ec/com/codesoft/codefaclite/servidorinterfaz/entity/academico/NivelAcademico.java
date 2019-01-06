@@ -110,6 +110,9 @@ public class NivelAcademico implements Serializable {
         this.descripcion = descripcion;
     }
 
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum ) {
+        this.estado = estadoEnum.getEstado();
+    }
     
     ///////Metodos personalizados////////////////////
     public GeneralEnumEstado getEstadoEnum() {

@@ -40,6 +40,8 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
         super(PersonaFacade.class);
         this.personaFacade=new PersonaFacade();
     }
+    
+    
 
     public Persona grabar(Persona p) throws ServicioCodefacException,java.rmi.RemoteException
     {

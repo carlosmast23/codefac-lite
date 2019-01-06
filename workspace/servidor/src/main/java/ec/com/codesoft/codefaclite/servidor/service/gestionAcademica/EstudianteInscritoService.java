@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcadem
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -37,6 +38,21 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         super(EstudianteInscritoFacade.class);
         this.estudianteInscritoFacade = new EstudianteInscritoFacade();
 
+    }
+    
+    public EstudianteInscrito obtenerPorEstudianteYNivelYEstado(Estudiante estudiante,NivelAcademico nivel,GeneralEnumEstado estado ) throws RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("estudiante",estudiante);
+        mapParametros.put("nivelAcademico",nivel);
+        mapParametros.put("estado",estado.getEstado());
+        List<EstudianteInscrito> estudiantesIncritos=getFacade().findByMap(mapParametros);
+        if(estudiantesIncritos.size()>0)
+        {
+            return estudiantesIncritos.get(0);
+        }
+        
+        return null;
     }
     
     public Long obtenerTamanioPorEstudiante(Estudiante estudiante)
@@ -181,4 +197,7 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         }
         return resultadoObjetos;
     }
+
+   
+    
 }

@@ -33,6 +33,20 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
         super(PeriodoFacade.class);
         this.periodoFacade = new PeriodoFacade();
     }
+    
+    public Periodo buscarPorNombreyEstado(String nombre,GeneralEnumEstado estado) throws RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("nombre",nombre);
+        mapParametros.put("estado",estado.getEstado());
+        
+        List<Periodo> periodos=getFacade().findByMap(mapParametros);
+        if(periodos.size()>0)
+        {
+            return periodos.get(0);
+        }
+        return null;
+    }
 
     public Periodo grabar(Periodo p) throws ServicioCodefacException {
         try {

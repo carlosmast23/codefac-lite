@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -15,4 +17,6 @@ import java.util.List;
  */
 public interface NivelServiceIf extends ServiceAbstractIf<Nivel>{
     public List<Nivel> obtenerNivelesActivos() throws RemoteException;
+    public Nivel obtenerNivelPorNombreYEstado(String nombre,GeneralEnumEstado estado) throws RemoteException;
+    
 }

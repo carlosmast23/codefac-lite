@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +35,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public abstract class ExcelMigrar {
     
     private static final String ESTADO_MIGRADO="Migrado";
+    private static final String ESTADO_DATO_DUPLICADO="El dato ya existe en el sistema";
     private static final String ESTADO_SIN_MIGRADO="Sin Migrar";
     /**
      * Archivo excel donde va a contener los datos para migrar
@@ -133,15 +135,57 @@ public abstract class ExcelMigrar {
     public void migrar(MigrarInterface interfaz)
     {
         for (FilaResultado filaResultado : datosResultado) {
-            try {
-                boolean procesado=interfaz.procesar(filaResultado);
-                filaResultado.migrado=procesado;
-            } catch (Exception ex) {
-                Logger.getLogger(ExcelMigrar.class.getName()).log(Level.SEVERE, null, ex);
-                filaResultado.migrado=false;
-                filaResultado.error=ex.getMessage();
-            }
+            //Solo ejecutar este proceso con los datos que faltan de migrar
+            if(!filaResultado.migrado)
+            {
+                try {
+                    //try {
+                    verificarDatosRequerido(filaResultado);
+                    interfaz.procesar(filaResultado);
+                    filaResultado.migrado=true;
+                    /*} catch (Exception ex) {
+                    Logger.getLogger(ExcelMigrar.class.getName()).log(Level.SEVERE, null, ex);
+                    filaResultado.migrado=false;
+                    filaResultado.error=ex.getMessage();
+                    } */
+                } catch (ExcepcionExcel ex) {
+                    filaResultado.migrado=false;
+                    filaResultado.error=ex.getMessage();
+                    
+                } catch (ExcepcionExcelRegistroDuplicado ex) {
+                    filaResultado.migrado=false;
+                    filaResultado.error=ESTADO_DATO_DUPLICADO;
+
+                }
+            }   
         }
+    }
+    
+    public void verificarDatosRequerido(FilaResultado filaResultado) throws ExcelMigrar.ExcepcionExcel
+    {
+                
+        for (CampoMigrarInterface campoMigrarInterface : obtenerCampos()) {
+            Class clase= campoMigrarInterface.getTipoDato();
+            
+            if(!campoMigrarInterface.equals(getCampoEstado()))
+            {
+                if(campoMigrarInterface.getCampoRequerido())
+                {
+                    verificarError(filaResultado.getByEnum(campoMigrarInterface), campoMigrarInterface.getNombre());                
+
+                }
+            }
+            
+        } 
+    }
+    
+    private void verificarError(Object dato,String nombre)  throws ExcelMigrar.ExcepcionExcel
+    {
+        if(dato==null  || dato.toString().isEmpty())
+        {
+            throw new ExcelMigrar.ExcepcionExcel("El campo "+nombre+" es requerido");
+        }
+        
     }
     
     /**
@@ -152,6 +196,7 @@ public abstract class ExcelMigrar {
     public List<FilaResultado> leerDatos() throws ExcepcionMigrar
     {
         datosResultado=new ArrayList<FilaResultado>();
+        int tamanioColumna= obtenerTituloTabla().size();
         
         FileInputStream file = null;
         try {
@@ -178,21 +223,37 @@ public abstract class ExcelMigrar {
                 FilaResultado filaResultado=new FilaResultado();
                 
                 int i=0;
+                
                 while (cellIterator.hasNext()) {
                     
+                    //Esto me sirve para no leer datos que no esten dentro del rango de las columnas de los titulos
+                    if(i>=(tamanioColumna-1))
+                    {
+                        break;
+                    }
                     
                     // se obtiene la celda en específico y se la imprime
                     cell = cellIterator.next();
                     
                     switch (cell.getCellTypeEnum()) {
                         case STRING:
+                            
                             filaResultado.agregarDato(new CampoResultado<String>(String.class,cell.getStringCellValue(),obtenerCampos()[i]),false);
                             //System.out.print(cell.getStringCellValue() + " | ");
                             break;
                         case NUMERIC:
                             filaResultado.agregarDato(new CampoResultado<Double>(Double.class,cell.getNumericCellValue(),obtenerCampos()[i]),false);
-                            System.out.print(cell.getNumericCellValue() + " | ");
+                            
                             break;
+                            
+                        case BLANK:
+                            filaResultado.agregarDato(new CampoResultado<String>(String.class,"",obtenerCampos()[i]),false);
+                            break;
+                        
+                        case _NONE:
+                            //System.out.println("none");
+                            break;
+
                             
                     }
                     
@@ -277,14 +338,27 @@ public abstract class ExcelMigrar {
         tabla.setDefaultRenderer(tabla.getColumnClass(0), new DefaultTableCellRenderer() {
             @Override
             public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                
+                //System.out.println(row+":"+column);
                 if (column == getCampoEstado().getPosicion()) {
-                    if (value.toString().equals(ESTADO_SIN_MIGRADO)) {
-                        setBackground(Color.white);
-                    } else if (value.toString().equals(ESTADO_MIGRADO)) {
-                        setBackground(Color.GREEN);
-                    } else {
-                        setBackground(Color.orange);
+                    
+                    //Si por algun motivo no existe ningun dato pinto de otro color para ver el eror
+                    if(value==null)
+                    {
+                        setBackground(Color.green);
+                    }
+                    else
+                    {
+
+                        if (value.toString().equals(ESTADO_SIN_MIGRADO)) {
+                            setBackground(Color.white);
+                        } else if (value.toString().equals(ESTADO_MIGRADO)) {
+                            setBackground(Color.GREEN);
+                        } else if(value.toString().equals(ESTADO_DATO_DUPLICADO)){
+                            setBackground(Color.lightGray);
+                        }else
+                        {
+                            setBackground(Color.orange); //Cuando existe un error
+                        }
                     }
                 } else {
                     setBackground(Color.white);
@@ -330,7 +404,7 @@ public abstract class ExcelMigrar {
         public List<CampoResultado> fila;
         public boolean migrado;
         public String error;
-
+       
         public FilaResultado() {
             fila=new ArrayList<CampoResultado>();
             migrado=false;
@@ -348,11 +422,13 @@ public abstract class ExcelMigrar {
             return fila.get(posicion);
         }
         
+        
+        
         public CampoResultado getByEnum(CampoMigrarInterface campoEnum)
         {
             for (CampoResultado campoResultado : fila) 
             {
-                System.out.println(campoResultado.campoEnum.getNombre());
+                //System.out.println(campoResultado.campoEnum.getNombre());
                 if(campoEnum.getNombre().equals(campoResultado.campoEnum.getNombre()))
                 {
                     return campoResultado;
@@ -362,7 +438,16 @@ public abstract class ExcelMigrar {
         }
         
         
+              
+        
     }
+
+    public void setHojaActual(int hojaActual) {
+        this.hojaActual = hojaActual;
+    }
+    
+    
+    
     
     /**
      * Clase que obtiene cada celda
@@ -392,16 +477,32 @@ public abstract class ExcelMigrar {
         public abstract String getNombre();
         public abstract int getPosicion();
         public abstract Class getTipoDato();
+        public abstract Boolean getCampoRequerido();
+        public abstract void setCampoRequerido(boolean requerido);
     };
     
+    /**
+     * Interface que permite establecer las validaciones especificas por cada pantalla
+     */
     public interface MigrarInterface 
     {
-        public boolean procesar(FilaResultado fila) throws ExcepcionExcel; 
-    };
+        public void procesar(FilaResultado fila) throws ExcepcionExcel,ExcepcionExcelRegistroDuplicado;       
+    };    
+    
     
     public static class ExcepcionExcel extends Exception {
 
         public ExcepcionExcel(String message) {
+            super(message);
+        }
+    };
+    
+    /**
+     * Excepcion que permite comunicar que el dato ya fue ingresado
+     */
+    public static class ExcepcionExcelRegistroDuplicado extends Exception {
+
+        public ExcepcionExcelRegistroDuplicado(String message) {
             super(message);
         }
     };

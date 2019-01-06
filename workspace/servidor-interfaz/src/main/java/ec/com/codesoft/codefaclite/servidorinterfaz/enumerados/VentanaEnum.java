@@ -52,6 +52,7 @@ public enum VentanaEnum {
     MIGRAR_REPRESENTANTES("ec.com.codesoft.codefaclite.gestionacademica.model.MigrarRepresentantesModel", "MIRE", "Migrar Representantes", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.MIGRAR,null),
     MIGRAR_CLIENTES("ec.com.codesoft.codefaclite.crm.model.MigrarClientesModel", "MICL", "Migrar Clientes", ModuloCodefacEnum.CRM, CategoriaMenuEnum.MIGRAR,null),    
     MIGRAR_PROVEEDORES("ec.com.codesoft.codefaclite.crm.model.MigrarProveedorModel", "MIPR", "Migrar Proveedores", ModuloCodefacEnum.CRM, CategoriaMenuEnum.MIGRAR,null),    
+    MIGRAR_CURSOS("ec.com.codesoft.codefaclite.gestionacademica.model.MigrarCursosModel", "MICU", "Migrar Cursos", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.MIGRAR,null),    
     PERIODO("ec.com.codesoft.codefaclite.gestionacademica.model.PeriodoModel", "PERI", "Periodo", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR,null),
     PERFILES("ec.com.codesoft.codefaclite.configuraciones.model.PerfilModel", "PERF", "Perfiles", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null),
     USUARIOS("ec.com.codesoft.codefaclite.configuraciones.model.PerfilUsuarioModel", "PEUM", "Usuario", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null),

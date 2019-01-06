@@ -26,7 +26,7 @@ public class ExcelMigrarEstudiantes extends ExcelMigrar{
     
     
     public enum Enum implements CampoMigrarInterface
-    {
+    {        
         IDENTIFICACION("Identificacion",0),
         NOMBRES("Nombres",1),
         APELLIDOS("Apellidos",2),
@@ -39,8 +39,10 @@ public class ExcelMigrarEstudiantes extends ExcelMigrar{
         private Enum(String nombre,Integer posicion) {
             this.nombre = nombre;
             this.posicion=posicion;
+            this.requerido=true;
         }
         
+        private boolean requerido;
         public String nombre;
         public Integer posicion;
 
@@ -57,6 +59,16 @@ public class ExcelMigrarEstudiantes extends ExcelMigrar{
         @Override
         public Class getTipoDato() {
             return String.class;
+        }
+
+        @Override
+        public Boolean getCampoRequerido() {
+            return this.requerido;
+        }
+
+        @Override
+        public void setCampoRequerido(boolean requerido){
+            this.requerido=requerido;
         }
         
     }

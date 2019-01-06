@@ -67,14 +67,12 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     
     public Entity grabar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        try {
-            this.facade.create(entity);            
-
-        } catch (ConstrainViolationExceptionSQL ex) {
-            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DatabaseException ex) {
-            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.persist(entity);
+            }
+        });
         return entity;
     }
    
@@ -85,7 +83,12 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     
     public void editar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        this.facade.edit(entity);
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.merge(entity);
+            }
+        });
     }
     
     public void eliminar(Entity entity) throws java.rmi.RemoteException

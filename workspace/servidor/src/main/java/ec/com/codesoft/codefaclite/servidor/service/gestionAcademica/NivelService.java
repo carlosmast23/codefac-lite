@@ -33,6 +33,20 @@ public class NivelService extends ServiceAbstract<Nivel, NivelFacade> implements
         this.nivelFacade = new NivelFacade();
     }
     
+    public Nivel obtenerNivelPorNombreYEstado(String nombre,GeneralEnumEstado estado) throws RemoteException
+    {
+        Map<String,Object> parametros=new HashMap<String,Object>();
+        parametros.put("nombre",nombre);
+        parametros.put("estado",estado.getEstado());
+        List<Nivel> niveles=getFacade().findByMap(parametros);
+        if(niveles.size()>0)
+        {
+            return niveles.get(0);
+        }
+        return null;
+        
+    }
+    
     public Nivel grabar(Nivel n) throws ServicioCodefacException {
         try {
             nivelFacade.create(n);

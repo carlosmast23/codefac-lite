@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import java.util.List;
 
 /**
  *
@@ -17,6 +19,8 @@ public class NivelFacade extends AbstractFacade<Nivel>{
     public NivelFacade() {
         super(Nivel.class);
     }
+    
+    
     
     
     

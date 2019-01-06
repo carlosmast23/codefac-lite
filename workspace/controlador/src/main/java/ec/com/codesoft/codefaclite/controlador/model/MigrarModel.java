@@ -18,6 +18,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -42,11 +43,25 @@ public abstract class MigrarModel extends MigrarPanel{
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        listenerBotonesInit();
+        listenerBotonesInit();        
     }
     
     private void listenerBotonesInit()
     {
+        getBtnRecargarDatos().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(getTxtRutaArchivo().getText().isEmpty())
+                {
+                    DialogoCodefac.mensaje("Error","No se puede recargar porque no existe un archivo cargado", DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+                else
+                {
+                    construirDatosExcel(new File(getTxtRutaArchivo().getText()));
+                }
+            }
+        });
+        
         getBtnMigrar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -115,7 +130,33 @@ public abstract class MigrarModel extends MigrarPanel{
     {
         this.excelMigrar=getExcelMigrar();
         this.excelMigrar.setArchivoExel(archivo);
+        this.excelMigrar.setHojaActual((int) getCmbNumeroHoja().getSelectedItem()-1);
+        construirDatosRequeridos();
         
+    }
+
+    private void construirDatosRequeridos() {
+        getPnlCamposRequeridos().removeAll();
+        
+        for (ExcelMigrar.CampoMigrarInterface campoMigrar : this.excelMigrar.obtenerCampos()) {
+            JCheckBox jcheckBox=new JCheckBox(campoMigrar.getNombre());
+            jcheckBox.setSelected(true);
+            getPnlCamposRequeridos().add(jcheckBox);
+            campoMigrar.setCampoRequerido(true);
+            
+            //AgregarListener para campos requeridos
+            jcheckBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    campoMigrar.setCampoRequerido(jcheckBox.isSelected());
+                }
+            });
+            
+        }
+        
+        getPnlCamposRequeridos().revalidate();
+        getPnlCamposRequeridos().repaint();
+
     }
     
     

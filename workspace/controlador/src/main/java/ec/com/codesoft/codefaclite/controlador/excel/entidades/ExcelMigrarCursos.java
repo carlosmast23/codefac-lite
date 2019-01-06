@@ -11,40 +11,33 @@ import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
  *
  * @author Carlos
  */
-public class ExcelMigrarClientes extends ExcelMigrar {
+public class ExcelMigrarCursos extends ExcelMigrar {
 
     @Override
     public CampoMigrarInterface[] obtenerCampos() {
-        return ExcelMigrarClientes.Enum.values();
+        return Enum.values();
     }
 
     @Override
     public CampoMigrarInterface getCampoEstado() {
-        return ExcelMigrarClientes.Enum.ESTADO;
+        return Enum.ESTADO;
     }
     
-     public enum Enum implements CampoMigrarInterface
+    public enum Enum implements CampoMigrarInterface
     {
-        IDENTIFICACION("Identificación",0,String.class),
-        NOMBRES("Nombres",1,String.class),
-        APELLIDOS("Apellidos",2,String.class),
-        RAZON_SOCIAL("Razon Social",3,String.class),
-        DIRECCION("Direccion",4,String.class),
-        TELEFONO("Telefono",5,String.class),
-        CELULAR("Celular",6,String.class),
-        CORREO("Correo",7,String.class),
-        ESTADO("Estado",8,String.class);
+        NOMBRE("Nombre",0),
+        DESCRIPCION("Descripción",1),
+        NIVEL("Nivel",2),
+        PERIODO("Periodo",3),
+        ESTADO("Estado Migración",4);
 
-        private Enum(String nombre,Integer posicion,Class tipoDato) {
+        private Enum(String nombre,Integer posicion) {
             this.nombre = nombre;
             this.posicion=posicion;
-            this.tipoDato=tipoDato;
         }
         
         public String nombre;
         public Integer posicion;
-        public Class tipoDato;
-        private Boolean requerido;
 
         @Override
         public String getNombre() {
@@ -58,17 +51,17 @@ public class ExcelMigrarClientes extends ExcelMigrar {
 
         @Override
         public Class getTipoDato() {
-            return tipoDato;
+            return String.class;
         }
 
         @Override
         public Boolean getCampoRequerido() {
-            return requerido;
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
         public void setCampoRequerido(boolean requerido) {
-            this.requerido=requerido;
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
         
     }

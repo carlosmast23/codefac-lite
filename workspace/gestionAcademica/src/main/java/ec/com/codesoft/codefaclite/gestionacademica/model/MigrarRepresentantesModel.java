@@ -36,20 +36,26 @@ public class MigrarRepresentantesModel extends MigrarModel {
         setTitle("Migrar Representantes");
     }
     
-    
+    private void datosRequeridos(Persona representante) throws ExcelMigrar.ExcepcionExcel
+    {
+        if(representante.getIdentificacion()==null || representante.getIdentificacion().isEmpty())
+        {
+            throw new ExcelMigrar.ExcepcionExcel("La identificación es un dato requerido");
+        }
+    }
 
     @Override
     public ExcelMigrar.MigrarInterface getInterfaceMigrar() {
         
         return new ExcelMigrar.MigrarInterface()  {
             @Override
-            public boolean procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel{
+            public void procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel{
                 try {
                     Persona representante=new Persona();
                     representante.setIdentificacion((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.IDENTIFICACION).valor);
                     representante.setNombres((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.NOMBRES).valor);
                     representante.setApellidos((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.APELLIDOS).valor);
-                    representante.setRazonSocial((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.RAZON_SOCIAL).valor);
+                    
                     representante.setDireccion((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.DIRECCION).valor);
                     representante.setTelefonoConvencional((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.TELEFONO).valor);
                     representante.setTelefonoCelular((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.CELULAR).valor);
@@ -71,6 +77,17 @@ public class MigrarRepresentantesModel extends MigrarModel {
                         representante.setTipoIdentificacionEnum(Persona.TipoIdentificacionEnum.RUC);
                     }
                     
+                    String razonSocialStr=(String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.RAZON_SOCIAL).valor;
+                    //Si no tiene razon social ingresada construyo con los nombres y apellidos
+                    if(razonSocialStr==null || razonSocialStr.isEmpty())
+                    {
+                        representante.setRazonSocial(representante.getNombres()+" "+representante.getApellidos());
+                    }
+                    else
+                    {
+                        representante.setRazonSocial((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.RAZON_SOCIAL).valor);
+                    }
+                    
                     Persona representanteTmp=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacionYestado(representante.getIdentificacion(),GeneralEnumEstado.ACTIVO);
                     if(representanteTmp!=null)
                     {
@@ -79,8 +96,9 @@ public class MigrarRepresentantesModel extends MigrarModel {
                         throw new ExcelMigrar.ExcepcionExcel("El dato ya se encuentra registrado en el sistema");
                     }
                     
+                    datosRequeridos(representante);
+                    
                     ServiceFactory.getFactory().getPersonaServiceIf().grabar(representante);
-                    return true;
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(MigrarRepresentantesModel.class.getName()).log(Level.SEVERE, null, ex);
                     throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());
@@ -88,14 +106,13 @@ public class MigrarRepresentantesModel extends MigrarModel {
                 } catch (RemoteException ex) {
                     Logger.getLogger(MigrarRepresentantesModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                return false;
             }
         };
     }
 
     @Override
     public ExcelMigrar getExcelMigrar() {
-        return new ExcelMigrarClientes(); 
+        return new ExcelMigrarRepresentantes(); 
     }
 
     @Override

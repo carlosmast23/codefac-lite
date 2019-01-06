@@ -3,21 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.crm.model;
+package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
-import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarClientes;
-import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarEstudiantes;
+import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarCursos;
 import ec.com.codesoft.codefaclite.controlador.model.MigrarModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
@@ -28,14 +26,13 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class MigrarClientesModel extends MigrarModel {
+public class MigrarCursosModel extends MigrarModel {
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         super.iniciar(); //To change body of generated methods, choose Tools | Templates.
-        setTitle("Migrar Clientes");
+        setTitle("Migración Cursos");
     }
-    
     
 
     @Override
@@ -44,60 +41,51 @@ public class MigrarClientesModel extends MigrarModel {
             @Override
             public void procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel {
                 try {
-                    Persona cliente = new Persona();
-                    cliente.setIdentificacion((String) fila.getByEnum(ExcelMigrarClientes.Enum.IDENTIFICACION).valor);
-                    cliente.setNombres((String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRES).valor);
-                    cliente.setApellidos((String) fila.getByEnum(ExcelMigrarClientes.Enum.APELLIDOS).valor);
-                    cliente.setRazonSocial((String) fila.getByEnum(ExcelMigrarClientes.Enum.RAZON_SOCIAL).valor);
+                    NivelAcademico curso=new NivelAcademico();
+                    curso.setNombre((String) fila.getByEnum(ExcelMigrarCursos.Enum.NOMBRE).valor);
+                    curso.setDescripcion((String) fila.getByEnum(ExcelMigrarCursos.Enum.DESCRIPCION).valor);
+                    curso.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                     
-                    cliente.setTelefonoConvencional((String) fila.getByEnum(ExcelMigrarClientes.Enum.TELEFONO).valor);
-                    cliente.setTelefonoCelular((String) fila.getByEnum(ExcelMigrarClientes.Enum.CELULAR).valor);
+                    String nombreNivel=(String) fila.getByEnum(ExcelMigrarCursos.Enum.NIVEL).valor;
+                    String nombrePeriodo=(String) fila.getByEnum(ExcelMigrarCursos.Enum.PERIODO).valor;
                     
-                    cliente.setDireccion((String) fila.getByEnum(ExcelMigrarClientes.Enum.DIRECCION).valor);
-                    
-                    cliente.setCorreoElectronico((String) fila.getByEnum(ExcelMigrarClientes.Enum.CORREO).valor);
-                    
-                    
-                    cliente.setTipoEnum(OperadorNegocioEnum.CLIENTE);
-                    cliente.setObligadoLlevarContabilidadEnum(EnumSiNo.NO);
-
-                    cliente.setContactoClienteEnum(EnumSiNo.NO);
-                    cliente.setTipClienteEnum(Persona.TipoClienteEnum.CLIENTE);//TODO: VALOR SETEADO
-                    
-                    
-                    //Todo: por el momento solo dejo considerado para estos 2 casos
-                    if (cliente.getIdentificacion().length() > 10) {
-                        cliente.setTipoIdentificacionEnum(Persona.TipoIdentificacionEnum.RUC);
-                    } else {
-                        cliente.setTipoIdentificacionEnum(Persona.TipoIdentificacionEnum.RUC);
+                    Nivel nivel=ServiceFactory.getFactory().getNivelServiceIf().obtenerNivelPorNombreYEstado(nombreNivel, GeneralEnumEstado.ACTIVO);
+                    if(nivel==null)
+                    {
+                        throw new ExcelMigrar.ExcepcionExcel("No existe el nivel en el sistema");
                     }
-
-                    //String genero = (String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor;
-
-                    ServiceFactory.getFactory().getPersonaServiceIf().grabar(cliente);
+                    curso.setNivel(nivel);
+                    
+                    Periodo periodo=ServiceFactory.getFactory().getPeriodoServiceIf().buscarPorNombreyEstado(nombrePeriodo, GeneralEnumEstado.ACTIVO);
+                    if(periodo==null)
+                    {
+                        throw new ExcelMigrar.ExcepcionExcel("No existe el periodo en el sistema");
+                    }
+                    curso.setPeriodo(periodo); 
                     
                     
-                    //ServiceFactory.getFactory().getEstudianteServiceIf().grabar(cliente);
-
-                    //return true;
-                } catch (ServicioCodefacException ex) {
-                    //Logger.getLogger(MigrarEstudiantesModel.class.getName()).log(Level.SEVERE, null, ex);
-                    throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());
+                    NivelAcademico cursoTmp=ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerPorNombreYEstadoYPeriodo(curso.getNombre(), GeneralEnumEstado.ACTIVO, periodo);
+                    if(cursoTmp!=null)
+                    {
+                        throw new ExcelMigrar.ExcepcionExcel("Ya existe un curso con el mismo nombre para ese periodo");
+                    }
+                        
                     
+                    ServiceFactory.getFactory().getNivelAcademicoServiceIf().grabar(curso);
+                   
                 } catch (RemoteException ex) {
-                    Logger.getLogger(MigrarClientesModel.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MigrarCursosModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(MigrarCursosModel.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());
                 }
-                //return false;
             }
-            
-
         };
     }
-    
 
     @Override
     public ExcelMigrar getExcelMigrar() {
-        return new ExcelMigrarClientes();
+        return new ExcelMigrarCursos();
     }
 
     @Override

@@ -41,7 +41,7 @@ public class MigrarProveedorModel extends MigrarModel{
     public ExcelMigrar.MigrarInterface getInterfaceMigrar() {
         return new ExcelMigrar.MigrarInterface()  {
             @Override
-            public boolean procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel{
+            public void procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel{
                 try {
                     Persona representante=new Persona();
                     representante.setIdentificacion((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.IDENTIFICACION).valor);
@@ -78,7 +78,7 @@ public class MigrarProveedorModel extends MigrarModel{
                     }
                     
                     ServiceFactory.getFactory().getPersonaServiceIf().grabar(representante);
-                    return true;
+                    //return true;
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(MigrarProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
                     throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());
@@ -86,7 +86,7 @@ public class MigrarProveedorModel extends MigrarModel{
                 } catch (RemoteException ex) {
                     Logger.getLogger(MigrarProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                return false;
+                //return false;
             }
         };
     }

@@ -28,6 +28,35 @@ public class NivelAcademicoService extends ServiceAbstract<NivelAcademico, Nivel
 
     private NivelAcademicoFacade nivelAcademicoFacade;
     
+    public NivelAcademico obtenerPorNombreYEstadoYPeriodo(String nombre,GeneralEnumEstado estado,Periodo periodo) throws RemoteException
+    {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("nombre", nombre);
+        mapParametros.put("estado", estado.getEstado());
+        mapParametros.put("periodo", periodo);
+        
+        List<NivelAcademico> resultados=getFacade().findByMap(mapParametros);
+        if(resultados.size()>0)
+        {
+            return resultados.get(0);
+        }
+        return null;
+    }
+    
+    public NivelAcademico obtenerPorNombreYEstado(String nombre,GeneralEnumEstado estado) throws RemoteException
+    {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("nombre", nombre);
+        mapParametros.put("estado", estado.getEstado());
+        
+        List<NivelAcademico> resultados=getFacade().findByMap(mapParametros);
+        if(resultados.size()>0)
+        {
+            return resultados.get(0);
+        }
+        return null;
+    }
+    
     public List<NivelAcademico> obtenerTodosActivosPorPeriodo(Periodo periodo) throws RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();        
