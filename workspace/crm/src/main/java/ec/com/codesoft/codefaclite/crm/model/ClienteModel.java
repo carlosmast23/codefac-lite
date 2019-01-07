@@ -167,6 +167,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setTipo(((OperadorNegocioEnum) getCmbTipoOperador().getSelectedItem()).getLetra());
         persona.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
         persona.setSriFormaPago((SriFormaPago) getCmbFormaPagoDefecto().getSelectedItem());
+        persona.setDiasCreditoCliente((Integer) getTxtDiasCredito().getValue());
         
         //Grabar la variable de obligado a llevar contabilidad
         if(getChkObligadoLlevarContabilidad().isSelected())
@@ -313,6 +314,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getCmbTipoOperador().setSelectedItem(persona.getTipoEnum());
         getCmbNacionalidad().setSelectedItem(persona.getNacionalidad());
         getCmbFormaPagoDefecto().setSelectedItem(persona.getSriFormaPago());
+        getTxtDiasCredito().setValue(persona.getDiasCreditoCliente());
         
         //Seleccionar si es obligado a llevar contabilidad
         if(persona.getObligadoLlevarContabilidadEnum()!=null)
@@ -385,6 +387,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             
             getTxtPorcentajeComision().setText("0");
             getChkContacto().setSelected(false);
+            getTxtDiasCredito().setValue(0);
             this.razonSocial = "";
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);

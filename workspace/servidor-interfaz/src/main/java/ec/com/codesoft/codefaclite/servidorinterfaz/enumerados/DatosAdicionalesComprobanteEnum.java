@@ -11,7 +11,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
  */
 public enum DatosAdicionalesComprobanteEnum {    
     NOMBRE_ESTUDIANTE("Estudiante"),
-    CODIGO_ESTUDIANTE("CodEstudiante");
+    CODIGO_ESTUDIANTE("CodEstudiante"),
+    FECHA_VENCIMIENTO("FechaVencimiento");
     
     private DatosAdicionalesComprobanteEnum(String nombre) {
         this.nombre = nombre;

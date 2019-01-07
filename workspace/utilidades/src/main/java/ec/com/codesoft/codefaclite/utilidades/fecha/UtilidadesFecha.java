@@ -180,4 +180,22 @@ public class UtilidadesFecha {
         };
         return calendar.getTime();
     }
+    
+    /**
+     * @author: Carlos Sánchez 
+     * @param date
+     * @param numero
+     * @param e
+     * @return 
+     */
+    public static java.util.Date sumarDiasFecha(java.util.Date date, int dias)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH,dias);
+        return calendar.getTime();
+    }
+
+    
+
 }

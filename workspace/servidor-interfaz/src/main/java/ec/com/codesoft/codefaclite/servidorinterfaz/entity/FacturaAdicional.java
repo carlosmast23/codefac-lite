@@ -27,7 +27,7 @@ public class FacturaAdicional extends ComprobanteAdicional implements Serializab
      * Nombre de los campos para grabar correos
      */
     //public static final String NOMBRE_CORREO="correo";
-        @JoinColumn(name = "FACTURA_ID")
+    @JoinColumn(name = "FACTURA_ID")
     @ManyToOne
     private Factura factura;
 

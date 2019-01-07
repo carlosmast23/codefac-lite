@@ -180,12 +180,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
 
     public FacturacionModel() {
-        setearFechas();
+        setearFechas();        
         addListenerButtons();
         addListenerCombos();
         addListenerCamposTexto();
         addListenerTablas();
         addPopUpListener();
+        addListenerChecks();
+        addListerFechas();
         initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
@@ -1439,6 +1441,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getTxtValorRecibido().setText("");
         getLblVuelto().setText("00.00");
+        
+        getChkActivarFechaVencimiento().setSelected(false);
+        getCmbFechaVencimiento().setDate(null);
+        getCmbFechaVencimiento().setEnabled(false);
        
 
     }
@@ -1784,6 +1790,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         //Cargar el correo solo cuando exista 
         if (factura.getCliente().getCorreoElectronico() != null) {
+            
+                       
             //Obtiene el campo del correo por defecto sis existe
             FacturaAdicional campoAdicional=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.CORREO);
             //Si no existe el campo del correo del cliente lo creo
@@ -1812,7 +1820,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     factura.getDatosAdicionales().remove(campoAdicional);
                 }
             }
-            
+           
 
             
             //datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
@@ -1883,8 +1891,28 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setIdentificacion(factura.getCliente().getIdentificacion());
         factura.setDireccion(factura.getCliente().getDireccion());
         factura.setTelefono(factura.getCliente().getTelefonoConvencional());
-        //Actualiza la tabla de los datos adicionales
-        //cargarDatosAdicionales();
+
+        //Cargar la fecha de vencimiento de la factura si existe ingresado una fecha
+        if(factura.getCliente().getDiasCreditoCliente()!=null && !factura.getCliente().getDiasCreditoCliente().equals(0))
+        {
+            //Eliminar dato anterior si ya fue ingresado
+            FacturaAdicional datoAdicional=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
+            if(datoAdicional!=null)
+            {
+                factura.getDatosAdicionales().remove(datoAdicional);
+            }
+            
+            
+            java.util.Date fechaNueva= UtilidadesFecha.sumarDiasFecha(new Date(getjDateFechaEmision().getDate().getTime()),factura.getCliente().getDiasCreditoCliente());
+            getCmbFechaVencimiento().setDate(fechaNueva);
+            getChkActivarFechaVencimiento().setSelected(true);
+            listenerChkFechaVencimiento();
+            
+            //getCmbFechaVencimiento().setDate(fechaNueva);
+            
+            //factura.setFechaVencimiento(fechaVencimiento);
+        }
+        
     }
 
     private void setearValoresProducto(BigDecimal valorUnitario,String descripcion,String codigo,CatalogoProducto catologoProducto) {
@@ -2003,12 +2031,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     public boolean ComprobarRangoDeFechaPermitido(java.util.Date fecha) {
-        boolean fechaDespues = fecha.after(fechaMin);
-        boolean fechaAntes = (fecha.before(fechaMax));
+        //if(fecha!=null && fechaMin!=null && fechaMax!=null)
+        //{
+            boolean fechaDespues = fecha.after(fechaMin);
+            boolean fechaAntes = (fecha.before(fechaMax));
 
-        if (fechaDespues && fechaAntes) {
-            return true;
-        }
+            if (fechaDespues && fechaAntes) {
+                return true;
+            }
+        //}
         return false;
     }
 
@@ -2968,6 +2999,62 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //getBtnAutorizarComprobante().setEnabled(true);
 
         }
+    }
+
+    private void addListenerChecks() {
+        
+        getChkActivarFechaVencimiento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listenerChkFechaVencimiento();
+            }
+        });
+        
+    }
+                
+    private void listenerChkFechaVencimiento()
+    {
+        if (getChkActivarFechaVencimiento().isSelected()) {
+                    if(getCmbFechaVencimiento().getDate()!=null)
+                    {
+                        String fechaStr = UtilidadesFecha.formatoDiaMesAño(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));
+                        factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO.getNombre(), fechaStr);
+                        factura.setFechaVencimiento(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));
+                    
+                    }                    
+                    getCmbFechaVencimiento().setEnabled(true);
+                    getChkActivarFechaVencimiento().setSelected(true);
+
+                } else {
+                    FacturaAdicional fechaVencimientoDato=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
+                    if(fechaVencimientoDato!=null)
+                    {
+                        factura.getDatosAdicionales().remove(fechaVencimientoDato);
+                    }
+                    factura.setFechaVencimiento(null);
+                    getCmbFechaVencimiento().setEnabled(false);
+                    getChkActivarFechaVencimiento().setSelected(false);
+
+                }
+                cargarTablaDatosAdicionales();            
+        
+    }
+
+    private void addListerFechas() {
+        getCmbFechaVencimiento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(getCmbFechaVencimiento().getDate()!=null)
+                {
+                    FacturaAdicional fechaVencimientoDato=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
+                    String fechaStr = UtilidadesFecha.formatoDiaMesAño(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));
+                    
+                    fechaVencimientoDato.setValor(fechaStr);
+                    cargarTablaDatosAdicionales();                       
+                    
+                }
+            }
+        });
     }
     
     

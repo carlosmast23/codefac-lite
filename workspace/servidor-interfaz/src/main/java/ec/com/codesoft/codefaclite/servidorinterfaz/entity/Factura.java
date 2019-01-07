@@ -89,6 +89,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
     @Column(name = "TIPO_IDENTIFICACION_CODIGO_SRI")
     private String tipoIdentificacionCodigoSri;
     
+    @Column(name = "FECHA_VENCIMIENTO_FACTURA")
+    protected Date fechaVencimiento;
+    
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne    
     private Persona cliente;
@@ -251,6 +254,16 @@ public class Factura extends ComprobanteEntity implements Serializable {
     public void setTipoIdentificacionCodigoSri(String tipoIdentificacionCodigoSri) {
         this.tipoIdentificacionCodigoSri = tipoIdentificacionCodigoSri;
     }
+
+    public Date getFechaVencimiento() {
+        return fechaVencimiento;
+    }
+
+    public void setFechaVencimiento(Date fechaVencimiento) {
+        this.fechaVencimiento = fechaVencimiento;
+    }
+    
+    
     
     
     

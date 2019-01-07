@@ -63,6 +63,16 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.txtValorTotal = txtValorTotal;
     }
 
+    public JCheckBox getChkActivarFechaVencimiento() {
+        return chkActivarFechaVencimiento;
+    }
+
+    public JXDatePicker getCmbFechaVencimiento() {
+        return cmbFechaVencimiento;
+    }
+    
+    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -202,6 +212,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         txtReferenciaContacto = new javax.swing.JTextField();
         btnBuscarReferenciaContacto = new javax.swing.JButton();
         jLabel29 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        cmbFechaVencimiento = new org.jdesktop.swingx.JXDatePicker();
+        chkActivarFechaVencimiento = new javax.swing.JCheckBox();
         pnlVuelto = new javax.swing.JPanel();
         txtValorRecibido = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
@@ -1245,10 +1258,30 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         lblEspacioVertical.add(btnBuscarReferenciaContacto, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         lblEspacioVertical.add(jLabel29, gridBagConstraints);
+
+        jLabel26.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel26.setText("Fecha Vencimiento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        lblEspacioVertical.add(jLabel26, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        lblEspacioVertical.add(cmbFechaVencimiento, gridBagConstraints);
+
+        chkActivarFechaVencimiento.setText("Activar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        lblEspacioVertical.add(chkActivarFechaVencimiento, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Adicionales", lblEspacioVertical);
 
@@ -1358,8 +1391,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnReProcesarComprobante;
     private javax.swing.JButton btnReenviarCorreo;
     private javax.swing.JCheckBox checkPorcentaje;
+    private javax.swing.JCheckBox chkActivarFechaVencimiento;
     private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaVencimiento;
     private javax.swing.JComboBox<EnumSiNo> cmbIva;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision> cmbPuntoEmision;
     private javax.swing.JComboBox<Persona> cmbRepresentante;
@@ -1384,6 +1419,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;

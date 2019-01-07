@@ -67,6 +67,9 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     @Column(name = "OBLIGADO_LLEVAR_CONTABILIDAD")
     private String obligadoLlevarContabilidad;
+    
+    @Column(name = "DIAS_CREDITO_CLIENTE")
+    private Integer diasCreditoCliente;
 
     @JoinColumn(name = "NACIONALIDAD_ID")
     @ManyToOne
@@ -274,6 +277,17 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setObligadoLlevarContabilidadEnum(EnumSiNo enumSiNo) {
         this.obligadoLlevarContabilidad = enumSiNo.getLetra();
     }
+    
+    public Integer getDiasCreditoCliente() {
+        return diasCreditoCliente;
+    }
+
+    public void setDiasCreditoCliente(Integer diasCreditoCliente) {
+        this.diasCreditoCliente = diasCreditoCliente;
+    }
+    
+    
+
 
     ///Metodos personalizados
     public String getNombresCompletos() {
@@ -323,6 +337,8 @@ public class Persona implements Serializable, Comparable<Persona> {
     {
         this.tipo=operadorEnum.getLetra();
     }
+    
+    
 
     @Override
     public int hashCode() {
@@ -376,6 +392,8 @@ public class Persona implements Serializable, Comparable<Persona> {
         public String nombre;
         
     };
+
+    
 
     public enum TipoIdentificacionEnum {
         RUC("R", "Ruc","04","01"),
