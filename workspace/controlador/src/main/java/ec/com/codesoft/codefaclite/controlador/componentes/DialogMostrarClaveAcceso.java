@@ -47,7 +47,7 @@ public class DialogMostrarClaveAcceso extends javax.swing.JDialog {
         setTitle("Clave de Acceso");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        txtClaveAcceso.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtClaveAcceso.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 400;
