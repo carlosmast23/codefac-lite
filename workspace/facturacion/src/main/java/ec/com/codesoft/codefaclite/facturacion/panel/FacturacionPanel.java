@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacion.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CursorPorDefectoAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
@@ -31,6 +32,8 @@ import org.jdesktop.swingx.JXDatePicker;
  */
 public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
+    private ComponenteDatosComprobanteElectronicosPanel pnlDatosAdicionales=new ComponenteDatosComprobanteElectronicosPanel();
+    
     /**
      * Creates new form FacturacionPanel
      */
@@ -1865,21 +1868,19 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         return pnlVuelto;
     }
 
-    @ComponenteSecundarioAnotacion(nombreCategoria = "Otros",visible = true)
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Otros",visible = false)
     public JButton getBtnCargarProforma() {
         return btnCargarProforma;
     }
-    
-    
 
-    //@ComponenteSecundarioAnotacion(nombreCategoria = "Cargar",visible = true)
-    //public JButton getBtnCargarPedido() {
-    //    return btnCargarPedido;
-    //}
-
-    @ComponenteSecundarioAnotacion(nombreCategoria = "Otros",visible = true)
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Otros",visible = false)
     public JButton getBtnReenviarCorreo() {
         return btnReenviarCorreo; 
+    }
+    
+        @ComponenteSecundarioAnotacion(nombreCategoria = "Otros",visible = false)
+    public JButton getBtnGenerarXml() {
+        return btnGenerarXml;
     }
 
     public JComboBox<PuntoEmision> getCmbPuntoEmision() {
@@ -1900,9 +1901,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         return btnReProcesarComprobante;
     }
 
-    @ComponenteSecundarioAnotacion(nombreCategoria = "Otros",visible = true)
-    public JButton getBtnGenerarXml() {
-        return btnGenerarXml;
+
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Datos",visible = true)
+    public ComponenteDatosComprobanteElectronicosPanel getPnlDatosAdicionales() {
+        return pnlDatosAdicionales;
     }
     
     

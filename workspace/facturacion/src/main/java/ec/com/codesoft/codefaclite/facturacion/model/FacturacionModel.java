@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialog
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
@@ -152,7 +153,7 @@ import org.jdesktop.swingx.prompt.PromptSupport;
  *
  * @author Carlos
  */
-public class FacturacionModel extends FacturacionPanel implements InterfazPostConstructPanel{
+public class FacturacionModel extends FacturacionPanel implements InterfazPostConstructPanel,ComponenteDatosComprobanteElectronicosInterface{
 
     //private Persona persona;
     protected Factura factura;
@@ -182,6 +183,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public FacturacionModel() {
         setearFechas();        
         addListenerButtons();
+        listenerComponentes();
         addListenerCombos();
         addListenerCamposTexto();
         addListenerTablas();
@@ -2989,6 +2991,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             getBtnAutorizarComprobante().setEnabled(false);
             getBtnReProcesarComprobante().setEnabled(false);
+            getPnlDatosAdicionales().habilitar(false);
             
         }
         else
@@ -2996,6 +2999,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getBtnCargarProforma().setEnabled(false);
             getBtnReenviarCorreo().setEnabled(true);
             getBtnGenerarXml().setEnabled(true);
+            getPnlDatosAdicionales().habilitar(true);
             //getBtnAutorizarComprobante().setEnabled(true);
 
         }
@@ -3055,6 +3059,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
             }
         });
+    }
+
+    private void listenerComponentes() {
+        getPnlDatosAdicionales().setComprobante(this);
+    }
+
+    @Override
+    public ComprobanteEntity getComprobante() {
+        return factura;
     }
     
     
