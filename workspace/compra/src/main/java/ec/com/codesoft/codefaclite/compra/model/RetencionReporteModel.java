@@ -177,7 +177,8 @@ public class RetencionReporteModel extends RetencionReportePanel {
                         retencion.getPorcentajeRetener().toString() + " %",
                         retencion.getCodigoRetencionSri(),
                         retencion.getValorRetenido().toString(),
-                        retencion.getRetencion().getPreimpresoDocumentoFormato()
+                        retencion.getRetencion().getPreimpresoDocumentoFormato(),
+                        retencion.getRetencion().getClaveAcceso()
                 ));
             }
 
@@ -260,7 +261,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                 public void excel() {
                     try{
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Preimpreso","Compra", "Base Imponible","Porcentaje", "Código", "Valor"};
+                        String nombreCabeceras[] = {"Clave de Acceso","Preimpreso","Compra", "Base Imponible","Porcentaje", "Código", "Valor"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
                         excel.abrirDocumento();
                     }
