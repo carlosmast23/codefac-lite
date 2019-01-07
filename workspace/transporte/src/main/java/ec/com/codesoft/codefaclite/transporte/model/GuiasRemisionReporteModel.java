@@ -238,6 +238,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
             data.setPlaca(guiaRemision.getPlaca());
             data.setPreimpreso(guiaRemision.getPreimpreso());
             data.setTransportista(guiaRemision.getRazonSocial());
+            data.setClaveAcceso(guiaRemision.getClaveAcceso());
             listReporte.add(data);
         }
         
@@ -248,7 +249,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
                 public void excel() {
                     try {
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = getCabeceraReporte();
+                        String nombreCabeceras[] = getCabeceraReporteExcel();
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras, listReporte);
                         excel.abrirDocumento();
                     } catch (IOException ex) {
@@ -277,6 +278,11 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
     private String[] getCabeceraReporte()
     {
         return new String[]{"Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa"};
+    }
+    
+    private String[] getCabeceraReporteExcel()
+    {
+        return new String[]{"Clave de Acceso","Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa"};
     }
     
     private void mostrarReporteTabla()

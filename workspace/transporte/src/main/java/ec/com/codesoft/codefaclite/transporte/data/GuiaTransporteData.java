@@ -17,6 +17,7 @@ import java.util.List;
  */
 public class GuiaTransporteData implements ExcelDatosInterface{
     //String[] titulos={"Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa"};
+    private String claveAcceso;
     private String preimpreso;
     private String transportista;
     private String identififacion;
@@ -93,10 +94,21 @@ public class GuiaTransporteData implements ExcelDatosInterface{
         this.placa = placa;
     }
 
+    public String getClaveAcceso() {
+        return claveAcceso;
+    }
+
+    public void setClaveAcceso(String claveAcceso) {
+        this.claveAcceso = claveAcceso;
+    }
+    
+    
+
     @Override
     public List<TipoDato> getDatos() {
         List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
         
+        tiposDatos.add(new TipoDato(this.claveAcceso,Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.preimpreso,Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.transportista, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.identififacion,Excel.TipoDataEnum.TEXTO));
