@@ -226,7 +226,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 (factura.getReferido()!=null)?factura.getReferido().getRazonSocial():"",
                                 (factura.getReferido()!=null)?factura.getReferido().getIdentificacion():"",
                                 (factura.getReferido()!=null)?factura.getReferido().getContactoClientePorcentaje().toString():"0",
-                                valorComision.toString()
+                                valorComision.toString(),
+                                factura.getClaveAcceso()
                                 
                         );
                         
@@ -263,7 +264,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 (nota.getRazonSocial()!=null)?nota.getRazonSocial():"",                                
                                 (nota.getIdentificacion()!=null)?nota.getIdentificacion():"",
                                 "0",
-                                "0"//TODO: Revisar porque en esta parte me late que no necesito calcular el iva
+                                "0",//TODO: Revisar porque en esta parte me late que no necesito calcular el iva
+                                nota.getClaveAcceso()
                                 
                         );
                         
@@ -463,7 +465,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
     
     protected Vector<String>  crearCabezeraExcel()
     {
-        return crearCabezeraTabla();
+        Vector<String> titulos=crearCabezeraTabla();
+        titulos.add(0,"Clave de Acceso");
+        return titulos;
     }
     
     

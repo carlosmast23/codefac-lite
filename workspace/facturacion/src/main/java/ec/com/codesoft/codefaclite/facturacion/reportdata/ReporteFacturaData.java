@@ -37,6 +37,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     protected String valorAfecta;
     protected String referencia;
     protected String totalFinal;
+    protected String claveAcceso;
     
     //============> Campos adicionales para los referidos <===================//
     protected String referido;
@@ -49,7 +50,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     
     
 
-    public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal,String referido,String referidoIdentificacion,String referidoPorcentaje,String valorComision) {
+    public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal,String referido,String referidoIdentificacion,String referidoPorcentaje,String valorComision,String claveAcceso) {
         this.numeroFactura = numeroFactura;
         this.fechaFactura = fechaFactura;
         this.identificacionCliente = identificacionCliente;
@@ -70,6 +71,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
         this.referidoIdentificacion=referidoIdentificacion;
         this.referidoPorcentaje=referidoPorcentaje;
         this.valorComision=valorComision;
+        this.claveAcceso=claveAcceso;
     }
 
         
@@ -232,6 +234,16 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     public void setValorComision(String valorComision) {
         this.valorComision = valorComision;
     }
+
+    public String getClaveAcceso() {
+        return claveAcceso;
+    }
+
+    public void setClaveAcceso(String claveAcceso) {
+        this.claveAcceso = claveAcceso;
+    }
+    
+    
     
     
 
@@ -249,6 +261,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     {    
         List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
 
+        tiposDatos.add(new TipoDato(this.claveAcceso, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));
@@ -271,7 +284,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     
     public List<TipoDato> getDatosReporteComisiones()
     {    
-        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
+        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();        
         tiposDatos.add(new TipoDato(this.referidoIdentificacion, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referido, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referidoPorcentaje, Excel.TipoDataEnum.NUMERO));
