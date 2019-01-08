@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.2078825000000046"/>
+	<property name="ireport.zoom" value="1.3286707500000068"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -108,7 +108,7 @@
 					<text><![CDATA[Email]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="69" y="19" width="82" height="13" uuid="ce832ccf-4064-40f9-8301-b721eca06f96"/>
+					<reportElement x="153" y="19" width="82" height="13" uuid="ce832ccf-4064-40f9-8301-b721eca06f96"/>
 					<box>
 						<pen lineWidth="1.0"/>
 						<topPen lineWidth="1.0"/>
@@ -122,7 +122,7 @@
 					<text><![CDATA[Nombres]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="151" y="19" width="84" height="13" uuid="192adcff-f73e-44ee-a30a-cb8871535d80"/>
+					<reportElement x="69" y="19" width="84" height="13" uuid="192adcff-f73e-44ee-a30a-cb8871535d80"/>
 					<box>
 						<pen lineWidth="1.0"/>
 						<topPen lineWidth="1.0"/>
@@ -192,20 +192,6 @@
 	<detail>
 		<band height="12" splitType="Stretch">
 			<textField>
-				<reportElement x="69" y="0" width="82" height="12" uuid="5ccbb6f1-bf96-4a8b-891d-7b788d3d9172"/>
-				<box leftPadding="2">
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{nombresEstudiante}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="235" y="0" width="102" height="12" uuid="4dd8f966-dac6-44b8-88b3-5f486e541088"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.5"/>
@@ -234,20 +220,6 @@
 				<textFieldExpression><![CDATA[$F{telefonoEstudiante}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="151" y="0" width="84" height="12" uuid="8053f16e-8c08-47fa-bba2-93b0d2c81f38"/>
-				<box leftPadding="2">
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{apellidosEstudiante}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="0" y="0" width="69" height="12" uuid="a396e3c2-26e4-45dd-bc1f-d9bffd13cacc"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.5"/>
@@ -274,6 +246,34 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{representanteEstudiante}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="69" y="0" width="84" height="12" uuid="8053f16e-8c08-47fa-bba2-93b0d2c81f38"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{apellidosEstudiante}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="153" y="0" width="82" height="12" uuid="5ccbb6f1-bf96-4a8b-891d-7b788d3d9172"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombresEstudiante}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

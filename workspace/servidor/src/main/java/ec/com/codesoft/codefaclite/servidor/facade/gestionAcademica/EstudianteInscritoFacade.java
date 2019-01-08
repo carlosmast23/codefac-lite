@@ -56,8 +56,9 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
     }
 
     public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel,Periodo periodo) {
-        //EstudianteInscrito estudianteInscrito;
-        //estudianteInscrito.getNivelAcademico().getNivel().getOrden();
+        EstudianteInscrito estudianteInscrito;
+        //estudianteInscrito.getEstudiante().getApellidos();
+        //estudianteInscrito.getEstudiante().getNombres();
         //estudianteInscrito.getNivelAcademico().getPeriodo();
         
         String academico = "";
@@ -76,8 +77,10 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
             }
             
             //Ordenar por el nivel del curso
-            queryString+=" order by u.nivelAcademico.nivel.orden ";
+            //queryString+=" order by u.estudiante.apellidos , u.estudiante.nombres, u.nivelAcademico.nivel.orden ";
+            queryString+=" order by u.nivelAcademico.nivel.orden asc,u.nivelAcademico, u.estudiante.apellidos asc,u.estudiante.nombres asc";
             
+            System.out.println(queryString);
             Query query = getEntityManager().createQuery(queryString);
             query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
             

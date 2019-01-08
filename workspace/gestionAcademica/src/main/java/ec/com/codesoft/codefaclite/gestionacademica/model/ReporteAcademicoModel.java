@@ -141,7 +141,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             public void excel() {
                 try {
                     Excel excel = new Excel();
-                    String[] nombreCabeceras = {" Nivel "," Cédula ", " Nombres ", " Apellidos "," Email "," Telefono "," Representante "};
+                    String[] nombreCabeceras = {" Nivel "," Cédula ", " Apellidos "," Nombres "," Email "," Telefono "," Representante "};
                     //List<ReporteAcademicoData> dat = ordenarDetallesEnFuncionDeCliente(data);
                     excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
                     excel.abrirDocumento();
@@ -244,8 +244,8 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                 try {
                     Vector<String> titulo = new Vector<>();
                     titulo.add("Cedula");
-                    titulo.add("Nombres");
                     titulo.add("Apellidos");
+                    titulo.add("Nombres");
                     titulo.add("Email");
                     titulo.add("Telefono");
                     titulo.add("Representante");
@@ -263,8 +263,8 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                     for (EstudianteInscrito est : dataEstudiantes) {
                         Vector<String> fila = new Vector<String>();
                         fila.add(est.getEstudiante().getCedula());
-                        fila.add(est.getEstudiante().getNombres());
                         fila.add(est.getEstudiante().getApellidos());
+                        fila.add(est.getEstudiante().getNombres());                        
                         fila.add(est.getEstudiante().getEmail());
                         fila.add(est.getEstudiante().getTelefono());
                         if (est.getEstudiante().getRepresentante() != null) {

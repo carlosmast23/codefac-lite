@@ -75,17 +75,6 @@ public abstract class ReporteAcademicoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
 
-        tblEstudiantes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Cédula", "Nombres", "Apellidos", "Correo", "Telefonos", "Representante", "Nivel Academico"
-            }
-        ));
         jScrollPane1.setViewportView(tblEstudiantes);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
