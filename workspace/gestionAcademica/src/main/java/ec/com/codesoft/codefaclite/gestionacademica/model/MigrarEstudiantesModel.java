@@ -134,9 +134,9 @@ public class MigrarEstudiantesModel extends MigrarModel{
             public void procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel,ExcelMigrar.ExcepcionExcelRegistroDuplicado {
                 try {
                     Estudiante estudiante = new Estudiante();
-                    estudiante.setCedula((String) fila.get(ExcelMigrarEstudiantes.Enum.IDENTIFICACION.posicion).valor);
-                    estudiante.setNombres((String) fila.get(ExcelMigrarEstudiantes.Enum.NOMBRES.posicion).valor);
-                    estudiante.setApellidos((String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor);
+                    estudiante.setCedula(((String) fila.get(ExcelMigrarEstudiantes.Enum.IDENTIFICACION.posicion).valor).trim());
+                    estudiante.setNombres(((String) fila.get(ExcelMigrarEstudiantes.Enum.NOMBRES.posicion).valor).trim());
+                    estudiante.setApellidos(((String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor).trim());
                     estudiante.setEstadoEnum(GeneralEnumEstado.ACTIVO);
 
                     procesarGenero(fila.getByEnum(ExcelMigrarEstudiantes.Enum.GENERO),estudiante);
@@ -215,11 +215,6 @@ public class MigrarEstudiantesModel extends MigrarModel{
             
             public void procesarRepresentantes2(ExcelMigrar.CampoResultado campo,Estudiante estudiante) throws ExcelMigrar.ExcepcionExcel,ExcelMigrar.ExcepcionExcelRegistroDuplicado, RemoteException, ServicioCodefacException
             {
-                //Si no es campo requerido no hago la validacion
-                if(!campo.campoEnum.getCampoRequerido())
-                {
-                    return;
-                }
                 
                 String identificacionRepresentante2 = (String) campo.valor;
 
@@ -227,7 +222,10 @@ public class MigrarEstudiantesModel extends MigrarModel{
                     Persona representante2 = ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacionYestado(identificacionRepresentante2, GeneralEnumEstado.ACTIVO);
 
                     if (representante2 == null) {
-                        throw new ExcelMigrar.ExcepcionExcel("El presentante 2 ingresado no existe en el sistema");
+                        if(campo.campoEnum.getCampoRequerido())
+                        {
+                            throw new ExcelMigrar.ExcepcionExcel("El presentante 2 ingresado no existe en el sistema");
+                        }
                     } else {
                         estudiante.setRepresentante2(representante2);
                     }
@@ -237,10 +235,6 @@ public class MigrarEstudiantesModel extends MigrarModel{
             
             public void procesarRepresentantes1(ExcelMigrar.CampoResultado campo,Estudiante estudiante) throws ExcelMigrar.ExcepcionExcel,ExcelMigrar.ExcepcionExcelRegistroDuplicado, RemoteException, ServicioCodefacException
             {
-                //Si no es campo requerido no hago la validacion
-                if (!campo.campoEnum.getCampoRequerido()) {
-                    return;
-                }
                 
                 String identificacionRepresentante1 = (String) campo.valor;
 
@@ -248,7 +242,10 @@ public class MigrarEstudiantesModel extends MigrarModel{
                     Persona representante1 = ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacionYestado(identificacionRepresentante1, GeneralEnumEstado.ACTIVO);
 
                     if (representante1 == null) {
-                        throw new ExcelMigrar.ExcepcionExcel("El presentante 1 ingresado no existe en el sistema");
+                        if(campo.campoEnum.getCampoRequerido())
+                        {
+                            throw new ExcelMigrar.ExcepcionExcel("El presentante 1 ingresado no existe en el sistema");
+                        }
                     } else {
                         estudiante.setRepresentante(representante1);
                     }

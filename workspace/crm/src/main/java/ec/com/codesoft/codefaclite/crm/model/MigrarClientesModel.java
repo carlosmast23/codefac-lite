@@ -69,7 +69,13 @@ public class MigrarClientesModel extends MigrarModel {
                     if (cliente.getIdentificacion().length() > 10) {
                         cliente.setTipoIdentificacionEnum(Persona.TipoIdentificacionEnum.RUC);
                     } else {
-                        cliente.setTipoIdentificacionEnum(Persona.TipoIdentificacionEnum.RUC);
+                        cliente.setTipoIdentificacionEnum(Persona.TipoIdentificacionEnum.CEDULA);
+                    }
+                    
+                    //Todo: si la razon social es vacia entonces yo me encargo de setear ese campo automaticamente
+                    if(cliente.getRazonSocial()==null || cliente.getRazonSocial().isEmpty())
+                    {
+                        cliente.setRazonSocial(cliente.getApellidos()+" "+cliente.getNombres());
                     }
 
                     //String genero = (String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor;
