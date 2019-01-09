@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Client
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.GuiaRemisionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
@@ -78,7 +79,7 @@ import org.apache.commons.collections4.map.HashedMap;
  *
  * @author Carlos
  */
-public class GuiaRemisionModel extends GuiaRemisionPanel{
+public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDatosComprobanteElectronicosInterface{
     
     private GuiaRemision guiaRemision;
     //private Transportista transportista;
@@ -90,6 +91,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         listenerTextBox();
         listenerBotones();
+        listenerComponentes();
         listenerCombos();
         iniciarComponentesPantalla();
     }
@@ -681,6 +683,29 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         }
         return dataReporte;
     }
+    
+        @Override
+    public ComprobanteEntity getComprobante() {
+        return guiaRemision;
+    }    
+
+    private void listenerComponentes() {
+        getPnlDatosAdicionales().setComprobante(this);
+    }
+
+    @Override
+    public void eventoCambiarEstado() {
+        if(estadoFormulario.equals(ESTADO_GRABAR))
+        {
+            getPnlDatosAdicionales().habilitar(false);
+        }
+        else if(estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            getPnlDatosAdicionales().habilitar(true);
+        }
+    }
+    
+    
     
     
 }
