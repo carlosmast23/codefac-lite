@@ -69,6 +69,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
+        lblEspacio2 = new javax.swing.JLabel();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -282,6 +283,12 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
 
         jLabel15.setText("          ");
         getContentPane().add(jLabel15, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(lblEspacio2, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -434,6 +441,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblEspacio2;
     private javax.swing.JTextField txtApellidos;
     private javax.swing.JTextArea txtAreaDireccion;
     private javax.swing.JScrollPane txtAreaDireccion1;

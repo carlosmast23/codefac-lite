@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionService
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.*;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
@@ -230,6 +231,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 factura.getClaveAcceso()
                                 
                         );
+                        
+                        UtilidadesFecha.formatoDiaMesAño(fechaFin);
+                        reporteData.setFechaMaximaPago((factura.getFechaVencimiento()!=null)?UtilidadesFecha.formatoDiaMesAño(factura.getFechaVencimiento()):"");
+                        reporteData.setVendedor((factura.getVendedor()!=null)?factura.getVendedor().getNombresCompletos():"");
                         
                         reporteData.mostrarReferido=filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
                         data.add(reporteData);
@@ -467,6 +472,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
     {
         Vector<String> titulos=crearCabezeraTabla();
         titulos.add(0,"Clave de Acceso");
+        titulos.add(1,"Fecha Max Pago");
+        titulos.add(2,"Vendedor");
         return titulos;
     }
     

@@ -74,6 +74,8 @@ create table DEPARTAMENTO
     NOMBRE varchar(30),
     DESCRIPCION varchar(150),
     ESTADO varchar(1),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.9.9)*/
+    TIPO varchar(1),
     primary key(ID)
 );
 

@@ -38,6 +38,7 @@ public class DepartamentoModel extends DepartamentoPanel
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarCombo();
         limpiarCampos();
+        valoresIniciales();
     }
 
     @Override
@@ -188,6 +189,9 @@ public class DepartamentoModel extends DepartamentoPanel
         this.getTxtCodigo().setText("");
         this.getTxtDescripcion().setText("");
         this.getTxtNombre().setText("");
+        
+        if(getCmbTipo().getModel().getSize()>0)
+            this.getCmbTipo().setSelectedIndex(0);
     }
     
     public void mostrarDatos()
@@ -197,6 +201,7 @@ public class DepartamentoModel extends DepartamentoPanel
         this.getTxtNombre().setText("" + this.departamento.getNombre());
         GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.departamento.getEstado());
         this.getCmbEstado().setSelectedItem(generalEnumEstado);
+        this.getCmbTipo().setSelectedItem(this.departamento.getTipoEnum());
     }
     
     public void setearDatos()
@@ -206,5 +211,15 @@ public class DepartamentoModel extends DepartamentoPanel
         this.departamento.setNombre(this.getTxtNombre().getText());
         GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) this.getCmbEstado().getSelectedItem(); 
         this.departamento.setEstado(generalEnumEstado.getEstado());
+        
+        Departamento.TipoEnum tipoEnum=(Departamento.TipoEnum) this.getCmbTipo().getSelectedItem();
+        this.departamento.setTipoEnum(tipoEnum);
+    }
+
+    private void valoresIniciales() {
+        getCmbTipo().removeAllItems();
+        for (Departamento.TipoEnum value : Departamento.TipoEnum.values()) {
+            getCmbTipo().addItem(value);
+        }
     }
 }

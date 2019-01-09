@@ -660,7 +660,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     boolean respuesta=true;
                     if(!frameInterface.salirSinGrabar())
                     {
-                        respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , está seguro que desea limpiar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        if(frameInterface.estadoFormulario.equals(GeneralPanelInterface.ESTADO_GRABAR)) //Agregada validacion solo en el estado de grabar para que se ejecute cuando este desde la pantalla de 
+                        {
+                            respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , está seguro que desea limpiar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        }
                     }
                     
                     //Solo si la respuesta es grabar ejecuta el metodo
@@ -1924,7 +1927,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             GeneralPanelInterface panelCerrando=(GeneralPanelInterface) e.getInternalFrame();                            
                             if(!panelCerrando.salirSinGrabar())
                             {
-                                respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , está seguro que desea cerrar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                                if(panelCerrando.estadoFormulario.equals(GeneralPanelInterface.ESTADO_GRABAR)) //Agregada validacion solo en el estado de grabar para que se ejecute cuando este desde la pantalla de 
+                                {
+                                    respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , está seguro que desea cerrar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                                }
                             }
                             
                             //Solo cerrar si la respuesta es si

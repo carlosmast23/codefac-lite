@@ -89,7 +89,8 @@ public class ComprobanteAdicional implements Serializable{
     {               
         CELULAR("celular"),
         CORREO("correo"),
-        FECHA_VENCIMIENTO("Fecha Maxima de Pago");
+        FECHA_VENCIMIENTO("Fecha Maxima de Pago"),
+        VENDEDOR("Vendedor");
         
         private String nombre;
 

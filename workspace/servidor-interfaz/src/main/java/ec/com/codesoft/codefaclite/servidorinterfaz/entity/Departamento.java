@@ -39,6 +39,9 @@ public class Departamento implements Serializable
     @Column(name = "ESTADO")
     private String estado;
     
+    @Column(name = "TIPO")
+    private String tipo;
+    
     public Departamento() {
         
     }
@@ -83,6 +86,23 @@ public class Departamento implements Serializable
         this.estado = estado;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
+    public TipoEnum getTipoEnum() {
+        return TipoEnum.buscarPorLetra(tipo);
+    }
+
+    public void setTipoEnum(TipoEnum tipoEnum) {
+        this.tipo = tipoEnum.getLetra();
+    }
+    
+
     @Override
     public String toString() {
         return ""+ codigo + " - " + nombre;
@@ -113,6 +133,55 @@ public class Departamento implements Serializable
         return true;
     }
     
+    
+    public enum TipoEnum
+    {
+        Otros("Otros","o"),
+        Ventas("Ventas","v");
+
+        private TipoEnum(String nombre, String letra) {
+            this.nombre = nombre;
+            this.letra = letra;
+        }
+        
+        private String nombre;
+        private String letra;
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public void setLetra(String letra) {
+            this.letra = letra;
+        }
+        
+        public static TipoEnum buscarPorLetra(String letra)
+        {
+            for (TipoEnum value : TipoEnum.values()) {
+                if(value.getLetra().equals(letra))
+                {
+                    return value;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+        
+        
+    }
     
     
 }
