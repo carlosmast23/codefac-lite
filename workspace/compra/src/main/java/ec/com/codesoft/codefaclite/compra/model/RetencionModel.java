@@ -1028,5 +1028,9 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         }
     }
     
+    @Override
+    public Empresa getEmpresa() {
+        return session.getEmpresa();
+    }
 
 }

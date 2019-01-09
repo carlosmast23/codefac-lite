@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.componentes;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 
 /**
  *
@@ -13,4 +14,5 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
  */
 public interface ComponenteDatosComprobanteElectronicosInterface {
     public ComprobanteEntity getComprobante();
+    public Empresa getEmpresa();
 }

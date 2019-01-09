@@ -5,10 +5,25 @@
  */
 package ec.com.codesoft.codefaclite.controlador.componentes;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import com.healthmarketscience.rmiio.RemoteInputStream;
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,16 +52,21 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     private void initComponents() {
 
         btnObtenerClaveAcceso = new javax.swing.JButton();
+        btnAbrirXml = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
         btnObtenerClaveAcceso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/datos.png"))); // NOI18N
         btnObtenerClaveAcceso.setToolTipText("Imprimir Clave de Acceso");
         add(btnObtenerClaveAcceso, java.awt.BorderLayout.CENTER);
+
+        btnAbrirXml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/xml.png"))); // NOI18N
+        add(btnAbrirXml, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAbrirXml;
     private javax.swing.JButton btnObtenerClaveAcceso;
     // End of variables declaration//GEN-END:variables
 
@@ -60,17 +80,54 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
 
             }
         });
+        
+        btnAbrirXml.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    RemoteInputStream remoteInputStream =ServiceFactory.getFactory().getComprobanteServiceIf().obtenerXmlFirmadoComprobante(comprobante.getEmpresa(),comprobante.getComprobante().getClaveAcceso());
+                    
+                    String nombreArchivoFinal=UtilidadesArchivos.generarNombreArchivoUnico("firma","xml");
+                    File fileDestino = new File(ParametrosSistemaCodefac.CARPETA_DATOS_TEMPORALES+"/"+nombreArchivoFinal); //Ver si parametrizar el backslash 
+                    //crear toda la ruta si no existe
+                    if (!fileDestino.exists()) {
+                        fileDestino.getParentFile().mkdirs();
+                        //file.mkdir();
+                    }
+
+                    OutputStream outputStream = new FileOutputStream(fileDestino);
+
+                    InputStream inputStream = RemoteInputStreamClient.wrap(remoteInputStream);
+
+                    UtilidadesArchivos.grabarInputStreamEnArchivo(inputStream, outputStream);
+                    UtilidadesSistema.abrirDocumento(fileDestino);
+                    
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
     
     public void habilitar(boolean habilitar)
     {
         btnObtenerClaveAcceso.setEnabled(habilitar);
+        btnAbrirXml.setEnabled(habilitar);
     }
 
     public void setComprobante(ComponenteDatosComprobanteElectronicosInterface comprobante) {
         this.comprobante = comprobante;
     }
 
+    
 
     
     
