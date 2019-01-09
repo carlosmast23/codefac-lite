@@ -840,7 +840,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 else
                     formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
                     
-                formaPago.setTotal(BigDecimal.ZERO);
+                formaPago.setTotal(factura.getTotal());
                 formaPago.setUnidadTiempo(FormaPago.UnidadTiempoEnum.NINGUNO.getNombre());
 
                 factura.addFormaPago(formaPago);
@@ -1015,13 +1015,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         agregarProductoVista(productoSeleccionado);
     }
     
+
+    
     private void agregarProductoVista(Producto productoSeleccionado) {
         if (productoSeleccionado == null) {
             return;
         }
         
         this.productoSeleccionado=productoSeleccionado;
+        cargarPrecios(productoSeleccionado);
         setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
+    }
+    
+    private void cargarPrecios(Producto producto) {
+        getCmbPreciosVenta().removeAllItems();
+        for (Producto.PrecioVenta precioVenta : producto.obtenerPreciosVenta()) {
+            getCmbPreciosVenta().addItem(precioVenta);
+            
+        }
     }
     
     public void validacionesGrabar() throws ExcepcionCodefacLite
@@ -1483,6 +1494,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbFechaVencimiento().setDate(null);
         getCmbFechaVencimiento().setEnabled(false);
         getTxtVendedor().setText("");
+        
+        getCmbPreciosVenta().removeAllItems();
        
 
     }
@@ -1725,6 +1738,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtCodigoDetalle().setText("");
         getTxtCodigoDetalle().requestFocus();
         getTxtCodigoDetalle().selectAll();
+        
+        //Desctivar los diferentes precios si el producto fue agregado correctamente
+        getCmbPreciosVenta().removeAllItems();
     }
 
     public void calcularTotalDescuento(List<FacturaDetalle> facturaDetalles) {
@@ -2383,6 +2399,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+                        
             return true; //si pasa todas las validaciones asumo que se edito correctamente
 
         }
@@ -2576,6 +2593,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     private void addListenerCombos() {
         
+        getCmbPreciosVenta().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Producto.PrecioVenta precioVenta=(Producto.PrecioVenta) getCmbPreciosVenta().getSelectedItem();
+                
+                if(precioVenta!=null)
+                {
+                    getTxtValorUnitario().setText(precioVenta.precio.toString());
+                }
+            }
+        });
+        
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2640,17 +2669,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void seleccionarPanelTipoDocumento(TipoDocumentoEnum tipoDocumentoEnum)
     {
+        getCmbPreciosVenta().setVisible(false);
         if (tipoDocumentoEnum != null) {
             switch(tipoDocumentoEnum)
             {
                 case ACADEMICO:
                     activarTabDatos(1);
+
                     break;
                 case PRESUPUESTOS:
                     activarTabDatos(2);
                     break;
                 case INVENTARIO: case LIBRE:
                     activarTabDatos(0);
+                    
+                    //Activar el combo de varios precios cuando selecciono cualquiera de las 2 opciones
+                    getCmbPreciosVenta().setVisible(true);
+                    
                     break;
             }
         }        
