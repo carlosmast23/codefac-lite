@@ -17,6 +17,6 @@ public class TestHash {
         String hash=UtilidadesHash.generarHashBcrypt(clave);
         
         System.out.println(hash);
-        System.out.println(UtilidadesHash.verificarHashBcrypt("123","$2a$12$q0x9uYw.x1/YJhDspUskeex3OmRfanR9PV9/N4/oybydkm3ztpGK2"));
+        System.out.println(UtilidadesHash.verificarHashBcrypt("123","$2a$12$meSmp.deopaRI9UYSHdoIu4lYDa40cTKipNqR/Wjdeq4L93.jTmpm"));
     }
 }

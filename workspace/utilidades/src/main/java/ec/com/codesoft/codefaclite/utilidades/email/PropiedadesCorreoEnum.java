@@ -12,7 +12,8 @@ package ec.com.codesoft.codefaclite.utilidades.email;
 public enum PropiedadesCorreoEnum {
     GMAIL("smtp.gmail.com","587"),
     YAHOO("smtp.mail.yahoo.com","587"),
-    HOTMAIL("smtp-mail.outlook.com","587");
+    HOTMAIL("smtp-mail.outlook.com","587"),
+    LIVE("smtp.live.com","587");
 
     private String host;
     private String port;

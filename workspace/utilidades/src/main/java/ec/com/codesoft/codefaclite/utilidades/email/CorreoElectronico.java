@@ -215,6 +215,13 @@ public class CorreoElectronico {
                     {
                         return PropiedadesCorreoEnum.YAHOO;
                     }
+                    else
+                    {
+                        if(email.indexOf("@live")>=0)
+                        {
+                            return PropiedadesCorreoEnum.LIVE;
+                        }
+                    }
                 
                 }
             }
