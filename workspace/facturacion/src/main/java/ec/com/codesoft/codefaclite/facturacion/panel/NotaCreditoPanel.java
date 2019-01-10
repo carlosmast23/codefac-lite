@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -26,6 +28,7 @@ import javax.swing.JTextField;
  */
 public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
 
+    private ComponenteDatosComprobanteElectronicosPanel pnlDatosAdicionales=new ComponenteDatosComprobanteElectronicosPanel();
     /**
      * Creates new form NotaCreditoPanel
      */
@@ -45,6 +48,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPanel4 = new javax.swing.JPanel();
         panelDatosGenerales = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
@@ -151,6 +155,8 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         setAutoscrolls(true);
         setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/facturaError.png"))); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jPanel4.setLayout(new java.awt.GridBagLayout());
 
         panelDatosGenerales.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Generales", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
         panelDatosGenerales.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
@@ -330,7 +336,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        getContentPane().add(panelDatosGenerales, gridBagConstraints);
+        jPanel4.add(panelDatosGenerales, gridBagConstraints);
 
         PanelDatosNotaCredito.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
         PanelDatosNotaCredito.setLayout(new java.awt.GridBagLayout());
@@ -575,7 +581,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
-        getContentPane().add(PanelDatosNotaCredito, gridBagConstraints);
+        jPanel4.add(PanelDatosNotaCredito, gridBagConstraints);
 
         PanelValores.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         PanelValores.setLayout(new java.awt.GridBagLayout());
@@ -810,7 +816,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.4;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        getContentPane().add(PanelValores, gridBagConstraints);
+        jPanel4.add(PanelValores, gridBagConstraints);
 
         tblDetalleNotaCredito.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jScrollPane1.setViewportView(tblDetalleNotaCredito);
@@ -822,13 +828,13 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.4;
-        getContentPane().add(jScrollPane1, gridBagConstraints);
+        jPanel4.add(jScrollPane1, gridBagConstraints);
 
         jLabel21.setText("             ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
-        getContentPane().add(jLabel21, gridBagConstraints);
+        jPanel4.add(jLabel21, gridBagConstraints);
 
         PanelDatosAdicionales.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Adicionales", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
         PanelDatosAdicionales.setLayout(new java.awt.GridBagLayout());
@@ -857,7 +863,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        getContentPane().add(PanelDatosAdicionales, gridBagConstraints);
+        jPanel4.add(PanelDatosAdicionales, gridBagConstraints);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
         jPanel2.add(jLabel31, new java.awt.GridBagConstraints());
@@ -999,7 +1005,15 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jPanel2, gridBagConstraints);
+        jPanel4.add(jPanel2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(jPanel4, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1082,6 +1096,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JToolBar jToolBar3;
@@ -1392,9 +1407,10 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         return lblEstablecimiento;
     }
     
-    
-    
-    
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Datos", visible = true)
+    public ComponenteDatosComprobanteElectronicosPanel getPnlDatosAdicionales() {
+        return pnlDatosAdicionales;
+    }
     
 
 }

@@ -85,88 +85,81 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
     @Override
     public void imprimir() {
-        try {
-            InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_academico.jrxml");
-
-            EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
+        InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporteMatriculados.jrxml");
+        //EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
+        //NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+        Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();
+        //dataEstudiantes = na.obtenerEstudiantesInscritos(nivelAcademico.getNombre().equals("TODOS")?null:nivelAcademico,periodo);
+        
+        List<ReporteAcademicoData> data = new ArrayList<ReporteAcademicoData>();
+        for (EstudianteInscrito est : dataEstudiantes) {
             
-            NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+            String nombreRepresentante="s/n";
             
-            Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();
-
-            dataEstudiantes = na.obtenerEstudiantesInscritos(nivelAcademico.getNombre().equals("TODOS")?null:nivelAcademico,periodo);
+            if(est.getEstudiante().getRepresentante()!=null)
+                nombreRepresentante=est.getEstudiante().getRepresentante().getNombresCompletos();
             
-            List<ReporteAcademicoData> data = new ArrayList<ReporteAcademicoData>();
-
-            for (EstudianteInscrito est : dataEstudiantes) {
-                
-                String nombreRepresentante="s/n";
-                
-                if(est.getEstudiante().getRepresentante()!=null)
-                    nombreRepresentante=est.getEstudiante().getRepresentante().getNombresCompletos();
-                
-                data.add(new ReporteAcademicoData(
-                        est.getEstudiante().getCedula(),
-                        est.getEstudiante().getNombres(),
-                        est.getEstudiante().getApellidos(),
-                        est.getEstudiante().getEmail(),
-                        est.getEstudiante().getTelefono(),
-                        nombreRepresentante,
-                        est.getNivelAcademico().getNombre()
-                ));
-
-            }
+            String telefono=(est.getEstudiante().getTelefono()!=null)?est.getEstudiante().getTelefono():"";
+            String email=(est.getEstudiante().getEmail()!=null)?est.getEstudiante().getEmail():"";
             
-            //Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
-            NivelAcademico nivela = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
-            if (periodo != null) {
-                parameters.put("periodo", periodo.getNombre());
-            } else {
-                parameters.put("periodo", "TODOS");
-            }
-
-            if (nivela != null) {
-                parameters.put("nivelacademico", nivela.getNombre());
-            } else {
-                parameters.put("nivelacademico", "TODOS");
-            }
+            data.add(new ReporteAcademicoData(
+                    est.getEstudiante().getCedula(),
+                    est.getEstudiante().getNombres(),
+                    est.getEstudiante().getApellidos(),
+                    email,
+                    telefono,
+                    nombreRepresentante,
+                    est.getNivelAcademico().getNombre()
+            ));
             
-            //Ordenar Datos en base a un parametro establecido
-            Collections.sort(data, new Comparator<ReporteAcademicoData>(){
-                public int compare(ReporteAcademicoData obj1, ReporteAcademicoData obj2)
-                {
-                    return obj1.getNombresEstudiante().compareTo(obj2.getNombresEstudiante());
-                }
-            });
-            //---
-            
-            DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
-                @Override
-                public void excel() {
-                    try {
-                        Excel excel = new Excel();
-                        String[] nombreCabeceras = {" Nivel "," Cédula ", " Nombres ", " Apellidos "," Email "," Telefono "," Representante "};
-                        List<ReporteAcademicoData> dat = ordenarDetallesEnFuncionDeCliente(data);
-                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, dat);
-                        excel.abrirDocumento();
-                    } catch (IOException ex) {
-                        Logger.getLogger(ReporteAcademicoData.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalArgumentException ex) {
-                        Logger.getLogger(ReporteAcademicoData.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalAccessException ex) {
-                        Logger.getLogger(ReporteAcademicoData.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-                @Override
-                public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Estudiantes Matriculados");
-                }
-            });
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+        //Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+        NivelAcademico nivela = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+        if (periodo != null) {
+            parameters.put("periodo", periodo.getNombre());
+        } else {
+            parameters.put("periodo", "TODOS");
+        }
+        if (nivela != null) {
+            parameters.put("nivelacademico", nivela.getNombre());
+        } else {
+            parameters.put("nivelacademico", "TODOS");
+        }
+        //Ordenar Datos en base a un parametro establecido
+        /*Collections.sort(data, new Comparator<ReporteAcademicoData>(){
+        public int compare(ReporteAcademicoData obj1, ReporteAcademicoData obj2)
+        {
+        return obj1.getNombresEstudiante().compareTo(obj2.getNombresEstudiante());
+        }
+        });*/
+        //---
+        
+        DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+            @Override
+            public void excel() {
+                try {
+                    Excel excel = new Excel();
+                    String[] nombreCabeceras = {" Nivel "," Cédula ", " Apellidos "," Nombres "," Email "," Telefono "," Representante "};
+                    //List<ReporteAcademicoData> dat = ordenarDetallesEnFuncionDeCliente(data);
+                    excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                    excel.abrirDocumento();
+                } catch (IOException ex) {
+                    Logger.getLogger(ReporteAcademicoData.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(ReporteAcademicoData.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(ReporteAcademicoData.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            @Override
+            public void pdf() {
+        
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Estudiantes Matriculados");
+            }
+        });
     }
 
     @Override
@@ -251,8 +244,8 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                 try {
                     Vector<String> titulo = new Vector<>();
                     titulo.add("Cedula");
-                    titulo.add("Nombres");
                     titulo.add("Apellidos");
+                    titulo.add("Nombres");
                     titulo.add("Email");
                     titulo.add("Telefono");
                     titulo.add("Representante");
@@ -270,8 +263,8 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                     for (EstudianteInscrito est : dataEstudiantes) {
                         Vector<String> fila = new Vector<String>();
                         fila.add(est.getEstudiante().getCedula());
-                        fila.add(est.getEstudiante().getNombres());
                         fila.add(est.getEstudiante().getApellidos());
+                        fila.add(est.getEstudiante().getNombres());                        
                         fila.add(est.getEstudiante().getEmail());
                         fila.add(est.getEstudiante().getTelefono());
                         if (est.getEstudiante().getRepresentante() != null) {

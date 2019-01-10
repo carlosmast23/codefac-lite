@@ -103,6 +103,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
     @JoinColumn(name = "TIPO_IDENTIFICACION_ID")
     private SriIdentificacion sriIdentificacion;
     
+    @JoinColumn(name = "VENDEDOR_ID")
+    private Empleado vendedor;
+        
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
     
@@ -503,6 +506,16 @@ public class Factura extends ComprobanteEntity implements Serializable {
  
     
     }
+
+    public Empleado getVendedor() {
+        return vendedor;
+    }
+
+    public void setVendedor(Empleado vendedor) {
+        this.vendedor = vendedor;
+    }
+    
+    
     
     /**
      * Metodo que permite saber si en la factura fueron ingresados correos

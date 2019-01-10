@@ -65,11 +65,12 @@ public abstract class MigrarModel extends MigrarPanel{
         getBtnMigrar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                estadoCargando();
                 excelMigrar.migrar(getInterfaceMigrar());
                 //DefaultTableModel modelo=excelMigrarEstudiantes.construirTabla();
                 excelMigrar.construirTabla(getTblDatos());
                 //getTblDatos().setModel(modelo);                
-                
+                estadoNormal();
             }
         });
         

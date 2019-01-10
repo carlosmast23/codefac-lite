@@ -87,7 +87,7 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
     @Override
 
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -265,12 +265,20 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
             nombre = estudiante.getRepresentante().getRazonSocial();
             getTxtRepresentante().setText(identificacion + " - " + nombre);
         }
+        else
+        {
+            getTxtRepresentante().setText("");
+        }
         
         if(estudiante.getRepresentante2() != null){
             representanteParaFacturar=estudiante.getRepresentante2();
             identificacion = estudiante.getRepresentante2().getIdentificacion();
             nombre = estudiante.getRepresentante2().getRazonSocial();
             getTxtFacturarANombre().setText(identificacion + " - " + nombre);
+        }
+        else
+        {
+            getTxtFacturarANombre().setText("");
         }
     }
 
@@ -287,6 +295,8 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
         getTxtPorcentajeDiscapacidad().setText("0");
         getCmbNacionalidad().setSelectedIndex(52);
         getLblCodigoSistema().setText("");
+        getTxtRepresentante().setText("");
+        getTxtFacturarANombre().setText("");
     }
 
 //    @Override

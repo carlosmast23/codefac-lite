@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.compra.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
@@ -28,6 +30,7 @@ import org.jdesktop.swingx.JXDatePicker;
  * @author Carlos
  */
 public abstract class RetencionPanel extends ControladorCodefacInterface {
+    private ComponenteDatosComprobanteElectronicosPanel pnlDatosAdicionales=new ComponenteDatosComprobanteElectronicosPanel();
 
     /**
      * Creates new form NotaCreditoPanel
@@ -48,6 +51,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPanel3 = new javax.swing.JPanel();
         tabTipoDocumentos = new javax.swing.JTabbedPane();
         PanelDatosNotaCredito = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -126,6 +130,8 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         setAutoscrolls(true);
         setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/facturaError.png"))); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jPanel3.setLayout(new java.awt.GridBagLayout());
 
         PanelDatosNotaCredito.setLayout(new java.awt.GridBagLayout());
 
@@ -254,7 +260,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
-        getContentPane().add(tabTipoDocumentos, gridBagConstraints);
+        jPanel3.add(tabTipoDocumentos, gridBagConstraints);
 
         panelDatosGenerales.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Generales", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
         panelDatosGenerales.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
@@ -428,7 +434,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        getContentPane().add(panelDatosGenerales, gridBagConstraints);
+        jPanel3.add(panelDatosGenerales, gridBagConstraints);
 
         PanelValores.setBorder(javax.swing.BorderFactory.createTitledBorder("Total"));
         PanelValores.setLayout(new java.awt.GridBagLayout());
@@ -511,7 +517,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.4;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        getContentPane().add(PanelValores, gridBagConstraints);
+        jPanel3.add(PanelValores, gridBagConstraints);
 
         tblDetalleRetenciones.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         tblDetalleRetenciones.setModel(new javax.swing.table.DefaultTableModel(
@@ -534,7 +540,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.4;
-        getContentPane().add(jScrollPane1, gridBagConstraints);
+        jPanel3.add(jScrollPane1, gridBagConstraints);
 
         PanelDatosAdicionales.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Adicionales", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
         PanelDatosAdicionales.setLayout(new java.awt.GridBagLayout());
@@ -575,7 +581,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        getContentPane().add(PanelDatosAdicionales, gridBagConstraints);
+        jPanel3.add(PanelDatosAdicionales, gridBagConstraints);
 
         PanelDatosDetalles.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Retenciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
         PanelDatosDetalles.setEnabled(false);
@@ -653,7 +659,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        getContentPane().add(PanelDatosDetalles, gridBagConstraints);
+        jPanel3.add(PanelDatosDetalles, gridBagConstraints);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
@@ -727,7 +733,15 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        getContentPane().add(jPanel2, gridBagConstraints);
+        jPanel3.add(jPanel2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(jPanel3, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -783,6 +797,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JToolBar jToolBar1;
@@ -1038,6 +1053,10 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         return lblEstablecimiento;
     }
     
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Datos", visible = true)
+    public ComponenteDatosComprobanteElectronicosPanel getPnlDatosAdicionales() {
+        return pnlDatosAdicionales;
+    }
     
     
     

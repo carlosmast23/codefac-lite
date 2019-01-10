@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfacesPropertisFindWeb;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 
 /**
  *
@@ -19,6 +20,16 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfacesPropertisFind
  */
 public class EmpleadoBusquedaDialogo implements InterfaceModelFind<Empleado>,InterfacesPropertisFindWeb
 {
+    /**
+     * Referencia si quiere consultar por algun campo en particular del tipo de departamente
+     */
+    private Departamento.TipoEnum tipoEnum;
+
+    public EmpleadoBusquedaDialogo() {
+        this.tipoEnum=null;
+    }
+    
+    
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<ColumnaDialogo>();
@@ -30,13 +41,27 @@ public class EmpleadoBusquedaDialogo implements InterfaceModelFind<Empleado>,Int
 
     @Override
     public QueryDialog getConsulta(String filter) {
+        //Empleado empleado;
+        //empleado.getDepartamento().getTipo();
         String queryString = "SELECT e FROM Empleado e WHERE (LOWER(e.nombres) like ?1) or ";
         queryString+="(LOWER(e.apellidos) like ?2) or e.identificacion like ?3  and e.estado=?4";
+        
+        if(tipoEnum!=null)
+        {
+            queryString+=" and e.departamento.tipo=?5 ";
+        }
+        
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
         queryDialog.agregarParametro(2,filter);
         queryDialog.agregarParametro(3,filter);
         queryDialog.agregarParametro(4,GeneralEnumEstado.ACTIVO.getEstado());
+        
+        if(tipoEnum!=null)
+        {
+            queryDialog.agregarParametro(5,tipoEnum.getLetra());
+        }
+        
         return queryDialog;    
     }
 
@@ -61,5 +86,15 @@ public class EmpleadoBusquedaDialogo implements InterfaceModelFind<Empleado>,Int
         propiedades.add("departamento");
         return propiedades;
     }
+
+    public Departamento.TipoEnum getTipoEnum() {
+        return tipoEnum;
+    }
+
+    public void setTipoEnum(Departamento.TipoEnum tipoEnum) {
+        this.tipoEnum = tipoEnum;
+    }
+    
+    
     
 }

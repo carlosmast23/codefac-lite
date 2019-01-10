@@ -274,6 +274,37 @@ public class Producto implements Serializable, Comparable<Producto> {
         this.manejarInventario = manejarInventario;
     }
     
+    public List<PrecioVenta> obtenerPreciosVenta()
+    {
+        List<PrecioVenta> valores=new ArrayList<PrecioVenta>();
+       
+        if(valorUnitario!=null && valorUnitario.compareTo(BigDecimal.ZERO)!=0)
+        {
+            PrecioVenta precioVenta=new PrecioVenta();
+            precioVenta.alias=PrecioVenta.PV1;
+            precioVenta.precio=valorUnitario;
+            valores.add(precioVenta);
+        }
+        
+        if(precioDistribuidor!=null && precioDistribuidor.compareTo(BigDecimal.ZERO)!=0)
+        {
+            PrecioVenta precioVenta=new PrecioVenta();
+            precioVenta.alias=PrecioVenta.PV2;
+            precioVenta.precio=precioDistribuidor;
+            valores.add(precioVenta);
+        }
+        
+        if(precioTarjeta!=null && precioTarjeta.compareTo(BigDecimal.ZERO)!=0)
+        {
+            PrecioVenta precioVenta=new PrecioVenta();
+            precioVenta.alias=PrecioVenta.PV3;
+            precioVenta.precio=precioTarjeta;
+            valores.add(precioVenta);
+        }
+        
+        return valores;
+    }
+    
     
         
 
@@ -342,4 +373,23 @@ public class Producto implements Serializable, Comparable<Producto> {
         }
         return true;
     }
+    
+    public static class PrecioVenta {
+        public static final String PV1="pv1";
+        public static final String PV2="pv2";
+        public static final String PV3="pv3";
+        
+        public String alias;
+        public BigDecimal precio;
+
+        @Override
+        public String toString() {
+            return alias;
+        }
+        
+        
+
+    }
+    
+    
 }

@@ -19,10 +19,12 @@ import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
@@ -71,6 +73,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
@@ -152,7 +157,7 @@ import org.jdesktop.swingx.prompt.PromptSupport;
  *
  * @author Carlos
  */
-public class FacturacionModel extends FacturacionPanel implements InterfazPostConstructPanel{
+public class FacturacionModel extends FacturacionPanel implements InterfazPostConstructPanel,ComponenteDatosComprobanteElectronicosInterface{
 
     //private Persona persona;
     protected Factura factura;
@@ -166,7 +171,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     //private int fila;
     private java.util.Date fechaMax;
     private java.util.Date fechaMin;
-    
     /**
      * Variable que almacena la forma de pago por defecto cuando no se selecciona ninguna
      */
@@ -182,6 +186,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public FacturacionModel() {
         setearFechas();        
         addListenerButtons();
+        listenerComponentes();
         addListenerCombos();
         addListenerCamposTexto();
         addListenerTablas();
@@ -416,6 +421,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
         
+       
         getBtnBuscarReferenciaContacto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -666,6 +672,38 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
             }
         });
+        
+        getBtnLimpiarVendedor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                factura.setVendedor(null);
+                getTxtVendedor().setText("");
+                FacturaAdicional facturaAdicional= factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR);
+                if(facturaAdicional!=null)
+                {
+                    factura.getDatosAdicionales().remove(facturaAdicional);
+                    cargarTablaDatosAdicionales();
+                }
+            }
+        });
+
+        getBtnBuscarVendedor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EmpleadoBusquedaDialogo busquedaDialog = new EmpleadoBusquedaDialogo();
+                busquedaDialog.setTipoEnum(Departamento.TipoEnum.Ventas);
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialog);
+                buscarDialogoModel.setVisible(true);
+                Empleado empleadoTmp = (Empleado) buscarDialogoModel.getResultado();
+                if (empleadoTmp != null) {
+                    factura.setVendedor(empleadoTmp);
+                    getTxtVendedor().setText(empleadoTmp.getIdentificacion() + " - " + empleadoTmp.getNombresCompletos());
+                    factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(),factura.getVendedor().getNombresCompletos());
+                    cargarTablaDatosAdicionales();
+                }
+
+            }
+        });
 
     }
     
@@ -803,7 +841,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 else
                     formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
                     
-                formaPago.setTotal(BigDecimal.ZERO);
+                formaPago.setTotal(factura.getTotal());
                 formaPago.setUnidadTiempo(FormaPago.UnidadTiempoEnum.NINGUNO.getNombre());
 
                 factura.addFormaPago(formaPago);
@@ -978,13 +1016,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         agregarProductoVista(productoSeleccionado);
     }
     
+
+    
     private void agregarProductoVista(Producto productoSeleccionado) {
         if (productoSeleccionado == null) {
             return;
         }
         
         this.productoSeleccionado=productoSeleccionado;
+        cargarPrecios(productoSeleccionado);
         setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
+    }
+    
+    private void cargarPrecios(Producto producto) {
+        getCmbPreciosVenta().removeAllItems();
+        for (Producto.PrecioVenta precioVenta : producto.obtenerPreciosVenta()) {
+            getCmbPreciosVenta().addItem(precioVenta);
+            
+        }
     }
     
     public void validacionesGrabar() throws ExcepcionCodefacLite
@@ -1445,6 +1494,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getChkActivarFechaVencimiento().setSelected(false);
         getCmbFechaVencimiento().setDate(null);
         getCmbFechaVencimiento().setEnabled(false);
+        getTxtVendedor().setText("");
+        
+        getCmbPreciosVenta().removeAllItems();
        
 
     }
@@ -1520,6 +1572,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //titulo.add("Objecto");
         //titulo.add("Nombre");
         //titulo.add("Valor");
+        
 
         this.modeloTablaDatosAdicionales=UtilidadesTablas.crearModeloTabla(new String[]{"","Nombre","Valor"},new Class[]{FacturaAdicional.class,String.class,String.class});
         //this.modeloTablaDatosAdicionales = new DefaultTableModel(titulo, 0);
@@ -1686,6 +1739,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtCodigoDetalle().setText("");
         getTxtCodigoDetalle().requestFocus();
         getTxtCodigoDetalle().selectAll();
+        
+        //Desctivar los diferentes precios si el producto fue agregado correctamente
+        getCmbPreciosVenta().removeAllItems();
     }
 
     public void calcularTotalDescuento(List<FacturaDetalle> facturaDetalles) {
@@ -1893,24 +1949,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setTelefono(factura.getCliente().getTelefonoConvencional());
 
         //Cargar la fecha de vencimiento de la factura si existe ingresado una fecha
-        if(factura.getCliente().getDiasCreditoCliente()!=null && !factura.getCliente().getDiasCreditoCliente().equals(0))
+        if(estadoFormulario.equals(ESTADO_GRABAR))
         {
-            //Eliminar dato anterior si ya fue ingresado
             FacturaAdicional datoAdicional=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
-            if(datoAdicional!=null)
+            if(factura.getCliente().getDiasCreditoCliente()!=null && !factura.getCliente().getDiasCreditoCliente().equals(0))
             {
-                factura.getDatosAdicionales().remove(datoAdicional);
+                //Eliminar dato anterior si ya fue ingresado
+
+                if(datoAdicional!=null)
+                {
+                    factura.getDatosAdicionales().remove(datoAdicional);
+                }
+
+                java.util.Date fechaNueva = UtilidadesFecha.sumarDiasFecha(new Date(getjDateFechaEmision().getDate().getTime()), factura.getCliente().getDiasCreditoCliente());
+                getCmbFechaVencimiento().setDate(fechaNueva);
+                getChkActivarFechaVencimiento().setSelected(true);
+                listenerChkFechaVencimiento();
+
             }
-            
-            
-            java.util.Date fechaNueva= UtilidadesFecha.sumarDiasFecha(new Date(getjDateFechaEmision().getDate().getTime()),factura.getCliente().getDiasCreditoCliente());
-            getCmbFechaVencimiento().setDate(fechaNueva);
-            getChkActivarFechaVencimiento().setSelected(true);
-            listenerChkFechaVencimiento();
-            
-            //getCmbFechaVencimiento().setDate(fechaNueva);
-            
-            //factura.setFechaVencimiento(fechaVencimiento);
+            else
+            {
+                if(datoAdicional!=null)
+                {
+                    factura.getDatosAdicionales().remove(datoAdicional);
+                }
+            }
         }
         
     }
@@ -2057,7 +2120,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        //verificarActivarBtnCargarProforma(true);
+        getjDateFechaEmision().setDate(new java.util.Date());
     }
         
 
@@ -2099,6 +2162,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             cargarSecuencialConsulta();
         }
         getjDateFechaEmision().setDate(factura.getFechaEmision());
+        
+        //Carlos los datos dle vendedor
+        if(factura.getVendedor()!=null)
+        {
+            getTxtVendedor().setText(factura.getVendedor().getIdentificacion() + " - " + factura.getVendedor().getNombresCompletos());
+        }
+        
+        if(factura.getReferido()!=null)
+        {
+            getTxtReferenciaContacto().setText(factura.getReferido().getIdentificacion() + " - " + factura.getReferido().getNombresCompletos());
+        }
+        
+        if(factura.getFechaVencimiento()!=null)
+        {
+            getCmbFechaVencimiento().setDate(factura.getFechaVencimiento());
+        }
+        
     }
 
     private boolean validacionParametrosCodefac() {
@@ -2320,6 +2400,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+                        
             return true; //si pasa todas las validaciones asumo que se edito correctamente
 
         }
@@ -2513,6 +2594,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     private void addListenerCombos() {
         
+        getCmbPreciosVenta().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Producto.PrecioVenta precioVenta=(Producto.PrecioVenta) getCmbPreciosVenta().getSelectedItem();
+                
+                if(precioVenta!=null)
+                {
+                    getTxtValorUnitario().setText(precioVenta.precio.toString());
+                }
+            }
+        });
+        
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2577,17 +2670,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void seleccionarPanelTipoDocumento(TipoDocumentoEnum tipoDocumentoEnum)
     {
+        getCmbPreciosVenta().setVisible(false);
         if (tipoDocumentoEnum != null) {
             switch(tipoDocumentoEnum)
             {
                 case ACADEMICO:
                     activarTabDatos(1);
+
                     break;
                 case PRESUPUESTOS:
                     activarTabDatos(2);
                     break;
                 case INVENTARIO: case LIBRE:
                     activarTabDatos(0);
+                    
+                    //Activar el combo de varios precios cuando selecciono cualquiera de las 2 opciones
+                    getCmbPreciosVenta().setVisible(true);
+                    
                     break;
             }
         }        
@@ -2989,14 +3088,59 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             getBtnAutorizarComprobante().setEnabled(false);
             getBtnReProcesarComprobante().setEnabled(false);
+            getPnlDatosAdicionales().habilitar(false);
             
+            getBtnBuscarReferenciaContacto().setEnabled(true);
+            getBtnBuscarVendedor().setEnabled(true);
+            getBtnBuscarVendedor().setEnabled(true);
+            getBtnLimpiarVendedor().setEnabled(true);
+            getChkActivarFechaVencimiento().setEnabled(true);
+            
+            getBtnAgregarCliente().setEnabled(true);
+            getBtnBuscarCliente().setEnabled(true);
+            getTxtCliente().setEnabled(true);
+            
+            getjDateFechaEmision().setEnabled(true);
+            getCmbPuntoEmision().setEnabled(true);
+            getBtnAgregarFormaPago().setEnabled(true);
+            
+            getBtnAgregarProducto().setEnabled(true);
+            getBtnCrearProducto().setEnabled(true);
+            getBtnAgregarDetalleFactura().setEnabled(true);
+            
+            getCmbDocumento().setEnabled(true);
+            getCmbTipoDocumento().setEnabled(true);
+            getCmbFechaVencimiento().setEnabled(true);
         }
         else
         {
             getBtnCargarProforma().setEnabled(false);
             getBtnReenviarCorreo().setEnabled(true);
             getBtnGenerarXml().setEnabled(true);
+            getPnlDatosAdicionales().habilitar(true);
             //getBtnAutorizarComprobante().setEnabled(true);
+            
+            getBtnBuscarReferenciaContacto().setEnabled(false);
+            getBtnBuscarVendedor().setEnabled(false);
+            getBtnBuscarVendedor().setEnabled(false);
+            getBtnLimpiarVendedor().setEnabled(false);
+            getChkActivarFechaVencimiento().setEnabled(false);
+            
+            getBtnAgregarCliente().setEnabled(false);
+            getBtnBuscarCliente().setEnabled(false);
+            getTxtCliente().setEnabled(false);
+            
+            getjDateFechaEmision().setEnabled(false);
+            getCmbPuntoEmision().setEnabled(false);
+            getBtnAgregarFormaPago().setEnabled(false);
+            
+            getBtnAgregarProducto().setEnabled(false);
+            getBtnCrearProducto().setEnabled(false);
+            getBtnAgregarDetalleFactura().setEnabled(false);
+            
+            getCmbDocumento().setEnabled(false);
+            getCmbTipoDocumento().setEnabled(false);
+            getCmbFechaVencimiento().setEnabled(false);
 
         }
     }
@@ -3047,14 +3191,29 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(getCmbFechaVencimiento().getDate()!=null)
                 {
                     FacturaAdicional fechaVencimientoDato=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
-                    String fechaStr = UtilidadesFecha.formatoDiaMesAño(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));
-                    
+                    String fechaStr = UtilidadesFecha.formatoDiaMesAño(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));                    
                     fechaVencimientoDato.setValor(fechaStr);
+                    factura.setFechaVencimiento(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));
+                    
                     cargarTablaDatosAdicionales();                       
                     
                 }
             }
         });
+    }
+
+    private void listenerComponentes() {
+        getPnlDatosAdicionales().setComprobante(this);
+    }
+
+    @Override
+    public ComprobanteEntity getComprobante() {
+        return factura;
+    }
+
+    @Override
+    public Empresa getEmpresa() {
+        return session.getEmpresa();
     }
     
     

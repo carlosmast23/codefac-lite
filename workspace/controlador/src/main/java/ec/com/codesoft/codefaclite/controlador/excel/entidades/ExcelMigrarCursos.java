@@ -38,6 +38,7 @@ public class ExcelMigrarCursos extends ExcelMigrar {
         
         public String nombre;
         public Integer posicion;
+        private boolean requerido;
 
         @Override
         public String getNombre() {
@@ -56,12 +57,12 @@ public class ExcelMigrarCursos extends ExcelMigrar {
 
         @Override
         public Boolean getCampoRequerido() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return requerido;
         }
 
         @Override
         public void setCampoRequerido(boolean requerido) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            this.requerido=requerido;
         }
         
     }

@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.transporte.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosPanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
@@ -21,6 +23,8 @@ import javax.swing.JTextField;
  * @author Carlos
  */
 public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
+    
+    private ComponenteDatosComprobanteElectronicosPanel pnlDatosAdicionales=new ComponenteDatosComprobanteElectronicosPanel();
 
     /**
      * Creates new form GuiaRemisionPanel
@@ -40,6 +44,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel5 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
         panelDatosGenerales = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jLabel38 = new javax.swing.JLabel();
@@ -132,6 +137,8 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         setResizable(true);
         setTitle("Guía de Remisión");
         getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jPanel7.setLayout(new java.awt.GridBagLayout());
 
         panelDatosGenerales.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Generales", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
         panelDatosGenerales.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
@@ -262,7 +269,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        getContentPane().add(panelDatosGenerales, gridBagConstraints);
+        jPanel7.add(panelDatosGenerales, gridBagConstraints);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Destinatario", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12))); // NOI18N
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -428,7 +435,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.3;
-        getContentPane().add(jPanel1, gridBagConstraints);
+        jPanel7.add(jPanel1, gridBagConstraints);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Transportista", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12))); // NOI18N
         jPanel2.setLayout(new java.awt.GridBagLayout());
@@ -560,7 +567,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
-        getContentPane().add(jPanel2, gridBagConstraints);
+        jPanel7.add(jPanel2, gridBagConstraints);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -590,7 +597,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jPanel3, gridBagConstraints);
+        jPanel7.add(jPanel3, gridBagConstraints);
 
         jScrollPane1.setViewportView(tblGuiaRemision);
 
@@ -601,7 +608,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jScrollPane1, gridBagConstraints);
+        jPanel7.add(jScrollPane1, gridBagConstraints);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Productos"));
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -705,7 +712,15 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        getContentPane().add(jPanel4, gridBagConstraints);
+        jPanel7.add(jPanel4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(jPanel7, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -751,6 +766,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
@@ -928,7 +944,10 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         return lblEstablecimiento;
     }
 
-    
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Datos", visible = true)
+    public ComponenteDatosComprobanteElectronicosPanel getPnlDatosAdicionales() {
+        return pnlDatosAdicionales;
+    }
      
     
     

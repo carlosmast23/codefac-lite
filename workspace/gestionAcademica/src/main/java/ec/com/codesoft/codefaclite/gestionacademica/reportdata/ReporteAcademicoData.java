@@ -97,8 +97,8 @@ public class ReporteAcademicoData implements ExcelDatosInterface
         List<TipoDato> datos = new ArrayList<>();
         datos.add(new TipoDato(this.nivelAcademicoEstudiante, Excel.TipoDataEnum.TEXTO));
         datos.add(new TipoDato(this.cedulaEstudiante, Excel.TipoDataEnum.TEXTO));
-        datos.add(new TipoDato(this.nombresEstudiante, Excel.TipoDataEnum.TEXTO));
         datos.add(new TipoDato(this.apellidosEstudiante, Excel.TipoDataEnum.TEXTO));
+        datos.add(new TipoDato(this.nombresEstudiante, Excel.TipoDataEnum.TEXTO));        
         datos.add(new TipoDato(this.emailEstudiante, Excel.TipoDataEnum.TEXTO));
         datos.add(new TipoDato(this.telefonoEstudiante, Excel.TipoDataEnum.TEXTO));
         datos.add(new TipoDato(this.representanteEstudiante, Excel.TipoDataEnum.TEXTO));

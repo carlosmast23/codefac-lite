@@ -44,6 +44,10 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     protected String referidoIdentificacion;
     protected String referidoPorcentaje;
     protected String valorComision;
+    
+    //============> Campos adicionales para el vendedor y fecha maxima de pago <====================//
+    protected String fechaMaximaPago;
+    protected String vendedor;
 
     public ReporteFacturaData() {
     }
@@ -242,6 +246,22 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     public void setClaveAcceso(String claveAcceso) {
         this.claveAcceso = claveAcceso;
     }
+
+    public String getFechaMaximaPago() {
+        return fechaMaximaPago;
+    }
+
+    public void setFechaMaximaPago(String fechaMaximaPago) {
+        this.fechaMaximaPago = fechaMaximaPago;
+    }
+
+    public String getVendedor() {
+        return vendedor;
+    }
+
+    public void setVendedor(String vendedor) {
+        this.vendedor = vendedor;
+    }
     
     
     
@@ -262,6 +282,8 @@ public class ReporteFacturaData implements ExcelDatosInterface {
         List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
 
         tiposDatos.add(new TipoDato(this.claveAcceso, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.fechaMaximaPago, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.vendedor, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));

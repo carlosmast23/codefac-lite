@@ -141,8 +141,10 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
     @Override
     public void limpiar() {
         limpiarVariables();
-
-        getCmbAula().setSelectedIndex(0);
+        
+        if(getCmbAula().getModel().getSize()>0)
+            getCmbAula().setSelectedIndex(0);
+        
         getCmbNivel().setSelectedIndex(0);
         getCmbPeriodo().setSelectedIndex(0);
     }

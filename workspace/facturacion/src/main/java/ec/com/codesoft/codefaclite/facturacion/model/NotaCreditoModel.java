@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
@@ -43,6 +44,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
@@ -96,7 +98,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class NotaCreditoModel extends NotaCreditoPanel {
+public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDatosComprobanteElectronicosInterface{
 
     private DefaultTableModel modeloTablaDetalle = new DefaultTableModel();
     private NotaCredito notaCredito;
@@ -107,8 +109,10 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     
 
     public NotaCreditoModel() {
+        
         valoresIniciales();
         initComponenesGraficos();
+        listenerComponentes();
         addListenerButtons();
         addListenerTablas();
         addListenerCombos();
@@ -1432,7 +1436,32 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         jPopupMenu.add(jMenuItemDatoAdicional);
         getTblDatosAdicionales().setComponentPopupMenu(jPopupMenu);
       }
+
+    @Override
+    public ComprobanteEntity getComprobante() {
+        return notaCredito;
+    }    
+
+    private void listenerComponentes() {
+        getPnlDatosAdicionales().setComprobante(this);
+    }
+
+    @Override
+    public void eventoCambiarEstado() {
+        if(estadoFormulario.equals(ESTADO_GRABAR))
+        {
+            getPnlDatosAdicionales().habilitar(false);
+        }
+        else if(estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            getPnlDatosAdicionales().habilitar(true);
+        }
+    }
     
+    @Override
+    public Empresa getEmpresa() {
+        return session.getEmpresa();
+    }
     
 
 }
