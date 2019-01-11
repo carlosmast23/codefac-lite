@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 /**
@@ -68,6 +69,10 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         btnBuscarImagen = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         cmbTipoFacturacion = new javax.swing.JComboBox<>();
+        jLabel14 = new javax.swing.JLabel();
+        txtSmtpHost = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        txtSmtpPuerto = new javax.swing.JSpinner();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
@@ -197,6 +202,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         gridBagConstraints.weightx = 0.1;
         panelConfiguracionesGenerales.add(txtCorreoElectronico, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -232,10 +238,10 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         panelConfiguracionesGenerales.add(jLabel12, gridBagConstraints);
 
         jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel13.setText("Correo Electrónico: ");
+        jLabel13.setText("Puerto (Smtp):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelConfiguracionesGenerales.add(jLabel13, gridBagConstraints);
@@ -296,6 +302,36 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         panelConfiguracionesGenerales.add(cmbTipoFacturacion, gridBagConstraints);
 
+        jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel14.setText("Correo Electrónico: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(30, 5, 5, 5);
+        panelConfiguracionesGenerales.add(jLabel14, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        panelConfiguracionesGenerales.add(txtSmtpHost, gridBagConstraints);
+
+        jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel15.setText("Host (Smtp):");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelConfiguracionesGenerales.add(jLabel15, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        panelConfiguracionesGenerales.add(txtSmtpPuerto, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -355,6 +391,8 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -379,6 +417,8 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JTextField txtFondoEscritorio;
     private javax.swing.JTextField txtNombreFirma;
     private javax.swing.JPasswordField txtPasswordCorreo;
+    private javax.swing.JTextField txtSmtpHost;
+    private javax.swing.JSpinner txtSmtpPuerto;
     // End of variables declaration//GEN-END:variables
 
    
@@ -479,6 +519,15 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         this.panelFacturacionElectronica = panelFacturacionElectronica;
     }
 
+    public JTextField getTxtSmtpHost() {
+        return txtSmtpHost;
+    }
+
+    public JSpinner getTxtSmtpPuerto() {
+        return txtSmtpPuerto;
+    }
+
+    
    
     
     

@@ -44,22 +44,14 @@ public class ParametroCodefac implements Serializable {
     
     public static final String CORREO_USUARIO= "correo_usuario";
     public static final String CORREO_CLAVE= "correo_clave";
-    
-    //public static final String ESTABLECIMIENTO= "establecimiento";
-    //public static final String PUNTO_EMISION= "punto_emision";
+    public static final String SMTP_HOST= "smtp_host";
+    public static final String SMTP_PORT= "smtp_port";
     
     public static final String CELULAR_VIRTUAL_MALL="celular_virtual_mall";
     public static final String IMAGEN_FONDO="imagen_fondo";
     public static final String ULTIMA_FECHA_VALIDACION="ultima_fecha_validacion";
     public static final String TIPO_FACTURACION="tipo_facturacion";
-    
-    /*
-    public static final String SECUENCIAL_FACTURA_FISICA= "secuencial_factura_fisica";
-    public static final String SECUENCIAL_NOTA_CREDITO_FISICA= "secuencial_nota_credito_fisica";
-    public static final String SECUENCIAL_NOTA_DEBITO_FISICA= "secuencial_nota_debito_fisica";
-    public static final String SECUENCIAL_GUIA_REMISION_FISICA= "secuencial_guia_remision_fisica";
-    public static final String SECUENCIAL_RETENCION_FISICA= "secuencial_retencion_fisica";
-    public static final String SECUENCIAL_NOTA_VENTA_FISICA= "secuencial_nota_venta_fisica";*/
+
     public static final String DIRECTORIO_RESPALDO = "directorio_respaldo";
     public static final String DEFECTO_TIPO_DOCUMENTO_FACTURA = "defecto_tipo_documento_factura";
     public static final String DEFECTO_TIPO_DOCUMENTO_COMPRA = "defecto_tipo_documento_compra";

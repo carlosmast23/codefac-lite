@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
+import ec.com.codesoft.codefaclite.utilidades.email.PropiedadCorreo;
 import ec.com.codesoft.codefaclite.utilidades.email.SmtpNoExisteException;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.varios.DialogoCopiarArchivos;
@@ -89,7 +90,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         jFileChooser.setDialogTitle("Elegir archivo");
         jFileChooser.setFileFilter(new FileNameExtensionFilter("Firma Electronica SRI", "p12"));
         dialogoCopiarFondoEscritorio=new DialogoCopiarArchivos("Elegir archivo", "Imagen Escritorio", "jpg","png","bpm");
-        this.addListenerButtons();
+        addListenerButtons();
         addListenerCombos();
         /**
          * Desactivo el ciclo de vida para controlar manualmente
@@ -210,6 +211,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         parametros.get(ParametroCodefac.TIPO_FACTURACION).setValor(((ComprobanteEntity.TipoEmisionEnum)getCmbTipoFacturacion().getSelectedItem()).getLetra());
         parametrosEditar.add(parametros.get(ParametroCodefac.TIPO_FACTURACION));
         
+        parametros.get(ParametroCodefac.SMTP_HOST).setValor(getTxtSmtpHost().getText());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SMTP_HOST));
+        
+        parametros.get(ParametroCodefac.SMTP_PORT).setValor(getTxtSmtpPuerto().getValue().toString());
+        parametrosEditar.add(parametros.get(ParametroCodefac.SMTP_PORT));
+        
         
         
         //verificarFirmaElectronica();
@@ -248,6 +255,10 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             String letra=parametros.get(ParametroCodefac.TIPO_FACTURACION).getValor();
             getCmbTipoFacturacion().setSelectedItem(ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(letra));
             listenerCmbTipoFacturacion(); //modifica las acciones para esta accion
+            
+            getTxtSmtpHost().setText(parametros.get(ParametroCodefac.SMTP_HOST).getValor());
+            getTxtSmtpPuerto().setValue(new Integer(parametros.get(ParametroCodefac.SMTP_PORT).getValor()));
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -440,6 +451,16 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         getTxtRetencionesSecuencial().setEnabled(opcion);        */
 
     }
+    
+    private PropiedadCorreo obtenerPropiedadesCorreo()
+    {
+        if(getTxtSmtpHost().getText()!=null && !getTxtSmtpHost().getText().isEmpty())
+        {
+            PropiedadCorreo propiedadCorreo=new PropiedadCorreo(getTxtSmtpHost().getText(), (int) getTxtSmtpPuerto().getValue());
+            return propiedadCorreo;
+        }
+        return null;
+    }
 
     private void verificarCredencialesCorreo() {
 
@@ -449,7 +470,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             String desc = "Bienvenido a Codefac-Lite. <br>"
                     + "Estimado/a usuario le informamos que su cuenta en Codefac-Lite ha sido activada exitosamente. Ahora ya puedes aprovechar los beneficios de nuestro sistema de facturación electrónica.\n"
                     + "<br><br> <b>NOTA.- Este mensaje fue enviado automáticamente por el sistema, por favor no responda a este correo.</b>";
-            CorreoElectronico correoElectronico = new CorreoElectronico(getTxtCorreoElectronico().getText(), new String(getTxtPasswordCorreo().getPassword()), desc, correos, "Notificación Codefac");
+            CorreoElectronico correoElectronico = new CorreoElectronico(getTxtCorreoElectronico().getText(), new String(getTxtPasswordCorreo().getPassword()), desc, correos, "Notificación Codefac",obtenerPropiedadesCorreo());
             correoElectronico.sendMail();
             //TODO: Verificar si se va a dar uso de esta funcionalidad
             //TODO: Agregar una variable para la informacion del consumidor final
@@ -462,6 +483,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
         } catch (MessagingException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error Correo", "Los datos ingresados son incorrectos.\n"+ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
         } catch (SmtpNoExisteException ex) {
             System.out.println("Fallo al autentificar el usuario");
             getTxtPasswordCorreo().setText("");
@@ -509,6 +531,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     @Override
     public void iniciar() {
+        listenerTextos();
     }
 
     @Override
@@ -565,5 +588,39 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         });
         
         
+    }
+
+    private void listenerTextos() {
+        getTxtCorreoElectronico().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            /**
+             * Verificar que cuando pierde el focus verifique si existen datos por defecto para cargar de los datos smtp de los correos electronicos
+             * @param e 
+             */
+            @Override
+            public void focusLost(FocusEvent e) {
+                setearDatosPorDefectoSmtp(getTxtCorreoElectronico().getText());
+            }
+        });
+    }
+    
+    
+    private void setearDatosPorDefectoSmtp(String correo)
+    {
+        PropiedadCorreo propiedadPorDefecto=PropiedadCorreo.obtenerPropiedadesPorDefecto(correo);
+        if(propiedadPorDefecto!=null)
+        {
+            getTxtSmtpHost().setText(propiedadPorDefecto.getHost());
+            getTxtSmtpPuerto().setValue(propiedadPorDefecto.getPort());
+        }
+        else
+        {
+            getTxtSmtpHost().setText("");
+            getTxtSmtpPuerto().setValue("");        
+        }
     }
 }

@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
+import ec.com.codesoft.codefaclite.utilidades.email.PropiedadCorreo;
 import ec.com.codesoft.codefaclite.utilidades.email.SmtpNoExisteException;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import java.rmi.RemoteException;
@@ -49,8 +50,17 @@ public abstract class CorreoCodefac {
             //Obtener clave desencriptada
             clave=UtilidadesEncriptar.desencriptar(clave,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
             
+            //Construir los datos de las propiedades si existen
+            String smtpHost=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_HOST).getValor();
+            String smtpPort=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_PORT).getValor();
             
-            correoElectronico=new CorreoElectronico(correo,clave, getMensaje(), getDestinatorios(), getTitulo());
+            PropiedadCorreo propiedadCorreo=null;
+            if(!smtpHost.isEmpty() && !smtpPort.isEmpty())
+            {
+                propiedadCorreo=new PropiedadCorreo(smtpHost,new Integer(smtpPort));
+            }  
+            
+            correoElectronico=new CorreoElectronico(correo,clave, getMensaje(), getDestinatorios(), getTitulo(),propiedadCorreo);
             correoElectronico.setPathFiles(getPathFiles());
             
             try

@@ -45,3 +45,5 @@ INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('formato_orden_trabajo','A4');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('cartera_activa','s');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('comprobante_guia_remision_activar','n');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('comprobante_venta_activar','n');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('smtp_host','');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('smtp_port','587');
