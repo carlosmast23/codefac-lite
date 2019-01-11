@@ -232,7 +232,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 
                         );
                         
-                        UtilidadesFecha.formatoDiaMesAño(fechaFin);
+                        //UtilidadesFecha.formatoDiaMesAño(fechaFin);
                         reporteData.setFechaMaximaPago((factura.getFechaVencimiento()!=null)?UtilidadesFecha.formatoDiaMesAño(factura.getFechaVencimiento()):"");
                         reporteData.setVendedor((factura.getVendedor()!=null)?factura.getVendedor().getNombresCompletos():"");
                         
