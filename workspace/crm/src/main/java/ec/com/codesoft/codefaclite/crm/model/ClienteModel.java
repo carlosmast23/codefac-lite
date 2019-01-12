@@ -388,6 +388,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             getTxtPorcentajeComision().setText("0");
             getChkContacto().setSelected(false);
             getTxtDiasCredito().setValue(0);
+            getTxtNombreLegal().setText("");
             this.razonSocial = "";
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);

@@ -26,8 +26,8 @@ public class ProveedorModel extends ClienteModel {
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        ProveedorBusquedaDialogo clienteBusquedaDialogo = new ProveedorBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+        ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
         return buscarDialogoModel;
     }
 }
