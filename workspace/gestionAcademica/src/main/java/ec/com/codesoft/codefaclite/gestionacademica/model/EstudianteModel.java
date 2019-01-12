@@ -130,7 +130,11 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
         estudiante.setTipoDiscapacidad(((TipoDiscapacidadEnum) getCmbTipoDiscapacidad().getSelectedItem()).getLetra());
         estudiante.setGenero(((GeneroEnum) getCmbGenero().getSelectedItem()).getEstado());
         estudiante.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
-        estudiante.setDiscapacidad(((EnumSiNo) getCmbDiscapacidad().getSelectedItem()).getLetra());
+        
+        if(getCmbDiscapacidad().getSelectedItem()!=null)
+        {
+            estudiante.setDiscapacidad(((EnumSiNo) getCmbDiscapacidad().getSelectedItem()).getLetra());
+        }
 
         if (getDateFechaNacimiento().getDate() != null) {
             fechaNacimiento = new Date(getDateFechaNacimiento().getDate().getTime());
