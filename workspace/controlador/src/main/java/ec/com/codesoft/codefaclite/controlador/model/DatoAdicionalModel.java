@@ -37,18 +37,22 @@ public class DatoAdicionalModel extends DatoAdicionalDialog{
         getBtnAgregar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(getTxtDato().getText()!=null && !getTxtDato().getText().equals(""))
-                {
-                    valor=getTxtDato().getText();
-                    campo=getTxtCampo().getText();                    
-                    tipo= (FacturaAdicional.Tipo) getCmbTipo().getSelectedItem();                   
-                    dispose();
-                }
-                else
+                if(getTxtDato().getText()==null || getTxtDato().getText().equals(""))
                 {
                     DialogoCodefac.mensaje("Advertencia","Porfavor ingrese un datos para grabar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return;
                 }
-                        
+                
+                if(getTxtCampo().getText()==null || getTxtCampo().getText().equals(""))
+                {
+                    DialogoCodefac.mensaje("Advertencia","Porfavor ingrese un nombre de campo para grabar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return;
+                }
+
+                valor = getTxtDato().getText();
+                campo = getTxtCampo().getText();
+                tipo = (FacturaAdicional.Tipo) getCmbTipo().getSelectedItem();
+                dispose();
             }
         });
         
