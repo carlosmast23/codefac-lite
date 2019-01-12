@@ -99,6 +99,14 @@ public class FirmaElectronica {
     {
         try {
             KeyStore keyStore= obtenerAlmacenFirma(almacenCertificadoClave, claveFirma);
+            
+            //Validar cunado el sistema no puede encontrar el archivo de la firma
+            if(keyStore==null)
+            {
+                throw new Exception(
+                        "El sistema no puede encontrar el archivo de la firma");
+            }
+            
             String almacenAlias = getAlias(keyStore);
             X509Certificate certificado = null;
             try {
