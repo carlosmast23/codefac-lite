@@ -153,7 +153,16 @@ public class Empresa implements Serializable {
 
     @Override
     public String toString() {
-        return nombreLegal;
+        String nameString="";
+        if(nombreLegal!=null && !nombreLegal.isEmpty())
+        {
+            nameString=nombreLegal;
+        }
+        else if(razonSocial!=null && !razonSocial.isEmpty())
+        {
+            nameString=razonSocial;
+        }
+        return nameString;
     }
     
     

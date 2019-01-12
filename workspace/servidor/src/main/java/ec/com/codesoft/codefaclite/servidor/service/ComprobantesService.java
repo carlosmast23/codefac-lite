@@ -1038,7 +1038,11 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
         //String establecimiento = parametroCodefacMap.get(ParametroCodefac.ESTABLECIMIENTO).valor;
         infoTributaria.setEstablecimiento(ComprobantesUtilidades.formatoEstablecimiento( comprobanteData.getEstablecimiento()));
-        infoTributaria.setNombreComercial(empresa.getNombreLegal());
+        
+        if(empresa.getNombreLegal()!=null && !empresa.getNombreLegal().isEmpty())
+        {
+            infoTributaria.setNombreComercial(empresa.getNombreLegal());
+        }
 
         //String puntoEmision = parametroCodefacMap.get(ParametroCodefac.PUNTO_EMISION).valor;
         infoTributaria.setPuntoEmision(ComprobantesUtilidades.formatoEstablecimiento( comprobanteData.getPuntoEmision()));

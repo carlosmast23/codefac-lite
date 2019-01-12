@@ -78,7 +78,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Nombre Comercial")
+    //@ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Nombre Comercial")
     public JTextField getjTextNombreComercial() {
         return jTextNombreComercial;
     }
