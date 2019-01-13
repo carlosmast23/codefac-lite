@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -106,7 +107,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
         persona.getTipo()
         persona.getTipoEnum().*/
         PersonaServiceIf service=ServiceFactory.getFactory().getPersonaServiceIf();
-        return service.buscarPorTipo(OperadorNegocioEnum.CLIENTE); //Todo: Obtener filtrar solo por clientes
+        return service.buscarPorTipo(OperadorNegocioEnum.CLIENTE,GeneralEnumEstado.ACTIVO); //Todo: Obtener filtrar solo por clientes
     }
 
     public String getNombreReporte()

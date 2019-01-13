@@ -94,9 +94,9 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
     }
     
     @Override
-    public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum) throws java.rmi.RemoteException
+    public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum,GeneralEnumEstado estado) throws java.rmi.RemoteException
     {
-        return getFacade().buscarPorTipoFacade(tipoEnum);
+        return getFacade().buscarPorTipoFacade(tipoEnum,estado);
     }
             
     

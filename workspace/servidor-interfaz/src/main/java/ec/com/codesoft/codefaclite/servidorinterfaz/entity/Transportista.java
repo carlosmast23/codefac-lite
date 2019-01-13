@@ -159,6 +159,11 @@ public class Transportista implements Serializable
     public Persona.TipoIdentificacionEnum getTipoIdentificacionEnum() {
         return Persona.TipoIdentificacionEnum.obtenerPorLetra(tipoIdentificacion);
     }
+    
+    public void setTipoIdentificacionEnum(Persona.TipoIdentificacionEnum enumerador) {
+        this.tipoIdentificacion = enumerador.getLetra();
+    }
+
  
     
     @Override

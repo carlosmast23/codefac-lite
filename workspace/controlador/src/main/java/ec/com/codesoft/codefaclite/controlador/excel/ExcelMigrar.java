@@ -94,6 +94,10 @@ public abstract class ExcelMigrar {
         for (int i = 0; i < primeraFila.getLastCellNum(); i++) {
             Cell celda = primeraFila.getCell(i);
             //System.out.println(celda.getCellTypeEnum().name());
+            if(celda==null)
+            {
+                continue;
+            }
             
             List<Class> tiposDatosCabecera= getTipoDatos();
             switch (celda.getCellTypeEnum()) {
@@ -221,9 +225,48 @@ public abstract class ExcelMigrar {
                 Cell cell;
                 //se recorre cada celda
                 FilaResultado filaResultado=new FilaResultado();
-                
-                int i=0;
-                
+
+                for(int i=0;i<tamanioColumna-1;i++)
+                {
+                    //Esto me sirve para no leer datos que no esten dentro del rango de las columnas de los titulos
+                    //if(i>=(tamanioColumna-1))
+                    //{
+                    //    break;
+                    //}
+                    
+                    // se obtiene la celda en específico y se la imprime
+                    cell = row.getCell(i);
+                    
+                    //cuando hay campos nulos los lleno con un valor de texto vacio
+                    if(cell==null)
+                    {
+                        filaResultado.agregarDato(new CampoResultado<String>(String.class,"",obtenerCampos()[i]),false);
+                    }
+                    else
+                    {
+                    
+                        switch (cell.getCellTypeEnum()) {
+                            case STRING:
+
+                                filaResultado.agregarDato(new CampoResultado<String>(String.class, cell.getStringCellValue(), obtenerCampos()[i]), false);
+                                //System.out.print(cell.getStringCellValue() + " | ");
+                                break;
+                            case NUMERIC:
+                                filaResultado.agregarDato(new CampoResultado<Double>(Double.class, cell.getNumericCellValue(), obtenerCampos()[i]), false);
+
+                                break;
+
+                            case BLANK:
+                                filaResultado.agregarDato(new CampoResultado<String>(String.class, "", obtenerCampos()[i]), false);
+                                break;
+
+                            case _NONE:
+                                //System.out.println("none");
+                                break;
+                        }
+                    }
+                }
+                /*
                 while (cellIterator.hasNext()) {
                     
                     //Esto me sirve para no leer datos que no esten dentro del rango de las columnas de los titulos
@@ -257,8 +300,8 @@ public abstract class ExcelMigrar {
                             
                     }
                     
-                    i++;
-                }
+                    //i++;
+                }*/
                 datosResultado.add(filaResultado);
                 
             }

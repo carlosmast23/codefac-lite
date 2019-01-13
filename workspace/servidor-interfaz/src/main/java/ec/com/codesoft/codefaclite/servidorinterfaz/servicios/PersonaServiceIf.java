@@ -26,7 +26,7 @@ public interface PersonaServiceIf extends ServiceAbstractIf<Persona>{
     
     public List<Persona> buscar() throws java.rmi.RemoteException;
     
-    public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum) throws java.rmi.RemoteException;
+    public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum,GeneralEnumEstado estado) throws java.rmi.RemoteException;
     
     public Persona buscarPorIdentificacionYestado(String identificacion,GeneralEnumEstado estado) throws ServicioCodefacException,java.rmi.RemoteException;
 }

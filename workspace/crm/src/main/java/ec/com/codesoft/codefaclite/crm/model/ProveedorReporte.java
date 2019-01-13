@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import java.rmi.RemoteException;
@@ -28,7 +29,7 @@ public class ProveedorReporte extends ClienteReporte{
     @Override    
     public List<Persona> obtenerConsulta() throws RemoteException {
        PersonaServiceIf service=ServiceFactory.getFactory().getPersonaServiceIf();
-        return service.buscarPorTipo(OperadorNegocioEnum.PROVEEDOR); //Todo: Obtener filtrar solo por clientes
+        return service.buscarPorTipo(OperadorNegocioEnum.PROVEEDOR,GeneralEnumEstado.ACTIVO); //Todo: Obtener filtrar solo por clientes
     }
     
     
