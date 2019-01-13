@@ -130,6 +130,57 @@ public class ValidacionLicenciaCodefac{
         }
     }
     
+    //TODO: VER SI PUEDO UNIR EN UN SOLO METODO CON EL DE ABAJA
+    public Properties crearLicenciaMaquina(Licencia licencia,String mac)
+    {
+        FileOutputStream fr=null;
+        try {
+
+            //String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;            
+            String modulosStr=licencia.getModulosStr();
+            String licenciaStr=licencia.getUsuario()+":"+mac+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;            
+            LOG.log(Level.INFO,"creando="+licenciaStr);
+            licenciaStr=UtilidadesHash.generarHashBcrypt(licenciaStr);
+            Properties prop = new Properties();
+            prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());
+            prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licenciaStr);
+            prop.setProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES,licencia.getCantidadClientes().toString());
+                        
+            //setearPropiedadesModulos(prop,licen); //Setea los modulos activos
+            
+            TipoLicenciaEnum enumTipoLicencia=licencia.getTipoLicenciaEnum();
+            prop.setProperty(Licencia.PROPIEDAD_TIPO_LICENCIA,enumTipoLicencia.getNombre());
+            
+            //Llea en el properties los datos adicionales del modulo
+            licencia.llenarPropertiesModulo(prop);
+            
+            File file=new File(path+NOMBRE_LICENCIA);
+            
+             //crear toda la ruta si no existe
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                //file.mkdir();
+            }
+            
+            fr = new FileOutputStream(file);
+            prop.store(fr,"Properties");
+            fr.close();
+            return prop;
+            //saveProperties(prop);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
     /**
      * Metodo que crea la licencia
      * @return 

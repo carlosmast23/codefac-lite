@@ -283,6 +283,10 @@ public class Licencia {
     public List<ModuloCodefacEnum> getModulosActivos() {
         return modulosActivos;
     }
+
+    public void setModulosActivos(List<ModuloCodefacEnum> modulosActivos) {
+        this.modulosActivos = modulosActivos;
+    }
     
     
 
