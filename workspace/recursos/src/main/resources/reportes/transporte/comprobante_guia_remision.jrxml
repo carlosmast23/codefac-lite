@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="421" pageHeight="595" columnWidth="381" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="405" pageHeight="595" columnWidth="365" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="1.4615378250000781"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="25"/>
+	<property name="ireport.y" value="265"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -56,7 +56,7 @@
 	<title>
 		<band height="49" splitType="Stretch">
 			<subreport>
-				<reportElement x="0" y="0" width="381" height="49" uuid="35826285-2ba3-4374-a880-47d8b954ac17"/>
+				<reportElement x="0" y="0" width="365" height="49" uuid="35826285-2ba3-4374-a880-47d8b954ac17"/>
 				<subreportParameter name="pl_direccion">
 					<subreportParameterExpression><![CDATA[$P{pl_direccion}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -114,7 +114,7 @@
 				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="276" y="0" width="105" height="15" uuid="86856508-a120-4b5e-a3ea-bcf478f218f4"/>
+				<reportElement x="276" y="0" width="89" height="15" uuid="86856508-a120-4b5e-a3ea-bcf478f218f4"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -141,7 +141,7 @@
 				<textFieldExpression><![CDATA[$P{cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="276" y="15" width="105" height="21" uuid="8371e6ed-6cbb-4b05-93d4-adbd60f2d739"/>
+				<reportElement x="276" y="15" width="89" height="21" uuid="8371e6ed-6cbb-4b05-93d4-adbd60f2d739"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -149,7 +149,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{codigo}]]></textFieldExpression>
 			</textField>
@@ -242,14 +242,14 @@
 				<textFieldExpression><![CDATA[$F{razon_social_persona}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="126" y="36" width="254" height="12" uuid="170ddf6f-8c7e-4e97-9e89-a8b15d0d4891"/>
+				<reportElement x="126" y="36" width="239" height="12" uuid="170ddf6f-8c7e-4e97-9e89-a8b15d0d4891"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{motivo_traslado}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="126" y="48" width="254" height="12" uuid="8983b73e-3cfe-4abf-b941-9ba3b42e25bd"/>
+				<reportElement x="126" y="48" width="239" height="12" uuid="8983b73e-3cfe-4abf-b941-9ba3b42e25bd"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -263,7 +263,7 @@
 				<text><![CDATA[Identificación:]]></text>
 			</staticText>
 			<subreport isUsingCache="true">
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="60" width="381" height="30" uuid="88188fe0-1d0f-4f97-bdd3-c567a94f6ce8"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="60" width="365" height="30" uuid="88188fe0-1d0f-4f97-bdd3-c567a94f6ce8"/>
 				<subreportParameter name="$P{razon_social_persona}">
 					<subreportParameterExpression><![CDATA[$F{razon_social_persona}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -284,7 +284,7 @@
 	<pageFooter>
 		<band height="40" splitType="Stretch">
 			<subreport>
-				<reportElement x="-1" y="0" width="382" height="40" uuid="7968d49c-a764-40cd-8900-3f9f7f1947c8"/>
+				<reportElement x="-1" y="0" width="366" height="40" uuid="7968d49c-a764-40cd-8900-3f9f7f1947c8"/>
 				<subreportParameter name="pl_telefonos">
 					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -317,14 +317,14 @@
 	<lastPageFooter>
 		<band height="79">
 			<staticText>
-				<reportElement x="1" y="15" width="380" height="22" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a"/>
+				<reportElement x="1" y="15" width="364" height="22" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Este documento es informativo y no tiene validez legal, para descargar el comprobante electrónico puede acceder desde su correo electrónico registrado o desde el portal del Sri.]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="0" width="380" height="15" uuid="e8fafbc1-02a6-442d-9b9d-c4b0ed1d9003"/>
+				<reportElement x="0" y="0" width="365" height="15" uuid="e8fafbc1-02a6-442d-9b9d-c4b0ed1d9003"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Dotted"/>
 					<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
@@ -335,7 +335,7 @@
 				<textFieldExpression><![CDATA["Autorización: "+$P{autorizacion}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement x="1" y="37" width="381" height="40" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
+				<reportElement x="1" y="37" width="364" height="40" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
 				<subreportParameter name="pl_telefonos">
 					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>
