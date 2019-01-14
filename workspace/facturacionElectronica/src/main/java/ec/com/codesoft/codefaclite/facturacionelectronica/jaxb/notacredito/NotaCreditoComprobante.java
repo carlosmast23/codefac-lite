@@ -73,6 +73,11 @@ public class NotaCreditoComprobante extends ComprobanteElectronico {
         return this.infoNotaCredito.getRazonSocialComprador();
     }
 
+    @Override
+    public String getDireccionEstablecimiento() {
+        return this.infoNotaCredito.getDirEstablecimiento();
+    }
+
     
 
     

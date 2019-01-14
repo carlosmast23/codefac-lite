@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Carlos
  */
 @XmlType(propOrder = {"fechaEmision",
+    "dirEstablecimiento",
     "obligadoContabilidad",
     "tipoIdentificacionComprador",
     "razonSocialComprador",
@@ -30,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
     "formaPagos"})
 public class InformacionFactura implements Serializable{
     private String fechaEmision;
+    private String dirEstablecimiento;
     private String tipoIdentificacionComprador;
     private String razonSocialComprador;
     private String identificacionComprador;
@@ -57,6 +59,17 @@ public class InformacionFactura implements Serializable{
     public void setFechaEmision(String fechaEmision) {
         this.fechaEmision = fechaEmision;
     }
+
+    @XmlElement(name = "dirEstablecimiento")
+    public String getDirEstablecimiento() {
+        return dirEstablecimiento;
+    }
+
+    public void setDirEstablecimiento(String dirEstablecimiento) {
+        this.dirEstablecimiento = dirEstablecimiento;
+    }
+    
+    
     
     @XmlElement(name = "tipoIdentificacionComprador")
     public String getTipoIdentificacionComprador() {

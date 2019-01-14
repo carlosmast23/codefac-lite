@@ -89,6 +89,11 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
         
         informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(factura.getFechaEmision()));
         
+        //if(factura.getDireccionEstablecimiento()!=null && !factura.getDireccionEstablecimiento().isEmpty())
+        //{
+        informacionFactura.setDirEstablecimiento(UtilidadValidador.normalizarTexto(factura.getDireccionEstablecimiento()));
+        //}
+        
         SriIdentificacionServiceIf servicioSri = ServiceFactory.getFactory().getSriIdentificacionServiceIf();
         SriIdentificacion sriIdentificacion = null;
         try {
@@ -342,6 +347,11 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
     @Override
     public Empresa getEmpresa() {
         return factura.getEmpresa();
+    }
+
+    @Override
+    public String getDireccionMatriz() {
+        return factura.getDireccionMatriz();
     }
    
     

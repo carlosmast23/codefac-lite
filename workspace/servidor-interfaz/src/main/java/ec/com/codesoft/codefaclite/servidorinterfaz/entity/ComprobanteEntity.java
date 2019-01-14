@@ -50,8 +50,17 @@ public class ComprobanteEntity implements Serializable{
     @Column(name = "IDENTIFICACION")
     protected String identificacion;
     
+    /**
+     * Este campo se va a referir a la direccion del cliente
+     */
     @Column(name = "DIRECCION")
     protected String direccion;
+    
+    @Column(name = "DIRECCION_ESTABLECIMIENTO")
+    protected String direccionEstablecimiento;
+    
+    @Column(name = "DIRECCION_MATRIZ")
+    protected String direccionMatriz;
     
     @Column(name = "TELEFONO")
     protected String telefono;
@@ -212,8 +221,22 @@ public class ComprobanteEntity implements Serializable{
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
-    
-    
+
+    public String getDireccionEstablecimiento() {
+        return direccionEstablecimiento;
+    }
+
+    public void setDireccionEstablecimiento(String direccionEstablecimiento) {
+        this.direccionEstablecimiento = direccionEstablecimiento;
+    }
+
+    public String getDireccionMatriz() {
+        return direccionMatriz;
+    }
+
+    public void setDireccionMatriz(String direccionMatriz) {
+        this.direccionMatriz = direccionMatriz;
+    }
     
     
     

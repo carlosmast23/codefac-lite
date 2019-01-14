@@ -102,7 +102,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         //Revisar este dato porque solo se debe poner cuando sea contribuyente especial
         //info.setContribuyenteEspecial(claveAcceso);
         
-        info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(notaCredito.getCliente().getDireccion()));
+        info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(notaCredito.getDireccionEstablecimiento()));
         info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(notaCredito.getFechaEmision()));
         info.setFechaEmisionDocSustento(ComprobantesElectronicosUtil.dateToString(notaCredito.getFechaEmisionDocSustento()));
         
@@ -311,6 +311,11 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
     @Override
     public Empresa getEmpresa() {
         return notaCredito.getEmpresa();
+    }
+
+    @Override
+    public String getDireccionMatriz() {
+        return notaCredito.getDireccionMatriz();
     }
     
 }

@@ -27,9 +27,9 @@ public class TestGenerarLicenciaManual {
         modulosActivos.add(ModuloCodefacEnum.TRANSPORTE);
         modulosActivos.add(ModuloCodefacEnum.SISTEMA);
 
-        String mac="9C-AD-97-81-A7-BE";
+        String mac="00-26-B6-F1-E3-04";
         
-        UtilidadLicencia.crearLicenciaManualConMac("ejemplo",1,TipoLicenciaEnum.PRO, modulosActivos,mac, "C:/Temp/licencia");
+        UtilidadLicencia.crearLicenciaManualConMac("lubricadora",1,TipoLicenciaEnum.PRO, modulosActivos,mac, "C:/Temp/licenciaToshiba");
     }
     
 }

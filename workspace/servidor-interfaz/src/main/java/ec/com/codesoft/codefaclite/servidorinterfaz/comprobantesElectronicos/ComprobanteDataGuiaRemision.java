@@ -95,7 +95,7 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
         
         //Revisar que codigo debe ir aqui , aunque en el SRI dice que es opcional
         info.setContribuyenteEspecial("123");
-        info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(guiaRemision.getDireccion()));
+        info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(guiaRemision.getDireccionEstablecimiento()));
         info.setFechaIniTransporte(ComprobantesElectronicosUtil.dateToString(guiaRemision.getFechaIniciaTransporte()));
         info.setFechaFinTransporte(ComprobantesElectronicosUtil.dateToString(guiaRemision.getFechaFinTransporte()));
         info.setDirPartida(guiaRemision.getDireccionPartida());
@@ -202,6 +202,11 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
     @Override
     public Empresa getEmpresa() {
         return guiaRemision.getEmpresa();
+    }
+
+    @Override
+    public String getDireccionMatriz() {
+        return guiaRemision.getDireccionMatriz();
     }
     
     

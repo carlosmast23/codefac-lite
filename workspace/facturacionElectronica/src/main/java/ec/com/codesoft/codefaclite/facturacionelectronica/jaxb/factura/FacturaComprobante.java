@@ -82,6 +82,11 @@ public class FacturaComprobante extends ComprobanteElectronico{
     public String getRazonSocialComprador() {
         return getInformacionFactura().getRazonSocialComprador();
     }
+
+    @Override
+    public String getDireccionEstablecimiento() {
+        return getInformacionFactura().getDirEstablecimiento();
+    }
     
     
 }

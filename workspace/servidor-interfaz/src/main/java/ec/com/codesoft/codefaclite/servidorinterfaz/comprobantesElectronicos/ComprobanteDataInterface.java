@@ -45,5 +45,7 @@ public interface ComprobanteDataInterface {
     public Long getComprobanteId();
     
     public Empresa getEmpresa();
+    
+    public String getDireccionMatriz();
 
 }

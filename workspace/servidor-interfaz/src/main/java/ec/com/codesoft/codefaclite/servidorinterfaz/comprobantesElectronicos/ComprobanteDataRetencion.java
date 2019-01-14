@@ -94,7 +94,7 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
         
         //TODO:Revisar que codigo debe ir aqui , aunque en el SRI dice que es opcional
         info.setContribuyenteEspecial("123");
-        info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(retencion.getProveedor().getDireccion()));
+        info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(retencion.getDireccionEstablecimiento()));
         info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(retencion.getFechaEmision()));
         
         SriIdentificacionServiceIf servicioSri=ServiceFactory.getFactory().getSriIdentificacionServiceIf();
@@ -178,6 +178,11 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
     @Override
     public Empresa getEmpresa() {
         return retencion.getEmpresa();
+    }
+
+    @Override
+    public String getDireccionMatriz() {
+        return retencion.getDireccionMatriz();
     }
     
     

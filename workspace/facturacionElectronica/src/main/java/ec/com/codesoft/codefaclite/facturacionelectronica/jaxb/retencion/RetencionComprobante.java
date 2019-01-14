@@ -67,6 +67,11 @@ public class RetencionComprobante extends ComprobanteElectronico {
     public String getVersionAttribute() {
         return "1.0.0";
     }
+
+    @Override
+    public String getDireccionEstablecimiento() {
+        return infoRetencion.getDirEstablecimiento();
+    }
     
     
 }

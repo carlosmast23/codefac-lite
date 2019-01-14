@@ -157,13 +157,15 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
         }
         
         try {
-            List<Sucursal> sucursales=ServiceFactory.getFactory().getSucursalServiceIf().obtenerTodos(); //TODO: Remplazar por un metodo que solo obtenga sucursal activas
+            List<Sucursal> sucursales=ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(session.getEmpresa()); //TODO: Remplazar por un metodo que solo obtenga sucursal activas
             getCmbSucursal().removeAllItems();
             for (Sucursal sucursal : sucursales) {
                 getCmbSucursal().addItem(sucursal);
             }
             
         } catch (RemoteException ex) {
+            Logger.getLogger(PuntoEmisionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(PuntoEmisionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         

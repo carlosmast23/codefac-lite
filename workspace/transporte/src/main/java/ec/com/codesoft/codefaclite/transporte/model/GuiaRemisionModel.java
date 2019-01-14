@@ -592,7 +592,9 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         guiaRemision.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
         guiaRemision.setEmpresa(session.getEmpresa());
         
-  ;
+        guiaRemision.setDireccionEstablecimiento(session.getSucursal().getDirecccion());
+        guiaRemision.setDireccionMatriz(session.getMatriz().getDirecccion());
+  
         
     }
     

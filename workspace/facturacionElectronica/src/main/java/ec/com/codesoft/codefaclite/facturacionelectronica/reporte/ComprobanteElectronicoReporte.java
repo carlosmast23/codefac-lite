@@ -63,7 +63,13 @@ public abstract class ComprobanteElectronicoReporte
         map.put("nombre_legal",comprobante.getInformacionTributaria().getNombreComercial());
         map.put("direccion",comprobante.getInformacionTributaria().getDirecionMatriz());
         //Cambiar por la direccion de las sucursales cuando exista
-        map.put("direccion_sucursal",comprobante.getInformacionTributaria().getDirecionMatriz());
+        String direccionEstablecimiento=comprobante.getInformacionTributaria().getDirecionMatriz();
+        if(comprobante.getDireccionEstablecimiento()!=null && !comprobante.getDireccionEstablecimiento().isEmpty())
+        {
+            direccionEstablecimiento=comprobante.getDireccionEstablecimiento();
+        }
+    
+        map.put("direccion_sucursal",direccionEstablecimiento);
         map.put("contribuyente_especial","");
         map.put("obligado_contabilidad","");
         return map;

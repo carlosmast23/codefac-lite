@@ -69,6 +69,11 @@ public class GuiaRemisionComprobante extends ComprobanteElectronico{
     public void setDestinatarios(List<DestinatariosGuiaRemisionComprobante> destinatarios) {
         this.destinatarios = destinatarios;
     }
+
+    @Override
+    public String getDireccionEstablecimiento() {
+        return infoGuiaRemision.getDirEstablecimiento();
+    }
     
     
     

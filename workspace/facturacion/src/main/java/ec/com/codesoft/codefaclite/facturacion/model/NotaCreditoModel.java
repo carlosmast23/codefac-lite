@@ -148,6 +148,9 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         notaCredito.setTipoDocumento(tipoDocumentoEnum.getCodigo());
         
+        notaCredito.setDireccionEstablecimiento(session.getSucursal().getDirecccion());
+        notaCredito.setDireccionMatriz(session.getMatriz().getDirecccion());
+        
         switch(tipoDocumentoEnum)
         {
             case LIBRE:

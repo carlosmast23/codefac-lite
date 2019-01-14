@@ -76,5 +76,10 @@ public class ComprobanteDataGenerico implements ComprobanteDataInterface,Seriali
     public Empresa getEmpresa() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public String getDireccionMatriz() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

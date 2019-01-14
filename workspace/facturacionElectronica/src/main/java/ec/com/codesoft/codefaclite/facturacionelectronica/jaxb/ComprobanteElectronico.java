@@ -46,6 +46,12 @@ public abstract class ComprobanteElectronico implements Serializable{
     public abstract String getRazonSocialComprador();
     
     /**
+     * Necesito este dato en los reportes para imprimir el numero de establecimiento
+     * @return 
+     */
+    public abstract String getDireccionEstablecimiento();
+    
+    /**
      * Variable adicional que permite almacenar los correos en una lista que no se procesa al generar el xml
      */
     protected List<String> correos;

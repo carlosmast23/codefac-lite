@@ -1033,8 +1033,16 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        infoTributaria.setDirecionMatriz((matriz!=null && matriz.getDirecccion()!=null && !matriz.getDirecccion().isEmpty())?matriz.getDirecccion():"SIN DIRECCION");
+    
+        //Si existe seteada grabada una direccion la ingreso
+        if(comprobanteData.getDireccionMatriz()!=null && !comprobanteData.getDireccionMatriz().isEmpty())
+        {
+            infoTributaria.setDirecionMatriz(comprobanteData.getDireccionMatriz());
+        }
+        else //Si no existe grabada una direccion selecciono la de la empresa
+        {
+            infoTributaria.setDirecionMatriz((matriz!=null && matriz.getDirecccion()!=null && !matriz.getDirecccion().isEmpty())?matriz.getDirecccion():"SIN DIRECCION");
+        }
 
         //String establecimiento = parametroCodefacMap.get(ParametroCodefac.ESTABLECIMIENTO).valor;
         infoTributaria.setEstablecimiento(ComprobantesUtilidades.formatoEstablecimiento( comprobanteData.getEstablecimiento()));

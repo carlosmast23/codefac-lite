@@ -660,7 +660,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = ExpresionRegular.textoSimple, nombre = "Apellidos", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
+    //@ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = ExpresionRegular.textoSimple, nombre = "Apellidos", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextApellidos() {
         return jTextApellidos;
     }
@@ -670,7 +670,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = ExpresionRegular.textoSimple, nombre = "Nombres", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
+    //@ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = ExpresionRegular.textoSimple, nombre = "Nombres", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextNombres() {
         return jTextNombres;
     }

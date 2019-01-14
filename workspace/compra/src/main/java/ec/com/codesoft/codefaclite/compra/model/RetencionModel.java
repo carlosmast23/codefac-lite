@@ -769,6 +769,9 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         retencion.setTipoDocumento(tipoDocumentoEnum.getCodigo());
         
+        retencion.setDireccionEstablecimiento(session.getSucursal().getDirecccion());
+        retencion.setDireccionMatriz(session.getMatriz().getDirecccion());
+        
         if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
         {
             //Si el tipo es libre seteo con los datos de la interfaz grafica
