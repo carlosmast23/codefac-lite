@@ -2711,7 +2711,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         parametros.put("pl_fecha_hora", formateador.format(new Date()));
         parametros.put("pl_usuario", sessionCodefac.getUsuario().getNick());
         parametros.put("pl_direccion", sessionCodefac.getSucursal().getDirecccion()); //TODO: Ver si agregar la direccion general de la matriz
-        parametros.put("pl_nombre_empresa", sessionCodefac.getEmpresa().getNombreLegal());
+        
+        String nombreComercial=sessionCodefac.getEmpresa().getNombreLegal();
+        if(nombreComercial==null || nombreComercial.trim().isEmpty())
+        {
+            nombreComercial=sessionCodefac.getEmpresa().getRazonSocial();
+        }
+        
+        parametros.put("pl_nombre_empresa", nombreComercial);
         parametros.put("pl_telefonos", sessionCodefac.getMatriz().getTelefono());
         parametros.put("pl_celular", sessionCodefac.getMatriz().getCelular());
         parametros.put("pl_facebook", sessionCodefac.getEmpresa().getFacebook());
