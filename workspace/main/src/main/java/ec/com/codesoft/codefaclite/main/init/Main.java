@@ -116,6 +116,8 @@ public class Main {
         frameAplicacion.setUndecorated(true);
         frameAplicacion.setIconImage(ParametrosSistemaCodefac.iconoSistema);
         frameAplicacion.setVisible(true);
+        
+        System.setProperty("sun.net.client.defaultConnectTimeout", "2000"); //Establece el tiempo de espera para las conexiones con el servidor
             
         //Configurar diferente tipo de letra para los dialogos
         UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));

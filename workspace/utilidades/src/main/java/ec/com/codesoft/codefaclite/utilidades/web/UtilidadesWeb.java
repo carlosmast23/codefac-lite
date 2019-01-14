@@ -65,6 +65,7 @@ public class UtilidadesWeb {
             File file = new File(folder + name);
 
             URLConnection conn = new URL(url).openConnection();
+            //conn.setConnectTimeout(3000); //Espera 3 segundos para verificar si existe conexion
             conn.connect();
             int tamanioTotal = conn.getContentLength();
             

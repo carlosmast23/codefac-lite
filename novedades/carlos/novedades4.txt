@@ -120,3 +120,6 @@ Verificar que por algun motivo cuando abro una pantalla que menos permisos en lo
 Ver como puedo disminuir el tiempo de espera cuando no exista el servidor
 Al momento que se esta guardando el punto de emision el campo esta como string , toca cambiarle a integer o long
 Revisar que los puntos de emision se esta grabando el numero del punto de emision para consultar el secuencial pero esto genera problemas cuando son varios establecimientos , deberia grabar el id del registro del punto de emision
+En el clase utilidades web en la linea 68 verificar si ese tiempo es suficiente para conectarse  conn.setConnectTimeout(3000); //Espera 3 segundos para verificar si existe conexion
+
+System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
