@@ -118,3 +118,5 @@ Hacer el modelo simplificado de la guia de remision
 Agregar advertencia al iniciar el software que no existe ninguna sucursal matriz activa y tambien de otras notificaciones
 Verificar que por algun motivo cuando abro una pantalla que menos permisos en los botones del menu al abrir otra ventana con mas permisos ya no carga (especialmente revisar despues de crear un usuario y luego crear un perfil)
 Ver como puedo disminuir el tiempo de espera cuando no exista el servidor
+Al momento que se esta guardando el punto de emision el campo esta como string , toca cambiarle a integer o long
+Revisar que los puntos de emision se esta grabando el numero del punto de emision para consultar el secuencial pero esto genera problemas cuando son varios establecimientos , deberia grabar el id del registro del punto de emision
