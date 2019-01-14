@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -25,16 +26,15 @@ import javax.persistence.Query;
  */
 public class FacturaBusqueda implements InterfaceModelFind<Factura> {   
     private Persona cliente;
+    private EnumSiNo estadoEnviadoGuiaRemision;
 
     public FacturaBusqueda(Persona cliente) {
-        this.cliente = cliente;
-    
+        this.cliente = cliente;    
     }
 
     public FacturaBusqueda() {
+        
     }
-    
-    
     
     
     @Override
@@ -54,11 +54,17 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
     @Override
     public QueryDialog getConsulta(String filter) {
         //Factura f;
+        //f.getEstadoEnviadoGuiaRemision()
         //f.getSecuencial();
         String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 ";
         if(cliente!=null)
         {
             queryString+=" AND u.cliente=?10 ";
+        }
+        
+        if(estadoEnviadoGuiaRemision!=null)
+        {
+            queryString+=" AND u.estadoEnviadoGuiaRemision=?11";
         }
         
         queryString+=" AND (u.codigoDocumento=?3 OR  u.codigoDocumento=?4) ";
@@ -73,6 +79,11 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
         
         if (cliente != null) {
             queryDialog.agregarParametro(10,cliente);
+        }
+        
+        if(estadoEnviadoGuiaRemision!=null)
+        {
+            queryDialog.agregarParametro(11,estadoEnviadoGuiaRemision.getLetra());
         }
         
         //queryDialog.agregarParametro(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
@@ -96,5 +107,11 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
         dato.add(t.getFechaEmision());
         dato.add(t.getTotal());
     }
+
+    public void setEstadoEnviadoGuiaRemision(EnumSiNo estadoEnviadoGuiaRemision) {
+        this.estadoEnviadoGuiaRemision = estadoEnviadoGuiaRemision;
+    }
+    
+    
     
 }

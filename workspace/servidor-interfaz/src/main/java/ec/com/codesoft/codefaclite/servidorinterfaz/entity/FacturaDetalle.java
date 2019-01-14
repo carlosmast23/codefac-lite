@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import javax.inject.Singleton;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -175,6 +176,32 @@ public class FacturaDetalle implements Serializable {
     public void setIcePorcentaje(BigDecimal icePorcentaje) {
         this.icePorcentaje = icePorcentaje;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final FacturaDetalle other = (FacturaDetalle) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
     
     
     

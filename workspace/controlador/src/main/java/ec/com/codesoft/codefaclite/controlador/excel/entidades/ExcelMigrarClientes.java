@@ -29,11 +29,12 @@ public class ExcelMigrarClientes extends ExcelMigrar {
         NOMBRES("Nombres",1,String.class),
         APELLIDOS("Apellidos",2,String.class),
         RAZON_SOCIAL("Razon Social",3,String.class),
-        DIRECCION("Direccion",4,String.class),
-        TELEFONO("Telefono",5,String.class),
-        CELULAR("Celular",6,String.class),
-        CORREO("Correo",7,String.class),
-        ESTADO("Estado",8,String.class);
+        NOMBRE_COMERCIAL("Nombre Comercial",4,String.class),
+        DIRECCION("Direccion",5,String.class),
+        TELEFONO("Telefono",6,String.class),
+        CELULAR("Celular",7,String.class),
+        CORREO("Correo",8,String.class),
+        ESTADO("Estado",9,String.class);
 
         private Enum(String nombre,Integer posicion,Class tipoDato) {
             this.nombre = nombre;

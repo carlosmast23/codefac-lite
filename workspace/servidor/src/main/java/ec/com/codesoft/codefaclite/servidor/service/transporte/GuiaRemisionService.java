@@ -5,16 +5,21 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service.transporte;
 
+import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.transporte.GuiaRemisionFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
+import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -55,7 +60,20 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                             entityManager.persist(destinatario);
                         }
                     }                    
-                    //entityManager.merge(entity.getTransportista());
+                   //CAMBIAR ESTADOS DE LAS FACTURAS QUE VAN A SER ENVIADAS
+                    for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {
+                        for (DetalleProductoGuiaRemision detallesProducto : destinatario.getDetallesProductos()) {
+                            Long facturaId=detallesProducto.getReferenciaId();
+                            FacturaDetalleFacade facturaDetalleFacade=new FacturaDetalleFacade();
+                            FacturaDetalle facturaDetalle= facturaDetalleFacade.find(facturaId);;
+                            
+                            Factura facturaEditar=facturaDetalle.getFactura();
+                            System.out.println("Factura editar: "+facturaEditar.getPreimpreso());
+                            facturaEditar.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.SI);
+                            entityManager.merge(facturaEditar);
+                        }
+                        
+                    }
                     
                     entityManager.persist(entity);
                 } catch (RemoteException ex) {

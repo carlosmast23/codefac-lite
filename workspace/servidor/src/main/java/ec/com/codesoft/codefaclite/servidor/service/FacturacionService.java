@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -96,6 +97,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
+                factura.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.NO);
 
                 ComprobantesService servicioComprobante = new ComprobantesService();
                 servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);            

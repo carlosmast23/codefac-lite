@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional.CampoDefectoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
@@ -88,6 +89,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
     
     @Column(name = "TIPO_IDENTIFICACION_CODIGO_SRI")
     private String tipoIdentificacionCodigoSri;
+    
+    @Column(name = "ESTADO_ENVIADO_GUIA_REMISION")
+    private String estadoEnviadoGuiaRemision;
     
     @Column(name = "FECHA_VENCIMIENTO_FACTURA")
     protected Date fechaVencimiento;
@@ -265,8 +269,23 @@ public class Factura extends ComprobanteEntity implements Serializable {
     public void setFechaVencimiento(Date fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
+
+    public String getEstadoEnviadoGuiaRemision() {
+        return estadoEnviadoGuiaRemision;
+    }
+
+    public void setEstadoEnviadoGuiaRemision(String estadoEnviadoGuiaRemision) {
+        this.estadoEnviadoGuiaRemision = estadoEnviadoGuiaRemision;
+    }
     
-    
+    public EnumSiNo getEstadoEnviadoGuiaRemisionEnum() {
+        return EnumSiNo.getEnumByLetra(estadoEnviadoGuiaRemision);
+    }
+
+    public void setEstadoEnviadoGuiaRemisionEnum(EnumSiNo estadoEnviadoGuiaRemisionEnum) {
+        this.estadoEnviadoGuiaRemision = estadoEnviadoGuiaRemisionEnum.getLetra();
+    }
+
     
     
     

@@ -130,6 +130,11 @@ public abstract class UtilidadesTextos {
         return cadena;
     }    
     
+    public static String formatearTextoSinNingunEspacio(String texto)
+    {
+        return texto.trim().replace(" ","");
+    }
+    
 
     /**
      * Convierte un input Stream a una cadena de texto

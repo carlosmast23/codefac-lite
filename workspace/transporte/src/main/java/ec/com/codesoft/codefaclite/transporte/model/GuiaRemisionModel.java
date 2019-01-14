@@ -38,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -239,6 +240,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         getTxtDescripcionDetalle().setText("");
         getTxtCodigoDetalle().setText("");
         getCmbDestinatarios().removeAllItems();
+        getTxtCodigoSucursal().setValue(1);
         
         imprimirTabla();
         
@@ -417,6 +419,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         destinatario.setRuta(destinatario.getRuta());
         destinatario.setReferenciaDocumentoId(facturaSeleccionada.getId());
         destinatario.setIdentificacion(this.destinatario.getIdentificacion());
+        destinatario.setCodigoEstablecimiento((Integer) getTxtCodigoSucursal().getValue());
         
         ///Agregado detalle  de los productos de la factura enlazada
         for (FacturaDetalle facturaDetalle : facturaSeleccionada.getDetalles()) {
@@ -425,7 +428,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             detalle.setCodigoAdicional("");
             detalle.setCodigoInterno(facturaDetalle.getReferenciaId()+"");
             detalle.setDescripcion(facturaDetalle.getDescripcion());
-            detalle.setReferenciaId(facturaDetalle.getReferenciaId());
+            detalle.setReferenciaId(facturaDetalle.getId());
             destinatario.addProducto(detalle);
         }        
         
@@ -491,6 +494,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             @Override
             public void actionPerformed(ActionEvent e) {
                 FacturaBusqueda facturaBusqueda = new FacturaBusqueda(destinatario);
+                facturaBusqueda.setEstadoEnviadoGuiaRemision(EnumSiNo.NO);
+                
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);
                 buscarDialogoModel.setVisible(true);
                 Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
@@ -513,6 +518,11 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         if(destinatarioGuiaRemision.getMotivoTranslado().isEmpty())
         {
             DialogoCodefac.mensaje("Error Validación","Porfavor ingrese un motivo de translado",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        
+        if (destinatarioGuiaRemision.getCodigoEstablecimiento().isEmpty()) {
+            DialogoCodefac.mensaje("Error Validación", "Porfavor ingrese un código de establecimiento", DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
         

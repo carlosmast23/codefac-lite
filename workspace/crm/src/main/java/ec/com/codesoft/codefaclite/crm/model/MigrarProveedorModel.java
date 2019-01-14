@@ -52,8 +52,9 @@ public class MigrarProveedorModel extends MigrarModel{
                     representante.setTelefonoConvencional((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.TELEFONO).valor);
                     representante.setTelefonoCelular((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.CELULAR).valor);
                     representante.setCorreoElectronico((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.CORREO).valor);
+                    representante.setNombreLegal((String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRE_COMERCIAL).valor);
                     
-                    representante.setTipoEnum(OperadorNegocioEnum.CLIENTE);
+                    representante.setTipoEnum(OperadorNegocioEnum.PROVEEDOR);
                     representante.setObligadoLlevarContabilidadEnum(EnumSiNo.NO);
                     
                     representante.setContactoClienteEnum(EnumSiNo.NO);
@@ -73,11 +74,21 @@ public class MigrarProveedorModel extends MigrarModel{
                     if(representanteTmp!=null)
                     {
                         //ExcepcionExcel excepcionExcel = new ExcepcionExcel("");
-                        
-                        throw new ExcelMigrar.ExcepcionExcel("El dato ya se encuentra registrado en el sistema");
+                        if(representanteTmp.getTipoEnum().equals(OperadorNegocioEnum.CLIENTE))
+                        {
+                            representanteTmp.setTipoEnum(OperadorNegocioEnum.AMBOS);
+                            ServiceFactory.getFactory().getPersonaServiceIf().editar(representanteTmp);
+                            
+                        }
+                        else
+                        {
+                            throw new ExcelMigrar.ExcepcionExcel("El dato ya se encuentra registrado en el sistema");
+                        }
                     }
-                    
-                    ServiceFactory.getFactory().getPersonaServiceIf().grabar(representante);
+                    else
+                    {
+                        ServiceFactory.getFactory().getPersonaServiceIf().grabar(representante);
+                    }
                     //return true;
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(MigrarProveedorModel.class.getName()).log(Level.SEVERE, null, ex);

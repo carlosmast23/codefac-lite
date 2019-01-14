@@ -114,7 +114,7 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
          */
         info.setObligadoContabilidad(retencion.getObligadoLlevarContabilidad());
         info.setPeriodoFiscal(retencion.getPeriodoFiscal());
-        info.setRazonSocialSujetoRetenido(retencion.getProveedor().getRazonSocial());
+        info.setRazonSocialSujetoRetenido(UtilidadValidador.normalizarTexto(retencion.getProveedor().getRazonSocial()));
         
         //Todo: Revisar este caso porque en los clientes coincide pero para las proveedores ya no coincide el codigo de tipo de identifiacion
         info.setTipoIdentificacionSujetoRetenido(sriIdentificacion.getCodigo());

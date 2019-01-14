@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -57,6 +58,9 @@ public class DestinatarioGuiaRemision implements Serializable{
     
     @Column(name = "REFERENCIA_DOCUMENTO_ID")
     private Long referenciaDocumentoId;
+    
+    @Column(name = "CODIGO_ESTABLECIMIENTO")
+    private String codigoEstablecimiento;
     
     @JoinColumn(name = "GUIA_REMISION_ID")
     @ManyToOne(optional = false)
@@ -184,6 +188,20 @@ public class DestinatarioGuiaRemision implements Serializable{
     public void setIdentificacion(String identificacion) {
         this.identificacion = identificacion;
     }
+
+    public String getCodigoEstablecimiento() {
+        return codigoEstablecimiento;
+    }
+
+    public void setCodigoEstablecimiento(String codigoEstablecimiento) {
+        this.codigoEstablecimiento = codigoEstablecimiento;
+    }
+    
+    public void setCodigoEstablecimiento(int codigoEstablecimiento) {
+        this.codigoEstablecimiento = UtilidadesTextos.llenarCarateresIzquierda(codigoEstablecimiento+"", 3,"0");
+    }
+
+    
     
     
 
@@ -226,5 +244,7 @@ public class DestinatarioGuiaRemision implements Serializable{
     public String toString() {
         return destinatorio.getRazonSocial()+" ("+preimpreso+")";
     }
+    
+    
     
 }
