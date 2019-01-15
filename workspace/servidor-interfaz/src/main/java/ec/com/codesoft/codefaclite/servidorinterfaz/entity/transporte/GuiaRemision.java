@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import java.io.Serializable;
 import java.sql.Date;
@@ -58,6 +59,9 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "guiaRemision",fetch = FetchType.EAGER)
     private List<DestinatarioGuiaRemision> destinatarios;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "guiaRemision", fetch = FetchType.EAGER)
+    private List<GuiaRemisionAdicional> datosAdicionales;
 
     public GuiaRemision() {
     }
@@ -143,6 +147,45 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
         this.placa = placa;
     }
     
+    
+    public void addDatosAdicionalCorreo(String correo, FacturaAdicional.Tipo tipoCorreo, FacturaAdicional.CampoDefectoEnum campoDefecto) {
+        
+        //Validacion para no ingresar correos vacios o nulos
+        if(correo.trim().isEmpty() || correo==null)
+        {
+           return ; 
+        }
+        
+        GuiaRemisionAdicional guiaRemisionAdicional = new GuiaRemisionAdicional();
+        guiaRemisionAdicional.setCampo(campoDefecto.getNombre());
+        guiaRemisionAdicional.setGuiaRemision(this);
+        guiaRemisionAdicional.setTipo(tipoCorreo.getLetra());
+        guiaRemisionAdicional.setValor(correo);
+
+        if (this.datosAdicionales == null) {
+            this.datosAdicionales = new ArrayList<GuiaRemisionAdicional>();
+        }
+
+        //Buscar si existe un correo anterior spara nombrar de forma secuencial
+        Integer numeroMaximo = 0;
+        for (GuiaRemisionAdicional datoAdicional : datosAdicionales) {
+            if (datoAdicional.getTipo().equals(tipoCorreo.getLetra())) {
+                if (datoAdicional.getNumero() > numeroMaximo) {
+                    numeroMaximo = datoAdicional.getNumero();
+                }
+            }
+        }
+
+        guiaRemisionAdicional.setNumero(numeroMaximo + 1);
+        //Modificar el nombre si el correo es mas de 2
+        if (guiaRemisionAdicional.getNumero() > 1) {
+            guiaRemisionAdicional.setCampo(campoDefecto.getNombre() + " " + guiaRemisionAdicional.getNumero());
+        }
+
+        this.datosAdicionales.add(guiaRemisionAdicional);
+
+    }
+    
     /**
      * Agregar Destinatarios a la guia de remision
      * @param detalle 
@@ -169,6 +212,15 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
         }
         return cantidad;
     }
+
+    public List<GuiaRemisionAdicional> getDatosAdicionales() {
+        return datosAdicionales;
+    }
+
+    public void setDatosAdicionales(List<GuiaRemisionAdicional> datosAdicionales) {
+        this.datosAdicionales = datosAdicionales;
+    }
+
     
     
 

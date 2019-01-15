@@ -26,9 +26,11 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataNotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -38,6 +40,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
@@ -68,7 +71,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JComponent;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -140,7 +142,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             guiaRemision=ServiceFactory.getFactory().getGuiaRemisionServiceIf().grabar(guiaRemision);            
             
             ComprobanteDataGuiaRemision comprobanteData = new ComprobanteDataGuiaRemision(this.guiaRemision);
-            comprobanteData.setMapInfoAdicional(new HashMap<String, String>());
+            comprobanteData.setMapInfoAdicional(getMapAdicional(guiaRemision));
+            //comprobanteData.setMapInfoAdicional(new HashMap<String, String>());
             
             GuiaRemisionImplComprobante gic=new GuiaRemisionImplComprobante(this, guiaRemision);            
             ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
@@ -154,6 +157,17 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         }
         
         
+    }
+    
+    private Map<String,String> getMapAdicional(GuiaRemision guiaRemision)
+    {
+        Map<String, String> parametroMap = new HashMap<String, String>();
+        if (guiaRemision.getDatosAdicionales() != null) {
+            for (GuiaRemisionAdicional datoAdicional : guiaRemision.getDatosAdicionales()) {
+                parametroMap.put(datoAdicional.getCampo(), datoAdicional.getValor());
+            }
+        }
+        return parametroMap;
     }
 
     @Override
@@ -604,6 +618,16 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         
         guiaRemision.setDireccionEstablecimiento(session.getSucursal().getDirecccion());
         guiaRemision.setDireccionMatriz(session.getMatriz().getDirecccion());
+        
+        /**
+         * Agregar los correos de los destinatarios
+         */
+        for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
+            guiaRemision.addDatosAdicionalCorreo(destinatario.getDestinatorio().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO);
+        }
+        
+        //Agregado correo del transportista
+        guiaRemision.addDatosAdicionalCorreo(guiaRemision.getTransportista().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO);
   
         
     }
@@ -649,6 +673,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         mapParametros.put("codigo", guiaRemision.getPreimpreso().toString());
         mapParametros.put("autorizacion", guiaRemision.getClaveAcceso());
         mapParametros.put("origen", guiaRemision.getDireccionPartida());
+        mapParametros.put("placa", guiaRemision.getPlaca());
         
         
         InputStream inputStreamSubReporte = RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("comprobanteGuiaRemisionDetalle.jrxml");
