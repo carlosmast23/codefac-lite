@@ -41,6 +41,8 @@
 	<parameter name="autorizacion" class="java.lang.String"/>
 	<parameter name="pl_url_detalle" class="java.lang.Object"/>
 	<parameter name="parameter1" class="java.lang.String"/>
+	<parameter name="placa" class="java.lang.String"/>
+	<parameter name="origen" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -111,7 +113,7 @@
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{placa}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="276" y="0" width="89" height="15" uuid="86856508-a120-4b5e-a3ea-bcf478f218f4"/>
@@ -131,7 +133,7 @@
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{telefonos}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{origen}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="70" y="3" width="205" height="12" uuid="5f603c69-4924-4a2f-a92c-b1d5610591c8"/>
