@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronico
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
@@ -263,7 +264,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return false;
     }
     
-    private List<String>obtenerCorreosFactura()
+    
+    private List<String> obtenerCorreosFactura()
     {
         ArrayList<String> correos=new ArrayList<String>();
         
@@ -3217,6 +3219,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public Empresa getEmpresa() {
         return session.getEmpresa();
     }
+
+    @Override
+    public InterfazComunicacionPanel getPanelPadre() {
+        return panelPadre;
+    }
+
+    @Override
+    public List<ComprobanteAdicional> getDatosAdicionales() {
+        return (List<ComprobanteAdicional>)(Object) factura.getDatosAdicionales();
+    }
+
     
     
     

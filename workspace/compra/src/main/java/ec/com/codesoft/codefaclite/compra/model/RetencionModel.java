@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_GRABAR;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -1034,6 +1035,16 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
     @Override
     public Empresa getEmpresa() {
         return session.getEmpresa();
+    }
+
+    @Override
+    public InterfazComunicacionPanel getPanelPadre() {
+        return panelPadre;
+    }
+
+    @Override
+    public List<ComprobanteAdicional> getDatosAdicionales() {
+        return (List<ComprobanteAdicional>)(Object) retencion.getDatosAdicionales();
     }
 
 }

@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosCompro
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaNotaCredito;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.NotaCreditoBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
@@ -43,6 +44,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
@@ -1465,6 +1467,17 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     public Empresa getEmpresa() {
         return session.getEmpresa();
     }
+
+    @Override
+    public InterfazComunicacionPanel getPanelPadre() {
+        return panelPadre;
+    }
+
+    @Override
+    public List<ComprobanteAdicional> getDatosAdicionales() {
+        return (List<ComprobanteAdicional>)(Object)notaCredito.getDatosAdicionales();
+    }
+
     
 
 }

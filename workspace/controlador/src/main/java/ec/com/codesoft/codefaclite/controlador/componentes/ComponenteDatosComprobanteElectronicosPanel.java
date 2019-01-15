@@ -8,7 +8,13 @@ package ec.com.codesoft.codefaclite.controlador.componentes;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
+import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
@@ -22,8 +28,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Action;
 
 /**
  *
@@ -53,21 +62,27 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
 
         btnObtenerClaveAcceso = new javax.swing.JButton();
         btnAbrirXml = new javax.swing.JButton();
+        btnReenviarCorreo = new javax.swing.JButton();
 
-        setLayout(new java.awt.BorderLayout());
+        setLayout(new org.jdesktop.swingx.VerticalLayout());
 
         btnObtenerClaveAcceso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/datos.png"))); // NOI18N
         btnObtenerClaveAcceso.setToolTipText("Imprimir Clave de Acceso");
-        add(btnObtenerClaveAcceso, java.awt.BorderLayout.CENTER);
+        add(btnObtenerClaveAcceso);
 
         btnAbrirXml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/xml.png"))); // NOI18N
-        add(btnAbrirXml, java.awt.BorderLayout.PAGE_END);
+        add(btnAbrirXml);
+
+        btnReenviarCorreo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/email.png"))); // NOI18N
+        btnReenviarCorreo.setToolTipText("Reenviar Correo");
+        add(btnReenviarCorreo);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbrirXml;
     private javax.swing.JButton btnObtenerClaveAcceso;
+    private javax.swing.JButton btnReenviarCorreo;
     // End of variables declaration//GEN-END:variables
 
     private void listenerBotones() {
@@ -78,6 +93,42 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                 dialogo.setClaveAcceso(comprobante.getComprobante().getClaveAcceso());                
                 dialogo.setVisible(true);
 
+            }
+        });
+        
+        btnReenviarCorreo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Boolean reenviarCorreo=DialogoCodefac.dialogoPregunta("Advertencia ","¿Está seguro que desea reenviar la información al correo? ",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if(reenviarCorreo)
+                {
+                    try {
+                        comprobante.getPanelPadre().cambiarCursorEspera();
+                        List<AlertaComprobanteElectronico> alertas=ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesPendienteSinCallBack(
+                                ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
+                                ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
+                                comprobante.getComprobante().getClaveAcceso(),
+                                obtenerCorreosFactura()); //TOdo:Verificar si puedo hacer alguna manera para solo enviar a los correos que esten escritos
+                        
+                        if(alertas.size()>0)
+                        {
+                            String mensajeCompleto = AlertaComprobanteElectronico.unirTodasAlertas(alertas);
+                            DialogoCodefac.mensaje("Alertas en el proceso ",mensajeCompleto,DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        }
+                        else
+                        {                            
+                            DialogoCodefac.mensaje(MensajeCodefacSistema.CorreoElectronico.CORREO_ENVIADO);
+                        }
+                        comprobante.getPanelPadre().cambiarCursorNormal();
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                    }
+                }
             }
         });
         
@@ -121,10 +172,26 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     {
         btnObtenerClaveAcceso.setEnabled(habilitar);
         btnAbrirXml.setEnabled(habilitar);
+        btnReenviarCorreo.setEnabled(habilitar);
     }
 
     public void setComprobante(ComponenteDatosComprobanteElectronicosInterface comprobante) {
         this.comprobante = comprobante;
+    }
+
+    private List<String> obtenerCorreosFactura() {
+        ArrayList<String> correos = new ArrayList<String>();
+
+        if (comprobante.getDatosAdicionales() != null) {
+            for (ComprobanteAdicional datoAdicional : comprobante.getDatosAdicionales()) {
+                if (FacturaAdicional.Tipo.TIPO_CORREO.getLetra().equals(datoAdicional.getTipo())) {
+
+                    correos.add(datoAdicional.getValor());
+
+                }
+            }
+        }
+        return correos;
     }
 
     

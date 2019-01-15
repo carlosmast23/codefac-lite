@@ -5,8 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.controlador.componentes;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import java.util.List;
 
 /**
  *
@@ -15,4 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 public interface ComponenteDatosComprobanteElectronicosInterface {
     public ComprobanteEntity getComprobante();
     public Empresa getEmpresa();
+    public InterfazComunicacionPanel getPanelPadre();
+    public List<ComprobanteAdicional> getDatosAdicionales();
+    
 }

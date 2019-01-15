@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.DetalleGuiaRemisionComprobante;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -627,7 +628,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         }
         
         //Agregado correo del transportista
-        guiaRemision.addDatosAdicionalCorreo(guiaRemision.getTransportista().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO);
+        //guiaRemision.addDatosAdicionalCorreo(guiaRemision.getTransportista().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO);
   
         
     }
@@ -746,6 +747,16 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     @Override
     public Empresa getEmpresa() {
         return session.getEmpresa();
+    }
+
+    @Override
+    public InterfazComunicacionPanel getPanelPadre() {
+        return panelPadre;
+    }
+
+    @Override
+    public List<ComprobanteAdicional> getDatosAdicionales() {
+        return (List<ComprobanteAdicional>)(Object) guiaRemision.getDatosAdicionales();
     }
     
     
