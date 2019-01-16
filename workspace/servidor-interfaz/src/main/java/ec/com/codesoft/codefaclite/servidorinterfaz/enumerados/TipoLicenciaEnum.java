@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
 
 /**
  *

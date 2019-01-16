@@ -6,7 +6,6 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
@@ -64,7 +63,7 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
     public void eliminar(Persona p)
     {
         //personaFacade.remove(p);
-        p.setEstado(ClienteEnumEstado.ELIMINADO.getEstado());
+        p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
         editar(p);
     }
     
@@ -97,6 +96,24 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
     public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum,GeneralEnumEstado estado) throws java.rmi.RemoteException
     {
         return getFacade().buscarPorTipoFacade(tipoEnum,estado);
+    }
+    
+    @Override
+    public Persona buscarPorIdentificacion(String identificacion) throws java.rmi.RemoteException
+    {
+        //Persona p;
+        //p.getIdentificacion();
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("identificacion", identificacion);
+        
+        List<Persona> personas=getFacade().findByMap(mapParametros);
+        if(personas.size()>0)
+        {
+            return personas.get(0);
+        }
+        
+        return null;
+
     }
             
     

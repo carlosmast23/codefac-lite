@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -187,6 +188,14 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+    
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
+    }
+
+    public void setEstadoEnum(GeneralEnumEstado estado) {
+        this.estado = estado.getEstado();
+    }
 
     public String getNombres() {
         return nombres;
@@ -290,6 +299,8 @@ public class Persona implements Serializable, Comparable<Persona> {
 
 
     ///Metodos personalizados
+    
+    
     public String getNombresCompletos() {
         String nombresTmp = (nombres != null) ? nombres : "";
         String apellidosTmp = (apellidos != null) ? apellidos : "";

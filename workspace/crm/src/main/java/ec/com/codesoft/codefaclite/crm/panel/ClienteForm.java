@@ -18,7 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
@@ -504,7 +504,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chkContacto;
     private javax.swing.JCheckBox chkObligadoLlevarContabilidad;
-    private javax.swing.JComboBox<ClienteEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<Nacionalidad> cmbNacionalidad;
     private javax.swing.JComboBox<OperadorNegocioEnum> cmbTipoOperador;
@@ -655,7 +655,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.jComboIdentificacion = jComboIdentificacion;
     }
 
-    public JComboBox<ClienteEnumEstado> getCmbEstado() {
+    public JComboBox<GeneralEnumEstado> getCmbEstado() {
         return cmbEstado;
     }
 

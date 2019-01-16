@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.util.Map;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import net.sf.jasperreports.engine.JasperPrint;
 
 /**
@@ -81,6 +82,9 @@ public interface InterfazComunicacionPanel
      * @param frame 
      */
     public void cambiarCursorNormal();
+    
+    public void cambiarEstadoFormularioEditar(GeneralPanelInterface frame);
+    public void cambiarEstadoFormularioNuevo(GeneralPanelInterface frame);
     
 
 

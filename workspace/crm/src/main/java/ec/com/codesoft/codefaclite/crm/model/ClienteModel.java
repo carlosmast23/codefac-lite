@@ -28,7 +28,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.callback.EnvioMensajesCallBa
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
@@ -37,6 +36,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
@@ -163,7 +163,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setExtensionTelefono(getjTextExtension().getText());
         persona.setTelefonoCelular(getjTextCelular().getText());
         persona.setCorreoElectronico(getjTextCorreo().getText());
-        persona.setEstado(((ClienteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+        persona.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
         persona.setTipo(((OperadorNegocioEnum) getCmbTipoOperador().getSelectedItem()).getLetra());
         persona.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
         persona.setSriFormaPago((SriFormaPago) getCmbFormaPagoDefecto().getSelectedItem());
@@ -310,11 +310,13 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextExtension().setText(persona.getExtensionTelefono());
         getjTextCelular().setText(persona.getTelefonoCelular());
         getjTextCorreo().setText(persona.getCorreoElectronico());
-        getCmbEstado().setSelectedItem(ClienteEnumEstado.getEnum(persona.getEstado()));
+        getCmbEstado().setSelectedItem(GeneralEnumEstado.getEnum(persona.getEstado()));
         getCmbTipoOperador().setSelectedItem(persona.getTipoEnum());
         getCmbNacionalidad().setSelectedItem(persona.getNacionalidad());
         getCmbFormaPagoDefecto().setSelectedItem(persona.getSriFormaPago());
-        getTxtDiasCredito().setValue(persona.getDiasCreditoCliente());
+        
+        if(persona.getDiasCreditoCliente()!=null)
+            getTxtDiasCredito().setValue(persona.getDiasCreditoCliente());
         
         //Seleccionar si es obligado a llevar contabilidad
         if(persona.getObligadoLlevarContabilidadEnum()!=null)
@@ -383,7 +385,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             getCmbFormaPagoDefecto().setSelectedIndex(0);
 
             //Setear el valor por defecto
-            getCmbEstado().setSelectedItem(ClienteEnumEstado.ACTIVO);
+            getCmbEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
             
             getTxtPorcentajeComision().setText("0");
             getChkContacto().setSelected(false);
@@ -434,7 +436,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
          * Cargando los estados por defecto
          */
         getCmbEstado().removeAllItems();
-        for (ClienteEnumEstado enumerador : ClienteEnumEstado.values()) {
+        for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
         }
         
@@ -442,7 +444,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
 
     private boolean prevalidar() {
-        if (getCmbEstado().getSelectedItem().equals(ClienteEnumEstado.ELIMINADO)) {
+        if (getCmbEstado().getSelectedItem().equals(GeneralEnumEstado.ELIMINADO)) {
             DialogoCodefac.mensaje("Advertencia", "Si desea eliminar el cliente seleccione el boton de eliminar,seleccione otro estado", DialogoCodefac.MENSAJE_ADVERTENCIA);
             return false;
         }
@@ -488,7 +490,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public void nuevo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     public void addListenerCombos() {
@@ -559,12 +561,20 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     public void addListenerTexts() {
         
+        getjTextIdentificacion().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {}
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                listenerBuscarDatoIngresado();
+            }
+        });
+        
                 
         getjTextNombres().addFocusListener(new FocusAdapter() {
             @Override
-            public void focusGained(FocusEvent evt) {
-
-            }
+            public void focusGained(FocusEvent evt) {}
 
             @Override
             public void focusLost(FocusEvent evt) {
@@ -574,15 +584,98 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
         getjTextApellidos().addFocusListener(new FocusAdapter() {
             @Override
-            public void focusGained(FocusEvent evt) {
-
-            }
+            public void focusGained(FocusEvent evt) {}
 
             @Override
             public void focusLost(FocusEvent evt) {
                 construirNombreSocial();
             }
         });
+    }
+    
+    private void seleccionarTipoIdentificacion() {
+        if (getjTextIdentificacion().getText().length() == 10) {
+            getjComboIdentificacion().setSelectedItem(Persona.TipoIdentificacionEnum.CEDULA);
+        } else if (getjTextIdentificacion().getText().length() == 13) {
+            getjComboIdentificacion().setSelectedItem(Persona.TipoIdentificacionEnum.RUC);
+        } else {
+            //getjComboIdentificacion().setSelectedItem(Persona.TipoIdentificacionEnum.PASAPORTE);
+        }
+
+    }
+
+    public void listenerBuscarDatoIngresado()
+    {
+                
+        //Este metodo solo funciona si el estado es grabar
+        if(estadoFormulario.equals(ESTADO_GRABAR))
+        {
+            //Si el dato ingresado es vacio no hago validaciones
+            if (getjTextIdentificacion().getText().trim().isEmpty()) 
+            {
+                return;
+            }
+            
+            try {
+                
+                //Seleccionar el tipo de identificacion de forma automatica
+                seleccionarTipoIdentificacion();
+                
+                 Persona persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(getjTextIdentificacion().getText());
+                //Si no esta ingresado ninguna persona continuar con el proceso normal
+                if(persona==null)
+                {
+                    return ;
+                }
+                
+                if(!persona.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                {
+                    DialogoCodefac.mensaje("Advertencia", "En el historial ya existen datos ingresados.\nEdite los datos que requiere y presione guardar.", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    cargarDatosParaEditar(persona);
+                    getCmbTipoOperador().setSelectedItem(operadorNegocioDefault); //Seteo el operador de negocio que vaya a trabajar
+                    getCmbEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
+                    return;
+                }
+
+                
+                if (persona.getTipoEnum().equals(operadorNegocioDefault) || persona.getTipoEnum().equals(OperadorNegocioEnum.AMBOS)) {
+                    DialogoCodefac.mensaje("Advertencia", "Ya existe ingresado un dato con esa identificación", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return;
+                }
+                
+                
+                if(persona.getTipoEnum().equals(OperadorNegocioEnum.CLIENTE) && operadorNegocioDefault.equals(OperadorNegocioEnum.PROVEEDOR))
+                {
+                    DialogoCodefac.mensaje("Advertencia","El registro ya se encuentra ingresada como cliente.\nEdite los datos que requiere y presione guardar.", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    cargarDatosParaEditar(persona);
+                    
+                }
+                
+                if(persona.getTipoEnum().equals(OperadorNegocioEnum.PROVEEDOR) && operadorNegocioDefault.equals(OperadorNegocioEnum.CLIENTE))
+                {
+                    DialogoCodefac.mensaje("Advertencia","El registro ya se encuentra ingresada como proveedor.\nEdite los datos que requiere y presione guardar.", DialogoCodefac.MENSAJE_ADVERTENCIA);                    
+                    cargarDatosParaEditar(persona);
+                }
+                
+                
+                
+                
+            } catch (RemoteException ex) {
+                Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+   
+    
+    //TODO: CONSUMIR ESTE DATO DESDE LA PANTALLA GENERAL PARA TENER UN METODO GENERAL QUE HAGA ESTA FUNCION
+    private void cargarDatosParaEditar(Persona entidad)
+    {
+        
+        panelPadre.cambiarEstadoFormularioEditar(this);
+        cargarDatosPantalla(entidad);
+        getCmbTipoOperador().setSelectedItem(OperadorNegocioEnum.AMBOS);
+        
     }
     
     private void construirNombreSocial()

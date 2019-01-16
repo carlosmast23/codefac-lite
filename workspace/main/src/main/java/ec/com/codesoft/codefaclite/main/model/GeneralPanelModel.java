@@ -3323,6 +3323,22 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         root.getGlassPane().setCursor(Cursor.getDefaultCursor());
     }
     
+    //TODO: HACER QUE ESTOS METODOS TAMBIEN SIRVAN PARA OTRAS FUNCIONALIDADES DE ESTA CLASE
+    @Override
+    public void cambiarEstadoFormularioEditar(GeneralPanelInterface frame) {
+        String tituloOriginal = getTituloOriginal(frame.getTitle());
+        frame.setTitle(tituloOriginal + " [Editar]");
+        frame.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR;
+    }
+
+    //TODO: HACER QUE ESTOS METODOS TAMBIEN SIRVAN PARA OTRAS FUNCIONALIDADES DE ESTA CLASE
+    @Override
+    public void cambiarEstadoFormularioNuevo(GeneralPanelInterface frame) {
+        String tituloOriginal = getTituloOriginal(frame.getTitle());
+        frame.setTitle(tituloOriginal + " [Nuevo]");
+        frame.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
+    }
+
 
    
 }
