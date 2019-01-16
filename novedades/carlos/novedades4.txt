@@ -126,3 +126,5 @@ System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
 
 Hacer algun especie de notifiaciones o widgets al inicio para mostrar novedades por ejemplo facturas pendientes de enviar
 Hacer la pantalla para enviar notifiaciones a la contadora
+Ver alguna forma de configurar con cuantos decimales quieren trabar
+Analizar los cambios del señor del gas
