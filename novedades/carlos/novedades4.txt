@@ -123,3 +123,6 @@ Revisar que los puntos de emision se esta grabando el numero del punto de emisio
 En el clase utilidades web en la linea 68 verificar si ese tiempo es suficiente para conectarse  conn.setConnectTimeout(3000); //Espera 3 segundos para verificar si existe conexion
 
 System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
+
+Hacer algun especie de notifiaciones o widgets al inicio para mostrar novedades por ejemplo facturas pendientes de enviar
+Hacer la pantalla para enviar notifiaciones a la contadora
