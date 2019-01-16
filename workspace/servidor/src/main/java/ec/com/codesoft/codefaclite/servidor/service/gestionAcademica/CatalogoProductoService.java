@@ -32,4 +32,16 @@ public class CatalogoProductoService extends ServiceAbstract<CatalogoProducto,Ca
         return getFacade().findByMap(mapParametros);
     }
     
+    public CatalogoProducto obtenerPorNombre(String nombre) throws RemoteException {
+        CatalogoProducto cp;
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("nombre",nombre);
+        List<CatalogoProducto> catalogos=getFacade().findByMap(mapParametros);
+        if(catalogos.size()>0)
+        {
+            return catalogos.get(0);
+        }
+        return null;
+    }
+    
 }

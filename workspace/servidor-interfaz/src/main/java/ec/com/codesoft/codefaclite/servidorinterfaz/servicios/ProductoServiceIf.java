@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ProductoEnumEstado;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -24,4 +26,6 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     public void eliminar(Producto p) throws java.rmi.RemoteException;
     
     public List<Producto> buscar() throws java.rmi.RemoteException;
+    
+    public Producto buscarPorNombreyEstado(String nombre,ProductoEnumEstado estadoEnum) throws RemoteException;
 }

@@ -14,7 +14,9 @@ import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
@@ -88,6 +90,21 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return productoFacade.findAll();
     }
     
+    public Producto buscarPorNombreyEstado(String nombre,ProductoEnumEstado estadoEnum) throws RemoteException
+    {
+
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("nombre",nombre);
+        mapParametros.put("estado",estadoEnum.getEstado());
+        
+        List<Producto> productos=getFacade().findByMap(mapParametros);
+        if(productos.size()>0)
+        {
+            return productos.get(0);
+        }
+        return null;
+        
+    }
             
     
 

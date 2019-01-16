@@ -45,10 +45,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.PreimpresoFormato;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -63,6 +70,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -89,6 +97,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         listener();
         listenerComponentes();        
         listenerPopups();
+        listenerTexts();
         cargarDatosIniciales();
     }
 
@@ -290,9 +299,9 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getjDateFechaEmision().setDate(UtilidadesFecha.getFechaHoy());
         
         UtilidadesSwingX.placeHolder("Base Imponible",getTxtBaseImponible());
-        UtilidadesSwingX.placeHolder("Preimpreso Compra",getTxtPreimpreso());
+        //UtilidadesSwingX.placeHolder("Preimpreso Compra",getTxtPreimpreso());
         
-        getTxtPreimpreso().setText("");
+        //getTxtPreimpreso().setText("");
         getCmbFechaDocumento().setDate(UtilidadesFecha.getFechaHoy());
         getTxtProveedor().setText("");
         getTxtBaseImponible().setText("");
@@ -559,7 +568,13 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getLblNombreCliente().setText(retencion.getRazonSocial());
         getLblTelefonoCliente().setText(retencion.getTelefono());
         getLblDireccionCliente().setText(retencion.getDireccion());
-        getTxtPreimpreso().setText(retencion.getPreimpresoDocumento());
+        
+        if(estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            getTxtEstablecimientoCompra().setText(retencion.getPreimpresoDocumentoEnum().establecimiento);
+            getTxtPuntoEmisionCompra().setText(retencion.getPreimpresoDocumentoEnum().puntoEmision);
+            getTxtSecuencialCompra().setText(retencion.getPreimpresoDocumentoEnum().secuencial);
+        }
         
         ///Cargar los detalles de la compra
         cargarTablaRetencion();
@@ -777,7 +792,8 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
         {
             //Si el tipo es libre seteo con los datos de la interfaz grafica
-            retencion.setPreimpresoDocumento(getTxtPreimpreso().getText().replaceAll("-",""));
+            PreimpresoFormato preimpresoFormato=new PreimpresoFormato(getTxtEstablecimientoCompra().getText(), getTxtPuntoEmisionCompra().getText(), getTxtSecuencialCompra().getText());
+            retencion.setPreimpresoDocumento(preimpresoFormato.formatoSinLineas());
             retencion.setFechaEmisionDocumento(new java.sql.Date(getCmbFechaDocumento().getDate().getTime()));
         }
         else
@@ -944,7 +960,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
         {
             //System.out.println("<<"+getTxtPreimpreso().getText().replaceAll("-","")+"<<");
-            if(getTxtPreimpreso().getText().replaceAll("-","").trim().length()==0)
+            if(getTxtEstablecimientoCompra().getText().isEmpty() || getTxtPuntoEmisionCompra().getText().isEmpty() || getTxtSecuencialCompra().getText().isEmpty())
             {
                 DialogoCodefac.mensaje("Error","El preimpreso de la compra no debe ser vacio",DialogoCodefac.MENSAJE_INCORRECTO);
                 return false;
@@ -1047,5 +1063,20 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
     public List<ComprobanteAdicional> getDatosAdicionales() {
         return (List<ComprobanteAdicional>)(Object) retencion.getDatosAdicionales();
     }
+
+    private void listenerTexts() {
+        UtilidadesFormularios.bloquerLimiteIngresoCampoTexto(getTxtEstablecimientoCompra(),3);
+        UtilidadesFormularios.bloquerLimiteIngresoCampoTexto(getTxtPuntoEmisionCompra(),3);
+        UtilidadesFormularios.bloquerLimiteIngresoCampoTexto(getTxtSecuencialCompra(),9);
+
+        UtilidadesFormularios.llenarAutomaticamenteCamposTexto(getTxtEstablecimientoCompra(),3);
+        UtilidadesFormularios.llenarAutomaticamenteCamposTexto(getTxtPuntoEmisionCompra(),3);
+        UtilidadesFormularios.llenarAutomaticamenteCamposTexto(getTxtSecuencialCompra(),9);
+        
+    }
+    
+
+    
+
 
 }

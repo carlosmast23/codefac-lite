@@ -17,4 +17,5 @@ import java.util.List;
 public interface CatalogoProductoServiceIf extends ServiceAbstractIf<CatalogoProducto> 
 {
     public List<CatalogoProducto> obtenerPorModulo(ModuloCodefacEnum modulo) throws RemoteException;
+    public CatalogoProducto obtenerPorNombre(String nombre) throws RemoteException;
 }

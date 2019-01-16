@@ -66,8 +66,13 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         lblEspacio6 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         cmbFechaDocumento = new org.jdesktop.swingx.JXDatePicker();
-        txtPreimpreso = new javax.swing.JFormattedTextField();
         jLabel18 = new javax.swing.JLabel();
+        jToolBar2 = new javax.swing.JToolBar();
+        txtEstablecimientoCompra = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        txtPuntoEmisionCompra = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        txtSecuencialCompra = new javax.swing.JTextField();
         panelDatosGenerales = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
@@ -188,20 +193,20 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         jLabel11.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel11.setText("Proveedor:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel11, gridBagConstraints);
 
         txtProveedor.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtProveedor, gridBagConstraints);
 
         btnBuscarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscarProveedor.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnBuscarProveedor, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -214,8 +219,8 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         jLabel17.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel17.setText("Preimpreso:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel17, gridBagConstraints);
@@ -229,21 +234,9 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbFechaDocumento, gridBagConstraints);
-
-        try {
-            txtPreimpreso.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-###-#########")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-        txtPreimpreso.setToolTipText("Preimpreso Compra");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 70;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        jPanel1.add(txtPreimpreso, gridBagConstraints);
 
         jLabel18.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel18.setText("Fecha Compra:");
@@ -252,6 +245,32 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel18, gridBagConstraints);
+
+        jToolBar2.setFloatable(false);
+        jToolBar2.setRollover(true);
+
+        txtEstablecimientoCompra.setColumns(3);
+        jToolBar2.add(txtEstablecimientoCompra);
+
+        jLabel12.setText(" - ");
+        jToolBar2.add(jLabel12);
+
+        txtPuntoEmisionCompra.setColumns(3);
+        jToolBar2.add(txtPuntoEmisionCompra);
+
+        jLabel13.setText(" - ");
+        jToolBar2.add(jLabel13);
+
+        txtSecuencialCompra.setColumns(9);
+        jToolBar2.add(txtSecuencialCompra);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jToolBar2, gridBagConstraints);
 
         tabTipoDocumentos.addTab("Libre", jPanel1);
 
@@ -778,6 +797,8 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
@@ -801,6 +822,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDireccionCliente;
@@ -827,9 +849,11 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JTable tblDatosAdicionales;
     private javax.swing.JTable tblDetalleRetenciones;
     private javax.swing.JTextField txtBaseImponible;
-    private javax.swing.JFormattedTextField txtPreimpreso;
+    private javax.swing.JTextField txtEstablecimientoCompra;
     private javax.swing.JTextField txtProveedor;
+    private javax.swing.JTextField txtPuntoEmisionCompra;
     private javax.swing.JTextField txtReferenciaFactura;
+    private javax.swing.JTextField txtSecuencialCompra;
     // End of variables declaration//GEN-END:variables
 
     public JLabel getLblDireccion() {
@@ -1003,15 +1027,6 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         this.txtBaseImponible = txtBaseImponible;
     }
 
-    public JFormattedTextField getjFormattedTextField1() {
-        return txtPreimpreso;
-    }
-
-    public void setjFormattedTextField1(JFormattedTextField jFormattedTextField1) {
-        this.txtPreimpreso = jFormattedTextField1;
-    }
-
-    
 
     public JXDatePicker getCmbFechaDocumento() {
         return cmbFechaDocumento;
@@ -1033,13 +1048,6 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         this.txtProveedor = txtProveedor;
     }
 
-    public JFormattedTextField getTxtPreimpreso() {
-        return txtPreimpreso;
-    }
-
-    public void setTxtPreimpreso(JFormattedTextField txtPreimpreso) {
-        this.txtPreimpreso = txtPreimpreso;
-    }
 
     public JPanel getPanelDatosDetalles() {
         return PanelDatosDetalles;
@@ -1057,7 +1065,34 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     public ComponenteDatosComprobanteElectronicosPanel getPnlDatosAdicionales() {
         return pnlDatosAdicionales;
     }
-    
+
+    @LimpiarAnotacion
+    public JTextField getTxtEstablecimientoCompra() {
+        return txtEstablecimientoCompra;
+    }
+
+    public void setTxtEstablecimientoCompra(JTextField txtEstablecimientoCompra) {
+        this.txtEstablecimientoCompra = txtEstablecimientoCompra;
+    }
+
+    @LimpiarAnotacion
+    public JTextField getTxtPuntoEmisionCompra() {
+        return txtPuntoEmisionCompra;
+    }
+
+    public void setTxtPuntoEmisionCompra(JTextField txtPuntoEmisionCompra) {
+        this.txtPuntoEmisionCompra = txtPuntoEmisionCompra;
+    }
+
+    @LimpiarAnotacion
+    public JTextField getTxtSecuencialCompra() {
+        return txtSecuencialCompra;
+    }
+
+    public void setTxtSecuencialCompra(JTextField txtSecuencialCompra) {
+        this.txtSecuencialCompra = txtSecuencialCompra;
+    }
+
     
     
     

@@ -190,6 +190,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      */
     private WidgetVirtualMallModelo widgetVirtualMall;
     private WidgetVentasDiarias widgetVentasDiarias;
+    private WidgetNotificacionCodefacModelo widgetNotificacionCodefac;
     
     /**
      * Varible que almacena la ip del servidor para setear en la pantalla
@@ -2256,6 +2257,22 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             widgetVentasDiarias.setVisible(true);
             /***
              * fin widget Ventas diarias
+             */
+            
+            /**
+             * WIDGET NOTIFICACIONES CODEFAC
+             */
+                widgetNotificacionCodefac=new WidgetNotificacionCodefacModelo(getjDesktopPane1());
+                widgetNotificacionCodefac.panelPadre=this;
+                widgetNotificacionCodefac.setPreferredSize(new Dimension(100,100));
+                widgetNotificacionCodefac.setBounds(100,100,250,330);
+                //widgetVentasDiarias.addListenerIcono();/
+                getjDesktopPane1().add(widgetNotificacionCodefac);
+                widgetNotificacionCodefac.setVisible(true);
+                
+            
+            /**
+             * ===============> FIN WIDGET NOTIFICACIONES CODEFAC <=============
              */
             mapBuscar = new HashMap<>();
             mapBuscar.put("nombre", FacturacionModel.class.getName());

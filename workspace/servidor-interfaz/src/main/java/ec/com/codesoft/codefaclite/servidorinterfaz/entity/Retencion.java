@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.PreimpresoFormato;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -139,6 +140,10 @@ public class Retencion extends ComprobanteEntity implements Serializable {
 
     public String getPreimpresoDocumento() {
         return preimpresoDocumento;
+    }
+    
+    public PreimpresoFormato getPreimpresoDocumentoEnum() {
+        return new PreimpresoFormato(preimpresoDocumento);
     }
 
     public void setPreimpresoDocumento(String preimpresoDocumento) {
@@ -342,6 +347,7 @@ public class Retencion extends ComprobanteEntity implements Serializable {
         this.datosAdicionales.add(retencionAdicional);
     
     }
+    
 
 
 }
