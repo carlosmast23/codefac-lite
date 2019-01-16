@@ -559,6 +559,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getLblNombreCliente().setText(retencion.getRazonSocial());
         getLblTelefonoCliente().setText(retencion.getTelefono());
         getLblDireccionCliente().setText(retencion.getDireccion());
+        getTxtPreimpreso().setText(retencion.getPreimpresoDocumento());
         
         ///Cargar los detalles de la compra
         cargarTablaRetencion();
