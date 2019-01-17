@@ -1659,14 +1659,30 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         entityManager.merge(puntoEmision);
     }
     
+    /**
+     * Por defecto este metodo busca primero el xml autorizado , si no encuentra devuelve el firmado
+     * @param empresa
+     * @param claveAcceso
+     * @return
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
     public RemoteInputStream obtenerXmlFirmadoComprobante(Empresa empresa,String claveAcceso) throws RemoteException, ServicioCodefacException
     {
         try {
+            File file=null;//archivo para mostrar
             ComprobanteElectronicoService comprobanteService=new ComprobanteElectronicoService();
             
             cargarConfiguraciones(comprobanteService,empresa);
-            String pathXml=comprobanteService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_FIRMADOS,claveAcceso);
-            File file=new File(pathXml);
+            
+            String pathXmlAutorizados=comprobanteService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_AUTORIZADOS,claveAcceso);
+            file=new File(pathXmlAutorizados);
+            
+            if(!file.exists())
+            {
+                String pathXml=comprobanteService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_FIRMADOS,claveAcceso);
+                file=new File(pathXml);
+            }
             
             SimpleRemoteInputStream istream = new SimpleRemoteInputStream(new FileInputStream(file));
             return istream;

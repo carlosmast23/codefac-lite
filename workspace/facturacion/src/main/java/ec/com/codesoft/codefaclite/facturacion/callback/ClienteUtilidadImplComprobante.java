@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteMo
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
-import ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel;
+import ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteAvanzadoModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -46,10 +46,10 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implements ClienteInterfaceComprobante {
 
-    private UtilidadComprobanteModel panel;
+    private UtilidadComprobanteAvanzadoModel panel;
 
 
-    public ClienteUtilidadImplComprobante(UtilidadComprobanteModel panel) throws RemoteException {
+    public ClienteUtilidadImplComprobante(UtilidadComprobanteAvanzadoModel panel) throws RemoteException {
         this.panel=panel;
     }
 

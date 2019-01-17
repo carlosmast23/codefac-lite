@@ -42,20 +42,20 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Carlos
  */
-public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
+public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
     
     private static final int COLUMNA_SELECCION=0;
     private static final int COLUMNA_CLAVE_ACCESO=4;
     
 
-    private UtilidadComprobanteModel formThis=this;
+    private UtilidadComprobanteAvanzadoModel formThis=this;
     
     private JInternalFrame frame;
     private DefaultTableModel tableModel;
     private List<ComprobanteElectronico> comprobantes;
     private DefaultListModel listaModel;
 
-    public UtilidadComprobanteModel() {
+    public UtilidadComprobanteAvanzadoModel() {
         iniciarComponentes();
         addBotonListener();
         addComboListener();
@@ -279,7 +279,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
             //getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Volver a cargar los comprobantes para actualizar y que no aparesca los que ya fueron enviados
 
         } catch (RemoteException ex) {
-            Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -309,7 +309,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                 DialogoCodefac.mensaje("Advertencia","Seleccione datos para procesar",DialogoCodefac.MENSAJE_ADVERTENCIA);
             }
         } catch (RemoteException ex) {
-            Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
@@ -340,7 +340,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
     
 
 
-    private void iniciarComponentes() {
+    protected void iniciarComponentes() {
         /**
          * Cargar las carpetas disponibles de los comprobantes
          */
@@ -357,7 +357,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
 
     }
 
-    private void cargarEtapas() {
+    protected void cargarEtapas() {
         getCmbEstadoLimiteProcesar().removeAllItems();
 
         getCmbEstadoLimiteProcesar().addItem("procesar todo");
@@ -409,7 +409,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                     cargarDatosComprobantesTabla(comprobantes);
                     cargarSiguienteEtapaPorCarpeta(getCmbCarpetaComprobante().getSelectedItem().toString());
                 } catch (RemoteException ex) {
-                    Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
