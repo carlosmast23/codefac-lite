@@ -285,43 +285,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     private void addListenerButtons() {    
         
-        getBtnGenerarXml().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                try {
-                    RemoteInputStream remoteInputStream =ServiceFactory.getFactory().getComprobanteServiceIf().obtenerXmlFirmadoComprobante(session.getEmpresa(),factura.getClaveAcceso());
-                    
-                    String nombreArchivoFinal=UtilidadesArchivos.generarNombreArchivoUnico("firma","xml");
-                    File fileDestino = new File(ParametrosSistemaCodefac.CARPETA_DATOS_TEMPORALES+"/"+nombreArchivoFinal); //Ver si parametrizar el backslash 
-                    //crear toda la ruta si no existe
-                    if (!fileDestino.exists()) {
-                        fileDestino.getParentFile().mkdirs();
-                        //file.mkdir();
-                    }
-
-                    OutputStream outputStream = new FileOutputStream(fileDestino);
-
-                    InputStream inputStream = RemoteInputStreamClient.wrap(remoteInputStream);
-
-                    UtilidadesArchivos.grabarInputStreamEnArchivo(inputStream, outputStream);
-                    UtilidadesSistema.abrirDocumento(fileDestino);
-                    
-                    
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-                
-        });
-        
+               
         getBtnReProcesarComprobante().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -344,69 +308,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
         
-        getBtnAutorizarComprobante().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(estadoFormulario.equals(ESTADO_EDITAR))
-                {
-                    if(DialogoCodefac.dialogoPregunta("Advertencia","Esta opción solo debe ser usada para corregir problemas, Por ejemplo:\n-Si el comprobante está  autorizada en el sri pero no en el sistema.\n-Para corregir cualquier problema con el sistema. \n\n Está  seguro que desea continuar de todos modos ? ",DialogoCodefac.MENSAJE_ADVERTENCIA))
-                    {
-                        try {
-                            ServiceFactory.getFactory().getComprobanteServiceIf().autorizarComprobante(factura);
-                            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
-                            getBtnAutorizarComprobante().setEnabled(false);
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ServicioCodefacException ex) {
-                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-            }
-        });
-        
-        getBtnReenviarCorreo().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
                 
-                if(!estadoFormulario.equals(ESTADO_EDITAR))
-                {
-                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ACCION_PERMITIDA_MODULO_EDITAR);
-                    return;
-                }
-                
-                Boolean reenviarCorreo=DialogoCodefac.dialogoPregunta("Advertencia ","¿Está seguro que desea reenviar la información al correo? ",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                if(reenviarCorreo)
-                {
-                    try {
-                        panelPadre.cambiarCursorEspera();
-                        List<AlertaComprobanteElectronico> alertas=ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesPendienteSinCallBack(
-                                ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
-                                ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
-                                factura.getClaveAcceso(),
-                                obtenerCorreosFactura()); //TOdo:Verificar si puedo hacer alguna manera para solo enviar a los correos que esten escritos
-                        
-                        if(alertas.size()>0)
-                        {
-                            String mensajeCompleto = AlertaComprobanteElectronico.unirTodasAlertas(alertas);
-                            DialogoCodefac.mensaje("Alertas en el proceso ",mensajeCompleto,DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        }
-                        else
-                        {                            
-                            DialogoCodefac.mensaje(MensajeCodefacSistema.CorreoElectronico.CORREO_ENVIADO);
-                        }
-                        panelPadre.cambiarCursorNormal();
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                        DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
-                    } catch (ServicioCodefacException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                        DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
-                    }
-                }
-            }
-        });
-        
         getBtnCargarProforma().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1378,15 +1280,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         cargarFormasPagoTabla();
         cargarTablaDatosAdicionales();
         
+        getPnlDatosAdicionales().habiliarBotonAutorizar();
         //Activar el boton de autorizar el comprobante solo si no esta autorizado
         if (factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR)) {
-            getBtnAutorizarComprobante().setEnabled(true);
+            //getBtnAutorizarComprobante().setEnabled(true);
             getBtnReProcesarComprobante().setEnabled(true);
+            //getPnlDatosAdicionales().getBtnAutorizarDocumento().setEnabled(true);
         }
         else
         {
-            getBtnAutorizarComprobante().setEnabled(false);
+            //getBtnAutorizarComprobante().setEnabled(false);
             getBtnReProcesarComprobante().setEnabled(false);
+            //getPnlDatosAdicionales().getBtnAutorizarDocumento().setEnabled(false);
         }
         
             
@@ -3087,10 +2992,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(estadoFormulario.equals(ESTADO_GRABAR))
         {
             getBtnCargarProforma().setEnabled(true);
-            getBtnReenviarCorreo().setEnabled(false);
-            getBtnGenerarXml().setEnabled(false);
             
-            getBtnAutorizarComprobante().setEnabled(false);
+            //getBtnAutorizarComprobante().setEnabled(false);
             getBtnReProcesarComprobante().setEnabled(false);
             getPnlDatosAdicionales().habilitar(false);
             
@@ -3119,8 +3022,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         else
         {
             getBtnCargarProforma().setEnabled(false);
-            getBtnReenviarCorreo().setEnabled(true);
-            getBtnGenerarXml().setEnabled(true);
             getPnlDatosAdicionales().habilitar(true);
             //getBtnAutorizarComprobante().setEnabled(true);
             

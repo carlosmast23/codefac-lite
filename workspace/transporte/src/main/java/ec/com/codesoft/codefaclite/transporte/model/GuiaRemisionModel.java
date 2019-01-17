@@ -305,7 +305,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         imprimirTabla();
         //getLblSecuencial().setText(guiaRemision.getPreimpreso());
         ComprobanteElectronicoComponente.cargarSecuencialConsulta(guiaRemision,getCmbPuntoEmision(),getLblEstablecimiento(),getLblSecuencial());
-
+        getPnlDatosAdicionales().habiliarBotonAutorizar();
         //cargarDatoFactura(guiaRemision.getre)
         
     }

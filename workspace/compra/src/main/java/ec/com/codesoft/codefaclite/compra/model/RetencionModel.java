@@ -243,6 +243,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
             //Todo: Completar la funcionalidad para la busqueda
             cargarDatosRetencion();
             getPanelDatosDetalles().setVisible(false);
+            getPnlDatosAdicionales().habiliarBotonAutorizar();
             
         }
         else

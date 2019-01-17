@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElect
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Action;
+import javax.swing.JButton;
 
 /**
  *
@@ -63,6 +65,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnObtenerClaveAcceso = new javax.swing.JButton();
         btnAbrirXml = new javax.swing.JButton();
         btnReenviarCorreo = new javax.swing.JButton();
+        btnAutorizarDocumento = new javax.swing.JButton();
 
         setLayout(new org.jdesktop.swingx.VerticalLayout());
 
@@ -71,21 +74,56 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         add(btnObtenerClaveAcceso);
 
         btnAbrirXml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/xml.png"))); // NOI18N
+        btnAbrirXml.setToolTipText("obtener xml");
         add(btnAbrirXml);
 
         btnReenviarCorreo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/email.png"))); // NOI18N
         btnReenviarCorreo.setToolTipText("Reenviar Correo");
         add(btnReenviarCorreo);
+
+        btnAutorizarDocumento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/visto.png"))); // NOI18N
+        btnAutorizarDocumento.setToolTipText("Cambiar estado autorizar comprobante");
+        add(btnAutorizarDocumento);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbrirXml;
+    private javax.swing.JButton btnAutorizarDocumento;
     private javax.swing.JButton btnObtenerClaveAcceso;
     private javax.swing.JButton btnReenviarCorreo;
     // End of variables declaration//GEN-END:variables
 
     private void listenerBotones() {
+        
+        btnAutorizarDocumento.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(comprobante.getComprobante().getEstadoEnum()!=null && comprobante.getComprobante().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
+                {
+                //if(estadoFormulario.equals(ESTADO_EDITAR))
+                //{
+                    if(DialogoCodefac.dialogoPregunta("Advertencia","Esta opción solo debe ser usada para corregir problemas, Por ejemplo:\n-Si el comprobante está  autorizada en el sri pero no en el sistema.\n-Para corregir cualquier problema con el sistema. \n\n Está  seguro que desea continuar de todos modos ? ",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                    {
+                        try {
+                            ServiceFactory.getFactory().getComprobanteServiceIf().autorizarComprobante(comprobante.getComprobante());
+                            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
+                            btnAutorizarDocumento.setEnabled(false);
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ServicioCodefacException ex) {
+                            Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                //}
+                }
+                else
+                {
+                    DialogoCodefac.mensaje("Advertencia","Esta función esta disponible solo para los comprobantes no autorizados", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+            }
+        });
+        
         btnObtenerClaveAcceso.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -173,6 +211,17 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnObtenerClaveAcceso.setEnabled(habilitar);
         btnAbrirXml.setEnabled(habilitar);
         btnReenviarCorreo.setEnabled(habilitar);
+        
+        btnAutorizarDocumento.setEnabled(false); //Por defecto este boton siempre va a estar desabilitado
+        /*if(habilitar==true)
+        {
+            if(comprobante.getComprobante().getEstadoEnum()!=null && comprobante.getComprobante().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
+            {
+                btnAutorizarDocumento.setEnabled(true);
+            }
+        }*/
+
+        
     }
 
     public void setComprobante(ComponenteDatosComprobanteElectronicosInterface comprobante) {
@@ -192,6 +241,18 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
             }
         }
         return correos;
+    }
+    
+    public void habiliarBotonAutorizar()
+    {
+        if(comprobante.getComprobante().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR) && comprobante.getComprobante().getEstadoEnum()!=null)
+        {
+            btnAutorizarDocumento.setEnabled(true);
+        }
+    }
+
+    public JButton getBtnAutorizarDocumento() {
+        return btnAutorizarDocumento;
     }
 
     

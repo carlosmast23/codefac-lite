@@ -55,8 +55,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
+import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
@@ -380,8 +382,31 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     try {
                         if(existeConexionRemota)
                         {
+                            
                             callbackClientObject.procesando(etapa, clave);
                         }
+                        
+                        //Setear el campo de seteado a factura solo si pasa la etapa de autorizar
+                        if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
+                            
+                            ComprobanteEntity comprobante=obtenerComprobantePorClaveAcceso(clave);
+                            comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+
+                            try {
+                                ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                                    @Override
+                                    public void transaccion() {
+                                        entityManager.merge(comprobante);
+                                    }
+                                });
+
+                                //Enviar mensaje
+                                //ServidorSMS.getInstance().enviarMensaje("994905332","La factura"+clave.secuencial+" fue enviada a su correo");
+                            } catch (ServicioCodefacException ex) {
+                                Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        
                     } catch (RemoteException ex) {
                         Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -416,6 +441,58 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             //comprobanteElectronico.getAlertas();
         //}
         return true;
+    }
+    
+    /**
+     * Todo:Ver si este metodo puedo poner en algun lugar para que pueda reutilizar varias veces
+     * @param claveAccesoStr
+     * @return 
+     */
+    private ComprobanteEntity obtenerComprobantePorClaveAcceso(ClaveAcceso claveAcceso) throws RemoteException
+    {
+        final String NOMBRE_CAMPO="claveAcceso";
+        //ClaveAcceso claveAcceso=new ClaveAcceso(claveAccesoStr);
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put(NOMBRE_CAMPO,claveAcceso.clave);
+        
+        switch(claveAcceso.getTipoComprobante())
+        {
+            case FACTURA:
+                FacturacionService servicio=new FacturacionService();                
+                List<Factura> comprobantes=servicio.obtenerPorMap(mapParametros);
+                if(comprobantes.size()>0)
+                    return comprobantes.get(0);
+                break;
+
+            case COMPROBANTE_RETENCION:
+                RetencionService servicio2 = new RetencionService();
+                List<Retencion> comprobantes2 = servicio2.obtenerPorMap(mapParametros);
+                if (comprobantes2.size() > 0) {
+                    return comprobantes2.get(0);
+                }
+                break;
+
+            case GUIA_REMISION:
+                GuiaRemisionService servicio3 = new GuiaRemisionService();
+                List<GuiaRemision> comprobantes3 = servicio3.obtenerPorMap(mapParametros);
+                if (comprobantes3.size() > 0) {
+                    return comprobantes3.get(0);
+                }
+                break;
+
+            case NOTA_CREDITO:
+                NotaCreditoService servicio4 = new NotaCreditoService();
+                List<NotaCredito> comprobantes4 = servicio4.obtenerPorMap(mapParametros);
+                if (comprobantes4.size() > 0) {
+                    return comprobantes4.get(0);
+                }
+                break;
+
+            case NOTA_DEBITO:
+                break;
+
+        }
+        return null;
     }
     
     public List<ComprobanteElectronico> getComprobantesObjectByFolder(String carpetaConfiguracion) throws RemoteException

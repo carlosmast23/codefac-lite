@@ -62,7 +62,7 @@ public class ServicioSri {
     /**
      * Numeros de intento para esperar que el sri me devuelva la consulta de autorizacion de un documentos
      */
-    private static final Long INTENTOS_AUTORIZACION =50L; 
+    private static final Long INTENTOS_AUTORIZACION =70L; 
     
     //private String uri="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
     private String uri_recepcion;
@@ -154,6 +154,11 @@ public class ServicioSri {
         } catch (MalformedURLException ex) {
             Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("no existe servicio");
+            return false;
+        } catch(javax.xml.ws.WebServiceException ex)
+        {
+            Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("error con el web service");
             return false;
         }
     }

@@ -236,8 +236,9 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                         break;
 
                     case ComprobanteElectronicoService.CARPETA_ENVIADOS: 
-                        //Se procesa desde la etapa de enviar porque aunque ya esta enviado al sri , tienen que volver a generar porque lo hago nuevamente pero por la modalidad en lote
+                        //TODO:Se deja el proceso normal porque con el proceso en lote no funciona par alos comprobantes que se quedaron en envio, analizar si para los ue se quedan en el envio en lote debe ser lo mismo, porque si se queda en esta etapa despues de procesar en lote talvez no funcione con este metodo
                         procesarComprobante(ComprobanteElectronicoService.ETAPA_ENVIAR+1, etapaLimite);
+                        //procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_ENVIAR+1, etapaLimite);
                         break;
                         
                     case ComprobanteElectronicoService.CARPETA_AUTORIZADOS:
@@ -263,36 +264,32 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
     {
         
         try {
-            //Obtiene el nombre de la firma elecronica
-            String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), COLUMNA_CLAVE_ACCESO).toString().replace(".xml", "");
-            
-            ComprobanteServiceIf comprobanteServiceIf=ServiceFactory.getFactory().getComprobanteServiceIf();
-            ClienteUtilidadImplComprobante callBack=new ClienteUtilidadImplComprobante(this);
+            //Buscar todos las filas seleccionadas
+            List<String> clavesAcceso=obtenerClavesAccesoTabla();
 
-            estadoCargando();            
-            comprobanteServiceIf.procesarComprobantesPendiente(etapaInicial, etapaLimite,claveAcceso,obtenerCorreos(),callBack);
-            getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Volver a cargar los comprobantes para actualizar la tabla
+            estadoCargando();
+            for (String claveAcceso : clavesAcceso) {
+
+                ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+                ClienteUtilidadImplComprobante callBack = new ClienteUtilidadImplComprobante(this);
+                
+                comprobanteServiceIf.procesarComprobantesPendiente(etapaInicial, etapaLimite, claveAcceso, obtenerCorreos(), callBack);                
+            }
+            //estadoNormal();
+            //getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Volver a cargar los comprobantes para actualizar y que no aparesca los que ya fueron enviados
 
         } catch (RemoteException ex) {
             Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
+
+    
     private void procesarComprobanteLote(Integer etapaInicial,Integer etapaLimite) 
     {
         try {
             //Buscar todos las filas seleccionadas
-            List<String> clavesAcceso=new ArrayList<String>();
-            for (int i = 0; i < tableModel.getRowCount(); i++)
-            {
-                Boolean opcion=(Boolean) tableModel.getValueAt(i, COLUMNA_SELECCION);
-                if(opcion)
-                {
-                    String claveAcceso=tableModel.getValueAt(i, COLUMNA_CLAVE_ACCESO).toString();
-                    clavesAcceso.add(claveAcceso);
-                    System.out.println(claveAcceso);
-                }
-            }
+            List<String> clavesAcceso=obtenerClavesAccesoTabla();
             
             if(clavesAcceso.size()>0)
             {
@@ -315,6 +312,20 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
             Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    
+    private List<String> obtenerClavesAccesoTabla() {
+        List<String> clavesAcceso = new ArrayList<String>();
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            Boolean opcion = (Boolean) tableModel.getValueAt(i, COLUMNA_SELECCION);
+            if (opcion) {
+                String claveAcceso = tableModel.getValueAt(i, COLUMNA_CLAVE_ACCESO).toString();
+                clavesAcceso.add(claveAcceso);
+                System.out.println(claveAcceso);
+            }
+        }
+        return clavesAcceso;
+
     }
     
     private List<String> obtenerCorreos()

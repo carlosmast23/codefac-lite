@@ -335,6 +335,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             mostrarDatosNotaCredito(); 
             cargarDatosDetalles();
             cargarTablaDatosAdicionales();
+            getPnlDatosAdicionales().habiliarBotonAutorizar();
         }
         else
         {

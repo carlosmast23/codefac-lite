@@ -55,8 +55,9 @@ public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implemen
 
     @Override
     public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas) throws RemoteException {
-        panel.estadoNormal();
-        DialogoCodefac.mensaje("Dialogo", "Proceso Terminado", 1);
+        panel.estadoNormal(); //TODO:Ver si se puede mejorar este metodo porque desabilita la pantalla cuando termina el primer comprobante pero pueden ser varios
+        //DialogoCodefac.mensaje("Dialogo", "Proceso Terminado", 1);
+        panel.getCmbCarpetaComprobante().setSelectedIndex(panel.getCmbCarpetaComprobante().getSelectedIndex()); //Volver a cargar los comprobantes para actualizar y que no aparesca los que ya fueron enviados
     }
 
     @Override
@@ -67,7 +68,7 @@ public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implemen
     @Override
     public void procesando(int etapa, ClaveAcceso clave) throws RemoteException {
         if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) //Si ya cumple la etapa de autorizar cambio el estado de los comprobantes
-        {
+        {/*
             try {
                 ComprobanteEnum comprobante = ComprobanteEnum.getEnumByCodigo(clave.tipoComprobante);
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -103,7 +104,7 @@ public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implemen
                 Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
         }
     }
 
