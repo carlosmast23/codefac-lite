@@ -2265,7 +2265,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 widgetNotificacionCodefac=new WidgetNotificacionCodefacModelo(getjDesktopPane1());
                 widgetNotificacionCodefac.panelPadre=this;
                 widgetNotificacionCodefac.setPreferredSize(new Dimension(500,100));
-                widgetNotificacionCodefac.setBounds(100,0,400,80);
+                widgetNotificacionCodefac.setBounds(100,0,400,90);
                 //widgetVentasDiarias.addListenerIcono();/
                 getjDesktopPane1().add(widgetNotificacionCodefac);
                 widgetNotificacionCodefac.setVisible(true);

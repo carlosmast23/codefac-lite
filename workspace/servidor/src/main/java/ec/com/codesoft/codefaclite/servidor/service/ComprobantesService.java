@@ -240,7 +240,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             public void termino(List<Autorizacion> autorizaciones) {
                 try {
                     //Cambiar el estado de los comprabantes que si fueron autorizados
-                    cambiarEstadoLoteAutorizaciones(autorizaciones,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);                    
+                    cambiarEstadoLoteAutorizaciones(autorizaciones,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);               
                     if(existeConexionRemota)
                     {
                         callbackClientObject.termino(castDatosComprobanteElectronico(autorizaciones,comprobanteElectronico.getServicioSri()));
@@ -290,10 +290,19 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                                         RetencionService serviceRetencion = new RetencionService();
                                         comprobante = serviceRetencion.obtenerPorMap(mapParametro).get(0);
                                         break;
+                                    case GUIA_REMISION:
+                                        GuiaRemisionService guiaRemisionServicio = new GuiaRemisionService();
+                                        comprobante = guiaRemisionServicio.obtenerPorMap(mapParametro).get(0);
+                                        break;
                                 }
                                 
-                                comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-                                entityManager.merge(comprobante);
+                                //Esta validacion la hago si por algun caso consulta datos que no existen en el sistema
+                                if(comprobante!=null)
+                                {
+                                    comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                                    entityManager.merge(comprobante);
+                                }
+                                
                             }
 
                         }
