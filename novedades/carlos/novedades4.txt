@@ -133,3 +133,4 @@ Ver porque cuando envie una guia de remision desde utilidades no se actulizo el 
 Ver si cuando estoy procesando en lote disminuyo el tiempo de espera a la mitad que para los casos normales
 Ver que funcione bien enviar en lote desde la carpeta enviar
 Crear una carpeta simplifica de la primera para procesar los datos
+Agregar la funcionalidad de enviar al correo desde la pantalla de enviar en especial para cuando esta en el modo enviar comprobantes autorizados

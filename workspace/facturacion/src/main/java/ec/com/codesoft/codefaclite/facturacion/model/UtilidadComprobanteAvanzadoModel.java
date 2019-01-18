@@ -203,6 +203,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
         getBtnSiguienteEtapa().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 String etapa = getCmbCarpetaComprobante().getSelectedItem().toString();
                 Integer etapaLimite = getCmbEstadoLimiteProcesar().getSelectedIndex();
                 
@@ -267,6 +268,11 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
             //Buscar todos las filas seleccionadas
             List<String> clavesAcceso=obtenerClavesAccesoTabla();
 
+            if (clavesAcceso.size() == 0) {
+                DialogoCodefac.mensaje("Advertencia", "No existen datos para procesar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return;
+            }
+
             estadoCargando();
             for (String claveAcceso : clavesAcceso) {
 
@@ -290,6 +296,12 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
         try {
             //Buscar todos las filas seleccionadas
             List<String> clavesAcceso=obtenerClavesAccesoTabla();
+            
+            if(clavesAcceso.size()==0)
+            {
+                DialogoCodefac.mensaje("Advertencia","No existen datos para procesar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return;
+            }
             
             if(clavesAcceso.size()>0)
             {
