@@ -344,13 +344,20 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         return alertas;
     }
     
-    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject) throws RemoteException
+    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo) throws RemoteException
     {
         Empresa empresa=obtenerEmpresaPorClaveAcceso(claveAcceso);
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
         cargarConfiguraciones(comprobanteElectronico,empresa);
         
         comprobanteElectronico.setCorreosElectronicos(correos);
+        comprobanteElectronico.setEnviarCorreos(enviarCorreo);
+        
+        //Esta validacion la realizo para cuando quieran enviar por correo y la etapa sea superior a la de enviar normalmente , envio al final del proceso
+        if(etapaInicial>ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE && enviarCorreo)
+        {
+            comprobanteElectronico.setEnviarCorreoComprobanteAutorizado(true);
+        }
     
         //if(callbackClientObject!=null)
         //{

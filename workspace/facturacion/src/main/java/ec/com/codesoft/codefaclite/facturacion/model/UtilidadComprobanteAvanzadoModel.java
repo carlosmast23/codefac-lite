@@ -19,6 +19,8 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.Informaci
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac.TipoEnvioComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
@@ -279,7 +281,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                 ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
                 ClienteUtilidadImplComprobante callBack = new ClienteUtilidadImplComprobante(this);
                 
-                comprobanteServiceIf.procesarComprobantesPendiente(etapaInicial, etapaLimite, claveAcceso, obtenerCorreos(), callBack);                
+                comprobanteServiceIf.procesarComprobantesPendiente(etapaInicial, etapaLimite, claveAcceso, obtenerCorreos(), callBack,getChkEnvioCorreo().isSelected());                
             }
             //estadoNormal();
             //getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Volver a cargar los comprobantes para actualizar y que no aparesca los que ya fueron enviados
@@ -417,10 +419,15 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                     if (getCmbCarpetaComprobante().getSelectedItem().equals(ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS)) {
                         return;
                     }
+                    
+                                       
                     ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
                     comprobantes = comprobanteServiceIf.getComprobantesObjectByFolder(getCmbCarpetaComprobante().getSelectedItem().toString());
                     cargarDatosComprobantesTabla(comprobantes);
                     cargarSiguienteEtapaPorCarpeta(getCmbCarpetaComprobante().getSelectedItem().toString());
+                   
+
+                    
                 } catch (RemoteException ex) {
                     Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
