@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.compra.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
@@ -69,6 +70,8 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         jLabel8 = new javax.swing.JLabel();
         btnLimpiarFechaInicial = new javax.swing.JButton();
         btnLimpiarFechaFinal = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        cmbEstado = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -79,8 +82,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -88,7 +90,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -143,10 +145,10 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         getContentPane().add(btnBuscarProveedor, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel3.setText("Fecha final:");
+        jLabel3.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -175,7 +177,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         jLabel4.setText("IVA:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
@@ -184,7 +186,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         jLabel5.setText("Tipo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel5, gridBagConstraints);
@@ -194,7 +196,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         btnBuscar.setText("Buscar Retenciones");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
@@ -203,7 +205,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.gridheight = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -219,7 +221,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 70;
@@ -232,7 +234,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
@@ -245,7 +247,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         jLabel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -256,7 +258,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         jLabel7.setText("Retención");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -265,8 +267,8 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         chkTodosIva.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         chkTodosIva.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(chkTodosIva, gridBagConstraints);
 
@@ -274,13 +276,13 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         chkTodosRenta.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(chkTodosRenta, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -290,17 +292,17 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         chkTodosTipo.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         getContentPane().add(chkTodosTipo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         getContentPane().add(lblEspacio1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(lblEspacio3, gridBagConstraints);
 
@@ -308,7 +310,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         jLabel8.setText("Renta:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel8, gridBagConstraints);
@@ -328,6 +330,25 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnLimpiarFechaFinal, gridBagConstraints);
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel9.setText("Fecha final:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel9, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbEstado, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -468,6 +489,12 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         this.btnLimpiarFechaInicial = btnLimpiarFechaInicial;
     }
 
+    public JComboBox<ComprobanteEntity.ComprobanteEnumEstado> getCmbEstado() {
+        return cmbEstado;
+    }
+    
+    
+
     
         
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -479,6 +506,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
     private javax.swing.JCheckBox chkTodosIva;
     private javax.swing.JCheckBox chkTodosRenta;
     private javax.swing.JCheckBox chkTodosTipo;
+    private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstado;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
     private javax.swing.JComboBox<SriRetencion> cmbTipo;
@@ -492,6 +520,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

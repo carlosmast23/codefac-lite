@@ -274,9 +274,15 @@ public class ComprobanteEntity implements Serializable{
          */
         SIN_AUTORIZAR("S", "Sin Autorizar"),
         /**
-         * Estado eliminado solo permitido si el comprobante no fue autorizado
+         * Estado eliminado solo permitido si el comprobante no fue autorizado , en especial para las pruebas o casos que toque volver a generar el comprobante porque estaba mal estructurado
          */
-        ELIMINADO("E", "Eliminado");
+        ELIMINADO("E", "Eliminado"),
+        /**
+         * Este estado debere manejarse para saber que una factura autorizada fue eliminada para el caso  cuando se elimine desde el portal del SRI
+         */
+        ELIMINADO_SRI("N","Anulado Sri");
+        
+        
 
         private ComprobanteEnumEstado(String estado, String nombre) {
             this.estado = estado;
@@ -311,6 +317,13 @@ public class ComprobanteEntity implements Serializable{
         public void setNombre(String nombre) {
             this.nombre = nombre;
         }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+        
     }
     
     /**

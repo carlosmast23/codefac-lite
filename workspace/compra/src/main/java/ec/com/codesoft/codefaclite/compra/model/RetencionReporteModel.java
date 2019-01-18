@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
@@ -372,6 +373,12 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
     private void variablesIniciales() {
         
+        //==================// Cargar los estados disponibles //
+        getCmbEstado().removeAllItems();
+        for (ComprobanteEntity.ComprobanteEnumEstado comprobanteEstado : ComprobanteEntity.ComprobanteEnumEstado.values()) {
+            getCmbEstado().addItem(comprobanteEstado);
+        }
+        
         //===================//Agregar los tipos de retencion Iva//==========================//
         getCmbRetencionIva().removeAllItems();
         SriRetencionIvaServiceIf sriRetencionIvaService = ServiceFactory.getFactory().getSriRetencionIvaServiceIf();
@@ -612,7 +619,8 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     }
 
                     RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
-                    dataretencion = fs.obtenerRetencionesReportes(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, sriRetencion);
+                    ComprobanteEntity.ComprobanteEnumEstado estadoEnum=(ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
+                    dataretencion = fs.obtenerRetencionesReportes(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, sriRetencion,estadoEnum);
                     construirMapSumatorias();
                     
                     construirTablaRetenciones();

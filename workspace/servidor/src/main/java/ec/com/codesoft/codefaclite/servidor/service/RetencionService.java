@@ -136,9 +136,9 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
     }
     
     @Override
-    public List<RetencionDetalle> obtenerRetencionesReportes(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion) throws RemoteException {
+    public List<RetencionDetalle> obtenerRetencionesReportes(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum) throws RemoteException {
         //return retencionFacade.lista(persona, fi, ff, iva, renta,tipo);
-        return retencionFacade.obtenerRetencionesReportesFacade(persona, fi, ff, iva, renta,sriRetencion);
+        return retencionFacade.obtenerRetencionesReportesFacade(persona, fi, ff, iva, renta,sriRetencion,estadoEnum);
     }
     public List<Object[]> obtenerRetencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta,String tipo) {
         return retencionFacade.retencionesCodigo(persona, fi, ff, iva, renta, tipo);
@@ -149,12 +149,6 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
     {
         return getFacade().obtenerRetencionesPorCompraFacade(compra);
     }
-
-    /*
-    @Override
-    public List<RetencionDetalle> obtenerRetencionesReportes(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, String tipo) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
 
 
 }

@@ -31,13 +31,15 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         super(Retencion.class);
     }
     
-    public List<RetencionDetalle> obtenerRetencionesReportesFacade(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion) {
-        RetencionDetalle rd;
+    public List<RetencionDetalle> obtenerRetencionesReportesFacade(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum) {
+        //RetencionDetalle rd;
+        //rd.getRetencion().getEstado();
         //rd.getCodigoRetencionSri();
         //rd.getCodigoRetencionSri();
         //rd.getRetencion().getFechaEmision();
         //rd.getRetencion().getProveedor();
-        String queryString = "SELECT d FROM RetencionDetalle d where d.retencion.estado<>?1 ";
+        //String queryString = "SELECT d FROM RetencionDetalle d where d.retencion.estado<>?1 ";
+        String queryString = "SELECT d FROM RetencionDetalle d where 1=1 ";
         
         if(persona!=null)
         {
@@ -69,9 +71,13 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
             queryString+=" and d.codigoRetencionSri=?7 ";
         }
         
+        if(estadoEnum!=null)
+        {
+            queryString+=" and d.retencion.estado=?8 ";
+        }
         
         Query query = getEntityManager().createQuery(queryString);
-        query.setParameter(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+        //query.setParameter(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         
         if(persona!=null)
         {
@@ -102,7 +108,12 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         {
             query.setParameter(7,renta.getCodigo().toString());
         }
-        
+
+        if (estadoEnum != null)
+        {
+            query.setParameter(8,estadoEnum.getEstado());
+        }
+
         
         
         

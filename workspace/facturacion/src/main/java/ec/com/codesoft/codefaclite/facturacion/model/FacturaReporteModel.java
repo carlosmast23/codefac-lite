@@ -581,11 +581,15 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getDateFechaInicio().setDate(fechaInicioMes(hoy()));
         getDateFechaFin().setDate(hoy());
 
-        getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
+        getCmbEstado().removeAllItems();
+        for (ComprobanteEntity.ComprobanteEnumEstado comprobanteEstado : ComprobanteEntity.ComprobanteEnumEstado.values()) {
+            getCmbEstado().addItem(comprobanteEstado);
+        }
+        //getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
         //getCmbEstado().addItem(FacturaEnumEstado.ANULADO_PARCIAL);
         //getCmbEstado().addItem(FacturaEnumEstado.ANULADO_TOTAL);
-        getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
-        getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO);
+        //getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
+        //getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO);
 
         getChkTodos().setSelected(true);
         if (getChkTodos().isSelected()) {
