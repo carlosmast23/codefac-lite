@@ -63,6 +63,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
                     guiaRemisionModel.panelPadre.crearReportePantalla(jasperPrint, guiaRemision.getPreimpreso());
                 }
             });*/
+            guiaRemisionModel.panelPadre.actualizarNotificacionesCodefac();
         } catch (IOException ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -166,6 +167,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
+        guiaRemisionModel.panelPadre.actualizarNotificacionesCodefac();
     }
 
     private void generarReportePdf(String clave) {

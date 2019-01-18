@@ -80,7 +80,7 @@ public class ComprobanteElectronicoService implements Runnable {
     public static final String CARPETA_GENERADOS = "generados";
     public static final String CARPETA_FIRMADOS = "firmados";
     public static final String CARPETA_FIRMADOS_SIN_ENVIAR = "firmados_sin_enviar";
-    public static final String CARPETA_ENVIADOS = "enviados";
+    public static final String CARPETA_ENVIADOS_SIN_RESPUESTA = "enviados";
     public static final String CARPETA_AUTORIZADOS = "autorizados";
     public static final String CARPETA_NO_AUTORIZADOS = "no_autorizados";
     public static final String CARPETA_RIDE = "ride";
@@ -1092,7 +1092,7 @@ public class ComprobanteElectronicoService implements Runnable {
                     System.out.println("Documento enviados");
                     
                     //Copiar el archivo al siguiente nivel firmado a los enviados
-                    ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobante(CARPETA_FIRMADOS),getPathComprobante(CARPETA_ENVIADOS));
+                    ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobante(CARPETA_FIRMADOS),getPathComprobante(CARPETA_ENVIADOS_SIN_RESPUESTA));
                     //Elimina la carpeta de los firmados para saber que ya fue enviado
                     ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_FIRMADOS_SIN_ENVIAR));
                     
@@ -1143,7 +1143,7 @@ public class ComprobanteElectronicoService implements Runnable {
                         {
                             //Mover todos los archivos individuales
                             String claveAccesoTemp = claveAccesoComprobante;
-                            ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, claveAccesoTemp), getPathComprobanteConClaveAcceso(CARPETA_ENVIADOS, claveAccesoTemp));
+                            ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, claveAccesoTemp), getPathComprobanteConClaveAcceso(CARPETA_ENVIADOS_SIN_RESPUESTA, claveAccesoTemp));
                             //ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp));
                             ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS_SIN_ENVIAR, claveAccesoTemp));
                         }                        
@@ -1183,7 +1183,7 @@ public class ComprobanteElectronicoService implements Runnable {
         if (servicioSri.autorizar(claveAcceso)) {
             String xmlAutorizado = servicioSri.obtenerRespuestaAutorizacion();
             ComprobantesElectronicosUtil.generarArchivoXml(xmlAutorizado, getPathComprobante(CARPETA_AUTORIZADOS));
-            ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_ENVIADOS));
+            ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_ENVIADOS_SIN_RESPUESTA));
         }
 
     }
@@ -1208,7 +1208,7 @@ public class ComprobanteElectronicoService implements Runnable {
                     String claveAccesoTemp=autorizacion.getNumeroAutorizacion();
                     String xmlAutorizado = servicioSri.castAutorizacionToString(autorizacion);
                     ComprobantesElectronicosUtil.generarArchivoXml(xmlAutorizado, getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS,claveAccesoTemp));
-                    ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_ENVIADOS,claveAccesoTemp));
+                    ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_ENVIADOS_SIN_RESPUESTA,claveAccesoTemp));
                 }
                 
             }

@@ -113,6 +113,8 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
                 });
             }
             
+            facturacionModel.panelPadre.actualizarNotificacionesCodefac();
+            
         } catch (IOException ex) {
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -231,6 +233,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
+        facturacionModel.panelPadre.actualizarNotificacionesCodefac();
     }
     
     private void generarReportePdf(String clave) {

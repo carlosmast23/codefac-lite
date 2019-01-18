@@ -252,9 +252,9 @@ public abstract class ComprobantesElectronicosUtil {
             for (File fichero : ficheros) {
                 autorizaciones.add(fichero.getName());
             }*/
-            return comprobantes;
+            //return comprobantes;
         }
-        return null;
+        return comprobantes;
     }
     
     public static ComprobanteElectronico getComprobanteElectronico(String carpetaConfiguracion,File archivo)

@@ -72,7 +72,9 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
             Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
+        
+        notaCreditoModel.panelPadre.actualizarNotificacionesCodefac();
 
     }
 
@@ -172,6 +174,7 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
+        notaCreditoModel.panelPadre.actualizarNotificacionesCodefac();
     }
     
     private void generarReportePdf(String clave) {

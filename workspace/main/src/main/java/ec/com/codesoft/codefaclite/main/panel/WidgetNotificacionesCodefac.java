@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.main.panel;
 
 import ec.com.codesoft.codefaclite.main.model.ObjetoEscritorioAbstract;
+import javax.swing.JButton;
 import javax.swing.JDesktopPane;
+import javax.swing.JTable;
 
 /**
  *
@@ -32,8 +34,11 @@ public abstract class WidgetNotificacionesCodefac extends ObjetoEscritorioAbstra
 
         panelTitulo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblNotificaciones = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        btnActualizarNotificaciones = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -48,19 +53,48 @@ public abstract class WidgetNotificacionesCodefac extends ObjetoEscritorioAbstra
 
         add(panelTitulo, java.awt.BorderLayout.PAGE_START);
 
-        jPanel2.setLayout(new java.awt.GridBagLayout());
+        jScrollPane1.setViewportView(tblNotificaciones);
 
-        jButton1.setText("Ejemplo de widget");
-        jPanel2.add(jButton1, new java.awt.GridBagConstraints());
+        add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        add(jPanel2, java.awt.BorderLayout.CENTER);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        btnActualizarNotificaciones.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnActualizarNotificaciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/FacturaCeleste.png"))); // NOI18N
+        btnActualizarNotificaciones.setText("Actualizar Notificaciones");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        jPanel1.add(btnActualizarNotificaciones, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel1.add(jLabel2, gridBagConstraints);
+
+        add(jPanel1, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnActualizarNotificaciones;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelTitulo;
+    private javax.swing.JTable tblNotificaciones;
     // End of variables declaration//GEN-END:variables
+
+    public JTable getTblNotificaciones() {
+        return tblNotificaciones;
+    }
+
+    public JButton getBtnActualizarNotificaciones() {
+        return btnActualizarNotificaciones;
+    }
+
+    
 }

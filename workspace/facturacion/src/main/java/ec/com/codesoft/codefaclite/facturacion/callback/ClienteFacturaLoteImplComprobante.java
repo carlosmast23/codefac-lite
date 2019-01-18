@@ -117,6 +117,7 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
                 JOptionPane.showMessageDialog(null, "Etapa: " + cee.getEtapa() + "\n" + cee.getMessage());
             }
         });
+        controlador.panelPadre.actualizarNotificacionesCodefac();
 
     }
 
@@ -139,6 +140,7 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
                     //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
                 }
             });
+            controlador.panelPadre.actualizarNotificacionesCodefac();
     }
     
     public void addListener(InterfaceCallbakClient listener)

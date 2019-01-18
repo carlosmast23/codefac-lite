@@ -58,6 +58,7 @@ public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implemen
         panel.estadoNormal(); //TODO:Ver si se puede mejorar este metodo porque desabilita la pantalla cuando termina el primer comprobante pero pueden ser varios
         //DialogoCodefac.mensaje("Dialogo", "Proceso Terminado", 1);
         panel.getCmbCarpetaComprobante().setSelectedIndex(panel.getCmbCarpetaComprobante().getSelectedIndex()); //Volver a cargar los comprobantes para actualizar y que no aparesca los que ya fueron enviados
+        panel.panelPadre.actualizarNotificacionesCodefac();
     }
 
     @Override

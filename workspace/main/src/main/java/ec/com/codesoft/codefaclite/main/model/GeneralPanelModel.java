@@ -2264,8 +2264,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
              */
                 widgetNotificacionCodefac=new WidgetNotificacionCodefacModelo(getjDesktopPane1());
                 widgetNotificacionCodefac.panelPadre=this;
-                widgetNotificacionCodefac.setPreferredSize(new Dimension(100,100));
-                widgetNotificacionCodefac.setBounds(100,100,250,330);
+                widgetNotificacionCodefac.setPreferredSize(new Dimension(500,100));
+                widgetNotificacionCodefac.setBounds(100,0,400,80);
                 //widgetVentasDiarias.addListenerIcono();/
                 getjDesktopPane1().add(widgetNotificacionCodefac);
                 widgetNotificacionCodefac.setVisible(true);
@@ -3263,6 +3263,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         } catch (RemoteException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void actualizarNotificacionesCodefac() {
+        this.widgetNotificacionCodefac.actualizarNotificaciones();
     }
 
        

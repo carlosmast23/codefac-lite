@@ -238,7 +238,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                             procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE + 1, etapaLimite);
                         break;
 
-                    case ComprobanteElectronicoService.CARPETA_ENVIADOS: 
+                    case ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA: 
                         //TODO:Se deja el proceso normal porque con el proceso en lote no funciona par alos comprobantes que se quedaron en envio, analizar si para los ue se quedan en el envio en lote debe ser lo mismo, porque si se queda en esta etapa despues de procesar en lote talvez no funcione con este metodo
                         procesarComprobante(ComprobanteElectronicoService.ETAPA_ENVIAR+1, etapaLimite);
                         //procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_ENVIAR+1, etapaLimite);
@@ -363,7 +363,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_GENERADOS);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_FIRMADOS);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR);
-        getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_ENVIADOS);
+        getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_AUTORIZADOS);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_RIDE);

@@ -20,7 +20,7 @@ public class UtilidadComprobanteSimpleModel extends UtilidadComprobanteAvanzadoM
          */
         getCmbCarpetaComprobante().removeAllItems();
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR);
-        getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_ENVIADOS);
+        getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA);
         cargarEtapas();
         
         getCmbEstadoLimiteProcesar().setVisible(false);

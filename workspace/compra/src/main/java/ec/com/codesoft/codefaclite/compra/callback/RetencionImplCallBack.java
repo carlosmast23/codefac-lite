@@ -68,6 +68,7 @@ public class RetencionImplCallBack extends UnicastRemoteObject implements Client
                     }
                 });
             }*/
+            formulario.panelPadre.actualizarNotificacionesCodefac();
             
         } catch (IOException ex) {
             Logger.getLogger(RetencionImplCallBack.class.getName()).log(Level.SEVERE, null, ex);
@@ -160,6 +161,7 @@ public class RetencionImplCallBack extends UnicastRemoteObject implements Client
         } else {
             monitorData.getBarraProgreso().setForeground(Color.ORANGE);
         }
+        formulario.panelPadre.actualizarNotificacionesCodefac();
     }
     
     private void generarReportePdf(String clave) {

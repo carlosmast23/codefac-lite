@@ -86,6 +86,11 @@ public interface InterfazComunicacionPanel
     public void cambiarEstadoFormularioEditar(GeneralPanelInterface frame);
     public void cambiarEstadoFormularioNuevo(GeneralPanelInterface frame);
     
+    /**
+     * Metodo que permite actualizar las notificaciones en la pantalla del escritorio
+     */
+    public void actualizarNotificacionesCodefac();
+    
 
 
 }
