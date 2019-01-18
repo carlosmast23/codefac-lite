@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac.TipoEnvioComprobanteEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -53,6 +54,8 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        cmbTipoEnvioComprobante = new javax.swing.JComboBox<>();
         panelConfiguracionesGenerales = new javax.swing.JPanel();
         cmbIvaDefault = new javax.swing.JComboBox<>();
         txtDirectorioRecurso = new javax.swing.JTextField();
@@ -170,6 +173,21 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         panelFacturacionElectronica.add(jLabel22, gridBagConstraints);
+
+        jLabel25.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel25.setText("Tipo Envio Comprobante:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelFacturacionElectronica.add(jLabel25, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        panelFacturacionElectronica.add(cmbTipoEnvioComprobante, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -386,6 +404,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JButton btnFirmaElectronica;
     private javax.swing.JComboBox<ImpuestoDetalle> cmbIvaDefault;
     private javax.swing.JComboBox<String> cmbModoFacturacion;
+    private javax.swing.JComboBox<TipoEnvioComprobanteEnum> cmbTipoEnvioComprobante;
     private javax.swing.JComboBox<ComprobanteEntity.TipoEmisionEnum> cmbTipoFacturacion;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -402,6 +421,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
@@ -527,9 +547,13 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         return txtSmtpPuerto;
     }
 
-    
-   
-    
+    public JComboBox<TipoEnvioComprobanteEnum> getCmbTipoEnvioComprobante() {
+        return cmbTipoEnvioComprobante;
+    }
+
+    public void setCmbTipoEnvioComprobante(JComboBox<TipoEnvioComprobanteEnum> cmbTipoEnvioComprobante) {
+        this.cmbTipoEnvioComprobante = cmbTipoEnvioComprobante;
+    }
     
 
 }

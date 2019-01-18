@@ -173,16 +173,18 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         return false;
     }
     
-    public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,String ruc,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException
+    public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,String ruc,ClienteInterfaceComprobanteLote callbackClientObject,Boolean enviarCorreo) throws RemoteException
     {
         Empresa empresa=obtenerEmpresaPorClaveAcceso(clavesAcceso.get(0));
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
+        comprobanteElectronico.setEnviarCorreos(enviarCorreo);
         cargarConfiguraciones(comprobanteElectronico,empresa);
         comprobanteElectronico.setEtapaActual(etapaInicial);
         //comprobanteElectronico.setClaveAcceso(claveAcceso);
         comprobanteElectronico.setEtapaLimiteProcesar(etapaLimite);
         comprobanteElectronico.setClavesAccesoLote(clavesAcceso);
         comprobanteElectronico.setRuc(ruc);
+        
         
         Integer secuencialLote=obtenerSecuencialLote(); //Verificar que solo debe dar un secuencial si la etapa es superior a enviar comprobante
         
@@ -1079,6 +1081,15 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
         //Etapa desde la cual va a procesar los comprobantes
         comprobanteElectronico.setEtapaActual(ComprobanteElectronicoService.ETAPA_GENERAR);
+        
+        //Consultar la modalidad como se van a procesar los correos
+        ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
+        ParametroCodefac parametroTipoEnvio=parametroCodefacService.getParametroByNombre(ParametroCodefac.TIPO_ENVIO_COMPROBANTE);
+        if(parametroTipoEnvio!=null && ParametroCodefac.TipoEnvioComprobanteEnum.buscarPorLetra(parametroTipoEnvio.valor).equals(ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_AUTORIZADO))
+        {
+            //Si requiere que se envie el correo con el xml autorizado se pone en true
+            comprobanteElectronico.setEnviarCorreoComprobanteAutorizado(true);
+        }
     
         return comprobanteElectronico;
     }

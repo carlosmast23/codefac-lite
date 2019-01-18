@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTable;
 
@@ -42,7 +43,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         cmbCarpetaComprobante = new javax.swing.JComboBox<>();
         cmbEstadoLimiteProcesar = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblEtapaFinalProcesar = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jListCorreos = new javax.swing.JList<>();
         btnAgregarCorreo = new javax.swing.JButton();
@@ -120,14 +121,14 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         getContentPane().add(jLabel1, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Etapa final procesar:");
+        lblEtapaFinalProcesar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblEtapaFinalProcesar.setText("Etapa final procesar:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
-        getContentPane().add(jLabel2, gridBagConstraints);
+        getContentPane().add(lblEtapaFinalProcesar, gridBagConstraints);
 
         jScrollPane1.setViewportView(jListCorreos);
 
@@ -239,7 +240,6 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
     private javax.swing.JComboBox<String> cmbCarpetaComprobante;
     private javax.swing.JComboBox<String> cmbEstadoLimiteProcesar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -251,6 +251,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblEspacioUtilidad;
+    private javax.swing.JLabel lblEtapaFinalProcesar;
     private javax.swing.JTable tblComprobantes;
     // End of variables declaration//GEN-END:variables
 
@@ -313,6 +314,14 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
 
     public JCheckBox getChkSeleccionarTodo() {
         return chkSeleccionarTodo;
+    }
+
+    public JLabel getLblEtapaFinalProcesar() {
+        return lblEtapaFinalProcesar;
+    }
+
+    public void setLblEtapaFinalProcesar(JLabel lblEtapaFinalProcesar) {
+        this.lblEtapaFinalProcesar = lblEtapaFinalProcesar;
     }
     
     

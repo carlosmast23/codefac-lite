@@ -72,6 +72,11 @@ public class ParametroCodefac implements Serializable {
     */
     public static final String COMPROBANTE_GUIA_REMISION_ACTIVAR="comprobante_guia_remision_activar";
     
+    /**
+     * Tipo de envio de los comprobantes 
+     */
+    public static final String TIPO_ENVIO_COMPROBANTE="tipo_envio_comprobante";
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -135,7 +140,53 @@ public class ParametroCodefac implements Serializable {
         return true;
     }
     
-    
+    public enum TipoEnvioComprobanteEnum
+    {
+        ENVIAR_FIRMADO("Enviar firmados","f"),
+        ENVIAR_AUTORIZADO("Enviar autorizados","a");
+
+        private TipoEnvioComprobanteEnum(String nombre, String letra) {
+            this.nombre = nombre;
+            this.letra = letra;
+        }
+       
+        private String nombre;
+        private String letra;
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public void setLetra(String letra) {
+            this.letra = letra;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+        public static TipoEnvioComprobanteEnum buscarPorLetra(String letra)
+        {
+            for (TipoEnvioComprobanteEnum enumerador : TipoEnvioComprobanteEnum.values()) 
+            {
+                if(enumerador.getLetra().equals(letra))
+                {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+        
+    }
     
     
 }

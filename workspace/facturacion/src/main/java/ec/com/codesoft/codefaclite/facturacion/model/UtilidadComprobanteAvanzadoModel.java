@@ -300,8 +300,9 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                         formThis.estadoNormal();
                         getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Vuelve a cargar los comprobantes
                     }
-                });                
-                ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, session.getEmpresa().getIdentificacion(),cic);
+                });
+                
+                ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, session.getEmpresa().getIdentificacion(),cic,getChkEnvioCorreo().isSelected());
                 //estadoNormal();
             }
             else

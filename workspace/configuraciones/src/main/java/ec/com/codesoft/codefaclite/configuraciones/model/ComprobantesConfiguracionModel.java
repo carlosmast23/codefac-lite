@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac.TipoEnvioComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
@@ -58,6 +59,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -217,6 +219,10 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         parametros.get(ParametroCodefac.SMTP_PORT).setValor(getTxtSmtpPuerto().getValue().toString());
         parametrosEditar.add(parametros.get(ParametroCodefac.SMTP_PORT));
         
+        ParametroCodefac.TipoEnvioComprobanteEnum tipoEnvioEnum=(ParametroCodefac.TipoEnvioComprobanteEnum) getCmbTipoEnvioComprobante().getSelectedItem();
+        parametros.get(ParametroCodefac.TIPO_ENVIO_COMPROBANTE).setValor(tipoEnvioEnum.getLetra());
+        parametrosEditar.add(parametros.get(ParametroCodefac.TIPO_ENVIO_COMPROBANTE));
+        
         
         
         //verificarFirmaElectronica();
@@ -259,6 +265,13 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             getTxtSmtpHost().setText(parametros.get(ParametroCodefac.SMTP_HOST).getValor());
             getTxtSmtpPuerto().setValue(new Integer(parametros.get(ParametroCodefac.SMTP_PORT).getValor()));
             
+            ParametroCodefac parametroCodefac=parametros.get(ParametroCodefac.TIPO_ENVIO_COMPROBANTE);
+            if(parametroCodefac!=null)
+            {
+                getCmbTipoEnvioComprobante().setSelectedItem(TipoEnvioComprobanteEnum.buscarPorLetra(parametroCodefac.valor));
+            }
+            
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -291,6 +304,11 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private void cargarModosFacturacion() {
         getCmbModoFacturacion().addItem(ComprobanteElectronicoService.MODO_PRODUCCION);
         getCmbModoFacturacion().addItem(ComprobanteElectronicoService.MODO_PRUEBAS);
+        
+        getCmbTipoEnvioComprobante().removeAllItems();
+        for (ParametroCodefac.TipoEnvioComprobanteEnum tipoEnvio : TipoEnvioComprobanteEnum.values()) {
+            getCmbTipoEnvioComprobante().addItem(tipoEnvio);
+        }
     }
 
     public void cargarDatosArchivos(File archivoEscogido) {
@@ -623,4 +641,5 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             getTxtSmtpPuerto().setValue("");        
         }
     }
+
 }

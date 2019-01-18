@@ -100,6 +100,8 @@ public class ComprobanteElectronicoService implements Runnable {
     public static final Integer ETAPA_ENVIO_COMPROBANTE =5;
     public static final Integer ETAPA_ENVIAR = 6;
     public static final Integer ETAPA_AUTORIZAR = 7;
+    public static final Integer ETAPA_ENVIO_COMPROBANTE_AUTORIZADO =8; //Etapa que deberia funcionar cuando quiere enviar el xml autorizado
+
 
     public static final Integer CODIGO_SRI_MODO_PRUEBAS = 1;
     public static final Integer CODIGO_SRI_MODO_PRODUCCION = 2;
@@ -206,12 +208,23 @@ public class ComprobanteElectronicoService implements Runnable {
      * Variable que sirve para saber si envio los correos adjuntos en el comprobante o tambien los adicionales
      */
     public boolean enviarSoloCorreosAdjuntos;
+    
+    /**
+     * Variable que me permite  saber si quiere enviar los correos con los documentos firmados o autorizados
+     */
+    private Boolean enviarCorreoComprobanteAutorizado ;
+    /**
+     * Variables para saber si se deben enviar correos por defecto pongo verdadero
+     */
+    private Boolean enviarCorreos;
 
     public ComprobanteElectronicoService() {
         this.etapaLimiteProcesar = 100;
         this.etapaActual = ETAPA_GENERAR;
         this.alertas=new ArrayList<AlertaComprobanteElectronico>();
-        enviarSoloCorreosAdjuntos=false;
+        this.enviarSoloCorreosAdjuntos=false;
+        this.enviarCorreoComprobanteAutorizado=false;
+        this.enviarCorreos=true;
     }
 
     public ComprobanteElectronicoService(String pathBase, String nombreFirma, String claveFirma, String modoFacturacion, ComprobanteElectronico comprobante) {
@@ -224,6 +237,8 @@ public class ComprobanteElectronicoService implements Runnable {
         this.etapaLimiteProcesar = 100;
         this.alertas=new ArrayList<AlertaComprobanteElectronico>();
         enviarSoloCorreosAdjuntos=false;
+        this.enviarCorreoComprobanteAutorizado=false;
+        this.enviarCorreos=true;
     }
 
     public void procesar(Boolean enviarPorLotes) {
@@ -289,9 +304,13 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
             
-            if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE)) {
-                //if(correosElectronicos!=null && correosElectronicos.size()>0)
-                enviarComprobante();
+            if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE))
+            {
+                if(enviarCorreoComprobanteAutorizado==false && enviarCorreos==true)
+                {
+                    enviarComprobante(CARPETA_FIRMADOS);
+                    System.out.println("enviarCorreo() y SMS()");
+                }
 
                 if (escucha != null) {
                     escucha.procesando(etapaActual, new ClaveAcceso(claveAcceso));
@@ -303,10 +322,8 @@ public class ComprobanteElectronicoService implements Runnable {
                     return;
                 }
                 etapaActual++;
-                //generarRide();
-                System.out.println("enviarCorreo() y SMS()");
             }
-
+            
             if (etapaActual.equals(ETAPA_ENVIAR)) {
                 enviarSri();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
@@ -319,11 +336,30 @@ public class ComprobanteElectronicoService implements Runnable {
             }
 
             if (etapaActual.equals(ETAPA_AUTORIZAR)) {
+                //throw new ComprobanteElectronicoException("error prueba","autorizado", 1);
                 autorizarSri();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("autorizarSri()");
                 if(etapaLimiteProcesar<=ETAPA_AUTORIZAR) {
                     if(escucha!=null)escucha.termino();
+                    return;
+                }
+                etapaActual++;
+            }
+            
+            if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE_AUTORIZADO)) {
+                if (enviarCorreoComprobanteAutorizado == true && enviarCorreos == true) {
+                    enviarComprobante(CARPETA_AUTORIZADOS);
+                    System.out.println("enviarCorreoAutorizado() y SMS()");
+                }
+
+                if (escucha != null) {
+                    escucha.procesando(etapaActual, new ClaveAcceso(claveAcceso));
+                }
+                if (etapaLimiteProcesar <= ETAPA_ENVIO_COMPROBANTE_AUTORIZADO) {
+                    if (escucha != null) {
+                        escucha.termino();
+                    }
                     return;
                 }
                 etapaActual++;
@@ -419,19 +455,24 @@ public class ComprobanteElectronicoService implements Runnable {
             
             
             if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE)) {
-                enviarComprobanteLoteCorreo();
+                
+                if(enviarCorreoComprobanteAutorizado==false && enviarCorreos==true)
+                {
+                    enviarComprobanteLoteCorreo(CARPETA_FIRMADOS);                  
+                    //generarRide();                    
+                    System.out.println("enviarCorreo()");
+                }
                 
                 if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
-                if(etapaLimiteProcesar<=ETAPA_ENVIO_COMPROBANTE) {
-                    if(escuchaLote!=null)escuchaLote.termino(servicioSri.getAutorizacion());
-                    return;
-                }
-                //generarRide();
+                    if(etapaLimiteProcesar<=ETAPA_ENVIO_COMPROBANTE) {
+                        if(escuchaLote!=null)escuchaLote.termino(servicioSri.getAutorizacion());
+                        return;
+                    }
                 etapaActual++;
-                System.out.println("enviarCorreo()");
             }
-
-
+            
+            
+            
             List<Comprobante> comprobanteConProblemasEnviar=new ArrayList<Comprobante>(); //Nota: Esta variable la pongo fuera por si el usuario solo manda a verificar desde la etapa final
             if (etapaActual.equals(ETAPA_ENVIAR)) {
                 comprobanteConProblemasEnviar= enviarSriLote();
@@ -457,6 +498,27 @@ public class ComprobanteElectronicoService implements Runnable {
                 }
                 etapaActual++;
             }
+            
+            if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE_AUTORIZADO)) {
+
+                if (enviarCorreoComprobanteAutorizado == true && enviarCorreos == true) {
+                    enviarComprobanteLoteCorreo(CARPETA_AUTORIZADOS);
+                    //generarRide();                    
+                    System.out.println("enviarCorreo()");
+                }
+
+                if (escuchaLote != null) {
+                    escuchaLote.procesando(etapaActual);
+                }
+                if (etapaLimiteProcesar <= ETAPA_ENVIO_COMPROBANTE_AUTORIZADO) {
+                    if (escuchaLote != null) {
+                        escuchaLote.termino(servicioSri.getAutorizacion());
+                    }
+                    return;
+                }
+                etapaActual++;
+            }
+            
 
             if(escuchaLote!=null)escuchaLote.termino(listaLotesAutorizados(servicioSri.getAutorizacion(),comprobanteConProblemasEnviar));
         } catch (ComprobanteElectronicoException cee) {
@@ -484,7 +546,7 @@ public class ComprobanteElectronicoService implements Runnable {
         return autorizadosConNoEnviados;
     }
 
-    private void enviarComprobante() throws ComprobanteElectronicoException {
+    private void enviarComprobante(String carpetaComprobante) throws ComprobanteElectronicoException {
         //enviarComprobanteCorreo(this.claveAcceso);
         try {
             ClaveAcceso claveAcceso=new ClaveAcceso(this.claveAcceso);
@@ -497,10 +559,12 @@ public class ComprobanteElectronicoService implements Runnable {
             //StringReader reader = new StringReader(mapComprobante.get("comprobante"));
             ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
 
-            String pathFile = getPathComprobante(CARPETA_RIDE, getNameRide(comprobante));
+            String pathFile = getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)); //Si utilizo dos modos para enviar al correo de veria 
             Map<String,String> archivosPath=new HashMap<String,String>();
             archivosPath.put(claveAcceso.getTipoComprobante().getPrefijo()+"-"+comprobante.getInformacionTributaria().getPreimpreso()+".pdf",pathFile);
-            archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso()+".xml",getPathComprobante(CARPETA_FIRMADOS));
+            //archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso()+".xml",getPathComprobante(CARPETA_FIRMADOS));
+            archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso()+".xml",getPathComprobante(carpetaComprobante));
+            
             
             try {
                 String mensajeGenerado =getMensajeCorreo(claveAcceso.getTipoComprobante(),comprobante);
@@ -571,7 +635,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
     }
     
-    private void enviarComprobanteLoteCorreo()
+    private void enviarComprobanteLoteCorreo(String carpetaEnviarComprobante)
     {
         for (String claveAccesoComprobante : clavesAccesoLote) {
              //Autorizacion autorizacion = servicioSri.buscarAutorizacion(claveAccesoComprobante);
@@ -579,7 +643,7 @@ public class ComprobanteElectronicoService implements Runnable {
              //Enviar toso los comprobantes que existen porque segun el SRI ya son validos
             //if (autorizacion != null && autorizacion.getEstado().equals(ServicioSri.AUTORIZADO)) {
                  try {
-                enviarComprobanteCorreo(claveAccesoComprobante);
+                enviarComprobanteCorreo(claveAccesoComprobante,carpetaEnviarComprobante);
             } catch (ComprobanteElectronicoException ex) {
                 Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -587,7 +651,7 @@ public class ComprobanteElectronicoService implements Runnable {
         }
     }
     
-    private void enviarComprobanteCorreo(String claveAccesoTemp) throws ComprobanteElectronicoException {
+    private void enviarComprobanteCorreo(String claveAccesoTemp,String carpetaEnviarComprobante) throws ComprobanteElectronicoException {
         try {
             ClaveAcceso claveAcceso=new ClaveAcceso(claveAccesoTemp);
             JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
@@ -602,21 +666,24 @@ public class ComprobanteElectronicoService implements Runnable {
             String pathFile = getPathComprobante(CARPETA_RIDE, getNameRide(comprobante));
             Map<String,String> archivosPath=new HashMap<String,String>();
             archivosPath.put(claveAcceso.getTipoComprobante().getPrefijo()+"-"+comprobante.getInformacionTributaria().getPreimpreso()+".pdf",pathFile);
-            archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso()+".xml",getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp));
+            archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso()+".xml",getPathComprobanteConClaveAcceso(carpetaEnviarComprobante,claveAccesoTemp));
             
             try {
                 
                 String mensajeGenerado =getMensajeCorreo(claveAcceso.getTipoComprobante(),comprobante);
                 
-                ComprobanteElectronico comprobanteElectronico=buscarComprobanteLote(claveAccesoTemp);
-                List<String> correosElectronicosTemp=comprobanteElectronico.getCorreos();
+                //ComprobanteElectronico comprobanteElectronico=buscarComprobanteLote(claveAccesoTemp);
+                //ComprobanteElectronico comprobanteElectronico=(ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
+                
+                
+                List<String> correosElectronicosTemp=comprobante.getCorreos();
                 
                 //Si la lista de correos adicionales  
                 if(correosElectronicosTemp==null)correosElectronicosTemp=new ArrayList<String>();
                 //Agregar correos adjuntos en el comprobante electronico
-                if(comprobanteElectronico.getInformacionAdicional()!=null)
+                if(comprobante.getInformacionAdicional()!=null)
                 {
-                    for (InformacionAdicional infoAdicional : comprobanteElectronico.getInformacionAdicional()) {
+                    for (InformacionAdicional infoAdicional : comprobante.getInformacionAdicional()) {
                         if(infoAdicional.getNombre().equals("correo"))
                             correosElectronicosTemp.add(infoAdicional.getValor());                                           
                     }
@@ -1456,7 +1523,7 @@ public class ComprobanteElectronicoService implements Runnable {
             }
         }
         comprobante.getTipoDocumento();
-        return prefijo + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";
+        return prefijo + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+comprobante.getInformacionTributaria().getClaveAcceso()+ ".pdf";
     }
 
     public void setUriRecepcion(String uriRecepcion) {
@@ -1625,10 +1692,13 @@ public class ComprobanteElectronicoService implements Runnable {
     
     private ComprobanteElectronico buscarComprobanteLote(String clave)
     {
-        for (ComprobanteElectronico comprobanteElectronico : comprobantesLote) {
-            if(comprobanteElectronico.getInformacionTributaria().getClaveAcceso().equals(clave))
-            {
-                return comprobanteElectronico;
+        if(comprobantesLote!=null)
+        {
+            for (ComprobanteElectronico comprobanteElectronico : comprobantesLote) {
+                if(comprobanteElectronico.getInformacionTributaria().getClaveAcceso().equals(clave))
+                {
+                    return comprobanteElectronico;
+                }
             }
         }
         return null;
@@ -1715,6 +1785,16 @@ public class ComprobanteElectronicoService implements Runnable {
     public List<AlertaComprobanteElectronico> getAlertas() {
         return alertas;
     }
+
+    public void setEnviarCorreoComprobanteAutorizado(Boolean enviarCorreoComprobanteAutorizado) {
+        this.enviarCorreoComprobanteAutorizado = enviarCorreoComprobanteAutorizado;
+    }
+
+    public void setEnviarCorreos(Boolean enviarCorreos) {
+        this.enviarCorreos = enviarCorreos;
+    }
+    
+    
     
     
 

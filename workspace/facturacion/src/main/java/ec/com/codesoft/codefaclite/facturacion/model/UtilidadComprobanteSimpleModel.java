@@ -22,7 +22,9 @@ public class UtilidadComprobanteSimpleModel extends UtilidadComprobanteAvanzadoM
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_ENVIADOS);
         cargarEtapas();
-        super.iniciarComponentes(); //To change body of generated methods, choose Tools | Templates.
+        
+        getCmbEstadoLimiteProcesar().setVisible(false);
+        getLblEtapaFinalProcesar().setVisible(false);
     }
     
 }
