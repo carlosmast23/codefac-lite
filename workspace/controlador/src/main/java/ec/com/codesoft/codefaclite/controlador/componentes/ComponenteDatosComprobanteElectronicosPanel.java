@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
@@ -172,8 +173,16 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
             @Override
             public void actionPerformed(ActionEvent e) {
                 DialogMostrarClaveAcceso dialogo=new DialogMostrarClaveAcceso(null,true);
-                dialogo.setClaveAcceso(comprobante.getComprobante().getClaveAcceso());                
+                dialogo.setClaveAcceso(comprobante.getComprobante().getClaveAcceso());      
+                
+                dialogo.setTipoComprobante(comprobante.getComprobante().getCodigoDocumentoEnum().getNombre());
+                
+                dialogo.setFechaAutorizacion("");
+                dialogo.setIdentificacionReceptor(comprobante.getComprobante().getCodigoDocumento());
+                dialogo.setCorreoElectronicoReceptor("");
+                dialogo.setearDatos();
                 dialogo.setVisible(true);
+                
 
             }
         });

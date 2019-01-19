@@ -89,6 +89,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.datatype.XMLGregorianCalendar;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -441,6 +442,11 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                         Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+
+            @Override
+            public void autorizado(Autorizacion documentoAutorizado) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
             });
         //}
         
@@ -884,6 +890,11 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+
+            @Override
+            public void autorizado(Autorizacion documentoAutorizado) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         });
         
         comprobanteElectronico.procesar(false);
@@ -967,28 +978,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     if(existeConexionRemota)
                     {
                         callbackClientObject.procesando(etapa, clave);
-                    }
-                    
-                    //Setear el campo de seteado a factura solo si pasa la etapa de autorizar
-                    if(etapa==ComprobanteElectronicoService.ETAPA_AUTORIZAR)
-                    {
-                        comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-
-                        try {
-                            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                                @Override
-                                public void transaccion() {
-                                    entityManager.merge(comprobanteOriginal);
-                                }
-                            });
-                            
-                            //Enviar mensaje
-                            //ServidorSMS.getInstance().enviarMensaje("994905332","La factura"+clave.secuencial+" fue enviada a su correo");
-                        } catch (ServicioCodefacException ex) {
-                            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
+                    }                    
+                                       
                     //Si se genera la etapa firmar entonces seteo la clave de acceso
                     if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
                         comprobanteOriginal.setClaveAcceso(clave.clave);
@@ -1022,12 +1013,51 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+
+            @Override
+            public void autorizado(Autorizacion documentoAutorizado) {
+                               
+                try {
+                    ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                        @Override
+                        public void transaccion() {
+                            //Setear el campo de seteado a factura solo si pasa la etapa de autorizar
+                            comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                            setearDatosAutorizacionComprobante(comprobanteOriginal,documentoAutorizado);               
+                            entityManager.merge(comprobanteOriginal);
+                        }
+                    });
+
+                    //Enviar mensaje
+                    //ServidorSMS.getInstance().enviarMensaje("994905332","La factura"+clave.secuencial+" fue enviada a su correo");
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
         });
         
         //Proceso el comprobante
         comprobanteElectronico.procesar(false);
     
     }
+    
+    private void setearDatosAutorizacionComprobante(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobanteOriginal,Autorizacion documentoAutorizado)
+    {
+        XMLGregorianCalendar fechaXml = documentoAutorizado.getFechaAutorizacion();
+        java.sql.Date fechaAutorizacion = new java.sql.Date(fechaXml.toGregorianCalendar().getTime().getTime());        
+        comprobanteOriginal.setFechaAutorizacionSri(fechaAutorizacion);
+        
+        ComprobanteEntity.TipoAmbienteEnum enumAmbiente=ComprobanteEntity.TipoAmbienteEnum.buscarPorNombreSri(documentoAutorizado.getAmbiente());
+        if(enumAmbiente!=null)
+        {
+            comprobanteOriginal.setTipoAmbiente(enumAmbiente.getLetra());
+        }
+        
+        
+        
+    }
+    
     
     private ComprobanteElectronicoService cargarConfiguracionesInicialesComprobantesLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario) throws RemoteException
     {
@@ -1719,6 +1749,11 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         }
         throw new ServicioCodefacException("Xml no disponible");
+    }
+    
+    public void consultarDocumentoAutorizado()
+    {
+    
     }
 
 }

@@ -81,6 +81,19 @@ public class ComprobanteEntity implements Serializable{
     
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
+    
+    /**
+     * La fecha de cuando fue autorizado el documento , información importante en especial para que puedan anular comprobante en el Sri
+     */
+    @Column(name = "FECHA_AUTORIZACION_SRI")
+    protected Date fechaAutorizacionSri;
+    
+    /**
+     * Tipo de ambiente de produccion o pruebas en el que fue emitido el comprobante
+     */
+    @Column(name = "TIPO_AMBIENTE")
+    protected String tipoAmbiente;
+    
 
     public ComprobanteEntity() {
     }
@@ -237,6 +250,23 @@ public class ComprobanteEntity implements Serializable{
     public void setDireccionMatriz(String direccionMatriz) {
         this.direccionMatriz = direccionMatriz;
     }
+
+    public Date getFechaAutorizacionSri() {
+        return fechaAutorizacionSri;
+    }
+
+    public void setFechaAutorizacionSri(Date fechaAutorizacionSri) {
+        this.fechaAutorizacionSri = fechaAutorizacionSri;
+    }
+
+    public String getTipoAmbiente() {
+        return tipoAmbiente;
+    }
+
+    public void setTipoAmbiente(String tipoAmbiente) {
+        this.tipoAmbiente = tipoAmbiente;
+    }
+    
     
     
     
@@ -375,6 +405,52 @@ public class ComprobanteEntity implements Serializable{
             return nombre;
         }
 
+    }
+    
+    public enum TipoAmbienteEnum
+    {
+        PRODUCCION("p","PRODUCCIÓN","Producción"),
+        PRUEBAS("b","PRUEBAS","Pruebas");
+        
+        private String letra;
+        /**
+         * Se refiere al nombre que me devuelve en el documento de autorizado del Sri
+         */
+        private String nombreSRI;
+        private String nombre;
+
+        private TipoAmbienteEnum(String letra, String nombreSRI, String nombre) {
+            this.letra = letra;
+            this.nombreSRI = nombreSRI;
+            this.nombre = nombre;
+        }
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public String getNombreSRI() {
+            return nombreSRI;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        public static TipoAmbienteEnum buscarPorNombreSri(String nombreSri)
+        {
+            for (TipoAmbienteEnum enumerador : TipoAmbienteEnum.values()) {
+                
+                if(enumerador.getNombreSRI().equals(nombreSri))
+                {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+        
+        
+        
     }
     
 }

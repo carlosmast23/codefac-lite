@@ -337,8 +337,10 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual.equals(ETAPA_AUTORIZAR)) {
                 //throw new ComprobanteElectronicoException("error prueba","autorizado", 1);
-                autorizarSri();
+                Autorizacion autorizacion=autorizarSri();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escucha!=null)escucha.autorizado(autorizacion); //Informo al servidor para enviar los datos de la autorizacion
+                
                 System.out.println("autorizarSri()");
                 if(etapaLimiteProcesar<=ETAPA_AUTORIZAR) {
                     if(escucha!=null)escucha.termino();
@@ -1172,7 +1174,7 @@ public class ComprobanteElectronicoService implements Runnable {
     }
     
 
-    private void autorizarSri() throws ComprobanteElectronicoException {
+    private Autorizacion autorizarSri() throws ComprobanteElectronicoException {
         servicioSri = new ServicioSri();
         servicioSri.setUri_autorizacion(uriAutorizacion);
         servicioSri.setUri_recepcion(uriRecepcion);
@@ -1184,7 +1186,9 @@ public class ComprobanteElectronicoService implements Runnable {
             String xmlAutorizado = servicioSri.obtenerRespuestaAutorizacion();
             ComprobantesElectronicosUtil.generarArchivoXml(xmlAutorizado, getPathComprobante(CARPETA_AUTORIZADOS));
             ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_ENVIADOS_SIN_RESPUESTA));
+            return servicioSri.getAutorizacion().get(0); //Obtengo solo el primer valor porque solo esta mandando a autorizar un documento
         }
+        return null;
 
     }
     
