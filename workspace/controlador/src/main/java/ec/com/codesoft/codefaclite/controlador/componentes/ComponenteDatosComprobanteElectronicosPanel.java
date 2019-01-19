@@ -20,8 +20,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
+import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -49,6 +53,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     public ComponenteDatosComprobanteElectronicosPanel() {
         initComponents();
         listenerBotones();
+        listenerLabels();
     }
     
     
@@ -66,6 +71,11 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnAbrirXml = new javax.swing.JButton();
         btnReenviarCorreo = new javax.swing.JButton();
         btnAutorizarDocumento = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        lblConsultaSri = new javax.swing.JLabel();
+        lblAnulacionSri = new javax.swing.JLabel();
 
         setLayout(new org.jdesktop.swingx.VerticalLayout());
 
@@ -84,6 +94,35 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnAutorizarDocumento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/visto.png"))); // NOI18N
         btnAutorizarDocumento.setToolTipText("Cambiar estado autorizar comprobante");
         add(btnAutorizarDocumento);
+
+        jLabel2.setText("  ");
+        add(jLabel2);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Links", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12))); // NOI18N
+        jPanel1.setLayout(new org.jdesktop.swingx.VerticalLayout());
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/SriLogo.png"))); // NOI18N
+        jPanel1.add(jLabel1);
+
+        lblConsultaSri.setBackground(new java.awt.Color(153, 0, 0));
+        lblConsultaSri.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblConsultaSri.setForeground(new java.awt.Color(0, 51, 153));
+        lblConsultaSri.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblConsultaSri.setText("Consulta");
+        lblConsultaSri.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblConsultaSri.setPreferredSize(new java.awt.Dimension(57, 20));
+        jPanel1.add(lblConsultaSri);
+
+        lblAnulacionSri.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblAnulacionSri.setForeground(new java.awt.Color(153, 0, 0));
+        lblAnulacionSri.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAnulacionSri.setText("Anulación");
+        lblAnulacionSri.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblAnulacionSri.setPreferredSize(new java.awt.Dimension(68, 20));
+        jPanel1.add(lblAnulacionSri);
+
+        add(jPanel1);
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -92,6 +131,11 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     private javax.swing.JButton btnAutorizarDocumento;
     private javax.swing.JButton btnObtenerClaveAcceso;
     private javax.swing.JButton btnReenviarCorreo;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblAnulacionSri;
+    private javax.swing.JLabel lblConsultaSri;
     // End of variables declaration//GEN-END:variables
 
     private void listenerBotones() {
@@ -255,8 +299,49 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         return btnAutorizarDocumento;
     }
 
-    
+    private void listenerLabels() {
+        
+        lblConsultaSri.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        lblConsultaSri.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                UtilidadesWeb.abrirPaginaWebNavigador(ParametrosSistemaCodefac.LINK_CONSULTAS_SRI);
+            }
 
-    
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        
+        lblAnulacionSri.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        lblAnulacionSri.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                UtilidadesWeb.abrirPaginaWebNavigador(ParametrosSistemaCodefac.LINK_ANULACIONES_SRI);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        
+    }
+ 
     
 }

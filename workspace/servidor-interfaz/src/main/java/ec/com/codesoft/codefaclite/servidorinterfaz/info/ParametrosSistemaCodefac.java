@@ -62,6 +62,10 @@ public abstract class ParametrosSistemaCodefac {
     public static final String CARPETA_DATOS_TEMPORALES="tmp";
     
     
+    public static final String LINK_CONSULTAS_SRI="https://declaraciones.sri.gob.ec/tuportal-internet/accederAplicacion.jspa?redireccion=60&idGrupo=58";
+     
+    public static final String LINK_ANULACIONES_SRI="https://declaraciones.sri.gob.ec/tuportal-internet/accederAplicacion.jspa?redireccion=61&idGrupo=58";
+    
     
     public abstract class MensajesSistemaCodefac
     {
