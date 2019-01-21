@@ -37,6 +37,8 @@ public class DescargaModel extends DescargaDialog implements Runnable{
     private List<ArchivoDescarga> archivosDescargar;
     
     private DefaultListModel<String> modeloLista;
+    
+    private Boolean descargaCompleta;
 
 
     public DescargaModel(List<ArchivoDescarga> archivosDescargar) {
@@ -44,6 +46,7 @@ public class DescargaModel extends DescargaDialog implements Runnable{
         this.archivosDescargar=archivosDescargar;
         setLocationRelativeTo(null);
         cargarListaArchivos();
+        descargaCompleta=false;
     }
     
     
@@ -131,6 +134,7 @@ public class DescargaModel extends DescargaDialog implements Runnable{
             }
             modeloLista.removeElement(name);
         }
+        descargaCompleta=true;
         
     }
 
@@ -139,6 +143,11 @@ public class DescargaModel extends DescargaDialog implements Runnable{
         empezarDescargaHilo();
         dispose();
     }
+
+    public Boolean getDescargaCompleta() {
+        return descargaCompleta;
+    }
+    
     
     
 }

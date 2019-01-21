@@ -211,6 +211,12 @@ public class Main {
                     descargaModel.empezarDescarga();
                     descargaModel.setVisible(true);
                     
+                    if(!descargaModel.getDescargaCompleta())
+                    {
+                        DialogoCodefac.mensaje("Advertencia","El proceso de actualización fue cancelado",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        System.exit(0); //Salir del sistema
+                    }
+                    
                     //Ejecutar el updater para que se encargue de hacer la actualicacion de la nueva version
                     try {
                         //String carpeta = "";
