@@ -39,7 +39,7 @@ public class GuiaRemisionBusqueda implements InterfaceModelFind<GuiaRemision>
         
         String queryString = "SELECT u FROM GuiaRemision u WHERE u.estado<>?1 ";
         queryString+="AND ( LOWER(u.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
-        queryString+=" ORDER BY u.secuencial DESC ";
+        queryString+=" ORDER BY u.secuencial+0 DESC ";
         
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());

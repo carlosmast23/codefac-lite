@@ -34,11 +34,16 @@ public class RetencionBusquedaDialogo implements InterfaceModelFind<Retencion> {
     public QueryDialog getConsulta(String filter) {
         //Retencion ret;
         //ret.getEstadoEnum()
-        String queryString = "SELECT r FROM Retencion r WHERE r.estado<>?2 AND ";
-        queryString += " ( LOWER(r.secuencial) like ?1 )";
+        String queryString = "SELECT r FROM Retencion r WHERE r.estado<>?2 ";
+        //queryString += " ( LOWER(r.secuencial) like ?1 )";
+        queryString += "AND ( LOWER(r.proveedor.razonSocial) like ?3 OR CONCAT(r.secuencial, '') like ?4 )";
+        queryString += " ORDER BY r.secuencial+0 DESC ";
+        
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1, filter);
+        //queryDialog.agregarParametro(1, filter);
         queryDialog.agregarParametro(2,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+        queryDialog.agregarParametro(3, filter);
+        queryDialog.agregarParametro(4, filter);
         return queryDialog;
     }
 
