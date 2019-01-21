@@ -136,3 +136,4 @@ Crear una carpeta simplifica de la primera para procesar los datos
 Agregar la funcionalidad de enviar al correo desde la pantalla de enviar en especial para cuando esta en el modo enviar comprobantes autorizados
 Agregar un estado para eliminar y saber y que fue por algun motivo desde el sri o para eliminar completamente del sistema y que no quede registro (para evitar problemas con los datos de prueba seria bueno filtrar por el tipo de ambiente)
 Revisar que cuando envio facturas que no se procecen lanzando una excepcion en la clase de autorizar se estan quedando pero en la carpeta firmados_sin_enviar y deberia haberse quedado en la carpeta de enviados
+Revisar que en la factura no se esta cargando los datos que deberian estar grabados en la factura , se cargan los datos en funcion del cliente pero no los quemados

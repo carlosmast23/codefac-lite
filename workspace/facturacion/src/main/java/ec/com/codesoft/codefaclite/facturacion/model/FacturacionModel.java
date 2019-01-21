@@ -1154,8 +1154,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        DialogoCodefac.mensaje("Advertencia","Las facturas no se pueden modificar",DialogoCodefac.MENSAJE_ADVERTENCIA);
-        throw new ExcepcionCodefacLite("cancelar el evento editar");
+        if(!factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
+        {
+            DialogoCodefac.mensaje("Advertencia","La factura no se pueden modificar ",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("cancelar el evento editar");
+        }
+        
+        try {
+            ServiceFactory.getFactory().getFacturacionServiceIf().editar(factura);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //ServiceFactory.getFactory().getComp
+        
     }
 
     @Override
@@ -1308,6 +1321,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (facturaTmp != null) {
             this.factura = facturaTmp;
             cargarDatosBuscar();
+            validacionesParaEditar();
            
         } else {
             throw new ExcepcionCodefacLite("cancelar ejecucion");
@@ -3129,6 +3143,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public List<ComprobanteAdicional> getDatosAdicionales() {
         return (List<ComprobanteAdicional>)(Object) factura.getDatosAdicionales();
+    }
+
+    private void validacionesParaEditar() {
+        //Solo para el caso que este sin autorizar dejo habilitado estos campos para que puedan ser modificados
+        if (factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR)) {
+            getBtnAgregarCliente().setEnabled(true);
+            getBtnBuscarCliente().setEnabled(true);
+            getTxtCliente().setEnabled(true);
+        }
     }
 
     
