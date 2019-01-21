@@ -248,6 +248,10 @@ public class DialogMostrarClaveAcceso extends javax.swing.JDialog {
     public void setearDatos() {
         txtClaveAcceso.setText(claveAcceso);
         txtTipoComprobante.setText(tipoComprobante);
+        txtFechaAutorizacion.setText(fechaAutorizacion);
+        txtIdentificacionrReceptor.setText(identificacionReceptor);
+        txtCorreoElectronicoReceptor.setText(CorreoElectronicoReceptor);
+        
     }
 
     public void setClaveAcceso(String claveAcceso) {

@@ -15,8 +15,12 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronico
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
@@ -176,10 +180,18 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                 dialogo.setClaveAcceso(comprobante.getComprobante().getClaveAcceso());      
                 
                 dialogo.setTipoComprobante(comprobante.getComprobante().getCodigoDocumentoEnum().getNombre());
+                if(comprobante.getComprobante().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
+                {
+                    dialogo.setFechaAutorizacion("Comprobante no esta autorizado en el SRI");
+                }
+                else
+                {
+                    dialogo.setFechaAutorizacion((comprobante.getComprobante().getFechaAutorizacionSri()!=null)?comprobante.getComprobante().getFechaAutorizacionSri().toString():"revisar en el archivo xml");
+                }
                 
-                dialogo.setFechaAutorizacion("");
-                dialogo.setIdentificacionReceptor(comprobante.getComprobante().getCodigoDocumento());
-                dialogo.setCorreoElectronicoReceptor("");
+                //dialogo.setIdentificacionReceptor(comprobante.getComprobante().getCodigoDocumento());
+                setearDatosRecepcion(dialogo);
+                //dialogo.setCorreoElectronicoReceptor("");
                 dialogo.setearDatos();
                 dialogo.setVisible(true);
                 
@@ -257,6 +269,43 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                 }
             }
         });
+    }
+    
+    private void setearDatosRecepcion(DialogMostrarClaveAcceso dialogo)
+    {
+        String identificacionReceptor="";
+        String correoReceptor="";
+        
+        switch (comprobante.getComprobante().getCodigoDocumentoEnum()) {
+            case FACTURA:
+                Factura factura=(Factura) comprobante.getComprobante();
+                identificacionReceptor=factura.getCliente().getIdentificacion();
+                correoReceptor=factura.getCliente().getCorreoElectronico();
+                break;
+
+            case NOTA_CREDITO:
+                NotaCredito notaCredito = (NotaCredito) comprobante.getComprobante();
+                identificacionReceptor = notaCredito.getCliente().getIdentificacion();
+                correoReceptor = notaCredito.getCliente().getCorreoElectronico();
+                break;
+
+                
+            case RETENCIONES:
+                Retencion retencion = (Retencion) comprobante.getComprobante();
+                identificacionReceptor = retencion.getProveedor().getIdentificacion();
+                correoReceptor = retencion.getProveedor().getCorreoElectronico();
+                break;
+                
+                
+            case GUIA_REMISION:
+                GuiaRemision guiaRemision = (GuiaRemision) comprobante.getComprobante();
+                identificacionReceptor = guiaRemision.getDestinatarios().get(0).getDestinatorio().getIdentificacion();
+                correoReceptor = guiaRemision.getDestinatarios().get(0).getDestinatorio().getCorreoElectronico();
+                break;
+        }
+        
+        dialogo.setIdentificacionReceptor(identificacionReceptor);
+        dialogo.setCorreoElectronicoReceptor(correoReceptor);
     }
     
     public void habilitar(boolean habilitar)
