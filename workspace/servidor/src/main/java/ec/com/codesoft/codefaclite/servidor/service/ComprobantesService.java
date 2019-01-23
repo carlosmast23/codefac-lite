@@ -406,7 +406,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                         }
                         
                         //Setear el campo de seteado a factura solo si pasa la etapa de autorizar
-                        if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
+                        /*if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
                             
                             ComprobanteEntity comprobante=obtenerComprobantePorClaveAcceso(clave);
                             comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
@@ -424,7 +424,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                             } catch (ServicioCodefacException ex) {
                                 Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                        }
+                        }*/
                         
                     } catch (RemoteException ex) {
                         Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -445,7 +445,15 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
             @Override
             public void autorizado(Autorizacion documentoAutorizado) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    try {
+                        ClaveAcceso clave=new ClaveAcceso(documentoAutorizado.getNumeroAutorizacion());
+                        ComprobanteEntity comprobante=obtenerComprobantePorClaveAcceso(clave);
+                        comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                        setearDatosAutorizacionComprobante(comprobante, documentoAutorizado);
+                        entityManager.merge(comprobante);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
             }
             });
         //}
@@ -893,7 +901,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
             @Override
             public void autorizado(Autorizacion documentoAutorizado) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                //Todo: Este metodo no se implementa porque se supone que no va a terminar de autorizar porque no llega a esta esa etapa
             }
         });
         

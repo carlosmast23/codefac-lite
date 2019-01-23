@@ -1161,6 +1161,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         try {
+            setearValoresDefaultFactura();
             ServiceFactory.getFactory().getFacturacionServiceIf().editar(factura);
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
             
@@ -1931,7 +1932,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         String codigoSri=tipoIdentificacionEnum.getCodigoSriVenta();
         factura.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
         factura.setEmpresa(session.getEmpresa());
-        factura.setEstado(Factura.ESTADO_FACTURADO);
+        //factura.setEstado(Factura.ESTADO_FACTURADO);
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         factura.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));
         //factura.setIvaSriId(iva);

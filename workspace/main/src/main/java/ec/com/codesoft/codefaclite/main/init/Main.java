@@ -56,6 +56,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -873,8 +874,10 @@ public class Main {
 
     public static boolean verificarLicenciaOnline(ValidacionLicenciaCodefac validacion)
     {
-        //try
-        //{
+            //Si esta en modo desarrollo omito el tema de comprobar la licencias
+            if (ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO)) {
+                return true;
+            }            
             
             String usuario=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
             Licencia licenciaOnline=new Licencia();
@@ -1055,6 +1058,12 @@ public class Main {
     }
 
     private static boolean comprobarLicencia(String pathBase) {
+        
+        //Si esta en modo desarrollo omito el tema de comprobar la licencias
+        if(ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO))
+        {
+            return true;
+        }
 
         //ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
         //String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;

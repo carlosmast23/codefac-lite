@@ -40,9 +40,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
     private static final long serialVersionUID = -1238278914412853684L;
     
     
-    public static final String ESTADO_FACTURADO="F";
-    public static final String ESTADO_ANULADO="A";
-    public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
+    //public static final String ESTADO_FACTURADO="F";
+    //public static final String ESTADO_ANULADO="A";
+    //public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
     
     
     @Id
