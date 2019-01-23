@@ -40,37 +40,25 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     public Producto grabar(Producto p) throws ServicioCodefacException
     {
-        EntityTransaction transactions= entityManager.getTransaction();
-        transactions.begin();
-        try {
-            
-            //Si el catalogo producto no esta creado primero crea la entidad
-            CatalogoProducto catalogoProducto=p.getCatalogoProducto();                        
-            if(catalogoProducto.getId()==null)
-            {
-                entityManager.persist(catalogoProducto);                        
-            }
-            
-            //Si no son ensables remover datos para no tener incoherencias
-            if(!TipoProductoEnum.EMSAMBLE.getLetra().equals(p.getTipoProductoCodigo()))
-            {          
-                if(p.getDetallesEnsamble()!=null)
-                {
-                    p.getDetallesEnsamble().clear();
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                //Si el catalogo producto no esta creado primero crea la entidad
+                CatalogoProducto catalogoProducto = p.getCatalogoProducto();
+                if (catalogoProducto.getId() == null) {
+                    entityManager.persist(catalogoProducto);
                 }
+
+                //Si no son ensables remover datos para no tener incoherencias
+                if (!TipoProductoEnum.EMSAMBLE.getLetra().equals(p.getTipoProductoCodigo())) {
+                    if (p.getDetallesEnsamble() != null) {
+                        p.getDetallesEnsamble().clear();
+                    }
+                }
+
+                entityManager.persist(p);
             }
-            
-            entityManager.persist(p);
-            transactions.commit();
-            
-        //} catch (ConstrainViolationExceptionSQL ex) {
-        //    Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
-        //    throw new ServicioCodefacException("La clave principal ya existe en el sistema");
-        } catch (DatabaseException ex) {
-            transactions.rollback();
-            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ServicioCodefacException("Error con la base de datos");
-        }
+        });        
         return p;
     }
     
