@@ -67,12 +67,11 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         jLabel17 = new javax.swing.JLabel();
         cmbFechaDocumento = new org.jdesktop.swingx.JXDatePicker();
         jLabel18 = new javax.swing.JLabel();
-        jToolBar2 = new javax.swing.JToolBar();
         txtEstablecimientoCompra = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
         txtPuntoEmisionCompra = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
         txtSecuencialCompra = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
         panelDatosGenerales = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
@@ -198,6 +197,9 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
 
         txtProveedor.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -206,10 +208,12 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         btnBuscarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscarProveedor.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnBuscarProveedor, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
@@ -232,7 +236,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 13;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -241,36 +245,44 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         jLabel18.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel18.setText("Fecha Compra:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel18, gridBagConstraints);
 
-        jToolBar2.setFloatable(false);
-        jToolBar2.setRollover(true);
-
         txtEstablecimientoCompra.setColumns(3);
-        jToolBar2.add(txtEstablecimientoCompra);
-
-        jLabel12.setText(" - ");
-        jToolBar2.add(jLabel12);
-
-        txtPuntoEmisionCompra.setColumns(3);
-        jToolBar2.add(txtPuntoEmisionCompra);
-
-        jLabel13.setText(" - ");
-        jToolBar2.add(jLabel13);
-
-        txtSecuencialCompra.setColumns(9);
-        jToolBar2.add(txtSecuencialCompra);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtEstablecimientoCompra, gridBagConstraints);
+
+        txtPuntoEmisionCompra.setColumns(3);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtPuntoEmisionCompra, gridBagConstraints);
+
+        txtSecuencialCompra.setColumns(9);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jToolBar2, gridBagConstraints);
+        jPanel1.add(txtSecuencialCompra, gridBagConstraints);
+
+        jLabel15.setText(" - ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        jPanel1.add(jLabel15, gridBagConstraints);
+
+        jLabel16.setText(" - ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        jPanel1.add(jLabel16, gridBagConstraints);
 
         tabTipoDocumentos.addTab("Libre", jPanel1);
 
@@ -797,8 +809,8 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
@@ -822,7 +834,6 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDireccionCliente;
