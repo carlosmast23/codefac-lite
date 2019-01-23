@@ -15,6 +15,11 @@ public final class ExpresionRegular
      * Texto simple 
      * Ejm: Texto simple que tiene caracteres como - guion, . punto, _línea baja y , coma
     */
+    public static final String textoSimpleSinNumeros = "^[A-Za-zÀ-ÿ\\u00f1\\u00d1\\s.\\_\\-\\,\\ ]*$";
+    /**
+     * Texto simple 
+     * Ejm: Texto simple que tiene caracteres como - guion, . punto, _línea baja y , coma
+    */
     public static final String textoSimple = "^[A-Za-zÀ-ÿ0-9\\u00f1\\u00d1\\s.\\_\\-\\,\\ ]*$";
     
     /**
