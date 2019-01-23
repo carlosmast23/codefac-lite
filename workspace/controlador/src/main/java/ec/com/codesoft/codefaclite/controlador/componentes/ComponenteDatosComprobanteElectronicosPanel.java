@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
@@ -207,10 +208,17 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                 if(reenviarCorreo)
                 {
                     try {
+                        int etapaEnviarCorreo=ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE; //Por defecto elijo que los correos se envie solo el xml firmado
+                        ParametroCodefac parametroCodefac=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.TIPO_ENVIO_COMPROBANTE);
+                        if(parametroCodefac!=null && parametroCodefac.getValor().equals(ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_AUTORIZADO.getLetra()))
+                        {
+                            etapaEnviarCorreo=ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE_AUTORIZADO;
+                        }
+                                                
                         comprobante.getPanelPadre().cambiarCursorEspera();
                         List<AlertaComprobanteElectronico> alertas=ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesPendienteSinCallBack(
-                                ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
-                                ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE,
+                                etapaEnviarCorreo,
+                                etapaEnviarCorreo,
                                 comprobante.getComprobante().getClaveAcceso(),
                                 obtenerCorreosFactura()); //TOdo:Verificar si puedo hacer alguna manera para solo enviar a los correos que esten escritos
                         

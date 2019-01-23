@@ -64,6 +64,8 @@ public class ServicioSri {
      */
     private static final Long INTENTOS_AUTORIZACION =70L; 
     
+    private static final Long INTENTOS_AUTORIZACION_LOTE = 50L;
+    
     //private String uri="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
     private String uri_recepcion;
     private String uri_autorizacion;
@@ -258,6 +260,9 @@ public class ServicioSri {
                    Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
                }
            }
+           
+           //Si sale del bucle sin retornar asumo que excedio el tiempo de espera
+           throw new ComprobanteElectronicoException("Se excedio el tiempo de espera para autorizar el documento , porfavor inténtelo mas tarde","Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
        }
        return false;
        
@@ -268,7 +273,7 @@ public class ServicioSri {
        if(verificarConexionAutorizar())
        {
            
-           for(int i=0;i<INTENTOS_AUTORIZACION;i++)
+           for(int i=0;i<INTENTOS_AUTORIZACION_LOTE;i++)
            {
                try {
                    AutorizacionComprobantesOffline port= servicioAutorizacion.getAutorizacionComprobantesOfflinePort();

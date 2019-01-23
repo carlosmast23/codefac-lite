@@ -342,6 +342,13 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         comprobanteElectronico.setEtapaLimiteProcesar(etapaLimite);
         comprobanteElectronico.enviarSoloCorreosAdjuntos=true;
         
+        //TODO; Revisar esta parte
+        ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.TIPO_ENVIO_COMPROBANTE);
+        if (parametroCodefac != null && parametroCodefac.getValor().equals(ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_AUTORIZADO.getLetra())) {
+           comprobanteElectronico.setEnviarCorreoComprobanteAutorizado(true);
+        }
+
+        
         comprobanteElectronico.procesarComprobante();
         List<AlertaComprobanteElectronico> alertas=comprobanteElectronico.getAlertas();
         for (AlertaComprobanteElectronico alerta : alertas) {
