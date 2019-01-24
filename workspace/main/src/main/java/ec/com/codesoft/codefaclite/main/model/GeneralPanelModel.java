@@ -50,6 +50,7 @@ import ec.com.codesoft.codefaclite.main.interfaces.BusquedaCodefacInterface;
 import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
+import ec.com.codesoft.codefaclite.main.panel.VentanaManualUsuario;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -583,7 +584,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             //Este artificio se realiza porque cuando se reutilizaba un referencia de la pantalla generaba problemas con los dialogos7
                             ventana= (ControladorCodefacInterface) menuControlador.createNewInstance();
                             ventana.reconstruirPantalla(); //Metodo adicional que construye las pantallas laterales
-                            agregarListenerMenu(ventana,menuControlador.isMaximizado());                    
+                            agregarListenerMenu(ventana,menuControlador.isMaximizado(),null,null);                    
                         }                        
                         else
                         {
@@ -1211,8 +1212,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         return false;
     
     }
-    
-    private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado)
+   
+    private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado,Integer ancho ,Integer alto)
     {
         try {
             //Anular el metodo de cierre automatico para controlar manualmente
@@ -1276,10 +1277,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             {
                 Dimension desktopSize =getjDesktopPane1().getSize(); //tamanio del escritorio
                 Dimension jInternalFrameSize = panel.getPreferredSize(); //tamanio de la ventana
-                double ancho=(double)(desktopSize.width - jInternalFrameSize.width) /(double) 2;
-                double alto=(double)(desktopSize.height - jInternalFrameSize.height) /(double) 2;
-                //double alto=(double)(desktopSize.height) /(double) 2;
-                panel.setLocation((int)ancho,(int)alto);
+                
+                if(ancho==null & alto==null)
+                {
+                    double anchoTmp=(double)(desktopSize.width - jInternalFrameSize.width) /(double) 2;
+                    double altoTmp=(double)(desktopSize.height - jInternalFrameSize.height) /(double) 2;
+                    //double alto=(double)(desktopSize.height) /(double) 2;
+                    panel.setLocation((int)anchoTmp,(int)altoTmp);
+                }
+                else
+                {
+                    panel.setSize(ancho,desktopSize.height);
+                    double anchoTmp = (double) (desktopSize.width - jInternalFrameSize.width) / (double) 2;
+                    double altoTmp = (double) (desktopSize.height - jInternalFrameSize.height) / (double) 4;
+                    panel.setLocation((int)anchoTmp,0);
+                }
             }
             
             
@@ -2492,7 +2504,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      */
     @Override
     public void crearVentanaCodefac(GeneralPanelInterface panel,boolean maximizado) {
-        agregarListenerMenu((ControladorCodefacInterface) panel,maximizado);
+        agregarListenerMenu((ControladorCodefacInterface) panel,maximizado,null,null);
     }
     
     public List<VentanaEnum> getVentanasMenuList() {
@@ -2876,7 +2888,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public void crearVentanaCodefac(VentanaEnum ventanEnum,boolean maximizado,Object[] parametrosPostConstructor)
     {
         ControladorCodefacInterface ventana=(ControladorCodefacInterface) ventanEnum.getInstance();
-        agregarListenerMenu(ventana,maximizado);
+        agregarListenerMenu(ventana,maximizado,null,null);
         
         //Validacion para verificar si implementa la interfaz del postcostructod
         if (ventana instanceof InterfazPostConstructPanel) {
@@ -2898,7 +2910,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     ventana.modoDialogo=true;
                     ventana.formOwnerFocus=panelPadre;
                     ventana.formOwner=panel;
-                    agregarListenerMenu(ventana,maximizado);
+                    agregarListenerMenu(ventana,maximizado,null,null);
                     habilitarBotones(false);
                     getBtnGuardar().setEnabled(true);
                     
@@ -2989,6 +3001,23 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 AcercaModel.getInstance().setUsuario(sessionCodefac.getUsuarioLicencia());
                 AcercaModel.getInstance().setLicencia(sessionCodefac.getTipoLicenciaEnum().getNombre());
                 AcercaModel.getInstance().setVisible(true);
+            }
+        });
+        
+                getjMenuItemAcerca().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {                
+                AcercaModel.getInstance().setUsuario(sessionCodefac.getUsuarioLicencia());
+                AcercaModel.getInstance().setLicencia(sessionCodefac.getTipoLicenciaEnum().getNombre());
+                AcercaModel.getInstance().setVisible(true);
+            }
+        });
+                
+        getBtnManualUsuario().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                agregarListenerMenu(new VentanaManualUsuario(),false,800,900);                
+                
             }
         });
         
@@ -3289,7 +3318,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 Constructor contructor = ventanaClase.getConstructor();
                 ControladorCodefacInterface ventana = (ControladorCodefacInterface) contructor.newInstance();
                 ventana.reconstruirPantalla(); //Esto sirve para la pantalla se reconstruya con los menus secundarios
-                agregarListenerMenu(ventana,maximizado);
+                agregarListenerMenu(ventana,maximizado,null,null);
             } catch (NoSuchMethodException ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SecurityException ex) {

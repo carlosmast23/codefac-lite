@@ -93,6 +93,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemContenido = new javax.swing.JMenuItem();
         jMenuItemAcerca = new javax.swing.JMenuItem();
         jMenuItemActualizarLicencia = new javax.swing.JMenuItem();
+        btnManualUsuario = new javax.swing.JMenuItem();
 
         JpanelAuxiliar.setLayout(new javax.swing.BoxLayout(JpanelAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -410,6 +411,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuAyuda.add(jMenuItemActualizarLicencia);
 
+        btnManualUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.ALT_MASK));
+        btnManualUsuario.setText("Manual Usuario");
+        jMenuAyuda.add(btnManualUsuario);
+
         jMenuBar1.add(jMenuAyuda);
 
         setJMenuBar(jMenuBar1);
@@ -538,6 +543,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnHome;
     private javax.swing.JButton btnImprimir;
+    private javax.swing.JMenuItem btnManualUsuario;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnSalirPantallaPublicidad;
     private javax.swing.JMenuItem itemActualizar;
@@ -885,6 +891,12 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public JMenuItem getItemCerrarVentana() {
         return itemCerrarVentana;
     }
+
+    public JMenuItem getBtnManualUsuario() {
+        return btnManualUsuario;
+    }
+    
+    
     
     
     
