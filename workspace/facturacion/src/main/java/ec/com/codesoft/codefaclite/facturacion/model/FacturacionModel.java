@@ -1174,46 +1174,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite,RemoteException {
-        //Varible 
-        boolean respuesta =false;
-        
         //Eliminar solo si esta en modo editar
         if (estadoFormulario.equals(ESTADO_EDITAR)) {
-            if (factura != null) {
-                
-                //Verificar que la factura no tenga notas de credito aplicando porque no podria eliminar si se da esta condicion
-                if(!factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.SIN_ANULAR))
-                {
-                    DialogoCodefac.mensaje(MensajeCodefacSistema.FacturasMensajes.ERROR_ELIMINAR_AFECTA_NOTA_CREDITO);
-                    throw new ExcepcionCodefacLite("error");
-                }
-                
-                
-                //Eliminar solo si el estado esta en sin autorizar, o esta en el modo de facturacion normal y esta con estado facturado
-                if (factura.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado()) || 
-                        (factura.getTipoFacturacion().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()) && factura.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado()) )) {
-                    
-                    respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
 
-                } else {
-                    respuesta=DialogoCodefac.dialogoPregunta("Alerta", "La factura se encuentra autorizada en el SRI , \nPorfavor elimine la factura solo si tambien esta anulado en el SRI\nDesea eliminar la factura de todos modos?", DialogoCodefac.MENSAJE_INCORRECTO);
-                }
-                
-                //Eliminar la factura si eligen la respuesta si
-                if (respuesta) {
-                    try {
-                        FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
-                        servicio.eliminarFactura(factura);
-                        DialogoCodefac.mensaje("Exitoso", "La factura se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-                        getLblEstadoFactura().setText(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre());
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+            //Verificar que la factura no tenga notas de credito aplicando porque no podria eliminar si se da esta condicion
+            if (!factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.SIN_ANULAR)) {
+                DialogoCodefac.mensaje(MensajeCodefacSistema.FacturasMensajes.ERROR_ELIMINAR_AFECTA_NOTA_CREDITO);
+                throw new ExcepcionCodefacLite("error");
             }
-        }
-        else
-        {
+            
+            ComprobanteElectronicoComponente.eliminarComprobante(this, factura, getLblEstadoFactura());
+            
+        }else{
             throw new ExcepcionCodefacLite("Cancelar evento eliminar porque no esta en modo editar");
         }
     }

@@ -105,7 +105,10 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion() throws ServicioCodefacException, RemoteException {
-                    entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    ComprobantesService comprobanteService=new ComprobantesService();
+                    comprobanteService.eliminarComprobanteSinTransaccion(entity);
+                    
+                    //entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                     entityManager.merge(entity);
                     
                     //Si el documento es diferente de compras cambiar el estado a no enviado la retencion

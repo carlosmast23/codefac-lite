@@ -178,23 +178,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        if(estadoFormulario.equals(ESTADO_GRABAR))
-        {
-            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.NO_PERMITE_ELIMINAR);
-        }
-        else
-        {
-            boolean pregunta=DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_COMPROBANTE_ELECTRONICO);
-            if(pregunta)
-            {
-                ServiceFactory.getFactory().getGuiaRemisionServiceIf().eliminar(guiaRemision);
-                DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
-            }
-            else
-            {
-                throw new ExcepcionCodefacLite("Canelado eliminar usuario"); 
-            }
-        }
+        ComprobanteElectronicoComponente.eliminarComprobante(this, guiaRemision,null);
     }
 
     @Override

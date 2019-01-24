@@ -56,6 +56,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEs
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
@@ -139,6 +140,17 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         }
         return null;
     }*/
+    
+    public void eliminarComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException,ServicioCodefacException
+    {
+        if (comprobante.getEstadoEnum().equals(ComprobanteEnumEstado.AUTORIZADO)) {
+            comprobante.setEstado(ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+        } else {
+            comprobante.setEstado(ComprobanteEnumEstado.ELIMINADO.getEstado());
+        }
+
+        entityManager.merge(comprobante);
+    }
     
     public void autorizarComprobante(ComprobanteEntity comprobanteElectronica) throws RemoteException,ServicioCodefacException
     {

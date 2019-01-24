@@ -68,4 +68,6 @@ public interface ComprobanteServiceIf extends Remote {
     
     public RemoteInputStream obtenerXmlFirmadoComprobante(Empresa empresa,String claveAcceso) throws RemoteException, ServicioCodefacException;
     
+    public void eliminarComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException,ServicioCodefacException;
+    
 }

@@ -272,10 +272,13 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion() throws ServicioCodefacException, RemoteException {
+                   
                     entity.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());
                     entityManager.merge(entity.getFactura());
                     
-                    entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+                    //entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+                    ComprobantesService comprobanteService = new ComprobantesService();
+                    comprobanteService.eliminarComprobanteSinTransaccion(entity);
                     entityManager.merge(entity);
                     
                 }

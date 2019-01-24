@@ -315,7 +315,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 @Override
                 public void transaccion() {
                     try {
-                        factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //Cambio el estado de las facturas a eliminad
+                        ComprobantesService comprobanteService=new ComprobantesService();
+                        comprobanteService.eliminarComprobanteSinTransaccion(factura);
+                        
+                        //factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //Cambio el estado de las facturas a eliminad
                         entityManager.merge(factura); //actualizar los datos de la factura
                         
                         NotaCreditoService servicioNotaCredito=new NotaCreditoService();
@@ -326,6 +329,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         }
                         
                     } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
                         Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     

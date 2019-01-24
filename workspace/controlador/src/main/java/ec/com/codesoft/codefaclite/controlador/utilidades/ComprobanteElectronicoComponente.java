@@ -5,12 +5,19 @@
  */
 package ec.com.codesoft.codefaclite.controlador.utilidades;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
@@ -25,6 +32,67 @@ import javax.swing.JLabel;
  * @author Carlos
  */
 public class ComprobanteElectronicoComponente {
+    
+    public static void eliminarComprobante(GeneralPanelInterface panel,ComprobanteEntity comprobante,JLabel labelEstado) throws ExcepcionCodefacLite
+    {
+        //Varible 
+        boolean respuesta = false;
+
+        //Eliminar solo si esta en modo editar
+        if (panel.estadoFormulario.equals(panel.ESTADO_EDITAR)) {
+            if (comprobante != null) {
+
+                //Eliminar solo si el estado esta en sin autorizar, o esta en el modo de facturacion normal y esta con estado facturado
+                if (comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado())
+                        || (comprobante.getTipoFacturacion().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()) && comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado()))) {
+
+                    respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar el comprobante electrónico? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
+
+                } else {
+                    respuesta = DialogoCodefac.dialogoPregunta("Alerta", "El comprobante electrónico se encuentra autorizada en el SRI , \nPorfavor elimine  solo si tambien esta anulado en el SRI\nDesea eliminar de todos modos?", DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+
+                //Eliminar la factura si eligen la respuesta si
+                if (respuesta) {
+                    try {
+                        
+                        switch(comprobante.getCodigoDocumentoEnum())
+                        {
+                            case FACTURA:
+                                ServiceFactory.getFactory().getFacturacionServiceIf().eliminarFactura((Factura) comprobante);
+                                break;
+                                
+                            case RETENCIONES:
+                                ServiceFactory.getFactory().getRetencionServiceIf().eliminar((Retencion)comprobante);
+                                break;
+                                
+                            case GUIA_REMISION:
+                                ServiceFactory.getFactory().getGuiaRemisionServiceIf().eliminar((GuiaRemision) comprobante);
+                                break;
+                                
+                            case NOTA_CREDITO:
+                                ServiceFactory.getFactory().getNotaCreditoServiceIf().eliminar((NotaCredito)comprobante);
+                                break;
+                                
+                        }
+                        
+                        //ServiceFactory.getFactory().getComprobanteServiceIf().eliminarComprobante(comprobante);
+                        DialogoCodefac.mensaje("Exitoso", "El comprobante electrónico se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                        
+                        if(labelEstado!=null)
+                        {
+                            labelEstado.setText(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre());
+                        }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        } else {
+            throw new ExcepcionCodefacLite("Cancelar evento eliminar porque no esta en modo editar");
+        }
+    
+    }
     
     public static void cargarSecuencialConsulta(ComprobanteEntity comprobante,JComboBox<PuntoEmision> cmbPuntoEmision,JLabel lblEstablecimiento,JLabel lblSecuencial )
     {        

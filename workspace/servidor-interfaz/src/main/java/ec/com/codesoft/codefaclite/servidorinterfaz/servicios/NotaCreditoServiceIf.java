@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -23,4 +24,5 @@ public interface NotaCreditoServiceIf extends ServiceAbstractIf<NotaCredito>
     public void editar(NotaCredito notaCredito) throws java.rmi.RemoteException;;
     public List<NotaCredito> obtenerTodos() throws java.rmi.RemoteException;;
     public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,String estado) throws java.rmi.RemoteException;;
+
 }

@@ -97,7 +97,9 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion() throws ServicioCodefacException, RemoteException {
-                    entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+                    ComprobantesService comprobanteService = new ComprobantesService();
+                    comprobanteService.eliminarComprobanteSinTransaccion(entity);
+                    //entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
                     entityManager.merge(entity);
                     //entity.setEstado(estado);
                 }

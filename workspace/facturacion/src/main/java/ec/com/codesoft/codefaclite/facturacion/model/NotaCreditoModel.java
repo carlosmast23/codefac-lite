@@ -279,20 +279,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        if (estadoFormulario.equals(ESTADO_EDITAR)) {
-            if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_COMPROBANTE_ELECTRONICO))
-            {
-                ServiceFactory.getFactory().getNotaCreditoServiceIf().eliminar(notaCredito);
-                DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);                        
-            }
-            else
-            {
-                throw new ExcepcionCodefacLite("Cancelado por el usuario");
-            }
-        }else
-        {
-            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ACCION_PERMITIDA_MODULO_EDITAR);
-        }
+        ComprobanteElectronicoComponente.eliminarComprobante(this,notaCredito,null);
     }
 
     @Override

@@ -62,9 +62,11 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         getDateFechaInicio().setDate(UtilidadesFecha.fechaInicioMes(UtilidadesFecha.hoy()));
         getDateFechaFin().setDate(UtilidadesFecha.hoy());
-        getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
-        getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
-        getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO);
+        
+        for(ComprobanteEntity.ComprobanteEnumEstado enumerador : ComprobanteEntity.ComprobanteEnumEstado.values())
+        {
+            getCmbEstado().addItem(enumerador);
+        }
         
         getChkTodosCliente().setSelected(true);
         if(getChkTodosCliente().isSelected())
