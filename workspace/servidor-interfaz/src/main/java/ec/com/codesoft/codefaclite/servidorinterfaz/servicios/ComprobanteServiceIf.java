@@ -70,4 +70,7 @@ public interface ComprobanteServiceIf extends Remote {
     
     public void eliminarComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException,ServicioCodefacException;
     
+    public boolean eliminarComprobanteFisico(String claveAcceso) throws RemoteException, ServicioCodefacException;
+    public boolean eliminarComprobanteFisico(String claveAcceso,String carpeta) throws RemoteException, ServicioCodefacException;
+    
 }

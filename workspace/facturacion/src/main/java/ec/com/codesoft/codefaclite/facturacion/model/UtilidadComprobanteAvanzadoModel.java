@@ -19,8 +19,10 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.Informaci
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac.TipoEnvioComprobanteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
@@ -37,7 +39,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JInternalFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -63,6 +67,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
         addComboListener();
         addTableListener();
         addCheckListener();
+        addListenerPopUps();
         frame = this;
     }
 
@@ -491,6 +496,37 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                 }
             }
         });
+    }
+
+    private void addListenerPopUps() {
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem jMenuItemDatoAdicional = new JMenuItem("Eliminar");
+        jMenuItemDatoAdicional.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada = getTblComprobantes().getSelectedRow();
+                if (filaSeleccionada >= 0) {
+                    String claveAcesso = (String) getTblComprobantes().getValueAt(filaSeleccionada, COLUMNA_CLAVE_ACCESO); //Obtener el objeto de la columna
+                    Boolean respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Esta seguro que desea elminar el xml de la carpeta?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    if(respuesta)
+                    {
+                        String nombreCarpeta=getCmbCarpetaComprobante().getSelectedItem().toString();
+                        try {
+                            ServiceFactory.getFactory().getComprobanteServiceIf().eliminarComprobanteFisico(claveAcesso,nombreCarpeta);
+                            DialogoCodefac.mensaje("Correcto","El xml fue eliminado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                            getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex());
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ServicioCodefacException ex) {
+                            Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });
+
+        jPopupMenu.add(jMenuItemDatoAdicional);
+        getTblComprobantes().setComponentPopupMenu(jPopupMenu);
     }
 
 }

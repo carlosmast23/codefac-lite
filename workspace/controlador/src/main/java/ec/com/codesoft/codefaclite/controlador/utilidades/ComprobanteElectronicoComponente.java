@@ -72,12 +72,23 @@ public class ComprobanteElectronicoComponente {
                                 
                             case NOTA_CREDITO:
                                 ServiceFactory.getFactory().getNotaCreditoServiceIf().eliminar((NotaCredito)comprobante);
-                                break;
-                                
+                                break;                                
                         }
                         
                         //ServiceFactory.getFactory().getComprobanteServiceIf().eliminarComprobante(comprobante);
                         DialogoCodefac.mensaje("Exitoso", "El comprobante electrónico se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                        
+                        /// Opcion para tambien eliminar el comprobante fisico
+                        if (comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado()))
+                        {
+                            Boolean respuestaEliminar=DialogoCodefac.dialogoPregunta("Exitoso","Desea eliminar también el comprobante físico?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                            if(respuestaEliminar)
+                            {
+                                ServiceFactory.getFactory().getComprobanteServiceIf().eliminarComprobanteFisico(comprobante.getClaveAcceso());
+                                DialogoCodefac.mensaje("Exitoso", "El comprobante electrónico se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                                panel.panelPadre.actualizarNotificacionesCodefac();
+                            }
+                        }
                         
                         if(labelEstado!=null)
                         {
@@ -85,6 +96,9 @@ public class ComprobanteElectronicoComponente {
                         }
                     } catch (RemoteException ex) {
                         Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
+                        DialogoCodefac.mensaje("Error al eliminar",ex.getMessage(),DialogoCodefac.MENSAJE_ADVERTENCIA);
                     }
                 }
             }

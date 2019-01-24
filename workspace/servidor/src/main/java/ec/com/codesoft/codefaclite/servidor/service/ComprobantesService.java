@@ -1779,6 +1779,51 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         throw new ServicioCodefacException("Xml no disponible");
     }
     
+    
+    public boolean eliminarComprobanteFisico(String claveAcceso) throws RemoteException, ServicioCodefacException
+    {
+        ClaveAcceso claveAccesoObj = new ClaveAcceso(claveAcceso);
+        EmpresaService empresaService = new EmpresaService();
+        Empresa empresa = empresaService.buscarPorIdentificacion(claveAccesoObj.identificacion);
+        
+       ComprobanteElectronicoService comprobanteService=new ComprobanteElectronicoService();
+       cargarConfiguraciones(comprobanteService,empresa);
+       
+       String pathCarpetaSinEnviar=comprobanteService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR,claveAcceso);
+       File file=new File(pathCarpetaSinEnviar);
+       if (file.exists()) {
+            file.delete();           
+        }
+       
+       String pathCarpetaEnviados=comprobanteService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA,claveAcceso);
+       file=new File(pathCarpetaEnviados);
+       if (file.exists()) {
+            file.delete();           
+        }
+       
+       return true;
+       
+    }
+    
+    public boolean eliminarComprobanteFisico(String claveAcceso,String carpeta) throws RemoteException, ServicioCodefacException {
+        
+        ClaveAcceso claveAccesoObj = new ClaveAcceso(claveAcceso);
+        EmpresaService empresaService = new EmpresaService();
+        Empresa empresa = empresaService.buscarPorIdentificacion(claveAccesoObj.identificacion);
+
+        ComprobanteElectronicoService comprobanteService = new ComprobanteElectronicoService();
+        cargarConfiguraciones(comprobanteService,empresa);
+
+        String pathCarpetaSinEnviar = comprobanteService.getPathComprobanteConClaveAcceso(carpeta, claveAcceso);
+        File file = new File(pathCarpetaSinEnviar);
+        if (file.exists()) {
+            file.delete();
+            return true;
+        }
+        return false;
+
+    }
+    
     public void consultarDocumentoAutorizado()
     {
     
