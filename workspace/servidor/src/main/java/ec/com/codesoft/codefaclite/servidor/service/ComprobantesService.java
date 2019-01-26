@@ -12,6 +12,7 @@ import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoAutorizado;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
@@ -91,10 +92,15 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -1072,6 +1078,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
     
     private void setearDatosAutorizacionComprobante(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobanteOriginal,Autorizacion documentoAutorizado)
     {
+        
         XMLGregorianCalendar fechaXml = documentoAutorizado.getFechaAutorizacion();
         java.sql.Date fechaAutorizacion = new java.sql.Date(fechaXml.toGregorianCalendar().getTime().getTime());        
         comprobanteOriginal.setFechaAutorizacionSri(fechaAutorizacion);
@@ -1805,6 +1812,85 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
        
     }
     
+    public boolean eliminarComprobantesFisico(String claveAcceso,String carpeta) throws RemoteException, ServicioCodefacException {
+        
+        ClaveAcceso claveAccesoObj = new ClaveAcceso(claveAcceso);
+        EmpresaService empresaService = new EmpresaService();
+        Empresa empresa = empresaService.buscarPorIdentificacion(claveAccesoObj.identificacion);
+
+        ComprobanteElectronicoService comprobanteService = new ComprobanteElectronicoService();
+        cargarConfiguraciones(comprobanteService,empresa);
+
+        String pathCarpetaSinEnviar = comprobanteService.getPathComprobanteConClaveAcceso(carpeta, claveAcceso);
+        File file = new File(pathCarpetaSinEnviar);
+        if (file.exists()) {
+            file.delete();
+            return true;
+        }
+        return false;
+
+    }
+    
+    
+    public void actualizarComprobanteDatos(List<ComprobanteEntity> entidades) throws RemoteException, ServicioCodefacException
+    {
+        //Si no hay ningun dato para procesar no hago nada
+        if(entidades.size()==0)
+            return;
+        
+        EmpresaService empresaService = new EmpresaService();
+        Empresa empresa = empresaService.buscarPorIdentificacion(entidades.get(0).getEmpresa().getIdentificacion());
+
+        ComprobanteElectronicoService comprobanteService = new ComprobanteElectronicoService();
+        cargarConfiguraciones(comprobanteService, empresa);
+            
+        for (ComprobanteEntity entidad : entidades) {
+            //Busacar el comprobante en la carpeta de los autorizados
+            if (entidad.getClaveAcceso() != null) {
+                String pathXmlAutorizado = comprobanteService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_AUTORIZADOS, entidad.getClaveAcceso());
+                ComprobanteElectronicoAutorizado autorizado = new ComprobanteElectronicoAutorizado();
+                
+                //Si no se puede construir el objeto xml no se hace ninguna otra accion
+                if(autorizado.construirDesdeArchivo(pathXmlAutorizado)==false)
+                {
+                    LOG.log(Level.WARNING,"No se puede actualizar el comprobante porque no existe el xml autorizado con clave de acceso: "+entidad.getClaveAcceso());
+                    continue;
+                }
+
+                java.sql.Date fechaAutorizado=autorizado.obtenerFecha();
+                if(fechaAutorizado!=null)
+                {
+                    entidad.setFechaAutorizacionSri(fechaAutorizado);
+                }
+
+                ComprobanteEntity.TipoAmbienteEnum enumAmbiente = ComprobanteEntity.TipoAmbienteEnum.buscarPorNombreSri(autorizado.getAmbiente());
+                if (enumAmbiente != null) {
+                    entidad.setTipoAmbiente(enumAmbiente.getLetra());
+                }
+                
+                //Cambiar el estado si el anterior es eliminado a elminado desde el Sri
+                if(entidad.getEstadoEnum().equals(ComprobanteEnumEstado.ELIMINADO))
+                {
+                    entidad.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+                }
+
+                ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                    @Override
+                    public void transaccion() throws ServicioCodefacException, RemoteException {
+                        entityManager.merge(entidad);
+                    }
+                });
+
+            }
+        }
+        
+    }
+    
+    public void consultarDocumentoAutorizado()
+    {
+    
+    }
+
     public boolean eliminarComprobanteFisico(String claveAcceso,String carpeta) throws RemoteException, ServicioCodefacException {
         
         ClaveAcceso claveAccesoObj = new ClaveAcceso(claveAcceso);
@@ -1824,9 +1910,5 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
     }
     
-    public void consultarDocumentoAutorizado()
-    {
-    
-    }
 
 }

@@ -28,7 +28,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    public List<Factura> lista(Persona persona, Date fi, Date ff, String estado,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido) {
+    public List<Factura> lista(Persona persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido) {
         //Factura factura;
         //factura.getReferido();
         String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="";
@@ -46,8 +46,16 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         } else {
             fecha = " AND (u.fechaEmision BETWEEN ?2 AND ?3)";
         }
-        if (estado != null) {
-            estadoFactura = " AND u.estado=?4";
+        if (estadoEnum!= null) {
+            //Si la peticion es por todos sri entonces tengo que setear 2 valores
+            if(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum))
+            {
+                estadoFactura = " AND ( u.estado=?10 or u.estado=?11 ) ";
+            }
+            else
+            {                
+                estadoFactura = " AND u.estado=?4";
+            }
         }
         
         if(agrupadoReferido)
@@ -77,8 +85,15 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             if (ff != null) {
                 query.setParameter(3, ff);
             }
-            if (estado != null) {
-                query.setParameter(4, estado);
+            if (estadoEnum != null) {
+                if(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum))
+                {
+                    query.setParameter(10,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                    query.setParameter(11,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+                }else
+                {
+                    query.setParameter(4, estadoEnum.getEstado());
+                }
             }
             
             if (consultarReferidos) 

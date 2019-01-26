@@ -294,6 +294,10 @@ public class ComprobanteEntity implements Serializable{
     
     public enum ComprobanteEnumEstado {
         /**
+         * Estado auxiliar para decir al sistema que tiene buscar autorizados y anulados por el Sri
+         */
+        TODOS_SRI("T", "Todos Sri"),
+        /**
          * Cuando la factura se grabo y se autorizo en el SRI y no aplica
          * ninguna nota de credito
          */

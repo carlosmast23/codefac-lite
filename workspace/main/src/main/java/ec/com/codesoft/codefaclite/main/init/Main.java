@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.AyudaCodef
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
 import ec.com.codesoft.codefaclite.controlador.logs.LogControlador;
+import ec.com.codesoft.codefaclite.main.actualizacion.ActualizacionSistemaUtil;
 import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
 import ec.com.codesoft.codefaclite.main.license.Licencia;
@@ -54,7 +55,9 @@ import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ActualizarSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
@@ -87,6 +90,8 @@ import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.awt.Font;
 import java.io.File;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -452,6 +457,9 @@ public class Main {
         
     }
 
+    /**
+     * Cargar Recursos servicios protocolo RMI
+     */
     public static void cargarRecursosServidor() {
         ControllerServiceUtil.cargarRecursosServidor();
     }
@@ -497,7 +505,7 @@ public class Main {
                  * Componentes iniciales que utilizo tanto para modo servidor y modo cliente-servidor
                  */
                 componentesBaseDatos(false);
-                cargarRecursosServidor();
+                cargarRecursosServidor();                
                 //Todo: Veriicar este metodo que obtiene la ip del servidor, porque cuando tienen varias interfaces o una virtual puede levantarse el servicio en una IP que no se desea
                 ipServidor = InetAddress.getLocalHost().getHostAddress();
                 cargarRecursosCliente(ipServidor);
@@ -539,7 +547,8 @@ public class Main {
                 ServidorSMS.getInstance().iniciarServidor();
                 
                 //Seteo el path de los directorio como una referencia global de todo el sistema
-                UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();    
+                UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
+                ejecutarActualizacionesCodefac();
                 
                 if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
                     //Crear el pantalla que va a manterner encendida la conexion con los clientes
@@ -954,7 +963,7 @@ public class Main {
     }
 
     /**
-     * Verifica y carga el Entity manager
+     * Verifica y carga el Entity manager 
      */
     public static void componentesBaseDatos(Boolean repetirCredenciales) {
         /**
@@ -1162,6 +1171,45 @@ public class Main {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedLookAndFeelException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Metodo que permite lanzar todas las actulizaciones pendientes en la aplicacione que son codigo en el aplicativo
+     */
+    private static void ejecutarActualizacionesCodefac() {
+        try {
+            List<ActualizarSistema> actualizaciones=ServiceFactory.getFactory().getActualizarSistemaServiceIf().obtenerCambiosPendientes();
+            for (ActualizarSistema actualizacion : actualizaciones) {
+                 String nombreMetodo=actualizacion.getNombreMetodo();
+                 Method metodo=ActualizacionSistemaUtil.class.getMethod(nombreMetodo,null);
+                 if(metodo!=null)
+                 {
+                      metodo.invoke(null);
+                      //Si el metodo se ejecuta correctamente en la base le cambio de etado
+                      actualizacion.setCambioActualizadoEnum(EnumSiNo.SI);
+                      ServiceFactory.getFactory().getActualizarSistemaServiceIf().editar(actualizacion);
+                      LOG.log(Level.INFO,"Actualizado metodo  :"+nombreMetodo);
+                 }
+                 else
+                 {
+                     LOG.log(Level.WARNING,"El metodo no se encontro para actualizar con el nombre :"+nombreMetodo);
+                 }
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

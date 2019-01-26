@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -25,7 +26,7 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo) throws java.rmi.RemoteException;
     public void editar(Factura factura) throws java.rmi.RemoteException;
     public List<Factura> obtenerTodos()throws java.rmi.RemoteException;
-    public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,String estado,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido) throws java.rmi.RemoteException;
+    public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido) throws java.rmi.RemoteException;
     public List<Factura> obtenerFacturasActivas() throws java.rmi.RemoteException;
     //public String getPreimpresoSiguiente() throws java.rmi.RemoteException;
     public void eliminarFactura(Factura factura) throws java.rmi.RemoteException;

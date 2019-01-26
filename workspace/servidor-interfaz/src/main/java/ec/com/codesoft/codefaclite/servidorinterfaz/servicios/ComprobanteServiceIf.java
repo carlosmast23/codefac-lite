@@ -73,4 +73,12 @@ public interface ComprobanteServiceIf extends Remote {
     public boolean eliminarComprobanteFisico(String claveAcceso) throws RemoteException, ServicioCodefacException;
     public boolean eliminarComprobanteFisico(String claveAcceso,String carpeta) throws RemoteException, ServicioCodefacException;
     
+    /**
+     * Metodo que permite actualizar documentos que no esten clasificados como autorizados
+     * @param entidades
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
+    public void actualizarComprobanteDatos(List<ComprobanteEntity> entidades) throws RemoteException, ServicioCodefacException;
+    
 }

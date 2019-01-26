@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servicios.controller;
 
 import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
+import ec.com.codesoft.codefaclite.servidor.service.ActualizarSistemaService;
 import ec.com.codesoft.codefaclite.servidor.service.AtsService;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
 import ec.com.codesoft.codefaclite.servidor.service.CategoriaProductoService;
@@ -73,6 +74,7 @@ import ec.com.codesoft.codefaclite.servidor.service.transporte.TransportistaServ
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -225,6 +227,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(AtsService.class, AtsServiceIf.class);
             mapRecursos.put(SucursalService.class, SucursalServiceIf.class);
             mapRecursos.put(PuntoEmisionService.class, PuntoEmisionServiceIf.class);
+            mapRecursos.put(ActualizarSistemaService.class, ActualizarSistemaServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             LOG.log(Level.INFO,"Servidor Iniciado");

@@ -129,7 +129,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
 
             FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
-            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoStr,filtrarReferidos,referido,getChkReporteAgrupadoReferido().isSelected());
+            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura,filtrarReferidos,referido,getChkReporteAgrupadoReferido().isSelected());
             NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();
             List<NotaCredito> dataNotCre = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin,estadoStr);
             
@@ -182,7 +182,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
                             //acumdoce = acumdoce.add(factura.getSubtotalImpuestos());
                             agregarValorTotal("acumiva",factura.getIva());
                             //acumiva = acumiva.add(factura.getIva());
-                            agregarValorTotal("acumdesc",factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
+                            BigDecimal descuentoSinImpuestos=(factura.getDescuentoSinImpuestos()!=null)?factura.getDescuentoSinImpuestos():BigDecimal.ZERO;
+                            agregarValorTotal("acumdesc",factura.getDescuentoImpuestos().add(descuentoSinImpuestos));
                             //acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
                         }
 

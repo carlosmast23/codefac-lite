@@ -76,6 +76,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionAdicional</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.ActualizarSistema</class>
     
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>

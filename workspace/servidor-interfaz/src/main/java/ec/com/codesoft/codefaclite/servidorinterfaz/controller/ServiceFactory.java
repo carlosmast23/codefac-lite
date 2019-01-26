@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.controller;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -171,6 +172,7 @@ public abstract class ServiceFactory {
     public AtsServiceIf getAtsServiceIf(){return (AtsServiceIf) getRecursosRMI(AtsServiceIf.class);};
     public SucursalServiceIf getSucursalServiceIf(){return (SucursalServiceIf) getRecursosRMI(SucursalServiceIf.class);};
     public PuntoEmisionServiceIf getPuntoVentaServiceIf(){return (PuntoEmisionServiceIf) getRecursosRMI(PuntoEmisionServiceIf.class);};
+    public ActualizarSistemaServiceIf getActualizarSistemaServiceIf(){return (ActualizarSistemaServiceIf) getRecursosRMI(ActualizarSistemaServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente

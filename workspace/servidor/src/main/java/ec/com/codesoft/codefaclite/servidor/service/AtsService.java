@@ -275,7 +275,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
     public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal) throws  RemoteException,ServicioCodefacException
     {
         FacturacionService facturacionService=new FacturacionService();
-        List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado(),false,null,false);
+        List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,false,null,false);
         
         Map<String,VentaAts> mapVentas=new HashMap<String,VentaAts>();
         

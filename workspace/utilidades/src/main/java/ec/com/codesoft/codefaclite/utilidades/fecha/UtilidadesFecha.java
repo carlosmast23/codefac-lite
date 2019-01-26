@@ -10,6 +10,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  *
@@ -196,6 +201,22 @@ public class UtilidadesFecha {
         return calendar.getTime();
     }
 
+    public static java.sql.Date stringFormatXMLGregorianCalendarToDate(String fechaFormat)
+    {
+        if(fechaFormat==null || fechaFormat.isEmpty())
+        {
+            return null;
+        }
+        
+        try {
+            XMLGregorianCalendar result = DatatypeFactory.newInstance().newXMLGregorianCalendar(fechaFormat);
+            java.sql.Date fechaAutorizacion = new java.sql.Date(result.toGregorianCalendar().getTime().getTime());
+            return fechaAutorizacion;
+        } catch (DatatypeConfigurationException ex) {
+            Logger.getLogger(UtilidadesFecha.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     
 
 }
