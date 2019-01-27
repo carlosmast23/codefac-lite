@@ -36,6 +36,9 @@ public class ArchivoConfiguracionesCodefac {
     
     public static final String CAMPO_TEMA="tema";
     
+    public static final String CAMPO_PUERTO_SISTEMA="puerto_sistema";
+    public static final String CAMPO_PUERTO_SMS="puerto_sms";
+    
     private Properties propiedadesIniciales;
     
     private static ArchivoConfiguracionesCodefac instance;

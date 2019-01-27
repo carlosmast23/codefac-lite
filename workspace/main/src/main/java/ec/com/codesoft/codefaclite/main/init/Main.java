@@ -143,6 +143,7 @@ public class Main {
          * Carga el tema seleccionado por defecto en aarchivo codefac.ini
          */
         cargarTemaCodefac();
+        cargarPuertoSistema();
         
         /**
          * Verificar si estan actualizaciones pendientes de una nueva version
@@ -1139,6 +1140,22 @@ public class Main {
         {
             setearEstiloSistema(EstiloCodefacEnum.findByNombre(tema));
         }
+    }
+    
+    private static void cargarPuertoSistema() {
+        ArchivoConfiguracionesCodefac archivo = ArchivoConfiguracionesCodefac.getInstance();
+        String puerto = archivo.obtenerValor(ArchivoConfiguracionesCodefac.CAMPO_PUERTO_SISTEMA);
+        if (puerto !=null) {
+            //Si existe un puerto en el archivo de configuracion cambio el puerto por defecto del aplicativo
+            ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED=Integer.parseInt(puerto);
+        }
+        
+        String puertoSms= archivo.obtenerValor(ArchivoConfiguracionesCodefac.CAMPO_PUERTO_SMS);
+        if (puertoSms !=null) {
+            //Si existe un puerto en el archivo de configuracion cambio el puerto por defecto del aplicativo
+            ParametrosSistemaCodefac.PUERTO_APP_MOVIL_SMS=Integer.parseInt(puertoSms);
+        }
+        
     }
     
     public static void setearEstiloSistema(EstiloCodefacEnum estiloCodefacEnum)

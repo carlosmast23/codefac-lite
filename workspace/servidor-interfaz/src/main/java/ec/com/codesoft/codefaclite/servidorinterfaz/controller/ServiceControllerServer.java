@@ -17,6 +17,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -52,6 +53,8 @@ public class ServiceControllerServer {
             
         } catch (RemoteException ex) {
             Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
         } catch (InstantiationException ex) {
             Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {

@@ -24,9 +24,9 @@ public abstract class ParametrosSistemaCodefac {
     public static final ModoSistemaEnum MODO=ModoSistemaEnum.DESARROLLO;
 
     /**
-     * Puerto por defecto para configurar las conexiones en red
+     * Puerto por defecto para configurar las conexiones en red no es final porque puedo modificar al momento de leer el archivo de configuraciones
      */
-    public static final int PUERTO_COMUNICACION_RED=1099;
+    public static  int PUERTO_COMUNICACION_RED=1099;
     /**
      * Nombre de la base de datosv1
      */
@@ -50,7 +50,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Puerto por el que van a aceptar conexiones para el app movil de Codefac
      */
-    public static final Integer PUERTO_APP_MOVIL_SMS=9999;
+    public static  Integer PUERTO_APP_MOVIL_SMS=9999;
     
     public static final String CODIGO_TELEFONO_ECUADOR="+593";
     

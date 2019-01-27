@@ -127,7 +127,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
     {
         List<AnuladoAts> anuladosAts=new ArrayList<AnuladoAts>();
         NotaCreditoService notaCreditoService=new NotaCreditoService();
-        List<NotaCredito> notasCredito=notaCreditoService.obtenerNotasReporte(null, fechaInicial, fechaFinal, GeneralEnumEstado.ACTIVO.getEstado());
+        List<NotaCredito> notasCredito=notaCreditoService.obtenerNotasReporte(null, fechaInicial, fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
         
         for (NotaCredito notaCredito : notasCredito) {
             AnuladoAts anuladoAts=new AnuladoAts();
