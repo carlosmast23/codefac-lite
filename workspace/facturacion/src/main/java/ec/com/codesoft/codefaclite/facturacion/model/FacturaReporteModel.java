@@ -130,13 +130,22 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
             FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
             List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura,filtrarReferidos,referido,getChkReporteAgrupadoReferido().isSelected());
-            NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();
-            List<NotaCredito> dataNotCre = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin,estadoStr);
+            
+            DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
+            NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();            
+            List<NotaCredito> dataNotCre =null;
+            
+            if(documentoConsultaEnum.equals(DocumentosConsultarEnum.VENTAS))
+            {
+                dataNotCre=nc.obtenerNotasReporte(persona, null,null,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
+            }else
+            {
+                dataNotCre=nc.obtenerNotasReporte(persona, fechaInicio, fechaFin,estadoFactura);
+            }
             
             data = new ArrayList<ReporteFacturaData>();
 
-            DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
-
+            
             switch (documentoConsultaEnum) {
                 case VENTAS:
                     for (Factura factura : datafact) {
@@ -435,7 +444,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     private NotaCredito verificarPorFactura(Factura factura,List<NotaCredito> notasCredito) {
         for (NotaCredito notaCredito : notasCredito) {
-            if (notaCredito.getFactura().equals(factura)) {
+            if (notaCredito.getFactura()!=null && notaCredito.getFactura().equals(factura)) {
                 return notaCredito;
             }
         }

@@ -262,7 +262,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         return notaCreditoFacade.findAll();
     }
 
-    public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,String estado) {
+    public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado) throws RemoteException {
         return notaCreditoFacade.lista(persona, fi, ff,estado);
     }
 

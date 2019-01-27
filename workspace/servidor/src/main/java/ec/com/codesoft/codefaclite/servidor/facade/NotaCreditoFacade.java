@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.sql.Date;
@@ -22,9 +23,9 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
         super(NotaCredito.class);
     }
 
-    public List<NotaCredito> lista(Persona persona, Date fi, Date ff,String estado) {
+    public List<NotaCredito> lista(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado) {
 
-        String cliente = "", fecha = "";
+        String cliente = "", fecha = "",estadoStr="";
         if (persona != null) {
             cliente = "u.cliente=?1";
         } else {
@@ -40,10 +41,21 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
         } else {
             fecha = " AND (u.fechaEmision BETWEEN ?2 AND ?3)";
         }
+        
+        if(estado!=null)
+        {
+            if(estado.equals(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI))
+            {
+                estadoStr=" AND ( u.estado=?5 or u.estado=?6 ) ";
+            }else
+            {
+                estadoStr=" AND u.estado=?4 ";
+            }
+        }
 
                 
         try {
-            String queryString = "SELECT u FROM NotaCredito u WHERE u.estado=?4 AND " + cliente + fecha;
+            String queryString = "SELECT u FROM NotaCredito u WHERE 1=1 AND " + cliente + fecha +estadoStr;
             Query query = getEntityManager().createQuery(queryString);
             
             if (persona != null) {
@@ -56,7 +68,16 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
                 query.setParameter(3, ff);
             }
             
-            query.setParameter(4,estado);
+            if (estado != null) {
+                if (estado.equals(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI)) {
+                    query.setParameter(5,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                    query.setParameter(6,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+                    
+                } else {
+                    query.setParameter(4,estado.getEstado());
+                }
+            }
+            
 
             return query.getResultList();
         } catch (NoResultException e) {
