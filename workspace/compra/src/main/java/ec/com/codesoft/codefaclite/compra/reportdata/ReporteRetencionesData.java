@@ -19,22 +19,29 @@ public class ReporteRetencionesData implements ExcelDatosInterface{
 
     private String claveAcceso;
     private String preimpresoRetencion;
+    private String proveedor;
+    private String fecha;
+    private String estado;
+    private String tipo; 
     private String preimpresoRetencionCompra;
     private String baseRetencion;
     private String porcentajeRetencion;
     private String codigoRetencion;
     private String valorRetencion;
 
-    public ReporteRetencionesData(String preimpresoRetencion, String baseRetencion, String porcentajeRetencion, String codigoRetencion, String valorRetencion,String preimpresoRetencionCompra,String claveAcceso) {
+    public ReporteRetencionesData(String claveAcceso, String preimpresoRetencion, String proveedor, String fecha, String estado, String tipo, String preimpresoRetencionCompra, String baseRetencion, String porcentajeRetencion, String codigoRetencion, String valorRetencion) {
+        this.claveAcceso = claveAcceso;
         this.preimpresoRetencion = preimpresoRetencion;
+        this.proveedor = proveedor;
+        this.fecha = fecha;
+        this.estado = estado;
+        this.tipo = tipo;
+        this.preimpresoRetencionCompra = preimpresoRetencionCompra;
         this.baseRetencion = baseRetencion;
         this.porcentajeRetencion = porcentajeRetencion;
         this.codigoRetencion = codigoRetencion;
         this.valorRetencion = valorRetencion;
-        this.preimpresoRetencionCompra=preimpresoRetencionCompra;
-        this.claveAcceso=claveAcceso;
     }
-
     
     
     public String getPreimpresoRetencion() {
@@ -93,6 +100,39 @@ public class ReporteRetencionesData implements ExcelDatosInterface{
         this.claveAcceso = claveAcceso;
     }
 
+    public String getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(String proveedor) {
+        this.proveedor = proveedor;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    
     
     
     @Override
@@ -101,6 +141,10 @@ public class ReporteRetencionesData implements ExcelDatosInterface{
         List<TipoDato> datos = new ArrayList<>();
         datos.add(new TipoDato(this.claveAcceso, Excel.TipoDataEnum.TEXTO));
         datos.add(new TipoDato(this.preimpresoRetencion, Excel.TipoDataEnum.TEXTO));
+        datos.add(new TipoDato(this.proveedor, Excel.TipoDataEnum.TEXTO));
+        datos.add(new TipoDato(this.fecha, Excel.TipoDataEnum.TEXTO));
+        datos.add(new TipoDato(this.estado, Excel.TipoDataEnum.TEXTO));
+        datos.add(new TipoDato(this.tipo, Excel.TipoDataEnum.TEXTO));
         datos.add(new TipoDato(this.preimpresoRetencionCompra, Excel.TipoDataEnum.TEXTO));
         datos.add(new TipoDato(this.baseRetencion, Excel.TipoDataEnum.NUMERO));
         datos.add(new TipoDato(this.porcentajeRetencion, Excel.TipoDataEnum.TEXTO));

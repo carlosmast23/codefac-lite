@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaS
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.formatDate;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -64,6 +65,8 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
     private Map<String,BigDecimal> mapSumatoriaRetencionIva=new HashMap<String,BigDecimal>();
     private Map<String,BigDecimal> mapSumatoriaRetencionRenta=new HashMap<String,BigDecimal>();
+    
+    private List<ReporteRetencionesData> dataReporte;
     
     /**
      * Carga los tipos de retencion definida por el SRI
@@ -170,7 +173,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
             InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_retenciones.jrxml");
             
             //Llenar la informacion con los datos consultados para 
-            List<ReporteRetencionesData> data = new ArrayList<ReporteRetencionesData>();
+            /*List<ReporteRetencionesData> data = new ArrayList<ReporteRetencionesData>();
             for (RetencionDetalle retencion : dataretencion) {
                 data.add(new ReporteRetencionesData(
                         retencion.getRetencion().getPreimpreso(),
@@ -181,7 +184,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                         retencion.getRetencion().getPreimpresoDocumentoFormato(),
                         retencion.getRetencion().getClaveAcceso()
                 ));
-            }
+            }*/
 
             //List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "2");
             
@@ -262,8 +265,8 @@ public class RetencionReporteModel extends RetencionReportePanel {
                 public void excel() {
                     try{
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Clave de Acceso","Preimpreso","Compra", "Base Imponible","Porcentaje", "Código", "Valor"};
-                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                        String nombreCabeceras[] = {"Clave de Acceso","Preimpreso","Proveedor","Fecha","Estado","Tipo","Compra", "Base Imponible","Porcentaje", "Código", "Valor"};
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, dataReporte);
                         excel.abrirDocumento();
                     }
                     catch(Exception exc)
@@ -275,7 +278,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
                 @Override
                 public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Retenciones ");                    
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, dataReporte, panelPadre, "Reporte Retenciones ");                    
                 }
             });
 
@@ -526,6 +529,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
         titulo.add("Preimpreso");
         titulo.add("Proveedor");
         titulo.add("Fecha");
+        titulo.add("Estado");
         titulo.add("Tipo");
         titulo.add("Compra Preimpreso");
         titulo.add("Base imponble");
@@ -535,11 +539,28 @@ public class RetencionReporteModel extends RetencionReportePanel {
         
         DefaultTableModel modeloTablaRetenciones = new DefaultTableModel(titulo, 0);
         
+        for (ReporteRetencionesData data : dataReporte) {
+            Vector<String> fila = new Vector<String>();
+            fila.add(data.getPreimpresoRetencion());
+            fila.add(data.getProveedor());
+            fila.add(data.getFecha());
+            fila.add(data.getEstado());
+            fila.add(data.getTipo());
+            fila.add(data.getPreimpresoRetencionCompra());            
+            fila.add(data.getBaseRetencion());
+            fila.add(data.getPorcentajeRetencion());
+            fila.add(data.getCodigoRetencion());
+            fila.add(data.getValorRetencion());
+
+            modeloTablaRetenciones.addRow(fila);
+        }
+        /*
         for (RetencionDetalle retencion : dataretencion) {
             Vector<String> fila = new Vector<String>();
             fila.add(retencion.getRetencion().getPreimpreso());
             fila.add(retencion.getRetencion().getRazonSocial());
             fila.add(retencion.getRetencion().getFechaEmision().toString());
+            fila.add(retencion.getRetencion().getEstadoEnum().getNombre());
             fila.add(mapTipoRetencion.get(retencion.getCodigoSri()).getNombre());
             fila.add(retencion.getRetencion().getPreimpresoDocumentoFormato());
             fila.add(retencion.getBaseImponible().toString());
@@ -549,9 +570,11 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
             modeloTablaRetenciones.addRow(fila);
 
-        }
+        }*/
         
         getTblRetenciones().setModel(modeloTablaRetenciones);
+        //UtilidadesTablas.cambiarTamanioColumnas(getTblRetenciones(),new Integer[]{100});
+        UtilidadesTablas.definirTamanioColumnas(getTblRetenciones(),new Integer[]{130});
         
     }
 
@@ -621,6 +644,36 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
                     ComprobanteEntity.ComprobanteEnumEstado estadoEnum=(ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
                     dataretencion = fs.obtenerRetencionesReportes(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, sriRetencion,estadoEnum);
+                    dataReporte=new ArrayList<ReporteRetencionesData>(); 
+                    for (RetencionDetalle retencion : dataretencion) {
+                        ReporteRetencionesData data=new ReporteRetencionesData(retencion.getRetencion().getClaveAcceso(), 
+                                retencion.getRetencion().getPreimpreso(),
+                                retencion.getRetencion().getProveedor().getRazonSocial(), 
+                                retencion.getRetencion().getFechaEmision().toString(),
+                                retencion.getRetencion().getEstadoEnum().getNombre(), 
+                                mapTipoRetencion.get(retencion.getCodigoSri()).getNombre(),
+                                retencion.getRetencion().getPreimpresoDocumentoFormato(), 
+                                retencion.getBaseImponible().toString(), 
+                                retencion.getPorcentajeRetener().toString() + " %", 
+                                retencion.getCodigoRetencionSri(), 
+                                retencion.getValorRetenido().toString());
+                                
+                       /*         
+                        Vector<String> fila = new Vector<String>();
+                        fila.add(retencion.getRetencion().getPreimpreso());
+                        fila.add(retencion.getRetencion().getRazonSocial());
+                        fila.add(retencion.getRetencion().getFechaEmision().toString());
+                        fila.add(retencion.getRetencion().getEstadoEnum().getNombre());
+                        fila.add(mapTipoRetencion.get(retencion.getCodigoSri()).getNombre());
+                        fila.add(retencion.getRetencion().getPreimpresoDocumentoFormato());
+                        fila.add(retencion.getBaseImponible().toString());
+                        fila.add(retencion.getPorcentajeRetener().toString() + " %");
+                        fila.add(retencion.getCodigoRetencionSri());
+                        fila.add(retencion.getValorRetenido().toString());*/
+
+                        dataReporte.add(data);
+                    }
+                    
                     construirMapSumatorias();
                     
                     construirTablaRetenciones();

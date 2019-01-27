@@ -73,7 +73,14 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         
         if(estadoEnum!=null)
         {
-            queryString+=" and d.retencion.estado=?8 ";
+            if(estadoEnum.equals(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI))
+            {
+                queryString+=" and (d.retencion.estado=?9 or d.retencion.estado=?10 ) ";
+            }
+            else
+            {
+                queryString+=" and d.retencion.estado=?8 ";
+            }
         }
         
         Query query = getEntityManager().createQuery(queryString);
@@ -111,7 +118,15 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
 
         if (estadoEnum != null)
         {
-            query.setParameter(8,estadoEnum.getEstado());
+            if(estadoEnum.equals(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI))
+            {
+                query.setParameter(9,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                query.setParameter(10,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+            }else
+            {
+                query.setParameter(8,estadoEnum.getEstado());
+            }
+            
         }
 
         
