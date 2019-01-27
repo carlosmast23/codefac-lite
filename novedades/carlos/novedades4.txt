@@ -138,3 +138,4 @@ Agregar un estado para eliminar y saber y que fue por algun motivo desde el sri 
 Revisar que cuando envio facturas que no se procecen lanzando una excepcion en la clase de autorizar se estan quedando pero en la carpeta firmados_sin_enviar y deberia haberse quedado en la carpeta de enviados
 Revisar que en la factura no se esta cargando los datos que deberian estar grabados en la factura , se cargan los datos en funcion del cliente pero no los quemados
 Analizar que al momento que la opcion de reenviar factura solo se pueda hacer despues de editar los cambios de la factura para evitar inconsistencia
+Falta implementar las busquedas por otros campos en las guias de remision

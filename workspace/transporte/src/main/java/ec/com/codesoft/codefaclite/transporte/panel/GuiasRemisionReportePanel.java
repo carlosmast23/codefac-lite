@@ -63,6 +63,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         txtTransportista = new javax.swing.JTextField();
         btnBuscarTransportista = new javax.swing.JButton();
         chkTodosTransportista = new javax.swing.JCheckBox();
+        jLabel3 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -187,6 +188,8 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
         getContentPane().add(jLabel1, gridBagConstraints);
 
         jLabel12.setText("           ");
@@ -265,6 +268,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
         getContentPane().add(chkTodosTransportista, gridBagConstraints);
+        getContentPane().add(jLabel3, new java.awt.GridBagConstraints());
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -288,6 +292,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;

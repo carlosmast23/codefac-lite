@@ -233,7 +233,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         for (GuiaRemision guiaRemision : listaConsulta) {
             GuiaTransporteData data=new GuiaTransporteData();
             data.setDireccionPartida(guiaRemision.getDireccionPartida());
-            data.setEstado(guiaRemision.getEstado());
+            data.setEstado(guiaRemision.getEstadoEnum().getNombre());
             data.setFechaFin(guiaRemision.getFechaFinTransporte().toString());
             data.setFechaInicio(guiaRemision.getFechaIniciaTransporte().toString());
             data.setIdentififacion((guiaRemision.getIdentificacion()!=null)?guiaRemision.getIdentificacion().toString():"");

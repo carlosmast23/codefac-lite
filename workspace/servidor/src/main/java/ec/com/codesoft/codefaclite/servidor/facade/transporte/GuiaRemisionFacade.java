@@ -44,7 +44,15 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
         
         if(estado!=null)
         {
-            queryString+=" AND u.estado=?5 " ;
+            if(estado.equals(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI))
+            {
+                queryString+=" AND (u.estado=?6 or u.estado=?7 )" ;
+            }
+            else
+            {
+                queryString+=" AND u.estado=?5 " ;
+            }
+            
         }
         
         /**
@@ -63,7 +71,14 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
         
         if(estado!=null)
         {
-            query.setParameter(5,estado.getEstado());
+            if(estado.equals(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI))
+            {
+                query.setParameter(6,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                query.setParameter(7,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+            }else
+            {
+                query.setParameter(5,estado.getEstado());
+            }            
         }
         
         return query.getResultList();        
