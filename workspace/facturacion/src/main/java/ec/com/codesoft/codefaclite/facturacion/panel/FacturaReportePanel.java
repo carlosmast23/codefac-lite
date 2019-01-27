@@ -7,8 +7,8 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.DocumentosConsultarEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
-import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel.DocumentosConsultarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;

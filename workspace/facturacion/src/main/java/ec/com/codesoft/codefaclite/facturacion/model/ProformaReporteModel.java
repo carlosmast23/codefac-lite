@@ -15,7 +15,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.panel.ProformaReportePanel;
-import ec.com.codesoft.codefaclite.facturacion.reportdata.ReporteFacturaData;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ReporteFacturaData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ReporteProformaData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;

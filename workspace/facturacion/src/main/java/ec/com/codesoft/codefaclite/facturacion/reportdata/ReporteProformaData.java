@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.reportdata;
 
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ReporteFacturaData;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
 import java.util.ArrayList;
