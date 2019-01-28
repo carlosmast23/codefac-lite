@@ -207,7 +207,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
     {
         this.empleado.setApellidos(""+getTxtApellidos().getText());
         this.empleado.setCargo(""+getTxtCargo().getText());
-        this.empleado.setCorreoElectronico(""+getTxtCargo().getText());
+        this.empleado.setCorreoElectronico(""+getTxtCorreoElectronico().getText());
         Departamento departamento = (Departamento) getCmbDepartamento().getSelectedItem();
         if(departamento != null){
             this.empleado.setDepartamento(departamento);

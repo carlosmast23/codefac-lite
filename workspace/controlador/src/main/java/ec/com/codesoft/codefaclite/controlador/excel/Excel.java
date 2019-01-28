@@ -256,5 +256,19 @@ public class Excel<T>
               
     };
     
+    public File obtenerArchivo()
+    {
+        
+        File archivo = new File(this.archivo);
+        
+        if(archivo.exists())
+        {
+            return archivo;
+        }
+        
+        return null;
+        
+    }
+    
     
 }

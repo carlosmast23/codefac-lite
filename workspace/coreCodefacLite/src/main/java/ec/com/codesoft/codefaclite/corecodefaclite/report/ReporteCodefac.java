@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -116,8 +117,23 @@ public class ReporteCodefac {
     public static void generarReporteInternalFramePlantilla(InputStream pathReporte, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte) {
         generarReporte(pathReporte, parametros, datos, panelPadre, tituloReporte, orientacionEnum,formatoReporte);
     }
+    
+    public static void generarReporteInternalFramePlantillaArchivo(InputStream pathReporte, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,String path) {
+        try {
+            JasperPrint jasperPrint=construirReporte(pathReporte, parametros, datos, panelPadre, tituloReporte, orientacionEnum, formatoReporte);
+            JasperExportManager.exportReportToPdfFile(jasperPrint, path);
+        } catch (JRException ex) {
+            Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
         
     private static void generarReporte(InputStream pathReporte,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
+    {
+        JasperPrint jasperPrint=construirReporte(pathReporte, parametros, datos, panelPadre, tituloReporte, orientacionEnum, formatoReporte);
+        panelPadre.crearReportePantalla(jasperPrint,tituloReporte);
+    } 
+    
+    private static JasperPrint construirReporte(InputStream pathReporte,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
     {
         try {
             Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla(orientacionEnum,formatoReporte));
@@ -134,10 +150,10 @@ public class ReporteCodefac {
             JasperReport report =JasperCompileManager.compileReport(pathReporte);
             JRBeanCollectionDataSource dataReport= new JRBeanCollectionDataSource(datos);
             JasperPrint print =JasperFillManager.fillReport(report, mapCompleto,dataReport);
-            //JasperViewer.viewReport(print,false);
-            panelPadre.crearReportePantalla(print,tituloReporte);
+            return print;
         } catch (JRException ex) {
             Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
-    } 
+        return null;
+    }
 }

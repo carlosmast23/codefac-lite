@@ -10,19 +10,33 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
  * @author Carlos
  */
 public enum FormatoReporteEnum {
-    PDF("pdf"),
-    EXCEL("excel");
+    PDF("pdf","pdf"),
+    EXCEL("excel","xlsx");
     
     private String nombre;
+    private String extension;
 
-    private FormatoReporteEnum(String nombre) {
+    private FormatoReporteEnum(String nombre,String extension) {
         this.nombre = nombre;
+        this.extension=extension;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+    
+    
 
     @Override
     public String toString() {
         return this.nombre;
     }
+    
+    
     
     
 }

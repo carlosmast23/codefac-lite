@@ -7,19 +7,31 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.UtilidadEnvioReportesPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.DocumentosConsultarEnum;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoReporteEnum;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JComponent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -97,18 +109,19 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
     }
 
     private void cargarValoresIniciales() {
+        
+        //Cargar por defecto el primer dia del mes actual
+        Date primerDiaMes=UtilidadesFecha.fechaInicioMes(new Date());
+        getCmbFechaInicial().setDate(primerDiaMes);
+        
+        getCmbFechaFinal().setDate(UtilidadesFecha.getFechaHoy());
+        
         for (ComprobanteEntity.ComprobanteEnumEstado objeto : ComprobanteEntity.ComprobanteEnumEstado.values()) {
-            getCmbEstadoGuiaRemision().addItem(objeto);
-            getCmbEstadoNotaCredito().addItem(objeto);
-            getCmbEstadoRetenciones().addItem(objeto);
-            getCmbEstadoVentas().addItem(objeto);
+            getCmbTipoEstadoReporte().addItem(objeto);
         } 
         
         for (FormatoReporteEnum valor : FormatoReporteEnum.values()) {
-            getCmbFormatoGuiaRemision().addItem(valor);
-            getCmbFormatoNotaCredito().addItem(valor);
-            getCmbFormatoRetenciones().addItem(valor);
-            getCmbFormatoVentas().addItem(valor);
+            getCmbFormatoReporte().addItem(valor);
         }
     }
 
@@ -116,6 +129,7 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
         getBtnBuscarEmpleado().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+               
                 EmpleadoBusquedaDialogo busquedaDialog = new EmpleadoBusquedaDialogo();
                 //busquedaDialog.setTipoEnum(Departamento.TipoEnum.Ventas);
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialog);
@@ -126,7 +140,93 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
                     getTxtEmpleadoDatos().setText(empleadoTmp.toString());
                 }
             }
+            
         });
+        
+        
+        getBtnEnviarCorreo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Map<String, String> archivosAdjuntos=new HashMap<String, String>();
+                FormatoReporteEnum formatoReporteEnum=(FormatoReporteEnum) getCmbFormatoReporte().getSelectedItem();
+                                                
+                if(!validacionCampos())
+                {
+                    return;
+                }
+                
+                if(getChkVentas().isSelected())
+                {
+                    ControladorReporteFactura controlador=new ControladorReporteFactura(
+                            null, 
+                            new java.sql.Date(getCmbFechaInicial().getDate().getTime()), 
+                            new java.sql.Date(getCmbFechaFinal().getDate().getTime()), 
+                            (ComprobanteEntity.ComprobanteEnumEstado) getCmbTipoEstadoReporte().getSelectedItem(), 
+                            false, 
+                            null, 
+                            false, 
+                            true, 
+                            DocumentosConsultarEnum.VENTAS);
+                    
+                    controlador.generarReporte();
+                    
+                    File archivoReporte = null;
+                    if (formatoReporteEnum.EXCEL.equals(formatoReporteEnum)) {
+                        archivoReporte = controlador.obtenerArchivoReporteExcel();                        
+                    } else if (formatoReporteEnum.PDF.equals(formatoReporteEnum)) {
+                        archivoReporte = controlador.obtenerArchivoReportePdf(panelPadre);                        
+                    }
+                    archivosAdjuntos.put("FacturasReporte." + formatoReporteEnum.getExtension(), archivoReporte.getPath());
+                    //archivosAdjuntos.add(controlador.obtenerArchivoReporte());
+                }
+                
+                
+                /**
+                 * Metodo final para enviar los correos
+                 */
+                CorreoCodefac correoCodefac = new CorreoCodefac() {
+                    @Override
+                    public String getMensaje() {
+                        return "Ejemplo Reportes";
+                    }
+
+                    @Override
+                    public String getTitulo() {
+                       return "Reportes Codefac";
+                    }
+
+                    @Override
+                    public Map<String, String> getPathFiles() {                        
+                        return archivosAdjuntos;
+                    }
+
+                    @Override
+                    public List<String> getDestinatorios() {
+                        ArrayList<String> correos=new ArrayList<String>();
+                        correos.add(empleadoSeleccionado.getCorreoElectronico());
+                        return correos;
+                    }
+                };
+                
+                try {
+                    correoCodefac.enviarCorreo();
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
+                } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
+                    Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        });
+    }
+    
+    private boolean validacionCampos() {
+        if(empleadoSeleccionado==null)
+        {
+            DialogoCodefac.mensaje("Advertencia","Seleccione un empleado para enviar los reportes",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+        return true;
     }
     
 }

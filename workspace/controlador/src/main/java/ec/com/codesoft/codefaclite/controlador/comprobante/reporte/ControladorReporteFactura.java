@@ -5,20 +5,30 @@
  */
 package ec.com.codesoft.codefaclite.controlador.comprobante.reporte;
 
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -45,7 +55,7 @@ public class ControladorReporteFactura {
     
     private List<ReporteFacturaData> data;
 
-    public ControladorReporteFactura(Persona persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentosConsultarEnum documentoConsultaEnum, Map<String, BigDecimal> mapTotales, List<ReporteFacturaData> data) {
+    public ControladorReporteFactura(Persona persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentosConsultarEnum documentoConsultaEnum) {
         this.persona = persona;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -55,8 +65,8 @@ public class ControladorReporteFactura {
         this.reporteAgrupado = reporteAgrupado;
         this.afectarNotaCredito = afectarNotaCredito;
         this.documentoConsultaEnum = documentoConsultaEnum;
-        this.mapTotales = mapTotales;
-        this.data = data;
+        this.mapTotales = new HashMap<String,BigDecimal>();
+        this.data = new ArrayList<ReporteFacturaData>();
     }
     
     
@@ -249,9 +259,99 @@ public class ControladorReporteFactura {
         }
         return null;
     }
+    
+    /**
+     * TODO: ver si se puede unificar la forma de crear la cabecera con el de la pantalla de Factura Reporte
+     * @return 
+     */
+    public Vector<String>  crearCabezeraTabla()
+    {
+        Vector<String> titulo = new Vector<>();
+        titulo.add("Clave de Acceso");
+        titulo.add("Fecha Max Pago");
+        titulo.add("Vendedor");
+
+        titulo.add("Preimpreso");
+        titulo.add("Referencia");
+        titulo.add("Fecha");
+        titulo.add("Identificación");
+        titulo.add("Razón social");
+        
+        titulo.add("Nombre legal");
+            
+        titulo.add("Documento");
+        titulo.add("Estado");
+        titulo.add("Tipo");
+        titulo.add("Subtotal 12%");
+        titulo.add("Subtotal 0% ");
+        titulo.add("Descuentos");
+        titulo.add("IVA 12%");
+        titulo.add("Valor Afecta");
+        titulo.add("Total");
+        return titulo;
+    }
+    
+    public File obtenerArchivoReporteExcel()
+    {
+        try {
+            Excel excel = new Excel();
+            Vector<String> titulosVector = crearCabezeraTabla();
+            String nombreCabeceras[] = titulosVector.toArray(new String[titulosVector.size()]); //Convertir en array
+            excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+            return excel.obtenerArchivo();
+        } catch (IOException ex) {
+            Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public File obtenerArchivoReportePdf(InterfazComunicacionPanel panelPadre)
+    {
+        InputStream path=RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
+        //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Documentos ", OrientacionReporteEnum.HORIZONTAL);
+        String pathGrabar="\\tmp\\reporteDocumentos.pdf"; //TODO: Camabiar por algun nombre en funcion de la fecha para que se unico y no genere problemas
+        ReporteCodefac.generarReporteInternalFramePlantillaArchivo(path, mapParametrosReportePdf(), data, panelPadre, "Reporte ", OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4,pathGrabar);
+        File file=new File(pathGrabar);
+        if(file.exists())
+        {
+            return file;
+        }
+        return null;
+    }
+   
 
     public List<ReporteFacturaData> getData() {
         return data;
+    }
+
+    public Map<String, BigDecimal> getMapTotales() {
+        return mapTotales;
+    }
+    
+    public Map<String,Object> mapParametrosReportePdf()
+    {
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("fechainicio", (fechaInicio != null) ? dateFormat.format(fechaInicio) : "");
+        parameters.put("fechafin", (fechaFin != null) ? dateFormat.format(fechaFin) : "");
+        parameters.put("tipodocumento", documentoConsultaEnum.toString());
+        parameters.put("cliente", persona);
+        parameters.put("subtotal", mapTotales.get("acum").toString());
+        parameters.put("subtotaliva", mapTotales.get("acumdoce").toString());
+        parameters.put("valoriva", mapTotales.get("acumiva").toString());
+        //BigDecimal total = acum.add(acumdoce).add(acumiva);
+        BigDecimal total = mapTotales.get("acum").add(mapTotales.get("acumdoce").add(mapTotales.get("acumiva")));
+        parameters.put("total", total.toString());
+
+        //BigDecimal subtotal = acum.add(acumdoce);
+        BigDecimal subtotal = mapTotales.get("acum").add(mapTotales.get("acumdoce"));
+        parameters.put("totalsubtotales", subtotal.toString());
+        parameters.put("descuentos", mapTotales.get("acumdesc").toString());
+        parameters.put("estadofactura", estadoFactura.getNombre());
+        return parameters;
     }
 
     

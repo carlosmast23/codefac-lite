@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -38,74 +39,68 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
 
         jPanel1 = new javax.swing.JPanel();
         chkNotaCredito = new javax.swing.JCheckBox();
-        cmbEstadoRetenciones = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         chkRetencion = new javax.swing.JCheckBox();
-        cmbEstadoGuiaRemision = new javax.swing.JComboBox<>();
         chkGuiaRemision = new javax.swing.JCheckBox();
-        cmbEstadoNotaCredito = new javax.swing.JComboBox<>();
         chkVentas = new javax.swing.JCheckBox();
-        cmbFormatoNotaCredito = new javax.swing.JComboBox<>();
-        cmbEstadoVentas = new javax.swing.JComboBox<>();
-        cmbFormatoRetenciones = new javax.swing.JComboBox<>();
-        cmbFormatoGuiaRemision = new javax.swing.JComboBox<>();
-        cmbFormatoVentas = new javax.swing.JComboBox<>();
+        cmbTipoEstadoReporte = new javax.swing.JComboBox<>();
+        cmbFormatoReporte = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         txtEmpleadoDatos = new javax.swing.JTextField();
         btnBuscarEmpleado = new javax.swing.JButton();
         btnEnviarCorreo = new javax.swing.JButton();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        cmbFechaFinal = new org.jdesktop.swingx.JXDatePicker();
+        cmbFechaInicial = new org.jdesktop.swingx.JXDatePicker();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
         setTitle("Utilidad Envio Reportes");
-        setPreferredSize(new java.awt.Dimension(635, 371));
+        setPreferredSize(new java.awt.Dimension(635, 451));
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         chkNotaCredito.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkNotaCredito.setSelected(true);
         chkNotaCredito.setText("Nota de Crédito:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(chkNotaCredito, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbEstadoRetenciones, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel1.setText("Seleccione el empleado a enviar el reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
 
         chkRetencion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkRetencion.setSelected(true);
         chkRetencion.setText("Retenciones:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(chkRetencion, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbEstadoGuiaRemision, gridBagConstraints);
-
         chkGuiaRemision.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkGuiaRemision.setSelected(true);
         chkGuiaRemision.setText("Guía Remisión:");
         chkGuiaRemision.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,80 +108,60 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(chkGuiaRemision, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbEstadoNotaCredito, gridBagConstraints);
-
         chkVentas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkVentas.setSelected(true);
         chkVentas.setText("Ventas:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(chkVentas, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbFormatoNotaCredito, gridBagConstraints);
+        jPanel1.add(cmbTipoEstadoReporte, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbEstadoVentas, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbFormatoRetenciones, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbFormatoGuiaRemision, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbFormatoVentas, gridBagConstraints);
+        jPanel1.add(cmbFormatoReporte, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel2.setText("Seleccione los reportes que desea enviar:");
+        jLabel2.setText("Seleccione las configuraciones para los reportes:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
 
         txtEmpleadoDatos.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtEmpleadoDatos, gridBagConstraints);
 
         btnBuscarEmpleado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(btnBuscarEmpleado, gridBagConstraints);
 
         btnEnviarCorreo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -194,22 +169,88 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         btnEnviarCorreo.setText("Enviar Correo");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnEnviarCorreo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
         jPanel1.add(lblEspacio2, gridBagConstraints);
+
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel3.setText("Seleccione los reportes que desea enviar:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
+        jPanel1.add(jLabel3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbFechaFinal, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbFechaInicial, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText("Formato Reporte:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel4, gridBagConstraints);
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel5.setText("Tipo de Reporte:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel5, gridBagConstraints);
+
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel6.setText("Seleccione el intervalo de Fechas para los reportes:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel6, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel7.setText("Fecha Inicial:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel7, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel8.setText("Fecha Final:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel8, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -228,16 +269,18 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
     private javax.swing.JCheckBox chkNotaCredito;
     private javax.swing.JCheckBox chkRetencion;
     private javax.swing.JCheckBox chkVentas;
-    private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstadoGuiaRemision;
-    private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstadoNotaCredito;
-    private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstadoRetenciones;
-    private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstadoVentas;
-    private javax.swing.JComboBox<FormatoReporteEnum> cmbFormatoGuiaRemision;
-    private javax.swing.JComboBox<FormatoReporteEnum> cmbFormatoNotaCredito;
-    private javax.swing.JComboBox<FormatoReporteEnum> cmbFormatoRetenciones;
-    private javax.swing.JComboBox<FormatoReporteEnum> cmbFormatoVentas;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaFinal;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaInicial;
+    private javax.swing.JComboBox<FormatoReporteEnum> cmbFormatoReporte;
+    private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbTipoEstadoReporte;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
@@ -276,70 +319,6 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         this.chkVentas = chkVentas;
     }
 
-    public JComboBox<ComprobanteEntity.ComprobanteEnumEstado> getCmbEstadoGuiaRemision() {
-        return cmbEstadoGuiaRemision;
-    }
-
-    public void setCmbEstadoGuiaRemision(JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstadoGuiaRemision) {
-        this.cmbEstadoGuiaRemision = cmbEstadoGuiaRemision;
-    }
-
-    public JComboBox<ComprobanteEntity.ComprobanteEnumEstado> getCmbEstadoNotaCredito() {
-        return cmbEstadoNotaCredito;
-    }
-
-    public void setCmbEstadoNotaCredito(JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstadoNotaCredito) {
-        this.cmbEstadoNotaCredito = cmbEstadoNotaCredito;
-    }
-
-    public JComboBox<ComprobanteEntity.ComprobanteEnumEstado> getCmbEstadoRetenciones() {
-        return cmbEstadoRetenciones;
-    }
-
-    public void setCmbEstadoRetenciones(JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstadoRetenciones) {
-        this.cmbEstadoRetenciones = cmbEstadoRetenciones;
-    }
-
-    public JComboBox<ComprobanteEntity.ComprobanteEnumEstado> getCmbEstadoVentas() {
-        return cmbEstadoVentas;
-    }
-
-    public void setCmbEstadoVentas(JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstadoVentas) {
-        this.cmbEstadoVentas = cmbEstadoVentas;
-    }
-
-    public JComboBox<FormatoReporteEnum> getCmbFormatoGuiaRemision() {
-        return cmbFormatoGuiaRemision;
-    }
-
-    public void setCmbFormatoGuiaRemision(JComboBox<FormatoReporteEnum> cmbFormatoGuiaRemision) {
-        this.cmbFormatoGuiaRemision = cmbFormatoGuiaRemision;
-    }
-
-    public JComboBox<FormatoReporteEnum> getCmbFormatoNotaCredito() {
-        return cmbFormatoNotaCredito;
-    }
-
-    public void setCmbFormatoNotaCredito(JComboBox<FormatoReporteEnum> cmbFormatoNotaCredito) {
-        this.cmbFormatoNotaCredito = cmbFormatoNotaCredito;
-    }
-
-    public JComboBox<FormatoReporteEnum> getCmbFormatoRetenciones() {
-        return cmbFormatoRetenciones;
-    }
-
-    public void setCmbFormatoRetenciones(JComboBox<FormatoReporteEnum> cmbFormatoRetenciones) {
-        this.cmbFormatoRetenciones = cmbFormatoRetenciones;
-    }
-
-    public JComboBox<FormatoReporteEnum> getCmbFormatoVentas() {
-        return cmbFormatoVentas;
-    }
-
-    public void setCmbFormatoVentas(JComboBox<FormatoReporteEnum> cmbFormatoVentas) {
-        this.cmbFormatoVentas = cmbFormatoVentas;
-    }
-
     public JButton getBtnBuscarEmpleado() {
         return btnBuscarEmpleado;
     }
@@ -351,6 +330,26 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
     public JTextField getTxtEmpleadoDatos() {
         return txtEmpleadoDatos;
     }
+
+    public JXDatePicker getCmbFechaFinal() {
+        return cmbFechaFinal;
+    }
+
+    public JXDatePicker getCmbFechaInicial() {
+        return cmbFechaInicial;
+    }
+
+    public JComboBox<FormatoReporteEnum> getCmbFormatoReporte() {
+        return cmbFormatoReporte;
+    }
+
+    public JComboBox<ComprobanteEntity.ComprobanteEnumEstado> getCmbTipoEstadoReporte() {
+        return cmbTipoEstadoReporte;
+    }
+
+    
+    
+    
 
     
     

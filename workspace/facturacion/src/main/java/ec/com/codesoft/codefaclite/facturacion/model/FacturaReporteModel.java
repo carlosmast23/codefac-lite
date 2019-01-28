@@ -116,7 +116,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             Date fechaInicio=null;
             Date fechaFin =null;
             
-            mapTotales=new HashMap<String,BigDecimal>();
+            //mapTotales=new HashMap<String,BigDecimal>();
             //igDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
             ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
             String estadoStr = estadoFactura.getEstado();
@@ -139,13 +139,11 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     referido,
                     getChkReporteAgrupadoReferido().isSelected(),
                     getChkAfectaNotaCredito().isSelected(),
-                    documentoConsultaEnum,
-                    mapTotales,
-                    data);
+                    documentoConsultaEnum);
             
             controladorReporte.generarReporte();
             data=controladorReporte.getData();
-            
+            mapTotales=controladorReporte.getMapTotales();
             
             //if (tabla) 
             //{
