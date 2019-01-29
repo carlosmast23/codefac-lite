@@ -2,9 +2,10 @@ package ec.com.codesoft.codefaclite.compra.model;
 
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.compra.panel.RetencionReportePanel;
-import ec.com.codesoft.codefaclite.compra.reportdata.ReporteRetencionesData;
-import ec.com.codesoft.codefaclite.compra.reportdata.ValorRetencionesData;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ReporteRetencionesData;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ValorRetencionesData;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteRetencion;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
@@ -63,10 +64,8 @@ import net.sf.jasperreports.engine.JasperReport;
  */
 public class RetencionReporteModel extends RetencionReportePanel {
 
-    private Map<String,BigDecimal> mapSumatoriaRetencionIva=new HashMap<String,BigDecimal>();
-    private Map<String,BigDecimal> mapSumatoriaRetencionRenta=new HashMap<String,BigDecimal>();
-    
-    private List<ReporteRetencionesData> dataReporte;
+    private ControladorReporteRetencion controladorReporte;
+    //private List<ReporteRetencionesData> dataReporte;
     
     /**
      * Carga los tipos de retencion definida por el SRI
@@ -84,7 +83,8 @@ public class RetencionReporteModel extends RetencionReportePanel {
     Date fechaFin = null;
     String fechainicio = "";
     String fechafin = "";
-    boolean banderaTipo = true, banderaIva = true, banderaRenta = true;
+    //boolean banderaTipo = true, 
+    boolean banderaIva = true, banderaRenta = true;
 
     private static final Logger LOG = Logger.getLogger(RetencionReporteModel.class.getName());
 
@@ -99,51 +99,8 @@ public class RetencionReporteModel extends RetencionReportePanel {
         listenerCheckBox();
         listenerBotones();
         super.validacionDatosIngresados=false;
-    }
-    
-    private void construirMapSumatorias()
-    {
-        mapSumatoriaRetencionIva=new HashMap<String,BigDecimal>();
-        mapSumatoriaRetencionRenta=new HashMap<String,BigDecimal>();
-        
-        for (RetencionDetalle retencionDetalle : dataretencion) 
-        {
-            //Sumar para los totales del iva
-            if(mapTipoRetencion.get(retencionDetalle.getCodigoSri()).getNombre().equals("IVA"))
-            {
-                if(mapSumatoriaRetencionIva.get(retencionDetalle.getCodigoRetencionSri())==null)
-                {
-                    BigDecimal valor=retencionDetalle.getValorRetenido();
-                    mapSumatoriaRetencionIva.put(retencionDetalle.getCodigoRetencionSri(),valor);
-                }
-                else
-                {
-                    BigDecimal valor=mapSumatoriaRetencionIva.get(retencionDetalle.getCodigoRetencionSri());
-                    valor=valor.add(retencionDetalle.getValorRetenido());
-                    mapSumatoriaRetencionIva.put(retencionDetalle.getCodigoRetencionSri(),valor);
-                }
-            }
-            else
-            {
-                //Sumar para los totales de la renta
-                if(mapTipoRetencion.get(retencionDetalle.getCodigoSri()).getNombre().equals("RENTA"))
-                {
-                    if (mapSumatoriaRetencionRenta.get(retencionDetalle.getCodigoRetencionSri()) == null) 
-                    {
-                        BigDecimal valor = retencionDetalle.getValorRetenido();
-                        mapSumatoriaRetencionRenta.put(retencionDetalle.getCodigoRetencionSri(), valor);
-                    } else 
-                    {
-                        BigDecimal valor = mapSumatoriaRetencionRenta.get(retencionDetalle.getCodigoRetencionSri());
-                        valor = valor.add(retencionDetalle.getValorRetenido());
-                        mapSumatoriaRetencionRenta.put(retencionDetalle.getCodigoRetencionSri(), valor);
-                    }
-                    
-                }
-                    
-            }
-        }
-    }
+    }    
+   
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
@@ -167,107 +124,16 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
     @Override
     public void imprimir() {
-
-        try {
-           
-            InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_retenciones.jrxml");
-            
-            //Llenar la informacion con los datos consultados para 
-            /*List<ReporteRetencionesData> data = new ArrayList<ReporteRetencionesData>();
-            for (RetencionDetalle retencion : dataretencion) {
-                data.add(new ReporteRetencionesData(
-                        retencion.getRetencion().getPreimpreso(),
-                        retencion.getBaseImponible().toString(),
-                        retencion.getPorcentajeRetener().toString() + " %",
-                        retencion.getCodigoRetencionSri(),
-                        retencion.getValorRetenido().toString(),
-                        retencion.getRetencion().getPreimpresoDocumentoFormato(),
-                        retencion.getRetencion().getClaveAcceso()
-                ));
-            }*/
-
-            //List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "2");
-            
-            List<ValorRetencionesData> datavc = new ArrayList<ValorRetencionesData>();
-            
-            for (Map.Entry<String, BigDecimal> entry : mapSumatoriaRetencionRenta.entrySet()) {
-                String key = entry.getKey();
-                BigDecimal value = entry.getValue();
-                
-                datavc.add(new ValorRetencionesData(
-                        key, value.toString()
-                ));
-                
-            }
-            
-           
-            List<ValorRetencionesData> datav = new ArrayList<ValorRetencionesData>();
-            
-            for (Map.Entry<String, BigDecimal> entry : mapSumatoriaRetencionIva.entrySet()) {
-                String key = entry.getKey();
-                BigDecimal value = entry.getValue();
-
-                datav.add(new ValorRetencionesData(
-                        key, value.toString()
-                ));
-
-            }
-            
-            RecursosServiceIf service = ServiceFactory.getFactory().getRecursosServiceIf();
-            InputStream pathSubReporte = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPRA, "subreporte_retencion.jrxml"));
-            JasperReport reportPiePagina = JasperCompileManager.compileReport(pathSubReporte);
-            RecursosServiceIf service2 = ServiceFactory.getFactory().getRecursosServiceIf();
-            InputStream pathSubReporte2 = RemoteInputStreamClient.wrap(service2.getResourceInputStream(RecursoCodefac.JASPER_COMPRA, "subreporte_retencion_renta.jrxml"));
-            JasperReport reportPiePagina2 = JasperCompileManager.compileReport(pathSubReporte2);
-
-            parameters.put("SUBREPORTE_RUTA", reportPiePagina);
-            parameters.put("SUBREPORTE_RUTA_RENTA", reportPiePagina2);
-
-            String cliente = "";
-            if (proveedor == null) {
-                cliente = "Todos";
-            } else {
-                cliente = proveedor.getRazonSocial();
-            }
-            String niva = "";
-            if (sriRetencionIva == null) {
-                niva = "Todos";
-            } else {
-                niva = sriRetencionIva.getNombre();
-            }
-            String nrenta = "";
-            if (sriRetencionIva == null) {
-                nrenta = "Todos";
-            } else {
-                nrenta = sriRetencionRenta.getNombre();
-            }
-
-            String ntipo = "";
-            if (banderaTipo == true) {
-                ntipo = "Todos";
-            } else {
-                ntipo = getCmbTipo().getSelectedItem().toString();
-            }
-
-            parameters.put("tipo", ntipo);
-            parameters.put("niva", niva);
-            parameters.put("nretencion", nrenta);
-            parameters.put("proveedor", cliente);
-            parameters.put("fechainicio", formatDate(fechaInicio, "yyyy-MM-dd"));
-            parameters.put("fechafin", formatDate(fechaFin, "yyyy-MM-dd"));
-            parameters.put("listaIva", datavc);
-            parameters.put("listaRenta", datav);
-            //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte de retenciones");
-            
             
             DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
                 @Override
                 public void excel() {
                     try{
-                        Excel excel = new Excel();
+                        /*Excel excel = new Excel();
                         String nombreCabeceras[] = {"Clave de Acceso","Preimpreso","Proveedor","Fecha","Estado","Tipo","Compra", "Base Imponible","Porcentaje", "Código", "Valor"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras, dataReporte);
-                        excel.abrirDocumento();
+                        excel.abrirDocumento();*/
+                        controladorReporte.obtenerReporteExcel();
                     }
                     catch(Exception exc)
                     {
@@ -278,17 +144,11 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
                 @Override
                 public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, dataReporte, panelPadre, "Reporte Retenciones ");                    
+                    controladorReporte.obtenerReportePdf(panelPadre);
+                    //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, dataReporte, panelPadre, "Reporte Retenciones ");                    
                 }
             });
 
-        } catch (RemoteException ex) {
-            Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JRException ex) {
-            Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
     }
 
@@ -336,7 +196,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
         
         getChkTodosTipo().setSelected(true);
         if (getChkTodosTipo().isSelected()) {
-            banderaTipo = true;
+            //banderaTipo = true;
             getCmbTipo().setEnabled(false);
         }
     }
@@ -409,10 +269,10 @@ public class RetencionReporteModel extends RetencionReportePanel {
         //================/ CARGAR LOS TIPOS DE RETENCIONES PARA CLASIFICAR /=============//
         try {
             getCmbTipo().removeAllItems();
-            mapTipoRetencion=new HashMap<String,SriRetencion>();
+            //mapTipoRetencion=new HashMap<String,SriRetencion>();
             List<SriRetencion> retenecionesTipo=ServiceFactory.getFactory().getSriRetencionServiceIf().obtenerTodos();
             for (SriRetencion sriRetencion : retenecionesTipo) {
-                mapTipoRetencion.put(sriRetencion.getCodigo(),sriRetencion);
+                //mapTipoRetencion.put(sriRetencion.getCodigo(),sriRetencion);
                 getCmbTipo().addItem(sriRetencion);
             }
         } catch (RemoteException ex) {
@@ -469,10 +329,10 @@ public class RetencionReporteModel extends RetencionReportePanel {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                    banderaTipo = true;
+                    //banderaTipo = true;
                     getCmbTipo().setEnabled(false);
                 } else {
-                    banderaTipo = false;
+                    //banderaTipo = false;
                     getCmbTipo().setEnabled(true);
                 }
             }
@@ -487,7 +347,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
         titulo3.add("Valor");
         DefaultTableModel modeloTablaRetRenta = new DefaultTableModel(titulo3, 0);
         //List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "1");
-        for (Map.Entry<String, BigDecimal> entry : mapSumatoriaRetencionRenta.entrySet()) {
+        for (Map.Entry<String, BigDecimal> entry : controladorReporte.getMapSumatoriaRetencionRenta().entrySet()) {
             String key = entry.getKey();
             BigDecimal value = entry.getValue();
             
@@ -510,7 +370,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
         titulo2.add("Valor");
         DefaultTableModel modeloTablaRetIva = new DefaultTableModel(titulo2, 0);
         //List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "2");
-        for (Map.Entry<String, BigDecimal> entry : mapSumatoriaRetencionIva.entrySet()) {
+        for (Map.Entry<String, BigDecimal> entry : controladorReporte.getMapSumatoriaRetencionIva().entrySet()) {
             String key = entry.getKey();
             BigDecimal value = entry.getValue();
             
@@ -539,7 +399,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
         
         DefaultTableModel modeloTablaRetenciones = new DefaultTableModel(titulo, 0);
         
-        for (ReporteRetencionesData data : dataReporte) {
+        for (ReporteRetencionesData data : controladorReporte.getDataReporte()) {
             Vector<String> fila = new Vector<String>();
             fila.add(data.getPreimpresoRetencion());
             fila.add(data.getProveedor());
@@ -612,77 +472,38 @@ public class RetencionReporteModel extends RetencionReportePanel {
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-
-                    if (getDateFechaInicio().getDate() != null) {
-                        fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
-                    } else {
-                        fechaInicio = null;
-                    }
-
-                    if (getDateFechaFin().getDate() != null) {
-                        fechaFin = new Date(getDateFechaFin().getDate().getTime());
-                    } else {
-                        fechaFin = null;
-                    }
-
-                    
-                    if (banderaIva == false) {
-                        sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
-                    }
-                    if (banderaRenta == false) {
-                        sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
-                    }
-
-                    SriRetencion sriRetencion = null;
-                    if (banderaTipo == true) {
-                        sriRetencion = null;
-                    } else {
-                        sriRetencion = (SriRetencion) getCmbTipo().getSelectedItem();
-                    }
-
-                    RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
-                    ComprobanteEntity.ComprobanteEnumEstado estadoEnum=(ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
-                    dataretencion = fs.obtenerRetencionesReportes(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, sriRetencion,estadoEnum);
-                    dataReporte=new ArrayList<ReporteRetencionesData>(); 
-                    for (RetencionDetalle retencion : dataretencion) {
-                        ReporteRetencionesData data=new ReporteRetencionesData(retencion.getRetencion().getClaveAcceso(), 
-                                retencion.getRetencion().getPreimpreso(),
-                                retencion.getRetencion().getProveedor().getRazonSocial(), 
-                                retencion.getRetencion().getFechaEmision().toString(),
-                                retencion.getRetencion().getEstadoEnum().getNombre(), 
-                                mapTipoRetencion.get(retencion.getCodigoSri()).getNombre(),
-                                retencion.getRetencion().getPreimpresoDocumentoFormato(), 
-                                retencion.getBaseImponible().toString(), 
-                                retencion.getPorcentajeRetener().toString() + " %", 
-                                retencion.getCodigoRetencionSri(), 
-                                retencion.getValorRetenido().toString());
-                                
-                       /*         
-                        Vector<String> fila = new Vector<String>();
-                        fila.add(retencion.getRetencion().getPreimpreso());
-                        fila.add(retencion.getRetencion().getRazonSocial());
-                        fila.add(retencion.getRetencion().getFechaEmision().toString());
-                        fila.add(retencion.getRetencion().getEstadoEnum().getNombre());
-                        fila.add(mapTipoRetencion.get(retencion.getCodigoSri()).getNombre());
-                        fila.add(retencion.getRetencion().getPreimpresoDocumentoFormato());
-                        fila.add(retencion.getBaseImponible().toString());
-                        fila.add(retencion.getPorcentajeRetener().toString() + " %");
-                        fila.add(retencion.getCodigoRetencionSri());
-                        fila.add(retencion.getValorRetenido().toString());*/
-
-                        dataReporte.add(data);
-                    }
-                    
-                    construirMapSumatorias();
-                    
-                    construirTablaRetenciones();
-                    construirTablaTotalesIva();
-                    construirTablaTotalesRenta();
-                    
-                } catch (RemoteException ex) {
-                    Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                if (getDateFechaInicio().getDate() != null) {
+                    fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
+                } else {
+                    fechaInicio = null;
                 }
+                if (getDateFechaFin().getDate() != null) {
+                    fechaFin = new Date(getDateFechaFin().getDate().getTime());
+                } else {
+                    fechaFin = null;
+                }
+                if (banderaIva == false) {
+                    sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
+                }
+                if (banderaRenta == false) {
+                    sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+                }
+                SriRetencion sriRetencion = null;
+                if (getChkTodosTipo().isSelected() == true) {
+                    sriRetencion = null;
+                } else {
+                    sriRetencion = (SriRetencion) getCmbTipo().getSelectedItem();
+                }
+                
+                //ControladorReporteRetencion controladorReporte=new ControladorReporteRetencion(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, sriRetencion,estadoEnum);
+                //RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
+                
+                ComprobanteEntity.ComprobanteEnumEstado estadoEnum=(ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
+                controladorReporte=new ControladorReporteRetencion(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, sriRetencion,estadoEnum);
+                controladorReporte.generarReporte();
+                construirTablaRetenciones();
+                construirTablaTotalesIva();
+                construirTablaTotalesRenta();
 
             }
         });

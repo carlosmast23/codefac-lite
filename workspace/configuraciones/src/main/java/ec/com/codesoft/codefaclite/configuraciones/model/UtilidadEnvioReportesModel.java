@@ -154,36 +154,24 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
                 {
                     return;
                 }
+                estadoCargando();
                 
                 if(getChkVentas().isSelected())
                 {
-                    ControladorReporteFactura controlador=new ControladorReporteFactura(
-                            null, 
-                            new java.sql.Date(getCmbFechaInicial().getDate().getTime()), 
-                            new java.sql.Date(getCmbFechaFinal().getDate().getTime()), 
-                            (ComprobanteEntity.ComprobanteEnumEstado) getCmbTipoEstadoReporte().getSelectedItem(), 
-                            false, 
-                            null, 
-                            false, 
-                            true, 
-                            DocumentosConsultarEnum.VENTAS);
-                    
-                    controlador.generarReporte();
-                    
-                    File archivoReporte = null;
-                    if (formatoReporteEnum.EXCEL.equals(formatoReporteEnum)) {
-                        archivoReporte = controlador.obtenerArchivoReporteExcel();                        
-                    } else if (formatoReporteEnum.PDF.equals(formatoReporteEnum)) {
-                        archivoReporte = controlador.obtenerArchivoReportePdf(panelPadre);                        
-                    }
-                    archivosAdjuntos.put("FacturasReporte." + formatoReporteEnum.getExtension(), archivoReporte.getPath());
-                    //archivosAdjuntos.add(controlador.obtenerArchivoReporte());
+                    generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.VENTAS,formatoReporteEnum, archivosAdjuntos);
                 }
+                
+                if(getChkNotaCredito().isSelected())
+                {
+                    generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.NOTA_CREDITO,formatoReporteEnum, archivosAdjuntos);
+                }
+                
                 
                 
                 /**
                  * Metodo final para enviar los correos
                  */
+               
                 CorreoCodefac correoCodefac = new CorreoCodefac() {
                     @Override
                     public String getMensaje() {
@@ -210,6 +198,7 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
                 
                 try {
                     correoCodefac.enviarCorreo();
+                    estadoNormal();
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
                 } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
                     Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -217,6 +206,41 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
                 
             }
         });
+    }
+    
+    private void generarReporteFacturasYNotaCredito(DocumentosConsultarEnum documentoEnum,FormatoReporteEnum formatoReporteEnum,Map<String, String> archivosAdjuntos)
+    {
+        //DocumentosConsultarEnum documentoEnum = null;
+        String tituloReporte = "";
+                    
+        if (documentoEnum.equals(DocumentosConsultarEnum.VENTAS)) {
+            //documentoEnum = DocumentosConsultarEnum.VENTAS;
+            tituloReporte = "FacturasReporte";
+        } else if (documentoEnum.equals(DocumentosConsultarEnum.NOTA_CREDITO)) {
+            //documentoEnum = DocumentosConsultarEnum.NOTA_CREDITO;
+            tituloReporte = "NotaCreditoReporte";
+        }
+
+        ControladorReporteFactura controlador = new ControladorReporteFactura(
+                null,
+                new java.sql.Date(getCmbFechaInicial().getDate().getTime()),
+                new java.sql.Date(getCmbFechaFinal().getDate().getTime()),
+                (ComprobanteEntity.ComprobanteEnumEstado) getCmbTipoEstadoReporte().getSelectedItem(),
+                false,
+                null,
+                false,
+                true,
+                documentoEnum);
+
+        controlador.generarReporte();
+
+        File archivoReporte = null;
+        if (formatoReporteEnum.EXCEL.equals(formatoReporteEnum)) {
+            archivoReporte = controlador.obtenerArchivoReporteExcel();
+        } else if (formatoReporteEnum.PDF.equals(formatoReporteEnum)) {
+            archivoReporte = controlador.obtenerArchivoReportePdf(panelPadre);
+        }
+        archivosAdjuntos.put(tituloReporte+"."+ formatoReporteEnum.getExtension(), archivoReporte.getPath());
     }
     
     private boolean validacionCampos() {
