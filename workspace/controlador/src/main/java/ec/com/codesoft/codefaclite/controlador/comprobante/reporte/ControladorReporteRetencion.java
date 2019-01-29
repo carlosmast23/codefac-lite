@@ -157,7 +157,7 @@ public class ControladorReporteRetencion {
         String nombreArchivo=UtilidadesArchivos.generarNombreArchivoUnico("reporte","pdf");
         String pathGrabar="\\tmp\\"+nombreArchivo; //TODO: Camabiar por algun nombre en funcion de la fecha para que se unico y no genere problemas
         
-        ReporteCodefac.generarReporteInternalFramePlantillaArchivo(obtenePathReporte(), obtenerMapReporte(),dataReporte, panelPadre, "Reporte Retención", OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4,pathGrabar);
+        ReporteCodefac.generarReporteInternalFramePlantillaArchivo(obtenePathReporte(), obtenerMapReporte(),dataReporte, panelPadre, "Reporte Retención", OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.A4,pathGrabar);
         File file=new File(pathGrabar);
         if(file.exists())
         {

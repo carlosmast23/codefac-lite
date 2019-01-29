@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 import ec.com.codesoft.codefaclite.configuraciones.panel.UtilidadEnvioReportesPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteRetencion;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.DocumentosConsultarEnum;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
@@ -24,6 +25,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -166,6 +168,11 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
                     generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.NOTA_CREDITO,formatoReporteEnum, archivosAdjuntos);
                 }
                 
+                if(getChkRetencion().isSelected())
+                {
+                    generarReporteRetenciones(formatoReporteEnum,archivosAdjuntos);
+                }
+                
                 
                 
                 /**
@@ -206,6 +213,39 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
                 
             }
         });
+    }
+    
+    private void generarReporteRetenciones(FormatoReporteEnum formatoReporteEnum,Map<String, String> archivosAdjuntos)
+    {
+        ControladorReporteRetencion controladorReporte = new ControladorReporteRetencion(
+                null,
+                new java.sql.Date(getCmbFechaInicial().getDate().getTime()),
+                new java.sql.Date(getCmbFechaFinal().getDate().getTime()),
+                null,
+                null,
+                null,
+                (ComprobanteEntity.ComprobanteEnumEstado) getCmbTipoEstadoReporte().getSelectedItem());
+        controladorReporte.generarReporte();
+        
+        File archivoReporte = null;
+        if (formatoReporteEnum.EXCEL.equals(formatoReporteEnum)) {
+            
+            try {
+                archivoReporte = controladorReporte.obtenerArchivoReporteExcel();
+            } catch (IOException ex) {
+                Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } else if (formatoReporteEnum.PDF.equals(formatoReporteEnum)) {
+            archivoReporte = controladorReporte.obtenerArchivoReportePdf(panelPadre);
+        }
+        
+        archivosAdjuntos.put("reporteRetencion."+ formatoReporteEnum.getExtension(), archivoReporte.getPath());
+        
     }
     
     private void generarReporteFacturasYNotaCredito(DocumentosConsultarEnum documentoEnum,FormatoReporteEnum formatoReporteEnum,Map<String, String> archivosAdjuntos)
