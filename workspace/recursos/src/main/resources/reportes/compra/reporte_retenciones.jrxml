@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_retenciones" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3427f0d5-5413-4d72-9b07-663b8c826977">
-	<property name="ireport.zoom" value="2.139837529582511"/>
+	<property name="ireport.zoom" value="0.9075000000000057"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="37"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -60,6 +60,7 @@
 	<field name="codigoRetencion" class="java.lang.String"/>
 	<field name="valorRetencion" class="java.lang.String"/>
 	<field name="preimpresoRetencionCompra" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -198,7 +199,21 @@
 				<text><![CDATA[Valor Retenido]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="325" y="1" width="80" height="13" uuid="987f2e5e-1c05-438f-afdf-ad9811fcbf42"/>
+				<reportElement x="101" y="1" width="93" height="13" uuid="ecb4794c-e211-4ad6-bf56-b0fc3bb4229a"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Compra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="367" y="1" width="59" height="13" uuid="987f2e5e-1c05-438f-afdf-ad9811fcbf42"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -212,21 +227,7 @@
 				<text><![CDATA[Porcentaje]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="234" y="1" width="91" height="13" uuid="22d037e3-fe42-4338-88b4-e39cdacf2a6c"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Base imponible]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="405" y="1" width="61" height="13" uuid="8929f0ad-7428-4824-8967-13fc8ae269db"/>
+				<reportElement x="426" y="1" width="40" height="13" uuid="8929f0ad-7428-4824-8967-13fc8ae269db"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -240,7 +241,7 @@
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="1" width="117" height="13" uuid="bb0d4743-8c60-43e1-91c9-bfdbabf4ea17"/>
+				<reportElement x="0" y="1" width="101" height="13" uuid="bb0d4743-8c60-43e1-91c9-bfdbabf4ea17"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -254,7 +255,7 @@
 				<text><![CDATA[Preimpreso]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="117" y="1" width="117" height="13" uuid="ecb4794c-e211-4ad6-bf56-b0fc3bb4229a"/>
+				<reportElement x="276" y="1" width="91" height="13" uuid="22d037e3-fe42-4338-88b4-e39cdacf2a6c"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -265,14 +266,28 @@
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Compra]]></text>
+				<text><![CDATA[Base imponible]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="194" y="1" width="82" height="13" uuid="183dbb27-5524-4a9c-9afa-e095402c4d04"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="12" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="117" height="12" uuid="f38daf67-1ec1-4176-b60f-60122a62c53c"/>
+				<reportElement x="0" y="0" width="101" height="12" uuid="f38daf67-1ec1-4176-b60f-60122a62c53c"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -286,21 +301,7 @@
 				<textFieldExpression><![CDATA[$F{preimpresoRetencion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="234" y="0" width="91" height="12" uuid="71df78a6-98ee-45c3-b22f-78888e23546b"/>
-				<box leftPadding="2">
-					<pen lineWidth="0.25"/>
-					<topPen lineWidth="0.25"/>
-					<leftPen lineWidth="0.25"/>
-					<bottomPen lineWidth="0.25"/>
-					<rightPen lineWidth="0.25"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{baseRetencion}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="325" y="0" width="80" height="12" uuid="ff222cc2-c2fe-4bf5-83ec-6babbb196320"/>
+				<reportElement x="367" y="0" width="59" height="12" uuid="ff222cc2-c2fe-4bf5-83ec-6babbb196320"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -314,7 +315,7 @@
 				<textFieldExpression><![CDATA[$F{porcentajeRetencion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="405" y="0" width="61" height="12" uuid="f76fd555-2742-4f49-bfdd-5f694955fb27"/>
+				<reportElement x="426" y="0" width="40" height="12" uuid="f76fd555-2742-4f49-bfdd-5f694955fb27"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -342,7 +343,7 @@
 				<textFieldExpression><![CDATA[$F{valorRetencion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="117" y="0" width="117" height="12" uuid="0c15889e-7243-45d5-b2a1-55e510912c67"/>
+				<reportElement x="101" y="0" width="93" height="12" uuid="0c15889e-7243-45d5-b2a1-55e510912c67"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -354,6 +355,34 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{preimpresoRetencionCompra}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="276" y="0" width="91" height="12" uuid="71df78a6-98ee-45c3-b22f-78888e23546b"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{baseRetencion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="194" y="0" width="82" height="12" uuid="5987ec8c-cc2e-47e3-b4d9-cb2d646a9578"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.transporte.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteGuiaRemision;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
@@ -24,7 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
-import ec.com.codesoft.codefaclite.transporte.data.GuiaTransporteData;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.GuiaTransporteData;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiasRemisionReportePanel;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
@@ -53,10 +54,11 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
 {
     private Persona persona;
     private Transportista transportista;
-    private List<GuiaRemision> listaConsulta;
+    //private List<GuiaRemision> listaConsulta;
+    private ControladorReporteGuiaRemision controladorReporte;
     
-    private Date fechaInicial;
-    private Date fechaFinal;
+    //private Date fechaInicial;
+    //private Date fechaFinal;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -210,27 +212,22 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
     
     public void ejecutarConsulta()
     {
-        try {
-            GuiaRemisionServiceIf guiaRemisionServiceIf=ServiceFactory.getFactory().getGuiaRemisionServiceIf();
-            fechaInicial=(getDateFechaInicio().getDate()!=null)?new java.sql.Date(getDateFechaInicio().getDate().getTime()):null;
-            fechaFinal=(getDateFechaFin().getDate()!=null)?new java.sql.Date(getDateFechaFin().getDate().getTime()):null;
-            ComprobanteEntity.ComprobanteEnumEstado estado=(ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
-            
-            listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal,estado);
-            mostrarReporteTabla();
-            //imprimirReporte();
-            
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        GuiaRemisionServiceIf guiaRemisionServiceIf=ServiceFactory.getFactory().getGuiaRemisionServiceIf();
+        Date fechaInicial =(getDateFechaInicio().getDate()!=null)?new java.sql.Date(getDateFechaInicio().getDate().getTime()):null;
+        Date fechaFinal =(getDateFechaFin().getDate()!=null)?new java.sql.Date(getDateFechaFin().getDate().getTime()):null;
+        ComprobanteEntity.ComprobanteEnumEstado estado=(ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
+        controladorReporte=new ControladorReporteGuiaRemision(fechaInicial, fechaFinal, estado);
+        controladorReporte.generarReporte();
+        //listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal,estado);
+        mostrarReporteTabla();
+        //imprimirReporte();
     }
     
     private void imprimirReporte()
     {
+        /*
         List<GuiaTransporteData> listReporte=new ArrayList<GuiaTransporteData>();
-        for (GuiaRemision guiaRemision : listaConsulta) {
+        for (GuiaRemision guiaRemision : controladorReporte.getListaConsulta()) {
             GuiaTransporteData data=new GuiaTransporteData();
             data.setDireccionPartida(guiaRemision.getDireccionPartida());
             data.setEstado(guiaRemision.getEstadoEnum().getNombre());
@@ -242,18 +239,19 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
             data.setTransportista(guiaRemision.getRazonSocial());
             data.setClaveAcceso(guiaRemision.getClaveAcceso());
             listReporte.add(data);
-        }
+        }*/
         
-        if(listaConsulta!=null)
+        if(controladorReporte.getListaConsulta()!=null)
         {
             DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
                 @Override
                 public void excel() {
                     try {
-                        Excel excel = new Excel();
+                        /*Excel excel = new Excel();
                         String nombreCabeceras[] = getCabeceraReporteExcel();
-                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, listReporte);
-                        excel.abrirDocumento();
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, controladorReporte.getListReporte());
+                        excel.abrirDocumento();*/
+                        controladorReporte.obtenerReporteExcel();
                     } catch (IOException ex) {
                         Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IllegalArgumentException ex) {
@@ -265,12 +263,19 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
 
                 @Override
                 public void pdf() {
-                    InputStream path = RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("reporte_guiaRemision.jrxml");
-                    Map parameters = new HashMap();
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listReporte, panelPadre, "Reporte Guía Remisión ", OrientacionReporteEnum.HORIZONTAL);
-                    //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listReporte, panelPadre, "Reporte Guía Remisión ");
-                    //dispose();
-                    //setVisible(false);
+                    try {
+                        /*InputStream path = RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("reporte_guiaRemision.jrxml");
+                        Map parameters = new HashMap();
+                        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listReporte, panelPadre, "Reporte Guía Remisión ", OrientacionReporteEnum.HORIZONTAL);*/
+                        controladorReporte.obtenerReportePdf(panelPadre);
+                    } catch (IOException ex) {
+                        Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
                 }
             });
         
@@ -282,20 +287,21 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         return new String[]{"Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa"};
     }
     
+    /*
     private String[] getCabeceraReporteExcel()
     {
         return new String[]{"Clave de Acceso","Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa"};
-    }
+    }*/
     
     private void mostrarReporteTabla()
     {
         String[] titulos=getCabeceraReporte();
         
-        if(listaConsulta!=null)
+        if(controladorReporte.getListaConsulta()!=null)
         {
             DefaultTableModel modeloTabla=new DefaultTableModel(titulos,0);
             
-            for (GuiaRemision guiaRemision : listaConsulta) 
+            for (GuiaRemision guiaRemision : controladorReporte.getListaConsulta()) 
             {
                 String[] fila={
                     guiaRemision.getPreimpreso(),
