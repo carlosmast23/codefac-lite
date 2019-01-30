@@ -199,7 +199,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                     /*Map<String, Object> mapParametros2 = new HashMap<String, Object>();
                     mapParametros2.put("estudianteInscrito", estudiante);
                     dataRubro = rs.obtenerPorMap(mapParametros2);*/
-                    dataRubro = rs.buscarRubrosMes(estudiante, periodo, null, null);
+                    dataRubro = rs.buscarRubrosMes(estudiante, periodo, null, mesesSeleccionados);
                 }
                 // comparamos si el estudiante tiene rubros
                 if (!dataRubro.isEmpty()) {
