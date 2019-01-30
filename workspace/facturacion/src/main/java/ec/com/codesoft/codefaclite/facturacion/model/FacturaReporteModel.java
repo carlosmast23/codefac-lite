@@ -226,7 +226,17 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
             @Override
             public void pdf() {
-                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Documentos ", OrientacionReporteEnum.HORIZONTAL);
+                //TODO: unir esta parte con el controlador del reporte
+                String titulo="Reporte ";
+                if(documentoConsultaEnum.equals(DocumentosConsultarEnum.VENTAS))
+                {
+                    titulo+="Facturas";
+                }else if(documentoConsultaEnum.equals(DocumentosConsultarEnum.NOTA_CREDITO))
+                {
+                    titulo+="Notas de Crédito";
+                }
+                
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, titulo, OrientacionReporteEnum.HORIZONTAL);
             }
         });
     }

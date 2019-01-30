@@ -312,12 +312,19 @@ public class ControladorReporteFactura {
     
     public File obtenerArchivoReportePdf(InterfazComunicacionPanel panelPadre)
     {
+        String titulo = "Reporte ";
+        if (documentoConsultaEnum.equals(DocumentosConsultarEnum.VENTAS)) {
+            titulo += "Facturas";
+        } else if (documentoConsultaEnum.equals(DocumentosConsultarEnum.NOTA_CREDITO)) {
+            titulo += "Notas de Crédito";
+        }
+
         InputStream path=RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
         //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Documentos ", OrientacionReporteEnum.HORIZONTAL);
         String nombreArchivo=UtilidadesArchivos.generarNombreArchivoUnico("reporte","pdf");
         String pathGrabar="\\tmp\\"+nombreArchivo; //TODO: Camabiar por algun nombre en funcion de la fecha para que se unico y no genere problemas
         
-        ReporteCodefac.generarReporteInternalFramePlantillaArchivo(path, mapParametrosReportePdf(), data, panelPadre, "Reporte ", OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4,pathGrabar);
+        ReporteCodefac.generarReporteInternalFramePlantillaArchivo(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4,pathGrabar);
         File file=new File(pathGrabar);
         if(file.exists())
         {

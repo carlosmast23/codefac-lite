@@ -187,12 +187,12 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
                 CorreoCodefac correoCodefac = new CorreoCodefac() {
                     @Override
                     public String getMensaje() {
-                        return "Ejemplo Reportes";
+                        return "Los archivos de los reportes estan adjuntos en el mensaje.";
                     }
 
                     @Override
                     public String getTitulo() {
-                       return "Reportes Codefac";
+                       return "Reportes Generados Codefac";
                     }
 
                     @Override
@@ -210,7 +210,7 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
                 
                 try {
                     correoCodefac.enviarCorreo();
-                    panelPadre.cambiarCursorEspera();
+                    panelPadre.cambiarCursorNormal();
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
                 } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
                     Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
