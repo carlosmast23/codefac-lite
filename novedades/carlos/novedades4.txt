@@ -139,3 +139,7 @@ Revisar que cuando envio facturas que no se procecen lanzando una excepcion en l
 Revisar que en la factura no se esta cargando los datos que deberian estar grabados en la factura , se cargan los datos en funcion del cliente pero no los quemados
 Analizar que al momento que la opcion de reenviar factura solo se pueda hacer despues de editar los cambios de la factura para evitar inconsistencia
 Falta implementar las busquedas por otros campos en las guias de remision
+
+Ver el significado exacto de estos 2 campos en las notas de credito
+<totalSinImpuestos>12.00</totalSinImpuestos>
+        <valorModificacion>11.20</valorModificacion>

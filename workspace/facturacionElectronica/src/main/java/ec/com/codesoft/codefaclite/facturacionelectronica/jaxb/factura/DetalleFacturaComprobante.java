@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.DetalleComprobanteAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,11 +19,11 @@ import javax.xml.bind.annotation.XmlType;
  * @author Carlos
  */
 @XmlType(propOrder = {"codigoPrincipal","descripcion","cantidad","precioUnitario","descuento","precioTotalSinImpuesto","impuestos"})
-public class DetalleFacturaComprobante implements Serializable{
+public class DetalleFacturaComprobante extends DetalleComprobanteAbstract{
     private String descripcion;
-    private BigDecimal cantidad;
-    private BigDecimal precioUnitario;
-    private BigDecimal descuento;
+    //private BigDecimal cantidad;
+    //private BigDecimal precioUnitario;
+    //private BigDecimal descuento;
     //Precio Unitario*Cantidad-Descuento
     private BigDecimal precioTotalSinImpuesto;
     
@@ -44,33 +45,7 @@ public class DetalleFacturaComprobante implements Serializable{
         this.descripcion = descripcion;
     }
 
-    @XmlElement(name="cantidad")
-    public BigDecimal getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(BigDecimal cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    @XmlElement(name="precioUnitario")
-    public BigDecimal getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(BigDecimal precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-
-    @XmlElement(name="descuento")
-    public BigDecimal getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(BigDecimal descuento) {
-        this.descuento = descuento;
-    }
-
+    
     @XmlElement(name="precioTotalSinImpuesto")
     public BigDecimal getPrecioTotalSinImpuesto() {
         return precioTotalSinImpuesto;

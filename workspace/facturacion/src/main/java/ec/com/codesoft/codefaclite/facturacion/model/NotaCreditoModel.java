@@ -902,6 +902,8 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         notaCredito.setSubtotalCero(notaCredito.getFactura().getSubtotalSinImpuestos());
         notaCredito.setSubtotalDoce(notaCredito.getFactura().getSubtotalImpuestos());
         notaCredito.setCliente(notaCredito.getFactura().getCliente());
+        notaCredito.setDescuentoImpuestos(notaCredito.getFactura().getDescuentoImpuestos());
+        notaCredito.setDescuentoSinImpuestos(notaCredito.getFactura().getDescuentoSinImpuestos());
         
         /**
          * CargarDetallesNotaCredito
@@ -914,6 +916,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             NotaCreditoDetalle notaDetalle = new NotaCreditoDetalle();
             notaDetalle.setCantidad(facturaDetalle.getCantidad());
             notaDetalle.setDescripcion(facturaDetalle.getDescripcion());
+            //System.out.println(facturaDetalle.getDescuento());
             notaDetalle.setDescuento(facturaDetalle.getDescuento());
             notaDetalle.setIva(facturaDetalle.getIva());
             notaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario());
@@ -1008,6 +1011,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         getLblIva12().setText(notaCredito.getIva() + "");
         getLblSubtotal0().setText(notaCredito.getSubtotalCero() + "");
         getLblSubtotal12().setText(notaCredito.getSubtotalDoce() + "");
+        getLblTotalDescuento().setText(notaCredito.getDescuentoImpuestos().add(notaCredito.getDescuentoSinImpuestos()).toString());
     }
     
     
@@ -1038,20 +1042,20 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                     case ACADEMICO:
                         RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
                         fila.add(rubroEstudiante.getId().toString());
-                        fila.add(rubroEstudiante.getValor().toString());
+                        //fila.add(rubroEstudiante.getValor().toString());
                         break;
 
                     case PRESUPUESTOS:
                         //Presupuesto presupuesto = ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(detalle.getReferenciaId());
                         fila.add(detalle.getReferenciaId()+"");
-                        fila.add(detalle.getPrecioUnitario().toString());
+                        //fila.add(detalle.getPrecioUnitario().toString());
                         break;
 
                     case INVENTARIO:
                     case LIBRE:
                         Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
                         fila.add((producto.getCodigoPersonalizado() != null) ? producto.getCodigoPersonalizado() : "");
-                        fila.add(producto.getValorUnitario() + "");
+                        //fila.add(producto.getValorUnitario() + "");
                         break;
 
                 }
@@ -1060,6 +1064,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             }
             
             //Setear los valores finales
+            fila.add(detalle.getPrecioUnitario().toString());
             fila.add(detalle.getCantidad() + "");
             fila.add(detalle.getDescripcion());
             fila.add(detalle.getTotal() + "");

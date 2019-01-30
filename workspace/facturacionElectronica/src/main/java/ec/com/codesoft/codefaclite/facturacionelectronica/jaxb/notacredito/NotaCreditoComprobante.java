@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -78,7 +80,33 @@ public class NotaCreditoComprobante extends ComprobanteElectronico {
         return this.infoNotaCredito.getDirEstablecimiento();
     }
 
+    /**
+     *==============> DATOS ADICIONALES
+     * @return 
+     */
+    public BigDecimal obtenerTotalDescuentos()
+    {
+        BigDecimal descuentoTotal=BigDecimal.ZERO;
+        if(detalles!=null)
+        {
+            for (DetalleNotaCreditoComprobante detalle : detalles) {
+                descuentoTotal=descuentoTotal.add(detalle.getDescuento());
+            }
+        }
+        return descuentoTotal;
+    }
     
+    public BigDecimal obtenerTotalImpuestos()
+    {
+        BigDecimal totalImpuestos=BigDecimal.ZERO;
+        if(getInfoNotaCredito().getTotalImpuestos()!=null)
+        {
+            for (TotalImpuesto impuesto : getInfoNotaCredito().getTotalImpuestos()) {
+                totalImpuestos=totalImpuestos.add(impuesto.getValor());
+            }
+        }
+        return totalImpuestos;
+    }
 
     
     

@@ -139,7 +139,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         
         info.setTipoIdentificacionComprador(UtilidadValidador.normalizarTexto(sriIdentificacion.getCodigo()));
         //info.setTotalImpuestos(totalImpuestos);
-        info.setTotalSinImpuestos(notaCredito.getSubtotalDoce().add(notaCredito.getSubtotalCero()));
+        info.setTotalSinImpuestos(notaCredito.getSubtotalDoce().add(notaCredito.getSubtotalCero()).subtract(notaCredito.getDescuentoImpuestos()).subtract(notaCredito.getDescuentoSinImpuestos()));
         info.setValorModificacion(notaCredito.getTotal());
         
         
@@ -183,7 +183,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
                 detalle.setCantidad(detalleNotaCredito.getCantidad());
                 detalle.setDescripcion(UtilidadValidador.normalizarTexto(detalleNotaCredito.getDescripcion()));
                 //Establecer el descuento en el aplicativo
-                detalle.setDescuento(BigDecimal.ZERO);
+                detalle.setDescuento(detalleNotaCredito.getDescuento());
                 detalle.setPrecioTotalSinImpuesto(detalleNotaCredito.getTotal());
                 detalle.setPrecioUnitario(detalleNotaCredito.getPrecioUnitario());
                 

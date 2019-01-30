@@ -277,5 +277,7 @@ public abstract class UtilidadesComprobantes {
         return dateString;
     }
     
+    //public static Map<String,Object> obtener
+    
 
 }

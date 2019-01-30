@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.DetalleComprobanteAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.DetalleAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
 import java.io.Serializable;
@@ -28,13 +29,13 @@ import javax.xml.bind.annotation.XmlType;
             "precioTotalSinImpuesto",
             "detallesAdicionales",
             "impuestos"})
-public class DetalleNotaCreditoComprobante implements Serializable{
+public class DetalleNotaCreditoComprobante extends DetalleComprobanteAbstract{
     private String codigoInterno;
     private String codigoAdicional;
     private String descripcion;
-    private BigDecimal cantidad;
-    private BigDecimal precioUnitario;
-    private BigDecimal descuento;
+    //private BigDecimal cantidad;
+    //private BigDecimal precioUnitario;
+    //private BigDecimal descuento;
     private BigDecimal precioTotalSinImpuesto;
 
         
@@ -72,33 +73,7 @@ public class DetalleNotaCreditoComprobante implements Serializable{
         this.descripcion = descripcion;
     }
     
-    @XmlElement(name="cantidad")
-    public BigDecimal getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(BigDecimal cantidad) {
-        this.cantidad = cantidad;
-    }
     
-    @XmlElement(name="precioUnitario")
-    public BigDecimal getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(BigDecimal precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-    
-    @XmlElement(name="descuento")
-    public BigDecimal getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(BigDecimal descuento) {
-        this.descuento = descuento;
-    }
-
     @XmlElement(name="precioTotalSinImpuesto")
     public BigDecimal getPrecioTotalSinImpuesto() {
         return precioTotalSinImpuesto;
