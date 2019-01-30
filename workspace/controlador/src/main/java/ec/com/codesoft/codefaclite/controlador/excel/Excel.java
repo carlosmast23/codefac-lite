@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.excel;
 
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Desktop;
 import java.io.File;
@@ -52,10 +53,12 @@ public class Excel<T>
         this.hoja1 = libro.createSheet("Hoja1");
         this.posicionesColumnas = new ArrayList<>();
         Date date = new Date();
-        String nombreArchivoExcel = "" + date;
-        nombreArchivoExcel = nombreArchivoExcel.replaceAll(" ", "");
-        nombreArchivoExcel = nombreArchivoExcel.replaceAll(":", "");
-        this.archivo = "\\tmp\\"+nombreArchivoExcel+".xlsx";
+        //String nombreArchivoExcel = "" + date;
+        //nombreArchivoExcel = nombreArchivoExcel.replaceAll(" ", "");
+        //nombreArchivoExcel = nombreArchivoExcel.replaceAll(":", "");
+        String nombreArchivoExcel=UtilidadesArchivos.generarNombreArchivoUnico("reporteExcel",".xlsx");
+        //this.archivo = "\\tmp\\"+nombreArchivoExcel+".xlsx";
+        this.archivo = "\\tmp\\"+nombreArchivoExcel;
     }
     
     public void gestionarIngresoInformacionExcel(String[] cabeceraDatosDinamicos, List<ExcelDatosInterface> datosDinamicos) throws FileNotFoundException, IOException, IllegalArgumentException, IllegalAccessException
