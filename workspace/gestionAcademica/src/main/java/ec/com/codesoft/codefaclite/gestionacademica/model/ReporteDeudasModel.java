@@ -59,8 +59,8 @@ import javax.swing.table.DefaultTableModel;
 public class ReporteDeudasModel extends ReporteDeudasPanel {
 
     Map parameters = new HashMap();
-    private boolean banderaNiveles = false;
-    private boolean banderaRubros = false;
+    //private boolean banderaNiveles = false;
+    //private boolean banderaRubros = false;
     private List<RubrosNivel> listaRubros;
 
     private DefaultListModel<RubroPlantillaMes> modeloLista;
@@ -91,7 +91,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
 
         //getChkTodosNiveles().setSelected(true);
         if (getChkTodosNiveles().isSelected()) {
-            banderaNiveles = true;
+            //banderaNiveles = true;
             getCmbNivelAcademico().setEnabled(false);
         }
 
@@ -99,10 +99,10 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                    banderaNiveles = true;
+                    //banderaNiveles = true;
                     getCmbNivelAcademico().setEnabled(false);
                 } else {
-                    banderaNiveles = false;
+                    //banderaNiveles = false;
                     getCmbNivelAcademico().setEnabled(true);
                 }
             }
@@ -110,7 +110,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
 
         // getChkTodosRubros().setSelected(true);
         if (getChkTodosRubros().isSelected()) {
-            banderaRubros = true;
+            //banderaRubros = true;
             getCmbTipoRubroPorMes().setEnabled(false);
         }
 
@@ -118,10 +118,10 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                    banderaRubros = true;
+                    //banderaRubros = true;
                     getCmbTipoRubroPorMes().setEnabled(false);
                 } else {
-                    banderaRubros = false;
+                    //banderaRubros = false;
                     getCmbTipoRubroPorMes().setEnabled(true);
 
                 }
@@ -180,7 +180,8 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             List<RubroEstudiante> dataRubro;
 
             Map<String, Object> mapParametros = new HashMap<String, Object>();
-            if (banderaNiveles == false) {
+            //if (banderaNiveles == false) {
+            if (getChkTodosNiveles().isSelected() == false) {
                 mapParametros.put("nivelAcademico", (NivelAcademico) getCmbNivelAcademico().getSelectedItem());
             }
             EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
@@ -190,7 +191,9 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             for (EstudianteInscrito estudiante : dataEstudiante) {
 
                 RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-                if (banderaRubros == false) {
+                
+                if (getChkTodosRubros().isSelected() == false) {
+                //if (banderaRubros == false) {
                     dataRubro = rs.buscarRubrosMes(estudiante, periodo, catalogoProducto, mesesSeleccionados);
                 } else {
                     /*Map<String, Object> mapParametros2 = new HashMap<String, Object>();
@@ -393,7 +396,9 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
 
                     DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    if (banderaNiveles == false) {
+                    
+                    if (getChkTodosNiveles().isSelected() == false) {
+                    //if (banderaNiveles == false) {
                         mapParametros.put("nivelAcademico", (NivelAcademico) getCmbNivelAcademico().getSelectedItem());
                     }
                     EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
@@ -401,10 +406,12 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                     for (EstudianteInscrito estudiante : dataEstudiante) {
                         Vector<String> fila = new Vector<String>();
                         RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-                        if (banderaRubros == false) {
+                        
+                        if (getChkTodosRubros().isSelected() == false) {
+                        //if (banderaRubros == false) {
                             dataRubro = rs.buscarRubrosMes(estudiante, periodo, catalogoProducto, mesesSeleccionados);
                         } else {
-                            dataRubro = rs.buscarRubrosMes(estudiante, periodo, null, null);
+                            dataRubro = rs.buscarRubrosMes(estudiante, periodo, null, mesesSeleccionados);
                         }
 
 // comparamos si el estudiante tiene rubros
