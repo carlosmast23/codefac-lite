@@ -501,6 +501,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
     private void addListenerPopUps() {
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem jMenuItemDatoAdicional = new JMenuItem("Eliminar");
+        JMenuItem jMenuItemOtroProceso = new JMenuItem("Procesar como enviado");
         jMenuItemDatoAdicional.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -524,8 +525,16 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                 }
             }
         });
-
+    
+        jMenuItemOtroProceso.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //a
+            }
+        });
+        
         jPopupMenu.add(jMenuItemDatoAdicional);
+        jPopupMenu.add(jMenuItemOtroProceso);
         getTblComprobantes().setComponentPopupMenu(jPopupMenu);
     }
 

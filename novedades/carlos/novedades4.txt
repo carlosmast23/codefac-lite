@@ -143,3 +143,5 @@ Falta implementar las busquedas por otros campos en las guias de remision
 Ver el significado exacto de estos 2 campos en las notas de credito
 <totalSinImpuestos>12.00</totalSinImpuestos>
         <valorModificacion>11.20</valorModificacion>
+
+Hacer una opcion para mover de carpeta o procesar desde la etapa enviar cuando  no permite enviar un comprobante desde la carpeta firmados_sin_enviar

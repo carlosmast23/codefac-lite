@@ -26,7 +26,7 @@ create table CLIENTE(
     TELEFONO_CONVENCIONAL varchar(9),
     EXTENSION_TELEFONO varchar(4), 
     TELEFONO_CELULAR varchar(10), 
-    CORREO_ELECTRONICO varchar(60),
+    CORREO_ELECTRONICO varchar(300),
     ACTIVIDAD_COMERCIAL varchar(100),
     OBLIGADO_LLEVAR_CONTABILIDAD varchar(1),
     ESTADO varchar(1),
