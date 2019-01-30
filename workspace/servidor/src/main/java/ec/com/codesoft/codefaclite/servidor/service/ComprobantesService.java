@@ -473,9 +473,16 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     try {
                         ClaveAcceso clave=new ClaveAcceso(documentoAutorizado.getNumeroAutorizacion());
                         ComprobanteEntity comprobante=obtenerComprobantePorClaveAcceso(clave);
-                        comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-                        setearDatosAutorizacionComprobante(comprobante, documentoAutorizado);
-                        entityManager.merge(comprobante);
+                        if(comprobante!=null)
+                        {
+                            comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                            setearDatosAutorizacionComprobante(comprobante, documentoAutorizado);
+                            entityManager.merge(comprobante);
+                        }
+                        else
+                        {
+                            LOG.log(Level.SEVERE,"Error se autorizo el comprobante pero no se encuentra el registro; "+documentoAutorizado.getNumeroAutorizacion());
+                        }
                     } catch (RemoteException ex) {
                         Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                     }
