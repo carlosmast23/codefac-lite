@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_deudas2" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3613f18e-d7a7-49ca-8ff5-a65d0f82d855">
-	<property name="ireport.zoom" value="1.2418426461183327"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="6.276856753442125"/>
+	<property name="ireport.x" value="111"/>
+	<property name="ireport.y" value="694"/>
 	<parameter name="periodo" class="java.lang.String"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
@@ -27,6 +27,9 @@
 	<field name="rubro" class="java.lang.String"/>
 	<field name="valor" class="java.lang.String"/>
 	<sortField name="nivelAcademicoEstudiante" order="Descending"/>
+	<variable name="sumatoriaVariable" class="java.math.BigDecimal" resetType="Group" resetGroup="estudiante" calculation="Sum">
+		<variableExpression><![CDATA[new BigDecimal($F{valor})]]></variableExpression>
+	</variable>
 	<group name="nivelAcademico">
 		<groupExpression><![CDATA[$F{nivelAcademicoEstudiante}]]></groupExpression>
 		<groupHeader>
@@ -88,13 +91,42 @@
 					<text><![CDATA[Valor]]></text>
 				</staticText>
 				<line>
-					<reportElement x="0" y="0" width="555" height="1" uuid="944f7fe6-bf4c-4084-a6b7-8f7024514ed7"/>
-				</line>
-				<line>
 					<reportElement x="0" y="14" width="555" height="1" uuid="a660a1eb-8cd8-41c0-ac98-91b4f038adb4"/>
 				</line>
 			</band>
 		</groupHeader>
+		<groupFooter>
+			<band height="13">
+				<textField>
+					<reportElement x="479" y="0" width="76" height="13" uuid="d3335bc7-36ad-49dd-980f-09d0f260cb53"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumatoriaVariable}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="433" y="0" width="46" height="13" uuid="71900e6c-27f5-47fa-838b-0f55609176aa"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
 	</group>
 	<background>
 		<band splitType="Stretch"/>
@@ -125,7 +157,7 @@
 				<subreportExpression><![CDATA[$P{pl_url_cabecera}]]></subreportExpression>
 			</subreport>
 			<textField>
-				<reportElement x="54" y="57" width="100" height="20" uuid="66a0bb1f-82d7-4be1-9c29-f3908b1c0dc1"/>
+				<reportElement x="54" y="57" width="201" height="20" uuid="66a0bb1f-82d7-4be1-9c29-f3908b1c0dc1"/>
 				<textFieldExpression><![CDATA[$P{periodo}]]></textFieldExpression>
 			</textField>
 			<textField>
