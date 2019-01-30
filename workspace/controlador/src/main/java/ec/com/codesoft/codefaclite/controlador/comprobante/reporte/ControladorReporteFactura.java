@@ -70,10 +70,19 @@ public class ControladorReporteFactura {
         this.data = new ArrayList<ReporteFacturaData>();
     }
     
-    
+    private Map<String,BigDecimal> buildMapTotales()
+    {
+        this.mapTotales = new HashMap<String,BigDecimal>();
+        this.mapTotales.put("acum", BigDecimal.ZERO);
+        this.mapTotales.put("acumdoce", BigDecimal.ZERO);
+        this.mapTotales.put("acumiva", BigDecimal.ZERO);
+        this.mapTotales.put("acumdesc", BigDecimal.ZERO);        
+        return this.mapTotales;
+    }
     
     public void generarReporte() {
         try {
+            this.mapTotales=buildMapTotales();
             FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
             List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado);
             

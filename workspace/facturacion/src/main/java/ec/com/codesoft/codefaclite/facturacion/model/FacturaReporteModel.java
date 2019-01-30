@@ -95,7 +95,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         
     }
     
-    private void agregarValorTotal(String nombre,BigDecimal valor)
+    /*private void agregarValorTotal(String nombre,BigDecimal valor)
     {
         BigDecimal valorTmp=mapTotales.get(nombre);
         if(valorTmp==null)
@@ -107,7 +107,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             valorTmp=valorTmp.add(valor);
             mapTotales.put(nombre,valorTmp);
         }
-    }
+    }*/
     
     private void generarReporte()
     {

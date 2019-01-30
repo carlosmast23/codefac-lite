@@ -436,7 +436,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Sumataria Rentención Iva]]></text>
+				<text><![CDATA[Sumataria Rentención Renta]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="325" y="19" width="115" height="12" uuid="3b917d24-bb7c-41be-a9ca-7cc585b37af6"/>
@@ -469,7 +469,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Sumatoria Rentención Renta]]></text>
+				<text><![CDATA[Sumatoria Rentención Iva]]></text>
 			</staticText>
 			<subreport>
 				<reportElement x="0" y="31" width="230" height="14" uuid="399a9fbb-5b86-436c-927f-f752382d8926"/>
