@@ -280,20 +280,43 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                 return;
             }
 
-            estadoCargando();
-            for (String claveAcceso : clavesAcceso) {
+            panelPadre.cambiarCursorEspera();
+            //for (String claveAcceso : clavesAcceso) {
 
                 ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
                 ClienteUtilidadImplComprobante callBack = new ClienteUtilidadImplComprobante(this);
                 
-                comprobanteServiceIf.procesarComprobantesPendiente(etapaInicial, etapaLimite, claveAcceso, obtenerCorreos(), callBack,getChkEnvioCorreo().isSelected());                
-            }
-            //estadoNormal();
-            //getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Volver a cargar los comprobantes para actualizar y que no aparesca los que ya fueron enviados
+                List<String> errores=comprobanteServiceIf.procesarComprobantesPendienteLote(etapaInicial, etapaLimite, getMapClaveAccesoYCorreos(),getChkEnvioCorreo().isSelected());                
+                //Mostrar los errores del Sistema
+                String errorMsg="";
+                if(errores.size()>0)
+                {
+                    for (String error : errores) {
+                        errorMsg+=error+"\n\n";
+                    }
+                    DialogoCodefac.mensaje("Errores",errorMsg,DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+            //}
+            panelPadre.actualizarNotificacionesCodefac();
+            panelPadre.cambiarCursorNormal();
+            getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Volver a cargar los comprobantes para actualizar y que no aparesca los que ya fueron enviados
 
         } catch (RemoteException ex) {
             Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private Map<String,List<String>> getMapClaveAccesoYCorreos()
+    {
+        List<String> clavesAcceso=obtenerClavesAccesoTabla();
+        Map<String,List<String>> mapClaveAccesoYCorreos=new HashMap<String,List<String>>();
+        
+        for (String claveAcceso : clavesAcceso) {
+            mapClaveAccesoYCorreos.put(claveAcceso,new ArrayList<String>());
+        }
+        return mapClaveAccesoYCorreos;
     }
     
 

@@ -379,7 +379,33 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         return alertas;
     }
     
-    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo) throws RemoteException
+    public List<String> procesarComprobantesPendienteLote(Integer etapaInicial,Integer etapaLimite,Map<String,List<String>> mapClaveAccesoYCorreos,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException 
+    {
+        List<String> errores=new ArrayList<String>();
+        for (Map.Entry<String, List<String>> entry : mapClaveAccesoYCorreos.entrySet()) {
+            String claveAcceso= entry.getKey();
+            List<String> correos = entry.getValue();            
+            procesarComprobantesPendiente(etapaInicial, etapaLimite, claveAcceso, correos, new ClienteInterfaceComprobante() {
+                @Override
+                public void termino(byte[] byteJasperPrint, List<AlertaComprobanteElectronico> alertas) throws RemoteException {}
+
+                @Override
+                public void iniciado() throws RemoteException {}
+
+                @Override
+                public void procesando(int etapa, ClaveAcceso clave) throws RemoteException {}
+
+                @Override
+                public void error(ComprobanteElectronicoException cee, String claveAcceso) throws RemoteException {
+                    errores.add("Clave Acceso:"+claveAcceso+"\nError:"+cee.getMessage());
+                }
+            }, enviarCorreo,false);            
+        }
+        return errores; //Esta opcion va a permitir que espera a que se termine el proceso y no funcione en segundo plano
+    
+    }        
+    
+    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo,Boolean asincrono) throws RemoteException
     {
         Empresa empresa=obtenerEmpresaPorClaveAcceso(claveAcceso);
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
@@ -404,7 +430,11 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     try {
                         if(existeConexionRemota)
                         {
-                            callbackClientObject.termino(null,comprobanteElectronico.getAlertas());
+                            if(callbackClientObject!=null)
+                            {
+                                callbackClientObject.termino(null,comprobanteElectronico.getAlertas());
+                            }
+                            
                         }
                     } catch (RemoteException ex) {
                         Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -414,7 +444,11 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                 @Override
                 public void iniciado(ComprobanteElectronico comprobante) {
                     try {
-                        callbackClientObject.iniciado();
+                        if(callbackClientObject!=null)
+                        {
+                            callbackClientObject.iniciado();
+                        }
+                        
                     } catch (RemoteException ex) {
                         existeConexionRemota=false;
                         Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -426,8 +460,10 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     try {
                         if(existeConexionRemota)
                         {
-                            
-                            callbackClientObject.procesando(etapa, clave);
+                            if(callbackClientObject!=null)
+                            {
+                                callbackClientObject.procesando(etapa, clave);
+                            }
                         }
                         
                         //Setear el campo de seteado a factura solo si pasa la etapa de autorizar
@@ -461,7 +497,11 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     try {
                         if(existeConexionRemota)
                         {
-                            callbackClientObject.error(cee,"");
+                            if(callbackClientObject!=null)
+                            {
+                                callbackClientObject.error(cee,"");
+                            }
+                            
                         }
                     } catch (RemoteException ex) {
                         Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -477,7 +517,13 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                         {
                             comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
                             setearDatosAutorizacionComprobante(comprobante, documentoAutorizado);
-                            entityManager.merge(comprobante);
+                            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                                @Override
+                                public void transaccion() throws ServicioCodefacException, RemoteException {
+                                    entityManager.merge(comprobante);
+                                }
+                            });
+                            
                         }
                         else
                         {
@@ -485,6 +531,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                         }
                     } catch (RemoteException ex) {
                         Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        LOG.log(Level.SEVERE,"Error: "+ex.getMessage()+" \n Clave Acceso:"+documentoAutorizado.getNumeroAutorizacion());
                     }
             }
             });
@@ -496,7 +544,14 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         //comprobanteElectronico
         //if(callbackClientObject!=null) //Si  tiene comunicación bidereccional entonces ejecuta el proceso con hilos
         //{
-            comprobanteElectronico.procesar(false);
+        if(asincrono)
+        {
+            comprobanteElectronico.procesar(false); //Manda a procesar en un hilo aparte los comprobantess
+        }
+        else
+        {
+            comprobanteElectronico.procesarComprobante();
+        }
         //}
         //else //Si el proceso no requiere comunicación bidireccional ejecuto directamente en el hilo principal
         //{

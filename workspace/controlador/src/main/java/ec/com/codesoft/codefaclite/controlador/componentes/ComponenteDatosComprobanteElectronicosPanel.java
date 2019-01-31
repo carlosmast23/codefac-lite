@@ -216,6 +216,8 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                         }
                                                 
                         comprobante.getPanelPadre().cambiarCursorEspera();
+                        
+                        //TODO: ver si usar el metodo procesarComprobantesPendiente porque este estan mal implementado para otros casos desde otras etapas
                         List<AlertaComprobanteElectronico> alertas=ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesPendienteSinCallBack(
                                 etapaEnviarCorreo,
                                 etapaEnviarCorreo,

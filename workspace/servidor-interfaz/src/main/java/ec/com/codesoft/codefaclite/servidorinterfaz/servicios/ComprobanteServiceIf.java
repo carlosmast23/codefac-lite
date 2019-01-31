@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 import net.sf.jasperreports.engine.JasperPrint;
 
 /**
@@ -39,8 +40,9 @@ public interface ComprobanteServiceIf extends Remote {
     
     public boolean verificarCredencialesFirma(String claveFirma) throws RemoteException;
 
-    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo) throws RemoteException;
+    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo,Boolean asincrono) throws RemoteException;
     
+    @Deprecated
     public List<AlertaComprobanteElectronico> procesarComprobantesPendienteSinCallBack(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos) throws RemoteException,ServicioCodefacException;
     
     public List<ComprobanteElectronico> getComprobantesObjectByFolder(String carpetaConfiguracion) throws RemoteException;
@@ -80,5 +82,17 @@ public interface ComprobanteServiceIf extends Remote {
      * @throws ServicioCodefacException 
      */
     public void actualizarComprobanteDatos(List<ComprobanteEntity> entidades) throws RemoteException, ServicioCodefacException;
+    
+    /**
+     * Metodo que permite enviar varios comprobante pero desde la forma normal es decir de uno en uno
+     * Nota: Esto lo utilizo para mandar a procesar datos desde la etapa de enviados porque no se puede enviar desde la seccion de lotes
+     * @param etapaInicial
+     * @param etapaLimite
+     * @param mapClaveAccesoYCorreos
+     * @param enviarCorreo
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
+    public List<String> procesarComprobantesPendienteLote(Integer etapaInicial,Integer etapaLimite,Map<String,List<String>> mapClaveAccesoYCorreos,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException;
     
 }
