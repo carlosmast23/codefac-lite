@@ -145,3 +145,4 @@ Ver el significado exacto de estos 2 campos en las notas de credito
         <valorModificacion>11.20</valorModificacion>
 
 Hacer una opcion para mover de carpeta o procesar desde la etapa enviar cuando  no permite enviar un comprobante desde la carpeta firmados_sin_enviar
+Verificar que ya no salgan errores cuando se hacen varias consultas sobre un mismo objeto en el entity manager o poner el comando setFlush(commit) en las consultas

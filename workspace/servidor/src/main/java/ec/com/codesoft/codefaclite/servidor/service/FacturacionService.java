@@ -106,31 +106,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             }
         });
         return factura;
-        /*
-        EntityTransaction transaction= entityManager.getTransaction();
-        transaction.begin();
         
-        try {
-            
-            factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
-            
-            ComprobantesService servicioComprobante = new ComprobantesService();
-            servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);            
-            grabarDetallesFactura(factura);
-            grabarCartera(factura);
-            
-        transaction.commit();
-        } catch (DatabaseException ex) {
-            transaction.rollback();
-            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch(PersistenceException ex)
-        {
-            transaction.rollback();
-            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return factura;*/
     }
     
     private void grabarDetallesFactura(Factura factura) throws RemoteException,PersistenceException

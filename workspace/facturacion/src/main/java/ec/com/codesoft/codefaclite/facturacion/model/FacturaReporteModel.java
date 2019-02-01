@@ -67,19 +67,14 @@ public class FacturaReporteModel extends FacturaReportePanel {
     
     private Persona persona;
     protected Persona referido;
-    //Map<String, Object> parameters = new HashMap<String, Object>();
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
     private List<ReporteFacturaData> data;
     
     private Map<String,BigDecimal> mapTotales;
+    private ControladorReporteFactura controladorReporte;
 
-    //private List<Factura> datafact;
-    //private List<NotaCredito> datafact2;
-    //Date fechaInicio = null;
-    //Date fechaFin = null;
-    //String fechainicio = "";
-    //String fechafin = "";
+
 
     public FacturaReporteModel() {
         valoresIniciales();
@@ -94,21 +89,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         listenerChecks();
         
     }
-    
-    /*private void agregarValorTotal(String nombre,BigDecimal valor)
-    {
-        BigDecimal valorTmp=mapTotales.get(nombre);
-        if(valorTmp==null)
-        {
-            mapTotales.put(nombre,valor);
-        }
-        else
-        {
-            valorTmp=valorTmp.add(valor);
-            mapTotales.put(nombre,valorTmp);
-        }
-    }*/
-    
+
     private void generarReporte()
     {
         //try {
@@ -130,7 +111,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
             DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
                      
-            ControladorReporteFactura controladorReporte = new ControladorReporteFactura(
+            controladorReporte = new ControladorReporteFactura(
                     persona,
                     fechaInicio,
                     fechaFin,
@@ -160,7 +141,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     }
     
     protected void imprimirReporte()
-    {
+    {/*
         Date fechaInicio = null;
         Date fechaFin = null;
 
@@ -185,11 +166,11 @@ public class FacturaReporteModel extends FacturaReportePanel {
         }
         
         DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
-        
+        */
         /**
          * Genera el reporte
          */
-
+        /*
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("fechainicio", (fechaInicio != null) ? dateFormat.format(fechaInicio) : "");
         parameters.put("fechafin", (fechaFin != null) ? dateFormat.format(fechaFin) : "");
@@ -207,7 +188,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         parameters.put("totalsubtotales", subtotal.toString());
         parameters.put("descuentos",mapTotales.get("acumdesc").toString());
         parameters.put("estadofactura", estadoText);
-
+*/
         DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
 
             @Override
@@ -226,17 +207,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
             @Override
             public void pdf() {
-                //TODO: unir esta parte con el controlador del reporte
-                String titulo="Reporte ";
-                if(documentoConsultaEnum.equals(DocumentosConsultarEnum.VENTAS))
-                {
-                    titulo+="Facturas";
-                }else if(documentoConsultaEnum.equals(DocumentosConsultarEnum.NOTA_CREDITO))
-                {
-                    titulo+="Notas de Crédito";
-                }
-                
-                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, titulo, OrientacionReporteEnum.HORIZONTAL);
+                controladorReporte.obtenerReportePdf(panelPadre);
+                //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, titulo, OrientacionReporteEnum.HORIZONTAL);
             }
         });
     }
