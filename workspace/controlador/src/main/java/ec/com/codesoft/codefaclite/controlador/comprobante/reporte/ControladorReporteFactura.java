@@ -256,6 +256,16 @@ public class ControladorReporteFactura {
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
                         data.add(reporteData);
                         
+                                                //Sumar solo si esta buscando todos los comprobantes del Sri y esta eliminado en el Sri
+                        if(estadoEnum.equals(estadoEnum.ELIMINADO_SRI) && estadoFactura.equals(estadoEnum.TODOS_SRI))
+                        {
+                            totalAnulados.addSubtotalSinImpuesto(nota.getSubtotalSinImpuestos());
+                            totalAnulados.addSubtotalConImpuesto(nota.getSubtotalImpuestos());
+                            totalAnulados.addsValorImpuesto(nota.getIva());
+                            totalAnulados.addDescuentoconImpuesto(nota.getDescuentoImpuestos());
+                            totalAnulados.addDescuentoSinImpuesto(nota.getDescuentoSinImpuestos());                            
+                        }
+                        
                         
                         totalNotasCredito.addSubtotalSinImpuesto(nota.getSubtotalCero());
                         totalNotasCredito.addSubtotalConImpuesto(nota.getSubtotalDoce());
@@ -434,7 +444,8 @@ public class ControladorReporteFactura {
        }
        else if(documentoConsultaEnum.equals(documentoConsultaEnum.NOTA_CREDITO))
        {
-           parameters.putAll(total.buildMap(EtiquetaReporteEnum.TOTAL));
+           TotalSumatoria totalSinAnulados=totalNotasCredito.subtract(totalAnulados);
+           parameters.putAll(totalSinAnulados.buildMap(EtiquetaReporteEnum.TOTAL));
        }
         
                 

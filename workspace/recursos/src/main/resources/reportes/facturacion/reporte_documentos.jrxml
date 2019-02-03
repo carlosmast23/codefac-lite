@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_documentos" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9cda46cf-cd6e-4c09-b67c-62113b7f5ab2">
 	<property name="ireport.zoom" value="1.6528925619835337"/>
-	<property name="ireport.x" value="754"/>
-	<property name="ireport.y" value="308"/>
+	<property name="ireport.x" value="123"/>
+	<property name="ireport.y" value="208"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
 	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
@@ -1034,7 +1034,9 @@
 				<textFieldExpression><![CDATA[$P{descuentosAnulado}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="226" y="30" width="100" height="20" uuid="ed365c9e-4677-42c0-b388-1bdc6ee5e152"/>
+				<reportElement x="226" y="30" width="100" height="20" uuid="ed365c9e-4677-42c0-b388-1bdc6ee5e152">
+					<printWhenExpression><![CDATA[new Boolean($P{tipodocumento}.equals("Ventas"))]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1048,7 +1050,9 @@
 				<textFieldExpression><![CDATA[$P{totalsubtotalesNC}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="226" y="50" width="100" height="20" uuid="a6b91fde-ccf0-437f-9c27-a5204a448128"/>
+				<reportElement x="226" y="50" width="100" height="20" uuid="a6b91fde-ccf0-437f-9c27-a5204a448128">
+					<printWhenExpression><![CDATA[new Boolean($P{tipodocumento}.equals("Ventas"))]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1062,7 +1066,9 @@
 				<textFieldExpression><![CDATA[$P{subtotalNC}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="226" y="70" width="100" height="20" uuid="83d7c47e-7b72-46da-bbc4-e9d2122b1106"/>
+				<reportElement x="226" y="70" width="100" height="20" uuid="83d7c47e-7b72-46da-bbc4-e9d2122b1106">
+					<printWhenExpression><![CDATA[new Boolean($P{tipodocumento}.equals("Ventas"))]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1076,7 +1082,9 @@
 				<textFieldExpression><![CDATA[$P{subtotalivaNC}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="226" y="90" width="100" height="20" uuid="f3622a93-7737-4d92-96a9-6dac23e39ad4"/>
+				<reportElement x="226" y="90" width="100" height="20" uuid="f3622a93-7737-4d92-96a9-6dac23e39ad4">
+					<printWhenExpression><![CDATA[new Boolean($P{tipodocumento}.equals("Ventas"))]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1090,7 +1098,9 @@
 				<textFieldExpression><![CDATA[$P{descuentosNC}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="226" y="110" width="100" height="20" uuid="1dba85c6-dc09-4272-90e2-a1a78a056ee7"/>
+				<reportElement x="226" y="110" width="100" height="20" uuid="1dba85c6-dc09-4272-90e2-a1a78a056ee7">
+					<printWhenExpression><![CDATA[new Boolean($P{tipodocumento}.equals("Ventas"))]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1104,7 +1114,9 @@
 				<textFieldExpression><![CDATA[$P{valorivaNC}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="226" y="130" width="100" height="20" uuid="7b3e1955-40ff-4947-ad8b-59e61236f083"/>
+				<reportElement x="226" y="130" width="100" height="20" uuid="7b3e1955-40ff-4947-ad8b-59e61236f083">
+					<printWhenExpression><![CDATA[new Boolean($P{tipodocumento}.equals("Ventas"))]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1128,11 +1140,11 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Sin notas de crédito"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Valor Bruto"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="226" y="10" width="100" height="20" uuid="a298d5aa-143f-4d1f-b9db-1cb2eca1934f">
@@ -1145,11 +1157,11 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Con notas de crédito"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Valor Neto"]]></textFieldExpression>
 			</textField>
 		</band>
 	</lastPageFooter>
