@@ -71,7 +71,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     
     private List<ReporteFacturaData> data;
     
-    private Map<String,BigDecimal> mapTotales;
+    //private Map<String,BigDecimal> mapTotales;
     private ControladorReporteFactura controladorReporte;
 
 
@@ -124,7 +124,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             
             controladorReporte.generarReporte();
             data=controladorReporte.getData();
-            mapTotales=controladorReporte.getMapTotales();
+            //mapTotales=controladorReporte.getMapTotales();
             
             //if (tabla) 
             //{
@@ -141,54 +141,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     }
     
     protected void imprimirReporte()
-    {/*
-        Date fechaInicio = null;
-        Date fechaFin = null;
-
-        //BigDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
-        ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
-        String estadoStr = estadoFactura.getEstado();
-
-        if (getDateFechaInicio().getDate() != null) {
-            fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
-        }
-        if (getDateFechaFin().getDate() != null) {
-            fechaFin = new Date(getDateFechaFin().getDate().getTime());
-        }
-        
-        String estadoText = estadoFactura.getNombre();
-        final InputStream path = getReporte();
-        String cliente = "";
-        if (persona == null) {
-            cliente = "TODOS";
-        } else {
-            cliente = persona.getRazonSocial();
-        }
-        
-        DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
-        */
-        /**
-         * Genera el reporte
-         */
-        /*
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("fechainicio", (fechaInicio != null) ? dateFormat.format(fechaInicio) : "");
-        parameters.put("fechafin", (fechaFin != null) ? dateFormat.format(fechaFin) : "");
-        parameters.put("tipodocumento", documentoConsultaEnum.toString());
-        parameters.put("cliente", cliente);
-        parameters.put("subtotal",mapTotales.get("acum").toString());
-        parameters.put("subtotaliva",mapTotales.get("acumdoce").toString());
-        parameters.put("valoriva",mapTotales.get("acumiva").toString());
-        //BigDecimal total = acum.add(acumdoce).add(acumiva);
-        BigDecimal total = mapTotales.get("acum").add(mapTotales.get("acumdoce").add(mapTotales.get("acumiva")));
-        parameters.put("total", total.toString());
-        
-        //BigDecimal subtotal = acum.add(acumdoce);
-        BigDecimal subtotal = mapTotales.get("acum").add(mapTotales.get("acumdoce"));
-        parameters.put("totalsubtotales", subtotal.toString());
-        parameters.put("descuentos",mapTotales.get("acumdesc").toString());
-        parameters.put("estadofactura", estadoText);
-*/
+    {
         DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
 
             @Override
@@ -249,15 +202,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
         mapTamanios.put(0, 130);
         UtilidadesTablas.definirTamanioColumnasPorMap(getTblDocumentos(), mapTamanios);
         
-        getLblSubtotal0().setText(mapTotales.get("acum").toString());
-        getLblSubtotal12().setText(mapTotales.get("acumdoce").toString());
-        BigDecimal subtotal = mapTotales.get("acum").add(mapTotales.get("acumdoce"));
-        getLblSubtotalSinImpuesto().setText(subtotal.toString());
-        getLblTotalDescuento().setText(mapTotales.get("acumdesc").toString());
-        getLblIva12().setText(mapTotales.get("acumiva").toString());
-        BigDecimal total = mapTotales.get("acum").add(mapTotales.get("acumdoce")).add(mapTotales.get("acumiva"));
-        getTxtValorTotal().setText(total.toString());
-
+        ControladorReporteFactura.TotalSumatoria total=controladorReporte.totalSinNotaCredito();
+        getLblSubtotal0().setText(total.getSubtotalSinImpuestoMenosDescuento().toString());
+        getLblSubtotal12().setText(total.getSubtotalSinImpuestoMenosDescuento().toString());
+        getLblSubtotalSinImpuesto().setText(total.obtenerSubtotal().toString());
+        getLblTotalDescuento().setText(total.obtenerTotalDescuentos().toString());
+        getLblIva12().setText(total.getValorImpuesto().toString());
+        getTxtValorTotal().setText(total.obtenerTotal().toString());
 
        
     }

@@ -739,11 +739,22 @@ public class ComprobanteElectronicoService implements Runnable {
     private String getMensajeCorreo(ComprobanteEnum clase,ComprobanteElectronico comprobante)
     {
         String mensajeGenerado = "Estimado/a ";
+        String nombreEmpresa="Codefac";
+        
+        if(comprobante.getInformacionTributaria().getNombreComercial()!=null && !comprobante.getInformacionTributaria().getNombreComercial().isEmpty())
+        {
+            nombreEmpresa=comprobante.getInformacionTributaria().getNombreComercial();
+        }
+        else
+        {
+            nombreEmpresa=comprobante.getInformacionTributaria().getRazonSocial();
+        }
+        
         if(clase.equals(ComprobanteEnum.FACTURA))
         {
             mensajeGenerado+= " "
                     + "<b>" + comprobante.getRazonSocialComprador() + "</b> ,<br><br>"
-                    + "<b>" + comprobante.getInformacionTributaria().getNombreComercial() + "</b>"
+                    + "<b>" + nombreEmpresa + "</b>"
                     + " le informa que su factura  electrónica " + comprobante.getInformacionTributaria().getPreimpreso() + " se generó correctamente. <br><br>";
             mensajeGenerado = "<p>" + mensajeGenerado + "</p>" + footerMensajeCorreo;
         }
@@ -753,7 +764,7 @@ public class ComprobanteElectronicoService implements Runnable {
             {
                 mensajeGenerado += " "
                         + "<b>" + comprobante.getRazonSocialComprador() + "</b> ,<br><br>"
-                        + "<b>" + comprobante.getInformacionTributaria().getNombreComercial() + "</b>"
+                        + "<b>" + nombreEmpresa + "</b>"
                         + " le informa que su nota de crédito " + comprobante.getInformacionTributaria().getPreimpreso() + " se generó correctamente. <br><br>";
                 mensajeGenerado = "<p>" + mensajeGenerado + "</p>" + footerMensajeCorreo;
                 
@@ -761,7 +772,7 @@ public class ComprobanteElectronicoService implements Runnable {
             else
             {
                 //Mensaje generico cuando no es ningun de los comprobantes registtados
-                mensajeGenerado=" puede revisar el comprobante electronico como archivo adjunto";
+                mensajeGenerado=" Puede revisar el comprobante electronico como archivo adjunto";
             }
         }
         return mensajeGenerado;

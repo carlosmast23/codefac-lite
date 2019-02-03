@@ -42,16 +42,7 @@ import java.util.logging.Logger;
  */
 public class ControladorReporteFactura {
     
-    private static final String ACUMULADO="acum";
-    private static final String ACUMULADO_DOCE="acumdoce";
-    private static final String ACUMULADO_IVA="acumiva";
-    private static final String ACUMULADO_DESCUENTO="acumdesc";
-    
-    private static final String ACUMULADO_ANULADO="acumAnulado";
-    private static final String ACUMULADO_DOCE_ANULADO="acumdoceAnulado";
-    private static final String ACUMULADO_IVA_ANULADO="acumivaAnulado";
-    private static final String ACUMULADO_DESCUENTO_ANULADO="acumdescAnulado";
-    
+    //TODO: Falta hacer 2 notas de credito para los calculos de los anulados    
     
     private Persona persona;
     private Date fechaInicio;
@@ -64,9 +55,14 @@ public class ControladorReporteFactura {
     private DocumentosConsultarEnum documentoConsultaEnum;
     
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private Map<String,BigDecimal> mapTotales;
+    //private Map<String,BigDecimal> mapTotales;
     
     private List<ReporteFacturaData> data;
+
+    private TotalSumatoria total;    //en este campo se van a calcular el valor total de todos los comprobantes     
+    private TotalSumatoria totalAnulados; //en esta variable se van a calcular los totales de los anulados
+    private TotalSumatoria totalNotasCredito; //en este campo se van a guardar los valores solo de las notas de credito
+    
     
     
     public ControladorReporteFactura(Persona persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentosConsultarEnum documentoConsultaEnum) {
@@ -79,28 +75,22 @@ public class ControladorReporteFactura {
         this.reporteAgrupado = reporteAgrupado;
         this.afectarNotaCredito = afectarNotaCredito;
         this.documentoConsultaEnum = documentoConsultaEnum;
-        this.mapTotales = new HashMap<String,BigDecimal>();
+        //this.mapTotales = new HashMap<String,BigDecimal>();
         this.data = new ArrayList<ReporteFacturaData>();
     }
     
-    private Map<String,BigDecimal> buildMapTotales()
+    private void buildMapTotales()
     {
-        this.mapTotales = new HashMap<String,BigDecimal>();
-        this.mapTotales.put(ACUMULADO, BigDecimal.ZERO);
-        this.mapTotales.put(ACUMULADO_DOCE, BigDecimal.ZERO);
-        this.mapTotales.put(ACUMULADO_IVA, BigDecimal.ZERO);
-        this.mapTotales.put(ACUMULADO_DESCUENTO, BigDecimal.ZERO);        
+        total=new TotalSumatoria();
+        totalAnulados=new TotalSumatoria();
+        totalNotasCredito=new TotalSumatoria();
         
-        this.mapTotales.put(ACUMULADO_ANULADO, BigDecimal.ZERO);
-        this.mapTotales.put(ACUMULADO_DOCE_ANULADO, BigDecimal.ZERO);
-        this.mapTotales.put(ACUMULADO_IVA_ANULADO, BigDecimal.ZERO);
-        this.mapTotales.put(ACUMULADO_DESCUENTO_ANULADO, BigDecimal.ZERO);
-        return this.mapTotales;
+        //return this.mapTotales;
     }
     
     public void generarReporte() {
         try {
-            this.mapTotales=buildMapTotales();
+            buildMapTotales();
             FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
             List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado);
             
@@ -127,7 +117,27 @@ public class ControladorReporteFactura {
                         String valorNotaCredito = "";
                         ComprobanteEntity.ComprobanteEnumEstado estadoEnum= factura.getEstadoEnum();
                         
-                        //if (getChkAfectaNotaCredito().isSelected()) {
+                        BigDecimal descuentoConImpuestos = (factura.getDescuentoImpuestos() != null) ? factura.getDescuentoImpuestos() : BigDecimal.ZERO;
+                        BigDecimal descuentoSinImpuestos = (factura.getDescuentoSinImpuestos() != null) ? factura.getDescuentoSinImpuestos() : BigDecimal.ZERO;
+                        
+                                               
+                        total.addSubtotalSinImpuesto(factura.getSubtotalSinImpuestos());
+                        total.addSubtotalConImpuesto(factura.getSubtotalImpuestos());
+                        total.addsValorImpuesto(factura.getIva());
+                        total.addDescuentoconImpuesto(descuentoConImpuestos);
+                        total.addDescuentoSinImpuesto(descuentoSinImpuestos);   
+                        
+                        //Sumar solo si esta buscando todos los comprobantes del Sri y esta eliminado en el Sri
+                        if(estadoEnum.equals(estadoEnum.ELIMINADO_SRI) && estadoFactura.equals(estadoEnum.TODOS_SRI))
+                        {
+                            totalAnulados.addSubtotalSinImpuesto(factura.getSubtotalSinImpuestos());
+                            totalAnulados.addSubtotalConImpuesto(factura.getSubtotalImpuestos());
+                            totalAnulados.addsValorImpuesto(factura.getIva());
+                            totalAnulados.addDescuentoconImpuesto(descuentoConImpuestos);
+                            totalAnulados.addDescuentoSinImpuesto(descuentoSinImpuestos);                            
+                        }
+                                                
+
                         if (afectarNotaCredito) {                        
                             NotaCredito notaCredito = verificarPorFactura(factura, dataNotCre);
                             if (notaCredito != null) {
@@ -137,14 +147,16 @@ public class ControladorReporteFactura {
                                 totalMenosNotaCredito = factura.getTotal().subtract(notaCredito.getTotal());
                                 
                                 
-                                agregarValorTotal(ACUMULADO, factura.getSubtotalSinImpuestos().subtract(notaCredito.getSubtotalCero()),estadoEnum);
-                                //acum = acum.add(factura.getSubtotalSinImpuestos().subtract(notaCredito.getSubtotalCero()));
-                                agregarValorTotal(ACUMULADO_DOCE, factura.getSubtotalImpuestos().subtract(notaCredito.getSubtotalDoce()),estadoEnum);
-                                //acumdoce = acumdoce.add(factura.getSubtotalImpuestos().subtract(notaCredito.getSubtotalDoce()));
-                                agregarValorTotal(ACUMULADO_IVA, factura.getIva().subtract(notaCredito.getValorIvaDoce()),estadoEnum);
-                                //acumiva = acumiva.add(factura.getIva().subtract(notaCredito.getValorIvaDoce()));
-                                agregarValorTotal(ACUMULADO_DESCUENTO, factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()),estadoEnum);
-                                //acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
+
+                                //Solo hacer la sumatoria de los valores de las notas de credito
+                                //TODO: Ver si se puede optimizar para sumar todo y luego restar de las notas de credito
+                                totalNotasCredito.addSubtotalSinImpuesto(notaCredito.getSubtotalCero());
+                                totalNotasCredito.addSubtotalConImpuesto(notaCredito.getSubtotalDoce());
+                                totalNotasCredito.addsValorImpuesto(notaCredito.getValorIvaDoce());
+                                totalNotasCredito.addDescuentoconImpuesto(notaCredito.getDescuentoImpuestos());
+                                totalNotasCredito.addDescuentoSinImpuesto(notaCredito.getDescuentoSinImpuestos());
+
+
                             } else {
                                 //Calculo de los valores cuenado no existe nota de credito
                                 calcularTotalesSinNotasCredito = true;
@@ -157,16 +169,6 @@ public class ControladorReporteFactura {
                         if (calcularTotalesSinNotasCredito) {
                             totalMenosNotaCredito = factura.getTotal();
                             //ComprobanteEntity.ComprobanteEnumEstado estadoEnum= factura.getEstadoEnum();
-                            
-                            agregarValorTotal(ACUMULADO, factura.getSubtotalSinImpuestos(),estadoEnum);
-                            //acum = acum.add(factura.getSubtotalSinImpuestos());
-                            agregarValorTotal(ACUMULADO_DOCE, factura.getSubtotalImpuestos(),estadoEnum);
-                            //acumdoce = acumdoce.add(factura.getSubtotalImpuestos());
-                            agregarValorTotal(ACUMULADO_IVA, factura.getIva(),estadoEnum);
-                            //acumiva = acumiva.add(factura.getIva());
-                            BigDecimal descuentoSinImpuestos = (factura.getDescuentoSinImpuestos() != null) ? factura.getDescuentoSinImpuestos() : BigDecimal.ZERO;
-                            agregarValorTotal(ACUMULADO_DESCUENTO, factura.getDescuentoImpuestos().add(descuentoSinImpuestos),estadoEnum);
-                            //acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
                         }
                         
                         BigDecimal valorComision = BigDecimal.ZERO;
@@ -216,6 +218,7 @@ public class ControladorReporteFactura {
                         
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
                         data.add(reporteData);
+
                         
                     }
                     
@@ -253,13 +256,13 @@ public class ControladorReporteFactura {
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
                         data.add(reporteData);
                         
-                        agregarValorTotal(ACUMULADO, nota.getSubtotalCero(),estadoEnum);
-                        //acum = acum.add(nota.getSubtotalCero());
-                        agregarValorTotal(ACUMULADO_DOCE, nota.getSubtotalDoce(),estadoEnum);
-                        //acumdoce = acumdoce.add(nota.getSubtotalDoce());
-                        agregarValorTotal(ACUMULADO_IVA, nota.getValorIvaDoce(),estadoEnum);
-                        //acumiva = acumiva.add(nota.getValorIvaDoce());
-                        agregarValorTotal(ACUMULADO_DESCUENTO, BigDecimal.ZERO,estadoEnum); //todo: ver si agregar el descuento
+                        
+                        totalNotasCredito.addSubtotalSinImpuesto(nota.getSubtotalCero());
+                        totalNotasCredito.addSubtotalConImpuesto(nota.getSubtotalDoce());
+                        totalNotasCredito.addsValorImpuesto(nota.getIva());
+                        totalNotasCredito.addDescuentoconImpuesto(nota.getDescuentoImpuestos());
+                        totalNotasCredito.addDescuentoSinImpuesto(nota.getDescuentoSinImpuestos());
+                        //TODO: ver si agregar el descuento
                         //acumdesc = acumdesc.add(nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()));
                         
                     }
@@ -272,7 +275,7 @@ public class ControladorReporteFactura {
         }
 
     }
-    
+    /*
     private void agregarValorTotal(String nombre, BigDecimal valor,ComprobanteEntity.ComprobanteEnumEstado estado)                
     {
         if(estadoFactura.equals(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI))
@@ -290,7 +293,7 @@ public class ControladorReporteFactura {
             valorTmp = valorTmp.add(valor);
             mapTotales.put(nombre, valorTmp);
         }
-    }
+    }*/
     
     private NotaCredito verificarPorFactura(Factura factura, List<NotaCredito> notasCredito) {
         for (NotaCredito notaCredito : notasCredito) {
@@ -402,9 +405,10 @@ public class ControladorReporteFactura {
         return data;
     }
 
+    /*
     public Map<String, BigDecimal> getMapTotales() {
         return mapTotales;
-    }
+    }*/
     
     public Map<String,Object> mapParametrosReportePdf()
     {
@@ -413,35 +417,180 @@ public class ControladorReporteFactura {
         parameters.put("fechafin", (fechaFin != null) ? dateFormat.format(fechaFin) : "");
         parameters.put("tipodocumento", documentoConsultaEnum.toString());
         parameters.put("cliente", persona);
-        parameters.put("subtotal", mapTotales.get(ACUMULADO).toString());
-        parameters.put("subtotaliva", mapTotales.get(ACUMULADO_DOCE).toString());
-        parameters.put("valoriva", mapTotales.get(ACUMULADO_IVA).toString());
-        //BigDecimal total = acum.add(acumdoce).add(acumiva);
-        BigDecimal total = mapTotales.get(ACUMULADO).add(mapTotales.get(ACUMULADO_DOCE).add(mapTotales.get(ACUMULADO_IVA)));
-        parameters.put("total", total.toString());
-
-        //BigDecimal subtotal = acum.add(acumdoce);
-        BigDecimal subtotal = mapTotales.get(ACUMULADO).add(mapTotales.get(ACUMULADO_DOCE));
-        parameters.put("totalsubtotales", subtotal.toString());
-        parameters.put("descuentos", mapTotales.get(ACUMULADO_DESCUENTO).toString());
         parameters.put("estadofactura", estadoFactura.getNombre());
-    
         
+        if(estadoFactura.equals(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI))
+        {
+            parameters.putAll(totalAnulados.buildMap(EtiquetaReporteEnum.ANULADOS));
+        }
         
+       if(documentoConsultaEnum.equals(documentoConsultaEnum.VENTAS))
+       {
+           TotalSumatoria totalSinNotasCredito=total.subtract(totalNotasCredito);
+           TotalSumatoria totalSinNotasCreditoYAnulados=totalSinNotasCredito.subtract(totalAnulados);
+           parameters.putAll(total.buildMap(EtiquetaReporteEnum.TOTAL));
+           parameters.putAll(totalSinNotasCreditoYAnulados.buildMap(EtiquetaReporteEnum.NOTA_CREDITO));
+           
+       }
+       else if(documentoConsultaEnum.equals(documentoConsultaEnum.NOTA_CREDITO))
+       {
+           parameters.putAll(total.buildMap(EtiquetaReporteEnum.TOTAL));
+       }
         
-        ///AGREGAR LOS PARAMETROS CUANDO ES EL ESTADO TODOS SRI
-        parameters.put("subtotalAnulado", mapTotales.get(ACUMULADO_ANULADO).toString());
-        parameters.put("subtotalivaAnulado", mapTotales.get(ACUMULADO_DOCE_ANULADO).toString());
-        parameters.put("valorivaAnulado", mapTotales.get(ACUMULADO_IVA_ANULADO).toString());
-        BigDecimal totalAnulado = mapTotales.get(ACUMULADO_ANULADO).add(mapTotales.get(ACUMULADO_DOCE_ANULADO).add(mapTotales.get(ACUMULADO_IVA_ANULADO)));
-        parameters.put("totalAnulado",totalAnulado.toString());
-        BigDecimal subtotalAnulado = mapTotales.get(ACUMULADO_ANULADO).add(mapTotales.get(ACUMULADO_DOCE_ANULADO));
-        parameters.put("totalsubtotalesAnulado",subtotalAnulado.toString());
-        parameters.put("descuentosAnulado", mapTotales.get(ACUMULADO_DESCUENTO_ANULADO).toString());
                 
         return parameters;
     }
+    
+    public TotalSumatoria totalSinNotaCredito()
+    {
+        return total.subtract(totalNotasCredito);
+    }
+    
 
+    
+    public class TotalSumatoria
+    {
+        private BigDecimal subtotalSinImpuesto;
+        private BigDecimal subtotalConImpuesto;
+        private BigDecimal descuentoSinImpuesto;
+        private BigDecimal descuentoconImpuesto;
+        private BigDecimal valorImpuesto; //Valor del Iva
+
+        public TotalSumatoria() {
+            this.subtotalSinImpuesto = BigDecimal.ZERO;
+            this.subtotalConImpuesto = BigDecimal.ZERO;
+            this.descuentoSinImpuesto = BigDecimal.ZERO;
+            this.descuentoconImpuesto = BigDecimal.ZERO;
+            this.valorImpuesto=BigDecimal.ZERO;
+        }
+        
+        
+
+        public TotalSumatoria(BigDecimal subtotalSinImpuesto, BigDecimal subtotalConImpuesto, BigDecimal descuentoSinImpuesto, BigDecimal descuentoconImpuesto) {
+            this.subtotalSinImpuesto = subtotalSinImpuesto;
+            this.subtotalConImpuesto = subtotalConImpuesto;
+            this.descuentoSinImpuesto = descuentoSinImpuesto;
+            this.descuentoconImpuesto = descuentoconImpuesto;
+        }
+        
+        public TotalSumatoria add(TotalSumatoria total)
+        {
+            TotalSumatoria totalTmp=new TotalSumatoria();
+            totalTmp.descuentoSinImpuesto=this.descuentoSinImpuesto.add(total.descuentoSinImpuesto);
+            totalTmp.descuentoconImpuesto=this.descuentoconImpuesto.add(total.descuentoconImpuesto);
+            totalTmp.subtotalConImpuesto=this.subtotalConImpuesto.add(total.subtotalConImpuesto);
+            totalTmp.subtotalSinImpuesto=this.subtotalSinImpuesto.add(total.subtotalSinImpuesto);
+            totalTmp.valorImpuesto=this.valorImpuesto.add(total.valorImpuesto);
+            return totalTmp;
+        }
+        
+        public TotalSumatoria subtract(TotalSumatoria total)
+        {
+            TotalSumatoria totalTmp=new TotalSumatoria();
+            totalTmp.descuentoSinImpuesto=this.descuentoSinImpuesto.subtract(total.descuentoSinImpuesto);
+            totalTmp.descuentoconImpuesto=this.descuentoconImpuesto.subtract(total.descuentoconImpuesto);
+            totalTmp.subtotalConImpuesto=this.subtotalConImpuesto.subtract(total.subtotalConImpuesto);
+            totalTmp.subtotalSinImpuesto=this.subtotalSinImpuesto.subtract(total.subtotalSinImpuesto);
+            totalTmp.valorImpuesto=this.valorImpuesto.subtract(total.valorImpuesto);
+            return totalTmp;
+        }
+
+        public BigDecimal getSubtotalSinImpuesto() {
+            return subtotalSinImpuesto;
+        }
+
+        public BigDecimal getSubtotalConImpuesto() {
+            return subtotalConImpuesto;
+        }
+        
+        public BigDecimal getSubtotalSinImpuestoMenosDescuento() {
+            return subtotalSinImpuesto.subtract(descuentoSinImpuesto);
+        }
+
+        public BigDecimal getSubtotalConImpuestoMenosDescuento() {
+            return subtotalConImpuesto.subtract(descuentoconImpuesto);
+        }
+
+        public BigDecimal getDescuentoSinImpuesto() {
+            return descuentoSinImpuesto;
+        }
+
+        public BigDecimal getDescuentoconImpuesto() {
+            return descuentoconImpuesto;
+        }
+
+        public BigDecimal getValorImpuesto() {
+            return valorImpuesto;
+        }
+        
+        
+              
+        public BigDecimal obtenerSubtotal()
+        {
+            return getSubtotalConImpuestoMenosDescuento().add(getSubtotalSinImpuestoMenosDescuento());
+        }
+        
+        public BigDecimal obtenerTotal()
+        {
+            return obtenerSubtotal().add(valorImpuesto);
+        }
+        
+        public BigDecimal obtenerTotalDescuentos()
+        {
+            return descuentoSinImpuesto.add(descuentoconImpuesto);
+        }
+
+        public void addSubtotalSinImpuesto(BigDecimal subtotalSinImpuesto) {
+            this.subtotalSinImpuesto=this.subtotalSinImpuesto.add(subtotalSinImpuesto);
+        }
+
+        public void addSubtotalConImpuesto(BigDecimal subtotalConImpuesto) {
+            this.subtotalConImpuesto=this.subtotalConImpuesto.add(subtotalConImpuesto);
+        }
+
+        public void addDescuentoSinImpuesto(BigDecimal descuentoSinImpuesto) {
+            this.descuentoSinImpuesto=this.descuentoSinImpuesto.add(descuentoSinImpuesto);
+        }
+
+        public void addDescuentoconImpuesto(BigDecimal descuentoconImpuesto) {
+            this.descuentoconImpuesto=this.descuentoconImpuesto.add(descuentoconImpuesto);
+        }
+
+        public void addsValorImpuesto(BigDecimal valorImpuesto) {
+            this.valorImpuesto=this.valorImpuesto.add(valorImpuesto);
+        }
+        
+        public Map<String,Object> buildMap(EtiquetaReporteEnum nombreEnum)
+        {
+            Map<String,Object> parametros=new HashMap<String,Object>();
+            parametros.put(nombreEnum.obtenerNombreEtiqueta("subtotal"),getSubtotalSinImpuestoMenosDescuento().toString());
+            parametros.put(nombreEnum.obtenerNombreEtiqueta("subtotaliva"),getSubtotalConImpuestoMenosDescuento().toString());
+            parametros.put(nombreEnum.obtenerNombreEtiqueta("valoriva"),valorImpuesto.toString());
+            parametros.put(nombreEnum.obtenerNombreEtiqueta("total"),obtenerTotal().toString());
+            parametros.put(nombreEnum.obtenerNombreEtiqueta("totalsubtotales"),obtenerSubtotal().toString());
+            parametros.put(nombreEnum.obtenerNombreEtiqueta("descuentos"),obtenerTotalDescuentos().toString());
+            
+            return parametros;
+        }
+    
+    }
+    
+    public enum EtiquetaReporteEnum {
+        ANULADOS("Anulado"),
+        NOTA_CREDITO("NC"),
+        TOTAL("");
+
+        private EtiquetaReporteEnum(String prefijo) {
+            this.prefijo = prefijo;
+        }
+
+        private String prefijo;
+
+        public String obtenerNombreEtiqueta(String nombre) {
+            return nombre + prefijo;
+        }
+
+    };
     
     
 }

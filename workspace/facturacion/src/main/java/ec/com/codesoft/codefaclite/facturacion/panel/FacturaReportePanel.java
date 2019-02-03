@@ -288,52 +288,63 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         PanelValores.add(lblValorTotal, gridBagConstraints);
 
         lblSubtotal12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblSubtotal12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblSubtotal12.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
         PanelValores.add(lblSubtotal12, gridBagConstraints);
 
         lblSubtotal0.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblSubtotal0.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblSubtotal0.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
         PanelValores.add(lblSubtotal0, gridBagConstraints);
 
         lblSubtotalSinImpuesto.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblSubtotalSinImpuesto.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblSubtotalSinImpuesto.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
         PanelValores.add(lblSubtotalSinImpuesto, gridBagConstraints);
 
         lblTotalDescuento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblTotalDescuento.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalDescuento.setText("0.00");
         lblTotalDescuento.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 51, 255), null));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
         PanelValores.add(lblTotalDescuento, gridBagConstraints);
 
         lblIva12.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblIva12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblIva12.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
         PanelValores.add(lblIva12, gridBagConstraints);
 
         txtValorTotal.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        txtValorTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtValorTotal.setText("0.00");
         txtValorTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
         txtValorTotal.addActionListener(new java.awt.event.ActionListener() {
@@ -344,6 +355,8 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
         PanelValores.add(txtValorTotal, gridBagConstraints);
