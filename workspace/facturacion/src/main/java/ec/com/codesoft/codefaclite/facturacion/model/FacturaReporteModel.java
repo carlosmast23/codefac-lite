@@ -89,7 +89,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
         listenerChecks();
         
     }
-
+    
+    public ControladorReporteFactura crearControlador()
+    {
+        return new ControladorReporteFactura();
+    }
+    
+    
     private void generarReporte()
     {
         //try {
@@ -110,8 +116,19 @@ public class FacturaReporteModel extends FacturaReportePanel {
             }
 
             DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
-                     
-            controladorReporte = new ControladorReporteFactura(
+            //Seteando datos para el controlador         
+            controladorReporte =crearControlador();
+            controladorReporte.setPersona(persona);
+            controladorReporte.setFechaInicio(fechaInicio);
+            controladorReporte.setFechaFin(fechaFin);
+            controladorReporte.setEstadoFactura(estadoFactura);
+            controladorReporte.setFiltrarReferidos(filtrarReferidos);
+            controladorReporte.setReferido(referido);
+            controladorReporte.setReporteAgrupado(getChkReporteAgrupadoReferido().isSelected());
+            controladorReporte.setAfectarNotaCredito(getChkAfectaNotaCredito().isSelected());
+            controladorReporte.setDocumentoConsultaEnum(documentoConsultaEnum);
+            
+            /*controladorReporte = new ControladorReporteFactura(
                     persona,
                     fechaInicio,
                     fechaFin,
@@ -120,7 +137,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     referido,
                     getChkReporteAgrupadoReferido().isSelected(),
                     getChkAfectaNotaCredito().isSelected(),
-                    documentoConsultaEnum);
+                    documentoConsultaEnum);*/
             
             controladorReporte.generarReporte();
             data=controladorReporte.getData();
@@ -135,10 +152,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     }
     
-    protected InputStream getReporte()
-    {
-        return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
-    }
+    //protected InputStream getReporte()
+    //{
+    //    return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
+    //}
     
     protected void imprimirReporte()
     {

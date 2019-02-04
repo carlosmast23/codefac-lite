@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteReferidos;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -76,17 +78,6 @@ public class ReferidosReporteModel extends FacturaReporteModel{
         
     }
 
-    @Override
-    protected InputStream getReporte() {
-        if(getChkReporteAgrupadoReferido().isSelected())
-        {
-            return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_referidos_acumulado.jrxml");
-        }   
-        else
-        {
-            return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_referidos.jrxml");
-        }
-    }
 
     @Override
     protected Vector<String> crearCabezeraTabla() {
@@ -110,37 +101,10 @@ public class ReferidosReporteModel extends FacturaReporteModel{
     }
 
     @Override
-    protected Vector<String> crearCabezeraExcel() {
-        Vector<String> titulo = new Vector<>();
-        titulo.add("Identificación Ref");
-        titulo.add("Nombres Ref");
-        titulo.add("Porcentaje Ref");
-        titulo.add("Comisión Ref");
-        titulo.add("Preimpreso");
-        titulo.add("Referencia");
-        titulo.add("Fecha");
-        titulo.add("Identificación");
-        titulo.add("Razón social");
-        titulo.add("Referido");           
-        titulo.add("Documento");
-        titulo.add("Estado");
-        titulo.add("Tipo");
-        titulo.add("Subtotal 12%");
-        titulo.add("Subtotal 0% ");
-        titulo.add("Descuentos");
-        titulo.add("IVA 12%");
-        titulo.add("Valor Afecta");
-        titulo.add("Total");
-        return titulo;
+    public ControladorReporteFactura crearControlador() {
+        return new ControladorReporteReferidos();
     }
-
     
     
-    
-    
-    
-    
-    
- 
     
 }

@@ -50,7 +50,7 @@ public class ControladorReporteFactura {
     private ComprobanteEntity.ComprobanteEnumEstado estadoFactura;
     private Boolean filtrarReferidos;
     private Persona referido;
-    private Boolean reporteAgrupado;
+    protected Boolean reporteAgrupado;
     private Boolean afectarNotaCredito;
     private DocumentosConsultarEnum documentoConsultaEnum;
     
@@ -62,6 +62,10 @@ public class ControladorReporteFactura {
     private TotalSumatoria total;    //en este campo se van a calcular el valor total de todos los comprobantes     
     private TotalSumatoria totalAnulados; //en esta variable se van a calcular los totales de los anulados
     private TotalSumatoria totalNotasCredito; //en este campo se van a guardar los valores solo de las notas de credito
+
+    public ControladorReporteFactura() {
+        this.data = new ArrayList<ReporteFacturaData>();
+    }
     
     
     
@@ -603,6 +607,62 @@ public class ControladorReporteFactura {
         }
 
     };
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public void setEstadoFactura(ComprobanteEntity.ComprobanteEnumEstado estadoFactura) {
+        this.estadoFactura = estadoFactura;
+    }
+
+    public void setFiltrarReferidos(Boolean filtrarReferidos) {
+        this.filtrarReferidos = filtrarReferidos;
+    }
+
+    public void setReferido(Persona referido) {
+        this.referido = referido;
+    }
+
+    public void setReporteAgrupado(Boolean reporteAgrupado) {
+        this.reporteAgrupado = reporteAgrupado;
+    }
+
+    public void setAfectarNotaCredito(Boolean afectarNotaCredito) {
+        this.afectarNotaCredito = afectarNotaCredito;
+    }
+
+    public void setDocumentoConsultaEnum(DocumentosConsultarEnum documentoConsultaEnum) {
+        this.documentoConsultaEnum = documentoConsultaEnum;
+    }
+
+    public void setDateFormat(DateFormat dateFormat) {
+        this.dateFormat = dateFormat;
+    }
+
+    public void setData(List<ReporteFacturaData> data) {
+        this.data = data;
+    }
+
+    public void setTotal(TotalSumatoria total) {
+        this.total = total;
+    }
+
+    public void setTotalAnulados(TotalSumatoria totalAnulados) {
+        this.totalAnulados = totalAnulados;
+    }
+
+    public void setTotalNotasCredito(TotalSumatoria totalNotasCredito) {
+        this.totalNotasCredito = totalNotasCredito;
+    }
     
     
 }
