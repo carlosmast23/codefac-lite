@@ -428,6 +428,7 @@ public class ControladorReporteFactura {
         parameters.put("tipodocumento", documentoConsultaEnum.toString());
         parameters.put("cliente", persona);
         parameters.put("estadofactura", estadoFactura.getNombre());
+        parameters.put("afectaNotaCredito",(documentoConsultaEnum.equals(documentoConsultaEnum.NOTA_CREDITO))?false:afectarNotaCredito);//Si el documento es nota de credito siempre mando descativado
         
         if(estadoFactura.equals(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI))
         {
