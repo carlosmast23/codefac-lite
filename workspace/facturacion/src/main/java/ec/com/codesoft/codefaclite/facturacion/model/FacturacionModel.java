@@ -787,6 +787,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             setearValoresCliente();
             cargarDatosAdicionales();
             cargarTablaDatosAdicionales();
+            getTxtCodigoDetalle().requestFocus();
+            
         };
     }
     
