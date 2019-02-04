@@ -147,3 +147,4 @@ Ver el significado exacto de estos 2 campos en las notas de credito
 Hacer una opcion para mover de carpeta o procesar desde la etapa enviar cuando  no permite enviar un comprobante desde la carpeta firmados_sin_enviar
 Verificar que ya no salgan errores cuando se hacen varias consultas sobre un mismo objeto en el entity manager o poner el comando setFlush(commit) en las consultas
 Revisar como hacer un proxy de reportes compilados porque parece que por ese motivo se demoran los reportes
+En la pantalla de reportes de las facturas verificar que el subtotal para impuestos no coincide con el calculo iva (esto es normal porque no guardo los suficientes decimales para volver a hacer el calculo exacto) ver si para evitar estos problemas el subtotal se calcula (Total - impuesto)

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_retenciones" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3427f0d5-5413-4d72-9b07-663b8c826977">
-	<property name="ireport.zoom" value="1.3286707500000103"/>
+	<property name="ireport.zoom" value="1.4615378250000115"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="150"/>
+	<property name="ireport.y" value="207"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -54,6 +54,7 @@
 	<parameter name="niva" class="java.lang.String"/>
 	<parameter name="nretencion" class="java.lang.String"/>
 	<parameter name="tipo" class="java.lang.String"/>
+	<parameter name="estado" class="java.lang.String"/>
 	<field name="preimpresoRetencion" class="java.lang.String"/>
 	<field name="baseRetencion" class="java.lang.String"/>
 	<field name="porcentajeRetencion" class="java.lang.String"/>
@@ -425,7 +426,7 @@
 	<lastPageFooter>
 		<band height="191">
 			<staticText>
-				<reportElement x="0" y="4" width="230" height="15" uuid="7f3b5801-41c9-4337-aff6-e59bec3654ba"/>
+				<reportElement x="0" y="15" width="230" height="15" uuid="7f3b5801-41c9-4337-aff6-e59bec3654ba"/>
 				<box>
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.75"/>
@@ -439,7 +440,7 @@
 				<text><![CDATA[Sumataria Rentención Renta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="325" y="19" width="115" height="12" uuid="3b917d24-bb7c-41be-a9ca-7cc585b37af6"/>
+				<reportElement x="325" y="30" width="115" height="12" uuid="3b917d24-bb7c-41be-a9ca-7cc585b37af6"/>
 				<box>
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.5"/>
@@ -453,12 +454,12 @@
 				<text><![CDATA[CÓDIGO]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="325" y="31" width="230" height="13" uuid="88a2af9c-c4d7-41a6-84d0-44c3d15df7e3"/>
+				<reportElement x="325" y="42" width="230" height="13" uuid="88a2af9c-c4d7-41a6-84d0-44c3d15df7e3"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaRenta})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORTE_RUTA_RENTA}]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="325" y="4" width="230" height="15" uuid="e9b63230-b278-43c9-825a-f236e33133b2"/>
+				<reportElement x="325" y="15" width="230" height="15" uuid="e9b63230-b278-43c9-825a-f236e33133b2"/>
 				<box>
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.75"/>
@@ -472,12 +473,12 @@
 				<text><![CDATA[Sumatoria Rentención Iva]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="0" y="31" width="230" height="14" uuid="399a9fbb-5b86-436c-927f-f752382d8926"/>
+				<reportElement x="0" y="42" width="230" height="14" uuid="399a9fbb-5b86-436c-927f-f752382d8926"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaIva})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORTE_RUTA}]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="0" y="19" width="115" height="12" uuid="e6150b55-ff77-4922-9c8b-a45fea821da6"/>
+				<reportElement x="0" y="30" width="115" height="12" uuid="e6150b55-ff77-4922-9c8b-a45fea821da6"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -491,7 +492,7 @@
 				<text><![CDATA[CÓDIGO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="115" y="19" width="115" height="12" uuid="e0d0d6a6-f38a-44ee-8c80-d2e8a6fb2717"/>
+				<reportElement x="115" y="30" width="115" height="12" uuid="e0d0d6a6-f38a-44ee-8c80-d2e8a6fb2717"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -505,7 +506,7 @@
 				<text><![CDATA[VALOR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="440" y="19" width="115" height="12" uuid="f2c3ae74-37ba-4a06-a2a7-bce35b4caba9"/>
+				<reportElement x="440" y="30" width="115" height="12" uuid="f2c3ae74-37ba-4a06-a2a7-bce35b4caba9"/>
 				<box>
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.5"/>
@@ -547,6 +548,22 @@
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{pl_url_piepagina}]]></subreportExpression>
 			</subreport>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="15" uuid="589b3535-35f3-47cf-9419-9bd756412150">
+					<printWhenExpression><![CDATA[new Boolean($P{estado}.equals("Todos Sri"))]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineStyle="Dashed"/>
+					<topPen lineWidth="0.5" lineStyle="Dashed"/>
+					<leftPen lineStyle="Dashed"/>
+					<bottomPen lineWidth="0.0" lineStyle="Dashed"/>
+					<rightPen lineStyle="Dashed"/>
+				</box>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Para los cuadros de la sumatoria solo se tomó en cuenta los comprobantes AUTORIZADOS]]></text>
+			</staticText>
 		</band>
 	</lastPageFooter>
 </jasperReport>

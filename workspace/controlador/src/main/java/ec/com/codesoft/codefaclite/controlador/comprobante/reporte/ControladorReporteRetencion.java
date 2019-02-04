@@ -113,6 +113,14 @@ public class ControladorReporteRetencion {
         
         for (RetencionDetalle retencionDetalle : dataretencion) 
         {
+            if(estadoEnum.equals(estadoEnum.TODOS_SRI))
+            {
+                //Solo hacer la sumatoria con las retenciones que estan autorizadas
+                if(!retencionDetalle.getRetencion().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO))
+                {
+                    continue;
+                }
+            }
             //Sumar para los totales del iva
             if(mapTipoRetencion.get(retencionDetalle.getCodigoSri()).getNombre().equals("IVA"))
             {
@@ -225,6 +233,8 @@ public class ControladorReporteRetencion {
             } else {
                 ntipo = sriRetencion.toString();
             }   parameters.put("tipo", ntipo);
+            
+            parameters.put("estado",estadoEnum.getNombre());
             parameters.put("niva", niva);
             parameters.put("nretencion", nrenta);
             parameters.put("proveedor", cliente);
