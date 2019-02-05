@@ -111,6 +111,16 @@
    <xsd:element name="return" type="xsd:string"/>
   </xsd:all>
  </xsd:complexType>
+ <xsd:complexType name="obtenerDiasFechaPagoRequestType">
+  <xsd:all>
+   <xsd:element name="usuario" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="obtenerDiasFechaPagoResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
  <xsd:element name="addnumbers" type="tns:addnumbersRequestType"/>
  <xsd:element name="addnumbersResponse" type="tns:addnumbersResponseType"/>
  <xsd:element name="actualizarlicencia" type="tns:actualizarlicenciaRequestType"/>
@@ -131,6 +141,8 @@
  <xsd:element name="estadousuarioResponse" type="tns:estadousuarioResponseType"/>
  <xsd:element name="verificarsoporte" type="tns:verificarsoporteRequestType"/>
  <xsd:element name="verificarsoporteResponse" type="tns:verificarsoporteResponseType"/>
+ <xsd:element name="obtenerDiasFechaPago" type="tns:obtenerDiasFechaPagoRequestType"/>
+ <xsd:element name="obtenerDiasFechaPagoResponse" type="tns:obtenerDiasFechaPagoResponseType"/>
 </xsd:schema>
 </types>
 <message name="addnumbersRequest">
@@ -173,6 +185,10 @@
   <part name="parameters" element="tns:verificarsoporte" /></message>
 <message name="verificarsoporteResponse">
   <part name="parameters" element="tns:verificarsoporteResponse" /></message>
+<message name="obtenerDiasFechaPagoRequest">
+  <part name="parameters" element="tns:obtenerDiasFechaPago" /></message>
+<message name="obtenerDiasFechaPagoResponse">
+  <part name="parameters" element="tns:obtenerDiasFechaPagoResponse" /></message>
 <portType name="SOAPServerPortType">
   <operation name="addnumbers">
     <documentation>Addition Of Two Numbers</documentation>
@@ -224,6 +240,11 @@
     <input message="tns:verificarsoporteRequest"/>
     <output message="tns:verificarsoporteResponse"/>
   </operation>
+  <operation name="obtenerDiasFechaPago">
+    <documentation>Obtener dias hasta la fecha de pago , si no existe devuelve -1</documentation>
+    <input message="tns:obtenerDiasFechaPagoRequest"/>
+    <output message="tns:obtenerDiasFechaPagoResponse"/>
+  </operation>
 </portType>
 <binding name="SOAPServerBinding" type="tns:SOAPServerPortType">
   <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -274,6 +295,11 @@
   </operation>
   <operation name="verificarsoporte">
     <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/verificarsoporte" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="obtenerDiasFechaPago">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/obtenerDiasFechaPago" style="document"/>
     <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
     <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
   </operation>

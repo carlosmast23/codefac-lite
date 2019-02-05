@@ -44,7 +44,6 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         chkGuiaRemision = new javax.swing.JCheckBox();
         chkVentas = new javax.swing.JCheckBox();
         cmbTipoEstadoReporte = new javax.swing.JComboBox<>();
-        cmbFormatoReporte = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         txtEmpleadoDatos = new javax.swing.JTextField();
         btnBuscarEmpleado = new javax.swing.JButton();
@@ -59,6 +58,8 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        chkPdf = new javax.swing.JCheckBox();
+        chkExcel = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -130,13 +131,6 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbTipoEstadoReporte, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbFormatoReporte, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel2.setText("Seleccione las configuraciones para los reportes:");
@@ -252,6 +246,22 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel8, gridBagConstraints);
 
+        chkPdf.setSelected(true);
+        chkPdf.setText("pdf");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(chkPdf, gridBagConstraints);
+
+        chkExcel.setSelected(true);
+        chkExcel.setText("excel");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(chkExcel, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -265,13 +275,14 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEmpleado;
     private javax.swing.JButton btnEnviarCorreo;
+    private javax.swing.JCheckBox chkExcel;
     private javax.swing.JCheckBox chkGuiaRemision;
     private javax.swing.JCheckBox chkNotaCredito;
+    private javax.swing.JCheckBox chkPdf;
     private javax.swing.JCheckBox chkRetencion;
     private javax.swing.JCheckBox chkVentas;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFinal;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicial;
-    private javax.swing.JComboBox<FormatoReporteEnum> cmbFormatoReporte;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbTipoEstadoReporte;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -339,12 +350,20 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         return cmbFechaInicial;
     }
 
-    public JComboBox<FormatoReporteEnum> getCmbFormatoReporte() {
+    /*public JComboBox<FormatoReporteEnum> getCmbFormatoReporte() {
         return cmbFormatoReporte;
-    }
+    }*/
 
     public JComboBox<ComprobanteEntity.ComprobanteEnumEstado> getCmbTipoEstadoReporte() {
         return cmbTipoEstadoReporte;
+    }
+
+    public JCheckBox getChkExcel() {
+        return chkExcel;
+    }
+
+    public JCheckBox getChkPdf() {
+        return chkPdf;
     }
 
     

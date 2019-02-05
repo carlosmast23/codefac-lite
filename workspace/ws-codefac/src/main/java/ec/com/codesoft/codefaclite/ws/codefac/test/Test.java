@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.ws.codefac.test;
 
 
 import com.sun.xml.internal.ws.client.ClientTransportException;
+import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizartipolicenciaRequestType;
@@ -27,6 +28,7 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloRequestT
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarsoporteRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarsoporteResponseType;
+import java.util.Date;
 
 /**
  *
@@ -35,7 +37,9 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarsoporteRespons
 public class Test {
     public static void main(String[] args) {
         //obtenerLicencia();
-        setearLicencia();
+        //setearLicencia();
+        Date fechaLimite=WebServiceCodefac.obtenerFechaLimitePago("carlosmast2301@hotmail.es");
+        System.out.println(fechaLimite);
         //obtenerNumeroMaquinasLicencia();
         //setearTipoLicencia();
         //obtenerTipoLicencia();

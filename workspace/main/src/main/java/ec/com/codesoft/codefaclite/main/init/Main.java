@@ -87,6 +87,7 @@ import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
+import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.awt.Font;
 import java.io.File;
 import java.lang.management.ManagementFactory;
@@ -544,6 +545,10 @@ public class Main {
                 }
                 
                 verificarLicencia(parametroDirectorioRecursos.getValor());
+                //Verificar si la fecha maximo de pago no esta vencida para que el sistema alerte o no deje seguir usando el software
+                //TODO: Ver si esta validacion se la hace antes , la unica razon porque se lo hace en esta parte es porque la variable global del usuario esta en el metodo verificarLicencia
+                verificarFechaMaximaPago(UtilidadesServidor.usuarioLicencia);
+                
                 //Cargar el servidor de mensajeria
                 ServidorSMS.getInstance().iniciarServidor();
                 
@@ -747,7 +752,7 @@ public class Main {
         /**
          * Numero de dias antes de empezar a verificar la licencia
          */
-        int diasToleraciaVerificacion=5;
+        int diasToleraciaVerificacion=3;
         
         try {
             ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
@@ -758,6 +763,7 @@ public class Main {
             if (parametroFechaValidacion != null && !parametroFechaValidacion.getValor().equals("")) {
                 //String fechaStr = parametroFechaValidacion.getValor();
                 String fechaStr = UtilidadesEncriptar.desencriptar(parametroFechaValidacion.getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+                System.out.println(fechaStr);
                 if (!fechaStr.equals("")) {
                     try {
                         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
@@ -1228,6 +1234,28 @@ public class Main {
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private static void verificarFechaMaximaPago(String usuario) {
+        Date fechaLimite=WebServiceCodefac.obtenerFechaLimitePago(usuario);
+        
+        if(fechaLimite!=null)
+        {
+            int diasFaltantes=UtilidadesFecha.obtenerDistanciaDias(UtilidadesFecha.getFechaHoy(),fechaLimite);
+            //System.out.println("Hoy:"+UtilidadesFecha.hoy());
+            //System.out.println("otro:"+fechaLimite);
+            //diasFaltantes=diasFaltantes+1; //Le sumo un digito porqe la distancia me devuelve con un numero menos TODO: revisar esta parte
+            if(diasFaltantes<=0)
+            {//Validacion cuando ya no tenga dias de espera ya no permite acceder al sistema
+                DialogoCodefac.mensaje("Error","El sistema detecta valores pendientes de pago y no se puede abrir\n Porfavor cancele los valores pendientes para continuar con el servicio.", DialogoCodefac.MENSAJE_INCORRECTO);
+                System.exit(0);
+            }
+            else if(diasFaltantes<=10)
+            {
+                DialogoCodefac.mensaje("Advertencia","El sistema registra valores pendientes por cancelar , le restan "+diasFaltantes+" días para usar el sistema,\n Si no cancela los valores pendientes el sistema automáticamente se bloqueará .",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            }
+        }
+                
     }
     
 }

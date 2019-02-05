@@ -14,6 +14,8 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaRequest
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.NumaquinasRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.NumaquinasResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerDiasFechaPagoRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerDiasFechaPagoResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
@@ -22,6 +24,11 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloRequestT
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarsoporteRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarsoporteResponseType;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -172,6 +179,42 @@ public abstract class WebServiceCodefac {
         //} catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
         //    throw cte;
         //}
+    }
+    
+    
+    public static Date obtenerFechaLimitePago(String usuario)
+    {
+        try
+        {
+            SOAPServer soapServer=new SOAPServer();
+            SOAPServerPortType soapServerPort=soapServer.getSOAPServerPort();
+            ObtenerDiasFechaPagoRequestType parametros=new ObtenerDiasFechaPagoRequestType();
+            parametros.setUsuario(usuario);
+
+            ObtenerDiasFechaPagoResponseType respuesta= soapServerPort.obtenerDiasFechaPago(parametros);
+            String respuestaStr=respuesta.getReturn();
+            if("null".equals(respuestaStr))
+            {
+                return null;
+            }
+            else
+            {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    Date fechaPago=format.parse(respuestaStr);
+                    return fechaPago;
+                } catch (ParseException ex) {
+                    Logger.getLogger(WebServiceCodefac.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        }catch(com.sun.xml.internal.ws.client.ClientTransportException e)
+        {            
+            e.printStackTrace();
+        }
+        
+        return null;
+        
     }
 
 }

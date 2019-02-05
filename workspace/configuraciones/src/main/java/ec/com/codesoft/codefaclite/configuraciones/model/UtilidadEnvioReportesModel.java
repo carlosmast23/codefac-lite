@@ -123,9 +123,9 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
             getCmbTipoEstadoReporte().addItem(objeto);
         } 
         
-        for (FormatoReporteEnum valor : FormatoReporteEnum.values()) {
-            getCmbFormatoReporte().addItem(valor);
-        }
+        //for (FormatoReporteEnum valor : FormatoReporteEnum.values()) {
+        //    getCmbFormatoReporte().addItem(valor);
+        //}
     }
 
     private void listenerBotones() {
@@ -151,7 +151,9 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 Map<String, String> archivosAdjuntos=new HashMap<String, String>();
-                FormatoReporteEnum formatoReporteEnum=(FormatoReporteEnum) getCmbFormatoReporte().getSelectedItem();
+                //FormatoReporteEnum formatoReporteEnum=(FormatoReporteEnum) getCmbFormatoReporte().getSelectedItem();
+                Boolean formatoPdf=getChkPdf().isSelected();
+                Boolean formatoExcel=getChkExcel().isSelected();
                                                 
                 if(!validacionCampos())
                 {
@@ -161,21 +163,39 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
                 
                 if(getChkVentas().isSelected())
                 {
-                    generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.VENTAS,formatoReporteEnum, archivosAdjuntos);
+                    if(formatoPdf)
+                        generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.VENTAS,FormatoReporteEnum.PDF, archivosAdjuntos);
+                    
+                    if(formatoExcel)
+                        generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.VENTAS,FormatoReporteEnum.EXCEL, archivosAdjuntos);
                 }
                 
                 if(getChkNotaCredito().isSelected())
                 {
-                    generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.NOTA_CREDITO,formatoReporteEnum, archivosAdjuntos);
+                    if(formatoPdf)
+                        generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.NOTA_CREDITO,FormatoReporteEnum.PDF, archivosAdjuntos);
+                    
+                    if(formatoExcel)
+                        generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.NOTA_CREDITO,FormatoReporteEnum.EXCEL, archivosAdjuntos);
                 }
                 
                 if(getChkRetencion().isSelected())
                 {
-                    generarReporteRetenciones(formatoReporteEnum,archivosAdjuntos);
+                    if(formatoPdf)
+                        generarReporteRetenciones(FormatoReporteEnum.PDF,archivosAdjuntos);
+                    
+                    if(formatoExcel)
+                        generarReporteRetenciones(FormatoReporteEnum.EXCEL,archivosAdjuntos);
                 }
                 
                 if (getChkGuiaRemision().isSelected()) {
-                    generarReporteGuiaRemision(formatoReporteEnum, archivosAdjuntos);
+                    
+                    if(formatoPdf)
+                        generarReporteGuiaRemision(FormatoReporteEnum.PDF, archivosAdjuntos);
+                    
+                    if(formatoExcel)
+                        generarReporteGuiaRemision(FormatoReporteEnum.EXCEL, archivosAdjuntos);
+                    
                 }
 
                 

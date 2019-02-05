@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.utilidades.fecha;
 
 import java.sql.Date;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -90,6 +91,15 @@ public class UtilidadesFecha {
      * @return
      */
     public static int obtenerDistanciaDias(java.util.Date fechaMenor, java.util.Date fechaMayor) {
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); //todo: Ver si estos dates format se hace un formato global
+        try {
+            //Formatear sin tiempo la fecha para evitar problemas en los calculos por las horas
+            fechaMenor=formato.parse(formato.format(fechaMenor)); //Revisar si no hay problema porque estoy quitando 
+            fechaMayor=formato.parse(formato.format(fechaMayor)); //Revisar si no hay problema porque estoy quitando 
+        } catch (ParseException ex) {
+            Logger.getLogger(UtilidadesFecha.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
         int dias = (int) ((fechaMayor.getTime() - fechaMenor.getTime()) / 86400000);
         return dias;
     }

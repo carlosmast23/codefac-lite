@@ -420,6 +420,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         panelOpciones.add(chkAfectaNotaDebito, gridBagConstraints);
 
         chkAfectaNotaCredito.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkAfectaNotaCredito.setSelected(true);
         chkAfectaNotaCredito.setText("Afectar Notas de Crédito");
         panelOpciones.add(chkAfectaNotaCredito, new java.awt.GridBagConstraints());
 
