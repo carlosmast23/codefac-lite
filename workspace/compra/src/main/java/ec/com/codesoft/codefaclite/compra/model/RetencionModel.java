@@ -270,7 +270,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         //UtilidadesSwingX.placeHolder("Preimpreso Compra",getTxtPreimpreso());
         
         //getTxtPreimpreso().setText("");
-        getCmbFechaDocumento().setDate(UtilidadesFecha.getFechaHoy());
+        //getCmbFechaDocumento().setDate();
         getTxtProveedor().setText("");
         getTxtBaseImponible().setText("");
         getCmbRetencionIva().setSelectedIndex(0);
@@ -958,7 +958,13 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
                 DialogoCodefac.mensaje("Error","El preimpreso de la compra no debe ser vacio",DialogoCodefac.MENSAJE_INCORRECTO);
                 return false;
             }
-        }
+            
+            if (getCmbFechaDocumento().getDate() == null) {
+                DialogoCodefac.mensaje("Error", "Ingrese un fecha de compra para continuar", DialogoCodefac.MENSAJE_INCORRECTO);
+                return false;
+            }
+        }      
+        
         return true;
     }
 

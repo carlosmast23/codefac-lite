@@ -234,6 +234,8 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
                 } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
                     Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                     panelPadre.cambiarCursorNormal();
                 }
                 
             }

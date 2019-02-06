@@ -58,7 +58,7 @@ public class Excel<T>
         //nombreArchivoExcel = nombreArchivoExcel.replaceAll(":", "");
         String nombreArchivoExcel=UtilidadesArchivos.generarNombreArchivoUnico("reporteExcel",".xlsx");
         //this.archivo = "\\tmp\\"+nombreArchivoExcel+".xlsx";
-        this.archivo = "\\tmp\\"+nombreArchivoExcel;
+        this.archivo = "tmp\\"+nombreArchivoExcel;
     }
     
     public void gestionarIngresoInformacionExcel(String[] cabeceraDatosDinamicos, List<ExcelDatosInterface> datosDinamicos) throws FileNotFoundException, IOException, IllegalArgumentException, IllegalAccessException
