@@ -115,6 +115,16 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
         return null;
 
     }
+
+    @Override
+    public void editarPersona(Persona p) throws RemoteException, ServicioCodefacException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.merge(p);
+            }
+        });
+    }
             
     
 }

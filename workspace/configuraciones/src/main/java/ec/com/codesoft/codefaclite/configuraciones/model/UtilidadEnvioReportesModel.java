@@ -83,7 +83,7 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getCmbTipoEstadoReporte().setSelectedItem(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI);
     }
 
     @Override

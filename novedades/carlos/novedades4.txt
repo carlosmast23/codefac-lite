@@ -149,3 +149,4 @@ Verificar que ya no salgan errores cuando se hacen varias consultas sobre un mis
 Revisar como hacer un proxy de reportes compilados porque parece que por ese motivo se demoran los reportes
 En la pantalla de reportes de las facturas verificar que el subtotal para impuestos no coincide con el calculo iva (esto es normal porque no guardo los suficientes decimales para volver a hacer el calculo exacto) ver si para evitar estos problemas el subtotal se calcula (Total - impuesto)
 Mejorar el metodo de validar fecha maximo de pago porque parece que cuando se levanta como servidor posiblemente no pase por esta validacion ,o puede ser que como el mensaje se queda estatico si no ponen aceptar igual podrian seguir usando en las otras maquinas porque no se cierra , opcion poner un dialogo temporal
+Verificar el reporte de las proformas porque seguramente debe tener el mismo problema en la sumatoria con los descuentos 

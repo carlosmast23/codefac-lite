@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "NACIONALIDAD")
 @XmlRootElement
 public class Nacionalidad implements Serializable {
+    
+    public static String ISO_NACIONALIDAD_DEFECTO="ECU"; //TODO: Ver si esta variable debe estar como configuracion global
 
     private static final long serialVersionUID = 1L;
     @Id

@@ -179,6 +179,11 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
             List<Nacionalidad> nacionalidades = ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerTodos();
             for (Nacionalidad nacionalidad : nacionalidades) {
                 getCmbNacionalidad().addItem(nacionalidad);
+                
+                if(nacionalidad.getIso().equals(Nacionalidad.ISO_NACIONALIDAD_DEFECTO))
+                {
+                    getCmbNacionalidad().setSelectedItem(nacionalidad);
+                }
             }
             
             getCmbSexo().removeAllItems();
@@ -201,6 +206,8 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
         getTxtNombres().setText("");
         getTxtTelefono().setText("");
         getTxtAreaDireccion().setText("");
+        
+        //getCmbNacionalidad().setSelectedItem(ABORT);
     }
     
     public void setearDatos()

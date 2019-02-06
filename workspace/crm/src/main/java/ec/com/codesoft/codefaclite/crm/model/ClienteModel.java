@@ -138,13 +138,16 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     public void editar() throws ExcepcionCodefacLite {
         try {
             setearDatos();
-            personaService.editar(persona);
+            personaService.editarPersona(persona);
             
             DialogoCodefac.mensaje("Correcto","La persona fue editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje("Error","Error de comunicacion con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error","Error de comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite("Cancelado por error");
         }
     }
     

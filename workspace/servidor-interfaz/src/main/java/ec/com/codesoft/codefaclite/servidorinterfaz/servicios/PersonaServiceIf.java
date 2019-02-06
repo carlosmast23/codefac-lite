@@ -31,4 +31,8 @@ public interface PersonaServiceIf extends ServiceAbstractIf<Persona>{
     public Persona buscarPorIdentificacionYestado(String identificacion,GeneralEnumEstado estado) throws ServicioCodefacException,java.rmi.RemoteException;
     
     public Persona buscarPorIdentificacion(String identificacion) throws java.rmi.RemoteException;
+    
+    //TODO: Ver si se hace un solo metodo que el de editar pero falta agregar la exepcion de ServicioCodefacException
+    public void editarPersona(Persona p) throws java.rmi.RemoteException,ServicioCodefacException;
+    
 }

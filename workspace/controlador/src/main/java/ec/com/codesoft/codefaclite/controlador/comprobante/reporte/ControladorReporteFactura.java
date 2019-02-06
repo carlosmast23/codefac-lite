@@ -145,6 +145,7 @@ public class ControladorReporteFactura {
                         if (afectarNotaCredito) {                        
                             NotaCredito notaCredito = verificarPorFactura(factura, dataNotCre);
                             if (notaCredito != null) {
+                                //System.out.println(notaCredito.getPreimpreso());
                                 //Calculo de los valores cuando existe una nota de credito
                                 preimpresoNotaCreditoAfecta = notaCredito.getPreimpreso();
                                 totalNotaCredito = notaCredito.getTotal();
@@ -557,23 +558,28 @@ public class ControladorReporteFactura {
         }
 
         public void addSubtotalSinImpuesto(BigDecimal subtotalSinImpuesto) {
-            this.subtotalSinImpuesto=this.subtotalSinImpuesto.add(subtotalSinImpuesto);
+            if(subtotalSinImpuesto!=null)
+                this.subtotalSinImpuesto=this.subtotalSinImpuesto.add(subtotalSinImpuesto);
         }
 
         public void addSubtotalConImpuesto(BigDecimal subtotalConImpuesto) {
-            this.subtotalConImpuesto=this.subtotalConImpuesto.add(subtotalConImpuesto);
+            if(subtotalConImpuesto!=null)
+                this.subtotalConImpuesto=this.subtotalConImpuesto.add(subtotalConImpuesto);
         }
 
         public void addDescuentoSinImpuesto(BigDecimal descuentoSinImpuesto) {
-            this.descuentoSinImpuesto=this.descuentoSinImpuesto.add(descuentoSinImpuesto);
+            if(descuentoSinImpuesto!=null)
+                this.descuentoSinImpuesto=this.descuentoSinImpuesto.add(descuentoSinImpuesto);
         }
 
         public void addDescuentoconImpuesto(BigDecimal descuentoconImpuesto) {
-            this.descuentoconImpuesto=this.descuentoconImpuesto.add(descuentoconImpuesto);
+            if(descuentoconImpuesto!=null)
+                this.descuentoconImpuesto=this.descuentoconImpuesto.add(descuentoconImpuesto);
         }
 
         public void addsValorImpuesto(BigDecimal valorImpuesto) {
-            this.valorImpuesto=this.valorImpuesto.add(valorImpuesto);
+            if(valorImpuesto!=null)
+                this.valorImpuesto=this.valorImpuesto.add(valorImpuesto);
         }
         
         public Map<String,Object> buildMap(EtiquetaReporteEnum nombreEnum)
