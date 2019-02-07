@@ -45,6 +45,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -77,6 +78,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnAbrirXml = new javax.swing.JButton();
         btnReenviarCorreo = new javax.swing.JButton();
         btnAutorizarDocumento = new javax.swing.JButton();
+        btnCambiarEstado = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -100,6 +102,10 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnAutorizarDocumento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/visto.png"))); // NOI18N
         btnAutorizarDocumento.setToolTipText("Cambiar estado autorizar comprobante");
         add(btnAutorizarDocumento);
+
+        btnCambiarEstado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/editar2.gif"))); // NOI18N
+        btnCambiarEstado.setToolTipText("Cambiar estado comprobante");
+        add(btnCambiarEstado);
 
         jLabel2.setText("  ");
         add(jLabel2);
@@ -135,6 +141,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbrirXml;
     private javax.swing.JButton btnAutorizarDocumento;
+    private javax.swing.JButton btnCambiarEstado;
     private javax.swing.JButton btnObtenerClaveAcceso;
     private javax.swing.JButton btnReenviarCorreo;
     private javax.swing.JLabel jLabel1;
@@ -145,6 +152,28 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     // End of variables declaration//GEN-END:variables
 
     private void listenerBotones() {
+        
+        btnCambiarEstado.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //ComprobanteEntity.ComprobanteEnumEstado.values();
+                ComprobanteEntity.ComprobanteEnumEstado opcionSeleccionada=(ComprobanteEntity.ComprobanteEnumEstado) JOptionPane.showInputDialog(null,"Seleccione el estado para cambiar:","Cambiar estado", JOptionPane.QUESTION_MESSAGE, null, ComprobanteEntity.ComprobanteEnumEstado.values(), ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
+                if(opcionSeleccionada!=null)
+                {
+                    ComprobanteEntity comprobanteEntidad=comprobante.getComprobante();
+                    comprobanteEntidad.setEstado(opcionSeleccionada.getEstado());
+                    try {
+                        ServiceFactory.getFactory().getComprobanteServiceIf().editar(comprobanteEntidad);
+                        DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+                    }
+                }
+            }
+        });
         
         btnAutorizarDocumento.addActionListener(new ActionListener() {
             @Override
@@ -325,6 +354,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnReenviarCorreo.setEnabled(habilitar);
         
         btnAutorizarDocumento.setEnabled(false); //Por defecto este boton siempre va a estar desabilitado
+        btnCambiarEstado.setEnabled(habilitar);
         /*if(habilitar==true)
         {
             if(comprobante.getComprobante().getEstadoEnum()!=null && comprobante.getComprobante().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
