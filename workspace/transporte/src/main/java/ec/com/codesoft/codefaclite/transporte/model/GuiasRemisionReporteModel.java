@@ -212,15 +212,20 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
     
     public void ejecutarConsulta()
     {
-        GuiaRemisionServiceIf guiaRemisionServiceIf=ServiceFactory.getFactory().getGuiaRemisionServiceIf();
-        Date fechaInicial =(getDateFechaInicio().getDate()!=null)?new java.sql.Date(getDateFechaInicio().getDate().getTime()):null;
-        Date fechaFinal =(getDateFechaFin().getDate()!=null)?new java.sql.Date(getDateFechaFin().getDate().getTime()):null;
-        ComprobanteEntity.ComprobanteEnumEstado estado=(ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
-        controladorReporte=new ControladorReporteGuiaRemision(fechaInicial, fechaFinal, estado);
-        controladorReporte.generarReporte();
-        //listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal,estado);
-        mostrarReporteTabla();
-        //imprimirReporte();
+        try {
+            GuiaRemisionServiceIf guiaRemisionServiceIf=ServiceFactory.getFactory().getGuiaRemisionServiceIf();
+            Date fechaInicial =(getDateFechaInicio().getDate()!=null)?new java.sql.Date(getDateFechaInicio().getDate().getTime()):null;
+            Date fechaFinal =(getDateFechaFin().getDate()!=null)?new java.sql.Date(getDateFechaFin().getDate().getTime()):null;
+            ComprobanteEntity.ComprobanteEnumEstado estado=(ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
+            controladorReporte=new ControladorReporteGuiaRemision(fechaInicial, fechaFinal, estado);
+            controladorReporte.generarReporte();
+            //listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal,estado);
+            mostrarReporteTabla();
+            //imprimirReporte();
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+        }
     }
     
     private void imprimirReporte()

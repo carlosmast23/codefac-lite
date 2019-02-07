@@ -5,7 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.controlador.comprobante.reporte;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
@@ -49,16 +51,17 @@ public class ControladorReporteGuiaRemision {
     }
    
     
-    public void generarReporte()
+    public void generarReporte() throws ServicioCodefacException
     {
         try {
             GuiaRemisionServiceIf guiaRemisionServiceIf=ServiceFactory.getFactory().getGuiaRemisionServiceIf();
             listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal,estado);
             llenarDatosReporte();
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ControladorReporteGuiaRemision.class.getName()).log(Level.SEVERE, null, ex);
+        //} catch (ServicioCodefacException ex) {
+        //    Logger.getLogger(ControladorReporteGuiaRemision.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
             Logger.getLogger(ControladorReporteGuiaRemision.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
         }
         
     }

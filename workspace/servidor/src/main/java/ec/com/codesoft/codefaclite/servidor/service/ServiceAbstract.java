@@ -34,6 +34,11 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     
     protected AbstractFacade<Entity> facade;
     protected EntityManager entityManager;
+    
+    /**
+     * TODO: Variable temporal solo para hacer aritificios para las clases internas
+     */
+    public Object tmp;
 
     public ServiceAbstract() throws RemoteException {
         this.entityManager=AbstractFacade.entityManager;
@@ -99,6 +104,43 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     public List<Entity> obtenerPorMap(Map<String,Object> parametros)
     {
         return this.facade.findByMap(parametros);
+    }
+    
+    protected Object ejecutarConsulta(MetodoInterfaceConsulta interfaz) throws ServicioCodefacException
+    {
+        try {
+            return interfaz.consulta();
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            throw new ServicioCodefacException("Error de conexión con el servidor");
+        } catch (ServicioCodefacException ex) {
+            ex.printStackTrace();
+            throw ex;
+        }catch (PersistenceException ex) { //Hacer un RoolBack cuando es un error relacionado con la persistencia
+            ex.printStackTrace();
+            
+            ExcepcionDataBaseEnum excepcionEnum=UtilidadesExcepciones.analizarExcepcionDataBase(ex);
+            //Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
+            if(excepcionEnum.equals(ExcepcionDataBaseEnum.CLAVE_DUPLICADO))
+            {
+                throw new ServicioCodefacException(ExcepcionDataBaseEnum.CLAVE_DUPLICADO.getMensaje());
+            }
+            else
+            {
+                String mensaje="sin mensaje";
+                if(ex!=null)
+                   mensaje=ex.getMessage();
+                    
+                throw new ServicioCodefacException(ExcepcionDataBaseEnum.DESCONOCIDO.getMensaje()+"\n Causa: "+ mensaje);
+            }  
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+            LOG.log(Level.SEVERE,e.getMessage()); //Todo: Mejorar esta parte porque deberia imprimir toda la pila de error y ademas deberia poder comunicar el error a la capa superior
+            throw new ServicioCodefacException(e.getMessage());
+        }
+        
     }
     
     

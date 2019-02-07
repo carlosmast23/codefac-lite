@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoReporteEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
@@ -244,38 +245,43 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
     
     private void generarReporteGuiaRemision(FormatoReporteEnum formatoReporteEnum,Map<String, String> archivosAdjuntos)
     {
-        ControladorReporteGuiaRemision controladorReporte=new ControladorReporteGuiaRemision(
-                new java.sql.Date(getCmbFechaInicial().getDate().getTime()), 
-                new java.sql.Date(getCmbFechaFinal().getDate().getTime()), 
-                (ComprobanteEntity.ComprobanteEnumEstado) getCmbTipoEstadoReporte().getSelectedItem());
-        controladorReporte.generarReporte();
-        
-        File archivoReporte = null;
-        if (formatoReporteEnum.EXCEL.equals(formatoReporteEnum)) {
+        try {
+            ControladorReporteGuiaRemision controladorReporte=new ControladorReporteGuiaRemision(
+                    new java.sql.Date(getCmbFechaInicial().getDate().getTime()),
+                    new java.sql.Date(getCmbFechaFinal().getDate().getTime()),
+                    (ComprobanteEntity.ComprobanteEnumEstado) getCmbTipoEstadoReporte().getSelectedItem());
+            controladorReporte.generarReporte();
             
-            try {
-                archivoReporte = controladorReporte.obtenerReporteArchivoExcel();
-            } catch (IOException ex) {
-                Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+            File archivoReporte = null;
+            if (formatoReporteEnum.EXCEL.equals(formatoReporteEnum)) {
+                
+                try {
+                    archivoReporte = controladorReporte.obtenerReporteArchivoExcel();
+                } catch (IOException ex) {
+                    Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            } else if (formatoReporteEnum.PDF.equals(formatoReporteEnum)) {
+                try {
+                    archivoReporte = controladorReporte.obtenerReporteArchivoPdf(panelPadre);
+                } catch (IOException ex) {
+                    Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             
-        } else if (formatoReporteEnum.PDF.equals(formatoReporteEnum)) {
-            try {
-                archivoReporte = controladorReporte.obtenerReporteArchivoPdf(panelPadre);
-            } catch (IOException ex) {
-                Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            archivosAdjuntos.put("reporteGuiaRemision."+ formatoReporteEnum.getExtension(), archivoReporte.getPath());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error","No se puede generar el reporte de las guías de remisión\nCausa:"+ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
         }
-        
-        archivosAdjuntos.put("reporteGuiaRemision."+ formatoReporteEnum.getExtension(), archivoReporte.getPath());
         
         
     }

@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.transporte.GuiaRemisionFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -23,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -88,7 +90,13 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
     
     public List<GuiaRemision> obtenerConsulta(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado) throws ServicioCodefacException, RemoteException
     {
-        return getFacade().obtenerConsultaFacade(fechaInicial, fechaFinal,estado);
+        return (List<GuiaRemision>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                return getFacade().obtenerConsultaFacade(fechaInicial, fechaFinal,estado);
+            }
+        });
+                
     }
 
     @Override
