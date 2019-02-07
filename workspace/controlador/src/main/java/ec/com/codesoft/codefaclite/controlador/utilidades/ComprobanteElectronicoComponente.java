@@ -37,6 +37,10 @@ public class ComprobanteElectronicoComponente {
     {
         //Varible 
         boolean respuesta = false;
+        
+        //Variable temporal cuando aun no se autoriza y el usuario quiere eliminar como si fuera desde el SRI
+        //TODO: Ver como se puede modificar para mejorar esta parte
+        boolean eliminarComoAutorizado=false;
 
         //Eliminar solo si esta en modo editar
         if (panel.estadoFormulario.equals(panel.ESTADO_EDITAR)) {
@@ -44,11 +48,21 @@ public class ComprobanteElectronicoComponente {
 
                 //Eliminar solo si el estado esta en sin autorizar, o esta en el modo de facturacion normal y esta con estado facturado
                 if (comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado())
-                        || (comprobante.getTipoFacturacion().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()) && comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado()))) {
-
+                        || (comprobante.getTipoFacturacion().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()) && comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado()))) 
+                {
+                    String [] opciones={"Eliminar internamente","Eliminado desde el Sri"};
+                    int opcionSeleccionada=DialogoCodefac.dialogoPreguntaPersonalizada("Advertencia","Selecciona la opción para eliminar el comprobante : ",DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
+                    
+                    if(opcionSeleccionada==1)
+                    {
+                        eliminarComoAutorizado=true;
+                    }
+                    
+                    
                     respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar el comprobante electrónico? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
-
-                } else {
+                } 
+                else 
+                {
                     respuesta = DialogoCodefac.dialogoPregunta("Alerta", "El comprobante electrónico se encuentra autorizada en el SRI , \nPorfavor elimine  solo si tambien esta anulado en el SRI\nDesea eliminar de todos modos?", DialogoCodefac.MENSAJE_INCORRECTO);
                 }
 
@@ -89,6 +103,13 @@ public class ComprobanteElectronicoComponente {
                                 panel.panelPadre.actualizarNotificacionesCodefac();
                             }
                         }
+                        
+                        //TODO: Mejorar esta parte
+                        if (eliminarComoAutorizado) {
+                            comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+                            ServiceFactory.getFactory().getComprobanteServiceIf().editar(comprobante);
+                        }
+                        
                         
                         if(labelEstado!=null)
                         {

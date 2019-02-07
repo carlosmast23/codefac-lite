@@ -1972,5 +1972,15 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
     }
     
+    public void editar(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.merge(comprobante);
+            }
+        });
+    }
+    
 
 }

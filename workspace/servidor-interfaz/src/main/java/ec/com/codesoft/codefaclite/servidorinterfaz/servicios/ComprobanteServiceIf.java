@@ -95,4 +95,6 @@ public interface ComprobanteServiceIf extends Remote {
      */
     public List<String> procesarComprobantesPendienteLote(Integer etapaInicial,Integer etapaLimite,Map<String,List<String>> mapClaveAccesoYCorreos,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException;
     
+    
+    public void editar(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException;
 }
