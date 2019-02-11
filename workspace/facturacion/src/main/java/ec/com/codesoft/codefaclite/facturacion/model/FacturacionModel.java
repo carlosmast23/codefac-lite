@@ -1981,11 +1981,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnAgregarCliente().setText("");
         getBtnAgregarCliente().setToolTipText("Crear nuevo cliente");
 
-        getBtnAgregarProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/list.png")));
+        //getBtnAgregarProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/list.png")));
         getBtnAgregarProducto().setText("");
         getBtnAgregarProducto().setToolTipText("Agregar producto a la factura");
 
-        getBtnCrearProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/add2.png")));
+        //getBtnCrearProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/add2.png")));
         getBtnCrearProducto().setText("");
         getBtnCrearProducto().setToolTipText("Crear nuevo producto");
 
@@ -2870,6 +2870,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     private void setearValoresVista() {
         UtilidadesSwingX.placeHolder("Identificación", getTxtCliente());
+        UtilidadesSwingX.placeHolder("Código Producto", getTxtCodigoDetalle());
+        UtilidadesSwingX.placeHolder("Descripción", getTxtDescripcion());
+        
+        
     }
 
     private void addPopUpListener() {

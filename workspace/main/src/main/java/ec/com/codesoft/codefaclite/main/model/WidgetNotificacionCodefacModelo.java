@@ -31,9 +31,9 @@ import javax.swing.table.DefaultTableModel;
 public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac{
 
     public WidgetNotificacionCodefacModelo(JDesktopPane parentPanel) {
-        super(parentPanel);       
-        actualizarNotificaciones();
+        super(parentPanel);               
         listenerBotones();
+        actualizarNotificaciones();
         
     }
 

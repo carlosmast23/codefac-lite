@@ -2280,7 +2280,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 widgetNotificacionCodefac.setBounds(100,0,400,90);
                 //widgetVentasDiarias.addListenerIcono();/
                 getjDesktopPane1().add(widgetNotificacionCodefac);
-                widgetNotificacionCodefac.setVisible(true);
+                //widgetNotificacionCodefac.setVisible(true);
                 
             
             /**

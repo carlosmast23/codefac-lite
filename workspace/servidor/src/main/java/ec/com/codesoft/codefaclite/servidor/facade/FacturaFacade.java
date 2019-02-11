@@ -30,7 +30,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
 
     public List<Factura> lista(Persona persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido) {
         //Factura factura;
-        //factura.getReferido();
+        //factura.getCodigoDocumentoEnum();
         String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="";
         if (persona != null) {
             cliente = "u.cliente=?1";
@@ -73,7 +73,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
 
         try {
-            String queryString = "SELECT u FROM Factura u WHERE " + cliente + fecha + estadoFactura +filtrarReferidos+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
+            String queryString = "SELECT u FROM Factura u WHERE u.codigoDocumento=?6 and  " + cliente + fecha + estadoFactura +filtrarReferidos+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
             Query query = getEntityManager().createQuery(queryString);
             //System.err.println("QUERY--->"+query.toString());
             if (persona != null) {
@@ -103,6 +103,8 @@ public class FacturaFacade extends AbstractFacade<Factura> {
                     query.setParameter(5, referido);
                 }
             }
+            
+            query.setParameter(6,DocumentoEnum.FACTURA.getCodigo());
             
             return query.getResultList();
         } catch (NoResultException e) {

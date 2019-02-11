@@ -151,3 +151,4 @@ En la pantalla de reportes de las facturas verificar que el subtotal para impues
 Mejorar el metodo de validar fecha maximo de pago porque parece que cuando se levanta como servidor posiblemente no pase por esta validacion ,o puede ser que como el mensaje se queda estatico si no ponen aceptar igual podrian seguir usando en las otras maquinas porque no se cierra , opcion poner un dialogo temporal
 Verificar el reporte de las proformas porque seguramente debe tener el mismo problema en la sumatoria con los descuentos 
 Analizar si al momento de mostrar los comprobantes se deberian mostrar los eliminados para hacer algun proceso adicional para reactivar o cambiar de estado (facturas)
+En la pantalla de registro aumentar como campo obligatorio para saber que el usuario tiene que ingresar el ruc

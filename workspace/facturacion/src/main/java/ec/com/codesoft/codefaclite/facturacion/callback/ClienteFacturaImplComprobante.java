@@ -111,9 +111,11 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
                         DialogoCodefac.mensaje("Advertencia","Recuerde Autorizar el comprobante en el SRI, \n Si esta sin internet mandar por correo el RIDE", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     }
                 });
+                facturacionModel.panelPadre.actualizarNotificacionesCodefac(); //todo: Ver alguna otra forma mejor para actualizar la pantalla de comprobantes                
+                
             }
             
-            facturacionModel.panelPadre.actualizarNotificacionesCodefac();
+            
             
         } catch (IOException ex) {
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
