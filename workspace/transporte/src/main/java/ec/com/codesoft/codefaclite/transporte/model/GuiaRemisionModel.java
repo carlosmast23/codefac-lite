@@ -103,7 +103,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getTxtDireccionPartida().setText(session.getSucursal().getDirecccion());
     }
     
     private boolean validarFormulario()
