@@ -53,12 +53,8 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         lblEspacio2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         lblRuc = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        lblDireccion = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         lblNombreComercial = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        lblTelefonos = new javax.swing.JLabel();
         jToolBar6 = new javax.swing.JToolBar();
         lblEstablecimiento = new javax.swing.JLabel();
         cmbPuntoEmision = new javax.swing.JComboBox<>();
@@ -190,24 +186,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelDatosGenerales.add(lblRuc, gridBagConstraints);
 
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel3.setText("Direccion:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelDatosGenerales.add(jLabel3, gridBagConstraints);
-
-        lblDireccion.setBackground(new java.awt.Color(255, 255, 255));
-        lblDireccion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblDireccion.setText("jLabel7");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        panelDatosGenerales.add(lblDireccion, gridBagConstraints);
-
         jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel2.setText("Nombre Comercial:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -226,25 +204,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelDatosGenerales.add(lblNombreComercial, gridBagConstraints);
-
-        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel5.setText("Telefonos:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelDatosGenerales.add(jLabel5, gridBagConstraints);
-
-        lblTelefonos.setBackground(new java.awt.Color(255, 255, 255));
-        lblTelefonos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblTelefonos.setText("jLabel8");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelDatosGenerales.add(lblTelefonos, gridBagConstraints);
 
         jToolBar6.setBorder(null);
         jToolBar6.setRollover(true);
@@ -516,7 +475,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.01;
+        gridBagConstraints.weightx = 0.001;
         jPanel2.add(lblEspacio3, gridBagConstraints);
 
         txtDireccionPartida.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -531,14 +490,14 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.ipadx = 65;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(cmbFechaInicio, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.ipadx = 65;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(cmbFechaFin, gridBagConstraints);
@@ -549,7 +508,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 40, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 20, 5, 5);
         jPanel2.add(jLabel9, gridBagConstraints);
 
         jLabel11.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -558,7 +517,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 40, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 20, 5, 5);
         jPanel2.add(jLabel11, gridBagConstraints);
 
         lblNombresTransportista.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -774,11 +733,9 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
@@ -798,7 +755,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JToolBar jToolBar5;
     private javax.swing.JToolBar jToolBar6;
     private javax.swing.JLabel lblCantidadProductos;
-    private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio3;
@@ -810,7 +766,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblPlacaTransportista;
     private javax.swing.JLabel lblRuc;
     private javax.swing.JLabel lblSecuencial;
-    private javax.swing.JLabel lblTelefonos;
     private javax.swing.JPanel panelDatosGenerales;
     private javax.swing.JTable tblGuiaRemision;
     private javax.swing.JTextField txtAutorizacion;
@@ -897,14 +852,14 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     public JLabel getLblSecuencial() {
         return lblSecuencial;
     }
-
+/*
     public JLabel getLblTelefonos() {
         return lblTelefonos;
     }
 
     public JLabel getLblDireccion() {
         return lblDireccion;
-    }
+    }*/
 
     public JButton getBtnAgregarDestinarioGuiaRemision() {
         return btnAgregarDestinarioGuiaRemision;

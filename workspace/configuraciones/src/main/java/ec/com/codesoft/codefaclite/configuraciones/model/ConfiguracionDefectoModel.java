@@ -155,7 +155,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         //Agregar las opcion para esocger si o no en activar los comprobantes de venta
         getCmbActivarReporteSimpleGuiaRemision().removeAllItems();
         getCmbActivarReporteSimpleGuiaRemision().addItem(EnumSiNo.NO);
-        getCmbActivarReporteSimpleGuiaRemision().addItem(EnumSiNo.SI);
+        
+                //Agregar las opcion para esocger si o no en activar los comprobantes de venta
+        getCmbCargarProductoIvaFactura().removeAllItems();
+        getCmbCargarProductoIvaFactura().addItem(EnumSiNo.NO);
+        getCmbCargarProductoIvaFactura().addItem(EnumSiNo.SI);
         
     }
 
@@ -203,6 +207,14 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
                 getCmbActivarReporteSimpleGuiaRemision().setSelectedItem(EnumSiNo.NO);
             
             
+            ParametroCodefac parametroCargarProductoIvaFactura= parametrosTodos.get(ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA);
+            enumSiNo=EnumSiNo.getEnumByLetra((parametroCargarProductoIvaFactura!=null)?parametroCargarProductoIvaFactura.getValor():null);
+            if(parametroCargarProductoIvaFactura!=null)
+                getCmbCargarProductoIvaFactura().setSelectedItem(enumSiNo);
+            else
+                getCmbCargarProductoIvaFactura().setSelectedItem(EnumSiNo.NO);
+            
+            
             
         } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -237,6 +249,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         enumSiNo = (EnumSiNo) getCmbActivarReporteSimpleGuiaRemision().getSelectedItem();
         agregarParametro(ParametroCodefac.COMPROBANTE_GUIA_REMISION_ACTIVAR, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         parametrosEditar.add(parametrosTodos.get(ParametroCodefac.COMPROBANTE_GUIA_REMISION_ACTIVAR));
+        
+        enumSiNo = (EnumSiNo) getCmbCargarProductoIvaFactura().getSelectedItem();
+        agregarParametro(ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        parametrosEditar.add(parametrosTodos.get(ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA));
         /*ParametroCodefac parametroCodefac=parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)
         {

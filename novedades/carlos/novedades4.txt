@@ -152,3 +152,4 @@ Mejorar el metodo de validar fecha maximo de pago porque parece que cuando se le
 Verificar el reporte de las proformas porque seguramente debe tener el mismo problema en la sumatoria con los descuentos 
 Analizar si al momento de mostrar los comprobantes se deberian mostrar los eliminados para hacer algun proceso adicional para reactivar o cambiar de estado (facturas)
 En la pantalla de registro aumentar como campo obligatorio para saber que el usuario tiene que ingresar el ruc
+Activar una opcion para manejar un numero maximo de decimales para mostrar en especial en la pantalla de factura

@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
@@ -147,12 +148,17 @@ public class SessionCodefac implements SessionCodefacInterface{
         this.matriz = matriz;
     }
 
-    
-    
-    
-    
-    
-    
+    @Override
+    public BigDecimal obtenerIvaActual() {
+        ParametroCodefac parametroCodefac=getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO);
+        String valorString=parametroCodefac.getValor();
+        return new BigDecimal(valorString);
+    }
+
+    @Override
+    public BigDecimal obtenerIvaActualDecimal() {
+        return obtenerIvaActual().divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+    }
     
     
 }

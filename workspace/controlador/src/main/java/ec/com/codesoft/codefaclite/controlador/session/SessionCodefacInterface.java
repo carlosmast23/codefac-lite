@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import org.jfree.ui.about.Licences;
@@ -71,4 +72,14 @@ public interface SessionCodefacInterface {
     public String getUsuarioLicencia();
 
     public List<ModuloCodefacEnum> getModulos();
+    /**
+     * Obtiene el valor en valores enteros
+     * @return 
+     */
+    public BigDecimal obtenerIvaActual();
+    /**
+     * Obtiene el valor en valores decimales util para calcular directamente otros ivas
+     * @return 
+     */
+    public BigDecimal obtenerIvaActualDecimal();
 }

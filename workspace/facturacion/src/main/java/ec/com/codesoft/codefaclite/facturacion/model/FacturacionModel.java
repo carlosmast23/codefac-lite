@@ -103,6 +103,7 @@ import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.tabla.ButtonColumn;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
@@ -492,7 +493,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
                     getCheckPorcentaje().setSelected(false);
                     getBtnEditarDetalle().setEnabled(true);
-                    getBtnQuitarDetalle().setEnabled(true);
                     getBtnAgregarDetalleFactura().setEnabled(false);
                     getBtnAgregarProducto().setEnabled(false);
                     getBtnCrearProducto().setEnabled(false);
@@ -525,13 +525,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
 
-        getBtnQuitarDetalle().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                btnListenerEliminar();
-            }
-        });
-
+        
         getBtnEditarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -660,7 +654,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void habilitarModoIngresoDatos() {
         getBtnEditarDetalle().setEnabled(false);
-        getBtnQuitarDetalle().setEnabled(false);
         getBtnAgregarDetalleFactura().setEnabled(true);
         getBtnAgregarProducto().setEnabled(true);
         getBtnCrearProducto().setEnabled(true);
@@ -674,7 +667,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             factura.getDetalles().remove(fila);
             cargarTotales();
             getBtnEditarDetalle().setEnabled(false);
-            getBtnQuitarDetalle().setEnabled(false);
             getBtnAgregarDetalleFactura().setEnabled(true);
             getBtnAgregarProducto().setEnabled(true);
             getBtnCrearProducto().setEnabled(true);
@@ -1322,10 +1314,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         this.factura.setDetalles(new ArrayList<FacturaDetalle>());
 
         //Setear los valores de la empresa 
-        getLblRuc().setText(session.getEmpresa().getIdentificacion());
-        getLblDireccion().setText(session.getSucursal().getDirecccion());
-        getLblTelefonos().setText(session.getMatriz().getTelefono());
-        getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
+        //getLblRuc().setText(session.getEmpresa().getIdentificacion());
+        //getLblDireccion().setText(session.getSucursal().getDirecccion());
+        //getLblTelefonos().setText(session.getMatriz().getTelefono());
+        //getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
         getLblEstadoFactura().setText("Procesando");
 
@@ -1371,7 +1363,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtValorTotal().setText("0.00");
 
         getBtnEditarDetalle().setEnabled(false);
-        getBtnQuitarDetalle().setEnabled(false);
         getBtnAgregarDetalleFactura().setEnabled(true);
         getBtnAgregarProducto().setEnabled(true);
         getBtnCrearProducto().setEnabled(true);
@@ -1890,14 +1881,27 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         if(catologoProducto.getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
         {
+            //Carga el dato por defecto cuando no se puede ingresar productos que contengan iva
             getCmbIva().setSelectedItem(EnumSiNo.NO);
             getCmbIva().setEnabled(false);
         }
         else
         {
+           getCmbIva().setEnabled(true);
             //TODO: Ver alguna forma de cargar por defecto el precio guardado en la base de datos
-            getCmbIva().setSelectedItem(EnumSiNo.NO);
-            getCmbIva().setEnabled(true);
+           ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA);
+           if(parametroCodefac != null && EnumSiNo.SI.equals(EnumSiNo.getEnumByLetra(parametroCodefac.getValor())))
+           {
+               getCmbIva().setSelectedItem(EnumSiNo.SI);
+               BigDecimal valorConIva=UtilidadIva.calcularValorConIvaIncluido(session.obtenerIvaActualDecimal(),valorUnitario);
+               getTxtValorUnitario().setText(valorConIva.toString());                       
+           }
+           else
+           {
+               getCmbIva().setSelectedItem(EnumSiNo.NO);
+           }
+           
+            
         }
     }
 
@@ -1973,9 +1977,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnEditarDetalle().setText("");
         getBtnEditarDetalle().setToolTipText("Editar detalle factura");
 
-        getBtnQuitarDetalle().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/cerrar-ico.png")));
-        getBtnQuitarDetalle().setText("");
-        getBtnQuitarDetalle().setToolTipText("Eliminar detalle factura");
 
         getBtnAgregarCliente().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/usuario.png")));
         getBtnAgregarCliente().setText("");

@@ -104,6 +104,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         getTxtDireccionPartida().setText(session.getSucursal().getDirecccion());
+        guiaRemision=new GuiaRemision();
     }
     
     private boolean validarFormulario()
@@ -119,11 +120,16 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             DialogoCodefac.mensaje("Error Validación","Porfavor ingrese detalles a la guía de remisión",DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
-        
-        System.out.println(guiaRemision.getDireccionPartida());
+                
         if(guiaRemision.getDireccionPartida()==null || guiaRemision.getDireccionPartida().isEmpty())
         {
             DialogoCodefac.mensaje("Error Validación","Porfavor ingrese la dirección de partida",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        
+        if(guiaRemision.getFechaIniciaTransporte().compareTo(guiaRemision.getFechaFinTransporte())>0)
+        {
+            DialogoCodefac.mensaje("Error Validación","La fecha de inicio no puede ser superior a la fecha de fin del transporte",DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
         return true;
@@ -207,14 +213,14 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     @Override
     public void limpiar() {
         getLblRuc().setText(session.getEmpresa().getIdentificacion());
-        getLblTelefonos().setText(session.getSucursal().getTelefono());
+        //getLblTelefonos().setText(session.getSucursal().getTelefono());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
-        getLblDireccion().setText(session.getSucursal().getDirecccion());
+        //getLblDireccion().setText(session.getSucursal().getDirecccion());
         getLblCantidadProductos().setText("0");
         ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
         
         ///Limpiar Variables
-        guiaRemision=new GuiaRemision();
+        //guiaRemision=new GuiaRemision();
         //transportista=new Transportista();
         destinatarioGuiaRemision=new DestinatarioGuiaRemision();
         destinatario=new Persona();
@@ -222,7 +228,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         //Limpiar etiquetas de la pantalla
         getLblNombresTransportista().setText("");
         getLblPlacaTransportista().setText("");
-        getTxtDireccionPartida().setText("");
+        //getTxtDireccionPartida().setText("");
         getCmbFechaInicio().setDate(UtilidadesFecha.getFechaHoy());
         getCmbFechaFin().setDate(UtilidadesFecha.getFechaHoy());
         getTxtIdentificacionTransportista().setText("");
@@ -543,7 +549,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         String.class});
 
 
-        if(guiaRemision.getDestinatarios()!=null)
+        if(guiaRemision!=null && guiaRemision.getDestinatarios()!=null)
         {
             for (DestinatarioGuiaRemision destinatarios : guiaRemision.getDestinatarios()) {
                 for (DetalleProductoGuiaRemision detalle : destinatarios.getDetallesProductos()) {
@@ -559,10 +565,11 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
 
                 }            
             }
+            //Imprimir el total de la cantidad de productos a transportar
+            getLblCantidadProductos().setText(guiaRemision.obtenerTotalProductos().toString());
+        
         }
         
-        //Imprimir el total de la cantidad de productos a transportar
-        getLblCantidadProductos().setText(guiaRemision.obtenerTotalProductos().toString());
         
         getTblGuiaRemision().setModel(modeloTabla);
         UtilidadesTablas.ocultarColumna(getTblGuiaRemision(),0);
@@ -585,16 +592,20 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
 
     private void setearValores() {
         Transportista transportista=guiaRemision.getTransportista();
-        guiaRemision.setTransportista(transportista);
-        guiaRemision.setIdentificacion(guiaRemision.getTransportista().getIdentificacion());
-        guiaRemision.setDireccion(transportista.getDireccion());
+        if(transportista!=null)
+        {
+            guiaRemision.setTransportista(transportista);
+            guiaRemision.setIdentificacion(transportista.getIdentificacion());
+            guiaRemision.setDireccion(transportista.getDireccion());
+            guiaRemision.setRazonSocial(transportista.getRazonSocial());
+            guiaRemision.setPlaca(transportista.getPlacaVehiculo());
+        }
+
         guiaRemision.setDireccionPartida(getTxtDireccionPartida().getText());
-        guiaRemision.setRazonSocial(transportista.getRazonSocial());
         guiaRemision.setRise("");
         guiaRemision.setFechaIniciaTransporte(new java.sql.Date(getCmbFechaInicio().getDate().getTime()));
         guiaRemision.setFechaEmision(new java.sql.Date(getCmbFechaInicio().getDate().getTime())); //Esto esta variable porque necesito para volver a generar la clave de acceso
         guiaRemision.setFechaFinTransporte(new java.sql.Date(getCmbFechaFin().getDate().getTime()));
-        guiaRemision.setPlaca(transportista.getPlacaVehiculo());
         PuntoEmision puntoEmisionSeleccionado= obtenerPuntoEmisionSeleccionado();
         guiaRemision.setPuntoEstablecimiento(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString());
         guiaRemision.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision().toString());
@@ -607,8 +618,11 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         /**
          * Agregar los correos de los destinatarios
          */
-        for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
-            guiaRemision.addDatosAdicionalCorreo(destinatario.getDestinatorio().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO);
+        if(guiaRemision.getDestinatarios()!=null)
+        {
+            for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
+                guiaRemision.addDatosAdicionalCorreo(destinatario.getDestinatorio().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO);
+            }
         }
         
         //Agregado correo del transportista

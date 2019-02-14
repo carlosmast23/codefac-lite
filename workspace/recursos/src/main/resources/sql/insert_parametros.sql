@@ -48,3 +48,4 @@ INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('comprobante_venta_activar','n');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('smtp_host','');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('smtp_port','587');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('tipo_envio_comprobante','f');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('cargar_producto_iva_factura','n');

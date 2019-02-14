@@ -76,6 +76,10 @@ public class ParametroCodefac implements Serializable {
      * Tipo de envio de los comprobantes 
      */
     public static final String TIPO_ENVIO_COMPROBANTE="tipo_envio_comprobante";
+    /**
+     * Nombre de parametro para saber si en la pantalla de facutura tiene que cargar los precios unitarios con iva o no
+     */
+    public static final String CARGAR_PRODUCTO_IVA_FACTURA = "cargar_producto_iva_factura";
     
     @Id
     @Column(name = "ID")
