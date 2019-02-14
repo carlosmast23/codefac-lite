@@ -422,7 +422,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         destinatario.setPreimpreso(getTxtPreimpreso().getText());
         destinatario.setRazonSocial(this.destinatario.getRazonSocial());
         destinatario.setRuta(destinatario.getRuta());
-        destinatario.setReferenciaDocumentoId(facturaSeleccionada.getId());
+        destinatario.setFacturaReferencia(facturaSeleccionada);
         destinatario.setIdentificacion(this.destinatario.getIdentificacion());
         destinatario.setCodigoEstablecimiento((Integer) getTxtCodigoSucursal().getValue());
         

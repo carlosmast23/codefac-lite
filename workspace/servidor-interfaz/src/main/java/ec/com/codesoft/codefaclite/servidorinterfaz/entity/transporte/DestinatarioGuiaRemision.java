@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
@@ -56,8 +57,8 @@ public class DestinatarioGuiaRemision implements Serializable{
     @Column(name = "FECHA_EMISION")
     private Date fechaEmision;
     
-    @Column(name = "REFERENCIA_DOCUMENTO_ID")
-    private Long referenciaDocumentoId;
+    //@Column(name = "REFERENCIA_DOCUMENTO_ID")
+    //private Long referenciaDocumentoId;
     
     @Column(name = "CODIGO_ESTABLECIMIENTO")
     private String codigoEstablecimiento;
@@ -69,6 +70,9 @@ public class DestinatarioGuiaRemision implements Serializable{
     @JoinColumn(name = "PERSONA_ID")
     @ManyToOne(optional = false)
     private Persona destinatorio;
+    
+    @JoinColumn(name = "REFERENCIA_DOCUMENTO_ID")
+    private Factura facturaReferencia;
    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "destinatario",fetch = FetchType.EAGER)
     private List<DetalleProductoGuiaRemision> detallesProductos;
@@ -173,13 +177,13 @@ public class DestinatarioGuiaRemision implements Serializable{
         this.guiaRemision = guiaRemision;
     }
 
-    public Long getReferenciaDocumentoId() {
-        return referenciaDocumentoId;
-    }
+    //public Long getReferenciaDocumentoId() {
+    //    return referenciaDocumentoId;
+    //}
 
-    public void setReferenciaDocumentoId(Long referenciaDocumentoId) {
-        this.referenciaDocumentoId = referenciaDocumentoId;
-    }
+    //public void setReferenciaDocumentoId(Long referenciaDocumentoId) {
+    //    this.referenciaDocumentoId = referenciaDocumentoId;
+    //}
 
     public String getIdentificacion() {
         return identificacion;
@@ -201,6 +205,15 @@ public class DestinatarioGuiaRemision implements Serializable{
         this.codigoEstablecimiento = UtilidadesTextos.llenarCarateresIzquierda(codigoEstablecimiento+"", 3,"0");
     }
 
+    public Factura getFacturaReferencia() {
+        return facturaReferencia;
+    }
+
+    public void setFacturaReferencia(Factura facturaReferencia) {
+        this.facturaReferencia = facturaReferencia;
+    }
+
+    
     
     
     

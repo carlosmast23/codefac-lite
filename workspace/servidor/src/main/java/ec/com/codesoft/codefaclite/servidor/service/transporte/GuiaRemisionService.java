@@ -107,6 +107,16 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                 public void transaccion() throws ServicioCodefacException, RemoteException {
                     ComprobantesService comprobanteService = new ComprobantesService();
                     comprobanteService.eliminarComprobanteSinTransaccion(entity);
+                    
+                    //cambiar el estado de la factura para que vuelvan volver a reenviar en otra guia de remision
+                    for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {
+                        if(destinatario.getFacturaReferencia()!=null)
+                        {   //
+                            destinatario.getFacturaReferencia().setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.NO);
+                            entityManager.merge(destinatario.getFacturaReferencia()); 
+                        }
+                    }
+
                     //entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
                     entityManager.merge(entity);
                     //entity.setEstado(estado);

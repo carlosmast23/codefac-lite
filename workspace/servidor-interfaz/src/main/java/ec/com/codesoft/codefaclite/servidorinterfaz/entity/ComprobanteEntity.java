@@ -202,6 +202,10 @@ public class ComprobanteEntity implements Serializable{
     public void setEstado(String estado) {
         this.estado = estado;
     }
+    
+    public void setEstadoEnum(ComprobanteEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
+    }
 
     public String getTipoFacturacion() {
         return tipoFacturacion;

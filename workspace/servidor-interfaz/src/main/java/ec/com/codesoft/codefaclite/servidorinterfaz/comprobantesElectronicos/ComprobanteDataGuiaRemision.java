@@ -98,7 +98,7 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
         info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(guiaRemision.getDireccionEstablecimiento()));
         info.setFechaIniTransporte(ComprobantesElectronicosUtil.dateToString(guiaRemision.getFechaIniciaTransporte()));
         info.setFechaFinTransporte(ComprobantesElectronicosUtil.dateToString(guiaRemision.getFechaFinTransporte()));
-        info.setDirPartida(guiaRemision.getDireccionPartida());
+        info.setDirPartida(UtilidadValidador.normalizarTexto(guiaRemision.getDireccionPartida()));
         info.setRazonSocialTransportista(UtilidadValidador.normalizarTexto(guiaRemision.getRazonSocial()));
         //info.setTipoIdentificacionTransportista(""); //Buscar tipo de identificacion
         info.setRucTransportista(guiaRemision.getTransportista().getIdentificacion());
@@ -145,7 +145,7 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
             DestinatariosGuiaRemisionComprobante destinatarioData=new DestinatariosGuiaRemisionComprobante();
             destinatarioData.setCodDocSustento("01");
             destinatarioData.setCodEstabDestino(destinatario.getCodigoEstablecimiento());//Todo: Verificar porque este campo deberia trabajar con sucursales
-            destinatarioData.setDirDestinatario(destinatario.getDireccionDestino());
+            destinatarioData.setDirDestinatario(UtilidadValidador.normalizarTexto(destinatario.getDireccionDestino()));
             destinatarioData.setDocAduaneroUnico(" ");//Todo: Ver este campo debe estar grabando pero no esta
             destinatarioData.setFechaEmisionDocSustento(ComprobantesElectronicosUtil.dateToString(destinatario.getFechaEmision()));
             destinatarioData.setIdentificacionDestinatario(destinatario.getDestinatorio().getIdentificacion()); //Todo: este dato deberia mejor estar grabado porque se supone que no se puden modificar por ningun motivo
