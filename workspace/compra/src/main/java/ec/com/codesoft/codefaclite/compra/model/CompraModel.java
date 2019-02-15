@@ -46,6 +46,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.event.ActionEvent;
@@ -120,7 +121,8 @@ public class CompraModel extends CompraPanel{
         this.banderaIngresoDetallesCompra = false;
         bloquearDesbloquearBotones(true);
         setearVariblesIniciales();
-        getTxtFPreimpreso().setText("001001000");
+        //getTxtFPreimpreso().setText("001001000");
+        listenerTexts();
         try {
             mostrarVentanaRetenciones();
         } catch (RemoteException ex) {
@@ -184,9 +186,13 @@ public class CompraModel extends CompraPanel{
 //        compra.setPuntoEmision(getTxtPuntoEmision().getText());
 //        compra.setPuntoEstablecimiento(getTxtEstablecimiento().getText());
 //        compra.setSecuencial(Integer.parseInt(getTcmbTipoDocumentoxtSecuencial().getText()));
-        compra.setPuntoEmision(getTxtFPreimpreso().getText().substring(0,3));
-        compra.setPuntoEstablecimiento(getTxtFPreimpreso().getText().substring(4,7));
-        compra.setSecuencial(Integer.parseInt(getTxtFPreimpreso().getText().substring(8, 17)));
+        //compra.setPuntoEmision(getTxtFPreimpreso().getText().substring(0,3));
+        //compra.setPuntoEstablecimiento(getTxtFPreimpreso().getText().substring(4,7));
+        //compra.setSecuencial(Integer.parseInt(getTxtFPreimpreso().getText().substring(8, 17)));
+        compra.setPuntoEmision(getTxtPuntoEmisionCompra().getText());
+        compra.setPuntoEstablecimiento(getTxtEstablecimientoCompra().getText());
+        compra.setSecuencial(Integer.parseInt(getTxtSecuencialCompra().getText()));
+        
         compra.setTipoFacturacion(""); //TODO: Establecer el metodo de facturacion manual y electronica
         compra.setInventarioIngreso(EnumSiNo.NO.getLetra());
         compra.setObservacion(getTxtObservacion().getText());
@@ -274,12 +280,12 @@ public class CompraModel extends CompraPanel{
         getTxtProveedor().setText(identificacion + " - " + nombre);
         //Observacion
         this.getTxtObservacion().setText(this.compra.getObservacion());
-        //Preimpreso
-        String preimpreso = "00" + this.compra.getPuntoEstablecimiento() + "00" + this.compra.getPuntoEmision();
-        String secuencial = "" + this.compra.getSecuencial();
-        preimpreso += establecerSecuencial(secuencial);
-
-        this.getTxtFPreimpreso().setText(preimpreso);
+        
+        getTxtEstablecimientoCompra().setText(this.compra.getPuntoEstablecimientoFormat());
+        getTxtPuntoEmisionCompra().setText(this.compra.getPuntoEmisionFormat());
+        getTxtSecuencialCompra().setText(this.compra.getSecuencialFormat());
+        
+        //this.getTxtFPreimpreso().setText(preimpreso);
         //Autorizacion
         this.getTxtAutorizacion().setText("Por Defecto");
         //Fecha
@@ -336,7 +342,11 @@ public class CompraModel extends CompraPanel{
         getTxtOrdenCompra().setText("");
         getTxtProveedor().setText("");
         getTxtObservacion().setText("");
-        getTxtFPreimpreso().setText("001001000000000");
+        //getTxtFPreimpreso().setText("001001000000000");
+        getTxtEstablecimientoCompra().setText("");
+        getTxtPuntoEmisionCompra().setText("");
+        getTxtSecuencialCompra().setText("");
+        
         getTxtAutorizacion().setText("");
         //Limpiar Detalles de Producto
         getTxtProductoItem().setText("");
@@ -1074,5 +1084,16 @@ public class CompraModel extends CompraPanel{
             return false;
         }        
         return true;
+    }
+    
+    private void listenerTexts() {
+        UtilidadesFormularios.bloquerLimiteIngresoCampoTexto(getTxtEstablecimientoCompra(),3);
+        UtilidadesFormularios.bloquerLimiteIngresoCampoTexto(getTxtPuntoEmisionCompra(),3);
+        UtilidadesFormularios.bloquerLimiteIngresoCampoTexto(getTxtSecuencialCompra(),9);
+
+        UtilidadesFormularios.llenarAutomaticamenteCamposTexto(getTxtEstablecimientoCompra(),3);
+        UtilidadesFormularios.llenarAutomaticamenteCamposTexto(getTxtPuntoEmisionCompra(),3);
+        UtilidadesFormularios.llenarAutomaticamenteCamposTexto(getTxtSecuencialCompra(),9);
+        
     }
 }

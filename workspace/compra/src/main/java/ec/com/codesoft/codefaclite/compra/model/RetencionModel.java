@@ -918,30 +918,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
 
     private boolean validar() {
         
-        try
-        {
-            if (getTxtEstablecimientoCompra().getText().length() != 3 || getTxtPuntoEmisionCompra().getText().length() != 3 || getTxtSecuencialCompra().getText().length() != 9) 
-            {
-                DialogoCodefac.mensaje("Error", "El tamaño del preimpreso es incorrecto", DialogoCodefac.MENSAJE_INCORRECTO);
-                return false;
-            }
-            
-            Long establecimiento=Long.valueOf(getTxtEstablecimientoCompra().getText());
-            Long puntoEmision=Long.valueOf(getTxtPuntoEmisionCompra().getText());
-            Long secuencial=Long.valueOf(getTxtSecuencialCompra().getText());
-            
-            if (establecimiento <= 0 || puntoEmision <= 0 || secuencial <= 0) {
-                DialogoCodefac.mensaje("Error", "El preimpreso no puede tener valores con 0 o menores", DialogoCodefac.MENSAJE_INCORRECTO);
-                return false;
-            }
-
-            
-        }catch(java.lang.NumberFormatException e)
-        {
-            DialogoCodefac.mensaje("Error","El preimpreso tiene valores incorrectos", DialogoCodefac.MENSAJE_INCORRECTO);
-            return false;
-        }
-        
+       
                 
         if(getTblDetalleRetenciones().getRowCount()==0)
         {
@@ -952,6 +929,27 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
         {
+            //Validacion del preimpreso cuando sea el documento libre y me toque ingresar estos datos
+            try {
+                if (getTxtEstablecimientoCompra().getText().length() != 3 || getTxtPuntoEmisionCompra().getText().length() != 3 || getTxtSecuencialCompra().getText().length() != 9) {
+                    DialogoCodefac.mensaje("Error", "El tamaño del preimpreso es incorrecto", DialogoCodefac.MENSAJE_INCORRECTO);
+                    return false;
+                }
+
+                Long establecimiento = Long.valueOf(getTxtEstablecimientoCompra().getText());
+                Long puntoEmision = Long.valueOf(getTxtPuntoEmisionCompra().getText());
+                Long secuencial = Long.valueOf(getTxtSecuencialCompra().getText());
+
+                if (establecimiento <= 0 || puntoEmision <= 0 || secuencial <= 0) {
+                    DialogoCodefac.mensaje("Error", "El preimpreso no puede tener valores con 0 o menores", DialogoCodefac.MENSAJE_INCORRECTO);
+                    return false;
+                }
+
+            } catch (java.lang.NumberFormatException e) {
+                DialogoCodefac.mensaje("Error", "El preimpreso tiene valores incorrectos", DialogoCodefac.MENSAJE_INCORRECTO);
+                return false;
+            }
+            
             //System.out.println("<<"+getTxtPreimpreso().getText().replaceAll("-","")+"<<");
             if(getTxtEstablecimientoCompra().getText().isEmpty() || getTxtPuntoEmisionCompra().getText().isEmpty() || getTxtSecuencialCompra().getText().isEmpty())
             {

@@ -90,15 +90,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setCmbRetencionRenta(JComboBox<SriRetencionRenta> cmbRetencionRenta) {
         this.cmbRetencionRenta = cmbRetencionRenta;
     }
-
-    public JFormattedTextField getTxtFPreimpreso() {
-        return txtFPreimpreso;
-    }
-
-    public void setTxtFPreimpreso(JFormattedTextField txtFPreimpreso) {
-        this.txtFPreimpreso = txtFPreimpreso;
-    }
     
+    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -170,8 +164,12 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jLabel18 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         btnAgregarProveedor = new javax.swing.JButton();
-        txtFPreimpreso = new javax.swing.JFormattedTextField();
         lblEspacio2 = new javax.swing.JLabel();
+        txtSecuencialCompra = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        txtPuntoEmisionCompra = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        txtEstablecimientoCompra = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -746,25 +744,49 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnAgregarProveedor, gridBagConstraints);
-
-        try {
-            txtFPreimpreso.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-###-#########")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.2;
-        getContentPane().add(txtFPreimpreso, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         getContentPane().add(lblEspacio2, gridBagConstraints);
+
+        txtSecuencialCompra.setColumns(9);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 100;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtSecuencialCompra, gridBagConstraints);
+
+        jLabel23.setText(" - ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
+        getContentPane().add(jLabel23, gridBagConstraints);
+
+        txtPuntoEmisionCompra.setColumns(3);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtPuntoEmisionCompra, gridBagConstraints);
+
+        jLabel25.setText(" - ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        getContentPane().add(jLabel25, gridBagConstraints);
+
+        txtEstablecimientoCompra.setColumns(3);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtEstablecimientoCompra, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -800,7 +822,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -828,12 +852,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtDescripcionItem;
     private javax.swing.JTextField txtDescuentoImpuestos;
     private javax.swing.JTextField txtDescuentoSinImpuestos;
-    private javax.swing.JFormattedTextField txtFPreimpreso;
+    private javax.swing.JTextField txtEstablecimientoCompra;
     private javax.swing.JTextField txtObservacion;
     private javax.swing.JTextField txtOrdenCompra;
     private javax.swing.JTextField txtPrecionUnitarioItem;
     private javax.swing.JTextField txtProductoItem;
     private javax.swing.JTextField txtProveedor;
+    private javax.swing.JTextField txtPuntoEmisionCompra;
+    private javax.swing.JTextField txtSecuencialCompra;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<DocumentoEnum> getCmbDocumento() {
@@ -1087,6 +1113,21 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
     public void setBtnCrearProducto(JButton btnCrearProducto) {
         this.btnCrearProducto = btnCrearProducto;
+    }
+
+    @ValidacionCodefacAnotacion(requerido = true)
+    public JTextField getTxtEstablecimientoCompra() {
+        return txtEstablecimientoCompra;
+    }
+
+    @ValidacionCodefacAnotacion(requerido = true)
+    public JTextField getTxtPuntoEmisionCompra() {
+        return txtPuntoEmisionCompra;
+    }
+
+    @ValidacionCodefacAnotacion(requerido = true)
+    public JTextField getTxtSecuencialCompra() {
+        return txtSecuencialCompra;
     }
     
     

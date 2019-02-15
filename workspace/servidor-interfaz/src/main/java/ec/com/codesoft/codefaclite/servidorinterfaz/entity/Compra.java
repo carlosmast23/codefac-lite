@@ -158,14 +158,27 @@ public class Compra implements Serializable {
     public Integer getSecuencial() {
         return secuencial;
     }
+    
+    public String getSecuencialFormat() {
+        return UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(),9,"0");
+    }
 
     public String getPuntoEstablecimiento() {
         return puntoEstablecimiento;
     }
     
+    public String getPuntoEstablecimientoFormat() {
+        return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0");
+    }
+    
     public String getPuntoEmision() {
         return puntoEmision;
     }
+    
+    public String getPuntoEmisionFormat() {
+        return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision, 3, "0");
+    }
+    
 
     public Date getFechaFactura() {
         return fechaFactura;
