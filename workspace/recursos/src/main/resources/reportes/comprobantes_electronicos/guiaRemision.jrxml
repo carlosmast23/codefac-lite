@@ -238,7 +238,7 @@
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Fecha Inicio Transporte:]]></text>
+				<text><![CDATA[Fecha Fin Transporte:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="455" y="367" width="90" height="20" uuid="ed62018a-cc6e-4de2-9ad4-895ef0661301"/>

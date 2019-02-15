@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -133,9 +134,18 @@ public class Producto implements Serializable, Comparable<Producto> {
     public String getEstado() {
         return estado;
     }
+    
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
+    }
+
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+    
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
     }
 
     public String getCodigoPersonalizado() {

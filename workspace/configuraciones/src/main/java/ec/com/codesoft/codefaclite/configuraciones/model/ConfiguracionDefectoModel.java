@@ -214,6 +214,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
             else
                 getCmbCargarProductoIvaFactura().setSelectedItem(EnumSiNo.NO);
             
+            ParametroCodefac parametroMotivoGuiaRemisions = parametrosTodos.get(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION);
+            String motivoGuiaRemision = (parametroMotivoGuiaRemisions != null) ? parametroMotivoGuiaRemisions.getValor() : "";
+            getTxtMotivoTrasladoGuiaRemision().setText(motivoGuiaRemision);
+            
             
             
         } catch (RemoteException ex) {
@@ -277,6 +281,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         
         agregarParametro(ParametroCodefac.FORMATO_ORDEN_TRABAJO,formatoHojaEnum.getLetra());
         parametrosEditar.add(parametrosTodos.get(ParametroCodefac.FORMATO_ORDEN_TRABAJO));
+        
+        agregarParametro(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION, getTxtMotivoTrasladoGuiaRemision().getText());
+        parametrosEditar.add(parametrosTodos.get(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION));
+        
+        
         
     }
     

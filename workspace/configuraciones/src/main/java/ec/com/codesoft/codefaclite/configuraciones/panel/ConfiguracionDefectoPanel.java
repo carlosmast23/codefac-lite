@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  *
@@ -65,9 +66,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbCargarProductoIvaFactura = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         lblEspacioVertical1 = new javax.swing.JLabel();
-        lblEspacioHorizontal1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         cmbActivarReporteSimpleGuiaRemision = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        txtMotivoTrasladoGuiaRemision = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -250,31 +252,44 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel5.add(lblEspacioVertical1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        jPanel5.add(lblEspacioHorizontal1, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Reporte Simplificado Guia Retención:");
+        jLabel6.setText("Motivo Traslado Por Defecto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(jLabel6, gridBagConstraints);
 
         cmbActivarReporteSimpleGuiaRemision.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(cmbActivarReporteSimpleGuiaRemision, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel8.setText("Reporte Simplificado Guia Retención:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jLabel8, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 300;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(txtMotivoTrasladoGuiaRemision, gridBagConstraints);
 
         jTabbedPane1.addTab("Transporte", jPanel5);
 
@@ -300,6 +315,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -314,9 +330,9 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacio6;
     private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JLabel lblEspacioBlanco2;
-    private javax.swing.JLabel lblEspacioHorizontal1;
     private javax.swing.JLabel lblEspacioVertical;
     private javax.swing.JLabel lblEspacioVertical1;
+    private javax.swing.JTextField txtMotivoTrasladoGuiaRemision;
     private javax.swing.JTextArea txtOrdenTrabajoReporte;
     // End of variables declaration//GEN-END:variables
 
@@ -378,6 +394,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public JComboBox<EnumSiNo> getCmbCargarProductoIvaFactura() {
         return cmbCargarProductoIvaFactura;
+    }
+
+    public JTextField getTxtMotivoTrasladoGuiaRemision() {
+        return txtMotivoTrasladoGuiaRemision;
     }
     
     

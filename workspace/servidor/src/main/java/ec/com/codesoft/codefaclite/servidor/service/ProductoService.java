@@ -6,12 +6,12 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -64,13 +64,33 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public void editar(Producto p)
     {
-        productoFacade.edit(p);
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+                    productoFacade.edit(p);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     public void eliminar(Producto p)
     {
-        p.setEstado(ProductoEnumEstado.ELIMINADO.getEstado());
-        productoFacade.edit(p);
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+                    p.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                    productoFacade.edit(p);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     public List<Producto> buscar()
@@ -78,12 +98,30 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return productoFacade.findAll();
     }
     
-    public Producto buscarPorNombreyEstado(String nombre,ProductoEnumEstado estadoEnum) throws RemoteException
+    public Producto buscarPorNombreyEstado(String nombre,GeneralEnumEstado estadoEnum) throws RemoteException
     {
 
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("nombre",nombre);
         mapParametros.put("estado",estadoEnum.getEstado());
+        
+        List<Producto> productos=getFacade().findByMap(mapParametros);
+        if(productos.size()>0)
+        {
+            return productos.get(0);
+        }
+        return null;
+        
+    }
+    
+    public Producto buscarProductoActivoPorCodigo(String codigo) throws RemoteException
+    {
+        //Producto p;
+        //p.getCodigoPersonalizado();
+        //p.getEstado();GeneralEnumEstado
+        Map<String,Object> mapParametros=new HashMap<String,Object>();        
+        mapParametros.put("codigoPersonalizado",codigo);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());        
         
         List<Producto> productos=getFacade().findByMap(mapParametros);
         if(productos.size()>0)

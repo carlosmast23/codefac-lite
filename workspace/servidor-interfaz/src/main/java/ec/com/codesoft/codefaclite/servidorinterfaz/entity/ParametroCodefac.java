@@ -81,6 +81,8 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String CARGAR_PRODUCTO_IVA_FACTURA = "cargar_producto_iva_factura";
     
+    public static final String MOTIVO_TRASLADO_GUIA_REMISION = "motivo_traslado_guia_remision";
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

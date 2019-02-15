@@ -16,7 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ProductoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -73,10 +73,10 @@ public class MigrarProductoModel extends MigrarModel {
                    }
                    
                    producto.setValorUnitario(precioVenta);
-                   producto.setEstado(ProductoEnumEstado.ACTIVO.getEstado());
+                   producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                    //producto.setCatalogoProducto(CatalogoPro);
                    
-                   Producto productoTmp=ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), ProductoEnumEstado.ACTIVO);
+                   Producto productoTmp=ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), GeneralEnumEstado.ACTIVO);
                    if(productoTmp!=null)
                    {
                        throw new ExcelMigrar.ExcepcionExcelRegistroDuplicado("El dato ya se encuentra registrado en el sistema");

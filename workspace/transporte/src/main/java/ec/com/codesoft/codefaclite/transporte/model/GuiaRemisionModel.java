@@ -234,7 +234,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         getTxtIdentificacionTransportista().setText("");
         getTxtIdentificacionDestinatario().setText("");
         getTxtDireccionDestino().setText("");
-        getTxtMotivoTraslado().setText("");
+        //getTxtMotivoTraslado().setText("");
         getTxtRuta().setText("");
         
         getTxtPreimpreso().setText("");
@@ -246,6 +246,12 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         getTxtCodigoDetalle().setText("");
         getCmbDestinatarios().removeAllItems();
         getTxtCodigoSucursal().setValue(1);
+        
+        ParametroCodefac parametroMotivoTraslado= session.getParametrosCodefac().get(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION);
+        if(estadoFormulario.equals(ESTADO_GRABAR) &&  parametroMotivoTraslado!=null)
+        {
+            getTxtMotivoTraslado().setText(parametroMotivoTraslado.getValor());
+        }
         
         imprimirTabla();
         

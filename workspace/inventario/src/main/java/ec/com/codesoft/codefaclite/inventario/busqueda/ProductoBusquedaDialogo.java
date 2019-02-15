@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ProductoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
         String queryString = "SELECT u FROM Producto u WHERE (u.estado=?1) and "+queryExtra;
         queryString+=" ( LOWER(u.nombre) like ?2 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
-        queryDialog.agregarParametro(1,ProductoEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2,filter);
         if(tipoProductoEnum!=null)
         {

@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ProductoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
 /**
@@ -56,7 +56,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
         String queryString = "SELECT u FROM Producto u WHERE (u.estado=?1) and";
         queryString+=" ( LOWER(u.nombre) like ?2 OR u.codigoPersonalizado like ?2 ) ORDER BY u.codigoPersonalizado";
         QueryDialog queryDialog=new QueryDialog(queryString);
-        queryDialog.agregarParametro(1,ProductoEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2,filter);
         //queryDialog.agregarParametro(2,ProductoEnumEstado.INACTIVO.getEstado());
         return queryDialog;

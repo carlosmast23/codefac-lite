@@ -43,10 +43,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.event.ActionEvent;
@@ -54,6 +56,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
@@ -102,8 +106,10 @@ public class CompraModel extends CompraPanel{
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        inicarComponentesGraficos();
         iniciarCombos();
         agregarListenerBotones();
+        agregarListenerTextoBox();
         crearVariables();
         if(session.getEmpresa() != null){
             if(session.getEmpresa().getObligadoLlevarContabilidad().equalsIgnoreCase(Empresa.SI_LLEVA_CONTABILIDAD))
@@ -889,8 +895,8 @@ public class CompraModel extends CompraPanel{
     
     private void desbloquearIngresoDetalleProducto()
     {
-        getTxtDescripcionItem().setEnabled(true);
-        getTxtProductoItem().setEnabled(true);
+        //getTxtDescripcionItem().setEnabled(true);
+        //getTxtProductoItem().setEnabled(true);
         getTxtCantidadItem().setEnabled(true);
         getTxtPrecionUnitarioItem().setEnabled(true);
         getCmbCobraIva().setEnabled(true);
@@ -898,8 +904,8 @@ public class CompraModel extends CompraPanel{
     
     private void bloquearIngresoDetalleProducto()
     {
-        getTxtDescripcionItem().setEnabled(false);
-        getTxtProductoItem().setEnabled(false);
+        //getTxtDescripcionItem().setEnabled(false);
+        //getTxtProductoItem().setEnabled(false);
         getTxtCantidadItem().setEnabled(false);
         getTxtPrecionUnitarioItem().setEnabled(false);
         getCmbCobraIva().setEnabled(false);
@@ -942,6 +948,7 @@ public class CompraModel extends CompraPanel{
             productoProveedor.setCosto(costo);
             EnumSiNo enumSiNo= (EnumSiNo) getCmbCobraIva().getSelectedItem();
             productoProveedor.setConIva(enumSiNo.getLetra());
+            
             //Seteo los valores de los detalles e la compra
             compraDetalle.setCantidad(Integer.parseInt(getTxtCantidadItem().getText()));
             BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText()); 
@@ -1007,7 +1014,7 @@ public class CompraModel extends CompraPanel{
     
     private boolean verificarCamposValidados()
     {
-        boolean b = true;
+        //boolean b = true;
         List<JTextField> camposValidar = new ArrayList<JTextField>();
             camposValidar.add(getTxtCantidadItem());
             camposValidar.add(getTxtPrecionUnitarioItem());
@@ -1018,10 +1025,33 @@ public class CompraModel extends CompraPanel{
                 //System.out.println("Color: -->" + campo.getBackground());
                 if(!campo.getBackground().equals(Color.WHITE))
                 {
-                    b = false;
+                    return  false;
                 }
             }
-        return b;
+            
+        if(estadoFormulario.equals(ESTADO_GRABAR))
+        {
+            String precioUnitarioTxt=getTxtPrecionUnitarioItem().getText();
+            if(precioUnitarioTxt.isEmpty())
+            {
+               DialogoCodefac.mensaje("Advertencia","El precio unitario no puede ser vacio",DialogoCodefac.MENSAJE_ADVERTENCIA);
+               return false;
+            }
+            else
+            {
+                BigDecimal precioUnitario=new BigDecimal(precioUnitarioTxt);
+                if(precioUnitario.compareTo(BigDecimal.ZERO)<=0)
+                {
+                    DialogoCodefac.mensaje("Advertencia","El precio unitario debe ser mayor que 0",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return false;
+                }
+            }
+            
+            
+            
+        }
+            
+        return true;
     }
     
     public void calcularDescuento(int opc, BigDecimal descuento)
@@ -1095,5 +1125,45 @@ public class CompraModel extends CompraPanel{
         UtilidadesFormularios.llenarAutomaticamenteCamposTexto(getTxtPuntoEmisionCompra(),3);
         UtilidadesFormularios.llenarAutomaticamenteCamposTexto(getTxtSecuencialCompra(),9);
         
+    }
+
+    private void inicarComponentesGraficos() {
+        UtilidadesSwingX.placeHolder("Código Producto", getTxtProductoItem());
+        UtilidadesSwingX.placeHolder("Descripción", getTxtDescripcionItem());
+        //getTxtProductoItem().
+    }
+
+    private void agregarListenerTextoBox() {
+        getTxtProductoItem().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                 if (e.getKeyCode() == KeyEvent.VK_ENTER) 
+                 {
+                     try {
+                         //Solo validar si existe datos ingresados en el combo
+                         if (getTxtProductoItem().getText().trim().equals("")) {
+                             return;
+                         }
+                         
+                         ProductoServiceIf productoServiceIf=ServiceFactory.getFactory().getProductoServiceIf();
+                         Producto productoSeleccionadoTmp=productoServiceIf.buscarProductoActivoPorCodigo(getTxtProductoItem().getText());
+                         if(productoSeleccionadoTmp!=null)
+                         {
+                            productoSeleccionado=productoSeleccionadoTmp;
+                            verificarExistenciadeProductoProveedor();
+                            bloquearDesbloquearBotones(true);
+                         }
+                     } catch (RemoteException ex) {
+                         Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                     }
+                 }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
     }
 }

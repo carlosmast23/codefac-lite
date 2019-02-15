@@ -21,7 +21,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
@@ -30,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
@@ -128,7 +128,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setCodigoPersonalizado(getTxtCodigoPersonalizado().getText());
         producto.setCodigoEAN(getTxtCodigoEAN().getText());
         producto.setCodigoUPC(getTxtCodigoUPC().getText());
-        producto.setEstado(ProductoEnumEstado.ACTIVO.getEstado());
+        producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
 
         ///CatalogoProducto catalogoProducto=(CatalogoProducto) getCmbCatalogoProducto().getSelectedItem();
         //producto.setCatalogoProducto(catalogoProducto);
