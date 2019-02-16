@@ -443,7 +443,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                 titulo.add("");
                 titulo.add("" + productoProveedor.getProducto().getNombre());
                 titulo.add("" + productoProveedor.getCosto().toString());
-                titulo.add("" + productoProveedor.getConIva());
+                titulo.add("" + productoProveedor.getProducto().getCatalogoProducto().getIva().getTarifa());
                 defaultTableModel.addRow(titulo);
             }            
         }
@@ -467,7 +467,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                 titulo.add("");
                 titulo.add("" + productoProveedor.getProveedor().getNombresCompletos());
                 titulo.add("" + productoProveedor.getCosto().toString());
-                titulo.add("" + productoProveedor.getConIva());
+                titulo.add("" + productoProveedor.getProducto().getCatalogoProducto().getIva().getTarifa());
                 defaultTableModel.addRow(titulo);
             }            
         }
@@ -557,7 +557,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                     break;
             }
             ipp.setPrecio(""+productoProveedor.getCosto().toString());
-            ipp.setIva(""+productoProveedor.getConIva());
+            ipp.setIva(""+productoProveedor.getProducto().getCatalogoProducto().getIva().getTarifa());
             informacionProductoProveedors.add(ipp);
         }
         

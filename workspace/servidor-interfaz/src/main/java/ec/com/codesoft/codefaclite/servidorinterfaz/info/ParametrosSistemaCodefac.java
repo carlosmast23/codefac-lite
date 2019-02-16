@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.info;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.Image;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import javax.swing.ImageIcon;
 
 /**
@@ -66,7 +68,10 @@ public abstract class ParametrosSistemaCodefac {
      
     public static final String LINK_ANULACIONES_SRI="https://declaraciones.sri.gob.ec/tuportal-internet/accederAplicacion.jspa?redireccion=61&idGrupo=58";
     
-    
+    /**
+     * Variable que sirve para establecer el redondeo por defecto de todo el sistam
+     */
+    public static final RoundingMode REDONDEO_POR_DEFECTO=RoundingMode.HALF_UP;
     public abstract class MensajesSistemaCodefac
     {
         public static final String MENSAJE_PIE_PAGINA_GRATIS="Reporte generado con Codefac versión gratuita, descargada en www.cf.codesoft-ec.com";

@@ -8,9 +8,11 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -137,6 +139,9 @@ public class Compra implements Serializable {
     
 
     public Compra() {
+        this.descuentoImpuestos=BigDecimal.ZERO;
+        this.descuentoSinImpuestos=BigDecimal.ZERO;
+        
     }
     
     public Long getId() {
@@ -459,6 +464,39 @@ public class Compra implements Serializable {
     /**
      * Informacion adicional
      */
+    public void calcularTotales()
+    {
+        this.subtotalImpuestos=BigDecimal.ZERO;
+        this.subtotalSinImpuestos=BigDecimal.ZERO;
+        this.iva=BigDecimal.ZERO;
+        
+        if(detalles!=null)
+        {
+            //FacturaDetalle fd;
+            //fd.getReferenciaId()
+            for (CompraDetalle detalle : detalles) {
+                if(detalle.getProductoProveedor().getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
+                {   //Sumar los subtotales con valor 0
+                    subtotalSinImpuestos=subtotalSinImpuestos.add(detalle.getTotal());                    
+                }
+                else
+                { //Sumar los subtotales con valor 12
+                    subtotalImpuestos=subtotalImpuestos.add(detalle.getTotal());
+                    iva=iva.add(detalle.getIva());
+                }
+            }
+            
+            //Setear la escala del iva y del valor total
+            iva=iva.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
+            
+            total=subtotalImpuestos.add(subtotalSinImpuestos).add(iva); //calcular el total de los valores
+            
+            //redondeo despues de redondear el iva para tener un valor coherente con la sumatoria de los valores redondeados
+            total=total.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
+        }
+    }
+    
+    
     public void addDetalle(CompraDetalle detalle)
     {
         if(this.detalles==null)

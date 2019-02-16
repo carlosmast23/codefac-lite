@@ -94,7 +94,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
         productoProveedor.setCosto(new BigDecimal(getTxtCosto().getText()));
         productoProveedor.setEstado("a");
         EnumSiNo enumSiNo= (EnumSiNo) getCmbIva().getSelectedItem();
-        productoProveedor.setConIva(enumSiNo.getLetra());
+        //productoProveedor.setConIva(enumSiNo.getLetra());
         productoProveedor.setProducto(producto);
         productoProveedor.setProveedor(proveedor);        
     }
@@ -223,12 +223,12 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
                 Vector<String> fila=new Vector<String>();
                 fila.add(productoProveedor.getProducto().getNombre());
                 fila.add(productoProveedor.getCosto().toString());
-                if(productoProveedor.getConIva().equals("n"))
-                {
+                //if(productoProveedor.getConIva().equals("n"))
+                //{
                     fila.add("Sin Iva");
-                }else{
-                    fila.add("Con Iva");
-                }
+                //}else{
+                //    fila.add("Con Iva");
+                //}
                 System.out.println("Estado de producto--->" +productoProveedor.getEstado());
                 modeloTabla.addRow(fila);
             }

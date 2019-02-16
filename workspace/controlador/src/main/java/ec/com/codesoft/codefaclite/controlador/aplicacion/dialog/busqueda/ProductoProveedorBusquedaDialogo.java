@@ -40,8 +40,8 @@ public class ProductoProveedorBusquedaDialogo implements InterfaceModelFind<Prod
         dato.add(t.getProducto().getNombre());
         dato.add(t.getCosto()+"");
         
-        EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(t.getConIva());
-        dato.add(enumSiNo.getNombre());
+        EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra("no"); //TODO: Setear otra variable mas util
+        //dato.add(enumSiNo.getNombre());
                 
 
     }

@@ -34,8 +34,8 @@ public class ProductoProveedor implements Serializable{
     @Column (name = "DESCRIPCION")
     private String descripcion;
     
-    @Column (name = "CON_IVA")
-    private String conIva;
+    //@Column (name = "CON_IVA")
+    //private String conIva;
     
     @Column (name = "COSTO_ACTUAL")
     private BigDecimal costo;
@@ -70,13 +70,14 @@ public class ProductoProveedor implements Serializable{
         this.descripcion = descripcion;
     }
 
-    public String getConIva() {
-        return conIva;
-    }
+    
+    //public String getConIva() {
+    //    return conIva;
+    //}
 
-    public void setConIva(String conIva) {
-        this.conIva = conIva;
-    }
+    //public void setConIva(String conIva) {
+    //    this.conIva = conIva;
+    //}
 
     public BigDecimal getCosto() {
         return costo;

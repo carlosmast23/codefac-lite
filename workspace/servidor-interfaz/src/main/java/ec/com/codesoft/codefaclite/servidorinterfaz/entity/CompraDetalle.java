@@ -178,6 +178,11 @@ public class CompraDetalle implements Serializable {
     {
         return new BigDecimal(cantidad+"").multiply(precioUnitario).subtract(descuento);
     }
+    
+    public void calcularSubtotalSinIva()
+    {
+        total=getSubtotal();
+    }
     /**
      * Calcula el valor del iva 
      * @return 

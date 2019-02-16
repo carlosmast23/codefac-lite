@@ -523,8 +523,8 @@ public class OrdenCompraModel extends OrdenCompraPanel{
                 if (resultados != null && resultados.size() > 0) {
                     productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
                     getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto() + "");
-                    EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra(productoProveedor.getConIva());
-                    getCmbCobraIva().setSelectedItem(enumSiNo);
+                    //EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra(productoProveedor.getConIva());
+                    //getCmbCobraIva().setSelectedItem(enumSiNo);
                 } else {//Cuando no existe crea un nuevo producto proveedor
                     productoProveedor = new ProductoProveedor(); //Si no existe el item lo creo para posteriormente cuando grabe persistir con la base de datos
                     productoProveedor.setDescripcion("");
@@ -563,7 +563,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
             BigDecimal costo = new BigDecimal(getTxtPrecionUnitarioItem().getText());
             productoProveedor.setCosto(costo);
             EnumSiNo enumSiNo = (EnumSiNo) getCmbCobraIva().getSelectedItem();
-            productoProveedor.setConIva(enumSiNo.getLetra());
+            //productoProveedor.setConIva(enumSiNo.getLetra());
             //Seteo los valores de los detalles e la compra
             ordenCompraDetalle.setCantidad(Integer.parseInt(getTxtCantidadItem().getText()));
             BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText());
@@ -571,10 +571,10 @@ public class OrdenCompraModel extends OrdenCompraPanel{
             ordenCompraDetalle.setOrdenCompra(ordenCompra);
             ordenCompraDetalle.setDescripcion(getTxtDescripcionItem().getText());
             ordenCompraDetalle.setDescuento(BigDecimal.ZERO);
-            if (productoProveedor.getConIva().equals("s")) {
-                ordenCompraDetalle.setIva(ordenCompraDetalle.calcularValorIva());
+            if (productoProveedor.getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0) {
+                ordenCompraDetalle.setIva(BigDecimal.ZERO);                
             } else {
-                ordenCompraDetalle.setIva(BigDecimal.ZERO);
+                ordenCompraDetalle.setIva(ordenCompraDetalle.calcularValorIva());
             }
 
             ordenCompraDetalle.setProductoProveedor(productoProveedor);
@@ -682,7 +682,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
     
     public void calcularSubtotal0(List<OrdenCompraDetalle> detalles) {
         for (OrdenCompraDetalle detalle : detalles) {
-            if (detalle.getProductoProveedor().getConIva().equals("n")) {
+            if (detalle.getProductoProveedor().getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0) {
                 this.ordenCompra.setSubtotalSinImpuestos(this.ordenCompra.getSubtotalSinImpuestos().add(detalle.getTotal()));
             }
         }
@@ -692,7 +692,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
 
     public void calcularSubtotal12(List<OrdenCompraDetalle> detalles) {
         for (OrdenCompraDetalle detalle : detalles) {
-            if (detalle.getProductoProveedor().getConIva().equals("s")) {
+            if (detalle.getProductoProveedor().getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)!=0) {
                 this.ordenCompra.setSubtotalImpuestos(this.ordenCompra.getSubtotalImpuestos().add(detalle.getTotal()));
             }
         }

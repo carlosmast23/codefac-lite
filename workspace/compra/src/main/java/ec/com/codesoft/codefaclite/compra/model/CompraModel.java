@@ -91,8 +91,6 @@ public class CompraModel extends CompraPanel{
     //private Persona proveedor;
     private ProductoProveedor productoProveedor;
     private DefaultTableModel modeloTablaDetallesCompra;
-    private BigDecimal subtotal12;
-    private BigDecimal subtotal0;
     private Boolean bandera;
     private int filaDP;
     private Boolean banderaIngresoDetallesCompra;
@@ -300,12 +298,8 @@ public class CompraModel extends CompraPanel{
         this.getTxtDescuentoImpuestos().setText(this.compra.getDescuentoImpuestos() + "");
         this.getTxtDescuentoSinImpuestos().setText(this.compra.getDescuentoSinImpuestos() + "");
         //Valores a mostrar del subtotal
-        this.subtotal0 = new BigDecimal(BigInteger.ZERO);
-        this.subtotal0 = this.subtotal0.add(this.compra.getDescuentoSinImpuestos()).add(this.compra.getSubtotalSinImpuestos());
-        this.subtotal12 = new BigDecimal(BigInteger.ZERO);
-        this.subtotal12 = this.subtotal12.add(this.compra.getDescuentoImpuestos()).add(this.compra.getSubtotalImpuestos());
-        this.getLblSubtotalImpuesto().setText(this.subtotal12 + "");
-        this.getLblSubtotalSinImpuesto().setText(this.subtotal0 + "");
+        this.getLblSubtotalImpuesto().setText(compra.getSubtotalImpuestos().toString());
+        this.getLblSubtotalSinImpuesto().setText(compra.getSubtotalSinImpuestos().toString());
         
         //Cargar la orden de compra si existe referencia
         if(this.compra.getOrdenCompra()!=null)
@@ -425,11 +419,6 @@ public class CompraModel extends CompraPanel{
             getCmbTipoDocumento().addItem(tipoDocumento);
         }
         
-        //Agregar los valores para ver si se cobra el iva o no
-        EnumSiNo enumSiNo=(EnumSiNo) getCmbCobraIva().getSelectedItem();
-        for (EnumSiNo enumerador : EnumSiNo.values()) {
-            getCmbCobraIva().addItem(enumerador);
-        }
         
         //Agregar los tipos de retencion Iva
         getCmbRetencionIva().removeAllItems();
@@ -604,7 +593,7 @@ public class CompraModel extends CompraPanel{
             @Override
             public void focusLost(FocusEvent e) {
                 BigDecimal descuento = new BigDecimal(getTxtDescuentoImpuestos().getText());
-                if(descuento.compareTo(subtotal12) == 1)
+                if(descuento.compareTo(compra.getSubtotalImpuestos()) == 1)
                 {
                     DialogoCodefac.mensaje("Descuento", "El descuento no puede ser mayor que el subtotal con impuesto", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     getTxtDescuentoImpuestos().setText(compra.getDescuentoImpuestos()+"");
@@ -627,7 +616,7 @@ public class CompraModel extends CompraPanel{
             public void focusLost(FocusEvent e)
             {
                 BigDecimal descuento = new BigDecimal(getTxtDescuentoSinImpuestos().getText());
-                if(descuento.compareTo(subtotal0) == 1)
+                if(descuento.compareTo(compra.getSubtotalSinImpuestos()) == 1)
                 {
                     DialogoCodefac.mensaje("Descuento", "El descuento no puede ser mayor que el subtotal sin impuesto", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     getTxtDescuentoSinImpuestos().setText(compra.getDescuentoSinImpuestos()+"");
@@ -713,8 +702,7 @@ public class CompraModel extends CompraPanel{
                         if (resultados != null && resultados.size() > 0) {
                             productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
                             getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto()+"");
-                            EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(productoProveedor.getConIva());
-                            getCmbCobraIva().setSelectedItem(enumSiNo);
+                            //EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(productoProveedor.getConIva());
                         }
                         else
                         {//Cuando no existe crea un nuevo producto proveedor
@@ -724,10 +712,9 @@ public class CompraModel extends CompraPanel{
                             productoProveedor.setProducto(productoSeleccionado);
                             productoProveedor.setProveedor(compra.getProveedor());
                             getTxtPrecionUnitarioItem().setText("0"); //Seteo con el valor de 0 porque no existe el costo grabado
-                            getCmbCobraIva().setSelectedItem(EnumSiNo.SI); //Seteo por defecto el valor de SI cuando no existe en la base de datos
                         }
                         
-                        getTxtProductoItem().setText(productoSeleccionado.getNombre());
+                        getTxtProductoItem().setText(productoSeleccionado.getCodigoPersonalizado());
                         getTxtDescripcionItem().setText(productoSeleccionado.getNombre());
                     } catch (RemoteException ex) {
                         Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -739,74 +726,12 @@ public class CompraModel extends CompraPanel{
     
     private void actualizarTotales()
     {
-        List<CompraDetalle> detalles= compra.getDetalles();
+        compra.calcularTotales();
+    }
+    
+       
+    
         
-        //Encerado Valores       
-        compra.setIva(BigDecimal.ZERO);
-        compra.setSubtotalImpuestos(BigDecimal.ZERO);
-        compra.setSubtotalSinImpuestos(BigDecimal.ZERO);
-        compra.setTotal(BigDecimal.ZERO);
-        //compra.setDescuentoSinImpuestos(BigDecimal.ZERO);
-        compra.setDescuentoSinImpuestos(compra.getDescuentoSinImpuestos().setScale(2,RoundingMode.HALF_UP));
-        //compra.setDescuentoImpuestos(BigDecimal.ZERO);
-        compra.setDescuentoImpuestos(compra.getDescuentoImpuestos().setScale(2,RoundingMode.HALF_UP));
-        //LLamo metodos para calcular valores totales
-        calcularSubtotal0(detalles);
-        calcularSubtotal12(detalles);
-        calcularIva12();
-        calcularValorTotal();
-
-    }
-    
-    public void calcularSubtotal0(List<CompraDetalle> detalles)
-    {
-        for(CompraDetalle detalle : detalles)
-        {
-            if(detalle.getProductoProveedor().getConIva().equals("n"))
-            {
-                this.compra.setSubtotalSinImpuestos(this.compra.getSubtotalSinImpuestos().add(detalle.getTotal()));
-            }
-        }
-        this.compra.setSubtotalSinImpuestos(this.compra.getSubtotalSinImpuestos().setScale(2,RoundingMode.HALF_UP));
-        this.subtotal0 = this.compra.getSubtotalSinImpuestos();
-    }
-    
-    public void calcularSubtotal12(List<CompraDetalle> detalles)
-    {
-        for(CompraDetalle detalle : detalles)
-        {
-            if(detalle.getProductoProveedor().getConIva().equals("s"))
-            {
-                this.compra.setSubtotalImpuestos(this.compra.getSubtotalImpuestos().add(detalle.getTotal()));
-            }
-        }
-        this.compra.setSubtotalImpuestos(this.compra.getSubtotalImpuestos().setScale(2,RoundingMode.HALF_UP));
-        this.subtotal12 = this.compra.getSubtotalImpuestos();
-    }
-    
-    public void calcularIva12()
-    {
-        this.compra.setIva(this.compra.getSubtotalImpuestos().multiply(new BigDecimal("0.120")));
-        this.compra.setIva(this.compra.getIva().setScale(2,RoundingMode.HALF_UP));
-    }
-    
-    public void calcularSubtotalSinImpuesto()
-    {
-        this.compra.setSubtotalSinImpuestos(this.subtotal0.subtract(this.compra.getDescuentoSinImpuestos()));
-        this.compra.setSubtotalSinImpuestos(this.compra.getSubtotalSinImpuestos().setScale(2,RoundingMode.HALF_UP));
-    }
-    
-    public void calcularSubtotalImpuesto()
-    {
-        this.compra.setSubtotalImpuestos(this.subtotal12.subtract(this.compra.getDescuentoImpuestos()));
-        this.compra.setSubtotalImpuestos(this.compra.getSubtotalImpuestos().setScale(2,RoundingMode.HALF_UP));
-    }
-    
-    public void calcularValorTotal()
-    {    
-        this.compra.setTotal(this.compra.getSubtotalImpuestos().add(this.compra.getSubtotalSinImpuestos().add(this.compra.getIva())));
-    }
-    
     /**
      * Actualiza los datos de la tabla segun los datos grabados en los detalles de la tabla
      * de compras
@@ -852,8 +777,8 @@ public class CompraModel extends CompraPanel{
     
     private void mostrarDatosTotales()
     {
-        getLblSubtotalSinImpuesto().setText(this.subtotal0 + "");
-        getLblSubtotalImpuesto().setText(this.subtotal12 + "");
+        getLblSubtotalSinImpuesto().setText(compra.getSubtotalSinImpuestos().toString());
+        getLblSubtotalImpuesto().setText(compra.getSubtotalImpuestos().toString());
         getTxtDescuentoImpuestos().setText(compra.getDescuentoImpuestos()+"");
         getTxtDescuentoSinImpuestos().setText(compra.getDescuentoSinImpuestos()+"");
         getLblSubtotalImpuestos().setText(compra.getSubtotalImpuestos()+"");
@@ -895,20 +820,20 @@ public class CompraModel extends CompraPanel{
     
     private void desbloquearIngresoDetalleProducto()
     {
-        //getTxtDescripcionItem().setEnabled(true);
-        //getTxtProductoItem().setEnabled(true);
+        getTxtDescripcionItem().setEnabled(true);
+        getTxtProductoItem().setEnabled(true);
         getTxtCantidadItem().setEnabled(true);
         getTxtPrecionUnitarioItem().setEnabled(true);
-        getCmbCobraIva().setEnabled(true);
+        
     }
     
     private void bloquearIngresoDetalleProducto()
     {
-        //getTxtDescripcionItem().setEnabled(false);
-        //getTxtProductoItem().setEnabled(false);
+        getTxtDescripcionItem().setEnabled(false);
+        getTxtProductoItem().setEnabled(false);
         getTxtCantidadItem().setEnabled(false);
         getTxtPrecionUnitarioItem().setEnabled(false);
-        getCmbCobraIva().setEnabled(false);
+        
     }
     
     private void limpiarCampos()
@@ -946,8 +871,8 @@ public class CompraModel extends CompraPanel{
         {
             BigDecimal costo=new BigDecimal(getTxtPrecionUnitarioItem().getText());
             productoProveedor.setCosto(costo);
-            EnumSiNo enumSiNo= (EnumSiNo) getCmbCobraIva().getSelectedItem();
-            productoProveedor.setConIva(enumSiNo.getLetra());
+            //EnumSiNo enumSiNo= (EnumSiNo) getCmbCobraIva().getSelectedItem();
+            //productoProveedor.setConIva(enumSiNo.getLetra());
             
             //Seteo los valores de los detalles e la compra
             compraDetalle.setCantidad(Integer.parseInt(getTxtCantidadItem().getText()));
@@ -956,13 +881,13 @@ public class CompraModel extends CompraPanel{
             compraDetalle.setCompra(compra);
             compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
             compraDetalle.setDescuento(BigDecimal.ZERO);
-            if(productoProveedor.getConIva().equals("s"))
+            if(productoProveedor.getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
             {
-                compraDetalle.setIva(compraDetalle.calcularValorIva());
+                compraDetalle.setIva(BigDecimal.ZERO);                
             }
             else
             {
-                compraDetalle.setIva(BigDecimal.ZERO);
+                compraDetalle.setIva(compraDetalle.calcularValorIva());
             }
             
             SriRetencionIva sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
@@ -972,7 +897,8 @@ public class CompraModel extends CompraPanel{
             compraDetalle.setSriRetencionRenta(sriRetencionRenta);
             
             compraDetalle.setProductoProveedor(productoProveedor);
-            compraDetalle.setTotal(compraDetalle.getSubtotal());
+            //compraDetalle.setTotal(compraDetalle.getSubtotal());
+            compraDetalle.calcularSubtotalSinIva();
             
             BigDecimal valorRetencionIVA = compraDetalle.getIva().multiply(new BigDecimal(sriRetencionIva.getPorcentaje()+"")).divide(new BigDecimal("100"));
             BigDecimal valorRetencionRenta = compraDetalle.getTotal().multiply(new BigDecimal(sriRetencionRenta.getPorcentaje()+"")).divide(new BigDecimal("100"));
@@ -989,9 +915,7 @@ public class CompraModel extends CompraPanel{
 
             if(agregar)
             {
-                compra.addDetalle(compraDetalle);
-                compra.setDescuentoImpuestos(new BigDecimal(getTxtDescuentoImpuestos().getText()));
-                compra.setDescuentoSinImpuestos(new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
+                compra.addDetalle(compraDetalle);                
             }
             
             actualizarDatosMostrarVentana();
@@ -1060,16 +984,14 @@ public class CompraModel extends CompraPanel{
         {
             case 1:
                 compra.setDescuentoImpuestos(descuento.setScale(2, RoundingMode.HALF_UP));
-                calcularSubtotalImpuesto();
+                compra.calcularTotales();
                 break;
             case 2:
                 compra.setDescuentoSinImpuestos(descuento.setScale(2,RoundingMode.HALF_UP));
-                calcularSubtotalSinImpuesto();
+                compra.calcularTotales();
                 break;
         }
         
-        calcularIva12();
-        calcularValorTotal();
         mostrarDatosTotales();
     }
     
