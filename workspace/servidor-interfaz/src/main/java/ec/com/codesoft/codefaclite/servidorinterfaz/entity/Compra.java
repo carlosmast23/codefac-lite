@@ -428,6 +428,13 @@ public class Compra implements Serializable {
     }
     
     
+    public BigDecimal getSubtotalImpuestosSinDescuentos() {
+        return subtotalImpuestos.add(descuentoImpuestos);
+    }
+    
+    public BigDecimal getSubtotalSinImpuestosSinDescuentos() {
+        return subtotalSinImpuestos.add(descuentoSinImpuestos);
+    }
     
     public GeneralEnumEstado getEstadoEnum()
     {
@@ -463,8 +470,9 @@ public class Compra implements Serializable {
    
     /**
      * Informacion adicional
+     * TODO: Ver si en vez de enviar el iva desde el formulario se puede grabar el dato para calcular internamente 
      */
-    public void calcularTotales()
+    public void calcularTotales(BigDecimal ivaConDecimales)
     {
         this.subtotalImpuestos=BigDecimal.ZERO;
         this.subtotalSinImpuestos=BigDecimal.ZERO;
@@ -482,12 +490,19 @@ public class Compra implements Serializable {
                 else
                 { //Sumar los subtotales con valor 12
                     subtotalImpuestos=subtotalImpuestos.add(detalle.getTotal());
-                    iva=iva.add(detalle.getIva());
+                    //iva=iva.add(detalle.getIva());
                 }
             }
             
+            //Obtengo los subtotal menos los decuentos
+            subtotalImpuestos=subtotalImpuestos.subtract(descuentoImpuestos);
+            subtotalSinImpuestos=subtotalSinImpuestos.subtract(descuentoSinImpuestos);
+            
+            
             //Setear la escala del iva y del valor total
+            iva=subtotalImpuestos.multiply(ivaConDecimales);
             iva=iva.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
+            
             
             total=subtotalImpuestos.add(subtotalSinImpuestos).add(iva); //calcular el total de los valores
             

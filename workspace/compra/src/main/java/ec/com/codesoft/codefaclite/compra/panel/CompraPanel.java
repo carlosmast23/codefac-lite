@@ -138,8 +138,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        lblSubtotalImpuesto = new javax.swing.JLabel();
-        lblSubtotalSinImpuesto = new javax.swing.JLabel();
+        lblSubtotalImpuestoSinDescuento = new javax.swing.JLabel();
+        lblSubtotalSinImpuestoSinDescuento = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         txtDescuentoSinImpuestos = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
@@ -481,25 +481,25 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel16, gridBagConstraints);
 
-        lblSubtotalImpuesto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblSubtotalImpuesto.setText("0.00");
+        lblSubtotalImpuestoSinDescuento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblSubtotalImpuestoSinDescuento.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(lblSubtotalImpuesto, gridBagConstraints);
+        jPanel1.add(lblSubtotalImpuestoSinDescuento, gridBagConstraints);
 
-        lblSubtotalSinImpuesto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblSubtotalSinImpuesto.setText("0.00");
+        lblSubtotalSinImpuestoSinDescuento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblSubtotalSinImpuestoSinDescuento.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(lblSubtotalSinImpuesto, gridBagConstraints);
+        jPanel1.add(lblSubtotalSinImpuestoSinDescuento, gridBagConstraints);
 
         jLabel19.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel19.setText("Descuento 0%");
@@ -814,9 +814,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio15;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblIva;
-    private javax.swing.JLabel lblSubtotalImpuesto;
+    private javax.swing.JLabel lblSubtotalImpuestoSinDescuento;
     private javax.swing.JLabel lblSubtotalImpuestos;
-    private javax.swing.JLabel lblSubtotalSinImpuesto;
+    private javax.swing.JLabel lblSubtotalSinImpuestoSinDescuento;
     private javax.swing.JLabel lblSubtotalSinImpuestos;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JPanel panelRetencion;
@@ -995,21 +995,23 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         this.lblIva = lblIva;
     }
 
-    public JLabel getLblSubtotalImpuesto() {
-        return lblSubtotalImpuesto;
+    public JLabel getLblSubtotalImpuestoSinDescuento() {
+        return lblSubtotalImpuestoSinDescuento;
     }
 
-    public void setLblSubtotalImpuesto(JLabel lblSubtotalImpuesto) {
-        this.lblSubtotalImpuesto = lblSubtotalImpuesto;
+    public void setLblSubtotalImpuestoSinDescuento(JLabel lblSubtotalImpuestoSinDescuento) {
+        this.lblSubtotalImpuestoSinDescuento = lblSubtotalImpuestoSinDescuento;
     }
 
-    public JLabel getLblSubtotalSinImpuesto() {
-        return lblSubtotalSinImpuesto;
+    public JLabel getLblSubtotalSinImpuestoSinDescuento() {
+        return lblSubtotalSinImpuestoSinDescuento;
     }
 
-    public void setLblSubtotalSinImpuesto(JLabel lblSubtotalSinImpuesto) {
-        this.lblSubtotalSinImpuesto = lblSubtotalSinImpuesto;
+    public void setLblSubtotalSinImpuestoSinDescuento(JLabel lblSubtotalSinImpuestoSinDescuento) {
+        this.lblSubtotalSinImpuestoSinDescuento = lblSubtotalSinImpuestoSinDescuento;
     }
+
+    
 
     public JLabel getLblTotal() {
         return lblTotal;
