@@ -225,13 +225,14 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("SUBTOTAL");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 0);
         jPanel1.add(jLabel6, gridBagConstraints);
 
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText("SUBTOTAL 12%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -240,6 +241,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 0);
         jPanel1.add(jLabel7, gridBagConstraints);
 
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("SUBTOTAL 0%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -248,7 +250,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 0);
         jPanel1.add(jLabel8, gridBagConstraints);
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel9.setText("DESCUENTO");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -257,7 +259,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 0);
         jPanel1.add(jLabel9, gridBagConstraints);
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel10.setText("IVA 12%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -266,7 +268,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 0);
         jPanel1.add(jLabel10, gridBagConstraints);
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel11.setText("TOTAL");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -275,12 +277,14 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 0);
         jPanel1.add(jLabel11, gridBagConstraints);
 
+        lblSubtotal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblSubtotal.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 5, 8);
         jPanel1.add(lblSubtotal, gridBagConstraints);
 
+        lblSubtotal12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblSubtotal12.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -289,6 +293,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 5, 8);
         jPanel1.add(lblSubtotal12, gridBagConstraints);
 
+        lblSubtotal0.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblSubtotal0.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -297,6 +302,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 5, 8);
         jPanel1.add(lblSubtotal0, gridBagConstraints);
 
+        lblDescuento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblDescuento.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -305,6 +311,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 5, 8);
         jPanel1.add(lblDescuento, gridBagConstraints);
 
+        lblIva12.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblIva12.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -313,6 +320,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 5, 8);
         jPanel1.add(lblIva12, gridBagConstraints);
 
+        lblTotal.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblTotal.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;

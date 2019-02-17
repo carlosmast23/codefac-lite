@@ -69,19 +69,12 @@ public class CompraReporteModel extends CompraReportePanel {
     //Variables que me permiten realizar la sumatoria de los totales de cada compra
     private BigDecimal subtotal = BigDecimal.ZERO;
     private BigDecimal subtotal0 = BigDecimal.ZERO;
-    ;
     private BigDecimal subtotal12 = BigDecimal.ZERO;
-    ;
     private BigDecimal descuento0 = BigDecimal.ZERO;
-    ;
     private BigDecimal descuento12 = BigDecimal.ZERO;
-    ;
     private BigDecimal descuento = BigDecimal.ZERO;
-    ;
     private BigDecimal iva = BigDecimal.ZERO;
-    ;
     private BigDecimal total = BigDecimal.ZERO;
-    ;
     
     //Servicio que me permite realizar la busqueda según los filtros de la ventana
     private CompraServiceIf compraServiceIf;
@@ -160,8 +153,8 @@ public class CompraReporteModel extends CompraReportePanel {
                 //Parametros estaticos que se envian para realizar el Reporte
                 parametros.put("tipodocumento", getCmbTipoDocumento().getSelectedItem() + "");
                 parametros.put("documento", getCmbDocumento().getSelectedItem() + "");
-                parametros.put("fechainicio", this.fechaInicio + "");
-                parametros.put("fechafin", this.fechaFinal + "");
+                parametros.put("fechainicial", this.fechaInicio + "");
+                parametros.put("fechafinal", this.fechaFinal + "");
                 parametros.put("subtotal", this.subtotal + "");
                 parametros.put("subtotal12", this.subtotal12 + "");
                 parametros.put("subtotal0", this.subtotal0 + "");
@@ -172,7 +165,7 @@ public class CompraReporteModel extends CompraReportePanel {
                 //Parametros dinámicos que se envian para realizar el Reporte
                 for (Compra compra : this.compras) {
                     CompraDataReporte cdr = new CompraDataReporte();
-                    cdr.setPreimpreso(compra.getPuntoEmision() + compra.getSecuencial() + compra.getPuntoEstablecimiento() + "");
+                    cdr.setPreimpreso(compra.getPreimpreso());
                     cdr.setIdentificacion(compra.getProveedor().getIdentificacion());
                     cdr.setNombre(compra.getProveedor().getRazonSocial());
                     cdr.setFecha(compra.getFechaFactura() + "");
@@ -363,13 +356,26 @@ public class CompraReporteModel extends CompraReportePanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    encerarValoresTotales();
                     setearValores();
                     visualizarTotalesComprasIndividuales();
                 } catch (RemoteException ex) {
                     Logger.getLogger(CompraReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+
         });
+    }
+
+    private void encerarValoresTotales() {
+        subtotal = BigDecimal.ZERO;
+        subtotal0 = BigDecimal.ZERO;
+        subtotal12 = BigDecimal.ZERO;
+        descuento0 = BigDecimal.ZERO;
+        descuento12 = BigDecimal.ZERO;
+        descuento = BigDecimal.ZERO;
+        iva = BigDecimal.ZERO;
+        total = BigDecimal.ZERO;
     }
 
     public void setearValores() throws RemoteException {
@@ -443,6 +449,15 @@ public class CompraReporteModel extends CompraReportePanel {
     }
 
     public BigDecimal sumarValores(BigDecimal d1, BigDecimal d2) {
+        if(d1==null)
+        {
+            d1=BigDecimal.ZERO;
+        }
+        
+        if(d2==null)
+        {
+            d2=BigDecimal.ZERO;
+        }
         return d1.add(d2);
     }
 
