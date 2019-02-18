@@ -53,7 +53,6 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
 {
     private Producto producto;
     private Persona proveedor;
-    private Boolean todos;
     private String opcionReporte;
     private DefaultTableModel modeloTablaDetallesCompra;
     private List<ProductoProveedor>  productoProveedores;
@@ -64,7 +63,6 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
     public void iniciar() throws ExcepcionCodefacLite {
         agregarBotonListener();
         agregarComboListener();
-        todos = false;
     }
 
     @Override
@@ -142,7 +140,6 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
         getTxtGenericoProductoProveedor().setText("");
         producto = null;
         proveedor = null;
-        todos = false;
         opcionReporte = "";
         productoProveedores = null;
         mapProductos = null;
@@ -266,7 +263,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                     switch(opcionReporte)
                     {
                         case "Producto":
-                            if(!todos){
+                            if(!getChckTodos().isSelected()){
                                 buscarPorProductor();
                                 crearMapPorProducto();
                             }else{
@@ -280,7 +277,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                             }
                             break;
                         case "Proveedor":
-                            if(!todos){
+                            if(!getChckTodos().isSelected()){
                                 buscarPorProveedor();
                                 crearMapPorProveedor();
                             }else{
@@ -312,14 +309,12 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
             public void actionPerformed(ActionEvent e) {
                 if(getChckTodos().isSelected())
                 {
-                    todos = true;
                     getBtnBuscarGenerico().setEnabled(false);
                     getTxtGenericoProductoProveedor().setEnabled(false);
                     getTxtGenericoProductoProveedor().setText("");                    
                 }
                 else
                 {
-                    todos = false;
                     getBtnBuscarGenerico().setEnabled(true);
                     getTxtGenericoProductoProveedor().setEnabled(true);
                 }
@@ -412,6 +407,8 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
         
         for(ProductoProveedor pp : productoProveedores)
         {
+            if(pp.getProveedor()==null)continue; //Si el proveedor es nulo no lo toma en cuenta
+            
             if(mapProveedores.get(pp.getProveedor()) == null)
             {
                 List<ProductoProveedor> pps = new ArrayList<>();
@@ -463,9 +460,10 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
             List<ProductoProveedor> productoProveedors = entry.getValue();
             for (ProductoProveedor productoProveedor : productoProveedors) 
             {
+                String nombreProveedor=(productoProveedor.getProveedor()!=null)?productoProveedor.getProveedor().getNombresCompletos():"Sin Proveedor";
                 titulo = new Vector<>();
                 titulo.add("");
-                titulo.add("" + productoProveedor.getProveedor().getNombresCompletos());
+                titulo.add("" + nombreProveedor);
                 titulo.add("" + productoProveedor.getCosto().toString());
                 titulo.add("" + productoProveedor.getProducto().getCatalogoProducto().getIva().getTarifa());
                 defaultTableModel.addRow(titulo);
@@ -525,7 +523,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
              * Agregar nombre Proveedor
              */
             ReporteProductoProveedor rpp = new ReporteProductoProveedor();
-            rpp.setNombre("" + key.getNombresCompletos());
+            rpp.setNombre("[ " +key.getNombreLegal()+" ] "+ key.getNombresCompletos());
             /**
              * Agregar Información
              */
@@ -549,10 +547,11 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
             opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
             switch (opcionReporte) {
                 case "Producto":
-                    ipp.setDescripcion(""+productoProveedor.getProveedor().getNombresCompletos());
+                    String nombreProveedor=(productoProveedor.getProveedor()!=null)?productoProveedor.getProveedor().getNombresCompletos():"Sin Proveedor";
+                    ipp.setDescripcion(nombreProveedor);
                     break;
                 case "Proveedor":
-                    ipp.setDescripcion(""+productoProveedor.getProducto().getNombre());
+                    ipp.setDescripcion(productoProveedor.getProducto().getNombre());
      
                     break;
             }
