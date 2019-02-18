@@ -33,7 +33,7 @@ public enum TipoDocumentoEnum {
      */
     COMPRA(ModuloCodefacEnum.COMPRA, 
             "COM", 
-            "Compra", 
+            "Compra Simple", 
             TipoDocumentoEnum.NO_AFECTA_INVETARIO,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA}),
     /**
@@ -69,13 +69,7 @@ public enum TipoDocumentoEnum {
             "COS",
             "Compra Servicios",
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
-    /**
-     * Tipo de compra que se registra como gastos de la empresa
-     */
-    COMPRA_GASTOS(ModuloCodefacEnum.COMPRA,
-            "COG",
-            "Compra Gastos",
-            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),    
+
     /**
      * Retenciones del iva o del inventario
      */

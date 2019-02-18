@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
@@ -137,6 +139,16 @@ public class Compra implements Serializable {
     @Column(name ="TIPO_IDENTIFICACION_CODIGO_SRI")
     private String tipoIdentificacionCodigoSri;
     
+    /**
+     * Este campo va a servir para los ats y saber cual es el codigo del documento segun el sri
+     * @date 17/02/2019
+     */
+    @Column(name ="CODIGO_DOCUMENTO_SRI")
+    private String codigoDocumentoSri;
+    
+    @Column(name = "CODIGO_SUSTENTO_SRI")
+    private String codigoSustentoSri;
+    
 
     public Compra() {
         this.descuentoImpuestos=BigDecimal.ZERO;
@@ -212,6 +224,23 @@ public class Compra implements Serializable {
 
     public String getTipoIdentificacionCodigoSri() {
         return tipoIdentificacionCodigoSri;
+    }
+
+    public String getCodigoComprobanteSri() {
+        return codigoDocumentoSri;
+    }
+
+    public String getCodigoSustentoSri() {
+        return codigoSustentoSri;
+    }
+    
+    public DocumentoEnum getCodigoDocumentoSriEnum() {
+        return DocumentoEnum.obtenerPorCodigoSri(codigoDocumentoSri);
+        
+    }
+
+    public SriSustentoComprobanteEnum getCodigoSustentoSriEnum() {
+        return SriSustentoComprobanteEnum.obtenerPorCodigo(codigoSustentoSri);        
     }
 
     
@@ -426,6 +455,25 @@ public class Compra implements Serializable {
     public void setAutorizacion(String autorizacion) {
         this.autorizacion = autorizacion;
     }
+
+    public void setCodigoComprobanteSri(String codigoComprobanteSri) {
+        this.codigoDocumentoSri = codigoComprobanteSri;
+    }
+
+    public void setCodigoSustentoSri(String codigoSustentoSri) {
+        this.codigoSustentoSri = codigoSustentoSri;
+    }
+    
+    public void setCodigoComprobanteSriEnum(DocumentoEnum documentoEnum) {
+        this.codigoDocumentoSri = documentoEnum.getCodigoSri();
+    }
+
+    public void setCodigoSustentoSriEnum(SriSustentoComprobanteEnum codigoEnum) {
+        this.codigoSustentoSri = codigoEnum.getCodigo();
+    }
+    
+    
+    
     
     
     public BigDecimal getSubtotalImpuestosSinDescuentos() {

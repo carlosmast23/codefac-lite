@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SriEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -160,12 +161,26 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             
             String identificacion=(compra.getIdentificacion()!=null && !compra.getIdentificacion().isEmpty() )?compra.getIdentificacion():compra.getProveedor().getIdentificacion();
                     
+            if(compra.getCodigoSustentoSri()==null)
+            {
+                compraAts.setCodSustento(SriSustentoComprobanteEnum.CREDITO_TRIBUTARIO_IVA.getCodigo()); //TODO: Por defecto dejo este valor para tener retrocompatiblidad con datos anteriores
+            }else
+            {
+                compraAts.setCodSustento(compra.getCodigoSustentoSri());
+            }
             
-            compraAts.setCodSustento("10"); //TODO:TABLA 5 consultar para integrar todas las clasificaciones de las compras
             String codigoSri=getCodigoSri(compra);        
             compraAts.setTpIdProv(codigoSri);
             compraAts.setIdProv(identificacion);
-            compraAts.setTipoComprobante("19");//Todo: Por el momento queda regitra ese codigo pero existen otro que toca preguntar para ver como funciona
+            
+            if(compra.getCodigoComprobanteSri()==null)
+            {
+                compraAts.setTipoComprobante(DocumentoEnum.FACTURA.getCodigoSri());
+            }else
+            {
+                compraAts.setTipoComprobante(compra.getCodigoComprobanteSri());
+            }
+            
             compraAts.setParteRel("SI"); //Todo: Me parece que esta parte toca implementar cuando es cliente final
             SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
             compraAts.setFechaRegistro(dateFormat.format(compra.getFechaCreacion()));

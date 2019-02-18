@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * TODO: Ver si aumentar un campo para saber cuales son documentos legales del Sri y cuales son documentos internos para otros procesos
  * @author Carlos
  */
 public enum DocumentoEnum {
@@ -21,7 +21,8 @@ public enum DocumentoEnum {
             DocumentoCategoriaEnum.COMPROBANTES_VENTA,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION,ModuloCodefacEnum.COMPRA},
             true,
-            true),
+            true,
+            "01"),
     
     /**
      * Documento no valido por el SRI //Ver si hago una clasificacion para diferencia este tipo de documentos
@@ -40,7 +41,52 @@ public enum DocumentoEnum {
             DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION,ModuloCodefacEnum.COMPRA},
             true,
-            false),
+            false,
+            "02"),
+    
+    BOLETOS_ESPETACULOS_PUBLICOS("Boletos espectáculos públicos",
+            "BEP",
+            DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS,
+            new ModuloCodefacEnum[]{ ModuloCodefacEnum.COMPRA},
+            true,
+            false,
+            "08"),
+    
+    /**
+     * Documentos emitidos por maquinas registradoras
+    */
+    TIQUETES_MAQUINAS_REGISTRADORAS("Tiquet maq.reg",
+            "TMR",
+            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA},
+            true,
+            false,
+            "09"),
+    
+    PASAJES_EMPRESA_AVIACION("Pasajes empresas de aviación",
+            "PEA",
+            DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS,
+            new ModuloCodefacEnum[]{ ModuloCodefacEnum.COMPRA},
+            true,
+            false,
+            "011"),
+    
+    DOCUMENTOS_INSTITUCIONES_FINANCIERAS("Documentos Instituciones financieras",
+            "DIF",
+            DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA},
+            true,
+            false,
+            "12"),
+    
+    COMPROBANTE_CUOTAS_APORTES("Comprobantes de Cuotas o Aportes",
+            "CCA",
+            DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA},
+            true,
+            false,
+            "19"),
+    
     
     /**
      * Nota de credito para anular parcial o total facturas
@@ -62,15 +108,6 @@ public enum DocumentoEnum {
             true,
             false),
     
-    /**
-     * Documentos emitidos por maquinas registradoras
-     */
-    TIQUETES_MAQUINAS_REGISTRADORAS("Tiquet maq.reg",
-            "TMR",
-            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
-            new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA},
-            true,
-            false),
     
     ABONOS("Abono",
             "ABO",
@@ -100,12 +137,23 @@ public enum DocumentoEnum {
         this.moduloEnum = moduloEnum;
     }
     
+    private DocumentoEnum(String nombre, String codigo, DocumentoCategoriaEnum categoria, ModuloCodefacEnum[] moduloEnum, Boolean comprobanteFisico, Boolean comprobanteElectronico,String codigoSri) {
+        this.nombre = nombre;
+        this.codigo = codigo;
+        this.categoria = categoria;
+        this.comprobanteElectronico = comprobanteElectronico;
+        this.comprobanteFisico = comprobanteFisico;
+        this.moduloEnum = moduloEnum;
+        this.codigoSri=codigoSri;
+    }
+    
     private String nombre;
     private DocumentoCategoriaEnum categoria;
     private String codigo;
     private Boolean comprobanteElectronico;
     private Boolean comprobanteFisico;
     private ModuloCodefacEnum[] moduloEnum;
+    private String codigoSri;
 
     public Boolean getComprobanteElectronico() {
         return comprobanteElectronico;
@@ -126,6 +174,12 @@ public enum DocumentoEnum {
     public String getNombre() {
         return nombre;
     }
+
+    public String getCodigoSri() {
+        return codigoSri;
+    }
+    
+    
 
     public DocumentoCategoriaEnum getCategoria() {
         return categoria;
@@ -206,8 +260,11 @@ public enum DocumentoEnum {
         for (DocumentoEnum documento : documentos) {
             ModuloCodefacEnum modulos[]=documento.getModuloEnum();
             for (ModuloCodefacEnum modulo1oEnum : modulos) {
-                documentosEnum.add(documento);
-                break;
+                if(modulo1oEnum.equals(modulo))
+                {
+                    documentosEnum.add(documento);
+                }
+                //sbreak;
             }
         }
         return documentosEnum;
@@ -223,5 +280,19 @@ public enum DocumentoEnum {
             }
         }
         return resultados;
+    }
+    
+    
+    public static DocumentoEnum obtenerPorCodigoSri(String codigoSri)
+    {
+        if(codigoSri==null)return null;
+            
+        for (DocumentoEnum value : DocumentoEnum.values()) {
+            if(value!=null && value.getCodigoSri().equals(codigoSri))
+            {
+                return value;
+            }
+        }
+        return null;
     }
 }

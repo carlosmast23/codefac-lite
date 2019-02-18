@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
@@ -214,6 +215,9 @@ public class CompraModel extends CompraPanel{
         
         
         compra.setEstadoRetencion(estadoRetencion.getEstado());
+        
+        compra.setCodigoComprobanteSriEnum(documentoEnum);
+        compra.setCodigoSustentoSriEnum((SriSustentoComprobanteEnum) getCmbSustentoComprobante().getSelectedItem());
     }
 
     @Override
@@ -308,12 +312,16 @@ public class CompraModel extends CompraPanel{
         this.getTxtAutorizacion().setText("Por Defecto");
         //Fecha
         this.getCmbFechaCompra().setDate(this.compra.getFechaFactura());
+        
         //Descuentos
         this.getTxtDescuentoImpuestos().setText(this.compra.getDescuentoImpuestos() + "");
         this.getTxtDescuentoSinImpuestos().setText(this.compra.getDescuentoSinImpuestos() + "");
         //Valores a mostrar del subtotal
         this.getLblSubtotalImpuestoSinDescuento().setText(compra.getSubtotalImpuestosSinDescuentos().toString());
         this.getLblSubtotalSinImpuestoSinDescuento().setText(compra.getSubtotalSinImpuestosSinDescuentos().toString());
+        
+        this.getCmbDocumento().setSelectedItem(DocumentoEnum.obtenerDocumentoPorCodigo(compra.getCodigoDocumento()));
+        this.getCmbSustentoComprobante().setSelectedItem(compra.getCodigoSustentoSriEnum());
         
         //Cargar la orden de compra si existe referencia
         if(this.compra.getOrdenCompra()!=null)
@@ -389,6 +397,9 @@ public class CompraModel extends CompraPanel{
         
         getCmbRetencionIva().setSelectedIndex(0);
         getCmbRetencionRenta().setSelectedIndex(0);
+        
+        getCmbSustentoComprobante().setSelectedIndex(0);
+        getCmbDocumento().setSelectedIndex(0);
     }
 
 //    @Override
@@ -419,6 +430,13 @@ public class CompraModel extends CompraPanel{
     }
 
     private void iniciarCombos() {
+        
+        getCmbSustentoComprobante().removeAllItems();
+        SriSustentoComprobanteEnum[] sustentosComprobanteList=SriSustentoComprobanteEnum.values();
+        for (SriSustentoComprobanteEnum sriSustentoComprobanteEnum : sustentosComprobanteList) {
+            getCmbSustentoComprobante().addItem(sriSustentoComprobanteEnum);
+        }
+        
         //Agregar los documentos del sri
         getCmbDocumento().removeAllItems();
         List<DocumentoEnum> documentos= DocumentoEnum.obtenerDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
@@ -428,10 +446,14 @@ public class CompraModel extends CompraPanel{
         
         //Agregar los tipos de documentos disponibles
         getCmbTipoDocumento().removeAllItems();
-        List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
-        for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
-            getCmbTipoDocumento().addItem(tipoDocumento);
-        }
+        getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA);
+        getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA_INVENTARIO);
+        getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA_SERVICIOS);
+        //getCmbTipoDocumento().addItem(TipoDocumentoEnum.INVENTARIO);
+        //List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
+        //for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
+        //    getCmbTipoDocumento().addItem(tipoDocumento);
+        //}
         
         
         //Agregar los tipos de retencion Iva
@@ -639,19 +661,22 @@ public class CompraModel extends CompraPanel{
             {
                 filaDP = getTblDetalleProductos().getSelectedRow();
                 bandera = true;
-                CompraDetalle compraDetalle = (CompraDetalle) compra.getDetalles().get(filaDP);
-                getTxtProductoItem().setText(compraDetalle.getDescripcion());
-                getTxtDescripcionItem().setText(compraDetalle.getDescripcion());
-                getTxtCantidadItem().setText(compraDetalle.getCantidad()+"");
-                getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
-                getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
-                getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
-                //compraDetalle.setPrecioUnitario
-                compraDetalle.getPrecioUnitario();
-                bloquearDesbloquearBotones(false);
-                //----------------------------------------------------------------------
-                productoSeleccionado = compraDetalle.getProductoProveedor().getProducto();
-                verificarExistenciadeProductoProveedor();
+                if(filaDP>=0)
+                {
+                    CompraDetalle compraDetalle = (CompraDetalle) compra.getDetalles().get(filaDP); //TODO: Revisar si esta forma es la mas optima
+                    getTxtProductoItem().setText(compraDetalle.getDescripcion());
+                    getTxtDescripcionItem().setText(compraDetalle.getDescripcion());
+                    getTxtCantidadItem().setText(compraDetalle.getCantidad()+"");
+                    getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
+                    getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
+                    getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
+                    //compraDetalle.setPrecioUnitario
+                    compraDetalle.getPrecioUnitario();
+                    bloquearDesbloquearBotones(false);
+                    //----------------------------------------------------------------------
+                    productoSeleccionado = compraDetalle.getProductoProveedor().getProducto();
+                    verificarExistenciadeProductoProveedor();
+                }
                 
             }
         });
