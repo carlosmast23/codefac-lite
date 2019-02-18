@@ -37,36 +37,53 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         this.compraDetalleFacade = new CompraDetalleFacade();
     }
     
+    @Override
+    public void editarCompra(Compra compra) throws ServicioCodefacException
+    {
+        //TODO: Editar este metodo porque el de grabar es muy similar
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
+                    for (CompraDetalle compraDetalle : compra.getDetalles()) {
+                        if (compraDetalle.getProductoProveedor().getId() == null) {
+                            entityManager.persist(compraDetalle.getProductoProveedor());
+                        } else {
+                            entityManager.merge(compraDetalle.getProductoProveedor());
+                        }
+                    }
+
+                    entityManager.merge(compra);
+            }
+        });
+    }
+    
     
     @Override
     public void grabarCompra(Compra compra) throws ServicioCodefacException
     {
-        entityManager.getTransaction().begin(); //Inicio de la transaccion
-        
-        try
-        {
-            //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
-            for (CompraDetalle compraDetalle : compra.getDetalles()) {
-                if (compraDetalle.getProductoProveedor().getId() == null) 
-                {
-                    entityManager.persist(compraDetalle.getProductoProveedor());
-                } 
-                else 
-                {
-                    entityManager.merge(compraDetalle.getProductoProveedor());
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                try {
+                    //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
+                    for (CompraDetalle compraDetalle : compra.getDetalles()) {
+                        if (compraDetalle.getProductoProveedor().getId() == null) {
+                            entityManager.persist(compraDetalle.getProductoProveedor());
+                        } else {
+                            entityManager.merge(compraDetalle.getProductoProveedor());
+                        }
+                    }
+
+                    entityManager.persist(compra);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new ServicioCodefacException("Error al grabar la compra");
+
                 }
             }
-
-            entityManager.persist(compra);
-            entityManager.getTransaction().commit();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            entityManager.getTransaction().rollback();
-            throw  new ServicioCodefacException("Error al grabar la compra");       
-            
-        }
+        });
+        
         //TODO: Falta retornar el tipo de dato por ejemplo en los dialogos necesita obtener el nuevo dato modificado.
     }
 

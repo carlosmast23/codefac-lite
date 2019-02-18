@@ -218,7 +218,21 @@ public class CompraModel extends CompraPanel{
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        
+        try {
+            if (!validarDatosGrabar()) {
+                throw new ExcepcionCodefacLite("Error de validación");
+            }
+            
+            ServiceFactory.getFactory().getCompraServiceIf().editarCompra(compra);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+            
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.dialogoPregunta("Error al grabar",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
+        } catch (RemoteException ex) {
+            Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite(ex.getMessage());
+        }
     }
 
     @Override
