@@ -835,7 +835,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
             mapParametros.put(PlantillaSmsEnum.EtiquetaEnum.ESTUDIANTE_NOMBRE,notificaciones.estudiante.getNombreSimple());
             mapParametros.put(PlantillaSmsEnum.EtiquetaEnum.VALOR_PENDIENTE,notificaciones.getTotal());
             
-            String numeroRepresentante=(notificaciones.estudiante.getRepresentante()!=null)?notificaciones.estudiante.getRepresentante().getTelefonoCelular():"";
+            String numeroRepresentante=(notificaciones.estudiante.getRepresentante()!=null)?notificaciones.estudiante.getRepresentante().getEstablecimientos().get(0).getTelefonoCelular():"";
             if(!numeroRepresentante.equals(""))
             {
                 ComponenteEnvioSmsData componenteSms = new ComponenteEnvioSmsData(numeroRepresentante, mapParametros);

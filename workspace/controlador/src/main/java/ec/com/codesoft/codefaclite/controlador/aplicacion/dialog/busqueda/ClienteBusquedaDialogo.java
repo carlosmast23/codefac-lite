@@ -40,9 +40,9 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
     {
         dato.add(t.getRazonSocial());
         dato.add(t.getIdentificacion());
-        dato.add(t.getTelefonoConvencional());
-        dato.add(t.getExtensionTelefono());
-        dato.add(t.getTelefonoCelular());
+        dato.add(t.getEstablecimientos().get(0).getTelefonoConvencional());
+        dato.add(t.getEstablecimientos().get(0).getExtensionTelefono());
+        dato.add(t.getEstablecimientos().get(0).getTelefonoCelular());
         dato.add(t.getCorreoElectronico());
    
     }

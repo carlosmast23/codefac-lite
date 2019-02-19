@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.Vector;
  *
  * @author PC
  */
-public class ProveedorBusquedaDialogo implements InterfaceModelFind<Persona>
+public class ProveedorBusquedaDialogo implements InterfaceModelFind<PersonaEstablecimiento>
 {
 
     @Override
@@ -37,11 +38,11 @@ public class ProveedorBusquedaDialogo implements InterfaceModelFind<Persona>
     }
 
     @Override
-    public void agregarObjeto(Persona t, Vector dato) 
+    public void agregarObjeto(PersonaEstablecimiento t, Vector dato) 
     {
-        dato.add(t.getIdentificacion());
-        dato.add(t.getRazonSocial());    
-        dato.add(t.getNombreLegal());  
+        dato.add(t.getPersona().getIdentificacion());
+        dato.add(t.getPersona().getRazonSocial());    
+        dato.add(t.getNombreComercial());  
         dato.add(t.getTelefonoConvencional());
         dato.add(t.getExtensionTelefono());
         dato.add(t.getTelefonoCelular());
@@ -64,10 +65,10 @@ public class ProveedorBusquedaDialogo implements InterfaceModelFind<Persona>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        //Persona p;
+        PersonaEstablecimiento p;
         //p.getTipo();
-        String queryString = "SELECT u FROM Persona u WHERE ";
-        queryString+=" ( (LOWER(u.nombreLegal) like ?3 or u.identificacion like ?5 or  LOWER(u.razonSocial) like ?2 ) and (u.tipo = ?1 or u.tipo = ?4 ) )";
+        String queryString = "SELECT u FROM PersonaEstablecimiento u WHERE ";
+        queryString+=" ( (LOWER(u.nombreComercial) like ?3 or u.persona.identificacion like ?5 or  LOWER(u.persona.razonSocial) like ?2 ) and (u.persona.tipo = ?1 or u.persona.tipo = ?4 ) )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,OperadorNegocioEnum.PROVEEDOR.getLetra());
         queryDialog.agregarParametro(4,OperadorNegocioEnum.AMBOS.getLetra());

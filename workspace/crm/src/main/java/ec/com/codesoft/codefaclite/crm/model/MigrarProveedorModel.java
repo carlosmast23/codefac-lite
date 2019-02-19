@@ -36,7 +36,7 @@ public class MigrarProveedorModel extends MigrarModel{
     }
     
     
-
+    //TODO: COMPLETAR DE CREAR LOS ESTABLECIMIENTOS
     @Override
     public ExcelMigrar.MigrarInterface getInterfaceMigrar() {
         return new ExcelMigrar.MigrarInterface()  {
@@ -48,11 +48,11 @@ public class MigrarProveedorModel extends MigrarModel{
                     representante.setNombres((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.NOMBRES).valor);
                     representante.setApellidos((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.APELLIDOS).valor);
                     representante.setRazonSocial((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.RAZON_SOCIAL).valor);
-                    representante.setDireccion((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.DIRECCION).valor);
-                    representante.setTelefonoConvencional((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.TELEFONO).valor);
-                    representante.setTelefonoCelular((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.CELULAR).valor);
+                    //representante.setDireccion((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.DIRECCION).valor);
+                    //representante.setTelefonoConvencional((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.TELEFONO).valor);
+                    //representante.setTelefonoCelular((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.CELULAR).valor);
                     representante.setCorreoElectronico((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.CORREO).valor);
-                    representante.setNombreLegal((String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRE_COMERCIAL).valor);
+                    //representante.setNombreLegal((String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRE_COMERCIAL).valor);
                     
                     representante.setTipoEnum(OperadorNegocioEnum.PROVEEDOR);
                     representante.setObligadoLlevarContabilidadEnum(EnumSiNo.NO);

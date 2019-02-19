@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
@@ -370,7 +371,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
                 ProveedorBusquedaDialogo buscarBusquedaDialogo = new ProveedorBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                Persona proveedor = (Persona) buscarDialogo.getResultado();
+                Persona proveedor = ((PersonaEstablecimiento) buscarDialogo.getResultado()).getPersona();
                 if (proveedor != null) {
                     String identificacion = proveedor.getIdentificacion();
                     String nombre = proveedor.getRazonSocial();

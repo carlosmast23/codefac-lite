@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
@@ -342,7 +343,7 @@ public class CompraReporteModel extends CompraReportePanel {
                 ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
-                proveedor = (Persona) buscarDialogoModel.getResultado();
+                proveedor = ((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();
                 if (proveedor != null) {
                     String identificacion = proveedor.getIdentificacion();
                     String nombre = proveedor.getRazonSocial();

@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -90,6 +91,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     //private Transportista transportista;
     private DestinatarioGuiaRemision destinatarioGuiaRemision;
     private Persona destinatario;
+    private PersonaEstablecimiento destinatarioEstablecimiento;
     private Factura facturaSeleccionada;
     
     @Override
@@ -293,7 +295,11 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     public void cargarDatosPantalla(Object entidad) {
         guiaRemision=(GuiaRemision) entidad;
         cargarDatosTransportista();
-        cargarCliente(guiaRemision.getDestinatarios().get(0).getDestinatorio());
+        
+        DestinatarioGuiaRemision destinarioDefecto=guiaRemision.getDestinatarios().get(0);
+        PersonaEstablecimiento sucursal=(destinarioDefecto.getSucursal()!=null)?destinarioDefecto.getSucursal():destinarioDefecto.getDestinatorio().getEstablecimientos().get(0);
+                
+        cargarCliente(sucursal);
         getTxtDireccionPartida().setText(guiaRemision.getDireccionPartida());
         getCmbFechaInicio().setDate(guiaRemision.getFechaIniciaTransporte());
         getCmbFechaFin().setDate(guiaRemision.getFechaFinTransporte());
@@ -340,7 +346,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                         try {
                             Map<String, Object> mapParametros = new HashedMap<String, Object>();
                             mapParametros.put("identificacion", identificacion);
-                            List<Persona> resultados=ServiceFactory.getFactory().getPersonaServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
+                            List<PersonaEstablecimiento> resultados=ServiceFactory.getFactory().getPersonaEstablecimientoServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
                             if(resultados.size()==0)
                             {
                                 if(DialogoCodefac.dialogoPregunta("Crear Cliente","No existe el Cliente, lo desea crear?",DialogoCodefac.MENSAJE_ADVERTENCIA))
@@ -381,7 +387,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         },VentanaEnum.CLIENTE, false,parametros,this);
     }
    
-    private void cargarCliente(Persona cliente)
+    private void cargarCliente(PersonaEstablecimiento cliente)
     {
         if (cliente != null) {
             //factura.setCliente(cliente);
@@ -389,9 +395,10 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             //factura.eliminarTodosDatosAdicionales();
             
             //cargarFormaPago();
-            getTxtIdentificacionDestinatario().setText(cliente.getIdentificacion());
-            getLblNombresCompletosDestinatarios().setText(cliente.getNombresCompletos());
-            getTxtDireccionDestino().setText(cliente.getDireccion());             
+            getTxtIdentificacionDestinatario().setText(cliente.getPersona().getIdentificacion());
+            getLblNombresCompletosDestinatarios().setText(cliente.getPersona().getRazonSocial());
+            getTxtDireccionDestino().setText(cliente.getDireccion());  
+            getTxtCodigoSucursal().setValue(Integer.parseInt(cliente.getCodigoSucursal()));
         };
     }
     
@@ -402,8 +409,9 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         //factura.setCliente((Persona) buscarDialogoModel.getResultado());      
         if(buscarDialogoModel.getResultado()!=null)
         {
-            destinatario=(Persona) buscarDialogoModel.getResultado();
-            cargarCliente(destinatario);        
+            destinatarioEstablecimiento=(PersonaEstablecimiento) buscarDialogoModel.getResultado();
+            destinatario=destinatarioEstablecimiento.getPersona();
+            cargarCliente(destinatarioEstablecimiento);        
         }
         
     }
@@ -504,7 +512,13 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         getBtnBuscarFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FacturaBusqueda facturaBusqueda = new FacturaBusqueda(destinatario);
+                FacturaBusqueda facturaBusqueda =null;
+                
+                if(destinatarioEstablecimiento!=null)
+                    facturaBusqueda = new FacturaBusqueda(destinatarioEstablecimiento);
+                else
+                    facturaBusqueda = new FacturaBusqueda(destinatario);
+                    
                 facturaBusqueda.setEstadoEnviadoGuiaRemision(EnumSiNo.NO);
                 
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);

@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
@@ -41,13 +42,41 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
     }
     
     
+    public void editarPersona(Persona p) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) 
+                {
+                    if(establecimiento.getId()==null)
+                    {
+                        entityManager.persist(establecimiento);
+                    }else
+                    {
+                        entityManager.merge(establecimiento);
+                    }
+                }
+                entityManager.merge(p);
+            }
+        });
+    }
 
     public Persona grabar(Persona p) throws ServicioCodefacException,java.rmi.RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                if(p.getEstablecimientos()==null || p.getEstablecimientos().size()==0)
+                {
+                    throw new ServicioCodefacException("Al menos tiene que existir un establecimiento para grabar");
+                }
+                
                 p.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) {
+                    entityManager.persist(establecimiento);
+                }
                 entityManager.persist(p);
             }
         });
@@ -58,6 +87,7 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
     public void editar(Persona p)
     {
         personaFacade.edit(p);
+       
     }
     
     public void eliminar(Persona p)
@@ -115,16 +145,6 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
         return null;
 
     }
-
-    @Override
-    public void editarPersona(Persona p) throws RemoteException, ServicioCodefacException {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-            @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                entityManager.merge(p);
-            }
-        });
-    }
-            
+   
     
 }

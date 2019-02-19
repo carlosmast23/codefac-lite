@@ -52,6 +52,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
@@ -756,7 +757,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                 ProveedorBusquedaDialogo clienteBusquedaDialogo = new ProveedorBusquedaDialogo();
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
-                Persona proveedorTmp=(Persona) buscarDialogoModel.getResultado();
+                Persona proveedorTmp=((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();
                 
                 if(proveedorTmp!=null)
                 {
@@ -863,8 +864,8 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     private void setearDatosProveedor(Persona proveedor)
     {
         notaCredito.setCliente(proveedor);
-        notaCredito.setTelefono(proveedor.getTelefonoConvencional());
-        notaCredito.setDireccion(proveedor.getDireccion());
+        notaCredito.setTelefono(proveedor.getEstablecimientos().get(0).getTelefonoConvencional());
+        notaCredito.setDireccion(proveedor.getEstablecimientos().get(0).getDireccion());
         notaCredito.setRazonSocial(proveedor.getRazonSocial());
     }
     

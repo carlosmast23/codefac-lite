@@ -50,6 +50,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  */
 public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> implements FacturacionServiceIf
 {
+    
 
     FacturaFacade facturaFacade;
     FacturaDetalleFacade facturaDetalleFacade;
@@ -108,6 +109,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return factura;
         
     }
+    
+    public void editarFactura(Factura factura) throws ServicioCodefacException {
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.merge(factura);            
+            }
+        });        
+        
+    }
+    
     
     private void grabarDetallesFactura(Factura factura) throws RemoteException,PersistenceException
     {

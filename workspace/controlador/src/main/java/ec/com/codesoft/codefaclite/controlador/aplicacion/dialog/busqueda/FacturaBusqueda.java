@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -26,10 +27,15 @@ import javax.persistence.Query;
  */
 public class FacturaBusqueda implements InterfaceModelFind<Factura> {   
     private Persona cliente;
+    private PersonaEstablecimiento establecimiento;
     private EnumSiNo estadoEnviadoGuiaRemision;
 
     public FacturaBusqueda(Persona cliente) {
         this.cliente = cliente;    
+    }
+    
+    public FacturaBusqueda(PersonaEstablecimiento establecimiento) {
+        this.establecimiento = establecimiento;    
     }
 
     public FacturaBusqueda() {
@@ -62,6 +68,11 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
             queryString+=" AND u.cliente=?10 ";
         }
         
+        if(establecimiento!=null)
+        {
+            queryString+=" AND u.sucursal=?12 ";
+        }
+        
         if(estadoEnviadoGuiaRemision!=null)
         {
             queryString+=" AND u.estadoEnviadoGuiaRemision=?11";
@@ -81,10 +92,16 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
             queryDialog.agregarParametro(10,cliente);
         }
         
+        if (establecimiento != null) {
+            queryDialog.agregarParametro(12, establecimiento);
+        }
+        
         if(estadoEnviadoGuiaRemision!=null)
         {
             queryDialog.agregarParametro(11,estadoEnviadoGuiaRemision.getLetra());
         }
+        
+        
         
         //queryDialog.agregarParametro(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
         return queryDialog;

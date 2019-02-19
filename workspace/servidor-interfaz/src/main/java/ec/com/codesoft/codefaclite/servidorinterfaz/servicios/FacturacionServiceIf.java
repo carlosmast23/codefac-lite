@@ -25,6 +25,7 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public List<Factura> obtenerFacturasPorIdentificacion(String identificacion) throws java.rmi.RemoteException;
     public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo) throws java.rmi.RemoteException;
     public void editar(Factura factura) throws java.rmi.RemoteException;
+    public void editarFactura(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 
     public List<Factura> obtenerTodos()throws java.rmi.RemoteException;
     public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido) throws java.rmi.RemoteException;
     public List<Factura> obtenerFacturasActivas() throws java.rmi.RemoteException;

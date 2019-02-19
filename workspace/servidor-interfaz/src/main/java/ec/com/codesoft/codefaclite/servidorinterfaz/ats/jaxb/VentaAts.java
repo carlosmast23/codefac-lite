@@ -51,9 +51,9 @@ public class VentaAts implements Serializable{
     private String tipoComprobante; // TODO: Este es el codigo del tipo de comprobante de la tabla4
     private String tipoEmision; //Esta relacionado con el valor de TipoEmisionEnum
     private int numeroComprobantes;
-    private BigDecimal baseNoGraIva;    
-    private BigDecimal baseImponible;
-    private BigDecimal baseImpGrav;
+    private BigDecimal baseNoGraIva;  //Variable que tiene el subtotal de los productos que no graban iva
+    private BigDecimal baseImponible; //Variable que tiene el subtotal sin impuestos
+    private BigDecimal baseImpGrav; //Variable que tiene el subtotal con impuestos
     private BigDecimal montoIva;
     //TODO: Ver si tengo que aumentar el valor de compensaciones
     private BigDecimal montoIce;

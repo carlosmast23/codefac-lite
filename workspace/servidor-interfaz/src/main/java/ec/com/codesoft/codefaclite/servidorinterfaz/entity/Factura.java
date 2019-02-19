@@ -109,6 +109,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
     
     @JoinColumn(name = "VENDEDOR_ID")
     private Empleado vendedor;
+    
+    @JoinColumn(name = "SUCURSAL_ID")
+    private PersonaEstablecimiento sucursal;
         
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -284,6 +287,14 @@ public class Factura extends ComprobanteEntity implements Serializable {
 
     public void setEstadoEnviadoGuiaRemisionEnum(EnumSiNo estadoEnviadoGuiaRemisionEnum) {
         this.estadoEnviadoGuiaRemision = estadoEnviadoGuiaRemisionEnum.getLetra();
+    }
+
+    public PersonaEstablecimiento getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(PersonaEstablecimiento sucursal) {
+        this.sucursal = sucursal;
     }
 
     

@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal.TipoSucursalEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
@@ -28,6 +29,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -110,6 +112,28 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         lblEspacioVertical = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         txtPorcentajeComision = new javax.swing.JTextField();
+        jPanelCaracteristicasGenerales1 = new javax.swing.JPanel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jTextTelefonoEstablecimiento = new javax.swing.JTextField();
+        jLabel24 = new javax.swing.JLabel();
+        jTextExtensionEstablecimiento = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        jTextCelularEstablecimiento = new javax.swing.JTextField();
+        jLabel30 = new javax.swing.JLabel();
+        lblEspacio9 = new javax.swing.JLabel();
+        lblEspacio11 = new javax.swing.JLabel();
+        txtNombreLegalEstablecimiento = new javax.swing.JTextField();
+        jTextAreaDireccionEstablecimiento = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblEstablecimientos = new javax.swing.JTable();
+        btnAgregarEstablecimiento = new javax.swing.JButton();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        txtCodigoEstablecimiento = new javax.swing.JSpinner();
+        jLabel27 = new javax.swing.JLabel();
+        cmbTipoEstablecimiento = new javax.swing.JComboBox<>();
+        btnEditarEstablecimiento = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -245,7 +269,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel11.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales.add(jLabel11, gridBagConstraints);
@@ -258,7 +282,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanelCaracteristicasGenerales.add(cmbEstado, gridBagConstraints);
@@ -491,6 +515,162 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
         jTabbedPane1.addTab("Referencias", jPanel2);
 
+        jPanelCaracteristicasGenerales1.setPreferredSize(new java.awt.Dimension(707, 353));
+        jPanelCaracteristicasGenerales1.setLayout(new java.awt.GridBagLayout());
+
+        jLabel22.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel22.setText("Dirección:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jLabel22, gridBagConstraints);
+
+        jLabel23.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel23.setText("Tipo Establecimiento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jLabel23, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.2;
+        jPanelCaracteristicasGenerales1.add(jTextTelefonoEstablecimiento, gridBagConstraints);
+
+        jLabel24.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel24.setText("Extensión:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jLabel24, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jTextExtensionEstablecimiento, gridBagConstraints);
+
+        jLabel25.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel25.setText("Código Establecimiento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jLabel25, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanelCaracteristicasGenerales1.add(jTextCelularEstablecimiento, gridBagConstraints);
+
+        jLabel30.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel30.setText("Nombre Establecimiento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jLabel30, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.2;
+        jPanelCaracteristicasGenerales1.add(lblEspacio9, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.3;
+        jPanelCaracteristicasGenerales1.add(lblEspacio11, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales1.add(txtNombreLegalEstablecimiento, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales1.add(jTextAreaDireccionEstablecimiento, gridBagConstraints);
+
+        jScrollPane1.setViewportView(tblEstablecimientos);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridwidth = 13;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jScrollPane1, gridBagConstraints);
+
+        btnAgregarEstablecimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(btnAgregarEstablecimiento, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanelCaracteristicasGenerales1.add(jLabel20, gridBagConstraints);
+
+        jLabel26.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel26.setText("Teléfono Celular:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jLabel26, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(txtCodigoEstablecimiento, gridBagConstraints);
+
+        jLabel27.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel27.setText("Teléfono Convencional:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jLabel27, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales1.add(cmbTipoEstablecimiento, gridBagConstraints);
+
+        btnEditarEstablecimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
+        btnEditarEstablecimiento.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(btnEditarEstablecimiento, gridBagConstraints);
+
+        jTabbedPane1.addTab("Establecimientos", jPanelCaracteristicasGenerales1);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -502,11 +682,14 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarEstablecimiento;
+    private javax.swing.JButton btnEditarEstablecimiento;
     private javax.swing.JCheckBox chkContacto;
     private javax.swing.JCheckBox chkObligadoLlevarContabilidad;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<Nacionalidad> cmbNacionalidad;
+    private javax.swing.JComboBox<TipoSucursalEnum> cmbTipoEstablecimiento;
     private javax.swing.JComboBox<OperadorNegocioEnum> cmbTipoOperador;
     private javax.swing.JComboBox<Persona.TipoIdentificacionEnum> jComboIdentificacion;
     private javax.swing.JComboBox<String> jComboTipoCliente;
@@ -522,7 +705,15 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -532,28 +723,39 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelCaracteristicasGenerales;
+    private javax.swing.JPanel jPanelCaracteristicasGenerales1;
     private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextApellidos;
     private javax.swing.JTextField jTextAreaDireccion;
+    private javax.swing.JTextField jTextAreaDireccionEstablecimiento;
     private javax.swing.JTextField jTextCelular;
+    private javax.swing.JTextField jTextCelularEstablecimiento;
     private javax.swing.JTextField jTextCorreo;
     private javax.swing.JTextField jTextExtension;
+    private javax.swing.JTextField jTextExtensionEstablecimiento;
     private javax.swing.JTextField jTextIdentificacion;
     private javax.swing.JTextField jTextNombreSocial;
     private javax.swing.JTextField jTextNombres;
     private javax.swing.JTextField jTextTelefono;
+    private javax.swing.JTextField jTextTelefonoEstablecimiento;
     private javax.swing.JLabel lblEspacio;
+    private javax.swing.JLabel lblEspacio11;
     private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblEspacio5;
     private javax.swing.JLabel lblEspacio6;
     private javax.swing.JLabel lblEspacio7;
     private javax.swing.JLabel lblEspacio8;
+    private javax.swing.JLabel lblEspacio9;
     private javax.swing.JLabel lblEspacioHorizontal;
     private javax.swing.JLabel lblEspacioVertical;
     private javax.swing.JLabel lblOligadoLlevarContabilidad;
+    private javax.swing.JTable tblEstablecimientos;
+    private javax.swing.JSpinner txtCodigoEstablecimiento;
     private javax.swing.JSpinner txtDiasCredito;
     private javax.swing.JTextField txtNombreLegal;
+    private javax.swing.JTextField txtNombreLegalEstablecimiento;
     private javax.swing.JTextField txtPorcentajeComision;
     // End of variables declaration//GEN-END:variables
 
@@ -750,7 +952,46 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public JSpinner getTxtDiasCredito() {
         return txtDiasCredito;
     }
-    
+
+    public JButton getBtnAgregarEstablecimiento() {
+        return btnAgregarEstablecimiento;
+    }
+
+    public JComboBox<TipoSucursalEnum> getCmbTipoEstablecimiento() {
+        return cmbTipoEstablecimiento;
+    }
+
+    public JSpinner getTxtCodigoEstablecimiento() {
+        return txtCodigoEstablecimiento;
+    }
+
+    public JTextField getTxtNombreLegalEstablecimiento() {
+        return txtNombreLegalEstablecimiento;
+    }
+
+    public JTextField getjTextAreaDireccionEstablecimiento() {
+        return jTextAreaDireccionEstablecimiento;
+    }
+
+    public JTextField getjTextCelularEstablecimiento() {
+        return jTextCelularEstablecimiento;
+    }
+
+    public JTextField getjTextExtensionEstablecimiento() {
+        return jTextExtensionEstablecimiento;
+    }
+
+    public JTextField getjTextTelefonoEstablecimiento() {
+        return jTextTelefonoEstablecimiento;
+    }
+
+    public JTable getTblEstablecimientos() {
+        return tblEstablecimientos;
+    }
+
+    public JButton getBtnEditarEstablecimiento() {
+        return btnEditarEstablecimiento;
+    }
     
     
 }

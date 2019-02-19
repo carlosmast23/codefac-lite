@@ -55,12 +55,12 @@ public class ClienteReporte extends ControladorCodefacInterface{
             
             for (Persona cliente : clientes) {
                 ClienteData clienteData=new ClienteData();
-                clienteData.setDireccion(cliente.getDireccion());
+                clienteData.setDireccion(cliente.getEstablecimientos().get(0).getDireccion());
                 clienteData.setEmail(cliente.getCorreoElectronico());
                 clienteData.setIdentificacion(cliente.getIdentificacion());
                 clienteData.setNombresCompletos(cliente.getRazonSocial());
-                clienteData.setNombreLegal(cliente.getNombreLegal());
-                clienteData.setTelefono(cliente.getTelefonoCelular());
+                clienteData.setNombreLegal(cliente.getEstablecimientos().get(0).getNombreComercial());
+                clienteData.setTelefono(cliente.getEstablecimientos().get(0).getTelefonoCelular());
                 data.add(clienteData);
             }
             

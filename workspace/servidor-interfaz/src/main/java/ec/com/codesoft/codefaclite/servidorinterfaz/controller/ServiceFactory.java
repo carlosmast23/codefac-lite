@@ -67,6 +67,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaEstablecimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
@@ -173,6 +174,7 @@ public abstract class ServiceFactory {
     public SucursalServiceIf getSucursalServiceIf(){return (SucursalServiceIf) getRecursosRMI(SucursalServiceIf.class);};
     public PuntoEmisionServiceIf getPuntoVentaServiceIf(){return (PuntoEmisionServiceIf) getRecursosRMI(PuntoEmisionServiceIf.class);};
     public ActualizarSistemaServiceIf getActualizarSistemaServiceIf(){return (ActualizarSistemaServiceIf) getRecursosRMI(ActualizarSistemaServiceIf.class);};
+    public PersonaEstablecimientoServiceIf getPersonaEstablecimientoServiceIf(){return (PersonaEstablecimientoServiceIf) getRecursosRMI(PersonaEstablecimientoServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente

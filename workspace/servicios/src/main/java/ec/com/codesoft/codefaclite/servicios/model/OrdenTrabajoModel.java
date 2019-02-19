@@ -150,8 +150,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
             parametros.put("estado", generalEnumEstado.getNombre());
             parametros.put("fechaIngreso", ""+ this.ordenTrabajo.getFechaIngreso());
-            parametros.put("direccion", ""+ this.ordenTrabajo.getCliente().getDireccion());
-            parametros.put("telefonos", ""+ this.ordenTrabajo.getCliente().getTelefonosTodos());
+            parametros.put("direccion", ""+ this.ordenTrabajo.getCliente().getEstablecimientos().get(0).getDireccion());
+            parametros.put("telefonos", ""+ this.ordenTrabajo.getCliente().getEstablecimientos().get(0).getTelefonoCelular());
             parametros.put("cedula", ""+ this.ordenTrabajo.getCliente().getIdentificacion());
             parametros.put("correo",(this.ordenTrabajo.getCliente().getCorreoElectronico()!=null)?this.ordenTrabajo.getCliente().getCorreoElectronico():"");
             
@@ -701,7 +701,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         else
         {
             getLblRazonSocial().setText(cliente.getRazonSocial());
-            getLblNombreLegal().setText(cliente.getNombreLegal());
+            getLblNombreLegal().setText(cliente.getEstablecimientos().get(0).getNombreComercial());
             getTxtCliente().setText(cliente.getIdentificacion());
         }
     }

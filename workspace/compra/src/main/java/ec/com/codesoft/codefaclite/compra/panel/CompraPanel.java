@@ -153,7 +153,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         lblEspacio15 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDetalleProductos = new javax.swing.JTable();
-        jLabel13 = new javax.swing.JLabel();
+        lblSustentoSri = new javax.swing.JLabel();
         cmbDocumento = new javax.swing.JComboBox<>();
         lblEspacio10 = new javax.swing.JLabel();
         lblEspacio12 = new javax.swing.JLabel();
@@ -635,14 +635,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 1.0;
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
-        jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel13.setText("Sustento Sri:");
+        lblSustentoSri.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblSustentoSri.setText("Sustento Sri:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel13, gridBagConstraints);
+        getContentPane().add(lblSustentoSri, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 19;
@@ -806,7 +806,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -839,6 +838,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblSubtotalImpuestos;
     private javax.swing.JLabel lblSubtotalSinImpuestoSinDescuento;
     private javax.swing.JLabel lblSubtotalSinImpuestos;
+    private javax.swing.JLabel lblSustentoSri;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JPanel panelRetencion;
     private javax.swing.JTable tblDetalleProductos;
@@ -1122,6 +1122,10 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
     public JComboBox<SriSustentoComprobanteEnum> getCmbSustentoComprobante() {
         return cmbSustentoComprobante;
+    }
+
+    public JLabel getLblSustentoSri() {
+        return lblSustentoSri;
     }
 
     

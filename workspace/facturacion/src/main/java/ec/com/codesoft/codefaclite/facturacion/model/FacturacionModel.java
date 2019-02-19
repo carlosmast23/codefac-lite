@@ -78,6 +78,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
@@ -708,8 +709,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void updateInterface(Persona entity) {
                 factura.setCliente(entity);
+                factura.setSucursal(entity.getEstablecimientos().get(0));
+                
                 if (factura.getCliente() != null) {
-                    cargarCliente(entity);
+                    cargarCliente(entity.getEstablecimientos().get(0));
                 }
             }
         },VentanaEnum.CLIENTE, false,parametros,this);
@@ -720,7 +723,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         //factura.setCliente((Persona) buscarDialogoModel.getResultado());        
-        cargarCliente((Persona) buscarDialogoModel.getResultado());        
+        cargarCliente((PersonaEstablecimiento) buscarDialogoModel.getResultado());        
     }
     
     private void cargarFormaPago()
@@ -768,10 +771,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
     }
     
-    private void cargarCliente(Persona cliente)
+    private void cargarCliente(PersonaEstablecimiento cliente)
     {
         if (cliente != null) {
-            factura.setCliente(cliente);
+            factura.setCliente(cliente.getPersona());
+            factura.setSucursal(cliente);
             //Elimino datos adicionales del anterior cliente si estaba seleccionado
             //factura.eliminarTodosDatosAdicionales();
             
@@ -1119,8 +1123,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("fechaEmision", factura.getFechaEmision().toString());
         parametros.put("razonSocial", factura.getCliente().getRazonSocial());
-        parametros.put("direccion", factura.getCliente().getDireccion());
-        parametros.put("telefono", factura.getCliente().getTelefonoConvencional());
+        parametros.put("direccion", factura.getSucursal().getDireccion());
+        parametros.put("telefono", factura.getSucursal().getTelefonoConvencional());
         parametros.put("correoElectronico", (factura.getCliente().getCorreoElectronico() != null) ? factura.getCliente().getCorreoElectronico() : "");
         parametros.put("identificacion", factura.getCliente().getIdentificacion());
 
@@ -1773,14 +1777,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         //Cargar el numero e celular del cliente
-        if (factura.getCliente().getTelefonoCelular() != null) {
+        if (factura.getSucursal().getTelefonoCelular() != null) {
             //Obtiene el campo del correo por defecto sis existe
             FacturaAdicional campoAdicional=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.CELULAR);
             //Si no existe el campo del correo del cliente lo creo
             
             String numeroCelular=null;
-            if(factura.getCliente().getTelefonoCelular()!=null && !factura.getCliente().getTelefonoCelular().toString().isEmpty())
-                numeroCelular=factura.getCliente().getTelefonoCelular();
+            if(factura.getSucursal().getTelefonoCelular()!=null && !factura.getSucursal().getTelefonoCelular().toString().isEmpty())
+                numeroCelular=factura.getSucursal().getTelefonoCelular();
                 
             if(campoAdicional==null)
             {
@@ -1814,8 +1818,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             case LIBRE:
                 getTxtCliente().setText(factura.getCliente().getIdentificacion());
                 getLblNombreCliente().setText(factura.getCliente().getRazonSocial());
-                getLblDireccionCliente().setText(factura.getCliente().getDireccion());
-                getLblTelefonoCliente().setText(factura.getCliente().getTelefonoConvencional());
+                getLblDireccionCliente().setText(factura.getSucursal().getDireccion());
+                getLblTelefonoCliente().setText(factura.getSucursal().getTelefonoConvencional());
                 break;
                 
                 //getTxtClientePresupuesto().setText(factura.getCliente().toString());
@@ -1835,8 +1839,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setCliente(factura.getCliente());
         factura.setRazonSocial(factura.getCliente().getRazonSocial());
         factura.setIdentificacion(factura.getCliente().getIdentificacion());
-        factura.setDireccion(factura.getCliente().getDireccion());
-        factura.setTelefono(factura.getCliente().getTelefonoConvencional());
+        factura.setDireccion(factura.getSucursal().getDireccion());
+        factura.setTelefono(factura.getSucursal().getTelefonoConvencional());
 
         //Cargar la fecha de vencimiento de la factura si existe ingresado una fecha
         if(estadoFormulario.equals(ESTADO_GRABAR))
@@ -2536,7 +2540,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     if(persona!=null)
                     {
                         factura.setCliente(persona);
-                        cargarCliente(persona); //carga los datos del representante en los campos del cliente
+                        cargarCliente(persona.getEstablecimientos().get(0)); //carga los datos del representante en los campos del cliente
                         
                         //Modificar el correo principal de los datos adicionales por el del nuevo cliente
                         FacturaAdicional facturaAdicional=factura.obtenerDatoAdicionalPorCampo(FacturaAdicional.CampoDefectoEnum.CORREO);
@@ -2745,8 +2749,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         try {
                             Map<String, Object> mapParametros = new HashedMap<String, Object>();
-                            mapParametros.put("identificacion", identificacion);
-                            List<Persona> resultados=ServiceFactory.getFactory().getPersonaServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
+                            mapParametros.put("persona.identificacion", identificacion);
+                            List<PersonaEstablecimiento> resultados=ServiceFactory.getFactory().getPersonaEstablecimientoServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
                             if(resultados.size()==0)
                             {
                                 if(DialogoCodefac.dialogoPregunta("Crear Cliente","No existe el Cliente, lo desea crear?",DialogoCodefac.MENSAJE_ADVERTENCIA))

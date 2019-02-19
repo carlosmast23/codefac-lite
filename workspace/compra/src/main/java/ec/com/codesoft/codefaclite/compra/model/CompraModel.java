@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
@@ -184,8 +185,8 @@ public class CompraModel extends CompraPanel{
         
         compra.setIdentificacion(compra.getProveedor().getIdentificacion());
         compra.setRazonSocial(compra.getProveedor().getRazonSocial());
-        compra.setTelefono(compra.getProveedor().getTelefonoCelular());
-        compra.setDireccion(compra.getProveedor().getDireccion());
+        compra.setTelefono(compra.getProveedor().getEstablecimientos().get(0).getTelefonoCelular()); //Todo: ver si se modifica para trabajar por sucursales
+        compra.setDireccion(compra.getProveedor().getEstablecimientos().get(0).getDireccion());//Todo: ver si se modifica para trabajar por sucursales
         //compra.setProveedor(proveedor);
         
 //        compra.setPuntoEmision(getTxtPuntoEmision().getText());
@@ -591,7 +592,7 @@ public class CompraModel extends CompraPanel{
                 ProveedorBusquedaDialogo buscarBusquedaDialogo = new ProveedorBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                Persona proveedor = (Persona) buscarDialogo.getResultado();
+                Persona proveedor = ((PersonaEstablecimiento) buscarDialogo.getResultado()).getPersona();
                 compra.setProveedor(proveedor);
                 if (proveedor != null) {
                     String identificacion=proveedor.getIdentificacion();
@@ -1051,10 +1052,14 @@ public class CompraModel extends CompraPanel{
         if(this.empresa.getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
         {
             this.getPanelRetencion().setVisible(true);
+            getCmbSustentoComprobante().setVisible(true);
+            getLblSustentoSri().setVisible(true);
         }
         else
         {
             this.getPanelRetencion().setVisible(false);
+            getCmbSustentoComprobante().setVisible(false);
+            getLblSustentoSri().setVisible(false);
         }
     }
 

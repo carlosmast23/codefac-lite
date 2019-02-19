@@ -88,6 +88,16 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         return entity;
     }
     
+    public void editarGuiaRemision(GuiaRemision guiaRemision) throws ServicioCodefacException, RemoteException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.merge(guiaRemision);
+            }
+        });
+    }
+    
     public List<GuiaRemision> obtenerConsulta(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado) throws ServicioCodefacException, RemoteException
     {
         return (List<GuiaRemision>) ejecutarConsulta(new MetodoInterfaceConsulta() {

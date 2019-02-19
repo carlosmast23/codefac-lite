@@ -444,7 +444,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
         factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
         factura.setDescuentoImpuestos(BigDecimal.ZERO);
         factura.setDescuentoSinImpuestos(BigDecimal.ONE);
-        factura.setDireccion(estudianteInscrito.getEstudiante().getRepresentante().getDireccion());
+        factura.setDireccion(estudianteInscrito.getEstudiante().getRepresentante().getEstablecimientos().get(0).getDireccion());
         factura.setEmpresa(session.getEmpresa());
         factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
@@ -467,7 +467,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
         //FIN COMENTADO PARA REVISAR
 
         factura.setRazonSocial(session.getEmpresa().getRazonSocial());
-        factura.setTelefono(estudianteInscrito.getEstudiante().getRepresentante().getTelefonoConvencional());
+        factura.setTelefono(estudianteInscrito.getEstudiante().getRepresentante().getEstablecimientos().get(0).getTelefonoConvencional());
         agregarDetallesFactura(factura, listaRubros);
 
         calcularTotalesFactura(factura);

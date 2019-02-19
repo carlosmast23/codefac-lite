@@ -10,13 +10,14 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import java.util.Vector;
 
 /**
  * TODO: Ver como unificar el dialogo con la factura y otras que usan similares
  * @author PC
  */
-public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
+public class ClienteBusquedaDialogo implements InterfaceModelFind<PersonaEstablecimiento>
 {
 
     @Override
@@ -34,11 +35,11 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
     }
 
     @Override
-    public void agregarObjeto(Persona t, Vector dato) 
+    public void agregarObjeto(PersonaEstablecimiento t, Vector dato) 
     {
-        dato.add(t.getIdentificacion());
-        dato.add(t.getRazonSocial());
-        dato.add((t.getNombreLegal()!=null)?t.getNombreLegal():"");
+        dato.add(t.getPersona().getIdentificacion());
+        dato.add(t.getPersona().getRazonSocial());
+        dato.add((t.getNombreComercial()!=null)?t.getNombreComercial():"");
         dato.add(t.getTelefonoConvencional());       
         dato.add(t.getTelefonoCelular());
    
@@ -46,10 +47,10 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        //Persona p;
+        //PersonaEstablecimiento pe;
         //p.getNombreLegal();
-        String queryString = "SELECT u FROM Persona u WHERE ";
-        queryString+=" ( LOWER(u.razonSocial) like ?1 or u.identificacion like ?1 or LOWER(u.nombreLegal) like ?1 )";
+        String queryString = "SELECT u FROM PersonaEstablecimiento u WHERE ";
+        queryString+=" ( LOWER(u.persona.razonSocial) like ?1 or u.persona.identificacion like ?1 or LOWER(u.nombreComercial) like ?1 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter.toLowerCase());
         return queryDialog;

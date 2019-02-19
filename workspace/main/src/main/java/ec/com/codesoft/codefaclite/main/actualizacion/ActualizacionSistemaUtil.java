@@ -7,10 +7,15 @@ package ec.com.codesoft.codefaclite.main.actualizacion;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -23,6 +28,10 @@ import java.util.logging.Logger;
  * @author Carlos
  */
 public class ActualizacionSistemaUtil {
+
+    private static final Logger LOG = Logger.getLogger(ActualizacionSistemaUtil.class.getName());
+    
+    
     
     public static void ejecutarNuevoMetodoEstatico()
     {
@@ -63,6 +72,80 @@ public class ActualizacionSistemaUtil {
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    /**
+     * Metodo que permite crear por lo menos una sucursal para cada empresa que esta creada
+     */
+    public static void actualizarSucursalesEmpresas()
+    {
+        //Crear una sucursal principal de todas los clientes disponibles
+        try {
+            List<Persona> personas=ServiceFactory.getFactory().getPersonaServiceIf().obtenerTodos();
+            for (Persona persona : personas) {
+                
+                if(persona.getEstablecimientos()==null || persona.getEstablecimientos().size()==0)
+                {                
+                    PersonaEstablecimiento establecimiento=new PersonaEstablecimiento();
+                    establecimiento.setCodigoSucursal("1");
+                    establecimiento.setCorreoElectronico(persona.getCorreoElectronico());
+                    establecimiento.setDireccion(persona.getDireccion());
+                    establecimiento.setExtensionTelefono(persona.getExtensionTelefono());
+                    establecimiento.setNombreComercial(persona.getNombreLegal());
+                    establecimiento.setPersona(persona);
+                    establecimiento.setTelefonoCelular(persona.getTelefonoCelular());
+                    establecimiento.setTelefonoConvencional(persona.getTelefonoConvencional());
+                    establecimiento.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);                
+                    persona.addEstablecimiento(establecimiento);
+
+                    try {                   
+                        ServiceFactory.getFactory().getPersonaServiceIf().editarPersona(persona);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
+                        LOG.log(Level.WARNING,persona.getRazonSocial()+" => "+ex.getMessage());
+                    }
+                }
+            }
+            
+            
+            //Actualizar la sucursal de todas las facturas
+            List<Factura> facturas= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerTodos();
+            for (Factura factura : facturas) {
+                if(factura.getCliente()!=null && factura.getCliente().getEstablecimientos()!=null && factura.getCliente().getEstablecimientos().size()>0)
+                {
+                    factura.setSucursal(factura.getCliente().getEstablecimientos().get(0));
+                    try {
+                        ServiceFactory.getFactory().getFacturacionServiceIf().editarFactura(factura);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }               
+                
+            }
+        
+            
+            List<GuiaRemision> guiaRemisionResultados=ServiceFactory.getFactory().getGuiaRemisionServiceIf().obtenerTodos();
+            for (GuiaRemision guiaRemision : guiaRemisionResultados) {
+                for (DestinatarioGuiaRemision destinatarioGuiaRemision : guiaRemision.getDestinatarios()) {
+                    
+                    if(destinatarioGuiaRemision.getDestinatorio()!=null && destinatarioGuiaRemision.getDestinatorio().getEstablecimientos()!=null && destinatarioGuiaRemision.getDestinatorio().getEstablecimientos().size()>0)
+                    {
+                        destinatarioGuiaRemision.setSucursal(destinatarioGuiaRemision.getDestinatorio().getEstablecimientos().get(0));
+                        try {
+                            ServiceFactory.getFactory().getGuiaRemisionServiceIf().editarGuiaRemision(guiaRemision);
+                        } catch (ServicioCodefacException ex) {
+                            Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
     }
     
 }

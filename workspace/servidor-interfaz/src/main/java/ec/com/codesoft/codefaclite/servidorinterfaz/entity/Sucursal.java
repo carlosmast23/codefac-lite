@@ -226,6 +226,11 @@ public class Sucursal implements Serializable{
         public String getCodigo() {
             return codigo;
         }
+
+        public String getNombre() {
+            return nombre;
+        }
+        
         
         
         

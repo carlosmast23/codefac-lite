@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionService
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.*;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -424,7 +425,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
-                persona = (Persona) buscarDialogoModel.getResultado();
+                persona = ((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();
                 if (persona != null) {
                     setearValoresCliente();
                 }

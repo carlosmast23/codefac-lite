@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional;
@@ -402,7 +403,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
                 
                 if(buscarDialogoModel.getResultado()!=null)
                 {
-                    Persona proveedor=(Persona) buscarDialogoModel.getResultado();
+                    Persona proveedor=((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();
                     Compra compraTmp=new Compra();
                     compraTmp.setProveedor(proveedor);
                     retencion.setCompra(compraTmp);
@@ -484,10 +485,10 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
     private void setearDatosCompraRetencion()
     {
         //retencion.setCompra(retencion.getCompra());
-        retencion.setTelefono(retencion.getCompra().getProveedor().getTelefonoConvencional());
+        retencion.setTelefono(retencion.getCompra().getProveedor().getEstablecimientos().get(0).getTelefonoConvencional());
         retencion.setPreimpresoDocumento(retencion.getCompra().getPreimpreso());
         retencion.setRazonSocial(retencion.getProveedor().getNombresCompletos());
-        retencion.setDireccion(retencion.getProveedor().getDireccion());
+        retencion.setDireccion(retencion.getProveedor().getEstablecimientos().get(0).getDireccion());
     }
     
     private void cargarCorreoPorDefecto(Compra compra)

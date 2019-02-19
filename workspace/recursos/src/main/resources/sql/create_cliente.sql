@@ -40,4 +40,20 @@ create table CLIENTE(
 
     primary key (CLIENTE_ID),
     UNIQUE(IDENTIFICACION)
-)
+);
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.7.8.0)*/
+create table PERSONA_ESTABLECIMIENTO( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) ,
+    PERSONA_ID BIGINT, 
+    CODIGO_SUCURSAL varchar(3),
+    NOMBRE_COMERCIAL varchar(256),
+    DIRECCION varchar(1024), 
+    TELEFONO_CONVENCIONAL varchar(9),
+    EXTENSION_TELEFONO varchar(4), 
+    TELEFONO_CELULAR varchar(10), 
+    CORREO_ELECTRONICO varchar(300),
+    TIPO_SUCURSAL varchar(3),    
+
+    primary key (ID)
+);

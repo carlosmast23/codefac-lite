@@ -44,6 +44,7 @@ public class MigrarRepresentantesModel extends MigrarModel {
         }
     }
 
+    //TODO: TERMINAR DE IMPLEMENTAR PARA CREAR LOS ESTABLECIMIENTOS
     @Override
     public ExcelMigrar.MigrarInterface getInterfaceMigrar() {
         
@@ -56,9 +57,9 @@ public class MigrarRepresentantesModel extends MigrarModel {
                     representante.setNombres((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.NOMBRES).valor);
                     representante.setApellidos((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.APELLIDOS).valor);
                     
-                    representante.setDireccion((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.DIRECCION).valor);
-                    representante.setTelefonoConvencional((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.TELEFONO).valor);
-                    representante.setTelefonoCelular((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.CELULAR).valor);
+                    //representante.setDireccion((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.DIRECCION).valor);
+                    //representante.setTelefonoConvencional((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.TELEFONO).valor);
+                    //representante.setTelefonoCelular((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.CELULAR).valor);
                     representante.setCorreoElectronico((String) fila.getByEnum(ExcelMigrarRepresentantes.Enum.CORREO).valor);
                     
                     representante.setTipoEnum(OperadorNegocioEnum.CLIENTE);

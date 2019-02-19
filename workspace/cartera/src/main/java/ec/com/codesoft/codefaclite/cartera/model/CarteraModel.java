@@ -355,8 +355,8 @@ public class CarteraModel extends CarteraPanel{
     
     private void cargarDatosCliente(Persona persona) {
         getLblNombresClientes().setText(persona.getRazonSocial());
-        getLblDireccion().setText(persona.getDireccion());
-        getLblTelefonos().setText(persona.getTelefonosTodos());
+        getLblDireccion().setText(persona.getEstablecimientos().get(0).getDireccion());
+        getLblTelefonos().setText(persona.getEstablecimientos().get(0).getTelefonoCelular());
         getTxtIdentificacion().setText(persona.getIdentificacion());
     }
     

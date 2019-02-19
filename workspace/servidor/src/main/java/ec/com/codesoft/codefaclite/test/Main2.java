@@ -79,7 +79,7 @@ public class Main2 {
         PersonaFacade personaFacade=new PersonaFacade();
         List<Persona> personasList=personaFacade.findAll();
         for (Persona persona : personasList) {
-            System.out.println(persona.getNombreLegal());
+            //System.out.println(persona.getNombreLegal());
         }
     }
     
@@ -89,7 +89,7 @@ public class Main2 {
         PersonaFacade personaFacade=new PersonaFacade();
         List<Persona> personasList=personaFacade.findAll();
         for (Persona persona : personasList) {
-            persona.setNombreLegal(persona.getNombreLegal()+"-");
+            //persona.setNombreLegal(persona.getNombreLegal()+"-");
             personaFacade.edit(persona);
             //System.out.println(persona.getNombre());
         }
@@ -100,7 +100,7 @@ public class Main2 {
         PersonaFacade personaFacade=new PersonaFacade();
         List<Persona> personasList=personaFacade.findAll();
         for (Persona persona : personasList) {
-            persona.setNombreLegal(persona.getNombreLegal()+"-");
+            //persona.setNombreLegal(persona.getNombreLegal()+"-");
             personaFacade.remove(persona);
             return;
             //System.out.println(persona.getNombre());

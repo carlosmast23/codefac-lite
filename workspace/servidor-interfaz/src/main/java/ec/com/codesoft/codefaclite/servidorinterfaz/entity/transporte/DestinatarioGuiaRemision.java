@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.sql.Date;
@@ -62,6 +63,9 @@ public class DestinatarioGuiaRemision implements Serializable{
     
     @Column(name = "CODIGO_ESTABLECIMIENTO")
     private String codigoEstablecimiento;
+    
+    @JoinColumn(name = "SUCURSAL_ID")
+    private PersonaEstablecimiento sucursal;
     
     @JoinColumn(name = "GUIA_REMISION_ID")
     @ManyToOne(optional = false)
@@ -211,6 +215,14 @@ public class DestinatarioGuiaRemision implements Serializable{
 
     public void setFacturaReferencia(Factura facturaReferencia) {
         this.facturaReferencia = facturaReferencia;
+    }
+
+    public PersonaEstablecimiento getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(PersonaEstablecimiento sucursal) {
+        this.sucursal = sucursal;
     }
 
     

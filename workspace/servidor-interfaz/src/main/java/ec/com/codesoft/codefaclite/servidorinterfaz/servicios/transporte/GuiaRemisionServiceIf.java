@@ -19,4 +19,5 @@ import java.util.List;
  */
 public interface GuiaRemisionServiceIf extends ServiceAbstractIf<GuiaRemision> {
     public List<GuiaRemision> obtenerConsulta(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado) throws ServicioCodefacException, RemoteException;
+    public void editarGuiaRemision(GuiaRemision guiaRemision) throws ServicioCodefacException, RemoteException;
 }

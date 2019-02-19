@@ -562,7 +562,7 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
                 if(representantePrincipal!=null)
                 {
                     estudianteData.setRepresentante(representantePrincipal.getNombresCompletos());
-                    estudianteData.setTelefono(representantePrincipal.getTelefonosTodos());
+                    estudianteData.setTelefono(representantePrincipal.getEstablecimientos().get(0).getTelefonoCelular());
                 }
                 else
                 {
@@ -647,7 +647,7 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
     @Override
     public List<ComponenteEnvioSmsData> getDataSms() {
         //TODO: Aumentar el numero para el segundo representante
-        ComponenteEnvioSmsData componenteEnvioSmsData = new ComponenteEnvioSmsData(estudiante.getRepresentante().getTelefonoCelular(), getPlantillaTags());
+        ComponenteEnvioSmsData componenteEnvioSmsData = new ComponenteEnvioSmsData(estudiante.getRepresentante().getEstablecimientos().get(0).getTelefonoCelular(), getPlantillaTags());
         List<ComponenteEnvioSmsData> dataList = new ArrayList<ComponenteEnvioSmsData>();
         dataList.add(componenteEnvioSmsData);
         return dataList;

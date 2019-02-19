@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -106,7 +107,7 @@ public class ProformaReporteModel extends ProformaReportePanel {
                 dato.setFechaFactura(dateFormat.format(proforma.getFechaEmision()));
                 dato.setIdentificacionCliente(proforma.getIdentificacion());
                 dato.setRazonSocialCliente(proforma.getRazonSocial());
-                dato.setNombreLegalCliente((proforma.getCliente().getNombreLegal()!=null)?proforma.getCliente().getNombreLegal():"");
+                dato.setNombreLegalCliente((proforma.getCliente().getEstablecimientos().get(0).getNombreComercial()!=null)?proforma.getCliente().getEstablecimientos().get(0).getNombreComercial():"");
                 dato.setSubtotalDoceFactura(proforma.getSubtotalImpuestos().toString());
                 dato.setSubtotalCeroFactura(proforma.getSubtotalSinImpuestos().toString());
                 dato.setDescFactura(proforma.getDescuentoImpuestos().add(proforma.getDescuentoSinImpuestos()).toString());
@@ -271,7 +272,7 @@ public class ProformaReporteModel extends ProformaReportePanel {
                 buscarDialogoModel.setVisible(true);
                 buscarDialogoModel.getResultado();
                 if (buscarDialogoModel.getResultado() != null) {
-                    cliente=(Persona) buscarDialogoModel.getResultado();
+                    cliente=((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();
                     getTxtCliente().setText(cliente.toString());
                 }
             }

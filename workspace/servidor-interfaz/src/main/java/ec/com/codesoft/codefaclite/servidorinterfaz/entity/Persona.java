@@ -10,16 +10,19 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -46,18 +49,31 @@ public class Persona implements Serializable, Comparable<Persona> {
     private String identificacion;
     @Column(name = "RAZON_SOCIAL")
     private String razonSocial;
+    
+    @Deprecated
     @Column(name = "NOMBRE_LEGAL")
     private String nombreLegal;
-    @Column(name = "TIPO_CLIENTE")
-    private String tipCliente;
+
+    @Deprecated
     @Column(name = "DIRECCION")
     private String direccion;
+    
+    @Deprecated
     @Column(name = "TELEFONO_CONVENCIONAL")
     private String telefonoConvencional;
+    
+    @Deprecated
     @Column(name = "EXTENSION_TELEFONO")
     private String extensionTelefono;
+    
+    @Deprecated
     @Column(name = "TELEFONO_CELULAR")
     private String telefonoCelular;
+
+    
+    @Column(name = "TIPO_CLIENTE")
+    private String tipCliente;    
+    
     @Column(name = "CORREO_ELECTRONICO")
     private String correoElectronico;
     @Column(name = "ESTADO")
@@ -96,6 +112,9 @@ public class Persona implements Serializable, Comparable<Persona> {
      */
     @Column(name = "TIPO_OPERADOR")
     private String tipo;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona",fetch = FetchType.EAGER)
+    private List<PersonaEstablecimiento> establecimientos;
 
     public Long getIdCliente() {
         return idCliente;
@@ -121,6 +140,7 @@ public class Persona implements Serializable, Comparable<Persona> {
         this.razonSocial = razonSocial;
     }
 
+    
     public String getNombreLegal() {
         return nombreLegal;
     }
@@ -141,6 +161,7 @@ public class Persona implements Serializable, Comparable<Persona> {
         this.tipCliente = enumerador.nombre;
     }
 
+    
     public String getDireccion() {
         return direccion;
     }
@@ -295,7 +316,14 @@ public class Persona implements Serializable, Comparable<Persona> {
         this.diasCreditoCliente = diasCreditoCliente;
     }
     
-    
+    public void addEstablecimiento(PersonaEstablecimiento establecimiento) {
+        if (this.establecimientos == null) {
+            this.establecimientos = new ArrayList<PersonaEstablecimiento>();
+        }
+        establecimiento.setPersona(this);
+        this.establecimientos.add(establecimiento);
+
+    }
 
 
     ///Metodos personalizados
@@ -311,6 +339,7 @@ public class Persona implements Serializable, Comparable<Persona> {
         return apellidos.split(" ")[0] + " " + nombres.split(" ")[0];
     }
 
+    /*
     public String getTelefonosTodos() {
         String telefonos = "";
 
@@ -329,7 +358,16 @@ public class Persona implements Serializable, Comparable<Persona> {
 
         return telefonos;
 
+    }*/
+
+    public List<PersonaEstablecimiento> getEstablecimientos() {
+        return establecimientos;
     }
+
+    public void setEstablecimientos(List<PersonaEstablecimiento> establecimientos) {
+        this.establecimientos = establecimientos;
+    }
+    
 
     public TipoIdentificacionEnum getTipoIdentificacionEnum() {
         return TipoIdentificacionEnum.obtenerPorLetra(tipoIdentificacion);
@@ -382,7 +420,8 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     @Override
     public String toString() {
-        return identificacion + " - " + getNombresCompletos();
+        return identificacion;
+        //return identificacion + " - " + getNombresCompletos();
     }
 
     @Override

@@ -39,7 +39,7 @@ public class MigrarClientesModel extends MigrarModel {
     }
     
     
-
+    //TODO: COMPLETAR LOGICA PARA MIGRAR CREANDO LAS SUCURSALES O ESTABLECIMIENTOS
     @Override
     public ExcelMigrar.MigrarInterface getInterfaceMigrar() {
         return new ExcelMigrar.MigrarInterface() {
@@ -51,13 +51,13 @@ public class MigrarClientesModel extends MigrarModel {
                     cliente.setNombres((String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRES).valor);
                     cliente.setApellidos((String) fila.getByEnum(ExcelMigrarClientes.Enum.APELLIDOS).valor);
                     cliente.setRazonSocial((String) fila.getByEnum(ExcelMigrarClientes.Enum.RAZON_SOCIAL).valor);
-                    cliente.setNombreLegal((String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRE_COMERCIAL).valor);
+                    //cliente.setNombreLegal((String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRE_COMERCIAL).valor);
                     
                     String telefono=(String) fila.getByEnum(ExcelMigrarClientes.Enum.TELEFONO).valor;
-                    cliente.setTelefonoConvencional(UtilidadesTextos.formatearTextoSinNingunEspacio(telefono));
-                    cliente.setTelefonoCelular((String) fila.getByEnum(ExcelMigrarClientes.Enum.CELULAR).valor);
+                    //cliente.setTelefonoConvencional(UtilidadesTextos.formatearTextoSinNingunEspacio(telefono));
+                    //cliente.setTelefonoCelular((String) fila.getByEnum(ExcelMigrarClientes.Enum.CELULAR).valor);
                     
-                    cliente.setDireccion((String) fila.getByEnum(ExcelMigrarClientes.Enum.DIRECCION).valor);
+                    //cliente.setDireccion((String) fila.getByEnum(ExcelMigrarClientes.Enum.DIRECCION).valor);
                     
                     cliente.setCorreoElectronico((String) fila.getByEnum(ExcelMigrarClientes.Enum.CORREO).valor);
                     

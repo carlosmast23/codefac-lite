@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.PerfilService;
 import ec.com.codesoft.codefaclite.servidor.service.PerfilUsuarioService;
 import ec.com.codesoft.codefaclite.servidor.service.PermisoVentanaService;
+import ec.com.codesoft.codefaclite.servidor.service.PersonaEstablecimientoService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.PresupuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.PresupuestoService;
@@ -108,6 +109,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PermisoVentanaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaEstablecimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
@@ -228,6 +230,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(SucursalService.class, SucursalServiceIf.class);
             mapRecursos.put(PuntoEmisionService.class, PuntoEmisionServiceIf.class);
             mapRecursos.put(ActualizarSistemaService.class, ActualizarSistemaServiceIf.class);
+            mapRecursos.put(PersonaEstablecimientoService.class, PersonaEstablecimientoServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             LOG.log(Level.INFO,"Servidor Iniciado");

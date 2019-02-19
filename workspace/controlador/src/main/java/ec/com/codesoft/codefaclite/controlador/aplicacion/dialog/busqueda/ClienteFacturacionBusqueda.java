@@ -8,6 +8,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.Vector;
  *
  * @author Carlos
  */
-public class ClienteFacturacionBusqueda implements InterfaceModelFind<Persona> {
+public class ClienteFacturacionBusqueda implements InterfaceModelFind<PersonaEstablecimiento> {
 
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
@@ -32,20 +33,22 @@ public class ClienteFacturacionBusqueda implements InterfaceModelFind<Persona> {
     }
 
     @Override
-    public void agregarObjeto(Persona t, Vector dato) {
-        dato.add(t.getIdentificacion());
-        dato.add(t.getRazonSocial());
-        dato.add((t.getNombreLegal()!=null)?t.getNombreLegal():"");
+    public void agregarObjeto(PersonaEstablecimiento t, Vector dato) {
+        dato.add(t.getPersona().getIdentificacion());
+        dato.add(t.getPersona().getRazonSocial());
+        dato.add((t.getNombreComercial()!=null)?t.getNombreComercial():"");
         dato.add(t.getTelefonoConvencional());       
         dato.add(t.getTelefonoCelular());
     }
 
     @Override
     public QueryDialog getConsulta(String filter) {
+        //PersonaEstablecimiento pe;
+        //pe.getNombreComercial();
         //p.getRazonSocial();
         //Persona persona=new Persona();
-        String queryString = "SELECT u FROM Persona u WHERE (u.estado<>?1) AND (u.tipo=?2 OR u.tipo=?3 ) AND ";
-        queryString+=" ( LOWER(u.razonSocial) like ?4 or LOWER(u.nombreLegal) like ?4 or u.identificacion like ?4 )";
+        String queryString = "SELECT u FROM PersonaEstablecimiento u WHERE (u.persona.estado<>?1) AND (u.persona.tipo=?2 OR u.persona.tipo=?3 ) AND ";
+        queryString+=" ( LOWER(u.persona.razonSocial) like ?4 or LOWER(u.nombreComercial) like ?4 or u.persona.identificacion like ?4 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(2,OperadorNegocioEnum.CLIENTE.getLetra());

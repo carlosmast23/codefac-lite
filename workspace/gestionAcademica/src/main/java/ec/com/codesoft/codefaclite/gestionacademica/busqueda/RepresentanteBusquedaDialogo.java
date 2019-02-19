@@ -42,8 +42,8 @@ public class RepresentanteBusquedaDialogo implements InterfaceModelFind<Persona>
        
         dato.add(t.getIdentificacion());
         dato.add(t.getRazonSocial());        
-        dato.add(t.getTelefonoConvencional());
-        dato.add(t.getTelefonoCelular());
+        dato.add(t.getEstablecimientos().get(0).getTelefonoConvencional());
+        dato.add(t.getEstablecimientos().get(0).getTelefonoCelular());
         dato.add(t.getCorreoElectronico());
    
     }

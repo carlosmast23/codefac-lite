@@ -153,3 +153,8 @@ Verificar el reporte de las proformas porque seguramente debe tener el mismo pro
 Analizar si al momento de mostrar los comprobantes se deberian mostrar los eliminados para hacer algun proceso adicional para reactivar o cambiar de estado (facturas)
 En la pantalla de registro aumentar como campo obligatorio para saber que el usuario tiene que ingresar el ruc
 Activar una opcion para manejar un numero maximo de decimales para mostrar en especial en la pantalla de factura
+Revisar si en el ats en las ventas se debe incluir la sumatoria de todos los comprobantes sin los anulados
+Ver en el ats que no va a coincidir el total del iva y el subtotal porque los decimales se pierden ver si no genera problemas en los ats
+En cada cliente crear un objeto que devuelva la matriz o el objeto principal para acceder rapidamente a otros datos como la direccion , telefono , etc
+en la pantalla de retencion con una compra hacer que la busqueda aparesca desde el ultimo documento al primero
+revisar que no imprime un ficha de los estudiantes

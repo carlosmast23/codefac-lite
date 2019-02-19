@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -63,6 +64,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
     public void iniciar() throws ExcepcionCodefacLite {
         agregarBotonListener();
         agregarComboListener();
+        validacionDatosIngresados=false; //Para que no haga validaciones automaticas
     }
 
     @Override
@@ -236,7 +238,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                     ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
                     BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
                     buscarDialogoModel.setVisible(true);
-                    Persona proveedorTemp = (Persona) buscarDialogoModel.getResultado();
+                    Persona proveedorTemp = ((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();
                     if(proveedorTemp != null)
                     {
                         limpiar();
@@ -523,7 +525,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
              * Agregar nombre Proveedor
              */
             ReporteProductoProveedor rpp = new ReporteProductoProveedor();
-            rpp.setNombre("[ " +key.getNombreLegal()+" ] "+ key.getNombresCompletos());
+            rpp.setNombre("[ " +key.getEstablecimientos().get(0).getNombreComercial()+" ] "+ key.getNombresCompletos());
             /**
              * Agregar Información
              */

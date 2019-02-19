@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
@@ -460,7 +461,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                 ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
-                proveedor = (Persona) buscarDialogoModel.getResultado();
+                proveedor = ((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();
                 if (proveedor != null) {
                     String identificacion = proveedor.getIdentificacion();
                     String nombre = proveedor.getRazonSocial();
