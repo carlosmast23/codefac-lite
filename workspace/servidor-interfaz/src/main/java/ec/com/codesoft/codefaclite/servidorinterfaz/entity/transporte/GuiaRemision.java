@@ -249,7 +249,25 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
         return true;
     }
     
-    
+    /**
+     * =============> DATOS ADICIONALES <===============
+     */
+    public Integer obtenerTotalItems()
+    {
+        Integer total=0;
+        if(destinatarios!=null)
+        {
+            for (DestinatarioGuiaRemision destinatario : destinatarios) {
+                if(destinatario.getDetallesProductos()!=null)
+                {
+                    for (DetalleProductoGuiaRemision detalleProducto : destinatario.getDetallesProductos()) {
+                       total+=detalleProducto.getCantidad(); 
+                    }
+                }
+            }
+        }
+        return total;
+    }
     
     
 }

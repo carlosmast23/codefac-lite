@@ -64,6 +64,10 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         btnBuscarTransportista = new javax.swing.JButton();
         chkTodosTransportista = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        txtProducto = new javax.swing.JTextField();
+        btnBuscarProducto = new javax.swing.JButton();
+        chkTodosProductos = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -150,7 +154,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -162,7 +166,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         btnBuscar.setText("Consultar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
@@ -195,11 +199,11 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         jLabel12.setText("           ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         getContentPane().add(jLabel12, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         getContentPane().add(jLabel21, gridBagConstraints);
 
         btnLimpiarFechaFin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
@@ -235,10 +239,11 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         getContentPane().add(cmbEstado, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Transportista:");
+        jLabel2.setText("Producto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(jLabel2, gridBagConstraints);
 
         txtTransportista.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -247,10 +252,8 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtTransportista, gridBagConstraints);
 
@@ -258,7 +261,6 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscarTransportista, gridBagConstraints);
 
@@ -270,6 +272,42 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         getContentPane().add(chkTodosTransportista, gridBagConstraints);
         getContentPane().add(jLabel3, new java.awt.GridBagConstraints());
 
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText("Transportista:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        getContentPane().add(jLabel4, gridBagConstraints);
+
+        txtProducto.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtProducto.setText("...");
+        txtProducto.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtProducto, gridBagConstraints);
+
+        btnBuscarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/icon1.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnBuscarProducto, gridBagConstraints);
+
+        chkTodosProductos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkTodosProductos.setText("Todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
+        getContentPane().add(chkTodosProductos, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -280,10 +318,12 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarCliente;
+    private javax.swing.JButton btnBuscarProducto;
     private javax.swing.JButton btnBuscarTransportista;
     private javax.swing.JButton btnLimpiarFechaFin;
     private javax.swing.JButton btnLimpiarFechaInicio;
     private javax.swing.JCheckBox chkTodosCliente;
+    private javax.swing.JCheckBox chkTodosProductos;
     private javax.swing.JCheckBox chkTodosTransportista;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstado;
     private com.toedter.calendar.JDateChooser dateFechaFin;
@@ -293,6 +333,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
@@ -301,6 +342,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblFechaInicio;
     private javax.swing.JTable tblDocumentos;
     private javax.swing.JTextField txtCliente;
+    private javax.swing.JTextField txtProducto;
     private javax.swing.JTextField txtTransportista;
     // End of variables declaration//GEN-END:variables
 
@@ -419,5 +461,19 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
     public void setChkTodosTransportista(JCheckBox chkTodosTransportista) {
         this.chkTodosTransportista = chkTodosTransportista;
     }
+
+    public JButton getBtnBuscarProducto() {
+        return btnBuscarProducto;
+    }
+
+    public JCheckBox getChkTodosProductos() {
+        return chkTodosProductos;
+    }
+
+    public JTextField getTxtProducto() {
+        return txtProducto;
+    }
+    
+    
 
 }

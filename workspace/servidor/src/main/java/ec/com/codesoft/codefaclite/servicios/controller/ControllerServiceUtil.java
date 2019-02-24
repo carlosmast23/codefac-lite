@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
 import ec.com.codesoft.codefaclite.servidor.service.DepartamentoService;
 import ec.com.codesoft.codefaclite.servidor.service.EmpleadoService;
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
+import ec.com.codesoft.codefaclite.servidor.service.FacturaDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
@@ -90,6 +91,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpleadoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturaDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
@@ -231,6 +233,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(PuntoEmisionService.class, PuntoEmisionServiceIf.class);
             mapRecursos.put(ActualizarSistemaService.class, ActualizarSistemaServiceIf.class);
             mapRecursos.put(PersonaEstablecimientoService.class, PersonaEstablecimientoServiceIf.class);
+            mapRecursos.put(FacturaDetalleService.class, FacturaDetalleServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             LOG.log(Level.INFO,"Servidor Iniciado");

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.facade.transporte;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import java.rmi.RemoteException;
@@ -24,7 +25,7 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
         super(GuiaRemision.class);
     }
     
-    public List<GuiaRemision> obtenerConsultaFacade(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado) throws ServicioCodefacException, RemoteException    
+    public List<GuiaRemision> obtenerConsultaFacade(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado,Producto  producto) throws ServicioCodefacException, RemoteException    
     {
         GuiaRemision guia;
         //guia.getFechaEmision()

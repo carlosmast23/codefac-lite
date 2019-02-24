@@ -184,7 +184,7 @@ public class RubrosNivel implements Serializable{
 
     @Override
     public String toString() {
-        return nombre;
+        return nombre+" [ "+valor+"$ ]";
     }
 
     @Override

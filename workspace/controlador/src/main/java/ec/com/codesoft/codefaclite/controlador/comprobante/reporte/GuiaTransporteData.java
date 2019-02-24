@@ -26,6 +26,7 @@ public class GuiaTransporteData implements ExcelDatosInterface{
     private String fechaFin;
     private String direccionPartida;
     private String placa;
+    private String cantidadItems;
 
     public GuiaTransporteData() {
     }
@@ -100,6 +101,14 @@ public class GuiaTransporteData implements ExcelDatosInterface{
 
     public void setClaveAcceso(String claveAcceso) {
         this.claveAcceso = claveAcceso;
+    }
+
+    public String getCantidadItems() {
+        return cantidadItems;
+    }
+
+    public void setCantidadItems(String cantidadItems) {
+        this.cantidadItems = cantidadItems;
     }
     
     

@@ -221,6 +221,15 @@ public class FacturaDetalle implements Serializable {
     {
         return precioUnitario.multiply(cantidad);
     }
+    
+    /**
+     * Metodos que devuelve el subtotal restado impuestos
+     * @return 
+     */
+    public BigDecimal getSubtotalRestadoDescuentos()
+    {
+        return precioUnitario.multiply(cantidad).subtract(descuento);
+    }
 
         
     

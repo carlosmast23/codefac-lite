@@ -103,7 +103,7 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         return (List<GuiaRemision>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta() throws ServicioCodefacException, RemoteException {
-                return getFacade().obtenerConsultaFacade(fechaInicial, fechaFinal,estado);
+                return getFacade().obtenerConsultaFacade(fechaInicial, fechaFinal,estado,null);
             }
         });
                 

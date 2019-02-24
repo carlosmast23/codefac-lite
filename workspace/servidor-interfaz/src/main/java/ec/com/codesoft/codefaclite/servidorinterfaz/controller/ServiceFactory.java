@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpleadoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturaDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
@@ -175,6 +176,7 @@ public abstract class ServiceFactory {
     public PuntoEmisionServiceIf getPuntoVentaServiceIf(){return (PuntoEmisionServiceIf) getRecursosRMI(PuntoEmisionServiceIf.class);};
     public ActualizarSistemaServiceIf getActualizarSistemaServiceIf(){return (ActualizarSistemaServiceIf) getRecursosRMI(ActualizarSistemaServiceIf.class);};
     public PersonaEstablecimientoServiceIf getPersonaEstablecimientoServiceIf(){return (PersonaEstablecimientoServiceIf) getRecursosRMI(PersonaEstablecimientoServiceIf.class);};
+    public FacturaDetalleServiceIf getFacturaDetalleServiceIf(){return (FacturaDetalleServiceIf) getRecursosRMI(FacturaDetalleServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente

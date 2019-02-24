@@ -1,0 +1,3 @@
+En los reportes ver la posibilidad de no mostrar las tablas y borrar de todos los reportes
+porque es inecesario y a la final todos terminan viendo el pdf
+Nota: Ver si en vez de la tabla se puede hacer que aparesca el reporte directamente abajo

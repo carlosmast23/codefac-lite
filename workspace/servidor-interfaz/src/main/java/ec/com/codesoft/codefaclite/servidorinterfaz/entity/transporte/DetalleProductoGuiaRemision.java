@@ -38,7 +38,7 @@ public class DetalleProductoGuiaRemision implements Serializable{
     private Integer cantidad;
     
     @Column(name = "REFERENCIA_ID")
-    private Long referenciaId; //Almacena la referencia al producto 
+    private Long referenciaId; //Almacena la referencia al producto , TODO: verificar si tambien se graba cuando son de otro lado la referencia por ejemplo de presupuestos , por el momento se asume que viene de la tabla de productos
     
 
     @JoinColumn(name="DESTINATARIO_ID")

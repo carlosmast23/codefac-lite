@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.comprobante.reporte;
 
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
@@ -15,6 +16,8 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
@@ -31,6 +34,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  *
@@ -65,6 +71,28 @@ public class ControladorReporteGuiaRemision {
         }
         
     }
+    
+    public List<SubreporteGuiaRemisionProductoData> obtenerSubtotalesProducto()
+    {
+        List<SubreporteGuiaRemisionProductoData> subReporte=new ArrayList<SubreporteGuiaRemisionProductoData>();
+        if(listaConsulta!=null)
+        {
+            for (GuiaRemision guiaRemision : listaConsulta) 
+            {
+                for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) 
+                {
+                    for (DetalleProductoGuiaRemision detalleProducto : destinatario.getDetallesProductos()) {
+                        SubreporteGuiaRemisionProductoData.agregarDatoLista(subReporte, detalleProducto);
+                    }
+                   
+                }
+
+            }
+        }
+        return subReporte;
+    }
+    
+    
 
     public List<GuiaRemision> getListaConsulta() {
         return listaConsulta;
@@ -86,9 +114,22 @@ public class ControladorReporteGuiaRemision {
     }
     
     public void obtenerReportePdf(InterfazComunicacionPanel panelPadre) throws IOException, FileNotFoundException, IllegalArgumentException, IllegalAccessException {
-        InputStream path =obtenerPathReporte();
-        Map parameters = new HashMap();
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listReporte, panelPadre, "Reporte Guía Remisión ", OrientacionReporteEnum.HORIZONTAL);
+        InputStream path =obtenerPathReporte();        
+        InputStream subreporte=RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("subreporteGuiaRemisionProductos.jrxml");
+        Map<String,Object> parametros = new HashMap<String,Object>();
+        try {
+            JasperReport subreporteJasper = JasperCompileManager.compileReport(subreporte);
+            parametros.put("subreporte_productos_jasper",subreporteJasper);
+        } catch (JRException ex) {
+            Logger.getLogger(ControladorReporteGuiaRemision.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+        parametros.put("subreporte_productos", obtenerSubtotalesProducto());
+       
+        
+        
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, listReporte, panelPadre, "Reporte Guía Remisión ", OrientacionReporteEnum.HORIZONTAL);
     }
     
     public File obtenerReporteArchivoPdf(InterfazComunicacionPanel panelPadre) throws IOException, FileNotFoundException, IllegalArgumentException, IllegalAccessException {
@@ -131,6 +172,7 @@ public class ControladorReporteGuiaRemision {
             data.setPreimpreso(guiaRemision.getPreimpreso());
             data.setTransportista(guiaRemision.getRazonSocial());
             data.setClaveAcceso(guiaRemision.getClaveAcceso());
+            data.setCantidadItems(guiaRemision.obtenerTotalItems().toString());
             listReporte.add(data);
         }
     }

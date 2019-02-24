@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.transporte.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteGuiaRemision;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -27,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.GuiaTransporteData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiasRemisionReportePanel;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
@@ -54,6 +56,7 @@ import javax.swing.table.DefaultTableModel;
 public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
 {
     private Persona persona;
+    private Producto producto;
     private Transportista transportista;
     //private List<GuiaRemision> listaConsulta;
     private ControladorReporteGuiaRemision controladorReporte;
@@ -75,7 +78,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         if(getChkTodosCliente().isSelected())
         {
             persona = null;
-            getTxtCliente().setText("...");
+            getTxtCliente().setText("");
             getBtnBuscarCliente().setEnabled(false);
         }
         
@@ -83,8 +86,16 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         if(getChkTodosTransportista().isSelected())
         {
             transportista = null;
-            getTxtTransportista().setText("...");
+            getTxtTransportista().setText("");
             getBtnBuscarTransportista().setEnabled(false);
+        }
+        
+        getChkTodosProductos().setSelected(true);
+        if(getChkTodosProductos().isSelected())
+        {
+            producto = null;
+            getTxtProducto().setText("");
+            getBtnBuscarProducto().setEnabled(false);
         }
         
         listenerBotones();
@@ -167,6 +178,21 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
             }
         });
         
+        getBtnBuscarProducto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                Producto productoTmp = (Producto) buscarDialogoModel.getResultado();
+                
+                if (productoTmp != null) {
+                    getTxtProducto().setText(productoTmp.getNombre());
+                    producto=productoTmp;
+                }
+            }
+        });
+        
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -231,22 +257,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
     
     private void imprimirReporte()
     {
-        /*
-        List<GuiaTransporteData> listReporte=new ArrayList<GuiaTransporteData>();
-        for (GuiaRemision guiaRemision : controladorReporte.getListaConsulta()) {
-            GuiaTransporteData data=new GuiaTransporteData();
-            data.setDireccionPartida(guiaRemision.getDireccionPartida());
-            data.setEstado(guiaRemision.getEstadoEnum().getNombre());
-            data.setFechaFin(guiaRemision.getFechaFinTransporte().toString());
-            data.setFechaInicio(guiaRemision.getFechaIniciaTransporte().toString());
-            data.setIdentififacion((guiaRemision.getIdentificacion()!=null)?guiaRemision.getIdentificacion().toString():"");
-            data.setPlaca(guiaRemision.getPlaca());
-            data.setPreimpreso(guiaRemision.getPreimpreso());
-            data.setTransportista(guiaRemision.getRazonSocial());
-            data.setClaveAcceso(guiaRemision.getClaveAcceso());
-            listReporte.add(data);
-        }*/
-        
+                
         if(controladorReporte.getListaConsulta()!=null)
         {
             DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
@@ -290,14 +301,8 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
     
     private String[] getCabeceraReporte()
     {
-        return new String[]{"Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa"};
+        return new String[]{"Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa","#Items"};
     }
-    
-    /*
-    private String[] getCabeceraReporteExcel()
-    {
-        return new String[]{"Clave de Acceso","Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa"};
-    }*/
     
     private void mostrarReporteTabla()
     {
@@ -317,7 +322,8 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
                     guiaRemision.getFechaIniciaTransporte().toString(),
                     guiaRemision.getFechaFinTransporte().toString(),
                     guiaRemision.getDireccionPartida(),
-                    guiaRemision.getPlaca()
+                    guiaRemision.getPlaca(),
+                    guiaRemision.obtenerTotalItems().toString(),
                     
                 };
                 
@@ -357,6 +363,20 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
                 } else {
                     getBtnBuscarTransportista().setEnabled(true);
                 }   
+            }
+        });
+        
+        getChkTodosProductos().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getStateChange() == ItemEvent.SELECTED)
+                {
+                    transportista = null;
+                    getTxtProducto().setText("");
+                    getBtnBuscarProducto().setEnabled(false);
+                } else {
+                    getBtnBuscarProducto().setEnabled(true);
+                }
             }
         });
     }
