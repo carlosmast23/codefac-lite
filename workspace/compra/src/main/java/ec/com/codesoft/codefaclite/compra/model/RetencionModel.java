@@ -51,6 +51,7 @@ import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.PreimpresoFormato;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
+import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -111,12 +112,20 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
     public void grabar() throws ExcepcionCodefacLite {
         try {
             
+            
             if(!validar())
             {
-                throw new ExcepcionCodefacLite("cancelado"); //Si no realiza la validacion se cancela el proceso
+                throw new ExcepcionCodefacLite("cancelado pantalla"); //Si no realiza la validacion se cancela el proceso
+            }
+            setearDatos();
+            
+            if (!validarDesdeModelo()) 
+            {
+                throw new ExcepcionCodefacLite("cancelado valicion modelo"); //Si no realiza la validacion se cancela el proceso
             }
             
-            setearDatos();
+            
+            
             retencion=ServiceFactory.getFactory().getRetencionServiceIf().grabar(retencion);
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                     
@@ -276,6 +285,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getTxtBaseImponible().setText("");
         getCmbRetencionIva().setSelectedIndex(0);
         getCmbRetencionRenta().setSelectedIndex(0);
+        getCmbFechaDocumento().setDate(null);
         
         cargarDatosEmpresa();
         
@@ -916,16 +926,36 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getTabTipoDocumentos().setEnabledAt(numeroTab,true);
         
     }
+    
+    private boolean  validarDesdeModelo()
+    {
+        if(retencion.getFechaEmision().compareTo(retencion.getFechaEmisionDocumento())<0)
+        {
+            DialogoCodefac.mensaje("Advertencia","La fecha de emisón no puede ser inferior  a la fecha de la compra",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+        final int DIAS_VALIDADOS_ENVIAR_RETENCION=5;
+        java.util.Date fechaLimiteDocumento = UtilidadesFecha.sumarDiasFecha(retencion.getFechaEmisionDocumento(), DIAS_VALIDADOS_ENVIAR_RETENCION+1);
+        if (retencion.getFechaEmision().compareTo(fechaLimiteDocumento) > 0) {
+            if (!DialogoCodefac.dialogoPregunta("Advertencia", "El SRI exige que la fecha de emisión de la retención no puede ser superior a 5 días de la fecha de la compra.\nDesea continuar de todos modos?  ", DialogoCodefac.MENSAJE_INCORRECTO)) {
+                return false;
+            }
+        }
+        
+        
+        return true;
+    }
 
     private boolean validar() {
         
-       
-                
         if(getTblDetalleRetenciones().getRowCount()==0)
         {
             DialogoCodefac.mensaje("Error","No se puede enviar retenciones sin detalles", DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
+        
+        
         
         TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
@@ -962,7 +992,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
                 DialogoCodefac.mensaje("Error", "Ingrese un fecha de compra para continuar", DialogoCodefac.MENSAJE_INCORRECTO);
                 return false;
             }
-        }      
+        }
         
         return true;
     }
