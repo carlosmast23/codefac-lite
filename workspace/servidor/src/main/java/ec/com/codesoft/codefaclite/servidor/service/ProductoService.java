@@ -62,19 +62,15 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return p;
     }
     
-    public void editar(Producto p)
+    public void editarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException
     {
-        try {
-            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
-                    productoFacade.edit(p);
-                }
-            });
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.merge(p);
+            }
+        });
+
     }
     
     public void eliminar(Producto p)

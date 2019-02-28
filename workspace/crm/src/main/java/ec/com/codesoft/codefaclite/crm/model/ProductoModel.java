@@ -117,7 +117,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             producto.setValorUnitario(d);
             */
             setearValoresProducto(producto);
-            productoService.editar(producto);
+            productoService.editarProducto(producto);
             DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -176,6 +176,10 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         EnumSiNo enumSiNo=(EnumSiNo) getCmbManejaInventario().getSelectedItem();
         producto.setManejarInventario(enumSiNo.getLetra());
+        
+        //Setear la opcion de si desea generar el codigo de barras
+        enumSiNo=(EnumSiNo) getCmbGenerarCodigoBarras().getSelectedItem();        
+        producto.setGenerarCodigoBarras(enumSiNo);
 
     }
     
@@ -288,7 +292,12 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         String letraInventario=(producto.getManejarInventario()!=null)?producto.getManejarInventario():EnumSiNo.NO.getLetra();        
         EnumSiNo enumInventario=EnumSiNo.getEnumByLetra(letraInventario);        
         getCmbManejaInventario().setSelectedItem(enumInventario);
-
+        
+        //Cargar si desea generar el codigo de los productos
+        String letraGenerarCodBarras=(producto.getGenerarCodigoBarras()!=null)?producto.getGenerarCodigoBarras():EnumSiNo.NO.getLetra();        
+        EnumSiNo enumGenerarCodigoBarras=EnumSiNo.getEnumByLetra(letraGenerarCodBarras);        
+        getCmbGenerarCodigoBarras().setSelectedItem(enumGenerarCodigoBarras);
+        
         actualizarTablaEnsamble();
 
     }
@@ -309,6 +318,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getComboIrbpnr().setSelectedItem("Seleccione: ");
         
         getCmbIvaOpcionPrecioVentaPublico().setSelectedItem(IvaOpcionEnum.SIN_IVA);
+        
+        getCmbGenerarCodigoBarras().setSelectedItem(EnumSiNo.NO);
 
 
     }
@@ -392,13 +403,17 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             
             //Agregar las opcoiones segun los modulos habilitados
             getCmbManejaInventario().removeAllItems();
-            
+                        
             if(session.getModulos().contains(ModuloCodefacEnum.INVENTARIO) || ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO))
             {
                 getCmbManejaInventario().addItem(EnumSiNo.SI);                
             }
-            
             getCmbManejaInventario().addItem(EnumSiNo.NO);
+            
+            //Cargar los estados para generar los codigos de barras
+            getCmbGenerarCodigoBarras().removeAllItems();
+            getCmbGenerarCodigoBarras().addItem(EnumSiNo.NO);
+            getCmbGenerarCodigoBarras().addItem(EnumSiNo.SI);
             
              
             getComboIva().removeAllItems();

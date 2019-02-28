@@ -90,6 +90,9 @@ public class Producto implements Serializable, Comparable<Producto> {
     
     @Column(name = "MANEJAR_INVENTARIO")
     private String manejarInventario;
+    
+    @Column(name = "GENERAR_CODIGO_BARRAS")
+    private String generarCodigoBarras;
 
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     @ManyToOne    
@@ -283,6 +286,20 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setManejarInventario(String manejarInventario) {
         this.manejarInventario = manejarInventario;
     }
+
+    public String getGenerarCodigoBarras() {
+        return generarCodigoBarras;
+    }
+    
+    public EnumSiNo getGenerarCodigoBarrasEnum() {
+        return EnumSiNo.getEnumByLetra(generarCodigoBarras);
+    }
+
+    public void setGenerarCodigoBarras(EnumSiNo generarCodigoBarrasEnum) {
+        this.generarCodigoBarras = generarCodigoBarrasEnum.getLetra();
+    }
+    
+    
     
     public List<PrecioVenta> obtenerPreciosVenta()
     {
