@@ -69,4 +69,17 @@ public abstract class UtilidadImagen {
         return null;
     }
     
+    public static Image convertirOutPutStreamToImage(ByteArrayOutputStream bos) {
+       
+        try {
+            byte [] data = bos.toByteArray();
+            ByteArrayInputStream bis = new ByteArrayInputStream(data);
+            BufferedImage bImage2 = ImageIO.read(bis);
+            return bImage2;
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadImagen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
 }

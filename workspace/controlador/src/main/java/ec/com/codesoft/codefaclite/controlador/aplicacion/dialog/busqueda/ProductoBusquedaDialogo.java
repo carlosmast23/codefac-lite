@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
@@ -19,6 +20,17 @@ import java.util.Vector;
  */
 public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
 {
+    /**
+     * Variable para hacer ese filtro cuando lo requiera
+     */
+    private EnumSiNo generarCodigoBarrasEnum; 
+
+    public ProductoBusquedaDialogo() 
+    {
+        this.generarCodigoBarrasEnum = null; //Le pongo en null para que filtre todo
+    }
+    
+    
 
     @Override
     public Vector<ColumnaDialogo> getColumnas() 
@@ -53,12 +65,37 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Producto u WHERE (u.estado=?1) and";
-        queryString+=" ( LOWER(u.nombre) like ?2 OR u.codigoPersonalizado like ?2 ) ORDER BY u.codigoPersonalizado";
+        //Producto p;
+        //p.getGenerarCodigoBarras()
+        String queryString = "SELECT u FROM Producto u WHERE (u.estado=?1) ";
+        
+        if (generarCodigoBarrasEnum != null) {
+            queryString+=" and  u.generarCodigoBarras=?3 ";
+        }
+        
+        queryString+=" and ( LOWER(u.nombre) like ?2 OR u.codigoPersonalizado like ?2 ) ORDER BY u.codigoPersonalizado";
+
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2,filter);
+        
+        if (generarCodigoBarrasEnum != null)
+        {
+            queryDialog.agregarParametro(3,generarCodigoBarrasEnum.getLetra());
+        }
         //queryDialog.agregarParametro(2,ProductoEnumEstado.INACTIVO.getEstado());
         return queryDialog;
     }
+
+    public EnumSiNo getGenerarCodigoBarrasEnum() {
+        return generarCodigoBarrasEnum;
+    }
+
+    public void setGenerarCodigoBarrasEnum(EnumSiNo generarCodigoBarrasEnum) {
+        this.generarCodigoBarrasEnum = generarCodigoBarrasEnum;
+    }
+
+    
+    
+    
 }

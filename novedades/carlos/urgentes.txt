@@ -1,0 +1,4 @@
+Hacer el filtro de las guias de remision por cliente
+Hacer el reporte de facturas por productos
+Ver alguna forma de que al momento de cargar los productos a la guia de remision
+en este caso no se pasen los que sean fletes

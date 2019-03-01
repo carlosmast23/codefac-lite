@@ -126,6 +126,7 @@ public class GuiaTransporteData implements ExcelDatosInterface{
         tiposDatos.add(new TipoDato(this.fechaFin,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.direccionPartida,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.placa,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.cantidadItems,Excel.TipoDataEnum.NUMERO));
         return tiposDatos;
     }
     

@@ -151,7 +151,7 @@ public class ControladorReporteGuiaRemision {
     
     public String[] getCabeceraReporteExcel()
     {
-        return new String[]{"Clave de Acceso","Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa"};
+        return new String[]{"Clave de Acceso","Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa","# Items"};
     }
     
     public InputStream obtenerPathReporte()
