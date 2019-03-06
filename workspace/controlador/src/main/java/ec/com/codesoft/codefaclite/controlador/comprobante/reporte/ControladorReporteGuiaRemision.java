@@ -15,6 +15,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPan
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
@@ -22,6 +24,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,11 +53,17 @@ public class ControladorReporteGuiaRemision {
     private ComprobanteEntity.ComprobanteEnumEstado estado;
     private List<GuiaRemision> listaConsulta;
     private List<GuiaTransporteData> listReporte;
+    private Transportista transportista;
+    private Persona destinatario;
+    private String codigoProducto;
 
-    public ControladorReporteGuiaRemision(Date fechaInicial, Date fechaFinal, ComprobanteEntity.ComprobanteEnumEstado estado) {
+    public ControladorReporteGuiaRemision(Date fechaInicial, Date fechaFinal, ComprobanteEntity.ComprobanteEnumEstado estado,Transportista transportista,Persona destinatario,String codigoProducto) {
         this.fechaInicial = fechaInicial;
         this.fechaFinal = fechaFinal;
         this.estado = estado;
+        this.transportista=transportista;
+        this.destinatario=destinatario;
+        this.codigoProducto=codigoProducto;
     }
    
     
@@ -61,7 +71,7 @@ public class ControladorReporteGuiaRemision {
     {
         try {
             GuiaRemisionServiceIf guiaRemisionServiceIf=ServiceFactory.getFactory().getGuiaRemisionServiceIf();
-            listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal,estado);
+            listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal,estado, transportista,destinatario,codigoProducto);
             llenarDatosReporte();
         //} catch (ServicioCodefacException ex) {
         //    Logger.getLogger(ControladorReporteGuiaRemision.class.getName()).log(Level.SEVERE, null, ex);
@@ -151,7 +161,7 @@ public class ControladorReporteGuiaRemision {
     
     public String[] getCabeceraReporteExcel()
     {
-        return new String[]{"Clave de Acceso","Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa","# Items"};
+        return new String[]{"Clave de Acceso","Preimpreso","Identificación","Transportista","Destinatarios","Estado","FechaInicio","FechaFin","Dir Partida","Placa","# Items"};
     }
     
     public InputStream obtenerPathReporte()
@@ -173,6 +183,12 @@ public class ControladorReporteGuiaRemision {
             data.setTransportista(guiaRemision.getRazonSocial());
             data.setClaveAcceso(guiaRemision.getClaveAcceso());
             data.setCantidadItems(guiaRemision.obtenerTotalItems().toString());
+            data.setDestinatarios(UtilidadesLista.castListToString(guiaRemision.getDestinatarios(),",",new UtilidadesLista.CastListInterface<DestinatarioGuiaRemision>() {
+                @Override
+                public String getString(DestinatarioGuiaRemision dato) {
+                    return dato.getRazonSocial();
+                }
+           }));
             listReporte.add(data);
         }
     }

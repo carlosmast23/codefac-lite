@@ -248,9 +248,9 @@ public abstract class UtilidadesTextos {
      * @return 
      */
     public static String quitaDiacriticos(String s) {
-    s = Normalizer.normalize(s, Normalizer.Form.NFD);
-    s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-    return s;
-}
+        s = Normalizer.normalize(s, Normalizer.Form.NFD);
+        s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return s;
+    }
     
 }

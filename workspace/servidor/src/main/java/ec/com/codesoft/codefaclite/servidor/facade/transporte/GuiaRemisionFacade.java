@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.servidor.facade.transporte;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import java.rmi.RemoteException;
@@ -25,13 +27,16 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
         super(GuiaRemision.class);
     }
     
-    public List<GuiaRemision> obtenerConsultaFacade(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado,Producto  producto) throws ServicioCodefacException, RemoteException    
+    public List<GuiaRemision> obtenerConsultaFacade(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado, Transportista transportista,Persona destinatario,String codigoProducto) throws ServicioCodefacException, RemoteException    
     {
-        GuiaRemision guia;
+        //GuiaRemision guia;
+        ///guia.getDestinatarios().get(0).getDetallesProductos().get(0).getDescripcion();
+        //guia.getDestinatarios().get(0).getDestinatorio();
+        //guia.getTransportista();
         //guia.getFechaEmision()
         //guia.getEs
         //guia.getFechaIniciaTransporte();
-        String queryString="select u from GuiaRemision u where 1=1 ";
+        String queryString="select u from GuiaRemision u Join u.destinatarios d Join d.detallesProductos dp where 1=1 ";
         
         if(fechaInicial!=null)
         {
@@ -56,6 +61,20 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
             
         }
         
+        if(transportista!=null)
+        {
+            queryString+=" AND u.transportista=?8 " ;
+        }
+        
+        if(destinatario!=null)
+        {
+            queryString+=" AND d.destinatorio=?9 " ;
+        }
+
+        if(codigoProducto!=null)
+        {
+            queryString+=" AND dp.descripcion=?10 " ; //TODO: Ver alguna mas eficaz de buscar
+        }        
         /**
          * ===================> SETEAR VALORES <=====================
          */
@@ -82,6 +101,21 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
             }            
         }
         
+        if(transportista!=null)
+        {
+            query.setParameter(8,transportista);
+        }
+        
+        if(destinatario!=null)
+        {
+            query.setParameter(9,destinatario);
+        }
+        
+        if(codigoProducto!=null)
+        {
+            query.setParameter(10,codigoProducto);
+        }  
+                
         return query.getResultList();        
     }
     

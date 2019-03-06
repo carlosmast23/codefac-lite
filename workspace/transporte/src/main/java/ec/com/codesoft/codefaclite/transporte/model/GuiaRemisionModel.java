@@ -445,7 +445,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             DetalleProductoGuiaRemision detalle=new DetalleProductoGuiaRemision();
             detalle.setCantidad(facturaDetalle.getCantidad().intValue());
             detalle.setCodigoAdicional("");
-            detalle.setCodigoInterno(facturaDetalle.getReferenciaId()+"");
+            detalle.setCodigoInterno(facturaDetalle.getReferenciaId()+""); //Todo: Ver si en este campo para futuras versiones se graba mejor el codigo de los productos , sevicios , etc
             detalle.setDescripcion(facturaDetalle.getDescripcion());
             detalle.setReferenciaId(facturaDetalle.getId());
             destinatario.addProducto(detalle);

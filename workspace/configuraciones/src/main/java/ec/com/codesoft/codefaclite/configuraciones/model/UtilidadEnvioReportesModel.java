@@ -249,7 +249,11 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
             ControladorReporteGuiaRemision controladorReporte=new ControladorReporteGuiaRemision(
                     new java.sql.Date(getCmbFechaInicial().getDate().getTime()),
                     new java.sql.Date(getCmbFechaFinal().getDate().getTime()),
-                    (ComprobanteEntity.ComprobanteEnumEstado) getCmbTipoEstadoReporte().getSelectedItem());
+                    (ComprobanteEntity.ComprobanteEnumEstado) getCmbTipoEstadoReporte().getSelectedItem(),
+                    null,
+                    null,
+                    null);
+            
             controladorReporte.generarReporte();
             
             File archivoReporte = null;

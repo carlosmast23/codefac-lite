@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.list;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,5 +17,20 @@ public abstract class UtilidadesLista {
     public static String castListToString(List lista,String caracter)
     {
         return StringUtils.join(lista,caracter);
+    }
+    
+    public static String castListToString(List lista,String caracter,CastListInterface interfaz)
+    {
+        List<String> datos=new ArrayList<String>();
+        for (Object object : lista) {
+            String textoNuevo=interfaz.getString(object);
+            datos.add(textoNuevo);
+        }
+        return StringUtils.join(datos,caracter);
+    }
+    
+    public interface CastListInterface<T>
+    {
+        public String getString(T dato);
     }
 }

@@ -244,7 +244,16 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
             Date fechaInicial =(getDateFechaInicio().getDate()!=null)?new java.sql.Date(getDateFechaInicio().getDate().getTime()):null;
             Date fechaFinal =(getDateFechaFin().getDate()!=null)?new java.sql.Date(getDateFechaFin().getDate().getTime()):null;
             ComprobanteEntity.ComprobanteEnumEstado estado=(ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
-            controladorReporte=new ControladorReporteGuiaRemision(fechaInicial, fechaFinal, estado);
+            
+            String codigoProducto=(producto!=null)?producto.getNombre():null;
+            controladorReporte=new ControladorReporteGuiaRemision(
+                    fechaInicial, 
+                    fechaFinal, 
+                    estado,
+                    transportista,
+                    persona,
+                    codigoProducto);
+            
             controladorReporte.generarReporte();
             //listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal,estado);
             mostrarReporteTabla();
@@ -371,7 +380,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED)
                 {
-                    transportista = null;
+                    producto = null;
                     getTxtProducto().setText("");
                     getBtnBuscarProducto().setEnabled(false);
                 } else {

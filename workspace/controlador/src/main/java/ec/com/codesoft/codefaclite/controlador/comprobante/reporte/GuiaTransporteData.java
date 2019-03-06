@@ -27,6 +27,7 @@ public class GuiaTransporteData implements ExcelDatosInterface{
     private String direccionPartida;
     private String placa;
     private String cantidadItems;
+    private String destinatarios;
 
     public GuiaTransporteData() {
     }
@@ -110,6 +111,14 @@ public class GuiaTransporteData implements ExcelDatosInterface{
     public void setCantidadItems(String cantidadItems) {
         this.cantidadItems = cantidadItems;
     }
+
+    public String getDestinatarios() {
+        return destinatarios;
+    }
+
+    public void setDestinatarios(String destinatarios) {
+        this.destinatarios = destinatarios;
+    }
     
     
 
@@ -118,9 +127,10 @@ public class GuiaTransporteData implements ExcelDatosInterface{
         List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
         
         tiposDatos.add(new TipoDato(this.claveAcceso,Excel.TipoDataEnum.TEXTO));        
-        tiposDatos.add(new TipoDato(this.preimpreso,Excel.TipoDataEnum.TEXTO));        
-        tiposDatos.add(new TipoDato(this.transportista, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.preimpreso,Excel.TipoDataEnum.TEXTO));    
         tiposDatos.add(new TipoDato(this.identififacion,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.transportista, Excel.TipoDataEnum.TEXTO));        
+        tiposDatos.add(new TipoDato(this.destinatarios,Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.estado, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaInicio, Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.fechaFin,Excel.TipoDataEnum.TEXTO));
