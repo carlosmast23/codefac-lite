@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiasRemisionReportePanel;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -47,7 +48,10 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
@@ -101,6 +105,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         listenerBotones();
         listenerCheck();
         listenerFechas();
+        listenerTablas();
         
         this.validacionDatosIngresados=false; //Desactivar validaciones automaticas en el formulario
         
@@ -403,6 +408,39 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
     public void setearDatosTransportista()
     {
         getTxtTransportista().setText(" " + transportista.getIdentificacion()+ " - " + transportista.getApellidos() +" "+ transportista.getNombres());
+    }
+    
+    private void listenerTablas() {
+        JPopupMenu jpopMenuItem=new JPopupMenu();
+        JMenuItem itemRide= new JMenuItem("RIDE");
+        itemRide.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada=getTblDocumentos().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    panelPadre.cambiarCursorEspera();
+                    
+                    try {
+                        String claveAcceso=controladorReporte.getListReporte().get(filaSeleccionada).getClaveAcceso();//                    String claveAcceso = this.factura.getClaveAcceso();
+                        byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso);
+                        JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                        panelPadre.crearReportePantalla(jasperPrint,controladorReporte.getListReporte().get(filaSeleccionada).getPreimpreso());
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    panelPadre.cambiarCursorNormal();
+                    
+                }
+            }
+        });
+        jpopMenuItem.add(itemRide);
+                
+        getTblDocumentos().setComponentPopupMenu(jpopMenuItem);
     }
     
   

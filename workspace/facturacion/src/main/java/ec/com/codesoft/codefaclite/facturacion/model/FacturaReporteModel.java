@@ -33,11 +33,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.*;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -54,7 +56,10 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperPrint;
 import sun.nio.cs.ext.Big5;
 
 /**
@@ -88,7 +93,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         listenerBotones();
         listenerCombos();
         listenerChecks();
-        
+        listenerTablas();
     }
     
     public ControladorReporteFactura crearControlador()
@@ -493,6 +498,37 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 }
             }
         });
+    }
+
+    private void listenerTablas() {
+        JPopupMenu jpopMenuItem=new JPopupMenu();
+        JMenuItem itemRide= new JMenuItem("RIDE");
+        itemRide.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada=getTblDocumentos().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    panelPadre.cambiarCursorEspera();
+                    try {
+                        String claveAcceso=controladorReporte.getData().get(filaSeleccionada).getClaveAcceso();//                    String claveAcceso = this.factura.getClaveAcceso();
+                        byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso);
+                        JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                        panelPadre.crearReportePantalla(jasperPrint,controladorReporte.getData().get(filaSeleccionada).getNumeroFactura());
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    panelPadre.cambiarCursorNormal();
+                }
+            }
+        });
+        jpopMenuItem.add(itemRide);
+                
+        getTblDocumentos().setComponentPopupMenu(jpopMenuItem);
     }
     
     

@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaS
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.formatDate;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,9 +50,12 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 
 /*
@@ -99,6 +103,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
         variablesIniciales();
         listenerCheckBox();
         listenerBotones();
+        listenerTablas();
         super.validacionDatosIngresados=false;
     }    
    
@@ -508,6 +513,39 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
             }
         });
+    }
+    
+    private void listenerTablas() {
+        JPopupMenu jpopMenuItem=new JPopupMenu();
+        JMenuItem itemRide= new JMenuItem("RIDE");
+        itemRide.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada=getTblRetenciones().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    panelPadre.cambiarCursorEspera();
+                    
+                    try {
+                        String claveAcceso=controladorReporte.getDataReporte().get(filaSeleccionada).getClaveAcceso();//                    String claveAcceso = this.factura.getClaveAcceso();
+                        byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso);
+                        JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                        panelPadre.crearReportePantalla(jasperPrint,controladorReporte.getDataReporte().get(filaSeleccionada).getPreimpresoRetencion());
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    panelPadre.cambiarCursorNormal();
+                    
+                }
+            }
+        });
+        jpopMenuItem.add(itemRide);
+                
+        getTblRetenciones().setComponentPopupMenu(jpopMenuItem);
     }
 
 }
