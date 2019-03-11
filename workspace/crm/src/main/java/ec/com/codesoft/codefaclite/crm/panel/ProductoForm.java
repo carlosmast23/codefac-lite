@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import java.util.Map;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -148,6 +149,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel31 = new javax.swing.JLabel();
         lblEspacio6 = new javax.swing.JLabel();
         lblEspacio8 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        lblEspacio12 = new javax.swing.JLabel();
+        chkTransportarGuiaRemision = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -785,6 +789,23 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         tabMenu.addTab("Info Inventario", jPanel4);
 
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel2.add(lblEspacio12, gridBagConstraints);
+
+        chkTransportarGuiaRemision.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkTransportarGuiaRemision.setText("Transportar en Guía de Remisión");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(chkTransportarGuiaRemision, gridBagConstraints);
+
+        tabMenu.addTab("Transporte", jPanel2);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -811,6 +832,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarProductoEnsamble;
     private javax.swing.JButton btnEditarEnsamble;
     private javax.swing.JButton btnEliminarEnsamble;
+    private javax.swing.JCheckBox chkTransportarGuiaRemision;
     private javax.swing.JComboBox<CategoriaProducto> cmbCategoriaProducto;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo> cmbGarantia;
     private javax.swing.JComboBox<EnumSiNo> cmbGenerarCodigoBarras;
@@ -851,6 +873,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -861,6 +884,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblEspacio1;
+    private javax.swing.JLabel lblEspacio12;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio4;
@@ -1163,6 +1187,11 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     public void setCmbGenerarCodigoBarras(JComboBox<EnumSiNo> cmbGenerarCodigoBarras) {
         this.cmbGenerarCodigoBarras = cmbGenerarCodigoBarras;
     }
+
+    public JCheckBox getChkTransportarGuiaRemision() {
+        return chkTransportarGuiaRemision;
+    }
+    
     
     
 

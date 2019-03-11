@@ -182,6 +182,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         //Setear la opcion de si desea generar el codigo de barras
         enumSiNo=(EnumSiNo) getCmbGenerarCodigoBarras().getSelectedItem();        
         producto.setGenerarCodigoBarras(enumSiNo);
+        
+        enumSiNo=enumSiNo.getEnumByBoolean(getChkTransportarGuiaRemision().isSelected());        
+        producto.setTransportarEnGuiaRemisionEnum(enumSiNo);
 
     }
     
@@ -252,8 +255,13 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         else
         {
             this.producto=productoTmp;
+            cargarProducto();
         }
 
+    }
+    
+    private void cargarProducto()
+    {
         getTxtCodigoPersonalizado().setText(producto.getCodigoPersonalizado());
         getTxtCodigoEAN().setText(producto.getCodigoEAN());
         getTxtCodigoUPC().setText(producto.getCodigoUPC());
@@ -261,9 +269,6 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTextValorUnitario().setText(producto.getValorUnitario().toString());
         getCmbIvaOpcionPrecioVentaPublico().setSelectedItem(IvaOpcionEnum.SIN_IVA); //Seleccciona esta opcion porque por defecto los precios en la base de datos estan grabados sin Iva
 
-        //getComboIva().setSelectedItem(producto.getCatalogoProducto().getIva());
-
-        //getComboTipoProducto().setSelectedItem(TipoProductoEnum.getEnumByLetra(producto.getCatalogoProducto().getTipoProducto()));
 
         /**
          * Cargar datos adicionales
@@ -300,8 +305,10 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         EnumSiNo enumGenerarCodigoBarras=EnumSiNo.getEnumByLetra(letraGenerarCodBarras);        
         getCmbGenerarCodigoBarras().setSelectedItem(enumGenerarCodigoBarras);
         
+        getChkTransportarGuiaRemision().setSelected(producto.getTransportarEnGuiaRemisionEnum().getBool());
+        
         actualizarTablaEnsamble();
-
+    
     }
     
 
@@ -322,6 +329,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getCmbIvaOpcionPrecioVentaPublico().setSelectedItem(IvaOpcionEnum.SIN_IVA);
         
         getCmbGenerarCodigoBarras().setSelectedItem(EnumSiNo.NO);
+        
+        getChkTransportarGuiaRemision().setEnabled(true);
 
 
     }

@@ -36,6 +36,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -46,6 +47,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import static ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum.INVENTARIO;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.transporte.callback.GuiaRemisionImplComprobante;
@@ -80,6 +83,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.collections4.map.HashedMap;
+import org.eclipse.persistence.sessions.factories.SessionFactory;
 
 /**
  *
@@ -442,6 +446,24 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         
         ///Agregado detalle  de los productos de la factura enlazada
         for (FacturaDetalle facturaDetalle : facturaSeleccionada.getDetalles()) {
+            
+            //Vericar que cuando sea productos esta activado la opcion de poder transportar en la guia de remision
+            if(facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.INVENTARIO) || facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
+            {
+                try {
+                    Producto producto = (Producto) ServiceFactory.getFactory().getFacturaDetalleServiceIf().getReferenciaDetalle(facturaDetalle);
+                    if(producto.getTransportarEnGuiaRemisionEnum().equals(EnumSiNo.NO))
+                    {
+                        continue;
+                    }
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+            
             DetalleProductoGuiaRemision detalle=new DetalleProductoGuiaRemision();
             detalle.setCantidad(facturaDetalle.getCantidad().intValue());
             detalle.setCodigoAdicional("");

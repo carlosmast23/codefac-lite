@@ -6,11 +6,12 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 
 /**
  *
  * @author Carlos
  */
 public interface FacturaDetalleServiceIf extends ServiceAbstractIf<FacturaDetalle> {
-    
+    public Object getReferenciaDetalle(FacturaDetalle facturaDetalle) throws ServicioCodefacException,java.rmi.RemoteException;
 }

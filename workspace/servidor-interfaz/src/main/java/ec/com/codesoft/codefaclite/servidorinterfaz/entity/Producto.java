@@ -93,6 +93,10 @@ public class Producto implements Serializable, Comparable<Producto> {
     
     @Column(name = "GENERAR_CODIGO_BARRAS")
     private String generarCodigoBarras;
+    
+    @Column(name = "TRANSPORTAR_EN_GUIA_REMISION")
+    private String transportarEnGuiaRemision;
+
 
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     @ManyToOne    
@@ -298,6 +302,27 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setGenerarCodigoBarras(EnumSiNo generarCodigoBarrasEnum) {
         this.generarCodigoBarras = generarCodigoBarrasEnum.getLetra();
     }
+
+    public String getTransportarEnGuiaRemision() {
+        return transportarEnGuiaRemision;
+    }
+
+    public void setTransportarEnGuiaRemision(String transportarEnGuiaRemision) {
+        this.transportarEnGuiaRemision = transportarEnGuiaRemision;
+    }
+    
+    public EnumSiNo getTransportarEnGuiaRemisionEnum() {
+        if(transportarEnGuiaRemision==null)
+        {
+            return EnumSiNo.SI; //Por defecto si no existe valor asumo que es si
+        }
+        return EnumSiNo.getEnumByLetra(transportarEnGuiaRemision);
+    }
+
+    public void setTransportarEnGuiaRemisionEnum(EnumSiNo transportarEnGuiaRemisionEnum) {
+        this.transportarEnGuiaRemision = transportarEnGuiaRemisionEnum.getLetra();
+    }
+    
     
     
     
