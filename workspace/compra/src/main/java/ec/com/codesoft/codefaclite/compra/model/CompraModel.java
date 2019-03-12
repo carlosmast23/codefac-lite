@@ -1049,17 +1049,18 @@ public class CompraModel extends CompraPanel{
         EmpresaServiceIf empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
         List<Empresa> listadoEmpresas = empresaService.obtenerTodos();
         this.empresa = listadoEmpresas.get(0);
+        
         if(this.empresa.getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
         {
             this.getPanelRetencion().setVisible(true);
-            getCmbSustentoComprobante().setVisible(true);
-            getLblSustentoSri().setVisible(true);
+            /*getCmbSustentoComprobante().setVisible(true);
+            getLblSustentoSri().setVisible(true);*/
         }
         else
         {
             this.getPanelRetencion().setVisible(false);
-            getCmbSustentoComprobante().setVisible(false);
-            getLblSustentoSri().setVisible(false);
+            /*getCmbSustentoComprobante().setVisible(false);
+            getLblSustentoSri().setVisible(false);*/
         }
     }
 
