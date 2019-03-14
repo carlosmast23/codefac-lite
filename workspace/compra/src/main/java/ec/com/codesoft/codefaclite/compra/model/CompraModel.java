@@ -923,7 +923,8 @@ public class CompraModel extends CompraPanel{
             //Seteo los valores de los detalles e la compra
             compraDetalle.setCantidad(Integer.parseInt(getTxtCantidadItem().getText()));
             BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText()); 
-            compraDetalle.setPrecioUnitario(precioUnitario.setScale(2,BigDecimal.ROUND_HALF_UP));
+            //compraDetalle.setPrecioUnitario(precioUnitario.setScale(2,BigDecimal.ROUND_HALF_UP));
+            compraDetalle.setPrecioUnitario(precioUnitario ); //TODO: Ver si es necesario escalar los valores o este proceso lo debe hacer el usuario
             compraDetalle.setCompra(compra);
             compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
             compraDetalle.setDescuento(BigDecimal.ZERO);
