@@ -15,11 +15,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -104,6 +106,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        grupoTipoCompra = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         txtProveedor = new javax.swing.JTextField();
         btnProveedorBuscar = new javax.swing.JButton();
@@ -171,6 +174,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         txtEstablecimientoCompra = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         cmbSustentoComprobante = new javax.swing.JComboBox<>();
+        rdbEmisionFisica = new javax.swing.JRadioButton();
+        rdbEmisionElectronica = new javax.swing.JRadioButton();
+        jLabel8 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -277,15 +283,15 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         getContentPane().add(txtAutorizacion, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Fecha Compra:");
+        jLabel4.setText("Tipo de Emisión:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 17;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 18;
+        gridBagConstraints.gridx = 19;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -306,7 +312,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 18;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -605,7 +611,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 19;
         gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.1;
@@ -647,7 +653,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 19;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -710,7 +716,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         getContentPane().add(panelRetencion, gridBagConstraints);
         panelRetencion.getAccessibleContext().setAccessibleName("");
@@ -783,6 +789,30 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(cmbSustentoComprobante, gridBagConstraints);
 
+        grupoTipoCompra.add(rdbEmisionFisica);
+        rdbEmisionFisica.setSelected(true);
+        rdbEmisionFisica.setText("Físico");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 20;
+        gridBagConstraints.gridy = 1;
+        getContentPane().add(rdbEmisionFisica, gridBagConstraints);
+
+        grupoTipoCompra.add(rdbEmisionElectronica);
+        rdbEmisionElectronica.setText("Electrónica");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 21;
+        gridBagConstraints.gridy = 1;
+        getContentPane().add(rdbEmisionElectronica, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel8.setText("Fecha Compra:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 17;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel8, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -802,6 +832,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
     private javax.swing.JComboBox<SriSustentoComprobanteEnum> cmbSustentoComprobante;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
+    private javax.swing.ButtonGroup grupoTipoCompra;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -824,6 +855,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -841,6 +873,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblSustentoSri;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JPanel panelRetencion;
+    private javax.swing.JRadioButton rdbEmisionElectronica;
+    private javax.swing.JRadioButton rdbEmisionFisica;
     private javax.swing.JTable tblDetalleProductos;
     private javax.swing.JTextField txtAutorizacion;
     private javax.swing.JTextField txtCantidadItem;
@@ -1126,6 +1160,30 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
     public JLabel getLblSustentoSri() {
         return lblSustentoSri;
+    }
+
+    public ButtonGroup getGrupoTipoCompra() {
+        return grupoTipoCompra;
+    }
+
+    public void setGrupoTipoCompra(ButtonGroup grupoTipoCompra) {
+        this.grupoTipoCompra = grupoTipoCompra;
+    }
+
+    public JRadioButton getRdbEmisionElectronica() {
+        return rdbEmisionElectronica;
+    }
+
+    public void setRdbEmisionElectronica(JRadioButton rdbEmisionElectronica) {
+        this.rdbEmisionElectronica = rdbEmisionElectronica;
+    }
+
+    public JRadioButton getRdbEmisionFisica() {
+        return rdbEmisionFisica;
+    }
+
+    public void setRdbEmisionFisica(JRadioButton rdbEmisionFisica) {
+        this.rdbEmisionFisica = rdbEmisionFisica;
     }
 
     

@@ -1982,6 +1982,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         });
     }
     
+    
     public List<String> solucionarProblemasEnvioComprobante(String carpetaActual,String claveAcceso,Empresa empresa) throws RemoteException, ServicioCodefacException
     {
         ComprobanteElectronicoService service=crearComprobanteEletronico(empresa);

@@ -159,4 +159,4 @@ En cada cliente crear un objeto que devuelva la matriz o el objeto principal par
 en la pantalla de retencion con una compra hacer que la busqueda aparesca desde el ultimo documento al primero
 revisar que no imprime un ficha de los estudiantes
 Revisar que al momento de crear un cliente desde el dialogo si existe se cambia de estado a editar , pero no carga ningun dato
-Agregar una validacion para que cuando se eleije la fecha de compra , la fecha de emision pueda ser maximo 5 dias porque el Sri lo exige de esa manera
+

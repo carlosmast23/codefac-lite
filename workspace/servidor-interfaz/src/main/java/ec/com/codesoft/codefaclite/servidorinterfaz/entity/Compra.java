@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -107,6 +108,10 @@ public class Compra implements Serializable {
     private String direccion;
     @Column(name = "TELEFONO")
     private String telefono;
+    
+    /**
+     * Variable que me permite saber el tipo de emision de la factura si es manual o electronica
+     */
     @Column(name = "TIPO_FACTURACION")
     private String tipoFacturacion;
     @Column(name = "CODIGO_DOCUMENTO")
@@ -387,6 +392,14 @@ public class Compra implements Serializable {
     public void setTipoFacturacion(String tipoFacturacion) {
         this.tipoFacturacion = tipoFacturacion;
     }
+    
+    public TipoEmisionEnum getTipoFacturacionEnum() {
+        return TipoEmisionEnum.getEnumByCodigoSri(tipoFacturacion);
+    }
+
+    public void setTipoFacturacion(TipoEmisionEnum tipoFacturacionEnum) {
+        this.tipoFacturacion = tipoFacturacionEnum.getCodigoSri();
+    }
 
     public String getCodigoDocumento() {
         return codigoDocumento;
@@ -594,6 +607,7 @@ public class Compra implements Serializable {
         return RetencionEnumCompras.getEnum(estadoRetencion);
     }
     
+        
     public enum RetencionEnumCompras
     {
         /**

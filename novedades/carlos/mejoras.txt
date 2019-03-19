@@ -3,6 +3,4 @@ porque es inecesario y a la final todos terminan viendo el pdf
 Nota: Ver si en vez de la tabla se puede hacer que aparesca el reporte directamente abajo
 Agregar la forma para generar codigos de barra y poder imprimir
 Revisar que en la pantalla de compra funciona el evento de enter
-al momento de crear el codigo de barras almacenar una campo para saber si ya se imprimio o no para luego sacar una lista de productos para imprimir
 habilitar una opcion para enviar por correo cualquier reporte
-Hacer una opcion para desde los reporte poder abrir el RIDE

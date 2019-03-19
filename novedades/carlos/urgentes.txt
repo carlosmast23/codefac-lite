@@ -1,4 +1,4 @@
+Agregar la opcion para tambien poder enviar el reporte de las compras y los ats en el software
 Hacer el filtro de las guias de remision por cliente
 Hacer el reporte de facturas por productos
-Ver alguna forma de que al momento de cargar los productos a la guia de remision
-en este caso no se pasen los que sean fletes
+hacer el reporte de la contadora de la guarderia y una forma de poder clasificar internamente las compras para reportes internos

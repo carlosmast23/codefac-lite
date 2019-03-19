@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -219,6 +220,14 @@ public class CompraModel extends CompraPanel{
         
         compra.setCodigoComprobanteSriEnum(documentoEnum);
         compra.setCodigoSustentoSriEnum((SriSustentoComprobanteEnum) getCmbSustentoComprobante().getSelectedItem());
+        //Setear el tipo de emision de la factura
+        if(getRdbEmisionElectronica().isSelected())
+        {
+            compra.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA);
+        }else if(getRdbEmisionFisica().isSelected())
+        {
+            compra.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.NORMAL);
+        }
     }
 
     @Override
@@ -336,6 +345,24 @@ public class CompraModel extends CompraPanel{
         } else {
             mostrarDatosTablaSinRetencion();
         }
+        
+        //Cargar el tipo de emision de las compras
+        if(compra.getTipoFacturacionEnum()!=null)
+        {
+            if(compra.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
+            {
+                getRdbEmisionElectronica().setSelected(true);
+            }
+            else if(compra.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))
+            { 
+                getRdbEmisionFisica().setSelected(true);
+            }
+        }
+        else
+        {
+            getRdbEmisionFisica().setSelected(true); //Cuando no tiene seleccionado ningun dato asumo que es fisica
+        }
+        
         mostrarDatosTotales();
         desbloquearIngresoDetalleProducto();
         
@@ -401,6 +428,8 @@ public class CompraModel extends CompraPanel{
         
         getCmbSustentoComprobante().setSelectedIndex(0);
         getCmbDocumento().setSelectedIndex(0);
+        
+        getRdbEmisionFisica().setSelected(true);
     }
 
 //    @Override

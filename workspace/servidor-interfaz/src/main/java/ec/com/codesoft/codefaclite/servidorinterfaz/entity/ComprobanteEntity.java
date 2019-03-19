@@ -407,6 +407,16 @@ public class ComprobanteEntity implements Serializable{
             }
             return null;
         }
+        
+        public static TipoEmisionEnum getEnumByCodigoSri(String codigoSri) {
+
+            for (TipoEmisionEnum enumerador : TipoEmisionEnum.values()) {
+                if (enumerador.codigoSri.equals(codigoSri)) {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
 
         @Override
         public String toString() {

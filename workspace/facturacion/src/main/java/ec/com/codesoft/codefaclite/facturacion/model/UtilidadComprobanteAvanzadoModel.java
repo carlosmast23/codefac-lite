@@ -527,6 +527,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem jMenuItemDatoAdicional = new JMenuItem("Eliminar");
         JMenuItem jMenuItemSolucionarProblema = new JMenuItem("Solucionar Problema");
+        
         jMenuItemDatoAdicional.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -574,7 +575,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                     {
                         DialogoCodefac.mensaje("Advertencia",UtilidadesLista.castListToString(mensajes,","), indice);
                     }
-                    
+                    actualizarDatosTabla();
                     
 
                 } catch (RemoteException ex) {
