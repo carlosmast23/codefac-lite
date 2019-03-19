@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.GuiaRe
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -50,6 +51,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum.INVENTARIO;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.transporte.callback.GuiaRemisionImplComprobante;
 import ec.com.codesoft.codefaclite.transporte.data.ComprobanteGuiaTransporteData;
@@ -413,15 +415,24 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         //factura.setCliente((Persona) buscarDialogoModel.getResultado());      
         if(buscarDialogoModel.getResultado()!=null)
         {
-            destinatarioEstablecimiento=(PersonaEstablecimiento) buscarDialogoModel.getResultado();
+            cargarDatosDestinatario((PersonaEstablecimiento) buscarDialogoModel.getResultado());
+            /*destinatarioEstablecimiento=(PersonaEstablecimiento) buscarDialogoModel.getResultado();
             destinatario=destinatarioEstablecimiento.getPersona();
-            cargarCliente(destinatarioEstablecimiento);        
+            cargarCliente(destinatarioEstablecimiento);        */
         }
         
     }
     
+    private void cargarDatosDestinatario(PersonaEstablecimiento personaEstablecimiento)
+    {
+        destinatarioEstablecimiento=personaEstablecimiento;
+        destinatario=destinatarioEstablecimiento.getPersona();
+        cargarCliente(destinatarioEstablecimiento);
+    }
+    
     private void cargarDatoFactura(Factura factura)
     {
+        facturaSeleccionada=factura;
         getTxtPreimpreso().setText(factura.getPreimpreso());
         getTxtAutorizacion().setText(factura.getClaveAcceso());
         getCmbFechaFactura().setDate(factura.getFechaEmision());
@@ -488,6 +499,37 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     
     private void listenerBotones() {
         
+        getBtnCargarFacturaIgualSecuencial().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
+                    
+                    Factura factura=ServiceFactory.getFactory().getFacturacionServiceIf().buscarPorPremimpresoYEstado(
+                            Integer.parseInt(getLblSecuencial().getText().replace("-","")),
+                            puntoEmision.getSucursal().getCodigoSucursal()+"",
+                            puntoEmision.getPuntoEmision()+"",
+                            ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
+                    
+                    if(factura==null)
+                    {
+                        DialogoCodefac.mensaje(MensajeCodefacSistema.Consultas.NO_EXISTE_DATO_BUSCAR);
+                        //TODO: IMPLEMENTAR MENSAJE
+                    }
+                    else
+                    {
+                        //factura.getSucursal();
+                        cargarDatosDestinatario(factura.getSucursal());
+                        cargarDatoFactura(factura);
+                        agregarDetalleGuiaRemision();
+
+                    }
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         
         getBtnBuscarTransportista().addActionListener(new ActionListener() {
             @Override
@@ -507,13 +549,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         getBtnAgregarDestinarioGuiaRemision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DestinatarioGuiaRemision destinatarioGuiaRemision=crearDestinatario();
-                if(validarDestinarioGuiaRemision(destinatarioGuiaRemision))
-                {
-                    guiaRemision.addDestinario(destinatarioGuiaRemision); 
-                    cargarDestinatariosAgregados();
-                    imprimirTabla();
-                }
+                agregarDetalleGuiaRemision();
             }
         });
         
@@ -547,8 +583,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                 buscarDialogoModel.setVisible(true);
                 Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
                 if(facturaTmp!=null)
-                {
-                    facturaSeleccionada=facturaTmp;
+                {                    
                     cargarDatoFactura(facturaTmp);
                 }
                 else
@@ -558,6 +593,16 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                 
             }
         });
+    }
+    
+    private void agregarDetalleGuiaRemision()
+    {
+        DestinatarioGuiaRemision destinatarioGuiaRemision = crearDestinatario();
+        if (validarDestinarioGuiaRemision(destinatarioGuiaRemision)) {
+            guiaRemision.addDestinario(destinatarioGuiaRemision);
+            cargarDestinatariosAgregados();
+            imprimirTabla();
+        }
     }
     
     private boolean validarDestinarioGuiaRemision(DestinatarioGuiaRemision destinatarioGuiaRemision)

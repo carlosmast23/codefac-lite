@@ -97,4 +97,6 @@ public interface ComprobanteServiceIf extends Remote {
     
     
     public void editar(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException;
+    
+    public List<String> solucionarProblemasEnvioComprobante(String carpetaActual,String claveAcceso,Empresa empresa) throws RemoteException, ServicioCodefacException;
 }

@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiasRemisionReportePanel;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -315,7 +316,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
     
     private String[] getCabeceraReporte()
     {
-        return new String[]{"Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa","#Items"};
+        return new String[]{"Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Facturas","Placa","#Items"};
     }
     
     private void mostrarReporteTabla()
@@ -336,6 +337,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
                     guiaRemision.getFechaIniciaTransporte().toString(),
                     guiaRemision.getFechaFinTransporte().toString(),
                     guiaRemision.getDireccionPartida(),
+                    UtilidadesLista.castListToString(guiaRemision.obtenerFacturasTransportadas(),","),
                     guiaRemision.getPlaca(),
                     guiaRemision.obtenerTotalItems().toString(),
                     

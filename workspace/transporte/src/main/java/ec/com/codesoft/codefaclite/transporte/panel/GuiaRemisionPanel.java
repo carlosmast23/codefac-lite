@@ -45,6 +45,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel5 = new javax.swing.JPanel();
+        btnCargarFacturaIgualSecuencial = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         panelDatosGenerales = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
@@ -129,6 +130,9 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 100, Short.MAX_VALUE)
         );
+
+        btnCargarFacturaIgualSecuencial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/buscarDocumento.png"))); // NOI18N
+        btnCargarFacturaIgualSecuencial.setToolTipText("Buscar factura con mismo secuencial");
 
         setClosable(true);
         setIconifiable(true);
@@ -715,6 +719,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarDetalle;
     private javax.swing.JButton btnBuscarDestinatario;
     private javax.swing.JButton btnBuscarTransportista;
+    private javax.swing.JButton btnCargarFacturaIgualSecuencial;
     private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JComboBox<DestinatarioGuiaRemision> cmbDestinatarios;
     private com.toedter.calendar.JDateChooser cmbFechaFactura;
@@ -934,9 +939,12 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     public void setTxtCodigoSucursal(JSpinner txtCodigoSucursal) {
         this.txtCodigoSucursal = txtCodigoSucursal;
     }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Otros", visible = true)
+    public JButton getBtnCargarFacturaIgualSecuencial() {
+        return btnCargarFacturaIgualSecuencial;
+    }
      
-    
-    
     
     
 

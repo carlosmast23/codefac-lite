@@ -110,6 +110,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
     @JoinColumn(name = "VENDEDOR_ID")
     private Empleado vendedor;
     
+    /**
+     * Se refiere a la sucucursal del cliente
+     */
     @JoinColumn(name = "SUCURSAL_ID")
     private PersonaEstablecimiento sucursal;
         

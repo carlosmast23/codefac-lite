@@ -403,7 +403,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         }
         return errores; //Esta opcion va a permitir que espera a que se termine el proceso y no funcione en segundo plano
     
-    }        
+    }          
     
     public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo,Boolean asincrono) throws RemoteException
     {
@@ -1980,6 +1980,54 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                 entityManager.merge(comprobante);
             }
         });
+    }
+    
+    public List<String> solucionarProblemasEnvioComprobante(String carpetaActual,String claveAcceso,Empresa empresa) throws RemoteException, ServicioCodefacException
+    {
+        ComprobanteElectronicoService service=crearComprobanteEletronico(empresa);
+        if (carpetaActual.equals(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR)) 
+        {
+            Map<String,List<String>> mapComprobante=new HashMap<String,List<String>>();
+            mapComprobante.put(claveAcceso,new ArrayList<String>());            
+            List<String> errores=procesarComprobantesPendienteLote(
+                    ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE, 
+                    99999, 
+                    mapComprobante, 
+                    false);
+            
+            service.eliminarComprobanteElectronico(claveAcceso, ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA);
+            return errores;
+            
+        } else if (carpetaActual.equals(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA)) 
+        {
+            service.copiarComprobantesElectronicos(claveAcceso, carpetaActual, ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR);
+            
+            Map<String,List<String>> mapComprobante=new HashMap<String,List<String>>();
+            mapComprobante.put(claveAcceso,new ArrayList<String>());            
+            List<String> errores=procesarComprobantesPendienteLote(
+                    ComprobanteElectronicoService.ETAPA_ENVIAR+1, 
+                    99999, 
+                    mapComprobante, 
+                    false);
+            
+            service.eliminarComprobanteElectronico(claveAcceso, ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA);
+            
+            return errores;
+        } else 
+        {
+            //TODO: Metodo no implementado
+        }
+        return new ArrayList<String>();
+        
+    }
+    
+    
+    private ComprobanteElectronicoService crearComprobanteEletronico(Empresa empresa)
+    {
+        ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
+        cargarConfiguraciones(comprobanteElectronico, empresa);
+        return comprobanteElectronico;
+        
     }
     
 

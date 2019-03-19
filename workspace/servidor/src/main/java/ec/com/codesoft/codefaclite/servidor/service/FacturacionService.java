@@ -64,6 +64,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
 
     }
     
+    public Factura buscarPorPremimpresoYEstado(Integer secuencial,String puntoEstablecimiento,String puntoEmision,ComprobanteEntity.ComprobanteEnumEstado estadoEnum) throws RemoteException
+    {
+        return getFacade().buscarPorPremimpresoYEstadoFacade(secuencial, puntoEstablecimiento, puntoEmision, estadoEnum);
+    }
     
     
     public Factura grabarProforma(Factura proforma) throws RemoteException

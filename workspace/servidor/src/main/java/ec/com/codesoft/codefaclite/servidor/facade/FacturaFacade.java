@@ -204,5 +204,32 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           return query.getResultList();
           
       }
+      
+      
+      public Factura buscarPorPremimpresoYEstadoFacade(Integer secuencial,String puntoEstablecimiento,String puntoEmision,ComprobanteEntity.ComprobanteEnumEstado estadoEnum)
+      {
+          /*Factura f;
+          f.getSecuencial();
+          f.getPuntoEmision();
+          f.getPuntoEstablecimiento();
+          f.getEstadoEnum();*/
+          
+          String queryString="SELECT F FROM Factura F WHERE F.secuencial=?1 AND F.puntoEmision=?2 AND F.puntoEstablecimiento=?3 AND F.estado=?4 ";
+          
+          Query query=getEntityManager().createQuery(queryString);
+          
+          query.setParameter(1,secuencial);
+          query.setParameter(2,puntoEmision);
+          query.setParameter(3,puntoEstablecimiento);
+          query.setParameter(4,estadoEnum.getEstado());
+          try
+          {
+              return (Factura) query.getSingleResult();
+          }
+          catch(NoResultException nre)
+          {
+              return null;
+          }
+      }
     //public Long obtenerSecuencialPresupuestos
 }

@@ -1744,6 +1744,20 @@ public class ComprobanteElectronicoService implements Runnable {
         }
         return path;
     }
+    
+    public void copiarComprobantesElectronicos(String claveAcceso,String carpetaOrigen,String carpetaDestino)
+    {
+        String pathOrigen=getPathComprobanteConClaveAcceso(carpetaOrigen,claveAcceso);
+        String pathDestino=getPathComprobanteConClaveAcceso(carpetaDestino,claveAcceso);        
+        ComprobantesElectronicosUtil.copiarArchivoXml(pathOrigen, pathDestino);
+        
+    }
+    
+    public void eliminarComprobanteElectronico(String claveAcceso,String carpeta)
+    {
+        String pathEliminar=getPathComprobanteConClaveAcceso(carpeta,claveAcceso);
+        ComprobantesElectronicosUtil.eliminarArchivo(pathEliminar);
+    }
 
     public void setSecuencialLote(Integer secuencialLote) {
         this.secuencialLote = secuencialLote;

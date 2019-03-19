@@ -39,6 +39,11 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj CARGAR_DATOS = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"Esta seguro que desea cargar los registro ?" ,DialogoCodefac.MENSAJE_INCORRECTO);
     }
     
+    public static abstract class Consultas
+    {
+        public static final CodefacMsj NO_EXISTE_DATO_BUSCAR = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"No existen datos que coincidan con la busqueda",DialogoCodefac.MENSAJE_ADVERTENCIA);        
+    }
+    
     public static abstract class CorreoElectronico {
 
         public static final CodefacMsj CORREO_ENVIADO = new CodefacMsj(CodefacMsj.TITULO_CORRECTO, "El correo fue enviado correctamente", DialogoCodefac.MENSAJE_CORRECTO);

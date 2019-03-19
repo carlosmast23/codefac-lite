@@ -268,6 +268,23 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
         }
         return total;
     }
+
+    /**
+     * ===================> obtener los numeros de las facturas <==================
+     */    
     
-    
-}
+    public List<String> obtenerFacturasTransportadas()
+    {
+        List<String> facturasPreimpreso=new ArrayList<String>();
+        if(destinatarios!=null)
+        {
+            for (DestinatarioGuiaRemision destinatario : destinatarios) {
+                if(destinatario.getDetallesProductos()!=null)
+                {
+                    facturasPreimpreso.add(destinatario.getPreimpreso());
+                }
+            }
+        }
+        return facturasPreimpreso;
+    }
+} 

@@ -36,7 +36,7 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
         //guia.getFechaEmision()
         //guia.getEs
         //guia.getFechaIniciaTransporte();
-        String queryString="select u from GuiaRemision u Join u.destinatarios d Join d.detallesProductos dp where 1=1 ";
+        String queryString="select distinct u from GuiaRemision u Join u.destinatarios d Join d.detallesProductos dp where 1=1 ";
         
         if(fechaInicial!=null)
         {

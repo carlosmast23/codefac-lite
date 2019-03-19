@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac.TipoEnvioComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -524,7 +525,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
     private void addListenerPopUps() {
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem jMenuItemDatoAdicional = new JMenuItem("Eliminar");
-        JMenuItem jMenuItemOtroProceso = new JMenuItem("Procesar como enviado");
+        JMenuItem jMenuItemSolucionarProblema = new JMenuItem("Solucionar Problema");
         jMenuItemDatoAdicional.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -549,15 +550,44 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
             }
         });
     
-        jMenuItemOtroProceso.addActionListener(new ActionListener() {
+        jMenuItemSolucionarProblema.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //a
+                
+                int indice=getTblComprobantes().getSelectedRow();
+                if(indice<0)
+                {
+                    return ; //Validacion que solo permite ejecutar el proceso si esta seleccionado un comprobante
+                }
+                
+                ComprobanteElectronico comprobante = comprobantes.get(indice);
+                String carpetaSeleccionada=(String) getCmbCarpetaComprobante().getSelectedItem();
+                if(carpetaSeleccionada.equals(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR))
+                {
+                    try {
+                        ServiceFactory.getFactory().getComprobanteServiceIf().solucionarProblemasEnvioComprobante(
+                                carpetaSeleccionada,
+                                comprobante.getInformacionTributaria().getClaveAcceso(),
+                                session.getEmpresa());
+                        
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }else if (carpetaSeleccionada.equals(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA))
+                {
+                    
+                }else
+                {
+                    DialogoCodefac.dialogoPregunta("Advertencia","Opción no disponible para esta carpeta",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+                
             }
         });
         
         jPopupMenu.add(jMenuItemDatoAdicional);
-        jPopupMenu.add(jMenuItemOtroProceso);
+        jPopupMenu.add(jMenuItemSolucionarProblema);
         getTblComprobantes().setComponentPopupMenu(jPopupMenu);
     }
 

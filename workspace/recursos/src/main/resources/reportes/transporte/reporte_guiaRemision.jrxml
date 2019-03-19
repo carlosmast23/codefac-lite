@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_documentos" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9cda46cf-cd6e-4c09-b67c-62113b7f5ab2">
 	<property name="ireport.zoom" value="1.331000000000006"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="Crosstab Data Text" hTextAlign="Center" hImageAlign="Center"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -68,6 +69,7 @@
 	<field name="placa" class="java.lang.String"/>
 	<field name="cantidadItems" class="java.lang.String"/>
 	<field name="destinatarios" class="java.lang.String"/>
+	<field name="facturas" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -171,7 +173,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[dirección partida]]></text>
+				<text><![CDATA[facturas]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="702" y="0" width="60" height="20" uuid="c5b229b8-4383-4fc2-bca4-ed1ee2996226"/>
@@ -335,7 +337,7 @@
 					<font size="9"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{direccionPartida}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{facturas}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="762" y="0" width="40" height="13" uuid="1831f75b-158b-4e89-a7e2-b283a6eb36aa"/>

@@ -28,6 +28,7 @@ public class GuiaTransporteData implements ExcelDatosInterface{
     private String placa;
     private String cantidadItems;
     private String destinatarios;
+    private String facturas;
 
     public GuiaTransporteData() {
     }
@@ -120,6 +121,14 @@ public class GuiaTransporteData implements ExcelDatosInterface{
         this.destinatarios = destinatarios;
     }
     
+    public String getFacturas() {
+        return facturas;
+    }
+
+    public void setFacturas(String facturas) {
+        this.facturas = facturas;
+    }
+    
     
 
     @Override
@@ -134,12 +143,14 @@ public class GuiaTransporteData implements ExcelDatosInterface{
         tiposDatos.add(new TipoDato(this.estado, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaInicio, Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.fechaFin,Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.direccionPartida,Excel.TipoDataEnum.TEXTO));
+        //tiposDatos.add(new TipoDato(this.direccionPartida,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.facturas,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.placa,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.cantidadItems,Excel.TipoDataEnum.NUMERO));
         return tiposDatos;
     }
+
     
-    
+     
     
 }

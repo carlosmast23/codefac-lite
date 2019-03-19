@@ -161,7 +161,7 @@ public class ControladorReporteGuiaRemision {
     
     public String[] getCabeceraReporteExcel()
     {
-        return new String[]{"Clave de Acceso","Preimpreso","Identificación","Transportista","Destinatarios","Estado","FechaInicio","FechaFin","Dir Partida","Placa","# Items"};
+        return new String[]{"Clave de Acceso","Preimpreso","Identificación","Transportista","Destinatarios","Estado","FechaInicio","FechaFin","Facturas","Placa","# Items"};
     }
     
     public InputStream obtenerPathReporte()
@@ -183,6 +183,7 @@ public class ControladorReporteGuiaRemision {
             data.setTransportista(guiaRemision.getRazonSocial());
             data.setClaveAcceso(guiaRemision.getClaveAcceso());
             data.setCantidadItems(guiaRemision.obtenerTotalItems().toString());
+            data.setFacturas(UtilidadesLista.castListToString(guiaRemision.obtenerFacturasTransportadas(),","));
             data.setDestinatarios(UtilidadesLista.castListToString(guiaRemision.getDestinatarios(),",",new UtilidadesLista.CastListInterface<DestinatarioGuiaRemision>() {
                 @Override
                 public String getString(DestinatarioGuiaRemision dato) {
