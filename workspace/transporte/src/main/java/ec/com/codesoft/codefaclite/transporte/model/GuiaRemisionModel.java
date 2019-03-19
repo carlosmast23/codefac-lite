@@ -822,10 +822,12 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         if(estadoFormulario.equals(ESTADO_GRABAR))
         {
             getPnlDatosAdicionales().habilitar(false);
+            getBtnCargarFacturaIgualSecuencial().setEnabled(true);
         }
         else if(estadoFormulario.equals(ESTADO_EDITAR))
         {
             getPnlDatosAdicionales().habilitar(true);
+            getBtnCargarFacturaIgualSecuencial().setEnabled(false);
         }
     }
     

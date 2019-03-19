@@ -399,7 +399,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                 public void error(ComprobanteElectronicoException cee, String claveAcceso) throws RemoteException {
                     errores.add("Clave Acceso:"+claveAcceso+"\nError:"+cee.getMessage());
                 }
-            }, enviarCorreo,false);            
+            }, enviarCorreo,false); //todo: ver si se hace parametrizable este valor de asincrono o no asincrono , por defecto esta no asincrono            
         }
         return errores; //Esta opcion va a permitir que espera a que se termine el proceso y no funcione en segundo plano
     
@@ -1987,10 +1987,12 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         ComprobanteElectronicoService service=crearComprobanteEletronico(empresa);
         if (carpetaActual.equals(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR)) 
         {
+            service.copiarComprobantesElectronicos(claveAcceso, carpetaActual, ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA);
+            
             Map<String,List<String>> mapComprobante=new HashMap<String,List<String>>();
             mapComprobante.put(claveAcceso,new ArrayList<String>());            
             List<String> errores=procesarComprobantesPendienteLote(
-                    ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE, 
+                    ComprobanteElectronicoService.ETAPA_AUTORIZAR, 
                     99999, 
                     mapComprobante, 
                     false);
@@ -2005,12 +2007,12 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             Map<String,List<String>> mapComprobante=new HashMap<String,List<String>>();
             mapComprobante.put(claveAcceso,new ArrayList<String>());            
             List<String> errores=procesarComprobantesPendienteLote(
-                    ComprobanteElectronicoService.ETAPA_ENVIAR+1, 
+                    ComprobanteElectronicoService.ETAPA_ENVIAR, 
                     99999, 
                     mapComprobante, 
                     false);
             
-            service.eliminarComprobanteElectronico(claveAcceso, ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA);
+            service.eliminarComprobanteElectronico(claveAcceso, ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR);
             
             return errores;
         } else 
