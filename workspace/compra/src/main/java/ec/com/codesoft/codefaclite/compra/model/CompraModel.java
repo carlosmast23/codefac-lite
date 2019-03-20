@@ -236,7 +236,7 @@ public class CompraModel extends CompraPanel{
             if (!validarDatosGrabar()) {
                 throw new ExcepcionCodefacLite("Error de validación");
             }
-            
+            setearValores();
             ServiceFactory.getFactory().getCompraServiceIf().editarCompra(compra);
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
             
@@ -319,7 +319,7 @@ public class CompraModel extends CompraPanel{
         
         //this.getTxtFPreimpreso().setText(preimpreso);
         //Autorizacion
-        this.getTxtAutorizacion().setText("Por Defecto");
+        this.getTxtAutorizacion().setText(this.compra.getAutorizacion());
         //Fecha
         this.getCmbFechaCompra().setDate(this.compra.getFechaFactura());
         
