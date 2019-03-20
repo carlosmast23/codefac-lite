@@ -49,7 +49,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
             Map parameters = new HashMap();
             List<ProductoData> data = new ArrayList<ProductoData>();
             ProductoServiceIf service=ServiceFactory.getFactory().getProductoServiceIf();
-            List<Producto> productos=service.obtenerTodos();
+            List<Producto> productos=service.obtenerTodosActivos();
             for (Producto producto : productos) {
                 ProductoData productoData=new ProductoData();
                 productoData.setCodigoPrincipal(producto.getCodigoPersonalizado());

@@ -30,4 +30,6 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     public Producto buscarPorNombreyEstado(String nombre,GeneralEnumEstado estadoEnum) throws RemoteException;
     
     public Producto buscarProductoActivoPorCodigo(String codigo) throws RemoteException;
+    
+    public List<Producto> obtenerTodosActivos() throws java.rmi.RemoteException;
 }

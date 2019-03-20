@@ -80,7 +80,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 @Override
                 public void transaccion() throws ServicioCodefacException, RemoteException {
                     p.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
-                    productoFacade.edit(p);
+                    entityManager.merge(p);
+                    //productoFacade.edit(p);
                 }
             });
         } catch (ServicioCodefacException ex) {
@@ -128,6 +129,15 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
             
+    public List<Producto> obtenerTodosActivos() throws java.rmi.RemoteException
+    {
+        //Producto producto;
+        //producto.getEstado()
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        List<Producto> resultados=getFacade().findByMap(mapParametros);
+        return resultados;
+    }
     
 
 }

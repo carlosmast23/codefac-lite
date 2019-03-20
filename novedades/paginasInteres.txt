@@ -4,3 +4,6 @@ LIBRERIA RMI PARA SERIALIZAR OBJETOS INPUTSTREAM
 
 **Este tutorial funciono para actualizar el php 7.1 **
 https://www.youtube.com/watch?v=R3uMWMXBm_A&t=126s
+
+***Como usar el google drive con java en especial para almacenar resplados *****************
+https://o7planning.org/en/11889/manipulating-files-and-folders-on-google-drive-using-java
