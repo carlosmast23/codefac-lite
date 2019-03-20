@@ -56,6 +56,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
+import ec.com.codesoft.codefaclite.servidor.facade.ComprobanteEntityFacade;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
@@ -106,7 +107,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Carlos
  */
-public class ComprobantesService extends ServiceAbstract implements ComprobanteServiceIf{
+public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,ComprobanteEntityFacade> implements ComprobanteServiceIf{
 
     private static final Logger LOG = Logger.getLogger(ComprobantesService.class.getName());
     
@@ -1998,7 +1999,17 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     mapComprobante, 
                     false);
             
-            service.eliminarComprobanteElectronico(claveAcceso, ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA);
+            if(service.verificarExisteArchivo(claveAcceso, ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA))
+            { 
+                //Si el archivo no se proceso elimino de la carpeta temporal
+                service.eliminarComprobanteElectronico(claveAcceso, ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA);
+            }
+            else
+            {
+                //Si el archivo ya se proceso y no existe en la carpeta temporal elimino tambien de la carpeta original
+                service.eliminarComprobanteElectronico(claveAcceso, ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR);
+            }
+                       
             return errores;
             
         } else if (carpetaActual.equals(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA)) 
@@ -2011,8 +2022,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     ComprobanteElectronicoService.ETAPA_ENVIAR, 
                     99999, 
                     mapComprobante, 
-                    false);
-            
+                    false);            
+           
             service.eliminarComprobanteElectronico(claveAcceso, ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR);
             
             return errores;
@@ -2030,6 +2041,22 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
         cargarConfiguraciones(comprobanteElectronico, empresa);
         return comprobanteElectronico;
+        
+    }
+    
+    private ComprobanteEntity consultarPorAutorizacion(String claveAcceso)
+    {
+        //ComprobanteEntity comprobante;
+        //comprobante.getClaveAcceso();
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("claveAcceso",claveAcceso);
+        
+        List<ComprobanteEntity> comprobantes=getFacade().findByMap(mapParametros);
+        if(comprobantes.size()>0)
+        {
+            return comprobantes.get(0);
+        }
+        return null;
         
     }
     

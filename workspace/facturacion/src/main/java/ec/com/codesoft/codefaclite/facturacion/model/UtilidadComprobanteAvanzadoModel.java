@@ -576,6 +576,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                         DialogoCodefac.mensaje("Advertencia",UtilidadesLista.castListToString(mensajes,","), indice);
                     }
                     actualizarDatosTabla();
+                    panelPadre.actualizarNotificacionesCodefac();
                     
 
                 } catch (RemoteException ex) {

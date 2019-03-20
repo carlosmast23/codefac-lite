@@ -1758,6 +1758,12 @@ public class ComprobanteElectronicoService implements Runnable {
         String pathEliminar=getPathComprobanteConClaveAcceso(carpeta,claveAcceso);
         ComprobantesElectronicosUtil.eliminarArchivo(pathEliminar);
     }
+    
+    public boolean verificarExisteArchivo(String claveAcceso,String carpeta)
+    {
+        String pathEliminar=getPathComprobanteConClaveAcceso(carpeta,claveAcceso);
+        return new File(pathEliminar).exists();
+    }
 
     public void setSecuencialLote(Integer secuencialLote) {
         this.secuencialLote = secuencialLote;
