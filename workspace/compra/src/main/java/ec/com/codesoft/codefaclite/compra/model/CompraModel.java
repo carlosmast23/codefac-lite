@@ -64,7 +64,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -1118,8 +1117,39 @@ public class CompraModel extends CompraPanel{
         {
             DialogoCodefac.mensaje("Error Validación","Ingrese detalles para poder grabar",DialogoCodefac.MENSAJE_ADVERTENCIA);
             return false;
-        }        
-        return true;
+        }
+        
+        try
+        {
+            if((new BigDecimal(getTxtEstablecimientoCompra().getText())).compareTo(BigDecimal.ZERO)==0)
+            {
+                DialogoCodefac.mensaje("Formato error","El establecimiento no puede ser 0",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return false;
+            }
+            if((new BigDecimal(getTxtPuntoEmisionCompra().getText())).compareTo(BigDecimal.ZERO)==0)
+            {
+                DialogoCodefac.mensaje("Formato error","EL punto de emisión no puede ser 0",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return false;
+            }
+            if((new BigDecimal(getTxtSecuencialCompra().getText())).compareTo(BigDecimal.ZERO)==0)
+            {
+                DialogoCodefac.mensaje("Formato error","El secuencial no puede ser 0",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return false;
+            }
+        } catch(java.lang.NumberFormatException nfe)
+        {
+            DialogoCodefac.mensaje("Formato error","El secuencial solo pueden ser numeros",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+
+        if(!(getTxtEstablecimientoCompra().getText().length()==3 && getTxtPuntoEmisionCompra().getText().length()==3 && getTxtSecuencialCompra().getText().length()==9))
+        {
+            DialogoCodefac.mensaje("Formato error","Revise el formato del secuencial de la compra que es incorrecto",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+       return true;
+
     }
     
     private void listenerTexts() {
