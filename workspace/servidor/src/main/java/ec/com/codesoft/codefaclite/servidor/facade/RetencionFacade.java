@@ -305,10 +305,11 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         //retencion.getCompra();
         //retencion.getEs
         
-        String queryString = "SELECT r FROM Retencion r WHERE r.estado<>?1 and r.compra=?2 ";
+        String queryString = "SELECT r FROM Retencion r WHERE r.estado<>?1 and r.estado<>?2 and r.compra=?3 ";
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
-        query.setParameter(2, compra);
+        query.setParameter(2, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+        query.setParameter(3, compra);
         
         return query.getResultList();
     }
