@@ -65,7 +65,6 @@ public class UtilidadesJuridicas {
     
     /**
      * Algoritmo para validar cedulas naturales
-     * @paginaWeb http://www.cyberexplorador.com/2011/02/20/validar-el-ingreso-del-ruc-de-ecuador-en-java/
      * @param cedula
      * @return 
      */
@@ -115,7 +114,6 @@ public class UtilidadesJuridicas {
     
     /**
      * Validacion para rucs de empresas publicas , Tomar en cuenta que el tercer digito siempre tiene que ser 6
-     * @paginaWeb http://www.cyberexplorador.com/2011/02/20/validar-el-ingreso-del-ruc-de-ecuador-en-java-tercera-parte/
      * @param ruc
      * @return 
      */
@@ -166,7 +164,6 @@ public class UtilidadesJuridicas {
     /**
      * Validacion del ruc para sociadedes , tomar en cuenta que el tercer dijito siempre tiene que ser 9
      * @param ruc
-     * @paginaWeb http://www.cyberexplorador.com/2011/02/20/validar-el-ingreso-del-ruc-de-ecuador-en-java-segunda-parte/
      * @return 
      */
     public static Boolean validacionRUCSociedades(String ruc) 

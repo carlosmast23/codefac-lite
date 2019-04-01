@@ -17,7 +17,6 @@ public abstract class UtilidadesSistema {
      /**
      * Metodo que compara una version con otra y devuelve 1 si es mayor la version , 0 si es igual y -1 si es menor 
      * @param version1
-     * @param Version2
      * @return 
      */
     public static int compareVersion(String version1,String version2)

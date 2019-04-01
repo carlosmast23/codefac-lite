@@ -23,10 +23,6 @@ import java.util.zip.ZipOutputStream;
  */
 public class UtilidadesZip {
     
-    /**
-     * Creates a Zip archive. If the name of the file passed in is a directory,
-     * the directory's contents will be made into a Zip file.
-     */
     public static void comprimirToFile(String fileName, String outPath)
             throws IOException, FileNotFoundException {
         File file = new File(fileName);

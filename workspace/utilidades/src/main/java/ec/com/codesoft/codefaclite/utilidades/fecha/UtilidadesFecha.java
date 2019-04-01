@@ -83,13 +83,12 @@ public class UtilidadesFecha {
         return fecha;
     }
 
-    /**
-     * Obtiene el numero de dias entre 2 fechas dadas
-     *
-     * @param fechaMenor
-     * @param fechaMayor
-     * @return
-     */
+/**
+ * etodo que obtiene dias de dias
+ * @param fechaMenor pendiente
+ * @param fechaMayor nada
+ * @return dias
+ */
     public static int obtenerDistanciaDias(java.util.Date fechaMenor, java.util.Date fechaMayor) {
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); //todo: Ver si estos dates format se hace un formato global
         try {
@@ -199,8 +198,7 @@ public class UtilidadesFecha {
     /**
      * @author: Carlos Sánchez 
      * @param date
-     * @param numero
-     * @param e
+     * @param dias
      * @return 
      */
     public static java.util.Date sumarDiasFecha(java.util.Date date, int dias)
