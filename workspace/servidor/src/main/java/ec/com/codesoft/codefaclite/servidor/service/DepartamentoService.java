@@ -31,6 +31,7 @@ public class DepartamentoService extends ServiceAbstract<Departamento, Departame
         this.departamentoFacade = new DepartamentoFacade();
     }
     
+    /*
     @Override
      public Departamento grabar(Departamento d) throws ServicioCodefacException {
         try {
@@ -42,7 +43,7 @@ public class DepartamentoService extends ServiceAbstract<Departamento, Departame
             Logger.getLogger(DepartamentoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return d;
-    }
+    }*/
 
     @Override
     public void editar(Departamento d) {

@@ -57,6 +57,9 @@ public class DepartamentoModel extends DepartamentoPanel
             limpiar();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
+            
         } catch (RemoteException ex) {
             Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
