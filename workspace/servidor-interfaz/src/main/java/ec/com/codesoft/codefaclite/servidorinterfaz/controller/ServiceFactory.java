@@ -84,6 +84,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRem
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
 
 /**
  *
@@ -177,6 +178,7 @@ public abstract class ServiceFactory {
     public ActualizarSistemaServiceIf getActualizarSistemaServiceIf(){return (ActualizarSistemaServiceIf) getRecursosRMI(ActualizarSistemaServiceIf.class);};
     public PersonaEstablecimientoServiceIf getPersonaEstablecimientoServiceIf(){return (PersonaEstablecimientoServiceIf) getRecursosRMI(PersonaEstablecimientoServiceIf.class);};
     public FacturaDetalleServiceIf getFacturaDetalleServiceIf(){return (FacturaDetalleServiceIf) getRecursosRMI(FacturaDetalleServiceIf.class);};
+    public TipoDocumentoServiceIf getTipoDocumentoServiceIf(){return (TipoDocumentoServiceIf) getRecursosRMI(TipoDocumentoServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente

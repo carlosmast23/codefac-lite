@@ -76,6 +76,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         chkTipoDocumento = new javax.swing.JCheckBox();
         btnLimpiarFechaInicial = new javax.swing.JButton();
         btnLimpiarFechaFinal = new javax.swing.JButton();
+        chkReporteAgrupadoPorCategoria = new javax.swing.JCheckBox();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -387,6 +388,15 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         getContentPane().add(btnLimpiarFechaFinal, gridBagConstraints);
 
+        chkReporteAgrupadoPorCategoria.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkReporteAgrupadoPorCategoria.setText("Reporte Agrupado por Categoria");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        getContentPane().add(chkReporteAgrupadoPorCategoria, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -538,6 +548,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnLimpiarFechaFinal;
     private javax.swing.JButton btnLimpiarFechaInicial;
     private javax.swing.JCheckBox chkDocumento;
+    private javax.swing.JCheckBox chkReporteAgrupadoPorCategoria;
     private javax.swing.JCheckBox chkTipoDocumento;
     private javax.swing.JCheckBox chkTodos;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
@@ -570,4 +581,12 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
     private javax.swing.JTable tableDetalleCompras;
     private javax.swing.JTextField txtProveedor;
     // End of variables declaration//GEN-END:variables
+
+    public JCheckBox getChkReporteAgrupadoPorCategoria() {
+        return chkReporteAgrupadoPorCategoria;
+    }
+
+    public void setChkReporteAgrupadoPorCategoria(JCheckBox chkReporteAgrupadoPorCategoria) {
+        this.chkReporteAgrupadoPorCategoria = chkReporteAgrupadoPorCategoria;
+    }
 }

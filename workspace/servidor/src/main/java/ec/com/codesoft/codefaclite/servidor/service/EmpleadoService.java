@@ -30,6 +30,7 @@ public class EmpleadoService extends ServiceAbstract<Empleado, EmpleadoFacade> i
         this.empleadoFacade = new EmpleadoFacade();
     }
     
+    /*
     @Override
      public Empleado grabar(Empleado b) throws ServicioCodefacException {
         try {
@@ -40,7 +41,7 @@ public class EmpleadoService extends ServiceAbstract<Empleado, EmpleadoFacade> i
         }
         return b;
     }
-
+    */
     @Override
     public void editar(Empleado b) {
         empleadoFacade.edit(b);

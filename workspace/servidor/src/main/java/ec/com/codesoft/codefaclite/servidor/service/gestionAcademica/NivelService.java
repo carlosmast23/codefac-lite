@@ -46,7 +46,7 @@ public class NivelService extends ServiceAbstract<Nivel, NivelFacade> implements
         return null;
         
     }
-    
+    /*
     public Nivel grabar(Nivel n) throws ServicioCodefacException {
         try {
             nivelFacade.create(n);
@@ -58,7 +58,7 @@ public class NivelService extends ServiceAbstract<Nivel, NivelFacade> implements
             throw new ServicioCodefacException("Error con la base de datos aulas");
         }
         return n;
-    }
+    }*/
 
     public void editar(Nivel n) {
         nivelFacade.edit(n);

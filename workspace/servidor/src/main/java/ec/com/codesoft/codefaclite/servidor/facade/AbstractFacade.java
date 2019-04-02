@@ -56,6 +56,8 @@ public abstract class AbstractFacade<T>
         return entityManager;
     }
 
+    //Metodo eliminado porque esta en desuso y puede generar muchos problemas de persistencia
+    /*
     public void create(T entity) throws ConstrainViolationExceptionSQL,DatabaseException{
         try
         {
@@ -86,6 +88,7 @@ public abstract class AbstractFacade<T>
 
         //getEntityManager().getTransaction().commit();
     }
+    */
 
     public void edit(T entity) {
         EntityTransaction tx= getEntityManager().getTransaction();

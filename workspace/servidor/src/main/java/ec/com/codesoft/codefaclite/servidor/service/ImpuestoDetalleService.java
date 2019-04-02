@@ -31,7 +31,7 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
         super(ImpuestoDetalleFacade.class);
         impuestoDetalleFacade= new ImpuestoDetalleFacade();
     }
-    
+    /*
     public ImpuestoDetalle grabar(ImpuestoDetalle i) throws ServicioCodefacException,java.rmi.RemoteException
     {
         try {
@@ -42,7 +42,7 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
             Logger.getLogger(ImpuestoDetalleService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return i;
-    }    
+    } */   
     
     public void eliminar(ImpuestoDetalle i) throws java.rmi.RemoteException
     {

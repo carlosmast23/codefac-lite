@@ -28,7 +28,7 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
         super(CategoriaProductoFacade.class);
         this.categoriaProductoFacade = new CategoriaProductoFacade();
     }
-    
+    /*
     public CategoriaProducto grabar(CategoriaProducto c) throws ServicioCodefacException {
         try {
             categoriaProductoFacade.create(c);
@@ -40,7 +40,7 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
             throw new ServicioCodefacException("Error con la base de datos");
         }
         return c;
-    }
+    }*/
 
     public void editar(CategoriaProducto c) {
         categoriaProductoFacade.edit(c);

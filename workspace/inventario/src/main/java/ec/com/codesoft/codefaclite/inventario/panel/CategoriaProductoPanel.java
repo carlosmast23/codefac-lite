@@ -125,10 +125,11 @@ public abstract class CategoriaProductoPanel extends ControladorCodefacInterface
         gridBagConstraints.gridy = 0;
         getContentPane().add(jLabel5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.weighty = 0.2;
         getContentPane().add(lblEspacio, gridBagConstraints);
 
         pack();

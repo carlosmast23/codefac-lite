@@ -31,7 +31,7 @@ public class TransportistaService extends ServiceAbstract<Transportista, Transpo
         super(TransportistaFacade.class);
         this.transportistaFacade = new TransportistaFacade();   
     }
-    
+    /*
     public Transportista grabar(Transportista t) throws ServicioCodefacException {
         try {
             transportistaFacade.create(t);
@@ -43,7 +43,7 @@ public class TransportistaService extends ServiceAbstract<Transportista, Transpo
             throw new ServicioCodefacException("Error con la base de datos");
         }
         return t;
-    }
+    }*/
 
     public void editar(Transportista t) {
         this.transportistaFacade.edit(t);

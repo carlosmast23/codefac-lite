@@ -29,6 +29,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
         this.bodegaFacade = new BodegaFacade();
     }
 
+    /*
     public Bodega grabar(Bodega b) throws ServicioCodefacException {
         try {
             bodegaFacade.create(b);
@@ -41,6 +42,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
         }
         return b;
     }
+*/
 
     public void editar(Bodega b) {
         bodegaFacade.edit(b);

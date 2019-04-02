@@ -23,6 +23,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  * @author Carlos
  */
 public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,ParametroCodefacFacade> implements ParametroCodefacServiceIf{
+
     private ParametroCodefacFacade parametroCodefacFacade;
 
     public ParametroCodefacService() throws RemoteException {
@@ -115,6 +116,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         }
     }
     
+    /*
     public ParametroCodefac grabar(ParametroCodefac parametro) throws java.rmi.RemoteException
     {
         try {
@@ -125,7 +127,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
             Logger.getLogger(ParametroCodefacService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return parametro;
-    }
+    }*/
     
     public List<ParametroCodefac> buscarParametrosPorMap(Map<String,Object> map) throws java.rmi.RemoteException
     {

@@ -40,6 +40,9 @@ public class CompraDetalle implements Serializable {
     private BigDecimal valorIce;
     @Column(name = "DESCRIPCION")
     private String descripcion;
+    /**
+     * Todo: Revisar como corregir este problema porque el total se esta grabando el subtotal sin iva y no le modificado porque la compra funciona con esta logica y genera problemas
+     */
     @Column(name = "TOTAL")
     private BigDecimal total;
     @Column(name = "IVA")
@@ -234,13 +237,24 @@ public class CompraDetalle implements Serializable {
     /**
      * Metodos adicionales
      */
-    /*
     
-    public BigDecimal getIva()
+    
+    /**
+     * Verificar si el producto esta cobrando iva 0
+     * @return 
+     */
+    public Boolean isImpuestoIvaCero()
     {
-        return total.multiply(producto.getIva().getPorcentaje());
-    }*/
+        return getProductoProveedor().getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0;
+    }
     
+    /**
+     * Obtener el valor del total porque se esta grabando mal en los detalles
+     * @return 
+     */
+    public BigDecimal getTotalCalculado() {
+        return getSubtotal().add(iva);
+    }
     
     
     

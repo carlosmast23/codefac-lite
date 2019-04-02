@@ -48,6 +48,7 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
         return null;
     }
 
+    /*
     public Periodo grabar(Periodo p) throws ServicioCodefacException {
         try {
             periodoFacade.create(p);
@@ -59,7 +60,7 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
             throw new ServicioCodefacException("Error con la base de datos periodo");
         }
         return p;
-    }
+    }*/
     
     public List<Periodo> obtenerPeriodoActivo() throws RemoteException
     {

@@ -14,11 +14,15 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.compra.panel.CompraReportePanel;
+import ec.com.codesoft.codefaclite.compra.reportdata.CompraAgrupadoCategoriaData;
 import ec.com.codesoft.codefaclite.compra.reportdata.CompraDataReporte;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
@@ -54,8 +58,6 @@ import javax.swing.table.DefaultTableModel;
 public class CompraReporteModel extends CompraReportePanel {
 
     private static final Logger LOG = Logger.getLogger(CompraReporteModel.class.getName());
-    
-    
 
     private DefaultTableModel modeloTablaDetallesCompras;
     private Persona proveedor;
@@ -76,7 +78,7 @@ public class CompraReporteModel extends CompraReportePanel {
     private BigDecimal descuento = BigDecimal.ZERO;
     private BigDecimal iva = BigDecimal.ZERO;
     private BigDecimal total = BigDecimal.ZERO;
-    
+
     //Servicio que me permite realizar la busqueda según los filtros de la ventana
     private CompraServiceIf compraServiceIf;
 
@@ -87,21 +89,19 @@ public class CompraReporteModel extends CompraReportePanel {
     private Map parametros;
 
     public CompraReporteModel() {
-        
+
     }
-    
-    
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        super.validacionDatosIngresados=false;
-        
+        super.validacionDatosIngresados = false;
+
         agregarListener();
         agregarListenerChecks();
         crearVariables();
         this.compraServiceIf = ServiceFactory.getFactory().getCompraServiceIf();
         iniciarValoresVentana();
-        
+
     }
 
     @Override
@@ -139,9 +139,8 @@ public class CompraReporteModel extends CompraReportePanel {
                 DialogoCodefac.mensaje("Advertencia", "Se debe realizar una busqueda, para imprimir un reporte", DialogoCodefac.MENSAJE_ADVERTENCIA);
             } else {
 
-                InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_compra.jrxml");
-                List<CompraDataReporte> compraDataReportes = new ArrayList<>();
-
+                
+                
                 if (banderaBusqueda) {
                     parametros.put("identificacion", "TODOS");
                     parametros.put("nombre", "TODOS");
@@ -162,38 +161,26 @@ public class CompraReporteModel extends CompraReportePanel {
                 parametros.put("descuento", this.descuento + "");
                 parametros.put("iva", this.iva + "");
                 parametros.put("total", this.total + "");
-
-                //Parametros dinámicos que se envian para realizar el Reporte
-                for (Compra compra : this.compras) {
-                    CompraDataReporte cdr = new CompraDataReporte();
-                    cdr.setPreimpreso(compra.getPreimpreso());
-                    cdr.setIdentificacion(compra.getProveedor().getIdentificacion());
-                    cdr.setNombre(compra.getProveedor().getRazonSocial());
-                    cdr.setFecha(compra.getFechaFactura() + "");
-                    cdr.setSubtotal(sumarValores(compra.getSubtotalImpuestos(), compra.getSubtotalSinImpuestos()) + "");
-                    cdr.setSubtotal0(compra.getSubtotalSinImpuestos() + "");
-                    cdr.setSubtotal12(compra.getSubtotalImpuestos() + "");
-                    cdr.setDescuento(sumarValores(compra.getDescuentoImpuestos(), compra.getDescuentoSinImpuestos()) + "");
-                    cdr.setDescuento0(compra.getDescuentoSinImpuestos() + "");
-                    cdr.setDescuento12(compra.getDescuentoImpuestos() + "");
-                    cdr.setIva(compra.getIva() + "");
-                    cdr.setTotal(compra.getTotal() + "");
-                    compraDataReportes.add(cdr);
-                }
-
-                Collections.sort(compraDataReportes, new Comparator<CompraDataReporte>() {
-                    public int compare(CompraDataReporte obj1, CompraDataReporte obj2) {
-                        return obj1.getNombre().compareTo(obj2.getNombre());
-                    }
-                });
+                
 
                 DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
                     @Override
                     public void excel() {
                         try {
                             Excel excel = new Excel();
-                            String[] nombreCabeceras = {"Preimpreso", "Identificación", "Nombre", "Fecha", "Subtotal12", "Sutotal0", "Descuento"};
-                            excel.gestionarIngresoInformacionExcel(nombreCabeceras, compraDataReportes);
+                            
+                            
+                            if(getChkReporteAgrupadoPorCategoria().isSelected())
+                            {
+                                String[] nombreCabeceras = new String[] {"Categoria","Producto","Compra","Fecha","Subtotal12", "Sutotal0", "Descuento","IVA","Total"};
+                                excel.gestionarIngresoInformacionExcel(nombreCabeceras,construirDataAgrupado(compras));
+                            }
+                            else 
+                            {
+                                String[] nombreCabeceras = {"Preimpreso", "Identificación", "Nombre", "Fecha", "Subtotal12", "Sutotal0", "Descuento","IVA","Total"};
+                                excel.gestionarIngresoInformacionExcel(nombreCabeceras, compraDataReportes(compras));
+                            }                           
+                            
                             excel.abrirDocumento();
 
                         } catch (Exception exc) {
@@ -204,7 +191,15 @@ public class CompraReporteModel extends CompraReportePanel {
                     @Override
                     public void pdf() {
                         try {
-                            ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, compraDataReportes, panelPadre, "Reporte Compra");
+                            if(getChkReporteAgrupadoPorCategoria().isSelected())
+                            {
+                                InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_compra_agrupado_categoria.jrxml");
+                                ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, construirDataAgrupado(compras), panelPadre, "Reporte Compra Agrupado");
+                            }else
+                            {
+                                InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_compra.jrxml");
+                                ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, compraDataReportes(compras), panelPadre, "Reporte Compra");
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -213,11 +208,95 @@ public class CompraReporteModel extends CompraReportePanel {
 
             }
         } catch (Exception e) {
-            LOG.log(Level.SEVERE,e.getMessage());
+            LOG.log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
             DialogoCodefac.mensaje("Error", "No se pudo crear el reporte correctamente", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
 
+    }
+    
+    public List<CompraDataReporte> compraDataReportes(List<Compra> compras)
+    {
+        List<CompraDataReporte> compraDataReportes = new ArrayList<>();
+        //Parametros dinámicos que se envian para realizar el Reporte
+        for (Compra compra : compras) {
+            CompraDataReporte cdr = new CompraDataReporte();
+            cdr.setPreimpreso(compra.getPreimpreso());
+            cdr.setIdentificacion(compra.getProveedor().getIdentificacion());
+            cdr.setNombre(compra.getProveedor().getRazonSocial());
+            cdr.setFecha(compra.getFechaFactura() + "");
+            cdr.setSubtotal(sumarValores(compra.getSubtotalImpuestos(), compra.getSubtotalSinImpuestos()) + "");
+            cdr.setSubtotal0(compra.getSubtotalSinImpuestos() + "");
+            cdr.setSubtotal12(compra.getSubtotalImpuestos() + "");
+            cdr.setDescuento(sumarValores(compra.getDescuentoImpuestos(), compra.getDescuentoSinImpuestos()) + "");
+            cdr.setDescuento0(compra.getDescuentoSinImpuestos() + "");
+            cdr.setDescuento12(compra.getDescuentoImpuestos() + "");
+            cdr.setIva(compra.getIva() + "");
+            cdr.setTotal(compra.getTotal() + "");
+            compraDataReportes.add(cdr);
+        }
+
+        Collections.sort(compraDataReportes, new Comparator<CompraDataReporte>() {
+            public int compare(CompraDataReporte obj1, CompraDataReporte obj2) {
+                return obj1.getNombre().compareTo(obj2.getNombre());
+            }
+        });
+        return compraDataReportes;
+    }
+
+    public List<CompraAgrupadoCategoriaData> construirDataAgrupado(List<Compra> compras) {
+        Map<CategoriaProducto, List<CompraDetalle>> mapAgrupadoCategoria = new HashMap<CategoriaProducto, List<CompraDetalle>>();
+
+        //List<CompraAgrupadoCategoriaData> resultado=new ArrayList<CompraAgrupadoCategoriaData>();
+        //Agrupar todos los detalles segun el tipo de categoria en un map
+        for (Compra compra : compras) {
+            for (CompraDetalle compraDetalle : compra.getDetalles()) {
+                CategoriaProducto categoria = compraDetalle.getProductoProveedor().getProducto().getCatalogoProducto().getCategoriaProducto();
+                List<CompraDetalle> detalles = mapAgrupadoCategoria.get(categoria);
+                if (detalles == null) {
+                    detalles= new ArrayList<CompraDetalle>();
+                    detalles.add(compraDetalle);
+                    mapAgrupadoCategoria.put(categoria, detalles);
+                } else {
+                    detalles.add(compraDetalle);
+                }
+            }
+        }
+
+        //Crear la nueva lista para el reporte con el map clasificado
+        List<CompraAgrupadoCategoriaData> resultado = new ArrayList<CompraAgrupadoCategoriaData>();
+        for (Map.Entry<CategoriaProducto, List<CompraDetalle>> entry : mapAgrupadoCategoria.entrySet()) {
+            CategoriaProducto categoria = entry.getKey();
+            List<CompraDetalle> detallesCompra = entry.getValue();
+
+            for (CompraDetalle compraDetalle : detallesCompra) {
+
+                CompraAgrupadoCategoriaData compraAgrupadoData = new CompraAgrupadoCategoriaData();
+                compraAgrupadoData.setCategoria(categoria.getNombre());
+                compraAgrupadoData.setProducto(compraDetalle.getProductoProveedor().getProducto().getNombre());
+                compraAgrupadoData.setCompra(compraDetalle.getCompra().getPreimpreso());
+                compraAgrupadoData.setFecha(compraDetalle.getCompra().getFechaFactura().toString());
+                compraAgrupadoData.setIva(compraDetalle.getIva());
+                compraAgrupadoData.setSubtotalDescuento(compraDetalle.getDescuento());
+                compraAgrupadoData.setTotal(compraDetalle.getTotalCalculado());
+                
+                if(compraDetalle.isImpuestoIvaCero())
+                {
+                    compraAgrupadoData.setSubtotalCero(compraDetalle.getSubtotal());
+                    compraAgrupadoData.setSubtotalDoce(BigDecimal.ZERO);
+                }
+                else
+                {
+                    compraAgrupadoData.setSubtotalCero(BigDecimal.ZERO);
+                    compraAgrupadoData.setSubtotalDoce(compraDetalle.getSubtotal());
+                }
+                
+                resultado.add(compraAgrupadoData);
+            }
+
+        }
+
+        return resultado;
     }
 
     @Override
@@ -281,7 +360,7 @@ public class CompraReporteModel extends CompraReportePanel {
         initValoresCombos();
         initModelTablaDetalleCompras();
         getTxtProveedor().setEnabled(false);
-        
+
         getChkDocumento().doClick();
         getChkDocumento().setSelected(true);
         getChkTipoDocumento().doClick();
@@ -311,31 +390,30 @@ public class CompraReporteModel extends CompraReportePanel {
         for (TipoDocumentoEnum tipoDocumentoEnum : tipoDocumentoEnums) {
             getCmbTipoDocumento().addItem(tipoDocumentoEnum);
         }
-        
+
         //Inicar valores del combo de Estados
         getCmbEstado().removeAllItems();
         getCmbEstado().addItem(GeneralEnumEstado.ACTIVO);
         getCmbEstado().addItem(GeneralEnumEstado.ELIMINADO);
-        
-        
+
     }
 
     public void agregarListener() {
-        
+
         getBtnLimpiarFechaInicial().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 getDateFechaInicio().setDate(null);
             }
         });
-        
+
         getBtnLimpiarFechaFinal().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 getDateFechaFinal().setDate(null);
             }
         });
-        
+
         //Permite buscar a un proveedor mediante una ventana
         getBtnBuscarProveedor().addActionListener(new ActionListener() {
             @Override
@@ -351,7 +429,6 @@ public class CompraReporteModel extends CompraReportePanel {
                 }
             }
         });
-
 
         getBtcConsultar().addActionListener(new ActionListener() {
             @Override
@@ -381,61 +458,53 @@ public class CompraReporteModel extends CompraReportePanel {
 
     public void setearValores() throws RemoteException {
         //Obtener valores de combos
-        if(!getChkDocumento().isSelected())
-        {
+        if (!getChkDocumento().isSelected()) {
             this.documentoEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
+        } else {
+            this.documentoEnum = null;
         }
-        else
-        {
-            this.documentoEnum=null;
-        }
-        
-        if(!getChkTipoDocumento().isSelected())
-        {
+
+        if (!getChkTipoDocumento().isSelected()) {
             this.tipoDocumentoEnum = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-        }
-        else
-        {
+        } else {
             this.tipoDocumentoEnum = null;
         }
-        
-        if(getChkTodos().isSelected())
-        {
-            this.proveedor=null;
+
+        if (getChkTodos().isSelected()) {
+            this.proveedor = null;
         }
-        
+
         //Obtener las fecha seleccionadas de los combos
-        this.fechaInicio = (getDateFechaInicio().getDate()!=null)?new Date(getDateFechaInicio().getDate().getTime()):null;
-        this.fechaFinal =(getDateFechaFinal().getDate()!=null)?new Date(getDateFechaFinal().getDate().getTime()):null;
-        
-        GeneralEnumEstado estadoEnum=(GeneralEnumEstado) getCmbEstado().getSelectedItem();
+        this.fechaInicio = (getDateFechaInicio().getDate() != null) ? new Date(getDateFechaInicio().getDate().getTime()) : null;
+        this.fechaFinal = (getDateFechaFinal().getDate() != null) ? new Date(getDateFechaFinal().getDate().getTime()) : null;
+
+        GeneralEnumEstado estadoEnum = (GeneralEnumEstado) getCmbEstado().getSelectedItem();
 
         //if (banderaBusqueda) {
         //    this.compras = compraServiceIf.obtenerTodos(null,);
         //    mostrarDatosEnTabla(this.compras);
         //    sumarTotalesComprasIndividuales(this.compras);
         //} else {
-            //if (proveedor != null) {
-                this.compras = compraServiceIf.obtenerCompraReporte(proveedor, fechaInicio, fechaFinal, documentoEnum, tipoDocumentoEnum,estadoEnum);
-                mostrarDatosEnTabla(this.compras);
-                sumarTotalesComprasIndividuales(this.compras);
-            //} else {
-            //    DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un proveedor", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            //}
+        //if (proveedor != null) {
+        this.compras = compraServiceIf.obtenerCompraReporte(proveedor, fechaInicio, fechaFinal, documentoEnum, tipoDocumentoEnum, estadoEnum);
+        mostrarDatosEnTabla(this.compras);
+        sumarTotalesComprasIndividuales(this.compras);
+        //} else {
+        //    DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un proveedor", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        //}
         //}
 
     }
 
     public void sumarTotalesComprasIndividuales(List<Compra> compras) {
         for (Compra compra : compras) {
-            BigDecimal subtotalImpuestos=(compra.getSubtotalImpuestos()!=null)?compra.getSubtotalImpuestos():BigDecimal.ZERO;
-            BigDecimal subtotalSinImpuestos=(compra.getSubtotalSinImpuestos()!=null)?compra.getSubtotalSinImpuestos():BigDecimal.ZERO;
-            BigDecimal descuentoImpuestos=(compra.getDescuentoImpuestos()!=null)?compra.getDescuentoImpuestos():BigDecimal.ZERO;
-            BigDecimal descuentoSinImpuestos=(compra.getDescuentoSinImpuestos()!=null)?compra.getDescuentoSinImpuestos():BigDecimal.ZERO;
-            BigDecimal iva=(compra.getIva()!=null)?compra.getIva():BigDecimal.ZERO;
-            BigDecimal total=(compra.getTotal()!=null)?compra.getTotal():BigDecimal.ZERO;
-            
-            
+            BigDecimal subtotalImpuestos = (compra.getSubtotalImpuestos() != null) ? compra.getSubtotalImpuestos() : BigDecimal.ZERO;
+            BigDecimal subtotalSinImpuestos = (compra.getSubtotalSinImpuestos() != null) ? compra.getSubtotalSinImpuestos() : BigDecimal.ZERO;
+            BigDecimal descuentoImpuestos = (compra.getDescuentoImpuestos() != null) ? compra.getDescuentoImpuestos() : BigDecimal.ZERO;
+            BigDecimal descuentoSinImpuestos = (compra.getDescuentoSinImpuestos() != null) ? compra.getDescuentoSinImpuestos() : BigDecimal.ZERO;
+            BigDecimal iva = (compra.getIva() != null) ? compra.getIva() : BigDecimal.ZERO;
+            BigDecimal total = (compra.getTotal() != null) ? compra.getTotal() : BigDecimal.ZERO;
+
             this.subtotal = this.subtotal.add(subtotalImpuestos.add(subtotalSinImpuestos));
             //this.subtotal = sumarValores(compra.getSubtotalImpuestos(), compra.getSubtotalSinImpuestos());
             this.subtotal0 = this.subtotal0.add(subtotalSinImpuestos);
@@ -450,14 +519,12 @@ public class CompraReporteModel extends CompraReportePanel {
     }
 
     public BigDecimal sumarValores(BigDecimal d1, BigDecimal d2) {
-        if(d1==null)
-        {
-            d1=BigDecimal.ZERO;
+        if (d1 == null) {
+            d1 = BigDecimal.ZERO;
         }
-        
-        if(d2==null)
-        {
-            d2=BigDecimal.ZERO;
+
+        if (d2 == null) {
+            d2 = BigDecimal.ZERO;
         }
         return d1.add(d2);
     }
@@ -475,8 +542,8 @@ public class CompraReporteModel extends CompraReportePanel {
             fila.add(compra.getSubtotalImpuestos() + "");
             fila.add(compra.getSubtotalSinImpuestos() + "");
             BigDecimal descuento = new BigDecimal(BigInteger.ZERO);
-            BigDecimal descuentoImpuestos=(compra.getDescuentoImpuestos()!=null)?compra.getDescuentoImpuestos():BigDecimal.ZERO;
-            BigDecimal descuentoSinImpuestos=(compra.getDescuentoSinImpuestos()!=null)?compra.getDescuentoSinImpuestos():BigDecimal.ZERO;
+            BigDecimal descuentoImpuestos = (compra.getDescuentoImpuestos() != null) ? compra.getDescuentoImpuestos() : BigDecimal.ZERO;
+            BigDecimal descuentoSinImpuestos = (compra.getDescuentoSinImpuestos() != null) ? compra.getDescuentoSinImpuestos() : BigDecimal.ZERO;
             descuento = descuento.add(descuentoImpuestos).add(descuentoSinImpuestos);
             fila.add(descuento + "");
             fila.add(compra.getIva() + "");
@@ -539,14 +606,14 @@ public class CompraReporteModel extends CompraReportePanel {
                 }
             }
         });
-        
+
         getChkDocumento().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 getCmbDocumento().setEnabled(!getChkDocumento().isSelected());
             }
         });
-        
+
         getChkTipoDocumento().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

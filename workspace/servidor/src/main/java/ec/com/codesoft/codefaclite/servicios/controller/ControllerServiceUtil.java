@@ -50,6 +50,7 @@ import ec.com.codesoft.codefaclite.servidor.service.SriRetencionRentaService;
 import ec.com.codesoft.codefaclite.servidor.service.SriRetencionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidor.service.SucursalService;
+import ec.com.codesoft.codefaclite.servidor.service.TipoDocumentoService;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraCruceService;
@@ -148,6 +149,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
 
 /**
  *
@@ -234,6 +236,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(ActualizarSistemaService.class, ActualizarSistemaServiceIf.class);
             mapRecursos.put(PersonaEstablecimientoService.class, PersonaEstablecimientoServiceIf.class);
             mapRecursos.put(FacturaDetalleService.class, FacturaDetalleServiceIf.class);
+            mapRecursos.put(TipoDocumentoService.class, TipoDocumentoServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             LOG.log(Level.INFO,"Servidor Iniciado");

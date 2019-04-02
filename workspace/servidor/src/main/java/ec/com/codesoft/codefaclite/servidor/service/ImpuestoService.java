@@ -32,7 +32,7 @@ public class ImpuestoService extends ServiceAbstract<Impuesto, ImpuestoFacade> i
         impuestoFacade = new ImpuestoFacade();
         impuestoDetalleFacade=new ImpuestoDetalleFacade();
     }
-   
+   /*
     public Impuesto grabar(Impuesto i)
     {
         try {
@@ -43,7 +43,7 @@ public class ImpuestoService extends ServiceAbstract<Impuesto, ImpuestoFacade> i
             Logger.getLogger(ImpuestoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return i;
-    }
+    }*/
     
     public void editar(Impuesto i)
     {

@@ -40,6 +40,7 @@ public class AulaService extends ServiceAbstract<Aula, AulaFacade> implements Au
         return getFacade().findByMap(mapParametros);
     }
 
+    /*
     public Aula grabar(Aula a) throws ServicioCodefacException {
         try {
             aulaFacade.create(a);
@@ -51,7 +52,7 @@ public class AulaService extends ServiceAbstract<Aula, AulaFacade> implements Au
             throw new ServicioCodefacException("Error con la base de datos aulas");
         }
         return a;
-    }
+    }*/
 
     public void editar(Aula a) {
         aulaFacade.edit(a);

@@ -78,6 +78,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.ActualizarSistema</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoDocumento</class>
     
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
