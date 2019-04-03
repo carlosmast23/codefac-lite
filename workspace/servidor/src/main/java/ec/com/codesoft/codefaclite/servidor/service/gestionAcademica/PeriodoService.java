@@ -70,6 +70,19 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
         return periodos;
     }
     
+    public Periodo obtenerUnicoPeriodoActivo() throws RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        List<Periodo> periodos= obtenerPorMap(mapParametros);
+        if(periodos.size()>0)
+        {
+            return periodos.get(0);
+        }
+        return null;
+    }
+    
+    
     
     public void setearPeriodoActivo(Periodo periodoActivar) throws RemoteException,ServicioCodefacException
     {

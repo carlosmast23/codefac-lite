@@ -4,3 +4,16 @@ Nota: Ver si en vez de la tabla se puede hacer que aparesca el reporte directame
 Agregar la forma para generar codigos de barra y poder imprimir
 Revisar que en la pantalla de compra funciona el evento de enter
 habilitar una opcion para enviar por correo cualquier reporte
+Ver la posibilidad de hacer una funcion que limite la cantidad de caracteres de ingreso directamente en los textfields
+hacer que se puedan editar los datos directamente de los correos y valores de la forma de pago directamente en la pantalla de hacer los comprobantes elctronicos 
+valiar que no se puedan editar las compras cuando ya estan emitidas las retenciones para evitar inconsistencias
+Hacer la prueba de que pasa cuando envio un comprobante que solo esta firma pero aun no ha sido recibido por el Sri a ver que me devuelve
+Ver como hacer para controlar automaticamente ese tema de los correo y no envien 2 vece o lo que es peor no se envien.
+hacer la pantalla para enviar notificaciones a los representantes de los estudiantes
+hacer pruebas para ver si en las notificaciones puede ingresar mas de 2 correos 
+Ver como hacer un metodo para buscar una palabra en distintos ordenes porque por ejemplo en la razon social solo busca si el orden es exacta
+Ver si en la pantalla de factura pueda hacer para que puedan seleccionar varios productos al mismo tiempo
+Ver como solucionar el problema que cuando no se actualizan los cambios el sistema cambia el archivo de propiedades apesar que no se ejcutaron ninguna actualizacion y eso puede generar erroes
+- Es recomedable agregar codigos en los productos por cada proveedor para poder hascer el ingreso de compras de forma automatica y relacionar el producto de venta con el de compra
+- En los proveedores seria bueno guardar los dias de credito para saber cuando ya se va a vencer la cartera de cada proveedor
+- En los proveedores ver si se vincula un numero de cuenta y los datos para poder emitir los cheques de pago (me imagino)

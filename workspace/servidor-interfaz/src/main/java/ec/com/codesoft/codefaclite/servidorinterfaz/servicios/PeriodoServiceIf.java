@@ -17,6 +17,7 @@ import java.util.List;
  */
 public interface PeriodoServiceIf extends ServiceAbstractIf<Periodo>{
     public List<Periodo> obtenerPeriodoActivo() throws RemoteException;
+    public Periodo obtenerUnicoPeriodoActivo() throws RemoteException;
     public List<Periodo> obtenerPeriodosSinEliminar() throws RemoteException;
     public void setearPeriodoActivo(Periodo periodoActivar) throws RemoteException,ServicioCodefacException;
     public Periodo buscarPorNombreyEstado(String nombre,GeneralEnumEstado estado) throws RemoteException;

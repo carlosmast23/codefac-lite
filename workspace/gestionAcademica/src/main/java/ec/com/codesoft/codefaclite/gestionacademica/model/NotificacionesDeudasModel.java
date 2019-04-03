@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EtiquetaMensajeEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
@@ -98,8 +99,8 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
      */
     private List<NotificacionDeudaImprimir>  notificacionesDeudaImprimir;
     
-    public static final String ETIQUETA_NOMBRE_ESTUDIANTE = "[nombre_estudiante]";
-    public static final String ETIQUETA_NOMBRE_REPRESENTANTE = "[nombre_representante]";
+    //public static final String ETIQUETA_NOMBRE_ESTUDIANTE = "[nombre_estudiante]";
+    //public static final String ETIQUETA_NOMBRE_REPRESENTANTE = "[nombre_representante]";
     
     private DefaultListModel<RubroPlantillaMes> modeloLista;
     
@@ -585,11 +586,16 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
     }
 
+    /**
+     * TODO: Unir este metodo con el de la otro pantalla de notificaciones
+     * @param estudianteInscrito
+     * @return 
+     */
     private String construirMensaje(EstudianteInscrito estudianteInscrito) {
-        String mensaje = getTxtFormatoMensaje().getText();
+        String mensaje = getTxtFormatoMensaje().getText().replace("\n","<br>");
 
-        mensaje = mensaje.replace(ETIQUETA_NOMBRE_ESTUDIANTE, estudianteInscrito.getEstudiante().getNombreCompleto());
-        mensaje = mensaje.replace(ETIQUETA_NOMBRE_REPRESENTANTE, estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
+        mensaje = mensaje.replace(EtiquetaMensajeEnum.ETIQUETA_NOMBRE_ESTUDIANTE.getEtiqueta(), estudianteInscrito.getEstudiante().getNombreCompleto());
+        mensaje = mensaje.replace(EtiquetaMensajeEnum.ETIQUETA_NOMBRE_REPRESENTANTE.getEtiqueta(), estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
 
         return mensaje;
     }
