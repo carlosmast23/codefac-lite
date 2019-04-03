@@ -184,6 +184,7 @@ public class CompraReporteModel extends CompraReportePanel {
                             excel.abrirDocumento();
 
                         } catch (Exception exc) {
+                            exc.printStackTrace();
                             DialogoCodefac.mensaje("Error", "El archivo Excel se encuentra abierto", DialogoCodefac.MENSAJE_INCORRECTO);
                         }
                     }

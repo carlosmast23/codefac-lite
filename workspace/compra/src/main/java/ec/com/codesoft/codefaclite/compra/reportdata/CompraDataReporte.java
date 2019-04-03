@@ -141,6 +141,8 @@ public class CompraDataReporte  implements ExcelDatosInterface
         tiposDatos.add(new TipoDato(this.subtotal12,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.subtotal0,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.descuento,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.iva,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.total,Excel.TipoDataEnum.NUMERO));
         return tiposDatos;
     }
     

@@ -111,9 +111,9 @@ public class CompraAgrupadoCategoriaData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.producto,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.compra,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fecha,Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.subtotalDoce,Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.subtotalCero,Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.subtotalDescuento,Excel.TipoDataEnum.FECHA));
+        tiposDatos.add(new TipoDato(this.subtotalDoce,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.subtotalCero,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.subtotalDescuento,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.iva,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.total,Excel.TipoDataEnum.NUMERO));
         return tiposDatos;
