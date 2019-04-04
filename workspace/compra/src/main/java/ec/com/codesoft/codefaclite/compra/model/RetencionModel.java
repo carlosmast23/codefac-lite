@@ -289,8 +289,37 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         
         cargarDatosEmpresa();
         
+        /**
+         * Cargar los datos por defecto  de las retenciones del IVA y de la RENTA
+         */
+        ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.VALOR_DEFECTO_RETENCION_IVA);
+        if(parametroCodefac!=null && parametroCodefac.getValor()!=null && !parametroCodefac.getValor().isEmpty())
+        {
+            try {
+                SriRetencionIva sriRetencionIva=ServiceFactory.getFactory().getSriRetencionIvaServiceIf().buscarPorId(Long.parseLong(parametroCodefac.getValor()));
+                if(sriRetencionIva!=null)
+                {
+                    getCmbRetencionIva().setSelectedItem(sriRetencionIva);
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         
-
+        parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.VALOR_DEFECTO_RETENCION_RENTA);
+        if(parametroCodefac!=null && parametroCodefac.getValor()!=null && !parametroCodefac.getValor().isEmpty())
+        {
+            try {
+                SriRetencionRenta sriRetencionRenta=ServiceFactory.getFactory().getSriRetencionRentaServiceIf().buscarPorId(Long.parseLong(parametroCodefac.getValor()));
+                if(sriRetencionRenta!=null)
+                {
+                    getCmbRetencionRenta().setSelectedItem(sriRetencionRenta);
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+                
         
     }
 
