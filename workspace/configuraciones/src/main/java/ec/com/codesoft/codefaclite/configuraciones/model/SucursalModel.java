@@ -66,6 +66,7 @@ public class SucursalModel extends SucursalPanel {
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(SucursalModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         }
     }
 
@@ -74,8 +75,13 @@ public class SucursalModel extends SucursalPanel {
         //setearDatos();
         if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
         {            
-            ServiceFactory.getFactory().getSucursalServiceIf().eliminar(sucursal);
-            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+            try {
+                ServiceFactory.getFactory().getSucursalServiceIf().eliminar(sucursal);
+                DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(SucursalModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.dialogoPregunta("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            }
         }  
         else
         {

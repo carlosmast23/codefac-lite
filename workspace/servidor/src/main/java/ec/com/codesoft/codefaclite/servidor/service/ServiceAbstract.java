@@ -96,7 +96,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         });
     }
     
-    public void eliminar(Entity entity) throws java.rmi.RemoteException
+    public void eliminar(Entity entity) throws ServicioCodefacException, java.rmi.RemoteException 
     {
         this.facade.remove(entity);
     }

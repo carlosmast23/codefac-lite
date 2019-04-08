@@ -2,3 +2,13 @@ Agregar la opcion para tambien poder enviar el reporte de las compras y los ats 
 Hacer el filtro de las guias de remision por cliente
 Hacer el reporte de facturas por productos
 hacer el reporte de la contadora de la guarderia y una forma de poder clasificar internamente las compras para reportes internos
+Restructrar para poder eliminar no de la base de datos si no con estados:
+AulaModel
+NivelModel
+MatriculaEstudianteModel
+RubroPlantillaModel
+PeriodoModel
+PerfilUsuarioModel
+PuntoEmisionModel
+SucursalModel
+

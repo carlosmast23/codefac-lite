@@ -195,12 +195,12 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
         presupuestosData = new ArrayList<PresupuestoData>();
         for (Presupuesto presupuesto : lista) {
             PresupuestoData presupuestoData = new PresupuestoData();
-            presupuestoData.setCodigo(presupuesto.getCodigo());
+            presupuestoData.setCodigo(presupuesto.getId().toString());
             presupuestoData.setFecha(presupuesto.getFechaPresupuesto().toString());
             presupuestoData.setEstado(presupuesto.getEstadoEnum().getNombre());
             presupuestoData.setDescripcion(presupuesto.getDescripcion());
             presupuestoData.setIdentificacion(presupuesto.getPersona().getIdentificacion());
-            presupuestoData.setNombres(presupuesto.getPersona().getNombres());
+            presupuestoData.setNombres(presupuesto.getPersona().getRazonSocial());
             presupuestoData.setTotal(presupuesto.getTotalCompra());
             presupuestosData.add(presupuestoData);
         }
@@ -208,7 +208,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
     }
 
     private String[] getTituloTablaPantalla() {
-        String[] titulo = {"Código", "Identificación", "Fecha", "Estado", "Nombres", "Descripción", "Total"};
+        String[] titulo = {"Código", "Identificación", "Fecha", "Estado", "Razon Social", "Descripción", "Total"};
         return titulo;
     }
 

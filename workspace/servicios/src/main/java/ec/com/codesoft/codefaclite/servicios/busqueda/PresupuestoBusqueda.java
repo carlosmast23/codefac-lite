@@ -45,7 +45,7 @@ public class PresupuestoBusqueda implements InterfaceModelFind<Presupuesto>
     @Override
     public void agregarObjeto(Presupuesto p, Vector dato) 
     {
-        dato.add(p.getCodigo());
+        dato.add(p.getId());
         dato.add(p.getDescripcion());
         dato.add((p.getEstadoEnum()!=null)?p.getEstadoEnum().getNombre():"Sin estado");
         dato.add(p.getFechaPresupuesto());

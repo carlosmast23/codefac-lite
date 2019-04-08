@@ -112,6 +112,7 @@ public class NivelModel extends NivelPanel {
         }
     }
 
+    
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
         if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
@@ -124,6 +125,11 @@ public class NivelModel extends NivelPanel {
                 DialogoCodefac.mensaje("Datos correctos", "El nivel se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             } catch (RemoteException ex) {
                 Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
+                
+                DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+                throw new ExcepcionCodefacLite(ex.getMessage());
             }
         }
     }

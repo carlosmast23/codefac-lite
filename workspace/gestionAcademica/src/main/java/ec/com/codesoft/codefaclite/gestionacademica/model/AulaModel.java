@@ -58,7 +58,7 @@ public class AulaModel extends AulaPanel {
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite,RemoteException {
+    public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try {
             setearValoresAula(aula);
             aula = aulaService.grabar(aula);
@@ -77,7 +77,7 @@ public class AulaModel extends AulaPanel {
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite,RemoteException {
+    public void editar() throws ExcepcionCodefacLite, RemoteException {
         try {
             setearValoresAula(aula);
             aulaService.editar(aula);
@@ -87,6 +87,10 @@ public class AulaModel extends AulaPanel {
         }
     }
 
+    /**
+     * TODO: REVISAR QUE ESTA ELIMINADO DIRECTAMENTE DE LA BASE DE DATOS
+     * @throws ExcepcionCodefacLite 
+     */
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
         if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
@@ -99,6 +103,11 @@ public class AulaModel extends AulaPanel {
                 DialogoCodefac.mensaje("Datos correctos", "El aula se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             } catch (RemoteException ex) {
                 Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+
+                DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+                throw new ExcepcionCodefacLite(ex.getMessage());
             }
         }
     }
@@ -127,14 +136,12 @@ public class AulaModel extends AulaPanel {
 //        getTxtUbicacion().setText(aula.getUbicacion());
 //        getTxtCapacidad().setText((aula.getCapacidad()!=null)?aula.getCapacidad().toString():"");
 //    }
-
     @Override
     public void limpiar() {
         aula = new Aula();
         getCmbEstado().setSelectedIndex(0);
 
     }
-
 
     public String getNombre() {
         return "Aula";
@@ -174,39 +181,36 @@ public class AulaModel extends AulaPanel {
         aula = (Aula) entidad;
         cargarDatos();
     }
-    
-    public void cargarDatos()
-    {
-        getTxtCapacidad().setText((aula.getCapacidad()!=null)?aula.getCapacidad().toString():"");
+
+    public void cargarDatos() {
+        getTxtCapacidad().setText((aula.getCapacidad() != null) ? aula.getCapacidad().toString() : "");
         getTxtNombre().setText("" + aula.getNombre());
         getTxtUbicacion().setText("" + aula.getUbicacion());
         GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(aula.getEstado());
         getCmbEstado().setSelectedItem(generalEnumEstado);
     }
-    
-    public void listenerBotones()
-    {
+
+    public void listenerBotones() {
         getjButton1().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 Graphics g = getjPanel1().getGraphics();
                 float pa = 10, pb = 5, pc = 5;
-                float total = pa+pb+pc;
-                int anguloA = (int)((pa*360)/total);
-                int anguloB = (int)((pb*360)/total);
-                int anguloC = (int)((pc*360)/total);
-                g.setColor(new Color(255,0,0));
+                float total = pa + pb + pc;
+                int anguloA = (int) ((pa * 360) / total);
+                int anguloB = (int) ((pb * 360) / total);
+                int anguloC = (int) ((pc * 360) / total);
+                g.setColor(new Color(255, 0, 0));
                 g.fillArc(0, 0, 301, 301, 0, anguloA);
-                g.setColor(new Color(0,255,0));
+                g.setColor(new Color(0, 255, 0));
                 g.fillArc(0, 0, 301, 301, anguloA, anguloB);
-                g.setColor(new Color(0,0,255));
-                g.fillArc(0, 0, 301, 301, anguloA+anguloB, anguloC);
+                g.setColor(new Color(0, 0, 255));
+                g.fillArc(0, 0, 301, 301, anguloA + anguloB, anguloC);
                 System.out.println("Hola");
-                        
+
             }
         });
-        
-      
+
     }
 
 }

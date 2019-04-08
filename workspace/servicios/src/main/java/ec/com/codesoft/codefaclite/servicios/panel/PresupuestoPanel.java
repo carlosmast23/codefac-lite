@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -57,7 +58,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jLabel6 = new javax.swing.JLabel();
         btnCliente = new javax.swing.JButton();
         txtDescripcion = new javax.swing.JTextField();
-        cmbFechaPresupuesto = new com.toedter.calendar.JDateChooser();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableDetallesPresupuesto = new javax.swing.JTable();
         lblEspacio1 = new javax.swing.JLabel();
@@ -120,6 +120,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jLabel27 = new javax.swing.JLabel();
         cmbTipoPresupuesto = new javax.swing.JComboBox<>();
         llblEspacio50 = new javax.swing.JLabel();
+        cmbFechaPresupuesto = new org.jdesktop.swingx.JXDatePicker();
 
         setClosable(true);
         setIconifiable(true);
@@ -221,14 +222,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtDescripcion, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(cmbFechaPresupuesto, gridBagConstraints);
 
         tableDetallesPresupuesto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -749,6 +742,13 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         getContentPane().add(llblEspacio50, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbFechaPresupuesto, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -766,7 +766,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JButton btnProveedor;
     private javax.swing.JComboBox<OrdenTrabajoDetalle> cmbDetallesOrdenTrabajo;
     private javax.swing.JComboBox<Presupuesto.EstadoEnum> cmbEstadoPresupuesto;
-    private com.toedter.calendar.JDateChooser cmbFechaPresupuesto;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaPresupuesto;
     private javax.swing.JComboBox<String> cmbOpcionDiaMes;
     private javax.swing.JComboBox<CatalogoProducto> cmbTipoPresupuesto;
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -898,13 +898,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
     
 
-    public JDateChooser getCmbFechaPresupuesto() {
-        return cmbFechaPresupuesto;
-    }
 
-    public void setCmbFechaPresupuesto(JDateChooser cmbFechaPresupuesto) {
-        this.cmbFechaPresupuesto = cmbFechaPresupuesto;
-    }
 
     public JDateChooser getjDateChooser1() {
         return jDateChooser1;
@@ -1137,5 +1131,11 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setCmbTipoPresupuesto(JComboBox<CatalogoProducto> cmbTipoPresupuesto) {
         this.cmbTipoPresupuesto = cmbTipoPresupuesto;
     }
+
+    public JXDatePicker getCmbFechaPresupuesto() {
+        return cmbFechaPresupuesto;
+    }
+    
+    
     
 }

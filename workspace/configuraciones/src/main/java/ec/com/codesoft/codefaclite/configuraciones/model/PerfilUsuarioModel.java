@@ -189,6 +189,10 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             ServiceFactory.getFactory().getUsuarioServicioIf().eliminar(usuario);
         } catch (RemoteException ex) {
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);            
+            DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         }
         
     }

@@ -107,7 +107,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Nombres]]></text>
+				<text><![CDATA[Razón Social]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="367" y="0" width="144" height="15" uuid="7732703f-5900-41e3-a25f-6fdfbe331113"/>

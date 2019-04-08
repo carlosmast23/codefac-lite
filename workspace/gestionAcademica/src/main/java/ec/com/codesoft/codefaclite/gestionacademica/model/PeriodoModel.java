@@ -161,7 +161,14 @@ public class PeriodoModel extends PeriodoPanel {
                 if (!respuesta) {
                     throw new ExcepcionCodefacLite("Cancelacion periodo");
                 }
-                periodoService.eliminar(periodo);
+                try {
+                    periodoService.eliminar(periodo);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(PeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
+
+                    DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+                    throw new ExcepcionCodefacLite(ex.getMessage());
+                }
                 DialogoCodefac.mensaje("Datos correctos", "El periodo se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             } catch (RemoteException ex) {
                 Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);

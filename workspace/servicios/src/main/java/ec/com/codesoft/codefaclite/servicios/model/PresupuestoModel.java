@@ -320,38 +320,33 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         Presupuesto.EstadoEnum generalEnumEstado = Presupuesto.EstadoEnum.getByLetra(this.presupuesto.getEstado());
         Presupuesto.EstadoEnum estadoPresupuestoEnum  = (Presupuesto.EstadoEnum) getCmbEstadoPresupuesto().getSelectedItem();    
         boolean b = false;
-        switch(generalEnumEstado)
-        {
+        switch (generalEnumEstado) {
             case ABANDONADO:
-                if(!(estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.FACTURADO) || estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.ANULADO)))
-                {
+                if (!(estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.FACTURADO) || estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.ANULADO))) {
                     return true;
                 }
-            break;
+                break;
             case ANULADO:
-                if(estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.TERMINADO))
-                {
+                if (estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.TERMINADO)) {
                     return true;
                 }
-            break;
+                break;
             case APROBADO:
+                return true;
 
-            break;
             case FACTURADO:
-                    DialogoCodefac.mensaje("Advertencia", "El presupuesto esta facturado no se permiten modificaciones", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            break;
-            case PRESUPUESTANDO:              
-                if(!(estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.FACTURADO) || estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.ANULADO)))
-                {
+                DialogoCodefac.mensaje("Advertencia", "El presupuesto esta facturado no se permiten modificaciones", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                break;
+            case PRESUPUESTANDO:
+                if (!(estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.FACTURADO) || estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.ANULADO))) {
                     return true;
-                }          
+                }
                 break;
             case TERMINADO:
-                if(estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.PRESUPUESTANDO) || estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.ABANDONADO) || estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.TERMINADO))
-                {
+                if (estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.PRESUPUESTANDO) || estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.ABANDONADO) || estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.TERMINADO)) {
                     return true;
                 }
-            break;
+                break;
 
         }
         return false;
@@ -389,7 +384,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 case PRESUPUESTANDO:
                 break;
                 case TERMINADO:
-                    DialogoCodefac.mensaje("Advertencia", "El presupuesto esta terminado no se permiten modificaciones", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    //DialogoCodefac.mensaje("Advertencia", "El presupuesto esta terminado no se permiten modificaciones", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 break;
                    
             }
@@ -1514,9 +1509,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 /**
                 * Modificar el campo ya que se esta ligando un detalle de la Orden de Trabajo a un Presupuesto
                 */
-                ordenTrabajo.setEstadoDetalles(OrdenTrabajo.GeneralEstadoEnum.FINALIZADO.getEstado());
+                ordenTrabajo.setEstadoDetalles(OrdenTrabajo.EstadoEnum.FINALIZADO.getEstado());
             }else{
-                ordenTrabajo.setEstadoDetalles(OrdenTrabajo.GeneralEstadoEnum.LIGADO.getEstado());
+                ordenTrabajo.setEstadoDetalles(OrdenTrabajo.EstadoEnum.LIGADO.getEstado());
             }
             servicioOrden.editar(ordenTrabajo);
             

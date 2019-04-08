@@ -68,9 +68,15 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        setearDatos();
-        ServiceFactory.getFactory().getPuntoVentaServiceIf().eliminar(puntoEmision);
-        DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+        try {
+            setearDatos();
+            ServiceFactory.getFactory().getPuntoVentaServiceIf().eliminar(puntoEmision);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PuntoEmisionModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
+        }
     }
 
     @Override

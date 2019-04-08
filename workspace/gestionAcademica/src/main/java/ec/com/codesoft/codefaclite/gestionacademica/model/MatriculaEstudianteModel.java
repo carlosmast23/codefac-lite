@@ -134,6 +134,11 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 DialogoCodefac.mensaje("Correcto","El estudiante matriculado fue eliminado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             } catch (RemoteException ex) {
                 Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+                
+                DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+                throw new ExcepcionCodefacLite(ex.getMessage());
             }
         }
         else

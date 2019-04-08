@@ -96,6 +96,14 @@ public class OrdenTrabajo implements Serializable
     public void setEstado(String estado) {
         this.estado = estado;
     }
+    
+    public EstadoEnum getEstadoEnum() {
+        return EstadoEnum.getEnum(estado);
+    }
+
+    public void setEstadoEnum(EstadoEnum estadoEnum) {
+        this.estado = estadoEnum.getEstado();
+    }
 
     public Date getFechaIngreso() {
         return fechaIngreso;
@@ -156,7 +164,7 @@ public class OrdenTrabajo implements Serializable
         return detallesTotales;
      }
      
-     public enum GeneralEstadoEnum{
+     public enum EstadoEnum{
          
          /**
          * Estado inicial en el cual se guarda cualquier Orden de trabajo y lo que siginifica es que esta todavia en proceso y que aun no se ha ligado
@@ -172,12 +180,17 @@ public class OrdenTrabajo implements Serializable
         /**
          * Estado utilizado para indicar que todos los detalles de la orden de trabajo han sido finculadas a un presupuesto
          */
-        FINALIZADO("F","Finalizado"),;
+        FINALIZADO("F","Finalizado"),
+        /**
+         * Estado para identificar las ordenes de trabajo eliminadas
+         */
+        ELIMINADO("E","Eliminado")
+        ;
         
         private String estado;
         private String nombre;
         
-        private GeneralEstadoEnum(String estado, String nombre)
+        private EstadoEnum(String estado, String nombre)
         {
             this.estado = estado;
             this.nombre = nombre;
@@ -199,9 +212,9 @@ public class OrdenTrabajo implements Serializable
             this.nombre = nombre;
         }
         
-        public static GeneralEstadoEnum getEnum(String estado) 
+        public static EstadoEnum getEnum(String estado) 
         {
-            for (GeneralEstadoEnum enumerador : GeneralEstadoEnum.values()) {
+            for (EstadoEnum enumerador : EstadoEnum.values()) {
                 if (enumerador.estado.equals(estado)) {
                     return enumerador;
                 }

@@ -828,6 +828,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             String descripcion="P"+presupuestoSeleccionado.getId()+" OT"+presupuestoSeleccionado.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoSeleccionado.getDescripcion();
             setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString(),presupuestoSeleccionado.getCatalogoProducto());
+            for (PersonaEstablecimiento establecimiento : presupuestoSeleccionado.getPersona().getEstablecimientos()) {
+                cargarCliente(establecimiento);
+                break;
+            }
+            
         }
     }
     
@@ -2639,10 +2644,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 break;
                 
             case PRESUPUESTOS:
-                if (presupuestoSeleccionado.getTotalVenta().compareTo(cantidad.multiply(valorUnitario)) == -1) {
+                /*if (presupuestoSeleccionado.getTotalVenta().compareTo(cantidad.multiply(valorUnitario)) == -1) {
                     DialogoCodefac.mensaje("Validación", "El Total no puede exceder del valor " + rubroSeleccionado.getSaldo() + " del rubro", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     return false;
-                }
+                }*/
                 break;
             
         }

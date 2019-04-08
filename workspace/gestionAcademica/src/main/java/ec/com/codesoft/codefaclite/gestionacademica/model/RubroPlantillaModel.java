@@ -172,6 +172,8 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         catch(RemoteException re)
         {
             re.printStackTrace();
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
