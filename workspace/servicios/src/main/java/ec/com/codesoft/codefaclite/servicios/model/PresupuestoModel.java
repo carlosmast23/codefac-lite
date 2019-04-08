@@ -144,12 +144,13 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         initDatosTabla();
         this.getCmbFechaPresupuesto().setDate(UtilidadesFecha.getFechaHoy());
         this.setEnabled(false);
+        validacionDatosIngresados=false;
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        
-        if(presupuesto != null && presupuesto.getPresupuestoDetalles() != null || presupuesto.getPersona() != null || getCmbDetallesOrdenTrabajo().getItemCount() > 0)
+        //TODO: Desctivar un momento hasta ver como funciona este tema
+        /*if(presupuesto != null && presupuesto.getPresupuestoDetalles() != null || presupuesto.getPersona() != null || getCmbDetallesOrdenTrabajo().getItemCount() > 0)
         {
             Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (respuesta) {
@@ -164,7 +165,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             }else{
                 throw new ExcepcionCodefacLite("Cancelacion usuario");
             }
-        }
+        }*/
 
     }
 

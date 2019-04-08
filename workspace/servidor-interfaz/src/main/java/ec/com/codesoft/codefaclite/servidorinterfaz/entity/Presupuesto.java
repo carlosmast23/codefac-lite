@@ -133,6 +133,14 @@ public class Presupuesto implements Serializable
     public void setEstado(String estado) {
         this.estado = estado;
     }
+    
+    public EstadoEnum getEstadoEnum() {
+        return EstadoEnum.getByLetra(estado);
+    }
+
+    public void setEstado(EstadoEnum estadoEnum) {
+        this.estado = estadoEnum.getLetra();
+    }
 
     public Date getFechaCreacion() {
         return fechaCreacion;
@@ -299,12 +307,7 @@ public class Presupuesto implements Serializable
      * Metodos Personalizados
      */
     
-    public EstadoEnum getEstadoEnum()
-    {
-        return EstadoEnum.getByLetra(estado);
-    }
-    
-    
+
     
     public enum EstadoEnum
     {
