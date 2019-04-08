@@ -1666,8 +1666,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
         
         if(!validacion.expresionRegular().equals("")){
+            System.out.println(componente.getText()+"->"+validacion.nombre()+"->"+validacion.expresionRegular());
             if(!Pattern.matches(validacion.expresionRegular(),componente.getText()))
             {
+                //Verifica si la etiqueta tiene un error personalizado o muestro el error por defecto
                 if(!validacion.expresionRegularMensaje().equals(""))
                 {
                     validar.add(validacion.expresionRegularMensaje());

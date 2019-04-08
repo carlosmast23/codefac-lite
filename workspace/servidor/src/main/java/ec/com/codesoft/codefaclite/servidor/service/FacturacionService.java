@@ -177,8 +177,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         try {
             PresupuestoService servicio = new PresupuestoService();
             Presupuesto presupuesto = servicio.buscarPorId(detalle.getReferenciaId());
-            presupuesto.setEstado(Presupuesto.EstadoEnum.FACTURADO.getLetra()); //Cambio el estado a facturado
+            
+            //Cambiar el estado al presupuesto para saber que ya fue facturadp
+            presupuesto.setEstado(Presupuesto.EstadoEnum.FACTURADO.getLetra()); 
+            
+            //Cambiar el estado a la orden de trabajo del detalle para saber que ya no puede usar
             presupuesto.getOrdenTrabajoDetalle().setEstado(OrdenTrabajoDetalle.EstadoEnum.TERMINADO.getLetra());//Cambio el estado a terminado
+            
+            //Actualiza el estado de la orde de trabajo principal
+            OrdenTrabajoService ordenTrabajoService=new OrdenTrabajoService();
+            ordenTrabajoService.actualizarEstadoSinTransaccion(presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
+            
+            
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }

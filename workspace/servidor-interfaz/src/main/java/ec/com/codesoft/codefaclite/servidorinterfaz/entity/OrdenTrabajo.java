@@ -44,8 +44,12 @@ public class OrdenTrabajo implements Serializable
     @Column(name = "ESTADO")
     private String estado;
     
-    @Column(name = "ESTADO_DETALLES")
-    private String estadoDetalles;
+    /**
+     * @deprecated 
+     * Todo: Este estado me parece que esta mal ingresado
+     */
+    //@Column(name = "ESTADO_DETALLES")
+    //private String estadoDetalles;
     
     @Column(name = "FECHA_INGRESO")
     private Date fechaIngreso;
@@ -121,13 +125,13 @@ public class OrdenTrabajo implements Serializable
         this.cliente = cliente;
     }
 
-    public String getEstadoDetalles() {
+    /*public String getEstadoDetalles() {
         return estadoDetalles;
     }
 
     public void setEstadoDetalles(String estadoDetalles) {
         this.estadoDetalles = estadoDetalles;
-    }
+    }*/
        
      public void addDetalle(OrdenTrabajoDetalle detalle)
     {
@@ -172,7 +176,8 @@ public class OrdenTrabajo implements Serializable
          */    
         GENERADO("G","Generado"),
         
-         /**
+         /**@deprecated 
+          * TODO: Este estado esta de revisar porque parece que esta dificil de controlar y no genera mayo beneficio
          * Estado utilizado para indicar que la orden de trabajo mas especificamente uno de sus detalles esta ligado a un presupuesto
          */
         LIGADO("L","Ligado"),

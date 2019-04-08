@@ -138,7 +138,7 @@ public class Presupuesto implements Serializable
         return EstadoEnum.getByLetra(estado);
     }
 
-    public void setEstado(EstadoEnum estadoEnum) {
+    public void setEstadoEnum(EstadoEnum estadoEnum) {
         this.estado = estadoEnum.getLetra();
     }
 

@@ -1705,69 +1705,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
     public void setearSecuencialComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
     {
-        //ParametroCodefacService parametroService=new ParametroCodefacService();
-        //ParametroCodefac parametro = null;
         
-        //Cuando la factura es electronica
-        /*
-        ParametroCodefac parametroTipoFacturacion=parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION);
-        if (parametroTipoFacturacion.valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra())) {
-            comprobante.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
-            //parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
-            
-            //Obtiene los secuenciales eletronicos
-            DocumentoEnum documentoEnum=comprobante.getCodigoDocumentoEnum();
-            switch(documentoEnum)
-            {
-                case FACTURA:
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
-                    break;
-                
-                case RETENCIONES:
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION);
-                    break;
-                    
-                case NOTA_CREDITO:
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO);
-                    break;
-                    
-                case GUIA_REMISION: 
-                    parametro= parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_GUIA_REMISION);
-                    break;
-            }
-            
-            
-        } else {
-            //Estableciendo estado de facturacion manual
-            comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-            comprobante.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra());
-            
-            //Busca los secuenciales disponibles para facturacion fisica
-            DocumentoEnum documentoEnum=comprobante.getCodigoDocumentoEnum();
-            switch(documentoEnum)
-            {
-                case FACTURA:
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA);
-                    break;
-                    
-                case NOTA_VENTA:
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA);
-                    break;
-                    
-                case RETENCIONES:
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION_FISICA);
-                    break;
-
-                case NOTA_CREDITO:
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA);
-                    break;
-                    
-                case GUIA_REMISION:
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA);
-                    break;
-            }
-
-        }*/
         
         PuntoEmisionService puntoEmisionService=new PuntoEmisionService();
         PuntoEmision puntoEmision=puntoEmisionService.obtenerPorCodigo(Integer.parseInt(comprobante.getPuntoEmision()));

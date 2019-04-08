@@ -86,7 +86,10 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * Variable que contiene el estado actual del formulario para que el desarrollado pueda consultar
      */
     public String estadoFormulario;
+    public String estadoFormularioEnum;
     
+    
+   
     /**
      * Lista que me permite grabar componentes que se desean excluir para no tomar en cuenta para la validacion de no salir si existen datos ingresados 
      */
@@ -474,6 +477,12 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
         //TODO: solo creo un metodo vacio para sobreescribir y no hacer una interfaz que me obligue a modificar a toditas las pantallas
     }
 
+    
+    public EstadoFormularioEnum getEstadoFormularioEnum()
+    {
+        return EstadoFormularioEnum.getEnum(estadoFormulario);
+    }
+    
     @Override
     public String toString() {
         VentanaEnum ventanaEnum=VentanaEnum.getByClass(this.getClass());
@@ -492,7 +501,34 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     }
     
     
+    public enum EstadoFormularioEnum
+    {
+        GRABAR(ESTADO_GRABAR),
+        EDITAR(ESTADO_EDITAR);
+        
+        private String letra;
+        
+        private  EstadoFormularioEnum(String letra)
+        {
+            this.letra=letra;
+        }
 
+        public String getLetra() {
+            return letra;
+        }
+        
+        public static EstadoFormularioEnum getEnum(String letra)
+        {
+            for (EstadoFormularioEnum enumerador : EstadoFormularioEnum.values()) {
+                if(enumerador.getLetra().equals(letra))
+                {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+                
+    }
     
     
     

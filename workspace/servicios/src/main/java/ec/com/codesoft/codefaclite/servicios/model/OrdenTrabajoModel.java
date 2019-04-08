@@ -232,7 +232,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             getCmbDateFechaIngreso().setDate(this.ordenTrabajo.getFechaIngreso());
             GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
             getCmbEstadoOrdenTrabajo().setSelectedItem(generalEnumEstado);
-            OrdenTrabajo.EstadoEnum generalEstadoEnum = OrdenTrabajo.EstadoEnum.getEnum(this.ordenTrabajo.getEstadoDetalles());
+            OrdenTrabajo.EstadoEnum generalEstadoEnum = this.ordenTrabajo.getEstadoEnum();
             getCmbEstadoDetallesOrdenTrabajo().setSelectedItem(generalEstadoEnum);
             mostrarDatosTabla();           
         }
@@ -610,10 +610,10 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     public void setearDatos() throws ExcepcionCodefacLite
     {
-            GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoOrdenTrabajo().getSelectedItem();
+            //GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoOrdenTrabajo().getSelectedItem();
             this.ordenTrabajo.setFechaIngreso(new Date(getCmbDateFechaIngreso().getDate().getTime()));
             this.ordenTrabajo.setDescripcion(""+getTxtDescripcion().getText());
-            this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());
+            //this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());
     }
     
   

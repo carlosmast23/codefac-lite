@@ -24,51 +24,51 @@ import javax.persistence.Transient;
  * @author CodesoftDesarrollo 1
  */
 @Entity
-@Table(name="DETALLE_ORDEN_TRABAJO")
-public class OrdenTrabajoDetalle implements Serializable 
-{
+@Table(name = "DETALLE_ORDEN_TRABAJO")
+public class OrdenTrabajoDetalle implements Serializable {
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "DESCRIPCION")
     private String descripcion;
-    
-    @Column (name = "NOTAS")
+
+    @Column(name = "NOTAS")
     private String notas;
-    
-    @Column (name = "FECHA_ENTREGA")
+
+    @Column(name = "FECHA_ENTREGA")
     private Date fechaEntrega;
-    
-    @Column (name = "ESTADO")
+
+    @Column(name = "ESTADO")
     private String estado;
-    
+
     @Column(name = "TIPO_ORDEN_TRABAJO")
     private String tipoOrdenTrabajo;
-    
+
     @Column(name = "PRIORIDAD")
     private String prioridad;
-    
+
     @Column(name = "TITULO")
     private String titulo;
-    
+
     @JoinColumn(name = "ORDEN_TRABAJO_ID")
     @ManyToOne(optional = false)
     private OrdenTrabajo ordenTrabajo;
-    
+
     @JoinColumn(name = "EMPLEADO_ID")
     @ManyToOne(optional = false)
-    private Empleado empleado;       
-    
+    private Empleado empleado;
+
     /**
-     * Este valor se lo crea porque el departamente es propio de a donde se asigna el trabajo sin importar el empleado
+     * Este valor se lo crea porque el departamente es propio de a donde se
+     * asigna el trabajo sin importar el empleado
      */
     @JoinColumn(name = "DEPARTAMENTO_ID")
-    @ManyToOne    
+    @ManyToOne
     private Departamento departamento;
-    
-            
+
     public Long getId() {
         return id;
     }
@@ -107,6 +107,14 @@ public class OrdenTrabajoDetalle implements Serializable
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public EstadoEnum getEstadoEnum() {
+        return EstadoEnum.getEnum(estado);
+    }
+
+    public void setEstado(EstadoEnum estadoEnum) {
+        this.estado = estadoEnum.getLetra();
     }
 
     public String getTipoOrdenTrabajo() {
@@ -159,7 +167,7 @@ public class OrdenTrabajoDetalle implements Serializable
 
     @Override
     public String toString() {
-        return "N° "+ id + " - " + descripcion;
+        return "N° " + id + " - " + descripcion;
     }
 
     @Override
@@ -186,25 +194,24 @@ public class OrdenTrabajoDetalle implements Serializable
         }
         return true;
     }
-    
+
     public enum EstadoEnum {
         /**
-         * Identificador para saber qe ordenes estan en estado recibido
+         * Identificador para saber qe ordenes esta emitida per no usada en ningun presupuestp
          */
         RECIBIDO("R", "Recibido"),
         /**
-         * Identificador para saber que la orden ya esta presupuestada
+         * Identificador para saber que la orden ya esta usada en algun presupuesto
          */
         PRESUPUESTADO("P", "Presupuestado"),
         /**
-         * Identificar para saber si se termino de realizar el presupueto
+         * Estado para saber si se termino de realizar el presupueto y que ya esta facturado
          */
         TERMINADO("T", "Terminado"),
         /**
-         * Identificador para saber que anularon el detalle de una orden
+         * Identificador para saber que esta anulada el detalle de la orden de trabajo
          */
-        ANULADO("A", "Anulado")
-        ;
+        ANULADO("A", "Anulado");
 
         private EstadoEnum(String letra, String nombre) {
             this.letra = letra;
@@ -236,11 +243,7 @@ public class OrdenTrabajoDetalle implements Serializable
         public String toString() {
             return nombre;
         }
-        
-        
 
     }
 
-    
-    
 }

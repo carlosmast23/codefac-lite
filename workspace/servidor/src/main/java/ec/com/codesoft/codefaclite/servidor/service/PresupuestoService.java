@@ -75,10 +75,21 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         presupuestoFacade.edit(p);
     }
     
-    public void eliminar(Presupuesto p)
+    public void eliminar(Presupuesto p) throws ServicioCodefacException,RemoteException
     {
-        p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        editar(p);
+        if(p.getEstadoEnum().equals(Presupuesto.EstadoEnum.FACTURADO))
+        {
+            throw new ServicioCodefacException("No se puede eliminar un presupuesto facturado");
+        }
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                p.setEstadoEnum(Presupuesto.EstadoEnum.ANULADO);
+                entityManager.merge(p);
+            }
+        });
+        
     }
     
     public List<Presupuesto> buscar()

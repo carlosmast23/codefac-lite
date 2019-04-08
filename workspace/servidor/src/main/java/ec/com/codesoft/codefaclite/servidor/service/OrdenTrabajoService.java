@@ -62,7 +62,7 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
     }
 
     @Override
-    public void eliminar(OrdenTrabajo ordenTrabajo) {
+    public void eliminar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, java.rmi.RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
@@ -90,7 +90,7 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
             /**
              * Agregar estado por defecto a orden trabajo (GENERADO)
              */
-            ordenTrabajo.setEstadoDetalles(estadoEnum.getEstado());
+            ordenTrabajo.setEstado(estadoEnum.getEstado());
             for (OrdenTrabajoDetalle otd : ordenTrabajo.getDetalles()) {
                 /**
                  * Agregar estado por defecto a detalle orden trabajo
@@ -122,5 +122,27 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
         }
 
         return ordenTrabajo;
+    }
+    
+    /**
+     * Metodo que me permite establecer el estado de la orden dea trabajo segun el estado de los detalles
+     * @param ordenTrabajo 
+     */
+    public void actualizarEstadoSinTransaccion(OrdenTrabajo ordenTrabajo)
+    {
+        //OrdenTrabajo.EstadoEnum estadoEnum=OrdenTrabajo.EstadoEnum.GENERADO;
+        
+        for (OrdenTrabajoDetalle detalleOrdenTrabajo : ordenTrabajo.getDetalles()) 
+        {
+            if(detalleOrdenTrabajo.getEstadoEnum().equals(OrdenTrabajoDetalle.EstadoEnum.RECIBIDO) || detalleOrdenTrabajo.getEstadoEnum().equals(OrdenTrabajoDetalle.EstadoEnum.PRESUPUESTADO))
+            {
+                ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.GENERADO);
+                entityManager.merge(ordenTrabajo);
+                return ;
+            }
+        }
+        ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.FINALIZADO);
+        entityManager.merge(ordenTrabajo);
+        
     }
 }

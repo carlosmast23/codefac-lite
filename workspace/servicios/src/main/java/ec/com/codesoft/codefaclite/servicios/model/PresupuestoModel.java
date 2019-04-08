@@ -197,94 +197,6 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             servicio.grabar(presupuesto);
             DialogoCodefac.mensaje("Correcto","El presupuesto fue grabado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             
-            
-            /**
-             * Modifar el estado del detalle de la orden de trabajo ya que se le ligo al presupuesto 
-             */
-            //modificarEstadoOrdenTrabajoPorDetalle();
-            
-//            this.ordenesCompra = new ArrayList<>();
-//            /**
-//             * El momento que se graba el Presupuesto genero de cada detalle presuesto la orden de compra
-//             */
-//            OrdenCompra ordenCompra;
-//            for (Map.Entry<Integer, List<PresupuestoDetalle>> entry : this.mapOrden.entrySet()) 
-//            {
-//                Integer key = entry.getKey();
-//                List<PresupuestoDetalle> detalles = entry.getValue();
-//                ordenCompra = new OrdenCompra();
-//                /**
-//                 * Obtener para que proveedor se realiza la orden de compra
-//                 */
-//                ordenCompra.setProveedor(detalles.get(0).getPersona());
-//                    /**
-//                     * Todos los presupuestos por el momento van a estar ligados a Servicios   
-//                     */     
-//                    TipoDocumentoEnum tde = TipoDocumentoEnum.COMPRA_SERVICIOS;
-//                    ordenCompra.setCodigoTipoDocumento(tde.getCodigo());
-//                    ordenCompra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-//                    ordenCompra.setFechaIngreso(this.presupuesto.getFechaPresupuesto());
-//                    ordenCompra.setDescuentoImpuestos(BigDecimal.ZERO);
-//                    ordenCompra.setDescuentoSinImpuestos(BigDecimal.ZERO);
-//                    ordenCompra.setObservacion(this.presupuesto.getDescripcion());
-//                    ordenCompra.setIva(BigDecimal.ZERO);
-//                    ordenCompra.setEstado("a");
-//                    
-//                    
-//                    BigDecimal total = new BigDecimal(BigInteger.ZERO);
-//                    
-//                    for(PresupuestoDetalle pd : detalles){
-//                        OrdenCompraDetalle ordenCompraDetalle = new OrdenCompraDetalle();
-//                        /**
-//                         * Setean valores de Detalle Orden Compra 
-//                         */
-//                        ordenCompraDetalle.setCantidad(pd.getCantidad().intValue());
-//                        ordenCompraDetalle.setDescripcion(pd.getProducto().getNombre());
-//                        ordenCompraDetalle.setDescuento(pd.getDescuentoVenta());
-//                        ordenCompraDetalle.setPrecioUnitario(pd.getPrecioVenta());
-//                        ordenCompraDetalle.setValorIce(BigDecimal.ZERO);
-//                        ordenCompraDetalle.setProductoProveedor(pd.getProductoProveedor());
-//                        
-//                        if (productoProveedor.getConIva().equals("s")) {
-//                            ordenCompraDetalle.setIva(ordenCompraDetalle.calcularValorIva());
-//                        } else {
-//                            ordenCompraDetalle.setIva(BigDecimal.ZERO);
-//                        }
-//
-//                        ordenCompraDetalle.setProductoProveedor(productoProveedor);
-//                        ordenCompraDetalle.setTotal(ordenCompraDetalle.getSubtotal());
-//                        
-//                        /**
-//                         * Sumatoria de totales de cada detalle
-//                         */
-//                        total.add(ordenCompraDetalle.getTotal());
-//
-//                        /**
-//                         * Agregando detalle a Orden Compra
-//                         */
-//                        ordenCompra.addDetalle(ordenCompraDetalle);
-//                    }
-//                    
-//                    ordenCompra.setTotal(total.setScale(2, RoundingMode.HALF_UP));
-//                    
-//  
-//                /**
-//                 * Grabando la orden de compra por Proveedor
-//                 */
-//                OrdenCompraServiceIf compraServiceIf = ServiceFactory.getFactory().getOrdenCompraServiceIf();
-//                compraServiceIf.grabar(ordenCompra);
-//                DialogoCodefac.mensaje("Orden compra", "Orden de Compra N° " + key +" generada", DialogoCodefac.MENSAJE_CORRECTO);
-//                /**
-//                 * Agregar ordenes para enviar a correo
-//                 */
-//                this.ordenesCompra.add(ordenCompra);
-//            }
-//            
-//            /**
-//             * Se inicia el proceso de enviar comumnicados a los empleados
-//             */
-//            empezarEnviarComunicados();
-//            
             }catch (ServicioCodefacException ex) {
                 Logger.getLogger(Presupuesto.class.getName()).log(Level.SEVERE, null, ex);
             }catch (RemoteException ex) {
@@ -354,7 +266,16 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(getEstadoFormularioEnum().equals(EstadoFormularioEnum.EDITAR)) //Opcion solo disponible para editar
+        {
+            try {
+                ServiceFactory.getFactory().getPresupuestoServiceIf().eliminar(presupuesto);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -772,7 +693,10 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getCmbDetallesOrdenTrabajo().removeAllItems();
         for(OrdenTrabajoDetalle pd : ordenTrabajo.getDetalles())
         {
-            getCmbDetallesOrdenTrabajo().addItem(pd);
+            if(pd.getEstadoEnum().equals(OrdenTrabajoDetalle.EstadoEnum.RECIBIDO) || pd.getEstadoEnum().equals(OrdenTrabajoDetalle.EstadoEnum.PRESUPUESTADO))
+            {
+                getCmbDetallesOrdenTrabajo().addItem(pd);
+            }
         }
         /**
           * Definir el detalle escogido
@@ -793,7 +717,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     public void agregarDetallesPresupuesto(PresupuestoDetalle presupuestoDetalle,boolean estado)
     {
         Boolean agregar = false;
-        Boolean perPro = true;
+        //Boolean perPro = true;
         if(presupuestoDetalle == null)
         {
             presupuestoDetalle = new PresupuestoDetalle();
@@ -803,13 +727,13 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         try{
             if(this.persona == null){
                 DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un proveedor", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                perPro = false;
+                return;
             }
          
             if(this.producto == null)
             {
                 DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                perPro = false;
+                return;
             }
                 
             if (!panelPadre.validarPorGrupo("detalles")) {
@@ -817,53 +741,44 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             }
             
             Presupuesto.EstadoEnum generalEnumEstado = Presupuesto.EstadoEnum.getByLetra(this.presupuesto.getEstado());
-            if(generalEnumEstado != null)
+            if(generalEnumEstado.equals(Presupuesto.EstadoEnum.FACTURADO))
             {
-                switch(generalEnumEstado)
-                {
-                    case PRESUPUESTANDO:
-                    case ABANDONADO:
-                        perPro = perPro && true;  
-                    break;
-                    default:
-                        perPro = perPro && false;  
-                    break;
-                }
+                DialogoCodefac.mensaje("Advertencia", "No se puede editar un presupuesto facturado", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            }
+            else if(generalEnumEstado.equals(Presupuesto.EstadoEnum.ANULADO))
+            {
+                DialogoCodefac.mensaje("Advertencia", "No se puede editar un presupuesto anulado o eliminado", DialogoCodefac.MENSAJE_ADVERTENCIA);
             }
             
-            if(perPro){
-                presupuestoDetalle.setProducto(this.producto);
-                presupuestoDetalle.setPersona(this.persona);
-                if(verificarCamposValidados())
-                {
-                    BigDecimal precioCompra = new BigDecimal(getTxtPrecioCompra().getText());
-                    presupuestoDetalle.setPrecioCompra(precioCompra.setScale(2,BigDecimal.ROUND_HALF_UP));
-                    BigDecimal descuentoCompra = new BigDecimal(getTxtDescuentoPrecioCompra().getText());
-                    presupuestoDetalle.setDescuentoCompra(descuentoCompra.setScale(2,BigDecimal.ROUND_HALF_UP));
-                    BigDecimal precioVenta = new BigDecimal(getTxtPrecioVenta().getText());
-                    presupuestoDetalle.setPrecioVenta(precioVenta.setScale(2,BigDecimal.ROUND_HALF_UP));
-                    BigDecimal descuentoVenta = new BigDecimal(getTxtDescuentoPrecioVenta().getText());
-                    presupuestoDetalle.setDescuentoVenta(descuentoVenta.setScale(2,BigDecimal.ROUND_HALF_UP));
-                    presupuestoDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
-                    if(estado){
-                        presupuestoDetalle.setEstado(EnumSiNo.SI.getLetra());
-                    }else{
-                        presupuestoDetalle.setEstado(EnumSiNo.NO.getLetra());
-                    }
-                    BigDecimal costo = new BigDecimal(getTxtPrecioVenta().getText());
-                    this.productoProveedor.setCosto(costo.setScale(2,BigDecimal.ROUND_HALF_UP));
-                    presupuestoDetalle.setProductoProveedor(this.productoProveedor);
+            presupuestoDetalle.setProducto(this.producto);
+            presupuestoDetalle.setPersona(this.persona);
+            if (verificarCamposValidados()) {
+                BigDecimal precioCompra = new BigDecimal(getTxtPrecioCompra().getText());
+                presupuestoDetalle.setPrecioCompra(precioCompra.setScale(2, BigDecimal.ROUND_HALF_UP));
+                BigDecimal descuentoCompra = new BigDecimal(getTxtDescuentoPrecioCompra().getText());
+                presupuestoDetalle.setDescuentoCompra(descuentoCompra.setScale(2, BigDecimal.ROUND_HALF_UP));
+                BigDecimal precioVenta = new BigDecimal(getTxtPrecioVenta().getText());
+                presupuestoDetalle.setPrecioVenta(precioVenta.setScale(2, BigDecimal.ROUND_HALF_UP));
+                BigDecimal descuentoVenta = new BigDecimal(getTxtDescuentoPrecioVenta().getText());
+                presupuestoDetalle.setDescuentoVenta(descuentoVenta.setScale(2, BigDecimal.ROUND_HALF_UP));
+                presupuestoDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+                if (estado) {
+                    presupuestoDetalle.setEstado(EnumSiNo.SI.getLetra());
+                } else {
+                    presupuestoDetalle.setEstado(EnumSiNo.NO.getLetra());
                 }
-                else{
-                    throw new ExcepcionCodefacLite("Campos detalles no validos");
-                }
-            }   
-        }catch(ExcepcionCodefacLite e)
-        {
-             Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, e);
+                BigDecimal costo = new BigDecimal(getTxtPrecioVenta().getText());
+                this.productoProveedor.setCosto(costo.setScale(2, BigDecimal.ROUND_HALF_UP));
+                presupuestoDetalle.setProductoProveedor(this.productoProveedor);
+            } else {
+                throw new ExcepcionCodefacLite("Campos detalles no validos");
+            }
+
+        } catch (ExcepcionCodefacLite e) {
+            Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, e);
         }
 
-        if(agregar && perPro)
+        if(agregar )
         {
             buscarNumeroOrdenPresupuestoDetalle(presupuestoDetalle);
             this.presupuesto.addDetalle(presupuestoDetalle);            
@@ -871,9 +786,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             mostrarDatosTabla();
             limpiarDetalles();
         }
-        if(perPro){
-            limpiarDetalles();
-        }
+        
+        
+        limpiarDetalles();
         
      }
     
@@ -974,7 +889,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getTxtDescuentoPrecioCompra().setText(presupuestoDetalle.getDescuentoCompra()+"");
         getTxtPrecioVenta().setText(presupuestoDetalle.getPrecioVenta()+"");
         getTxtDescuentoPrecioVenta().setText(presupuestoDetalle.getDescuentoVenta()+"");
-        getTxtCantidad().setText(presupuestoDetalle.getCantidad()+"");
+        getTxtCantidad().setText(presupuestoDetalle.getCantidad().intValue()+"");
         
     }
     
@@ -1302,24 +1217,25 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
     private void editarDetallePresupuesto()
     {
-        try{
-            int fila = getTableDetallesPresupuesto().getSelectedRow();
-            PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
-            if(presupuestoDetalle != null)
-            {
-                agregarDetallesPresupuesto(presupuestoDetalle,false);
-                limpiarDetalles();
-                mostrarDatosTabla();
-                calcularTotales();                   
-                getBtnAgregarDetalle().setEnabled(true);
-                
-            }else{
-                limpiarDetalles();
-                getBtnAgregarDetalle().setEnabled(true);
+
+        int fila = getTableDetallesPresupuesto().getSelectedRow();
+        if (fila >= 0) {
+            try {
+                PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
+                if (presupuestoDetalle != null) {
+                    agregarDetallesPresupuesto(presupuestoDetalle, false);
+                    limpiarDetalles();
+                    mostrarDatosTabla();
+                    calcularTotales();
+                    getBtnAgregarDetalle().setEnabled(true);
+
+                } else {
+                    limpiarDetalles();
+                    getBtnAgregarDetalle().setEnabled(true);
+                }
+            } catch (Exception exc) {
+                exc.printStackTrace();
             }
-        }catch(Exception exc)
-        {
-            exc.printStackTrace();
         }
                 
     }
@@ -1509,9 +1425,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 /**
                 * Modificar el campo ya que se esta ligando un detalle de la Orden de Trabajo a un Presupuesto
                 */
-                ordenTrabajo.setEstadoDetalles(OrdenTrabajo.EstadoEnum.FINALIZADO.getEstado());
+                ordenTrabajo.setEstado(OrdenTrabajo.EstadoEnum.FINALIZADO.getEstado());
             }else{
-                ordenTrabajo.setEstadoDetalles(OrdenTrabajo.EstadoEnum.LIGADO.getEstado());
+                ordenTrabajo.setEstado(OrdenTrabajo.EstadoEnum.LIGADO.getEstado());
             }
             servicioOrden.editar(ordenTrabajo);
             
