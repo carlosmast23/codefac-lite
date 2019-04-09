@@ -82,6 +82,9 @@ public class Presupuesto implements Serializable
     @Column(name = "TOTAL_COMPRA")
     private BigDecimal totalCompra;
 
+    /**
+     * TODO: Este total en ventas realmente es el subtotal cambiar el nombre
+     */
     @Column(name = "TOTAL_VENTA")
     private BigDecimal totalVenta;            
             
@@ -306,7 +309,10 @@ public class Presupuesto implements Serializable
     /**
      * Metodos Personalizados
      */
-    
+    public BigDecimal calcularTotalMenosDescuentos()
+    {
+        return totalVenta.subtract(descuentoVenta);
+    }
 
     
     public enum EstadoEnum

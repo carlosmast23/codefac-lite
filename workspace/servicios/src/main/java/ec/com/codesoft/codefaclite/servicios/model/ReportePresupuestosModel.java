@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
-import ec.com.codesoft.codefaclite.servicios.data.PresupuestoData;
+import ec.com.codesoft.codefaclite.servicios.data.PresupuestoReporteData;
 import ec.com.codesoft.codefaclite.servicios.panel.ReportePresupuestosPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -43,7 +43,7 @@ import javax.swing.table.DefaultTableModel;
 public class ReportePresupuestosModel extends ReportePresupuestosPanel {
 
     private Persona cliente;
-    private List<PresupuestoData> presupuestosData;
+    private List<PresupuestoReporteData> presupuestosData;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -192,9 +192,9 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
     }
 
     private void construirDataReporte(List<Presupuesto> lista) {
-        presupuestosData = new ArrayList<PresupuestoData>();
+        presupuestosData = new ArrayList<PresupuestoReporteData>();
         for (Presupuesto presupuesto : lista) {
-            PresupuestoData presupuestoData = new PresupuestoData();
+            PresupuestoReporteData presupuestoData = new PresupuestoReporteData();
             presupuestoData.setCodigo(presupuesto.getId().toString());
             presupuestoData.setOrdenTrabajo(presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getId().toString());
             presupuestoData.setFecha(presupuesto.getFechaPresupuesto().toString());
@@ -219,7 +219,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
         DefaultTableModel modeloTabla = new DefaultTableModel(titulo, 0);
 
         if (presupuestosData != null) {
-            for (PresupuestoData presupuestoData : presupuestosData) {
+            for (PresupuestoReporteData presupuestoData : presupuestosData) {
                 modeloTabla.addRow(new String[]{
                     presupuestoData.getCodigo(),
                     presupuestoData.getOrdenTrabajo(),

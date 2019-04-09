@@ -12,6 +12,8 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Provee
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
@@ -21,6 +23,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servicios.busqueda.PresupuestoBusqueda;
+import ec.com.codesoft.codefaclite.servicios.data.PresupuestoData;
 import ec.com.codesoft.codefaclite.servicios.panel.PresupuestoPanel;
 import ec.com.codesoft.codefaclite.servicios.reportdata.OrdenCompraDataReporte;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
@@ -92,6 +95,7 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.table.DefaultTableModel;
 import org.bouncycastle.pqc.math.linearalgebra.BigIntUtils;
+import sun.nio.cs.ext.Big5;
 
 /**
  *
@@ -149,6 +153,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
+        this.presupuesto=new Presupuesto();
         //TODO: Desctivar un momento hasta ver como funciona este tema
         /*if(presupuesto != null && presupuesto.getPresupuestoDetalles() != null || presupuesto.getPersona() != null || getCmbDetallesOrdenTrabajo().getItemCount() > 0)
         {
@@ -194,8 +199,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             }
 
             PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
-            servicio.grabar(presupuesto);
+            presupuesto=servicio.grabar(presupuesto);
             DialogoCodefac.mensaje("Correcto","El presupuesto fue grabado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            imprimir();
             
             }catch (ServicioCodefacException ex) {
                 Logger.getLogger(Presupuesto.class.getName()).log(Level.SEVERE, null, ex);
@@ -282,7 +288,101 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        InputStream path = RecursoCodefac.JASPER_SERVICIO.getResourceInputStream("presupuesto.jrxml");
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, obtenerMapReporte(), obtenerDetallesReporte(), panelPadre,"Presupuesto");
+    }
+    
+    private Map<String,Object> obtenerMapReporte()
+    {
+        Map<String,Object> parametros=new HashMap<String,Object>();
+        parametros.put("identificacion", presupuesto.getPersona().getIdentificacion());
+        parametros.put("razonSocial", presupuesto.getPersona().getRazonSocial());
+        parametros.put("telefonos",(presupuesto.getPersona().getTelefonoCelular()!=null )?presupuesto.getPersona().getTelefonoCelular():"");
+        parametros.put("direccion", (presupuesto.getPersona().getDireccion()!=null)?presupuesto.getPersona().getDireccion():"");
+        parametros.put("estado", presupuesto.getEstadoEnum().getNombre());
+        parametros.put("fecha", presupuesto.getFechaPresupuesto().toString());
+        parametros.put("correo", (presupuesto.getPersona().getCorreoElectronico()!=null)?presupuesto.getPersona().getCorreoElectronico():"");
+        parametros.put("codigo", presupuesto.getId().toString());
+        
+        //Datos de la orden de trabajo
+        parametros.put("ordenTrabajo", presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getId().toString());
+        parametros.put("descripcion", presupuesto.getDescripcion());
+        parametros.put("observaciones", presupuesto.getObservaciones());
+        
+        //Calcular los totales
+        parametros.put("subtotal", presupuesto.getTotalVenta().toString());
+        parametros.put("descuento", presupuesto.getDescuentoVenta().toString());
+        parametros.put("total", presupuesto.calcularTotalMenosDescuentos().toString());
+        
+        //Calcular los totales
+        Map<TotalEnum,Object> totales=obtenerMapReporteTotales();
+        parametros.put("valorPagarCliente", totales.get(TotalEnum.VALOR_PAGAR_CLIENTE));
+        parametros.put("valorProveedores", totales.get(TotalEnum.VALORES_PROVEEDORES));
+        parametros.put("produccionInterna", totales.get(TotalEnum.PRODUCCION_INTERNO));
+        parametros.put("utilidad", totales.get(TotalEnum.UTILIDAD));
+        
+        
+        return parametros ;
+    }
+    
+    private Map<TotalEnum,Object> obtenerMapReporteTotales()
+    {
+        BigDecimal totalProveedores=BigDecimal.ZERO;
+        BigDecimal totalProduccionInterna= BigDecimal.ZERO;
+        
+        for (PresupuestoDetalle presupuestoDetalle : presupuesto.getPresupuestoDetalles()) {
+            
+            //Si encuentra que el cliente es la misma empresa que esta usando el software lo registra como produccion interna
+            if(presupuestoDetalle.getPersona().getIdentificacion().equals(session.getEmpresa().getIdentificacion()))
+            {
+                totalProduccionInterna=totalProduccionInterna.add(presupuestoDetalle.calcularTotalCompra());
+            }
+            else //Cualquier otro tipo de ingreso lo considero como de proveedoresv
+            {
+                totalProveedores=totalProveedores.add(presupuestoDetalle.calcularTotalCompra());
+            }
+        }
+        
+        Map<TotalEnum,Object> mapTotalEnum=new HashMap<TotalEnum,Object>();
+        mapTotalEnum.put(TotalEnum.VALOR_PAGAR_CLIENTE,presupuesto.calcularTotalMenosDescuentos().toString());
+        mapTotalEnum.put(TotalEnum.VALORES_PROVEEDORES,totalProveedores.toString());
+        mapTotalEnum.put(TotalEnum.PRODUCCION_INTERNO,totalProduccionInterna.toString());
+
+        BigDecimal utilidad
+                = presupuesto.calcularTotalMenosDescuentos().
+                        subtract(totalProveedores).
+                        subtract(totalProduccionInterna);
+        
+        mapTotalEnum.put(TotalEnum.UTILIDAD,utilidad.toString());
+        
+                
+        return mapTotalEnum;
+    }
+    
+    enum TotalEnum {
+        VALOR_PAGAR_CLIENTE,
+        VALORES_PROVEEDORES,
+        PRODUCCION_INTERNO,
+        UTILIDAD
+    }
+        
+    
+    private List<PresupuestoData> obtenerDetallesReporte()
+    {
+        List<PresupuestoData> datos=new ArrayList<PresupuestoData>();
+        for (PresupuestoDetalle presupuestoDetalle : presupuesto.getPresupuestoDetalles()) {
+            PresupuestoData presupuestoData=new PresupuestoData();
+            presupuestoData.setCantidad(presupuestoDetalle.getCantidad().toString());
+            presupuestoData.setDescuento(presupuestoDetalle.getDescuentoCompra().toString());
+            presupuestoData.setIdentificacion(presupuestoDetalle.getPersona().getIdentificacion());
+            presupuestoData.setRazonSocial(presupuestoDetalle.getPersona().getRazonSocial());
+            presupuestoData.setProducto(presupuestoDetalle.getProductoProveedor().getProducto().getNombre());
+            presupuestoData.setSubtotal(presupuestoDetalle.calcularSubtotalCompra().toString());
+            presupuestoData.setTotal(presupuestoDetalle.calcularTotalCompra().toString());
+            datos.add(presupuestoData);
+        }
+        return datos;
+        
     }
 
     @Override
@@ -334,7 +434,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     }
 
     @Override
-    public void limpiar() {
+    public void limpiar() {        
         limpiarDetalles();
         limpiarTotales();
         this.getTxtOrdenTrabajo().setText("");
@@ -767,10 +867,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 return;
             }
-                
+            
+               
             if (!panelPadre.validarPorGrupo("detalles")) {
                 return;
             }
+            
             
             //Presupuesto.EstadoEnum generalEnumEstado = Presupuesto.EstadoEnum.getByLetra(this.presupuesto.getEstado());
             Presupuesto.EstadoEnum generalEnumEstado = presupuesto.getEstadoEnum();
@@ -791,13 +893,25 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             presupuestoDetalle.setProducto(this.producto);
             presupuestoDetalle.setPersona(this.persona);
             if (verificarCamposValidados()) {
+                
+                
                 BigDecimal precioCompra = new BigDecimal(getTxtPrecioCompra().getText());
-                presupuestoDetalle.setPrecioCompra(precioCompra.setScale(2, BigDecimal.ROUND_HALF_UP));
+                
                 BigDecimal descuentoCompra = new BigDecimal(getTxtDescuentoPrecioCompra().getText());
-                presupuestoDetalle.setDescuentoCompra(descuentoCompra.setScale(2, BigDecimal.ROUND_HALF_UP));
+                
                 BigDecimal precioVenta = new BigDecimal(getTxtPrecioVenta().getText());
-                presupuestoDetalle.setPrecioVenta(precioVenta.setScale(2, BigDecimal.ROUND_HALF_UP));
+                
                 BigDecimal descuentoVenta = new BigDecimal(getTxtDescuentoPrecioVenta().getText());
+                
+                if(precioCompra.subtract(descuentoCompra).compareTo(BigDecimal.ZERO)<=0)
+                {
+                    DialogoCodefac.mensaje("Error","No se puede ingresar un detalle con precio de compra igual o menor que 0",DialogoCodefac.MENSAJE_INCORRECTO);
+                    return;
+                }
+                
+                presupuestoDetalle.setPrecioCompra(precioCompra.setScale(2, BigDecimal.ROUND_HALF_UP));                
+                presupuestoDetalle.setDescuentoCompra(descuentoCompra.setScale(2, BigDecimal.ROUND_HALF_UP));
+                presupuestoDetalle.setPrecioVenta(precioVenta.setScale(2, BigDecimal.ROUND_HALF_UP));
                 presupuestoDetalle.setDescuentoVenta(descuentoVenta.setScale(2, BigDecimal.ROUND_HALF_UP));
                 presupuestoDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
                 if (estado) {

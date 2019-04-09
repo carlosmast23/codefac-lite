@@ -5,36 +5,20 @@
  */
 package ec.com.codesoft.codefaclite.servicios.data;
 
-import ec.com.codesoft.codefaclite.controlador.excel.Excel;
-import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
-import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author Carlos
  */
-public class PresupuestoData implements ExcelDatosInterface {
-    private String codigo;
+public class PresupuestoData {
     private String identificacion;
-    private String nombres;
-    private String descripcion;
-    private String fecha;
-    private String estado;
-    private String ordenTrabajo;
-    private BigDecimal total;
+    private String razonSocial;
+    private String producto;
+    private String cantidad;
+    private String subtotal;
+    private String descuento;
+    private String total;
 
     public PresupuestoData() {
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
     }
 
     public String getIdentificacion() {
@@ -45,71 +29,54 @@ public class PresupuestoData implements ExcelDatosInterface {
         this.identificacion = identificacion;
     }
 
-    public String getNombres() {
-        return nombres;
+    public String getRazonSocial() {
+        return razonSocial;
     }
 
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getProducto() {
+        return producto;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setProducto(String producto) {
+        this.producto = producto;
     }
 
-    public BigDecimal getTotal() {
+    public String getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(String cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public String getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(String subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public String getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(String descuento) {
+        this.descuento = descuento;
+    }
+
+    public String getTotal() {
         return total;
     }
 
-    public void setTotal(BigDecimal total) {
+    public void setTotal(String total) {
         this.total = total;
     }
-
-    public String getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public String getOrdenTrabajo() {
-        return ordenTrabajo;
-    }
-
-    public void setOrdenTrabajo(String ordenTrabajo) {
-        this.ordenTrabajo = ordenTrabajo;
-    }
     
-    
-    
-
-    @Override
-    public List<TipoDato> getDatos() {
-        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
         
-        tiposDatos.add(new TipoDato(this.codigo,Excel.TipoDataEnum.TEXTO));        
-        tiposDatos.add(new TipoDato(this.ordenTrabajo,Excel.TipoDataEnum.TEXTO));        
-        tiposDatos.add(new TipoDato(this.identificacion, Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.fecha, Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.estado, Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.nombres,Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.descripcion, Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.total, Excel.TipoDataEnum.NUMERO));        
-        return tiposDatos;
-    }
-    
     
 }

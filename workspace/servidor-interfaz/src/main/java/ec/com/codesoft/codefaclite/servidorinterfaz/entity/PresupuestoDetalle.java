@@ -167,6 +167,28 @@ public class PresupuestoDetalle implements Serializable
     public void setProductoProveedor(ProductoProveedor productoProveedor) {
         this.productoProveedor = productoProveedor;
     }
+    
+    /**
+     * ==========================> METODOS PERSONALIZADOS <====================
+     */
+    
+    /**
+     * Devuelve el valor de la cantidad por el valor unitario
+     * @return 
+     */
+    public BigDecimal calcularSubtotalCompra()
+    {
+        return cantidad.multiply(precioCompra);
+    }
+    
+    /**
+     * Devuelve el valor del subtotal - descuento
+     * @return 
+     */
+    public BigDecimal calcularTotalCompra()
+    {
+        return calcularSubtotalCompra().subtract(descuentoCompra);
+    }
 
     @Override
     public int hashCode() {

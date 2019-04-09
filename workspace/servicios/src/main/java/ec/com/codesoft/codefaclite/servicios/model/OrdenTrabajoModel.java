@@ -148,7 +148,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             parametros.put("cliente", this.ordenTrabajo.getCliente().getNombresCompletos());
             parametros.put("descripcion", this.ordenTrabajo.getDescripcion());
             //GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
-            parametros.put("estado", ordenTrabajo.getEstadoEnum());
+            parametros.put("estado",(ordenTrabajo.getEstadoEnum()!=null)?ordenTrabajo.getEstadoEnum().getNombre():"Sin estado");
             parametros.put("fechaIngreso", ""+ this.ordenTrabajo.getFechaIngreso());
             parametros.put("direccion", ""+ this.ordenTrabajo.getCliente().getEstablecimientos().get(0).getDireccion());
             parametros.put("telefonos", ""+ this.ordenTrabajo.getCliente().getEstablecimientos().get(0).getTelefonoCelular());
