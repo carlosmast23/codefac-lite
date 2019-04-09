@@ -600,6 +600,33 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             }
         });
         
+        
+        getjTextNombres().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                construirNombreSocial();
+            }
+        });
+        
+        getjTextApellidos().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                construirNombreSocial();
+            }
+        });
                 
         getjTextNombres().addFocusListener(new FocusAdapter() {
             @Override
