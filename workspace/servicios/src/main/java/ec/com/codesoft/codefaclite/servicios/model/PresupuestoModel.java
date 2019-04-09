@@ -740,14 +740,20 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 return;
             }
             
-            Presupuesto.EstadoEnum generalEnumEstado = Presupuesto.EstadoEnum.getByLetra(this.presupuesto.getEstado());
-            if(generalEnumEstado.equals(Presupuesto.EstadoEnum.FACTURADO))
+            //Presupuesto.EstadoEnum generalEnumEstado = Presupuesto.EstadoEnum.getByLetra(this.presupuesto.getEstado());
+            Presupuesto.EstadoEnum generalEnumEstado = presupuesto.getEstadoEnum();
+            
+            //Validacion solo para el modo editar
+            if(getEstadoFormularioEnum().equals(getEstadoFormularioEnum().EDITAR))
             {
-                DialogoCodefac.mensaje("Advertencia", "No se puede editar un presupuesto facturado", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            }
-            else if(generalEnumEstado.equals(Presupuesto.EstadoEnum.ANULADO))
-            {
-                DialogoCodefac.mensaje("Advertencia", "No se puede editar un presupuesto anulado o eliminado", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if(generalEnumEstado.equals(Presupuesto.EstadoEnum.FACTURADO))
+                {
+                    DialogoCodefac.mensaje("Advertencia", "No se puede editar un presupuesto facturado", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+                else if(generalEnumEstado.equals(Presupuesto.EstadoEnum.ANULADO))
+                {
+                    DialogoCodefac.mensaje("Advertencia", "No se puede editar un presupuesto anulado o eliminado", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
             }
             
             presupuestoDetalle.setProducto(this.producto);

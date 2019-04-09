@@ -147,8 +147,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             parametros.put("codigo",this.ordenTrabajo.getId().toString());
             parametros.put("cliente", this.ordenTrabajo.getCliente().getNombresCompletos());
             parametros.put("descripcion", this.ordenTrabajo.getDescripcion());
-            GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
-            parametros.put("estado", generalEnumEstado.getNombre());
+            //GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
+            parametros.put("estado", ordenTrabajo.getEstadoEnum());
             parametros.put("fechaIngreso", ""+ this.ordenTrabajo.getFechaIngreso());
             parametros.put("direccion", ""+ this.ordenTrabajo.getCliente().getEstablecimientos().get(0).getDireccion());
             parametros.put("telefonos", ""+ this.ordenTrabajo.getCliente().getEstablecimientos().get(0).getTelefonoCelular());
@@ -230,8 +230,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             cargarDatosCliente(ordenTrabajo.getCliente());
             getTxtDescripcion().setText(""+this.ordenTrabajo.getDescripcion());
             getCmbDateFechaIngreso().setDate(this.ordenTrabajo.getFechaIngreso());
-            GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
-            getCmbEstadoOrdenTrabajo().setSelectedItem(generalEnumEstado);
+            //GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
+            getCmbEstadoOrdenTrabajo().setSelectedItem(ordenTrabajo.getEstadoEnum());
             OrdenTrabajo.EstadoEnum generalEstadoEnum = this.ordenTrabajo.getEstadoEnum();
             getCmbEstadoDetallesOrdenTrabajo().setSelectedItem(generalEstadoEnum);
             mostrarDatosTabla();           
@@ -434,9 +434,9 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
          * Estado general de orden trabajo
          */
         getCmbEstadoOrdenTrabajo().removeAllItems();
-        for(GeneralEnumEstado generalEnumEstado : GeneralEnumEstado.values())
+        for(OrdenTrabajo.EstadoEnum enumEstado : OrdenTrabajo.EstadoEnum.values())
         {
-            getCmbEstadoOrdenTrabajo().addItem(generalEnumEstado);
+            getCmbEstadoOrdenTrabajo().addItem(enumEstado);
         }
         
         /**

@@ -23,6 +23,7 @@ public class PresupuestoData implements ExcelDatosInterface {
     private String descripcion;
     private String fecha;
     private String estado;
+    private String ordenTrabajo;
     private BigDecimal total;
 
     public PresupuestoData() {
@@ -83,6 +84,15 @@ public class PresupuestoData implements ExcelDatosInterface {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public String getOrdenTrabajo() {
+        return ordenTrabajo;
+    }
+
+    public void setOrdenTrabajo(String ordenTrabajo) {
+        this.ordenTrabajo = ordenTrabajo;
+    }
+    
     
     
 
@@ -91,6 +101,7 @@ public class PresupuestoData implements ExcelDatosInterface {
         List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
         
         tiposDatos.add(new TipoDato(this.codigo,Excel.TipoDataEnum.TEXTO));        
+        tiposDatos.add(new TipoDato(this.ordenTrabajo,Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.identificacion, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fecha, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.estado, Excel.TipoDataEnum.TEXTO));

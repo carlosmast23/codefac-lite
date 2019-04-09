@@ -196,6 +196,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
         for (Presupuesto presupuesto : lista) {
             PresupuestoData presupuestoData = new PresupuestoData();
             presupuestoData.setCodigo(presupuesto.getId().toString());
+            presupuestoData.setOrdenTrabajo(presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getId().toString());
             presupuestoData.setFecha(presupuesto.getFechaPresupuesto().toString());
             presupuestoData.setEstado(presupuesto.getEstadoEnum().getNombre());
             presupuestoData.setDescripcion(presupuesto.getDescripcion());
@@ -208,7 +209,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
     }
 
     private String[] getTituloTablaPantalla() {
-        String[] titulo = {"Código", "Identificación", "Fecha", "Estado", "Razon Social", "Descripción", "Total"};
+        String[] titulo = {"Código","Orden T.", "Identificación", "Fecha", "Estado", "Razon Social", "Descripción", "Total"};
         return titulo;
     }
 
@@ -221,6 +222,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
             for (PresupuestoData presupuestoData : presupuestosData) {
                 modeloTabla.addRow(new String[]{
                     presupuestoData.getCodigo(),
+                    presupuestoData.getOrdenTrabajo(),
                     presupuestoData.getIdentificacion(),
                     presupuestoData.getFecha(),
                     presupuestoData.getEstado(),

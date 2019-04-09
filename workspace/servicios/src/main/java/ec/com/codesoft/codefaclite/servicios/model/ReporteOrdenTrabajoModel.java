@@ -99,7 +99,7 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
             ordenTrabajoData.setCliente(ordenTrabajoDetalle.getOrdenTrabajo().getCliente().getNombresCompletos());
             ordenTrabajoData.setCodigo(ordenTrabajoDetalle.getOrdenTrabajo().getId().toString());
             ordenTrabajoData.setDetalleStr(ordenTrabajoDetalle.getTitulo());
-            ordenTrabajoData.setEstado(ordenTrabajoDetalle.getEstado());
+            ordenTrabajoData.setEstado(ordenTrabajoDetalle.getEstadoEnum().getNombre());
             ordenTrabajoData.setFechaIngreso(ordenTrabajoDetalle.getOrdenTrabajo().getFechaIngreso().toString());
             ordenTrabajoData.setIdentificacion(ordenTrabajoDetalle.getOrdenTrabajo().getCliente().getIdentificacion());     
             listData.add(ordenTrabajoData);

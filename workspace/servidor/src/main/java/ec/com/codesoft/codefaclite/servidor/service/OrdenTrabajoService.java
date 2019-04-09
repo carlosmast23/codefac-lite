@@ -79,48 +79,35 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
     }
 
     @Override
-    public OrdenTrabajo grabar(OrdenTrabajo ordenTrabajo) {
+    public OrdenTrabajo grabar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, java.rmi.RemoteException {
 
-        EntityTransaction transaction = entityManager.getTransaction();
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                OrdenTrabajo.EstadoEnum estadoEnum = OrdenTrabajo.EstadoEnum.GENERADO;
+                ordenTrabajo.setEstadoEnum(estadoEnum);
 
-        try {
-            transaction.begin();
-            OrdenTrabajo.EstadoEnum estadoEnum = OrdenTrabajo.EstadoEnum.GENERADO;
-            OrdenTrabajoDetalle.EstadoEnum estadoEnumDetalle = OrdenTrabajoDetalle.EstadoEnum.RECIBIDO;
-            /**
-             * Agregar estado por defecto a orden trabajo (GENERADO)
-             */
-            ordenTrabajo.setEstado(estadoEnum.getEstado());
-            for (OrdenTrabajoDetalle otd : ordenTrabajo.getDetalles()) {
-                /**
-                 * Agregar estado por defecto a detalle orden trabajo
-                 */
-                otd.setEstado(estadoEnumDetalle.getLetra());
-
-            }
-            entityManager.persist(ordenTrabajo);
-            entityManager.flush();
-            transaction.commit();
-
-            SmsService smsService = new SmsService();
-            for (OrdenTrabajoDetalle detalle : ordenTrabajo.getDetalles()) {
-                if (detalle.getEmpleado() != null) {
-                    if (detalle.getEmpleado().getTelefonoCelular() != null && !detalle.getEmpleado().getTelefonoCelular().equals("")) {
-                        smsService.enviarMensaje(detalle.getEmpleado().getTelefonoCelular(), "Nueva orden " + ordenTrabajo.getId() + "," + detalle.getTitulo() + ", Cliente:" + ordenTrabajo.getCliente().getNombreSimple());
-                    }
-
+                for (OrdenTrabajoDetalle ordenTrabajoDetalle : ordenTrabajo.getDetalles()) {
+                    /**
+                     * Agregar estado por defecto a detalle orden trabajo
+                     */
+                    ordenTrabajoDetalle.setEstadoEnum(OrdenTrabajoDetalle.EstadoEnum.RECIBIDO);
                 }
+                entityManager.persist(ordenTrabajo);
+
+                SmsService smsService = new SmsService();
+                for (OrdenTrabajoDetalle detalle : ordenTrabajo.getDetalles()) {
+                    if (detalle.getEmpleado() != null) {
+                        if (detalle.getEmpleado().getTelefonoCelular() != null && !detalle.getEmpleado().getTelefonoCelular().equals("")) {
+                            smsService.enviarMensaje(detalle.getEmpleado().getTelefonoCelular(), "Nueva orden " + ordenTrabajo.getId() + "," + detalle.getTitulo() + ", Cliente:" + ordenTrabajo.getCliente().getNombreSimple());
+                        }
+
+                    }
+                }
+
             }
-
-        } catch (DatabaseException ex) {
-            transaction.rollback();
-            Logger.getLogger(OrdenTrabajoService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(OrdenTrabajoService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(OrdenTrabajoService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+           
+        });
         return ordenTrabajo;
     }
     

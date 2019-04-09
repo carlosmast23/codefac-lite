@@ -113,7 +113,7 @@ public class OrdenTrabajoDetalle implements Serializable {
         return EstadoEnum.getEnum(estado);
     }
 
-    public void setEstado(EstadoEnum estadoEnum) {
+    public void setEstadoEnum(EstadoEnum estadoEnum) {
         this.estado = estadoEnum.getLetra();
     }
 
