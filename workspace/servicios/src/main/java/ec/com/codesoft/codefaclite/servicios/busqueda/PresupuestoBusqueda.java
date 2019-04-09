@@ -25,6 +25,7 @@ public class PresupuestoBusqueda implements InterfaceModelFind<Presupuesto>
         titulo.add(new ColumnaDialogo("Código",0.2d));
         titulo.add(new ColumnaDialogo("Descripción",0.3d));
         titulo.add(new ColumnaDialogo("Estado",0.15d));
+        titulo.add(new ColumnaDialogo("Total",0.10d));
         titulo.add(new ColumnaDialogo("Fecha ingreso",0.15d));
         titulo.add(new ColumnaDialogo("Fecha fin",0.15d));
         return titulo;
@@ -48,6 +49,7 @@ public class PresupuestoBusqueda implements InterfaceModelFind<Presupuesto>
         dato.add(p.getId());
         dato.add(p.getDescripcion());
         dato.add((p.getEstadoEnum()!=null)?p.getEstadoEnum().getNombre():"Sin estado");
+        dato.add(p.getTotalVenta());
         dato.add(p.getFechaPresupuesto());
         dato.add(p.getFechaValidez());
     }

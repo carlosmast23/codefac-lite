@@ -199,6 +199,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             
             }catch (ServicioCodefacException ex) {
                 Logger.getLogger(Presupuesto.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ExcepcionCodefacLite(ex.getMessage());
             }catch (RemoteException ex) {
                 Logger.getLogger(Presupuesto.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -611,15 +613,45 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         });
         getTxtDiasPresupuesto().addFocusListener(new FocusListener() {
              @Override
-             public void focusGained(FocusEvent e) {
-     
-             }
+             public void focusGained(FocusEvent e) {}
 
              @Override
              public void focusLost(FocusEvent e) {
                 calcularFechaProxima();
              }
          });
+        
+        getTxtSubtotalVentas().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {}
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                actualizarTotalVentaVista();
+            }
+        });
+       
+        getTxtDescuentoVentas().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                actualizarTotalVentaVista();
+            }
+        });
+        
+    }
+    
+    private void actualizarTotalVentaVista()
+    {
+        BigDecimal precioVenta= new BigDecimal(getTxtSubtotalVentas().getText());
+        BigDecimal descuentoVenta= new BigDecimal(getTxtDescuentoVentas().getText());
+        
+        BigDecimal total=precioVenta.subtract(descuentoVenta);
+        getLblTotalVenta().setText(total.toString());
+        
     }
     
     public void addListenerTablas()

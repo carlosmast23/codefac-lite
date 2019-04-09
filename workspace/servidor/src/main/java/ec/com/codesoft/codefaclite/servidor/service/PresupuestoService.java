@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,16 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     
     public Presupuesto grabar(Presupuesto entity) throws ServicioCodefacException
     {
+        
+        if(entity.getPresupuestoDetalles()==null || entity.getPresupuestoDetalles().size()==0)
+        {
+            throw new ServicioCodefacException("Error al grabar, no existen datos en el detalle");
+        }
+        
+        if(entity.getTotalVenta()==null || entity.getTotalVenta().compareTo(BigDecimal.ZERO)==0)
+        {
+            throw new ServicioCodefacException("Error al grabar, el total del presupuesto no puede ser 0");
+        }
         
         EntityTransaction transaccion=entityManager.getTransaction();
         try {
