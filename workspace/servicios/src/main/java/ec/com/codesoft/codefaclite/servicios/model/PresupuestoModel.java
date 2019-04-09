@@ -912,20 +912,22 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         for (PresupuestoDetalle detalle : detalles) {
             subtotalCompra = subtotalCompra.add(detalle.getPrecioCompra()).multiply(detalle.getCantidad());
             descuentoCompra = descuentoCompra.add(detalle.getDescuentoCompra());
-            subtotalVenta = subtotalVenta.add(detalle.getPrecioVenta()).multiply(detalle.getCantidad());
-            descuentoVenta = descuentoVenta.add(detalle.getDescuentoVenta());
+            //subtotalVenta = subtotalVenta.add(detalle.getPrecioVenta()).multiply(detalle.getCantidad());
+            //descuentoVenta = descuentoVenta.add(detalle.getDescuentoVenta());
             totalCompra = subtotalCompra.subtract(descuentoCompra);
-            totalVenta = subtotalVenta.subtract(descuentoVenta);
+            //totalVenta = subtotalVenta.subtract(descuentoVenta);
         }
         /**
          * Mostrar valores en pantalla
          */
         getLblSubtotalCompra().setText(subtotalCompra.toString());
         getLblDescuentoCompra().setText(descuentoCompra.toString());
-        getLblSubtotalVenta().setText(subtotalVenta.toString());
-        getLblSubtotaDescuentoVenta().setText(descuentoVenta.toString());
+        //getTxtSubtotalVentas().setText(subtotalVenta.toString());
+        //getTxtDescuentoVentas().setText(descuentoVenta.toString());
+        getTxtSubtotalVentas().setText(presupuesto.getTotalVenta().toString());
+        getTxtDescuentoVentas().setText(presupuesto.getDescuentoVenta().toString());        
         getLblTotalCompra().setText(totalCompra.toString());
-        getLblTotalVenta().setText(totalVenta.toString());
+        getLblTotalVenta().setText(presupuesto.getTotalVenta().subtract(presupuesto.getDescuentoVenta()).toString());
         
         /**
          * Cargar valores en Presupuesto}
@@ -952,9 +954,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     public void limpiarTotales()
     {
         this.getLblDescuentoCompra().setText("0.00");
-        this.getLblSubtotaDescuentoVenta().setText("0.00");
+        this.getTxtDescuentoVentas().setText("0");
         this.getLblSubtotalCompra().setText("0.00");
-        this.getLblSubtotalVenta().setText("0.00");
+        this.getTxtSubtotalVentas().setText("0");
         this.getLblTotalCompra().setText("0.00");
         this.getLblTotalVenta().setText("0.00");
     }
@@ -974,14 +976,21 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 DialogoCodefac.mensaje("Alerta", "Seleccione la fecha de ingreso para Orden Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
             }
             this.presupuesto.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+            
+            /**
+             * Grabar los totales de la venta
+             */
+            this.presupuesto.setTotalVenta(new BigDecimal(getTxtSubtotalVentas().getText()));
+            this.presupuesto.setDescuentoVenta(new BigDecimal(getTxtDescuentoVentas().getText()));
+            
     }
     
     public void setearValoresPresupuesto(BigDecimal descuentoCompra, BigDecimal descuentoVenta, BigDecimal totalCompra, BigDecimal totalVenta)
     {
         this.presupuesto.setDescuentoCompra(descuentoCompra);
-        this.presupuesto.setDescuentoVenta(descuentoVenta);
+        //this.presupuesto.setDescuentoVenta(descuentoVenta);
         this.presupuesto.setTotalCompra(totalCompra);
-        this.presupuesto.setTotalVenta(totalVenta);
+        //this.presupuesto.setTotalVenta(totalVenta);
     }
     
     public void ordenarDetallesEnFuncionDeCliente()
