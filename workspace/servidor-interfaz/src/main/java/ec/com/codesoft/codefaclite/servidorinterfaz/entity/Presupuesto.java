@@ -11,7 +11,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -312,6 +314,49 @@ public class Presupuesto implements Serializable
     public BigDecimal calcularTotalMenosDescuentos()
     {
         return totalVenta.subtract(descuentoVenta);
+    }
+    
+    public ResultadoTotales obtenerMapReporteTotales(String rucEmpresa)
+    {
+        BigDecimal totalProveedores=BigDecimal.ZERO;
+        BigDecimal totalProduccionInterna= BigDecimal.ZERO;
+        
+        if(getPresupuestoDetalles()!=null)
+        {
+            for (PresupuestoDetalle presupuestoDetalle : getPresupuestoDetalles()) {
+
+                //Si encuentra que el cliente es la misma empresa que esta usando el software lo registra como produccion interna
+                if(presupuestoDetalle.getPersona().getIdentificacion().equals(rucEmpresa))
+                {
+                    totalProduccionInterna=totalProduccionInterna.add(presupuestoDetalle.calcularTotalCompra());
+                }
+                else //Cualquier otro tipo de ingreso lo considero como de proveedoresv
+                {
+                    totalProveedores=totalProveedores.add(presupuestoDetalle.calcularTotalCompra());
+                }
+            }
+        }
+        ResultadoTotales resultado=new ResultadoTotales();
+        
+        resultado.valorPagarCliente=calcularTotalMenosDescuentos();
+        resultado.valoresProveedores=totalProveedores;
+        resultado.produccionInterna=totalProduccionInterna;
+
+        BigDecimal utilidad
+                = calcularTotalMenosDescuentos().
+                        subtract(totalProveedores).
+                        subtract(totalProduccionInterna);
+        
+        resultado.utilidad=utilidad;
+                
+        return resultado;
+    }
+    
+    public class ResultadoTotales {
+        public BigDecimal valorPagarCliente;
+        public BigDecimal valoresProveedores;
+        public BigDecimal produccionInterna;
+        public BigDecimal utilidad;
     }
 
     

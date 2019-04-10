@@ -42,10 +42,10 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     public Presupuesto grabar(Presupuesto entity) throws ServicioCodefacException
     {
         
-        if(entity.getPresupuestoDetalles()==null || entity.getPresupuestoDetalles().size()==0)
+        /*if(entity.getPresupuestoDetalles()==null || entity.getPresupuestoDetalles().size()==0)
         {
             throw new ServicioCodefacException("Error al grabar, no existen datos en el detalle");
-        }
+        }*/
         
         if(entity.getTotalVenta()==null || entity.getTotalVenta().compareTo(BigDecimal.ZERO)==0)
         {
@@ -63,11 +63,14 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
             /**
              * Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
              */ 
-            for (PresupuestoDetalle presupuestoDetalle : entity.getPresupuestoDetalles()) {
-                if (presupuestoDetalle.getProductoProveedor().getId() == null) {
-                    entityManager.persist(presupuestoDetalle.getProductoProveedor());
-                } else {
-                    entityManager.merge(presupuestoDetalle.getProductoProveedor());
+            if(entity.getPresupuestoDetalles()!=null)
+            {
+                for (PresupuestoDetalle presupuestoDetalle : entity.getPresupuestoDetalles()) {
+                    if (presupuestoDetalle.getProductoProveedor().getId() == null) {
+                        entityManager.persist(presupuestoDetalle.getProductoProveedor());
+                    } else {
+                        entityManager.merge(presupuestoDetalle.getProductoProveedor());
+                    }
                 }
             }
 

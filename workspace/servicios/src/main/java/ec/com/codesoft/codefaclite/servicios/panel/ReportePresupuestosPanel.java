@@ -56,6 +56,7 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
         btnLimpiarFechaInicial = new javax.swing.JButton();
         btnLimpiarFechaFinal = new javax.swing.JButton();
         chkTodosEstados = new javax.swing.JCheckBox();
+        chkReporteAgrupadoGastos = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -98,7 +99,7 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -196,6 +197,15 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(chkTodosEstados, gridBagConstraints);
 
+        chkReporteAgrupadoGastos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkReporteAgrupadoGastos.setText("Reporte Agrupado por Gastos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(chkReporteAgrupadoGastos, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -207,6 +217,7 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
     private javax.swing.JButton btnConsultar;
     private javax.swing.JButton btnLimpiarFechaFinal;
     private javax.swing.JButton btnLimpiarFechaInicial;
+    private javax.swing.JCheckBox chkReporteAgrupadoGastos;
     private javax.swing.JCheckBox chkTodosClientes;
     private javax.swing.JCheckBox chkTodosEstados;
     private javax.swing.JComboBox<Presupuesto.EstadoEnum> cmbEstado;
@@ -267,6 +278,12 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
     public JCheckBox getChkTodosEstados() {
         return chkTodosEstados;
     }
+
+    public JCheckBox getChkReporteAgrupadoGastos() {
+        return chkReporteAgrupadoGastos;
+    }
+    
+    
 
     
 }

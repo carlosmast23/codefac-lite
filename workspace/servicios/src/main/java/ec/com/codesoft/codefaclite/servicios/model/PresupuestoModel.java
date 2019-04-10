@@ -315,71 +315,35 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         parametros.put("total", presupuesto.calcularTotalMenosDescuentos().toString());
         
         //Calcular los totales
-        Map<TotalEnum,Object> totales=obtenerMapReporteTotales();
-        parametros.put("valorPagarCliente", totales.get(TotalEnum.VALOR_PAGAR_CLIENTE));
-        parametros.put("valorProveedores", totales.get(TotalEnum.VALORES_PROVEEDORES));
-        parametros.put("produccionInterna", totales.get(TotalEnum.PRODUCCION_INTERNO));
-        parametros.put("utilidad", totales.get(TotalEnum.UTILIDAD));
+        Presupuesto.ResultadoTotales totales=presupuesto.obtenerMapReporteTotales(session.getEmpresa().getIdentificacion());
         
+        parametros.put("valorPagarCliente", totales.valorPagarCliente.toString());
+        parametros.put("valorProveedores", totales.valoresProveedores.toString());
+        parametros.put("produccionInterna", totales.produccionInterna.toString());
+        parametros.put("utilidad", totales.utilidad.toString());
         
         return parametros ;
     }
     
-    private Map<TotalEnum,Object> obtenerMapReporteTotales()
-    {
-        BigDecimal totalProveedores=BigDecimal.ZERO;
-        BigDecimal totalProduccionInterna= BigDecimal.ZERO;
-        
-        for (PresupuestoDetalle presupuestoDetalle : presupuesto.getPresupuestoDetalles()) {
-            
-            //Si encuentra que el cliente es la misma empresa que esta usando el software lo registra como produccion interna
-            if(presupuestoDetalle.getPersona().getIdentificacion().equals(session.getEmpresa().getIdentificacion()))
-            {
-                totalProduccionInterna=totalProduccionInterna.add(presupuestoDetalle.calcularTotalCompra());
-            }
-            else //Cualquier otro tipo de ingreso lo considero como de proveedoresv
-            {
-                totalProveedores=totalProveedores.add(presupuestoDetalle.calcularTotalCompra());
-            }
-        }
-        
-        Map<TotalEnum,Object> mapTotalEnum=new HashMap<TotalEnum,Object>();
-        mapTotalEnum.put(TotalEnum.VALOR_PAGAR_CLIENTE,presupuesto.calcularTotalMenosDescuentos().toString());
-        mapTotalEnum.put(TotalEnum.VALORES_PROVEEDORES,totalProveedores.toString());
-        mapTotalEnum.put(TotalEnum.PRODUCCION_INTERNO,totalProduccionInterna.toString());
-
-        BigDecimal utilidad
-                = presupuesto.calcularTotalMenosDescuentos().
-                        subtract(totalProveedores).
-                        subtract(totalProduccionInterna);
-        
-        mapTotalEnum.put(TotalEnum.UTILIDAD,utilidad.toString());
-        
-                
-        return mapTotalEnum;
-    }
     
-    enum TotalEnum {
-        VALOR_PAGAR_CLIENTE,
-        VALORES_PROVEEDORES,
-        PRODUCCION_INTERNO,
-        UTILIDAD
-    }
         
     
     private List<PresupuestoData> obtenerDetallesReporte()
     {
         List<PresupuestoData> datos=new ArrayList<PresupuestoData>();
-        for (PresupuestoDetalle presupuestoDetalle : presupuesto.getPresupuestoDetalles()) {
-            PresupuestoData presupuestoData=new PresupuestoData();
-            presupuestoData.setCantidad(presupuestoDetalle.getCantidad().toString());
-            presupuestoData.setDescuento(presupuestoDetalle.getDescuentoCompra().toString());
-            presupuestoData.setIdentificacion(presupuestoDetalle.getPersona().getIdentificacion());
-            presupuestoData.setRazonSocial(presupuestoDetalle.getPersona().getRazonSocial());
-            presupuestoData.setProducto(presupuestoDetalle.getProductoProveedor().getProducto().getNombre());
-            presupuestoData.setSubtotal(presupuestoDetalle.calcularSubtotalCompra().toString());
-            presupuestoData.setTotal(presupuestoDetalle.calcularTotalCompra().toString());
-            datos.add(presupuestoData);
+        if(presupuesto.getPresupuestoDetalles()!=null)
+        {
+            for (PresupuestoDetalle presupuestoDetalle : presupuesto.getPresupuestoDetalles()) {
+                PresupuestoData presupuestoData=new PresupuestoData();
+                presupuestoData.setCantidad(presupuestoDetalle.getCantidad().toString());
+                presupuestoData.setDescuento(presupuestoDetalle.getDescuentoCompra().toString());
+                presupuestoData.setIdentificacion(presupuestoDetalle.getPersona().getIdentificacion());
+                presupuestoData.setRazonSocial(presupuestoDetalle.getPersona().getRazonSocial());
+                presupuestoData.setProducto(presupuestoDetalle.getProductoProveedor().getProducto().getNombre());
+                presupuestoData.setSubtotal(presupuestoDetalle.calcularSubtotalCompra().toString());
+                presupuestoData.setTotal(presupuestoDetalle.calcularTotalCompra().toString());
+                datos.add(presupuestoData);
+            }
         }
         return datos;
         
@@ -1070,10 +1034,14 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getLblDescuentoCompra().setText(descuentoCompra.toString());
         //getTxtSubtotalVentas().setText(subtotalVenta.toString());
         //getTxtDescuentoVentas().setText(descuentoVenta.toString());
-        getTxtSubtotalVentas().setText(presupuesto.getTotalVenta().toString());
-        getTxtDescuentoVentas().setText(presupuesto.getDescuentoVenta().toString());        
+        
+        BigDecimal subtotalVentas=(presupuesto.getTotalVenta()!=null)?presupuesto.getTotalVenta():BigDecimal.ZERO;
+        BigDecimal descuentoVentas=(presupuesto.getDescuentoVenta()!=null)?presupuesto.getDescuentoVenta():BigDecimal.ZERO;
+        
+        getTxtSubtotalVentas().setText(subtotalVentas.toString());
+        getTxtDescuentoVentas().setText(descuentoVentas.toString());        
         getLblTotalCompra().setText(totalCompra.toString());
-        getLblTotalVenta().setText(presupuesto.getTotalVenta().subtract(presupuesto.getDescuentoVenta()).toString());
+        getLblTotalVenta().setText(subtotalVentas.subtract(descuentoVentas).toString());
         
         /**
          * Cargar valores en Presupuesto}

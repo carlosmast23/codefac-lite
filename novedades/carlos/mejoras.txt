@@ -17,3 +17,4 @@ Ver como solucionar el problema que cuando no se actualizan los cambios el siste
 - Es recomedable agregar codigos en los productos por cada proveedor para poder hascer el ingreso de compras de forma automatica y relacionar el producto de venta con el de compra
 - En los proveedores seria bueno guardar los dias de credito para saber cuando ya se va a vencer la cartera de cada proveedor
 - En los proveedores ver si se vincula un numero de cuenta y los datos para poder emitir los cheques de pago (me imagino)
+- Al momento de editar un cliente si esta una razon social distinta de la genera no la edito

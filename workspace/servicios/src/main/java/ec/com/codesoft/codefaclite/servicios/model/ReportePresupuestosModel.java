@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -26,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +75,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
 
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        InputStream path = RecursoCodefac.JASPER_SERVICIO.getResourceInputStream("presupuestosReporte.jrxml");
+        InputStream path = RecursoCodefac.JASPER_SERVICIO.getResourceInputStream("presupuestosReporteHorizontal.jrxml");
 
         DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
             @Override
@@ -90,7 +92,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
 
             @Override
             public void pdf() {
-                ReporteCodefac.generarReporteInternalFramePlantilla(path, new HashMap(), presupuestosData, panelPadre, "Reporte Presupuestos");
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, new HashMap(), presupuestosData, panelPadre, "Reporte Presupuestos",OrientacionReporteEnum.HORIZONTAL);
             }
         });
     }
@@ -202,14 +204,21 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
             presupuestoData.setDescripcion(presupuesto.getDescripcion());
             presupuestoData.setIdentificacion(presupuesto.getPersona().getIdentificacion());
             presupuestoData.setNombres(presupuesto.getPersona().getRazonSocial());
-            presupuestoData.setTotal(presupuesto.getTotalCompra());
+            
+            Presupuesto.ResultadoTotales totales=presupuesto.obtenerMapReporteTotales(session.getEmpresa().getIdentificacion());
+            presupuestoData.setTotal(totales.valorPagarCliente);
+            presupuestoData.setCompras(totales.valoresProveedores);
+            presupuestoData.setProduccionInterna(totales.produccionInterna);
+            presupuestoData.setUtilidad(totales.utilidad);
+
             presupuestosData.add(presupuestoData);
         }
 
     }
+    
 
     private String[] getTituloTablaPantalla() {
-        String[] titulo = {"Código","Orden T.", "Identificación", "Fecha", "Estado", "Razon Social", "Descripción", "Total"};
+        String[] titulo = {"Código","Orden T.", "Identificación", "Fecha", "Estado", "Razon Social", "Descripción", "Ventas","Compras","Interno","Utilidad"};
         return titulo;
     }
 
@@ -228,7 +237,11 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
                     presupuestoData.getEstado(),
                     presupuestoData.getNombres(),
                     presupuestoData.getDescripcion(),
-                    presupuestoData.getTotal().toString(),});
+                    presupuestoData.getTotal().toString(),
+                    presupuestoData.getCompras().toString(),
+                    presupuestoData.getProduccionInterna().toString(),
+                    presupuestoData.getUtilidad().toString(),
+                });
 
             }
         }

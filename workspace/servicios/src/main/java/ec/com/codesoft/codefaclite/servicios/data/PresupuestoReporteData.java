@@ -25,6 +25,9 @@ public class PresupuestoReporteData implements ExcelDatosInterface {
     private String estado;
     private String ordenTrabajo;
     private BigDecimal total;
+    private BigDecimal compras;
+    private BigDecimal produccionInterna;
+    private BigDecimal utilidad;
 
     public PresupuestoReporteData() {
     }
@@ -92,6 +95,30 @@ public class PresupuestoReporteData implements ExcelDatosInterface {
     public void setOrdenTrabajo(String ordenTrabajo) {
         this.ordenTrabajo = ordenTrabajo;
     }
+
+    public BigDecimal getCompras() {
+        return compras;
+    }
+
+    public void setCompras(BigDecimal compras) {
+        this.compras = compras;
+    }
+
+    public BigDecimal getProduccionInterna() {
+        return produccionInterna;
+    }
+
+    public void setProduccionInterna(BigDecimal produccionInterna) {
+        this.produccionInterna = produccionInterna;
+    }
+
+    public BigDecimal getUtilidad() {
+        return utilidad;
+    }
+
+    public void setUtilidad(BigDecimal utilidad) {
+        this.utilidad = utilidad;
+    }
     
     
     
@@ -108,6 +135,10 @@ public class PresupuestoReporteData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.nombres,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.descripcion, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.total, Excel.TipoDataEnum.NUMERO));        
+        tiposDatos.add(new TipoDato(this.compras, Excel.TipoDataEnum.NUMERO));        
+        tiposDatos.add(new TipoDato(this.produccionInterna, Excel.TipoDataEnum.NUMERO));        
+        tiposDatos.add(new TipoDato(this.utilidad, Excel.TipoDataEnum.NUMERO));        
+        
         return tiposDatos;
     }
     
