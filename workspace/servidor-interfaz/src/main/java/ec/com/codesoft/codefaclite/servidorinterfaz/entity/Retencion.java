@@ -54,6 +54,9 @@ public class Retencion extends ComprobanteEntity implements Serializable {
     @Column(name = "PREIMPRESO_COMPRA")
     private String preimpresoDocumento;
 
+    /**
+     * Fecha emision documento corresponde a la fecha de la factura de compra
+     */
     @Column(name = "FECHA_EMISION_COMPRA")
     private Date fechaEmisionDocumento;
 

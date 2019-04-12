@@ -387,8 +387,9 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         compraDetalle.setPrecioUnitario(baseImponible);
         compraDetalle.setDescuento(BigDecimal.ZERO);
         ParametroCodefac parametroCodefacIva = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO);
+        
+        //TODO: Revisar si debe coger el valor del iva dela session o del codigo que le correspanda en alguna tabla segun el iva de la compra
         BigDecimal ivaActual = new BigDecimal(parametroCodefacIva.getValor().toString());
-
         BigDecimal valorSriRetencionIVA = baseImponible.multiply(ivaActual).multiply(sriRetencionIva.getPorcentaje()).divide(new BigDecimal("10000"), 2, BigDecimal.ROUND_HALF_UP);
         //compraDetalle.setValorSriRetencionIVA(baseImponible.multiply(sriRetencionIva.getPorcentaje()).divide(new BigDecimal("100"),BigDecimal.ROUND_HALF_UP));
         compraDetalle.setValorSriRetencionIVA(valorSriRetencionIVA);
@@ -400,12 +401,40 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         //Si solo se esta editado el objecto no se agrega nuevamente
         if(!actualizar)
         {
+            if(verificarRepetidoDetalle(compraDetalle))
+            {
+                if(!DialogoCodefac.dialogoPregunta("Advertencia","Ya existe un detalle similiar agregado , desea agregar de todos modos ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                {
+                    return ;
+                }
+            }
             retencion.getCompra().addDetalle(compraDetalle);
         }
 
         cargarDatosCompra();
-
         //retencion.getCompra().addDetalle(detalle);
+    }
+    
+    private boolean verificarRepetidoDetalle(CompraDetalle compraDetalle)
+    {
+        
+        if(retencion.getCompra()!=null && retencion.getCompra().getDetalles()!=null)
+        {
+            for (CompraDetalle compraDetalleTmp : retencion.getCompra().getDetalles()) {
+                
+                if (compraDetalle.getPrecioUnitario().compareTo(compraDetalleTmp.getPrecioUnitario()) == 0
+                        && compraDetalle.getDescuento().compareTo(compraDetalleTmp.getDescuento()) == 0
+                        && compraDetalle.getValorSriRetencionIVA().compareTo(compraDetalleTmp.getValorSriRetencionIVA()) == 0
+                        && compraDetalle.getValorSriRetencionRenta().compareTo(compraDetalleTmp.getValorSriRetencionRenta()) == 0
+                        && compraDetalle.getSriRetencionIva().equals(compraDetalleTmp.getSriRetencionIva())
+                        && compraDetalle.getSriRetencionRenta().equals(compraDetalleTmp.getSriRetencionRenta())) {
+                    return true;
+                }
+
+            }
+        }
+
+        return false;
     }
     
     //private void setearValorRetencion()
@@ -576,6 +605,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getLblNombreCliente().setText(retencion.getRazonSocial());
         getLblTelefonoCliente().setText(retencion.getTelefono());
         getLblDireccionCliente().setText(retencion.getDireccion());
+        getCmbFechaDocumento().setDate(retencion.getFechaEmisionDocumento());
         
         if(estadoFormulario.equals(ESTADO_EDITAR))
         {
