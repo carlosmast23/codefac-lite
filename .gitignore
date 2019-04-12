@@ -24,6 +24,7 @@ nb-configuration.xml
 /workspace/main/DB/
 /workspace/main/Derby2.DB/
 /workspace/main/Derby2.DB.bk/
+/workspace/main/Derby2.DB.bk2/
 #excluir archivo temporal
 /workspace/main/tmp/
 
@@ -53,6 +54,7 @@ workspace/main/codefac.ini
 /workspace/main/updater.jar
 /workspace/main/key.codefac
 /workspace/main/key.codefac.bk
+/workspace/main/key.codefac.bk2
 /workspace/updaterCodefac/target/
 
 #Excluir archivos del manual para generar el instalador

@@ -279,8 +279,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         UtilidadesSwingX.placeHolder("Base Imponible",getTxtBaseImponible());
         //UtilidadesSwingX.placeHolder("Preimpreso Compra",getTxtPreimpreso());
         
-        //getTxtPreimpreso().setText("");
-        //getCmbFechaDocumento().setDate();
+
         getTxtProveedor().setText("");
         getTxtBaseImponible().setText("");
         getCmbRetencionIva().setSelectedIndex(0);
@@ -411,7 +410,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
             retencion.getCompra().addDetalle(compraDetalle);
         }
 
-        cargarDatosCompra();
+        cargarTablaRetencion();
         //retencion.getCompra().addDetalle(detalle);
     }
     
@@ -605,6 +604,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getLblNombreCliente().setText(retencion.getRazonSocial());
         getLblTelefonoCliente().setText(retencion.getTelefono());
         getLblDireccionCliente().setText(retencion.getDireccion());
+        
         getCmbFechaDocumento().setDate(retencion.getFechaEmisionDocumento());
         
         if(estadoFormulario.equals(ESTADO_EDITAR))

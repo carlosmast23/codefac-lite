@@ -29,6 +29,7 @@ public class CompraDataReporte  implements ExcelDatosInterface
     private String descuento12;
     private String iva;
     private String total;
+    private String autorizacion;
 
     public CompraDataReporte() {
        
@@ -130,11 +131,22 @@ public class CompraDataReporte  implements ExcelDatosInterface
         this.total = total;
     }
 
+    public String getAutorizacion() {
+        return autorizacion;
+    }
+
+    public void setAutorizacion(String autorizacion) {
+        this.autorizacion = autorizacion;
+    }
+    
+    
+
     @Override
     public List<TipoDato> getDatos() 
     {
         List<TipoDato> tiposDatos = new ArrayList<>();
         tiposDatos.add(new TipoDato(this.preimpreso,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.autorizacion,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.identificacion,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombre,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fecha,Excel.TipoDataEnum.FECHA));

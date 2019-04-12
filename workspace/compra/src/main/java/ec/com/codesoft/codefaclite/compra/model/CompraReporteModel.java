@@ -177,7 +177,7 @@ public class CompraReporteModel extends CompraReportePanel {
                             }
                             else 
                             {
-                                String[] nombreCabeceras = {"Preimpreso", "Identificación", "Nombre", "Fecha", "Subtotal12", "Sutotal0", "Descuento","IVA","Total"};
+                                String[] nombreCabeceras = {"Preimpreso","Autorización", "Identificación", "Nombre", "Fecha", "Subtotal12", "Sutotal0", "Descuento","IVA","Total"};
                                 excel.gestionarIngresoInformacionExcel(nombreCabeceras, compraDataReportes(compras));
                             }                           
                             
@@ -223,6 +223,7 @@ public class CompraReporteModel extends CompraReportePanel {
         for (Compra compra : compras) {
             CompraDataReporte cdr = new CompraDataReporte();
             cdr.setPreimpreso(compra.getPreimpreso());
+            cdr.setAutorizacion(compra.getAutorizacion());
             cdr.setIdentificacion(compra.getProveedor().getIdentificacion());
             cdr.setNombre(compra.getProveedor().getRazonSocial());
             cdr.setFecha(compra.getFechaFactura() + "");

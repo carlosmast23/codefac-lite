@@ -11,4 +11,5 @@ PeriodoModel
 PerfilUsuarioModel
 PuntoEmisionModel
 SucursalModel
-
+en las compras no me parece que establece la forma de pago lo cual es necesario para el ats
+en el dato del ats numsucursales se debe poner de cuantas sucursales estoy generando el ats

@@ -62,9 +62,9 @@ public class ServicioSri {
     /**
      * Numeros de intento para esperar que el sri me devuelva la consulta de autorizacion de un documentos
      */
-    private static final Long INTENTOS_AUTORIZACION =70L; 
+    private static final Long INTENTOS_AUTORIZACION =10L; //Esperar maximo 10 segundos 
     
-    private static final Long INTENTOS_AUTORIZACION_LOTE = 50L;
+    private static final Long INTENTOS_AUTORIZACION_LOTE = 30L;
     
     //private String uri="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
     private String uri_recepcion;
@@ -383,8 +383,9 @@ public class ServicioSri {
             return null;
         
         try {
-            
-            JAXBContext jaxbContext = JAXBContext.newInstance(ComprobanteEnum.FACTURA.getClase());
+            ClaveAcceso claveAcceso=new ClaveAcceso(autorizacion.getNumeroAutorizacion());
+            //JAXBContext jaxbContext = JAXBContext.newInstance(ComprobanteEnum.FACTURA.getClase());
+            JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getTipoComprobante().getClase());
             String comprobanteStr=autorizacion.getComprobante();
             //Quitar etiquetas de cdata
             comprobanteStr=comprobanteStr.replaceAll("<!\\[CDATA\\[","");

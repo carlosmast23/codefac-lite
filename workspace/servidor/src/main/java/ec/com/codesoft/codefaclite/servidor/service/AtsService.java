@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -70,7 +71,11 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         ats.setCodigoOperativo("IVA"); //Todo: Por el momento dejo en IVA como en el ejemplo del SRI
         ats.setIdInformante(empresa.getIdentificacion());
         ats.setMes(formatearMes(mes.getNumero()));
-        ats.setNumEstabRuc(numeroSucursal);
+        //Todo: Es el numero de establecimientos activos que voy a realizar el ats
+        SucursalService sucursalService=new SucursalService();
+        List<Sucursal> sucursales=sucursalService.consultarActivosPorEmpresa(empresa);
+        //ats.setNumEstabRuc(UtilidadesTextos.llenarCarateresIzquierda(sucursales.size()+"",3,"0")); 
+        ats.setNumEstabRuc("001");  //Todo: por el momento dejo seteado
         ats.setRazonSocial(empresa.getRazonSocial());
         ats.setTipoIDInformante("R"); //Todo: Ver que opciones existen para ese campo
         
@@ -239,6 +244,19 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 retencionesAts.add(retencionRentaAts);
             }
             compraAts.setDetalleAir(retencionesAts);
+            
+            //solo agregar las formas de pago cuando la base imponible superio los 1000
+            //la suma de las BASES IMPONIBLES y los MONTOS de IVA e ICE exceden los USD. 1000.00.
+            if(compraAts.getBaseImpGrav()
+                    .add(compraAts.getBaseImpExe())
+                    .add(compraAts.getBaseImponible())
+                    .add(compraAts.getBaseNoGraIva())
+                    .add(compraAts.getMontoIva())
+                    .add(compraAts.getMontoIce())
+                    .compareTo(new BigDecimal("1000"))>0)
+            {
+                compraAts.setFormasDePago(formasPago);
+            }
             
             //TODO Falta completar los detalles de los impuestos a la renta
             

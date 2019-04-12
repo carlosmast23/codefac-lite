@@ -99,6 +99,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import org.jfree.util.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -230,6 +231,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             @Override
             public void datosAutorizados(List<Autorizacion> autorizaciones) {
                 //TODOS: Lista de los documentos autorizados
+                
+                for (Autorizacion autorizacion: autorizaciones) {
+                    setearDatosComprobanteAutorizado(autorizacion);                                        
+                }
+                
             }
 
             @Override
@@ -260,7 +266,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             public void termino(List<Autorizacion> autorizaciones) {
                 try {
                     //Cambiar el estado de los comprabantes que si fueron autorizados
-                    cambiarEstadoLoteAutorizaciones(autorizaciones,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);               
+                    //cambiarEstadoLoteAutorizaciones(autorizaciones,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
                     if(existeConexionRemota)
                     {
                         callbackClientObject.termino(castDatosComprobanteElectronico(autorizaciones,comprobanteElectronico.getServicioSri()));
@@ -275,7 +281,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         comprobanteElectronico.procesar(true);
         return true;
     }
-    
+    /*
     private void cambiarEstadoLoteAutorizaciones(List<Autorizacion> autorizaciones,ComprobanteEntity.ComprobanteEnumEstado enumEstado)
     {
 
@@ -322,6 +328,10 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                                     comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
                                     entityManager.merge(comprobante);
                                 }
+                                else
+                                {
+                                    LOG.log(Level.SEVERE,"El comprobante "+claveAcceso.getTipoComprobante().getNombre()+" con clave de acceso "+claveAcceso+"No existe para cambiar el estado a Autorizados");
+                                }
                                 
                             }
 
@@ -337,7 +347,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
+    }*/
     
     private Empresa obtenerEmpresaPorClaveAcceso(String claveAcceso) throws RemoteException
     {
@@ -511,30 +521,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
             @Override
             public void autorizado(Autorizacion documentoAutorizado) {
-                    try {
-                        ClaveAcceso clave=new ClaveAcceso(documentoAutorizado.getNumeroAutorizacion());
-                        ComprobanteEntity comprobante=obtenerComprobantePorClaveAcceso(clave);
-                        if(comprobante!=null)
-                        {
-                            comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-                            setearDatosAutorizacionComprobante(comprobante, documentoAutorizado);
-                            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                                @Override
-                                public void transaccion() throws ServicioCodefacException, RemoteException {
-                                    entityManager.merge(comprobante);
-                                }
-                            });
-                            
-                        }
-                        else
-                        {
-                            LOG.log(Level.SEVERE,"Error se autorizo el comprobante pero no se encuentra el registro; "+documentoAutorizado.getNumeroAutorizacion());
-                        }
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
-                        LOG.log(Level.SEVERE,"Error: "+ex.getMessage()+" \n Clave Acceso:"+documentoAutorizado.getNumeroAutorizacion());
-                    }
+                    setearDatosComprobanteAutorizado(documentoAutorizado);
             }
             });
         //}
@@ -561,6 +548,31 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             //comprobanteElectronico.getAlertas();
         //}
         return true;
+    }
+    
+    private void setearDatosComprobanteAutorizado(Autorizacion documentoAutorizado )
+    {
+        try {
+            ClaveAcceso clave = new ClaveAcceso(documentoAutorizado.getNumeroAutorizacion());
+            ComprobanteEntity comprobante = obtenerComprobantePorClaveAcceso(clave);
+            if (comprobante != null) {
+                //comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                setearDatosAutorizacionComprobante(comprobante, documentoAutorizado);
+                ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                    @Override
+                    public void transaccion() throws ServicioCodefacException, RemoteException {
+                        entityManager.merge(comprobante);
+                    }
+                });
+
+            } else {
+                LOG.log(Level.SEVERE, "Error se autorizo el comprobante pero no se encuentra el registro; " + documentoAutorizado.getNumeroAutorizacion());
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            LOG.log(Level.SEVERE, "Error: " + ex.getMessage() + " \n Clave Acceso:" + documentoAutorizado.getNumeroAutorizacion());
+        }
     }
     
     /**
@@ -1141,18 +1153,18 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     private void setearDatosAutorizacionComprobante(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobanteOriginal,Autorizacion documentoAutorizado)
     {
-        
-        XMLGregorianCalendar fechaXml = documentoAutorizado.getFechaAutorizacion();
-        java.sql.Date fechaAutorizacion = new java.sql.Date(fechaXml.toGregorianCalendar().getTime().getTime());        
-        comprobanteOriginal.setFechaAutorizacionSri(fechaAutorizacion);
-        
-        ComprobanteEntity.TipoAmbienteEnum enumAmbiente=ComprobanteEntity.TipoAmbienteEnum.buscarPorNombreSri(documentoAutorizado.getAmbiente());
-        if(enumAmbiente!=null)
+        if(documentoAutorizado.getEstado().equals("AUTORIZADO"))
         {
-            comprobanteOriginal.setTipoAmbiente(enumAmbiente.getLetra());
+            comprobanteOriginal.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
+            XMLGregorianCalendar fechaXml = documentoAutorizado.getFechaAutorizacion();
+            java.sql.Date fechaAutorizacion = new java.sql.Date(fechaXml.toGregorianCalendar().getTime().getTime());
+            comprobanteOriginal.setFechaAutorizacionSri(fechaAutorizacion);
+
+            ComprobanteEntity.TipoAmbienteEnum enumAmbiente = ComprobanteEntity.TipoAmbienteEnum.buscarPorNombreSri(documentoAutorizado.getAmbiente());
+            if (enumAmbiente != null) {
+                comprobanteOriginal.setTipoAmbiente(enumAmbiente.getLetra());
+            }
         }
-        
-        
         
     }
     

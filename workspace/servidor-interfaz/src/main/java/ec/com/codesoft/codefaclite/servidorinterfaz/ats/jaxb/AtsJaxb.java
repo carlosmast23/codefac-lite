@@ -40,6 +40,9 @@ public class AtsJaxb implements Serializable
     private String razonSocial;
     private Integer anio;
     private String mes;
+    /**
+     * Corresponde al numero de establecimientos activos que voy a realizar el ats
+     */
     private String numEstabRuc;
     private BigDecimal totalVentas;
     private String codigoOperativo;

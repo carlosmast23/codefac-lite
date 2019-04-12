@@ -210,6 +210,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                 dialogo.setClaveAcceso(comprobante.getComprobante().getClaveAcceso());      
                 
                 dialogo.setTipoComprobante(comprobante.getComprobante().getCodigoDocumentoEnum().getNombre());
+                
                 if(comprobante.getComprobante().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
                 {
                     dialogo.setFechaAutorizacion("Comprobante no esta autorizado en el SRI");
