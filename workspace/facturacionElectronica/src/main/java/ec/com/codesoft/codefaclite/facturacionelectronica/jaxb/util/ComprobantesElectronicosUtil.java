@@ -38,6 +38,15 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 
@@ -59,7 +68,8 @@ public abstract class ComprobantesElectronicosUtil {
         try {
             //file.createNewFile();
             fw = new FileWriter(file);
-            fw.write(xml.toString());
+            //fw.write(xml.toString());
+            fw.write(new String(xml.toString().getBytes("UTF-8")));
             fw.close();
         } catch (IOException ex) {
             Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
@@ -141,28 +151,59 @@ public abstract class ComprobantesElectronicosUtil {
             Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static String castDocumentToString(Document doc)
+    {
+        try {
+            DocumentBuilderFactory domFact = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = domFact.newDocumentBuilder();
+            
+            DOMSource domSource = new DOMSource(doc);
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.transform(domSource, result);
+            return writer.toString();
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     public static void generarArchivoXml(Document documento, String path)
             throws Exception {
-        File file = new File(path);
+        /**
+         * @Fecha 16/04/2019
+         * Cambiado forma de grabar porque generaba problemas con caracteres especiales , tildes eñes comas
+         * Todo: Ver si eliminar la clase de UtilidadTratarNodo porque parece que ya no utilizo
+         */
+        String xml=castDocumentToString(documento);
+        generarArchivoXml(xml, path);
+        
+        /*File file = new File(path);
         //crear toda la ruta si no existe
         if (!file.exists()) {
             file.getParentFile().mkdirs();
             //file.mkdir();
         }
 
+        
         FileOutputStream flujoSalida = null;
         try {
             try {
                 flujoSalida = new FileOutputStream(path);
-                UtilidadTratarNodo.saveDocumentToOutputStream(documento,
-                        flujoSalida, true);
+                UtilidadTratarNodo.saveDocumentToOutputStream(documento,flujoSalida, true);
             } finally {
                 flujoSalida.close();
             }
         } catch (FileNotFoundException e) {
             throw new Exception("Error al salvar el documento");
-        }
+        }*/
     }
 
     public static boolean eliminarArchivo(String rutaArchivo) {

@@ -1551,7 +1551,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Descripcion",grupo = "detalles")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "[^\\n]*",nombre = "Descripcion",grupo = "detalles")
     public JTextField getTxtDescripcion() {
         return txtDescripcion;
     }
