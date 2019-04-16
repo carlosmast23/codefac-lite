@@ -388,6 +388,65 @@ public class Persona implements Serializable, Comparable<Persona> {
     }
     
     
+    /***
+     * ==================> Validadores de los campos <======================
+     * TODO: Terminar de hacer la validacion para casos mas complicados
+     * @return 
+     */
+    public ValidacionCedulaEnum validarIdentificacion()
+    {
+        if(identificacion==null)
+        {
+            return ValidacionCedulaEnum.DATO_NO_INGRESADO;
+        }
+        
+        if(identificacion.length()==0)
+        {
+            return ValidacionCedulaEnum.DATO_VACIO;
+        }
+        
+        if(identificacion.length()!=10 && identificacion.length()!=13)
+        {
+            return ValidacionCedulaEnum.TAMANIO_INCORRECTO;
+        }
+        
+        try
+        {
+            new BigDecimal(identificacion);
+        }catch(Exception e)
+        {
+            return ValidacionCedulaEnum.FORMATO_INCORRECTO;
+        }
+        
+        return ValidacionCedulaEnum.VALIDACION_CORRECTA;
+    }
+    
+    public enum ValidacionCedulaEnum
+    {
+        DATO_NO_INGRESADO("Identificación sin ingresar"),
+        DATO_VACIO("Identificación vacia"),
+        TAMANIO_INCORRECTO("El tamaño de la Identificación es incorrecta"),
+        FORMATO_INCORRECTO("La Identificación tiene caracteres no permitidos"),
+        VALIDACION_CORRECTA;
+        
+        private String mensaje;
+
+        private ValidacionCedulaEnum() {
+            
+        }
+        
+        private ValidacionCedulaEnum(String mensaje) {
+            this.mensaje = mensaje;
+        }
+
+        public String getMensaje() {
+            return mensaje;
+        }
+        
+        
+        
+    }
+    
 
     @Override
     public int hashCode() {

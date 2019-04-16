@@ -955,6 +955,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
         }
+        
+        if(!factura.getCliente().validarIdentificacion().equals(Persona.ValidacionCedulaEnum.VALIDACION_CORRECTA))
+        {
+            DialogoCodefac.mensaje("Error con el cliente", factura.getCliente().validarIdentificacion().getMensaje(), DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Error con la identificacion del cliente seleccionado");
+        }
 
         if (factura.getDetalles().isEmpty()) {
             DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
