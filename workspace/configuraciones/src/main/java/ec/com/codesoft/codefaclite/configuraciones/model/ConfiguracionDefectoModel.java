@@ -274,6 +274,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
                 getCmbRetencionRenta().setSelectedItem(null);
             }
             
+            //Nuevo parametro para poder imprimir con los tickets de la impresora
+            ParametroCodefac parametroImpresoraTicketVenta = parametrosTodos.get(ParametroCodefac.IMPRESORA_TICKETS_VENTAS);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroImpresoraTicketVenta != null) ? parametroImpresoraTicketVenta.getValor() : null);
+            getChkImpresoraTickets().setSelected((enumSiNo!=null)?enumSiNo.getBool():false);
+            
 
         } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -344,6 +349,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         SriRetencionRenta sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
         agregarParametro(ParametroCodefac.VALOR_DEFECTO_RETENCION_RENTA, (sriRetencionRenta != null) ? sriRetencionRenta.getId().toString(): "");
         agregarParametroEditar(ParametroCodefac.VALOR_DEFECTO_RETENCION_RENTA);
+        
+        enumSiNo = (EnumSiNo) EnumSiNo.getEnumByBoolean(getChkImpresoraTickets().isSelected());
+        agregarParametro(ParametroCodefac.IMPRESORA_TICKETS_VENTAS, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.IMPRESORA_TICKETS_VENTAS);
 
     }
     
@@ -378,5 +387,6 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
 
 }

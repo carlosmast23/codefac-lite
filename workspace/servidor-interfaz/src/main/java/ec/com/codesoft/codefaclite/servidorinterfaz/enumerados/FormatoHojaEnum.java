@@ -11,7 +11,10 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
  */
 public enum FormatoHojaEnum {
     
-    A5("A5"),A4("A4"),A3("A3");
+    A5("A5"),
+    A4("A4"),
+    A3("A3"),
+    TICKET("TICKET");
     
     private String letra;    
 

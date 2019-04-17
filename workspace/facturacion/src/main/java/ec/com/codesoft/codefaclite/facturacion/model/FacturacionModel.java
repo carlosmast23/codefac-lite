@@ -2983,21 +2983,27 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public  void imprimirComprobanteVenta(Factura facturaProcesando)
     {
 
-        //if(DialogoCodefac.dialogoPregunta("Pregunta","Desea imprimir un comprobante de la venta",DialogoCodefac.MENSAJE_CORRECTO))
-        //{
-            List<ComprobanteVentaData> dataReporte=getDetalleDataReporte(facturaProcesando);
-            
-            //map de los parametros faltantes
-            Map<String,Object> mapParametros=getMapParametrosReporte(facturaProcesando);
-            
-            
-            InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
-            
-           ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ",OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.A5);
-            
-        //}
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);
+        Map<String, Object> mapParametros = getMapParametrosReporte(facturaProcesando);
+        InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
         
-        
+        //TODO: Ver si esta parte se puede mejorar para imprimir
+        ParametroCodefac parametroCodefac = session.getParametrosCodefac().get(ParametroCodefac.IMPRESORA_TICKETS_VENTAS);
+        FormatoHojaEnum formatoEnum=FormatoHojaEnum.A5;
+        if (parametroCodefac !=null) 
+        {
+            if(parametroCodefac.getValor()!=null)
+            {
+                EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(parametroCodefac.getValor());
+                if(enumSiNo!=null && enumSiNo.getBool())
+                {
+                    formatoEnum=FormatoHojaEnum.TICKET;
+                    path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
+                }
+            }
+        }
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
+
     }
 
     @Override

@@ -2811,6 +2811,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             switch(formatoReporte)
             {
+                case TICKET:
+                        nombreReporteEncabezado = "encabezadoTicket.jrxml";
+                        nombreReportePiePagina = "pie_paginaTicket.jrxml";
+                        break;
+                
                 case A5:
                     switch (orientacionEnum) {
                         case HORIZONTAL:

@@ -86,6 +86,8 @@ public class ParametroCodefac implements Serializable {
     public static final String VALOR_DEFECTO_RETENCION_IVA = "defecto_retencion_iva";
     public static final String VALOR_DEFECTO_RETENCION_RENTA = "defecto_retencion_renta";
     
+    public static final String IMPRESORA_TICKETS_VENTAS = "impresora_tickets_venta";
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
