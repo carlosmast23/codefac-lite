@@ -99,7 +99,13 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
                 for (OrdenTrabajoDetalle detalle : ordenTrabajo.getDetalles()) {
                     if (detalle.getEmpleado() != null) {
                         if (detalle.getEmpleado().getTelefonoCelular() != null && !detalle.getEmpleado().getTelefonoCelular().equals("")) {
-                            smsService.enviarMensaje(detalle.getEmpleado().getTelefonoCelular(), "Nueva orden " + ordenTrabajo.getId() + "," + detalle.getTitulo() + ", Cliente:" + ordenTrabajo.getCliente().getNombreSimple());
+                            try
+                            {
+                                smsService.enviarMensaje(detalle.getEmpleado().getTelefonoCelular(), "Nueva orden " + ordenTrabajo.getId() + "," + detalle.getTitulo() + ", Cliente:" + ordenTrabajo.getCliente().getNombreSimple());
+                            }catch(ServicioCodefacException se)
+                            {
+                                se.printStackTrace();
+                            }
                         }
 
                     }
