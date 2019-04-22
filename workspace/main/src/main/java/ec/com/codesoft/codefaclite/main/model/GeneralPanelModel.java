@@ -202,6 +202,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      * Map que me permite tener grabadas las pantallas abiertas
      */
     private Map<GeneralPanelInterface,JMenuItem> mapPantallaAbiertas;
+    
+    /**
+     * Variable para tener una lista de los iconos del sistema
+     */
+    private List<IconoPanel> listaIconos;
+    
    
     public GeneralPanelModel() 
     {
@@ -272,8 +278,50 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         //TODO: Falta implementar la funcionalidad para estos botones
         JPopupMenu popup = new JPopupMenu();
+        JMenuItem jmenuItemOrdenarDefecto=new JMenuItem("Ordenar por defecto");
+        
         popup.add(new JMenuItem("Nuevo"));
         popup.add(new JMenuItem("Actualizar"));
+        popup.add(jmenuItemOrdenarDefecto);
+        
+        jmenuItemOrdenarDefecto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                widgetVentasDiarias.setLocation(120,120);
+                if(listaIconos!=null)
+                {
+                    for (IconoPanel iconoPanel : listaIconos) {
+                        switch(iconoPanel.getTitulo())
+                        {
+                            case "Factura":
+                                iconoPanel.setLocation(30,50);
+                                break;
+                                
+                                case "Producto":
+                                iconoPanel.setLocation(30,250);
+                                break;
+                                
+                                case "Calculadora":
+                                iconoPanel.setLocation(30,350);
+                                break;
+                                
+                                case "Cliente":
+                                iconoPanel.setLocation(30,150);
+                                break;
+                                
+                                case "Configurar":
+                                iconoPanel.setLocation(30,450);
+                                break;
+                        }
+                        
+                    }   
+                }
+                
+                
+            }
+        });
+        
+        
         //popup.add(new JMenuItem("tres"));
         
         getjDesktopPane1().setComponentPopupMenu(popup);
@@ -2288,12 +2336,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             /**
              * ===============> FIN WIDGET NOTIFICACIONES CODEFAC <=============
              */
+            listaIconos=new ArrayList<IconoPanel>();
+            
             mapBuscar = new HashMap<>();
             mapBuscar.put("nombre", FacturacionModel.class.getName());
             url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("factura.png");
             IconoPanel iconoFactura=new IconoPanel("Factura",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);
             iconoFactura.addListenerIcono(new ListenerIcono(FacturacionModel.class,true));
             getjDesktopPane1().add(iconoFactura);
+            listaIconos.add(iconoFactura);
             
             
             mapBuscar=new HashMap<>();
@@ -2302,6 +2353,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             IconoPanel iconoPanel=new IconoPanel("Producto",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);
             iconoPanel.addListenerIcono(new ListenerIcono(ProductoModel.class, true));
             getjDesktopPane1().add(iconoPanel);
+            listaIconos.add(iconoPanel);
             
             
             mapBuscar = new HashMap<>();
@@ -2310,6 +2362,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             IconoPanel iconoCalcu=new IconoPanel("Calculadora",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);
             iconoCalcu.addListenerIcono(new ListenerIcono(CalculadoraModel.class,false));
             getjDesktopPane1().add(iconoCalcu);
+            listaIconos.add(iconoCalcu);
             
             
             
@@ -2319,6 +2372,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             IconoPanel iconoCliente=new IconoPanel("Cliente",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);
             iconoCliente.addListenerIcono(new ListenerIcono(ClienteModel.class,true));
             getjDesktopPane1().add(iconoCliente);
+            listaIconos.add(iconoCliente);
             
             
             mapBuscar = new HashMap<>();
@@ -2327,6 +2381,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             IconoPanel iconoConfig=new IconoPanel("Configurar",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);
             iconoConfig.addListenerIcono(new ListenerIcono(ComprobantesConfiguracionModel.class,true));
             getjDesktopPane1().add(iconoConfig);
+            listaIconos.add(iconoConfig);
         } catch (RemoteException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {

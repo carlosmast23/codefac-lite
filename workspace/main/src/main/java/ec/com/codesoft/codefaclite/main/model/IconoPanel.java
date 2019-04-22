@@ -140,6 +140,11 @@ public class IconoPanel extends JPanel{
         this.iconoInterfaz=iconoInterfaz;
     }
     
+    public String getTitulo()
+    {
+        return lblTitulo.getText();
+    }
+    
     
     
 }
