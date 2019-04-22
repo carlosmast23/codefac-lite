@@ -294,23 +294,23 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         switch(iconoPanel.getTitulo())
                         {
                             case "Factura":
-                                iconoPanel.setLocation(30,50);
+                                iconoPanel.setNuevaPosicion(30, 50);
                                 break;
                                 
                                 case "Producto":
-                                iconoPanel.setLocation(30,250);
+                                iconoPanel.setNuevaPosicion(30,250);
                                 break;
                                 
                                 case "Calculadora":
-                                iconoPanel.setLocation(30,350);
+                                iconoPanel.setNuevaPosicion(30,350);
                                 break;
                                 
                                 case "Cliente":
-                                iconoPanel.setLocation(30,150);
+                                iconoPanel.setNuevaPosicion(30,150);
                                 break;
                                 
                                 case "Configurar":
-                                iconoPanel.setLocation(30,450);
+                                iconoPanel.setNuevaPosicion(30,450);
                                 break;
                         }
                         
@@ -2209,6 +2209,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         return false;
     }
+    
     
     private void iniciarComponentes()
     {

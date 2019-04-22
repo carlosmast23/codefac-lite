@@ -139,6 +139,17 @@ public class IconoPanel extends JPanel{
     {
         this.iconoInterfaz=iconoInterfaz;
     }
+
+    public IconoInterfaz getIconoInterfaz() {
+        return iconoInterfaz;
+    }
+    
+    public void setNuevaPosicion(int x, int y)
+    {
+        setLocation(x, y);
+        getIconoInterfaz().grabarNuevaPosicion(new Point(x, y));
+    }
+    
     
     public String getTitulo()
     {

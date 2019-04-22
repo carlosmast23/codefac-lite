@@ -188,7 +188,10 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             
             compraAts.setParteRel("SI"); //Todo: Me parece que esta parte toca implementar cuando es cliente final
             SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
-            compraAts.setFechaRegistro(dateFormat.format(compra.getFechaCreacion()));
+            
+            //Fecha de registro contable del comprobante de venta
+            //compraAts.setFechaRegistro(dateFormat.format(compra.getFechaCreacion())); //Todo: este dato por defecto voy a dejar como fecha de registro la fecha de la compra
+            compraAts.setFechaRegistro(dateFormat.format(compra.getFechaFactura())); //Todo: este dato por defecto voy a dejar como fecha de registro la fecha de la compra
             compraAts.setEstablecimiento(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEstablecimiento(),3,"0"));
             compraAts.setPuntoEmision(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEmision(),3,"0"));
             compraAts.setSecuencial(compra.getSecuencial().toString());
