@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
@@ -286,5 +287,10 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
             }
         }
         return facturasPreimpreso;
+    }
+
+    @Override
+    public List<ComprobanteAdicional> getDatosAdicionalesComprobante() {
+        return (List<ComprobanteAdicional>)(ArrayList<?>)getDatosAdicionales();
     }
 } 

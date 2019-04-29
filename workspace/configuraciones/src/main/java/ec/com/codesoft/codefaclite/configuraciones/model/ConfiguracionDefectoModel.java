@@ -249,7 +249,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroMotivoGuiaRemisions = parametrosTodos.get(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION);
             String motivoGuiaRemision = (parametroMotivoGuiaRemisions != null) ? parametroMotivoGuiaRemisions.getValor() : "";
             getTxtMotivoTrasladoGuiaRemision().setText(motivoGuiaRemision);
-            
+                       
             //==========> CARGAR VALOR DE LAS RETENCIONES
             ParametroCodefac parametro = parametrosTodos.get(ParametroCodefac.VALOR_DEFECTO_RETENCION_IVA);
             if(parametro!=null && parametro.getValor()!=null && !parametro.getValor().isEmpty())
@@ -278,6 +278,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroImpresoraTicketVenta = parametrosTodos.get(ParametroCodefac.IMPRESORA_TICKETS_VENTAS);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroImpresoraTicketVenta != null) ? parametroImpresoraTicketVenta.getValor() : null);
             getChkImpresoraTickets().setSelected((enumSiNo!=null)?enumSiNo.getBool():false);
+            
+            
+            parametro = parametrosTodos.get(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS);
+            getTxtVariableGeneralComprobantes().setText((parametro != null) ? parametro.getValor() : "");
+            //getTxtMotivoTrasladoGuiaRemision().setText(motivoGuiaRemision);
             
 
         } catch (RemoteException ex) {
@@ -353,6 +358,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) EnumSiNo.getEnumByBoolean(getChkImpresoraTickets().isSelected());
         agregarParametro(ParametroCodefac.IMPRESORA_TICKETS_VENTAS, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.IMPRESORA_TICKETS_VENTAS);
+        
+        agregarParametro(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS, getTxtVariableGeneralComprobantes().getText());
+        agregarParametroEditar(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS);
 
     }
     

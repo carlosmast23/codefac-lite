@@ -350,6 +350,11 @@ public class Retencion extends ComprobanteEntity implements Serializable {
         this.datosAdicionales.add(retencionAdicional);
     
     }
+
+    @Override
+    public List<ComprobanteAdicional> getDatosAdicionalesComprobante() {
+        return (List<ComprobanteAdicional>)(ArrayList<?>)getDatosAdicionales();
+    }
     
 
 

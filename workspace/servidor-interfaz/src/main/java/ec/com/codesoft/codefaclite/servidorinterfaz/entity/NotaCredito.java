@@ -591,5 +591,10 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     
     }
 
+    @Override
+    public List<ComprobanteAdicional> getDatosAdicionalesComprobante() {
+        return (List<ComprobanteAdicional>)(ArrayList<?>)getDatosAdicionales();
+    }
+
     
 }

@@ -101,6 +101,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                
                 factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
                 factura.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.NO);
 

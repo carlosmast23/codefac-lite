@@ -9,16 +9,21 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 /**
  *
  * @author Carlos
  */
 @MappedSuperclass
-public class ComprobanteEntity implements Serializable{
+public abstract class ComprobanteEntity implements Serializable{
+    
+    
+    public abstract List<ComprobanteAdicional> getDatosAdicionalesComprobante();
     
     @Column(name = "CLAVE_ACCESO")
     protected String claveAcceso;

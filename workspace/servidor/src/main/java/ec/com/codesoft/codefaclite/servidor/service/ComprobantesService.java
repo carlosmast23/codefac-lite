@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import autorizacion.ws.sri.gob.ec.Autorizacion;
 import autorizacion.ws.sri.gob.ec.Mensaje;
+import com.google.gson.Gson;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
@@ -58,10 +59,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
 import ec.com.codesoft.codefaclite.servidor.facade.ComprobanteEntityFacade;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
@@ -86,9 +92,11 @@ import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1714,6 +1722,86 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             System.out.println("El cliente no estaba registrado");
         }
     }
+    
+    private void agregarParametrosGenerales(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
+    {
+        ParametroCodefacService parametroService=new ParametroCodefacService();
+        ParametroCodefac parametroCodefac=parametroService.getParametroByNombre(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS);
+        if(parametroCodefac!=null && parametroCodefac.getValor()!=null && !parametroCodefac.getValor().isEmpty())
+        {
+            Gson json = new Gson();
+            Properties propiedades=json.fromJson(parametroCodefac.getValor(), Properties.class);
+            for (Enumeration e = propiedades.keys(); e.hasMoreElements() ; ) {
+                // Obtenemos el objeto
+                Object clave = e.nextElement();
+                String valor=propiedades.getProperty(clave.toString());
+                
+                
+                if(comprobante.getDatosAdicionalesComprobante()!=null)
+                {
+                    //ComprobanteAdicional comprobanteAdicional=new ComprobanteAdicional();
+                    //comprobanteAdicional.setCampo(clave.toString());
+                    //comprobanteAdicional.setValor(valor);
+                    //comprobanteAdicional.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    //comprobante.getDatosAdicionalesComprobante().add(comprobanteAdicional);
+                    
+                    DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
+                    switch (documentoEnum) {
+                        case FACTURA:
+                            Factura factura=(Factura) comprobante;
+                            FacturaAdicional datoAdicional=new FacturaAdicional();
+                            datoAdicional.setCampo(clave.toString());
+                            datoAdicional.setValor(valor);
+                            datoAdicional.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                            datoAdicional.setFactura(factura);
+                            factura.addDatoAdicional(datoAdicional);
+                            break;
+
+                        case NOTA_VENTA:
+                            //Factura factura=(Factura) comprobante;
+                            //factura.addDatoAdicional((FacturaAdicional) comprobanteAdicional);
+                            break;
+
+                        case RETENCIONES:
+                            Retencion retencion=(Retencion) comprobante;
+                            RetencionAdicional datoAdicional2=new RetencionAdicional();
+                            datoAdicional2.setCampo(clave.toString());
+                            datoAdicional2.setValor(valor);
+                            datoAdicional2.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                            datoAdicional2.setRetencion(retencion);
+                            retencion.addDatoAdicional(datoAdicional2);
+                            
+                            break;
+
+                        case NOTA_CREDITO:
+                            NotaCredito notaCredito=(NotaCredito) comprobante;
+                            NotaCreditoAdicional datoAdicional3=new NotaCreditoAdicional();
+                            datoAdicional3.setCampo(clave.toString());
+                            datoAdicional3.setValor(valor);
+                            datoAdicional3.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                            datoAdicional3.setNotaCredito(notaCredito);
+                            notaCredito.addDatoAdicional(datoAdicional3);
+                            break;
+
+                        case GUIA_REMISION:
+                            GuiaRemision guiaRemision=(GuiaRemision) comprobante;
+                            GuiaRemisionAdicional datoAdicional4=new GuiaRemisionAdicional();
+                            datoAdicional4.setCampo(clave.toString());
+                            datoAdicional4.setValor(valor);
+                            datoAdicional4.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                            datoAdicional4.setGuiaRemision(guiaRemision);
+                            //guiaRemision.addDatoAdic(datoAdicional4);
+                            break;
+                    }
+                    
+                }
+                
+            }
+            
+            
+            parametroCodefac.getValor();
+        }
+    }
 
     public void setearSecuencialComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
     {
@@ -1758,6 +1846,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
          * Aumentar el codigo de la numeracion en los parametros
          */
         comprobante.setSecuencial(secuencial);
+        
+        /**
+         * Agregado datos adicionales de configuracion general
+         */
+        agregarParametrosGenerales(comprobante);
 
         //parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
         //parametroService.editar(parametro);

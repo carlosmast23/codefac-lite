@@ -34,12 +34,24 @@ public class ComprobanteAdicional implements Serializable{
     @Column(name = "TIPO")
     private String tipo;
     
+    
     /**
      * Tipo de dato que se utiliza para numerar tipo de datos de un mismo tipo por ejemplo
      * los correo, correo 1 , correo 2 , correo 3
      */
     @Column(name = "NUMERO")
     private Integer numero;
+
+    public ComprobanteAdicional() {
+    }
+
+    public ComprobanteAdicional(String campo, String valor, String tipo) {
+        this.campo = campo;
+        this.valor = valor;
+        this.tipo = tipo;
+    }
+    
+    
    
 
     public Long getId() {
@@ -72,6 +84,10 @@ public class ComprobanteAdicional implements Serializable{
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+    
+    public void setTipoEnum(Tipo tipoEnum) {
+        this.tipo = tipoEnum.getLetra();
     }
 
     public Integer getNumero() {

@@ -31,6 +31,16 @@ public class FacturaAdicional extends ComprobanteAdicional implements Serializab
     @ManyToOne
     private Factura factura;
 
+    public FacturaAdicional() {
+    }
+
+    public FacturaAdicional(Factura factura, String campo, String valor, String tipo) {
+        super(campo, valor, tipo);
+        this.factura = factura;
+    }
+    
+    
+
     public Factura getFactura() {
         return factura;
     }

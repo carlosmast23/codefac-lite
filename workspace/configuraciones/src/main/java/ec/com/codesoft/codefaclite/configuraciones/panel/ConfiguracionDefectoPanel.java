@@ -69,6 +69,9 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbCargarProductoIvaFactura = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
         chkImpresoraTickets = new javax.swing.JCheckBox();
+        jLabel13 = new javax.swing.JLabel();
+        txtVariableGeneralComprobantes = new javax.swing.JTextField();
+        lblEspacioBlanco123 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         lblEspacioVertical1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -223,8 +226,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -245,10 +248,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbActivarComprobanteVenta, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel7.setText("Impresora con tickets:");
+        jLabel7.setText("Variable General Comprobantes:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel7, gridBagConstraints);
@@ -271,6 +274,27 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         jPanel4.add(chkImpresoraTickets, gridBagConstraints);
+
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel13.setText("Impresora con tickets:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel13, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(txtVariableGeneralComprobantes, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 0.1;
+        jPanel4.add(lblEspacioBlanco123, gridBagConstraints);
 
         jTabbedPane1.addTab("Facturas", jPanel4);
 
@@ -380,6 +404,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -403,11 +428,13 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacio42;
     private javax.swing.JLabel lblEspacio6;
     private javax.swing.JLabel lblEspacioBlanco;
+    private javax.swing.JLabel lblEspacioBlanco123;
     private javax.swing.JLabel lblEspacioBlanco2;
     private javax.swing.JLabel lblEspacioVertical;
     private javax.swing.JLabel lblEspacioVertical1;
     private javax.swing.JTextField txtMotivoTrasladoGuiaRemision;
     private javax.swing.JTextArea txtOrdenTrabajoReporte;
+    private javax.swing.JTextField txtVariableGeneralComprobantes;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<TipoDocumentoEnum> getCmbTipoDocumento() {
@@ -493,12 +520,9 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public JCheckBox getChkImpresoraTickets() {
         return chkImpresoraTickets;
     }
-    
-    
-    
-    
-    
 
-    
+    public JTextField getTxtVariableGeneralComprobantes() {
+        return txtVariableGeneralComprobantes;
+    }
     
 }

@@ -28,6 +28,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -569,6 +570,11 @@ public class Factura extends ComprobanteEntity implements Serializable {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<ComprobanteAdicional> getDatosAdicionalesComprobante() {
+        return (List<ComprobanteAdicional>)(ArrayList<?>)getDatosAdicionales();
     }
     
     

@@ -87,6 +87,10 @@ public class ParametroCodefac implements Serializable {
     public static final String VALOR_DEFECTO_RETENCION_RENTA = "defecto_retencion_renta";
     
     public static final String IMPRESORA_TICKETS_VENTAS = "impresora_tickets_venta";
+    /**
+     * Tipo de envio de los comprobantes 
+     */
+    public static final String VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS="variables_generales_comprobantes_electronicos";
     
     @Id
     @Column(name = "ID")
