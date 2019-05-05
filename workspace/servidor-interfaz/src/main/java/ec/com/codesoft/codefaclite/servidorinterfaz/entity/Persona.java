@@ -113,6 +113,12 @@ public class Persona implements Serializable, Comparable<Persona> {
     @Column(name = "TIPO_OPERADOR")
     private String tipo;
     
+    /**
+     * Este variable solo es informativa para saber el nombre de la persona que tenemos de contacto dentro de la empresa
+     */
+    @Column(name = "CONTACTO_CLIENTE_NOMBRE")
+    private String contactoClienteNombre;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona",fetch = FetchType.EAGER)
     private List<PersonaEstablecimiento> establecimientos;
 
@@ -386,6 +392,16 @@ public class Persona implements Serializable, Comparable<Persona> {
     {
         this.tipo=operadorEnum.getLetra();
     }
+
+    public String getContactoClienteNombre() {
+        return contactoClienteNombre;
+    }
+
+    public void setContactoClienteNombre(String contactoClienteNombre) {
+        this.contactoClienteNombre = contactoClienteNombre;
+    }
+    
+    
     
     
     /***
