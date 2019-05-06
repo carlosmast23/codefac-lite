@@ -13,3 +13,8 @@ PuntoEmisionModel
 SucursalModel
 en las compras no me parece que establece la forma de pago lo cual es necesario para el ats
 en el dato del ats numsucursales se debe poner de cuantas sucursales estoy generando el ats
+
+habilitar una opcion al grabar el cliente cuando no tienen identificacion
+En la pantalla de proforma que permita enviar a los correos
+Manejan correos independientes para proformas
+ver si podemos agregar numero telefonicos y el ruc en el reporte de la proforma para todos los reportes
