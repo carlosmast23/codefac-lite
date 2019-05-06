@@ -17,6 +17,9 @@ import javax.swing.JTextField;
  * @author Carlos
  */
 public class UtilidadesFormularios {
+    
+    
+    
     public static void bloquerLimiteIngresoCampoTexto(JTextField campoTexto, int limite)
     {
         campoTexto.addKeyListener(new KeyListener() {

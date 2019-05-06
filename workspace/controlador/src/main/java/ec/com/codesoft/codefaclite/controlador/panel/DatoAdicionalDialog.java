@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.panel;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.utilidades.swing.JTextFieldLimit;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -22,6 +23,7 @@ public class DatoAdicionalDialog extends javax.swing.JDialog {
     public DatoAdicionalDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        limitarIngresoCampos();
         //setSize(getsi);
     }
 
@@ -235,6 +237,12 @@ public class DatoAdicionalDialog extends javax.swing.JDialog {
 
     public void setTxtCampo(JTextField txtCampo) {
         this.txtCampo = txtCampo;
+    }
+
+    private void limitarIngresoCampos() {
+        //TODO: Mejor hacer una etiqueta para validar este comportamiento
+        getTxtCampo().setDocument(new JTextFieldLimit(150));
+        getTxtDato().setDocument(new JTextFieldLimit(150));
     }
 
     
