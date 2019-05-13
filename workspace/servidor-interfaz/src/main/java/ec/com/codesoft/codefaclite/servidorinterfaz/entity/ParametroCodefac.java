@@ -87,6 +87,8 @@ public class ParametroCodefac implements Serializable {
     public static final String VALOR_DEFECTO_RETENCION_RENTA = "defecto_retencion_renta";
     
     public static final String IMPRESORA_TICKETS_VENTAS = "impresora_tickets_venta";
+    
+    public static final String FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO = "formato_mensaje_comprobante_electronico";
     /**
      * Tipo de envio de los comprobantes 
      */

@@ -10,7 +10,7 @@
 create table 
     PARAMETRO( ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     NOMBRE varchar(200),
-    VALOR varchar(200), 
+    VALOR varchar(2048), 
     primary key (ID));
 
 /*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.7.0.5)*/

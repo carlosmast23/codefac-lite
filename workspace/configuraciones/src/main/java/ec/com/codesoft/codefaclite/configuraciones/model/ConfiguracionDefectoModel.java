@@ -21,6 +21,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +43,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarVariables();
+        listenerComponentes();
         cargarDatos();
+        
         /**
          * Desactivo el ciclo de vida para controlar manualmente
          */
@@ -284,6 +288,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             getTxtVariableGeneralComprobantes().setText((parametro != null) ? parametro.getValor() : "");
             //getTxtMotivoTrasladoGuiaRemision().setText(motivoGuiaRemision);
             
+            parametro = parametrosTodos.get(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
+            getTxtCodigoHtml().setText((parametro != null) ? parametro.getValor() : "");    
+            getjEditorPanelVistaPrevia().setText(getTxtCodigoHtml().getText());
+            
+            
 
         } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -361,6 +370,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS, getTxtVariableGeneralComprobantes().getText());
         agregarParametroEditar(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS);
+        
+        agregarParametro(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO,getTxtCodigoHtml().getText());
+        agregarParametroEditar(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
 
     }
     
@@ -394,6 +406,22 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void listenerComponentes() {
+        getjEditorPanelVistaPrevia().setContentType("text/html");
+        getTxtCodigoHtml().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                getjEditorPanelVistaPrevia().setText(getTxtCodigoHtml().getText());
+            }
+        });
     }
     
 

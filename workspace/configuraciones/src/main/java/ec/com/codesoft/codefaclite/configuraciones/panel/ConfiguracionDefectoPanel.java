@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -84,6 +85,13 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         lblEspacio42 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         cmbRetencionRenta = new javax.swing.JComboBox<>();
+        jPanel7 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtCodigoHtml = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jEditorPanelVistaPrevia = new javax.swing.JEditorPane();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -383,6 +391,48 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jTabbedPane1.addTab("Retenciones", jPanel6);
 
+        jPanel7.setLayout(new java.awt.GridBagLayout());
+
+        txtCodigoHtml.setColumns(20);
+        txtCodigoHtml.setRows(5);
+        jScrollPane2.setViewportView(txtCodigoHtml);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 0.1;
+        jPanel7.add(jScrollPane2, gridBagConstraints);
+
+        jScrollPane3.setViewportView(jEditorPanelVistaPrevia);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 0.1;
+        jPanel7.add(jScrollPane3, gridBagConstraints);
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel14.setText("Código HTML");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel7.add(jLabel14, gridBagConstraints);
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel15.setText("Vista Previa");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel7.add(jLabel15, gridBagConstraints);
+
+        jTabbedPane1.addTab("Comprobantes Electrónicos", jPanel7);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -400,11 +450,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumentoCompra;
+    private javax.swing.JEditorPane jEditorPanelVistaPrevia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -419,7 +472,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
@@ -432,6 +488,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacioBlanco2;
     private javax.swing.JLabel lblEspacioVertical;
     private javax.swing.JLabel lblEspacioVertical1;
+    private javax.swing.JTextArea txtCodigoHtml;
     private javax.swing.JTextField txtMotivoTrasladoGuiaRemision;
     private javax.swing.JTextArea txtOrdenTrabajoReporte;
     private javax.swing.JTextField txtVariableGeneralComprobantes;
@@ -524,5 +581,17 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public JTextField getTxtVariableGeneralComprobantes() {
         return txtVariableGeneralComprobantes;
     }
+
+    public JEditorPane getjEditorPanelVistaPrevia() {
+        return jEditorPanelVistaPrevia;
+    }
+
+    public JTextArea getTxtCodigoHtml() {
+        return txtCodigoHtml;
+    }
+    
+    
+    
+    
     
 }

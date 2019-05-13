@@ -1398,7 +1398,15 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
              */
             cargarConfiguracionesCorreo(servicio);
             cargarConfiguracionesSms(servicio);
+            
+            
             String footer = UtilidadVarios.getStringHtmltoUrl(RecursoCodefac.HTML.getResourceInputStream("footer_codefac.html"));
+            ParametroCodefac parametroFooter=parametroCodefacMap.get(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
+            if(parametroFooter!=null && parametroFooter.getValor()!=null)
+            {
+                footer = parametroFooter.getValor();
+            }            
+            
             servicio.setFooterMensajeCorreo(footer);
 
             /**
