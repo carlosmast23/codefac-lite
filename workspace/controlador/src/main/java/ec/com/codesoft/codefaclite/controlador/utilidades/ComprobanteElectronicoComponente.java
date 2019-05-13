@@ -35,6 +35,15 @@ public class ComprobanteElectronicoComponente {
     
     public static void eliminarComprobante(GeneralPanelInterface panel,ComprobanteEntity comprobante,JLabel labelEstado) throws ExcepcionCodefacLite
     {
+        //TODO: Mejorar esta parte porque puede ser que se quiera cambiar entre estos tipos anulaciones pero por ahora no
+        //Validacion para no eliminar facturas que estan anuladas en el Sri o eliminadas
+        if(comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado()) || comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()))
+        {
+            DialogoCodefac.mensaje("Advertencia","No se puede eliminar el comprobante porque ya esta eliminado o anulado",DialogoCodefac.MENSAJE_INCORRECTO);
+            return;
+            
+        }
+        
         //Varible 
         boolean respuesta = false;
         

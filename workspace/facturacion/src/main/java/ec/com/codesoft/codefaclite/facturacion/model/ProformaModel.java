@@ -197,12 +197,15 @@ public class ProformaModel extends FacturacionModel{
     private List<InformacionAdicionalData> obtenerDatosAdicionales()
     {
         List<InformacionAdicionalData> datosAdicionalesData=new ArrayList<InformacionAdicionalData>();
-        for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) 
-        {
-            InformacionAdicionalData data=new InformacionAdicionalData();
-            data.setNombre(datoAdicional.getCampo());
-            data.setValor(datoAdicional.getValor());
-            datosAdicionalesData.add(data);
+        if(factura.getDatosAdicionales()!=null)
+        {          
+            for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) 
+            {
+                InformacionAdicionalData data=new InformacionAdicionalData();
+                data.setNombre(datoAdicional.getCampo());
+                data.setValor(datoAdicional.getValor());
+                datosAdicionalesData.add(data);
+            }
         }
         return datosAdicionalesData;
     }

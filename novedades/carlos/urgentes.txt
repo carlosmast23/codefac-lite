@@ -18,3 +18,5 @@ habilitar una opcion al grabar el cliente cuando no tienen identificacion
 En la pantalla de proforma que permita enviar a los correos
 Manejan correos independientes para proformas
 ver si podemos agregar numero telefonicos y el ruc en el reporte de la proforma para todos los reportes
+en los rides al parecer cuando se manda por correo no aparece los numeros completos de la autorizacion revisar
+en la pantalla de clientes verificar que al grabar la razon social permita grabar caracteres como &

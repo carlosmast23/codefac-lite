@@ -796,7 +796,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
   
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=false ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$",nombre = "Direccion", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
+    @ValidacionCodefacAnotacion(requerido=false ,min=0, expresionRegular = "[^\\n]*",nombre = "Direccion", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextAreaDireccion() {
         return jTextAreaDireccion;
     }
@@ -849,7 +849,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     @CampoBuscarAnotacion
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100, expresionRegular = ExpresionRegular.textoSimpleSinNumeros, nombre = "Nombre Social", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
+    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100, expresionRegular ="[^\\n]*", nombre = "Nombre Social", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextNombreSocial() {
         return jTextNombreSocial;
     }
