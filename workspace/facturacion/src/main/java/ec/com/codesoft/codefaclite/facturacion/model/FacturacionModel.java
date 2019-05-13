@@ -319,8 +319,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 buscarDialogoModel.setVisible(true);
                 if(buscarDialogoModel.getResultado()!=null)
                 {
-                    factura=(Factura) buscarDialogoModel.getResultado();
+                    factura = (Factura) buscarDialogoModel.getResultado();
+                    //Metodo para actualizar las referencias editadas , ene este caso el cliente cuando cambios los datos
+                    //Todo: Ver como se puede optimizar
+                    try {
+                        factura=(Factura) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(factura);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
                     factura.setId(null); //Con este artificio no tengo que copiar a un nuevo objeto y al grabar me reconoce como un nuevo dato
+
+                    //Todo: revisar que el cambio sea correcto
+                    //Actualizo con los nuevo valores del cliente si se modifico y viene de un presupuesto
+                    //setearValoresCliente();
+                    
                     cargarDatosBuscar();
                     //DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO)
                 }
@@ -1164,7 +1177,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        if(!factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
+        if(!factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR) && !factura.getCodigoDocumentoEnum().equals(factura.getCodigoDocumentoEnum().PROFORMA))
         {
             DialogoCodefac.mensaje("Advertencia","La factura no se pueden modificar ",DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("cancelar el evento editar");
@@ -2075,10 +2088,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getLblEstadoFactura().setText((factura.getEstadoEnum()!=null)?factura.getEstadoEnum().getNombre():"Sin estado");
         
         //Solo cargar el secuencial cuando no es una proforma
-        if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
-        {
+        //if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
+        //{
             cargarSecuencialConsulta();
-        }
+        //}
+        
         getjDateFechaEmision().setDate(factura.getFechaEmision());
         
         //Carlos los datos dle vendedor

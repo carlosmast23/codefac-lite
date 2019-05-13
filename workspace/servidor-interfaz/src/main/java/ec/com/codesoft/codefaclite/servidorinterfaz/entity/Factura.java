@@ -115,6 +115,7 @@ public class Factura extends ComprobanteEntity implements Serializable {
      * Se refiere a la sucucursal del cliente
      */
     @JoinColumn(name = "SUCURSAL_ID")
+    @ManyToOne    
     private PersonaEstablecimiento sucursal;
         
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)

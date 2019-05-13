@@ -421,17 +421,21 @@ public class Persona implements Serializable, Comparable<Persona> {
             return ValidacionCedulaEnum.DATO_VACIO;
         }
         
-        if(identificacion.length()!=10 && identificacion.length()!=13)
-        {
-            return ValidacionCedulaEnum.TAMANIO_INCORRECTO;
-        }
-        
-        try
-        {
-            new BigDecimal(identificacion);
-        }catch(Exception e)
-        {
-            return ValidacionCedulaEnum.FORMATO_INCORRECTO;
+        //Hacer validaciones de tamanio y texto cuando es diferente de pasaporte
+        if(!getTipoIdentificacionEnum().equals(TipoIdentificacionEnum.PASAPORTE))
+        {        
+            if(identificacion.length()!=10 && identificacion.length()!=13)
+            {
+                return ValidacionCedulaEnum.TAMANIO_INCORRECTO;
+            }
+
+            try
+            {
+                new BigDecimal(identificacion);
+            }catch(Exception e)
+            {
+                return ValidacionCedulaEnum.FORMATO_INCORRECTO;
+            }
         }
         
         return ValidacionCedulaEnum.VALIDACION_CORRECTA;

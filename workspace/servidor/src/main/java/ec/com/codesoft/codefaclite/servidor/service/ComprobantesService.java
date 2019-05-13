@@ -1737,8 +1737,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 String valor=propiedades.getProperty(clave.toString());
                 
                 
-                if(comprobante.getDatosAdicionalesComprobante()!=null)
-                {
+                //if(comprobante.getDatosAdicionalesComprobante()!=null)
+                //{
                     //ComprobanteAdicional comprobanteAdicional=new ComprobanteAdicional();
                     //comprobanteAdicional.setCampo(clave.toString());
                     //comprobanteAdicional.setValor(valor);
@@ -1790,11 +1790,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                             datoAdicional4.setValor(valor);
                             datoAdicional4.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
                             datoAdicional4.setGuiaRemision(guiaRemision);
-                            //guiaRemision.addDatoAdic(datoAdicional4);
+                            //guiaRemision.addDatoAdic(datoAdicional4); //Todo: Faclta setear valores para este caso
                             break;
                     }
                     
-                }
+                //}
                 
             }
             
