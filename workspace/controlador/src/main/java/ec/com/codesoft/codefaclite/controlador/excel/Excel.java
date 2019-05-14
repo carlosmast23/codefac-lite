@@ -123,19 +123,27 @@ public class Excel<T>
             for (TipoDato valorDato: valores) 
             {
                 celda = fila.createCell(c++);
-                Object valor = (valorDato.valor!=null)?valorDato.valor:"";
+                
                 TipoDataEnum tipo = valorDato.tipoData;
                 switch(tipo)
                 {
                     case TEXTO:
+                        Object valor = (valorDato.valor!=null)?valorDato.valor:"";
                         celda.setCellValue(valor.toString());
                     break;
                     case FECHA:
-                        celda.setCellValue((Date) devolverTipoDato(valor.toString()));
+                        Object valor2 = (valorDato.valor!=null)?valorDato.valor:"";
+                        celda.setCellValue((Date) devolverTipoDato(valor2.toString()));
                         celda.setCellStyle(estilo.get("fecha"));
                     break;
                     case NUMERO:
-                        celda.setCellValue(Double.parseDouble(valor.toString()));
+                        if(valorDato.valor==null || valorDato.valor=="112.00")
+                        {
+                            System.out.println("detener");
+                        }
+                        Object valor3 = (valorDato.valor!=null)?valorDato.valor:"0";
+                        System.out.println(valor3);
+                        celda.setCellValue(Double.parseDouble(valor3.toString()));
                         if(b)
                         {
                             posicionesColumnas.add(c-1);

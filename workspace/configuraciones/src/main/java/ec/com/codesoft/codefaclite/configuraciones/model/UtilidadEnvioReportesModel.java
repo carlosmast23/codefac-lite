@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.UtilidadEnvioReportesPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteCompra;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteGuiaRemision;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteRetencion;
@@ -22,7 +23,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -148,6 +152,9 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
         });
         
         
+        /**
+         * Todo: Optimizar la forma de enviar los reportes porque esta generando 2 veces la misma consulta para generar en excel y pdf
+         */
         getBtnEnviarCorreo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -197,6 +204,17 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
                     if(formatoExcel)
                         generarReporteGuiaRemision(FormatoReporteEnum.EXCEL, archivosAdjuntos);
                     
+                }
+                
+                if(getChkCompras().isSelected())
+                {
+                    if(formatoPdf)
+                        generarReporteCompra(FormatoReporteEnum.PDF, archivosAdjuntos);
+                        //Todo: falta implementar
+                        
+                    if(formatoExcel)
+                        generarReporteCompra(FormatoReporteEnum.EXCEL, archivosAdjuntos);
+                        //Todo: falta implementar
                 }
 
                 
@@ -286,6 +304,38 @@ public class UtilidadEnvioReportesModel  extends UtilidadEnvioReportesPanel{
             Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error","No se puede generar el reporte de las guías de remisión\nCausa:"+ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
         }
+        
+        
+    }
+    
+    private void generarReporteCompra(FormatoReporteEnum formatoReporteEnum,Map<String, String> archivosAdjuntos)
+    {
+        ControladorReporteCompra controladorReporte=new ControladorReporteCompra(
+                null,
+                new java.sql.Date(getCmbFechaInicial().getDate().getTime()),
+                new java.sql.Date(getCmbFechaFinal().getDate().getTime()),
+                null,
+                null,
+                GeneralEnumEstado.ACTIVO,
+                true);
+        controladorReporte.generarReporte();
+        File archivoReporte = null;
+        if (formatoReporteEnum.EXCEL.equals(formatoReporteEnum)) {
+            
+            try {
+                archivoReporte = controladorReporte.reporteCompraExcelGetFile();
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } else if (formatoReporteEnum.PDF.equals(formatoReporteEnum)) {
+            try {
+                archivoReporte = controladorReporte.reporteCompraPdfGetFile(panelPadre);
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(UtilidadEnvioReportesModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        archivosAdjuntos.put("reporteCompra."+ formatoReporteEnum.getExtension(), archivoReporte.getPath());
         
         
     }

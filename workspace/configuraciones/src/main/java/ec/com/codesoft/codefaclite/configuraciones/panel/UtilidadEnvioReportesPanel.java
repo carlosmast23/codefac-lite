@@ -60,6 +60,7 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         jLabel8 = new javax.swing.JLabel();
         chkPdf = new javax.swing.JCheckBox();
         chkExcel = new javax.swing.JCheckBox();
+        chkCompras = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -72,7 +73,7 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
 
         chkNotaCredito.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         chkNotaCredito.setSelected(true);
-        chkNotaCredito.setText("Nota de Crédito:");
+        chkNotaCredito.setText("Nota de Crédito");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 8;
@@ -92,7 +93,7 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
 
         chkRetencion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         chkRetencion.setSelected(true);
-        chkRetencion.setText("Retenciones:");
+        chkRetencion.setText("Retenciones");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 7;
@@ -102,7 +103,7 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
 
         chkGuiaRemision.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         chkGuiaRemision.setSelected(true);
-        chkGuiaRemision.setText("Guía Remisión:");
+        chkGuiaRemision.setText("Guía Remisión");
         chkGuiaRemision.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkGuiaRemisionActionPerformed(evt);
@@ -117,7 +118,7 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
 
         chkVentas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         chkVentas.setSelected(true);
-        chkVentas.setText("Ventas:");
+        chkVentas.setText("Ventas");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
@@ -168,7 +169,7 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnEnviarCorreo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -262,6 +263,16 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(chkExcel, gridBagConstraints);
 
+        chkCompras.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkCompras.setSelected(true);
+        chkCompras.setText("Compras");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(chkCompras, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -275,6 +286,7 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEmpleado;
     private javax.swing.JButton btnEnviarCorreo;
+    private javax.swing.JCheckBox chkCompras;
     private javax.swing.JCheckBox chkExcel;
     private javax.swing.JCheckBox chkGuiaRemision;
     private javax.swing.JCheckBox chkNotaCredito;
@@ -364,6 +376,10 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
 
     public JCheckBox getChkPdf() {
         return chkPdf;
+    }
+
+    public JCheckBox getChkCompras() {
+        return chkCompras;
     }
 
     

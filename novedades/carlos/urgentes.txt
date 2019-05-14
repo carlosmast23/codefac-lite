@@ -1,7 +1,6 @@
 Agregar la opcion para tambien poder enviar el reporte de las compras y los ats en el software
 Hacer el filtro de las guias de remision por cliente
 Hacer el reporte de facturas por productos
-hacer el reporte de la contadora de la guarderia y una forma de poder clasificar internamente las compras para reportes internos
 Restructrar para poder eliminar no de la base de datos si no con estados:
 AulaModel
 NivelModel
@@ -14,9 +13,15 @@ SucursalModel
 en las compras no me parece que establece la forma de pago lo cual es necesario para el ats
 en el dato del ats numsucursales se debe poner de cuantas sucursales estoy generando el ats
 
-habilitar una opcion al grabar el cliente cuando no tienen identificacion
 En la pantalla de proforma que permita enviar a los correos
 Manejan correos independientes para proformas
 ver si podemos agregar numero telefonicos y el ruc en el reporte de la proforma para todos los reportes
-en los rides al parecer cuando se manda por correo no aparece los numeros completos de la autorizacion revisar
-en la pantalla de clientes verificar que al grabar la razon social permita grabar caracteres como &
+en los rides al parecer cuando se manda por correo no aparece los numeros completos de la autorizacion revisar en los demas porque en la factura esta corregido
+En la pantalla de proforma que permita enviar a los correos.
+manejan correos independientes para proformas.
+Hacer el reporte de ibarra de presupuestos por detalles de las facturas de compra.
+Hacer el cambio de la mitad del mundo que desean grabar comisiones por cada empleado.
+Hacer el cambio para poder enviar el reporte de compras desde la utilidad de envio de reportes.
+Hacer el cambio para poder enviar el archivo del ats a la contadora (esperemos)
+Optimizar la forma de enviar los reportes porque esta generando 2 veces la misma consulta para generar en excel y pdf
+
