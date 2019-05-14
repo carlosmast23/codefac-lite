@@ -16,18 +16,19 @@ import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servicios.data.PresupuestoReporteData;
+import ec.com.codesoft.codefaclite.servicios.data.PresupuestoReporteDetalleData;
 import ec.com.codesoft.codefaclite.servicios.panel.ReportePresupuestosPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,13 +77,22 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         InputStream path = RecursoCodefac.JASPER_SERVICIO.getResourceInputStream("presupuestosReporteHorizontal.jrxml");
+        InputStream pathReporteAgrupado = RecursoCodefac.JASPER_SERVICIO.getResourceInputStream("presupuestosReporteHorizontalDetalles.jrxml");
+
 
         DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
             @Override
             public void excel() {
                 try {
                     Excel excel = new Excel();
-                    excel.gestionarIngresoInformacionExcel(getTituloTablaPantalla(), presupuestosData);
+                    if(getChkReporteDetallesCompras().isSelected())
+                    {   
+                        excel.gestionarIngresoInformacionExcel(getTituloTablaPantallaDetalle(), getReporteDetalleData(presupuestosData));
+                    }
+                    else
+                    {
+                        excel.gestionarIngresoInformacionExcel(getTituloTablaPantalla(), presupuestosData);
+                    }
                     excel.abrirDocumento();
                 } catch (Exception exc) {
                     exc.printStackTrace();
@@ -92,9 +102,34 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
 
             @Override
             public void pdf() {
-                ReporteCodefac.generarReporteInternalFramePlantilla(path, new HashMap(), presupuestosData, panelPadre, "Reporte Presupuestos",OrientacionReporteEnum.HORIZONTAL);
+                if(getChkReporteDetallesCompras().isSelected())
+                {                    
+                    ReporteCodefac.generarReporteInternalFramePlantilla(pathReporteAgrupado, new HashMap(),getReporteDetalleData(presupuestosData), panelPadre, "Reporte Presupuestos Detalle",OrientacionReporteEnum.HORIZONTAL);
+                }
+                else
+                {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, new HashMap(), presupuestosData, panelPadre, "Reporte Presupuestos",OrientacionReporteEnum.HORIZONTAL);
+                }
             }
         });
+    }
+    
+    public List<PresupuestoReporteDetalleData> getReporteDetalleData(List<PresupuestoReporteData> presupuestosData)
+    {
+        List<PresupuestoReporteDetalleData> detalleReporteData=new  ArrayList<PresupuestoReporteDetalleData>();
+        for (PresupuestoReporteData data : presupuestosData) {
+            for (PresupuestoDetalle presupuestoDetalle : data.getPresupuesto().getPresupuestoDetalles()) {
+                PresupuestoReporteDetalleData dataDetalle=new PresupuestoReporteDetalleData(data);
+                dataDetalle.setProveedor(presupuestoDetalle.getPersona().getNombreSimple());
+                dataDetalle.setProducto(presupuestoDetalle.getProducto().getNombre());
+                dataDetalle.setPrecioCompra(presupuestoDetalle.getPrecioCompra());
+                dataDetalle.setDescuentoCompra(presupuestoDetalle.getDescuentoCompra());
+                dataDetalle.setCantidadCompra(presupuestoDetalle.getCantidad());
+                dataDetalle.setTotalCompra(presupuestoDetalle.calcularTotalCompra());
+                detalleReporteData.add(dataDetalle);
+            }
+        }
+        return detalleReporteData;
     }
 
     @Override
@@ -210,7 +245,9 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
             presupuestoData.setCompras(totales.valoresProveedores);
             presupuestoData.setProduccionInterna(totales.produccionInterna);
             presupuestoData.setUtilidad(totales.utilidad);
-
+            
+            
+            presupuestoData.setPresupuesto(presupuesto);
             presupuestosData.add(presupuestoData);
         }
 
@@ -219,6 +256,11 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
 
     private String[] getTituloTablaPantalla() {
         String[] titulo = {"Código","Orden T.", "Identificación", "Fecha", "Estado", "Razon Social", "Descripción", "Ventas","Compras","Interno","Utilidad"};
+        return titulo;
+    }
+    
+    private String[] getTituloTablaPantallaDetalle() {
+        String[] titulo = {"Proveedor","Producto","Prec Compra","Desc Compra","Cant Compra","Tot Compra","Código","Orden T.", "Identificación", "Fecha", "Estado", "Razon Social", "Descripción", "Ventas","Compras","Interno","Utilidad"};
         return titulo;
     }
 

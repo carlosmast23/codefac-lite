@@ -8,6 +8,9 @@ package ec.com.codesoft.codefaclite.servicios.data;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,8 @@ import java.util.List;
  * @author Carlos
  */
 public class PresupuestoReporteData implements ExcelDatosInterface {
+    private Presupuesto presupuesto;
+    
     private String codigo;
     private String identificacion;
     private String nombres;
@@ -118,6 +123,14 @@ public class PresupuestoReporteData implements ExcelDatosInterface {
 
     public void setUtilidad(BigDecimal utilidad) {
         this.utilidad = utilidad;
+    }
+
+    public Presupuesto getPresupuesto() {
+        return presupuesto;
+    }
+
+    public void setPresupuesto(Presupuesto presupuesto) {
+        this.presupuesto = presupuesto;
     }
     
     
