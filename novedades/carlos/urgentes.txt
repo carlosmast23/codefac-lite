@@ -24,4 +24,5 @@ Hacer el cambio de la mitad del mundo que desean grabar comisiones por cada empl
 Hacer el cambio para poder enviar el reporte de compras desde la utilidad de envio de reportes.
 Hacer el cambio para poder enviar el archivo del ats a la contadora (esperemos)
 Optimizar la forma de enviar los reportes porque esta generando 2 veces la misma consulta para generar en excel y pdf
+Ver porque los correos que tiene punto despues en el sistema no verifican las credenciales
 

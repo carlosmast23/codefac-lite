@@ -69,8 +69,8 @@ create table DEPARTAMENTO
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     CODIGO varchar(10),
-    NOMBRE varchar(30),
-    DESCRIPCION varchar(150),
+    NOMBRE varchar(100),
+    DESCRIPCION varchar(1024),
     ESTADO varchar(1),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.9.9)*/
     TIPO varchar(1),

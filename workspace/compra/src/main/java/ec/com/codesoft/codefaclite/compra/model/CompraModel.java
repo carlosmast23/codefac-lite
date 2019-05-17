@@ -202,7 +202,7 @@ public class CompraModel extends CompraPanel{
         compra.setTipoFacturacion(""); //TODO: Establecer el metodo de facturacion manual y electronica
         compra.setInventarioIngreso(EnumSiNo.NO.getLetra());
         compra.setObservacion(getTxtObservacion().getText());
-        compra.setAutorizacion(getTxtAutorizacion().getText());
+        compra.setAutorizacion(getTxtAutorizacion().getText().trim());
         
         //Seteando el tipo de documento 
         TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();

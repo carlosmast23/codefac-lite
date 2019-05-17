@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -975,7 +976,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Autorización")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = ExpresionRegular.soloNumeros,nombre = "Autorización")
     public JTextField getTxtAutorizacion() {
         return txtAutorizacion;
     }

@@ -198,7 +198,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             compraAts.setFechaEmision(dateFormat.format(compra.getFechaFactura()));
             
             String autorizacion=(compra.getAutorizacion()!=null && !compra.getAutorizacion().isEmpty())?compra.getAutorizacion():"0000000000";
-            compraAts.setAutorizacion(autorizacion); //todo: En caso de que los comprobantes con código 11, 19 y 20 no posean numeración, así como en convenios de débito y recaudación deberán completar sus datos con nueves (9999999999)
+            compraAts.setAutorizacion(autorizacion.trim()); //todo: En caso de que los comprobantes con código 11, 19 y 20 no posean numeración, así como en convenios de débito y recaudación deberán completar sus datos con nueves (9999999999)
             compraAts.setBaseNoGraIva(BigDecimal.ZERO);
             compraAts.setBaseImponible(compra.getSubtotalSinImpuestos());
             compraAts.setBaseImpGrav(compra.getSubtotalImpuestos());
