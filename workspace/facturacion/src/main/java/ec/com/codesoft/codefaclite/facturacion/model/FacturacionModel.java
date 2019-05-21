@@ -1704,10 +1704,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     public void cargarTotales() {
-        if(estadoFormulario.equals(ESTADO_GRABAR))
-        {
-            factura.calcularTotalesDesdeDetalles();
-        }
+        //if(estadoFormulario.equals(ESTADO_GRABAR))
+        //{
+        factura.calcularTotalesDesdeDetalles();
+        //}
         /**
          * Setear los componentes graficos despues de los calculos
          */
