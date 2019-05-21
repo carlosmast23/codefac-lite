@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
@@ -168,6 +169,11 @@ public class MigrarClientesModel extends MigrarModel {
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public InputStream getInputStreamExcel() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

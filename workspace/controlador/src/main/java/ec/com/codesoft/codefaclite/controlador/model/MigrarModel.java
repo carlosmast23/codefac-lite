@@ -10,10 +10,18 @@ import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
 import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarEstudiantes;
 import ec.com.codesoft.codefaclite.controlador.panel.MigrarPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -28,6 +36,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author Carlos
  */
 public abstract class MigrarModel extends MigrarPanel{
+
+    private static final Logger LOG = Logger.getLogger(MigrarModel.class.getName());
+    
+    
     
     /**
      * Archivo donde se selecciona 
@@ -38,6 +50,7 @@ public abstract class MigrarModel extends MigrarPanel{
     //public abstract void construirDatosExcel(File archivo);
     public abstract ExcelMigrar.MigrarInterface getInterfaceMigrar();
     public abstract ExcelMigrar getExcelMigrar() ;
+    public abstract InputStream getInputStreamExcel();
     
     //private ExcelMigrar excelMigrar;
     
@@ -46,8 +59,73 @@ public abstract class MigrarModel extends MigrarPanel{
         listenerBotonesInit();        
     }
     
+    private JFileChooser construirSelectorArchivos()
+    {
+        JFileChooser jFileChooser=new JFileChooser();
+        jFileChooser.setDialogTitle("Seleccione la ubicación para descargar el archivo");
+        jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        return jFileChooser;
+        
+    }
+    
+    private boolean copiarArchivo(File ubicacionArchivoCopiar)
+    {
+        OutputStream outputStream=null;
+        try {
+            InputStream excelInputStream=getInputStreamExcel();
+            File archivoFinal=new File(ubicacionArchivoCopiar,"plantilla.xlsx");
+            outputStream = new FileOutputStream(archivoFinal);
+            UtilidadesArchivos.grabarInputStreamEnArchivo(excelInputStream, outputStream);
+            return true;
+            
+        }catch(UnsupportedOperationException e){
+          LOG.log(Level.SEVERE,e.getMessage());
+          e.printStackTrace();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MigrarModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MigrarModel.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                outputStream.close();
+            } catch (IOException ex) {
+                Logger.getLogger(MigrarModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return false;
+    }
+    
     private void listenerBotonesInit()
     {
+        getBtnDescargarPlantilla().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                InputStream inputStream=RecursoCodefac.PLANTILLAS_EXCEL.getResourceInputStream("compras.xlsx");
+                JFileChooser jFileChooser=construirSelectorArchivos();
+                
+                int seleccion = jFileChooser.showDialog(null, "Seleccionar");
+                switch (seleccion) {
+                    case JFileChooser.APPROVE_OPTION:
+                        File ubicacionArchivoCopiar = jFileChooser.getSelectedFile();
+                        if(copiarArchivo(ubicacionArchivoCopiar))
+                        {
+                            DialogoCodefac.mensaje("Correcto","El archivo fue descargado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                        }
+                        else
+                        {
+                            DialogoCodefac.mensaje("Error","No se puede descargar el archivo ",DialogoCodefac.MENSAJE_INCORRECTO);
+                        }
+                        break;
+                    case JFileChooser.CANCEL_OPTION:
+
+                        break;
+                    case JFileChooser.ERROR_OPTION:
+
+                        break;
+                }
+            }
+        });
+        
         getBtnRecargarDatos().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

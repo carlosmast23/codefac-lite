@@ -41,6 +41,7 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
 
         btnMigrar = new javax.swing.JButton();
         pnlCamposRequeridos = new javax.swing.JPanel();
+        btnDescargarPlantilla = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtRutaArchivo = new javax.swing.JTextField();
@@ -57,6 +58,10 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
         btnMigrar.setToolTipText("Empezar migración");
 
         pnlCamposRequeridos.setLayout(new org.jdesktop.swingx.VerticalLayout());
+
+        btnDescargarPlantilla.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnDescargarPlantilla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/excel.png"))); // NOI18N
+        btnDescargarPlantilla.setText("Descarga Plantilla");
 
         setClosable(true);
         setIconifiable(true);
@@ -142,6 +147,7 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargarExcel;
+    private javax.swing.JButton btnDescargarPlantilla;
     private javax.swing.JButton btnMigrar;
     private javax.swing.JButton btnRecargarDatos;
     private javax.swing.JComboBox<Integer> cmbNumeroHoja;
@@ -166,6 +172,8 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
     public JTable getTblDatos() {
         return tblDatos;
     }
+    
+
 
     @ComponenteSecundarioAnotacion(nombreCategoria = "Migrar",visible = true)
     public JButton getBtnMigrar() {
@@ -179,12 +187,20 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
     public JButton getBtnRecargarDatos() {
         return btnRecargarDatos;
     }
+    
+        
+    
 
     @ComponenteSecundarioAnotacion(nombreCategoria = "Campos Requeridos",visible = true)
     public JPanel getPnlCamposRequeridos() {
         return pnlCamposRequeridos;
     }
+
     
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Utilidades",visible = true)
+    public JButton getBtnDescargarPlantilla() {
+        return btnDescargarPlantilla;
+    }
     
 
     

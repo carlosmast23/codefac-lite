@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -260,6 +261,11 @@ public class MigrarEstudiantesModel extends MigrarModel{
     @Override
     public ExcelMigrar getExcelMigrar() {
         return new ExcelMigrarEstudiantes();
+    }
+
+    @Override
+    public InputStream getInputStreamExcel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     

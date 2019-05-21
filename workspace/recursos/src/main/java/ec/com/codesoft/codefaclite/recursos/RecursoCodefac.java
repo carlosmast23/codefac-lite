@@ -36,7 +36,8 @@ public enum RecursoCodefac {
     JASPER_SERVICIO("reportes/servicio"),
     JASPER("reportes"),
     HTML("html/factura_electronica"),
-    AYUDA("ayuda");
+    AYUDA("ayuda"),
+    PLANTILLAS_EXCEL("plantillas_excel");
 
     private String subPathResource;
 

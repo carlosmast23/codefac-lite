@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
@@ -173,6 +174,11 @@ public class MigrarRepresentantesModel extends MigrarModel {
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public InputStream getInputStreamExcel() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
