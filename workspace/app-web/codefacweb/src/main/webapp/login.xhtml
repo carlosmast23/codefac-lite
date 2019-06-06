@@ -17,10 +17,10 @@
 
                 <h:panelGrid columns="2" cellpadding="5" width="100" style="text-align: center" >
                     <h:outputLabel for="username" value="Usuario:" />
-                    <p:inputText id="username"  required="true" label="username" />
+                    <p:inputText id="username"  required="true" label="username" value="#{loginMb.nick}" />
 
                     <h:outputLabel for="password" value="Constraseña:" />
-                    <p:password id="password"  required="true" label="password" />
+                    <p:password id="password"  required="true" label="password" value="#{loginMb.clave}" />
 
                     <f:facet name="footer">
                         <p:commandButton value="Ingresar" action="#{loginMb.login()}" />
