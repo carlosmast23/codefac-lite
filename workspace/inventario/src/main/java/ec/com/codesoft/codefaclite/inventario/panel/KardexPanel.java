@@ -315,7 +315,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         this.btnProductoBuscar = btnProductoBuscar;
     }
 
-    @LimpiarAnotacion
+    //@LimpiarAnotacion
     public JDateChooser getCmbFechaFinal() {
         return cmbFechaFinal;
     }
@@ -324,7 +324,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         this.cmbFechaFinal = cmbFechaFinal;
     }
 
-    @LimpiarAnotacion
+    //@LimpiarAnotacion
     public JDateChooser getCmbFechaInicial() {
         return cmbFechaInicial;
     }

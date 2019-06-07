@@ -39,6 +39,12 @@ public class ArchivoConfiguracionesCodefac {
     public static final String CAMPO_PUERTO_SISTEMA="puerto_sistema";
     public static final String CAMPO_PUERTO_SMS="puerto_sms";
     
+    /**
+     * Este campo especifica si se desea activar o no el servicio web al iniciar la aplicacion
+     * Valores validos (si o no)
+     */
+    public static final String CAMPO_ACTIVAR_SERVICIO_WEB="activar_servicio_web";
+    
     private Properties propiedadesIniciales;
     
     private static ArchivoConfiguracionesCodefac instance;

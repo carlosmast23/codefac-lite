@@ -41,6 +41,7 @@ import ec.com.codesoft.codefaclite.main.other.ArchivoDescarga;
 import ec.com.codesoft.codefaclite.main.other.BaseDatosCredenciales;
 import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.main.utilidades.UtilidadServicioWeb;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servicios.controller.ControllerServiceUtil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -84,6 +85,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
@@ -230,6 +232,9 @@ public class Main {
                         //String carpeta = "";
                         String pid=obtenerPIDProcesoActual();
                         //List<String> comando = Arrays.asList("java","-jar","updater.jar "+pid);
+                        /**
+                         * La variable pid sirve para enviar como parametro a updater.jar y luego permita matar el proceso actual si por algun motivo no se termina
+                         */
                         List<String> comando = Arrays.asList("java","-jar","updater.jar",pid);
                         ProcessBuilder pb = new ProcessBuilder()
                                 .command(comando);
@@ -608,6 +613,8 @@ public class Main {
 
             //session.setParametrosCodefac(getParametros());
             splashScren.siguiente();
+            
+            
 
             /**
              * Seteando la session de los datos a utilizar en el aplicativo
@@ -636,6 +643,13 @@ public class Main {
             } catch (InterruptedException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+                        /**
+             * ===============================================================
+             * ACTIVAR EL SERVICIO WEB DEPENDIENDO LA CONFIGURACION
+             * ===============================================================
+             */
+            activarServicioWeb();
 
             /**
              * Si el usuario devuuelto es incorrecto terminar el aplicativo
@@ -671,6 +685,8 @@ public class Main {
             panel.setVisible(true);
             
 
+
+            
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnknownHostException ex) {
@@ -681,6 +697,14 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    private static void activarServicioWeb()
+    {
+        String respuestaServicioWeb = ArchivoConfiguracionesCodefac.getInstance().obtenerValor(ArchivoConfiguracionesCodefac.CAMPO_ACTIVAR_SERVICIO_WEB);
+        if (respuestaServicioWeb != null && respuestaServicioWeb.equals("si")) {
+            UtilidadServicioWeb.activarServicioWeb();
+        }
     }
     
     public static LoginModel.DatosLogin cargarLoginUsuario() {

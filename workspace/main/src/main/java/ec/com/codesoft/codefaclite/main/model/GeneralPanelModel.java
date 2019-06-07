@@ -53,6 +53,7 @@ import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.panel.VentanaManualUsuario;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.main.utilidades.UtilidadServicioWeb;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.AccesoDirecto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -339,6 +340,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 if (hiloPublicidadCodefac != null) {
                     hiloPublicidadCodefac.hiloPublicidad = false;
                 }
+                UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web 
                 dispose();
                 System.exit(0);
                 break;

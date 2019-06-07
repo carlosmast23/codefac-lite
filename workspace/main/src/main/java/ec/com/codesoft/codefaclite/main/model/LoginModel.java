@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.panel.LoginFormDialog;
+import ec.com.codesoft.codefaclite.main.utilidades.UtilidadServicioWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -71,6 +72,7 @@ public class LoginModel extends LoginFormDialog{
                 //dispose();
                 salirAplicacion=true;
                 setVisible(false);
+                UtilidadServicioWeb.apagarServicioWeb();
             }
         });
         

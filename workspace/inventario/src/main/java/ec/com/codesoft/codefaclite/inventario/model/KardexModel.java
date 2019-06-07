@@ -280,7 +280,10 @@ public class KardexModel extends KardexPanel {
                         precioUnitarioPromedio = kardexDetalle.getPrecioUnitario();
                     } else //Cuando es el segundo registro empiezo a calcular el promedio
                     {
-                        precioUnitarioPromedio = precioTotalAcumulado.divide(new BigDecimal(cantidadAcumulada),2,BigDecimal.ROUND_HALF_UP);
+                        if(cantidadAcumulada>0)
+                        {
+                            precioUnitarioPromedio = precioTotalAcumulado.divide(new BigDecimal(cantidadAcumulada),2,BigDecimal.ROUND_HALF_UP);
+                        }
                     }
 
                     completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado, true);
@@ -295,7 +298,10 @@ public class KardexModel extends KardexPanel {
                         precioUnitarioPromedio = kardexDetalle.getPrecioUnitario();
                     } else //Cuando es el segundo registro empiezo a calcular el promedio
                     {
-                        precioUnitarioPromedio = precioTotalAcumulado.divide(new BigDecimal(cantidadAcumulada),2,BigDecimal.ROUND_HALF_UP);
+                        if(cantidadAcumulada>0)
+                        {
+                            precioUnitarioPromedio = precioTotalAcumulado.divide(new BigDecimal(cantidadAcumulada),2,BigDecimal.ROUND_HALF_UP);
+                        }
                     }
                     
                     completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado, false);
