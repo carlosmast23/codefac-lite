@@ -25,7 +25,7 @@ public class UtilidadServicioWeb {
         try {
             LOG.log(Level.INFO, "Servicio web activado");
             //List<String> comando=Arrays.asList("cd","apache-tomcat-7.0.94");
-            List<String> comando = Arrays.asList("tomcat/bin/startup.bat", "tomcat");
+            List<String> comando = Arrays.asList("tomcat9/bin/startup.bat", "tomcat9");
             //Primer comando
             ProcessBuilder pb = new ProcessBuilder()
                     .command(comando);
@@ -45,7 +45,7 @@ public class UtilidadServicioWeb {
         try {
             LOG.log(Level.INFO, "Servicio web apagado");
             //List<String> comando=Arrays.asList("cd","apache-tomcat-7.0.94");
-            List<String> comando = Arrays.asList("tomcat/bin/shutdown.bat", "tomcat");
+            List<String> comando = Arrays.asList("tomcat9/bin/shutdown.bat", "tomcat9");
             //Primer comando
             ProcessBuilder pb = new ProcessBuilder()
                     .command(comando);
