@@ -24,13 +24,11 @@
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
             <version>6.2</version>
-            <!--<scope>provided</scope>!-->
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>recursosWeb</artifactId>
             <version>${project.version}</version>
-            <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -48,14 +46,12 @@
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
-            <!--<scope>provided</scope>-->
         </dependency>
         
         <dependency>
             <groupId>org.primefaces.themes</groupId>
             <artifactId>all-themes</artifactId>
             <version>1.0.10</version>
-            <!--<optional>true</optional>-->
         </dependency>
         
         <dependency>
@@ -71,6 +67,22 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+    
+    <profiles>
+        <profile>
+            <id>desarrollo</id>
+            <properties>
+                <profile.packagingExcludes></profile.packagingExcludes>             
+            </properties>
+        </profile>
+        
+        <profile>
+            <id>produccion</id>
+            <properties>
+                <profile.packagingExcludes>WEB-INF/lib/*.jar</profile.packagingExcludes>             
+            </properties>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
@@ -91,7 +103,8 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.2.3</version>
                 <configuration>
-                    <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+                    <!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>-->
+                    <packagingExcludes>${profile.packagingExcludes}</packagingExcludes>
                     <!--<archive>-->
                       <!--<manifest>-->
                         <!--<addClasspath>true</addClasspath>-->
