@@ -49,6 +49,12 @@
         </dependency>
         
         <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.faces</artifactId>
+            <version>2.2.7</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.primefaces.themes</groupId>
             <artifactId>all-themes</artifactId>
             <version>1.0.10</version>
@@ -71,6 +77,9 @@
     <profiles>
         <profile>
             <id>desarrollo</id>
+            <activation> 
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <profile.packagingExcludes></profile.packagingExcludes>             
             </properties>
@@ -106,10 +115,10 @@
                     <!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>-->
                     <packagingExcludes>${profile.packagingExcludes}</packagingExcludes>
                     <!--<archive>-->
-                      <!--<manifest>-->
-                        <!--<addClasspath>true</addClasspath>-->
-                        <!--<classpathPrefix>lib/</classpathPrefix>-->
-                      <!--</manifest>-->
+                    <!--<manifest>-->
+                    <!--<addClasspath>true</addClasspath>-->
+                    <!--<classpathPrefix>lib/</classpathPrefix>-->
+                    <!--</manifest>-->
                     <!--</archive>-->
                 </configuration>
             </plugin>

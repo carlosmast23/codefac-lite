@@ -46,6 +46,8 @@ workspace/main/codefac.ini
 /workspace/servicios/target/
 
 #Excluir carpeta de logs y temporales
+/workspace/main/tomcat9_pruebas
+/workspace/main/tomcat92
 /workspace/main/tomcat9
 /workspace/main/*.log
 /workspace/main/log/
