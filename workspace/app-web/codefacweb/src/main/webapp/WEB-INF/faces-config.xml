@@ -36,5 +36,10 @@
             <from-outcome>dialogo_busqueda</from-outcome>
             <to-view-id>faces/template/dialogo_busqueda.xhtml</to-view-id>
         </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>construyendo</from-outcome>
+            <to-view-id>faces/sistema/facturacion/proforma.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

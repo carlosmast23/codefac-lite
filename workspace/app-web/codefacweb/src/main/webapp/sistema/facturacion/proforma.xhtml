@@ -13,35 +13,48 @@
         </ui:define>
 
         <ui:define name="contenido" >
-            
+
             <f:event listener="#{controllerCodefacMb.agregarVista(empleadoMb)}" type="preRenderView" />
 
-            <h:panelGrid columns="4"  cellpadding="5" width="100%" >
-                <h:outputLabel value="Cedula"/>
-                <h:inputText value="#{empleadoMb.empleado.identificacion}" />
 
-                <p:spacer/>
-                <p:spacer/>
+            <p:panelGrid columns="3" layout="grid">            
+                <p:outputLabel for="button" value="Button:" />
+                <p:datePicker id="button"  showIcon="true" placeholder="Fecha Emisión" />
 
-                <h:outputLabel value="Nombres"/>
-                <h:inputText value="#{empleadoMb.empleado.nombres}" />
 
-                <h:outputLabel value="Apellidos"/>
-                <h:inputText value="#{empleadoMb.empleado.apellidos}" />
+                <p:selectOneMenu id="car" value="#{selectOneMenuView.car}">
+                    <f:selectItem itemLabel="Documento" itemValue="" />
+                    <f:selectItems value="#{selectOneMenuView.cars}" />
+                </p:selectOneMenu>
 
-                <h:outputLabel value="Direccion"/>
-                <h:inputText value="#{empleadoMb.empleado.direccion}" />
 
-                <h:outputLabel value="Telefono"/>
-                <h:inputText value="#{empleadoMb.empleado.telefonoConvencional}" />
+            </p:panelGrid>
 
-                <h:outputLabel value="Celular"/>
-                <h:inputText value="#{empleadoMb.empleado.telefonoCelular}" />
+            <p:panel>
+                <div class="ui-inputgroup">
+                    <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 25%" />
+                    <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}">
+                        <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarCliente}" update="txtCliente,datosCliente"  />
+                    </p:commandButton>  
+                </div>
+            </p:panel>
 
-                <h:outputLabel value="Correo"/>
-                <h:inputText value="#{empleadoMb.empleado.correoElectronico}" />
-            </h:panelGrid>
+            <p:panelGrid columns="2" layout="grid" id="datosCliente">      
+                <p:outputPanel deferred="true">
+                    <h:outputLabel style="font-weight: bold">Razon Social:  </h:outputLabel>
+                    <h:outputLabel>#{proformaMb.factura.cliente.razonSocial}</h:outputLabel>
+                </p:outputPanel>
 
+                <p:outputPanel deferred="true">
+                    <h:outputLabel style="font-weight: bold">Dirección:  </h:outputLabel>
+                    <h:outputLabel>#{proformaMb.factura.cliente.direccion}</h:outputLabel>
+                </p:outputPanel>
+
+                <p:outputPanel deferred="true">
+                    <h:outputLabel style="font-weight: bold">Telefonos:  </h:outputLabel>
+                    <h:outputLabel>#{proformaMb.factura.telefono}</h:outputLabel>
+                </p:outputPanel>
+            </p:panelGrid>
         </ui:define>
     </ui:composition>
 

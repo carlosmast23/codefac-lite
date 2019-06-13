@@ -31,64 +31,63 @@ import org.primefaces.event.SelectEvent;
  */
 @ManagedBean
 @ViewScoped
-public class ControllerCodefacMb implements Serializable{
+public class ControllerCodefacMb implements Serializable {
+
     private String indiceTabSecundario;
     private GeneralAbstractMb generalAbstractMb;
-    
 
     @PostConstruct
-    public void init()
-    {
-        indiceTabSecundario="2";
+    public void init() {
+        indiceTabSecundario = "2";
     }
-    
+
     /**
      * Metodo superior que contrala la forma como van a grabar
      */
-    public void save()
-    {
+    public void save() {
         //Metodo save desde el controlador
         System.out.println("Metodo save desde el controlador");
         generalAbstractMb.grabar();
     }
-    
-    public void delete()
-    {
+
+    public void delete() {
         System.err.println("Metodo para eliminar desde el controlador");
         generalAbstractMb.eliminar();
     }
-    
-     
-    public void abrirDialogoBusqueda()
-    {
+
+    public void abrirDialogoBusqueda() {
+        System.out.println("abriendo dialogo");
+        abrirDialogoBusqueda(generalAbstractMb.obtenerDialogoBusqueda());
+    }
+
+    public void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) {
         //find();
         System.out.println("Abriendo dialogo busqueda");
-        
+
         //Establecer objeto de la clase que tiene la implemetacion del dialogo de busqueda que necesito para construir el dialogo web
         //TODO: Solucion temporal porque es una gasto innesario de memoria , buscar otra forma
         Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-        sessionMap.put("busquedaClase",generalAbstractMb.obtenerDialogoBusqueda());
-        
+        sessionMap.put("busquedaClase",modeloBusqueda);
+
         //Esstablecer porpiedades que se van a enviar al dialogo en map
-        Map<String,Object> options = new HashMap<String, Object>();
+        Map<String, Object> options = new HashMap<String, Object>();
         options.put("resizable", false);
         options.put("draggable", false);
         options.put("modal", true);
         //options.put("busquedaClase", new EmpleadoBusquedaDialogo() ); //TODO: Mando por defecto un dialogo por defecto
-        String nombreDialogoBusqueda="dialogo_busqueda";
+        String nombreDialogoBusqueda = "dialogo_busqueda";
         //PrimeFaces.current().dialog()
         PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, null);
     }
-    
+
     //Metodo que permite recibir el dato seleccionado
-    public void onObjectChosen(SelectEvent event)
-    {        
+    public void onObjectChosen(SelectEvent event) {
         Object objetoSeleccionado = (Object) event.getObject();
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Dato Seleccionado", "");         
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Dato Seleccionado", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         generalAbstractMb.cargarBusqueda(objetoSeleccionado);
     }
-    
+
     public String getIndiceTabSecundario() {
         return indiceTabSecundario;
     }
@@ -96,11 +95,10 @@ public class ControllerCodefacMb implements Serializable{
     public void setIndiceTabSecundario(String indiceTabSecundario) {
         this.indiceTabSecundario = indiceTabSecundario;
     }
-    
-    public void mostrarAyuda()
-    {
+
+    public void mostrarAyuda() {
         System.out.println("Cambiando indice panel");
-        indiceTabSecundario="1";
+        indiceTabSecundario = "1";
     }
 
     public GeneralAbstractMb getGeneralAbstractMb() {
@@ -110,12 +108,10 @@ public class ControllerCodefacMb implements Serializable{
     public void setGeneralAbstractMb(GeneralAbstractMb generalAbstractMb) {
         this.generalAbstractMb = generalAbstractMb;
     }
-    
-    public void agregarVista(GeneralAbstractMb vista)
-    {
-        generalAbstractMb=vista;
+
+    public void agregarVista(GeneralAbstractMb vista) {
+        generalAbstractMb = vista;
         System.out.println("iniciando el metodo que setea la vista");
     }
 
-    
 }

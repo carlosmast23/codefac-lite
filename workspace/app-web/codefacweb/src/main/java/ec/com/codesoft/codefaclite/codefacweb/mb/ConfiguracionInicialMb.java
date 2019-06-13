@@ -58,11 +58,11 @@ public class ConfiguracionInicialMb implements Serializable{
             //} catch (IOException ex) {
             //    Logger.getLogger(ConfiguracionInicialMb.class.getName()).log(Level.SEVERE, null, ex);
             //}
-            
+            String paginaActual="faces/sistema/facturacion/proforma.xhtml";
             FacesContext context = FacesContext.getCurrentInstance();
             HttpServletRequest origRequest = (HttpServletRequest) context.getExternalContext().getRequest();           
-            FacesContext.getCurrentInstance().getExternalContext()
-                        .redirect("faces/principal.xhtml");
+            //FacesContext.getCurrentInstance().getExternalContext().redirect("faces/principal.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(paginaActual);
         } catch (IOException ex) {
             Logger.getLogger(ConfiguracionInicialMb.class.getName()).log(Level.SEVERE, null, ex);
         }

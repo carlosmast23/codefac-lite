@@ -145,7 +145,18 @@ public class PersonaEstablecimiento implements  Serializable{
         this.persona = persona;
     }
     
+    /**
+     * ==============> DATOS ADICIONALES PARA MOSTRAR EN LAS DIALOGOS WEB <=================
+     * TODO: Ver si se puede encontrar una mejor solucion porque no resulta practica esta solucion
+     */
+    public String getoutIdentificacion()
+    {
+        return this.persona.getIdentificacion();
+    }
     
-    
+    public String getoutRazonSocial()
+    {
+        return this.persona.getRazonSocial();
+    }
     
 }

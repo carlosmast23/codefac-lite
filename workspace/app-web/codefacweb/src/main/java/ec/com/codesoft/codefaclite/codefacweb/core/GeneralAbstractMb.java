@@ -20,6 +20,9 @@ public abstract class GeneralAbstractMb implements Serializable{
     public abstract void buscar();
     public abstract void cargarBusqueda(Object obj);
     public abstract InterfaceModelFind obtenerDialogoBusqueda();
+    
+    
+    
     public String linkAyuda()
     {
         System.out.println("ayuda presionada");

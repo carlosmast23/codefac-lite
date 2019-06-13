@@ -5,11 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.corecodefaclite.dialog;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Carlos
  */
-public class ColumnaDialogo {
+public class ColumnaDialogo implements Serializable{
     private String Nombre;
     private  Integer tamanio;
     /**
