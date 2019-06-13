@@ -27,3 +27,6 @@ Optimizar la forma de enviar los reportes porque esta generando 2 veces la misma
 Ver porque los correos que tiene punto despues en el sistema no verifican las credenciales
 revisar el reporte de kardex , en la columna de los totales no tiene sentido que se sumarice precion de venta de los inventarios porque no cuadra , o bien separo 2 saldos por los precios de compra y venta o bien solo muestro los precios de compra
 Hacer un modulo que utilice selenium para que puedan subir automaticamente los registros a la pagina del Gas 
+en la pantalla de factura , cuando cargao
+El señor del gas solicita que no se pueda seleccionar una fecha inferior de la guia de remision a la cual esta ligada la factura
+Hacer el reporte del señor del gas agrupado por cliente , por ventas diaras y cantidad

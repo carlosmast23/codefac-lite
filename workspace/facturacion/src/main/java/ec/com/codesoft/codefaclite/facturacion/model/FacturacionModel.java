@@ -2313,7 +2313,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     facturaDetalle.setIva(iva);
                 }
                 
-                if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) > 0) {
+                if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) >= 0) {
                     
                     //Solo agregar si se enviar un dato vacio
                     if (agregar) {
