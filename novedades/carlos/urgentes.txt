@@ -30,3 +30,4 @@ Hacer un modulo que utilice selenium para que puedan subir automaticamente los r
 en la pantalla de factura , cuando cargao
 El señor del gas solicita que no se pueda seleccionar una fecha inferior de la guia de remision a la cual esta ligada la factura
 Hacer el reporte del señor del gas agrupado por cliente , por ventas diaras y cantidad
+En la pantalla de factura unificar metodos por ejemplo de calcular iva y totales como en el modulo web para hacer mas escalable el sistema

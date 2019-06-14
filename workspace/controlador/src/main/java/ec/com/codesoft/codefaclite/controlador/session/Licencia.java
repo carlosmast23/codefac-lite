@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.main.license;
+package ec.com.codesoft.codefaclite.controlador.session;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
-import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
+import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.io.FileWriter;
 import java.net.InetAddress;
 import java.net.NetworkInterface;

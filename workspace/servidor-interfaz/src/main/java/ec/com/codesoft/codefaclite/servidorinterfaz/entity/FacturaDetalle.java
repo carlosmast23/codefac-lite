@@ -217,7 +217,11 @@ public class FacturaDetalle implements Serializable {
         total=setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);        
     }
     
-    
+    public void calculaIva()
+    {
+        BigDecimal valorIvaDecimal=new BigDecimal(ivaPorcentaje.toString()).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP);        
+        iva = getTotal().multiply(valorIvaDecimal).setScale(2, BigDecimal.ROUND_HALF_UP);        
+    }
 
 
     public TipoDocumentoEnum getTipoDocumentoEnum()

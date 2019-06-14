@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.main.session;
+package ec.com.codesoft.codefaclite.controlador.session;
 
 import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
-import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -28,16 +27,16 @@ import java.util.logging.Logger;
  */
 public class SessionCodefac implements SessionCodefacInterface{
     
-    private Usuario usuario;
-    private Empresa empresa;
-    private Sucursal matriz;
-    private Sucursal sucursal;
-    private Map<String,ParametroCodefac>  parametrosCodefac;
-    private List<Perfil> perfiles;
-    private TipoLicenciaEnum tipoLicenciaEnum;
-    private String usuarioLicencia; 
-    private Licencia licencia;
-    private List<ModuloCodefacEnum> modulos;
+    protected Usuario usuario;
+    protected Empresa empresa;
+    protected Sucursal matriz;
+    protected Sucursal sucursal;
+    protected Map<String,ParametroCodefac>  parametrosCodefac;
+    protected List<Perfil> perfiles;
+    protected TipoLicenciaEnum tipoLicenciaEnum;
+    protected String usuarioLicencia; 
+    protected Licencia licencia;
+    protected List<ModuloCodefacEnum> modulos;
 
     public SessionCodefac() {       
     }
@@ -148,6 +147,10 @@ public class SessionCodefac implements SessionCodefacInterface{
         this.matriz = matriz;
     }
 
+    /**
+     * Obtiene el valor en escala de 100%
+     * @return 
+     */
     @Override
     public BigDecimal obtenerIvaActual() {
         ParametroCodefac parametroCodefac=getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO);
@@ -155,6 +158,10 @@ public class SessionCodefac implements SessionCodefacInterface{
         return new BigDecimal(valorString);
     }
 
+    /**
+     * Obtiene el el valor en escala de decimales
+     * @return 
+     */
     @Override
     public BigDecimal obtenerIvaActualDecimal() {
         return obtenerIvaActual().divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);

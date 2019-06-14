@@ -15,8 +15,7 @@
         <ui:define name="contenido" >
 
             <f:event listener="#{controllerCodefacMb.agregarVista(empleadoMb)}" type="preRenderView" />
-
-
+            
             <p:panelGrid columns="3" layout="grid">            
                 <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
                     <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 70%" />
@@ -63,8 +62,8 @@
             <p:panel>
                 <p:ribbon>
                     <p:tab title="Productos">
-                        
-                        
+
+
                         <p:ribbonGroup style="width:22%" >
                             <p:inputText id="txtProducto" placeholder="Código" value="#{proformaMb.productoSeleccionado.codigoPersonalizado}" />
                             <p:commandButton  process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBusquedaProducto()}">
@@ -149,7 +148,7 @@
                     </p:column>
 
                     <f:facet name="footer">
-                        <p:panelGrid columns="3" layout="grid" id="datosCliente">
+                        <p:panelGrid columns="4" layout="grid" id="datosCliente">
                             <p:panel>
                                 <h:outputLabel style="font-weight: bold">Subtotal 12: </h:outputLabel>
                                 <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.subtotalImpuestos}" />
@@ -164,10 +163,14 @@
                                 <h:outputLabel style="font-weight: bold">Descuento: </h:outputLabel>
                                 <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.descuentoImpuestos}" />
                             </p:panel>
+                            <p:panel>
+                                <h:outputLabel style="font-weight: bold">IVA: </h:outputLabel>
+                                <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.iva}" />
+                            </p:panel>
                         </p:panelGrid>
                         <p:panel>
                             <h:outputLabel style="font-weight: bold;font-size: 18px">Total: </h:outputLabel>
-                            <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.total}" />
+                            <h:outputLabel style="font-weight: normal;font-size: 18px" value="#{proformaMb.factura.total}" />
                         </p:panel>
                     </f:facet>
                 </p:dataTable>

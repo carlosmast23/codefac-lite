@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.codefacweb.mb.facturacion;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
+import ec.com.codesoft.codefaclite.codefacweb.core.SessionMb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
@@ -38,6 +40,9 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     private Factura factura;
     private Producto productoSeleccionado;
     private FacturaDetalle facturaDetalle;
+    
+    @ManagedProperty(value="#{sessionMb}")
+    private SessionMb sessionMb;
 
     @PostConstruct
     public void init() {
@@ -123,14 +128,16 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         facturaDetalle.setDescripcion(productoSeleccionado.getNombre());
         facturaDetalle.setPrecioUnitario(productoSeleccionado.getValorUnitario());
         facturaDetalle.setDescuento(BigDecimal.ZERO);    
-        //facturaDetalle.setIva(BigDecimal.ONE);
-        //facturaDetalle.setIvaPorcentaje(0);
+        facturaDetalle.setIvaPorcentaje(sessionMb.obtenerIvaActual().intValue());
+        
     }
     
     public void agregarProducto()
     {
-        //facturaDetalle.
+        //facturaDetalle.        
         facturaDetalle.calcularTotalDetalle();        
+        facturaDetalle.calculaIva();
+        
         factura.addDetalle(facturaDetalle);
         factura.calcularTotalesDesdeDetalles();
     }
@@ -170,6 +177,15 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         this.productoSeleccionado = productoSeleccionado;
     }
 
+    public SessionMb getSessionMb() {
+        return sessionMb;
+    }
+
+    public void setSessionMb(SessionMb sessionMb) {
+        this.sessionMb = sessionMb;
+    }
+
+    
     
 
 }

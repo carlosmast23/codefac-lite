@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.main.license.Licencia;
+import ec.com.codesoft.codefaclite.controlador.session.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
 import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
