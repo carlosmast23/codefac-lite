@@ -122,13 +122,17 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         facturaDetalle.setCantidad(BigDecimal.ZERO);
         facturaDetalle.setDescripcion(productoSeleccionado.getNombre());
         facturaDetalle.setPrecioUnitario(productoSeleccionado.getValorUnitario());
-        facturaDetalle.setDescuento(BigDecimal.ZERO);        
+        facturaDetalle.setDescuento(BigDecimal.ZERO);    
+        //facturaDetalle.setIva(BigDecimal.ONE);
+        //facturaDetalle.setIvaPorcentaje(0);
     }
     
     public void agregarProducto()
     {
         //facturaDetalle.
+        facturaDetalle.calcularTotalDetalle();        
         factura.addDetalle(facturaDetalle);
+        factura.calcularTotalesDesdeDetalles();
     }
 
     public void cargarDatosCliente(PersonaEstablecimiento establecimiento) {

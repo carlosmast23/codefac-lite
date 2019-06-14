@@ -152,22 +152,22 @@
                         <p:panelGrid columns="3" layout="grid" id="datosCliente">
                             <p:panel>
                                 <h:outputLabel style="font-weight: bold">Subtotal 12: </h:outputLabel>
-                                <h:outputLabel style="font-weight: normal">100 </h:outputLabel>
+                                <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.subtotalImpuestos}" />
                             </p:panel>
 
                             <p:panel>
                                 <h:outputLabel style="font-weight: bold">Subtotal 0: </h:outputLabel>
-                                <h:outputLabel style="font-weight: normal">100 </h:outputLabel>
+                                <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.subtotalSinImpuestos}" />
                             </p:panel>
 
                             <p:panel>
                                 <h:outputLabel style="font-weight: bold">Descuento: </h:outputLabel>
-                                <h:outputLabel style="font-weight: normal">100 </h:outputLabel>
+                                <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.descuentoImpuestos}" />
                             </p:panel>
                         </p:panelGrid>
                         <p:panel>
                             <h:outputLabel style="font-weight: bold;font-size: 18px">Total: </h:outputLabel>
-                            <h:outputLabel style="font-weight: normal;font-size: 18px">100 </h:outputLabel>
+                            <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.total}" />
                         </p:panel>
                     </f:facet>
                 </p:dataTable>

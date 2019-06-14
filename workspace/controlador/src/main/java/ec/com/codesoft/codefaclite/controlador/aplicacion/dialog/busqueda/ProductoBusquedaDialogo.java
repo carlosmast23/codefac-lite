@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfacesPropertisFindWeb;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -18,7 +19,7 @@ import java.util.Vector;
  *
  * @author PC
  */
-public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
+public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , InterfacesPropertisFindWeb
 {
     /**
      * Variable para hacer ese filtro cuando lo requiera
@@ -95,6 +96,16 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
         this.generarCodigoBarrasEnum = generarCodigoBarrasEnum;
     }
 
+        @Override
+    public Vector<String> getNamePropertysObject() {
+        Vector<String> propiedades = new Vector<String>();
+        propiedades.add("codigoPersonalizado");
+        propiedades.add("nombre");
+        propiedades.add("valorUnitario");
+        propiedades.add("catalogoProducto.iva");
+        propiedades.add("catalogoProducto.ice");
+        return propiedades;
+    }
     
     
     

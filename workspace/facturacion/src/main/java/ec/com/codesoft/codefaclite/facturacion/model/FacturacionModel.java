@@ -2199,6 +2199,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
     }
 
+    /**
+     * TODO: VER SIS ESTE METODO SE PUEDE UNIR CON EL DE ABAJO PORQUE EISTE 2 SIMILARES
+     * @param facturaDetalle
+     * @return 
+     */
     public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle) {
         boolean agregar = true;
 
@@ -2299,8 +2304,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 
                 //Calular el total despues del descuento porque necesito esa valor para grabar
-                BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
-                facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+                //BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
+                //facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+                facturaDetalle.calcularTotalDetalle();
                 /**
                  * Revisar este calculo del iva para no calcular 2 veces al mostrar
                  */
@@ -2399,8 +2405,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 
                 //Calular el total despues del descuento porque necesito esa valor para grabar
-                BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
-                facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+                //BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
+                //facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));a
+                facturaDetalle.calcularTotalDetalle();
                 facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
                 /**
                  * Revisar este calculo del iva para no calcular 2 veces al mostrar

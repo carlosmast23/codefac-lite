@@ -43,6 +43,11 @@ public class FacturaDetalle implements Serializable {
     
     @Column(name = "DESCRIPCION" ,length = 150)
     private String descripcion;
+    
+    /**
+     * El total del detalle corresonde a la siguiente formular
+     * Total=cantidad*valorUnitario-descuento
+     */
     @Column(name = "TOTAL")
     private BigDecimal total;
     @Column(name = "IVA")
@@ -203,7 +208,14 @@ public class FacturaDetalle implements Serializable {
     }
     
     
-    
+    /**
+     * ====================> METODOS PERSONALIZADOS <=====================     * 
+     */
+    public void calcularTotalDetalle()
+    {
+        BigDecimal setTotal = getCantidad().multiply(getPrecioUnitario()).subtract(getDescuento());
+        total=setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);        
+    }
     
     
 
