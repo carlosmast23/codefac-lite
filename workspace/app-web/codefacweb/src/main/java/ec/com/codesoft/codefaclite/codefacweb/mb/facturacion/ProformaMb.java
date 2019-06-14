@@ -8,11 +8,15 @@ package ec.com.codesoft.codefaclite.codefacweb.mb.facturacion;
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +36,8 @@ import org.primefaces.event.SelectEvent;
 public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     private Factura factura;
+    private Producto productoSeleccionado;
+    private FacturaDetalle facturaDetalle;
 
     @PostConstruct
     public void init() {
@@ -63,17 +69,21 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    public void saludo()
-    {
+
+    public void saludo() {
         System.out.println("Hola todos");
     }
 
     public void abrirDialogoBuscarCliente() {
         System.out.println("Abriendo dialogo init");
-        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();        
+        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
         abrirDialogoBusqueda(clienteBusquedaDialogo);
         System.out.println("Abriendo dialogo fin");
+    }
+
+    public void abrirDialogoBusquedaProducto() {
+        ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo();
+        abrirDialogoBusqueda(dialogModel);
     }
 
     public void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) {
@@ -95,20 +105,38 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         //PrimeFaces.current().dialog()
         PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, null);
     }
-    
-     public void seleccionarCliente(SelectEvent event) {
-        PersonaEstablecimiento clienteOficina= (PersonaEstablecimiento) event.getObject();
+
+    public void seleccionarCliente(SelectEvent event) {
+        PersonaEstablecimiento clienteOficina = (PersonaEstablecimiento) event.getObject();
         cargarDatosCliente(clienteOficina);
-     }
-     
-     public void cargarDatosCliente(PersonaEstablecimiento establecimiento)
-     {
-         if(establecimiento!=null)
-         {
+    }
+
+    public void seleccionarProducto(SelectEvent event) {
+        productoSeleccionado = (Producto) event.getObject();
+        cargarDetalleFacturaAgregar(productoSeleccionado);
+    }
+    
+    private void cargarDetalleFacturaAgregar(Producto productoSeleccionado)
+    {
+        facturaDetalle=new FacturaDetalle();
+        facturaDetalle.setCantidad(BigDecimal.ZERO);
+        facturaDetalle.setDescripcion(productoSeleccionado.getNombre());
+        facturaDetalle.setPrecioUnitario(productoSeleccionado.getValorUnitario());
+        facturaDetalle.setDescuento(BigDecimal.ZERO);        
+    }
+    
+    public void agregarProducto()
+    {
+        //facturaDetalle.
+        factura.addDetalle(facturaDetalle);
+    }
+
+    public void cargarDatosCliente(PersonaEstablecimiento establecimiento) {
+        if (establecimiento != null) {
             factura.setCliente(establecimiento.getPersona());
             factura.setSucursal(establecimiento);
-         }
-     }
+        }
+    }
 
     /**
      * ==========================> METODOS GET AND SET
@@ -121,5 +149,23 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public void setFactura(Factura factura) {
         this.factura = factura;
     }
+
+    public FacturaDetalle getFacturaDetalle() {
+        return facturaDetalle;
+    }
+
+    public void setFacturaDetalle(FacturaDetalle facturaDetalle) {
+        this.facturaDetalle = facturaDetalle;
+    }
+
+    public Producto getProductoSeleccionado() {
+        return productoSeleccionado;
+    }
+
+    public void setProductoSeleccionado(Producto productoSeleccionado) {
+        this.productoSeleccionado = productoSeleccionado;
+    }
+
+    
 
 }

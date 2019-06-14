@@ -15,7 +15,7 @@
         </h:head>
 
         <h:body style="font-size: 11px">
-            <h:form>
+            <h:form id="formulario">
 
                 <p:layout fullPage="true" >
 
@@ -109,7 +109,7 @@
                         </div>
                     </p:layoutUnit>
 
-                    <p:layoutUnit position="west" size="175" header="Barra Tareas" collapsible="true" style="height: auto;border:1px;border-style: ridge">
+                    <!--<p:layoutUnit position="west" size="175" header="Barra Tareas" collapsible="true" style="height: auto;border:1px;border-style: ridge">
                         <h:graphicImage library="img" name="logoCodefac.gif" style="height: 30%" />
                         <p:menu toggleable="true">
                             <p:submenu label="Mensajeria">
@@ -124,7 +124,7 @@
                                 <p:menuitem value="Opción 2" icon="ui-icon-star"/>
                             </p:submenu>
                         </p:menu>
-                    </p:layoutUnit>
+                    </p:layoutUnit>-->
 
                     <p:layoutUnit position="east" size="270" header="Menu" collapsible="true" style="border: 1px;border-style: ridge" >
                         <p:tabView id="panelSecundario" dynamic="true" cache="true" effect="fold"  activeIndex="#{controllerCodefacMb.indiceTabSecundario}">
@@ -149,14 +149,15 @@
                     </p:layoutUnit>
 
                     <p:layoutUnit position="center" style="border:1px;border-style: none">
-                        <p:panel id="panelContenido">
-                            <f:facet name="header">
+                        <p:panel id="panelContenido" style="text-align: center">
+                            <f:facet name="header" >
+                                
                                 <ui:insert name="titulo_contenido">
                                     Sin titulo por defecto
                                 </ui:insert>                                
                             </f:facet>
 
-                            <div  style="padding: 10px">
+                            <div  style="padding: 10px;text-align: left">
                                 <ui:insert name="contenido">
                                     Contenido por defecto de la plantilla  
                                 </ui:insert>

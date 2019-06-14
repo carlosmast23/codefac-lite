@@ -18,43 +18,163 @@
 
 
             <p:panelGrid columns="3" layout="grid">            
-                <p:outputLabel for="button" value="Button:" />
-                <p:datePicker id="button"  showIcon="true" placeholder="Fecha Emisión" />
-
-
-                <p:selectOneMenu id="car" value="#{selectOneMenuView.car}">
-                    <f:selectItem itemLabel="Documento" itemValue="" />
-                    <f:selectItems value="#{selectOneMenuView.cars}" />
-                </p:selectOneMenu>
-
-
-            </p:panelGrid>
-
-            <p:panel>
-                <div class="ui-inputgroup">
-                    <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 25%" />
+                <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
+                    <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 70%" />
                     <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}">
                         <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarCliente}" update="txtCliente,datosCliente"  />
                     </p:commandButton>  
-                </div>
-            </p:panel>
+                </p:panel>
+
+                <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
+                    <p:datePicker id="button"  showIcon="true" placeholder="Fecha Emisión" />
+                </p:panel>
+
+
+                <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
+                    <p:selectOneMenu id="car" value="">
+                        <f:selectItem itemLabel="Proforma" itemValue="" />
+                        <f:selectItems value="" />
+                    </p:selectOneMenu>
+                </p:panel>
+
+
+            </p:panelGrid>
+
 
             <p:panelGrid columns="2" layout="grid" id="datosCliente">      
-                <p:outputPanel deferred="true">
+                <p:panel style="border: none">
                     <h:outputLabel style="font-weight: bold">Razon Social:  </h:outputLabel>
                     <h:outputLabel>#{proformaMb.factura.cliente.razonSocial}</h:outputLabel>
-                </p:outputPanel>
+                </p:panel>
 
-                <p:outputPanel deferred="true">
+                <p:panel style="border: none">
                     <h:outputLabel style="font-weight: bold">Dirección:  </h:outputLabel>
                     <h:outputLabel>#{proformaMb.factura.cliente.direccion}</h:outputLabel>
-                </p:outputPanel>
+                </p:panel>
 
-                <p:outputPanel deferred="true">
+                <p:panel style="border: none">
                     <h:outputLabel style="font-weight: bold">Telefonos:  </h:outputLabel>
                     <h:outputLabel>#{proformaMb.factura.telefono}</h:outputLabel>
-                </p:outputPanel>
+                </p:panel>
+
             </p:panelGrid>
+
+
+            <p:panel>
+                <p:ribbon>
+                    <p:tab title="Productos">
+                        
+                        
+                        <p:ribbonGroup style="width:22%" >
+                            <p:inputText id="txtProducto" placeholder="Código" value="#{proformaMb.productoSeleccionado.codigoPersonalizado}" />
+                            <p:commandButton  process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBusquedaProducto()}">
+                                <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}" update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion"  />
+                            </p:commandButton>
+                        </p:ribbonGroup>
+
+                        <p:ribbonGroup style="width:15%" id="datosProducto">
+                            <p:inputText id="txtValorUnitario" style="width: 100px" placeholder="Valor" value="#{proformaMb.facturaDetalle.precioUnitario}" />
+                            <p:inputText id="txtCantidad" style="width: 100px" placeholder="Cantidad" value="#{proformaMb.facturaDetalle.cantidad}" />
+                            <p:inputText id="txtDescuento" style="width: 100px" placeholder="Descuento" value="#{proformaMb.facturaDetalle.descuento}" />
+                        </p:ribbonGroup>
+
+                        <p:ribbonGroup style="width:45%">
+                            <p:inputText style="width: 80%" id="txtDescripcion"  placeholder="Descripcion" value="#{proformaMb.facturaDetalle.descripcion}" />
+                        </p:ribbonGroup>
+
+                        <p:ribbonGroup style="width:12%">
+                            <p:commandButton process="@this,txtValorUnitario,txtCantidad,txtDescuento" update=":formulario:tblProductoDetalles" icon="fa fa-plus"   styleClass="white-button" action="#{proformaMb.agregarProducto()}"/>
+                            <p:commandButton process="@this" icon="fa fa-pencil"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}"/>
+                            <p:commandButton process="@this" icon="fa fa-close"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}"/>
+                        </p:ribbonGroup>
+                    </p:tab>
+
+                    <p:tab title="View">
+
+                    </p:tab>
+                </p:ribbon>
+
+                <p:dataTable id="tblProductoDetalles" var="detalle" value="#{proformaMb.factura.detalles}" editable="true" style="margin-bottom:20px">
+                    <f:facet name="header">
+                        Detalles Factura
+                    </f:facet>
+
+                    <!--
+                    <p:column headerText="Código" style="width: 10%">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{detalle.referenciaId}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput1" value="asas" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>-->
+
+                    <p:column headerText="Descripción" style="width: 50%">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{detalle.descripcion}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput2" value="asas" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+
+                    <p:column headerText="Valor Unit">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{detalle.precioUnitario}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput3" value="asas" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Cantidad">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{detalle.cantidad}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput6" value="asas" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Descuento">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{detalle.descuento}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput4" value="asas" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Total">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{detalle.total}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput" value="asas" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+
+                    <p:column style="width:35px">
+                        <p:rowEditor />
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:panelGrid columns="3" layout="grid" id="datosCliente">
+                            <p:panel>
+                                <h:outputLabel style="font-weight: bold">Subtotal 12: </h:outputLabel>
+                                <h:outputLabel style="font-weight: normal">100 </h:outputLabel>
+                            </p:panel>
+
+                            <p:panel>
+                                <h:outputLabel style="font-weight: bold">Subtotal 0: </h:outputLabel>
+                                <h:outputLabel style="font-weight: normal">100 </h:outputLabel>
+                            </p:panel>
+
+                            <p:panel>
+                                <h:outputLabel style="font-weight: bold">Descuento: </h:outputLabel>
+                                <h:outputLabel style="font-weight: normal">100 </h:outputLabel>
+                            </p:panel>
+                        </p:panelGrid>
+                        <p:panel>
+                            <h:outputLabel style="font-weight: bold;font-size: 18px">Total: </h:outputLabel>
+                            <h:outputLabel style="font-weight: normal;font-size: 18px">100 </h:outputLabel>
+                        </p:panel>
+                    </f:facet>
+                </p:dataTable>
+            </p:panel>
+
+
+
         </ui:define>
     </ui:composition>
 
