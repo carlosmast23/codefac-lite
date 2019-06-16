@@ -5,10 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.main.license;
 
-import ec.com.codesoft.codefaclite.controlador.session.Licencia;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
 import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
-import ec.com.codesoft.codefaclite.controlador.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;

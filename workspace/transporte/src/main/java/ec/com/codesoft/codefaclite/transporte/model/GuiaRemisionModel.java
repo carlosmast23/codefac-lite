@@ -755,7 +755,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         mapParametros.put("cedula", guiaRemision.getIdentificacion());
         mapParametros.put("direccion", guiaRemision.getDireccion());
         mapParametros.put("telefonos", guiaRemision.getTelefono());
-        mapParametros.put("fechaIngreso", UtilidadesFecha.formatoDiaMesAño(guiaRemision.getFechaEmision()));
+        mapParametros.put("fechaIngreso", UtilidadesFecha.formatoDiaMesAño(new java.sql.Date(guiaRemision.getFechaEmision().getTime())));
         mapParametros.put("codigo", guiaRemision.getPreimpreso().toString());
         mapParametros.put("autorizacion", guiaRemision.getClaveAcceso());
         mapParametros.put("origen", guiaRemision.getDireccionPartida());

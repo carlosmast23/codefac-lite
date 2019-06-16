@@ -40,5 +40,10 @@
             <artifactId>recursos</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ws-codefac</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

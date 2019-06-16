@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.controlador.session;
+package ec.com.codesoft.codefaclite.servidorinterfaz.other.session;
 
-import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
+
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class SessionCodefac implements SessionCodefacInterface{
+public class SessionCodefac implements SessionCodefacInterface,Serializable{
     
     protected Usuario usuario;
     protected Empresa empresa;

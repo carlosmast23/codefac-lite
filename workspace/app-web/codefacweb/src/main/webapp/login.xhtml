@@ -17,10 +17,23 @@
 
                 <h:panelGrid columns="2" cellpadding="5" width="100" style="text-align: center" >
                     <h:outputLabel for="username" value="Usuario:" />
-                    <p:inputText id="username"  required="true" label="username" value="#{loginMb.nick}" />
+                    <p:inputText id="username"  required="true" label="username" value="#{loginMb.nick}"  />
 
                     <h:outputLabel for="password" value="Constraseña:" />
-                    <p:password id="password"  required="true" label="password" value="#{loginMb.clave}" />
+                    <p:password id="password"  required="true" label="password" value="#{loginMb.clave}"  />
+
+                    <h:outputLabel for="password" value="Empresa:" />
+                    <p:selectOneMenu id="cmbEmpresa" value="#{loginMb.empresaSeleccionada}" style="width: 100%" converter="empresaConverter"  >
+                        <f:selectItems value="#{loginMb.empresas}" var="empresa" itemValue="#{empresa.id.toString()}"/>                        
+                        <p:ajax event="itemSelect" listener="#{loginMb.cargarSucursales}" update="" />
+                    </p:selectOneMenu> 
+
+                    
+                    <h:outputLabel for="password" value="Sucursales" />
+                    <p:selectOneMenu id="cmbSucursal" value="#{loginMb.sucursalSeleccionada}" converter="sucursalConverter" style="width: 100%" >                        
+                        <f:selectItems value="#{loginMb.sucursales}" var="sucursal" itemValue="#{sucursal.id.toString()}" />
+                    </p:selectOneMenu>
+
 
                     <f:facet name="footer">
                         <p:commandButton value="Ingresar" action="#{loginMb.login()}" />

@@ -16,11 +16,10 @@
 
         <h:body style="font-size: 11px">
             <h:form id="formulario">
-
                 <p:layout fullPage="true">
 
                     <p:layoutUnit position="north" resizable="false" size="7%" > <!-- TODO: Revisar este tamanio de 10% porque solo es referencial , pero sn poner ningun valor deberia adaptarse al menu principal -->
-                        <p:growl id="messages"/>
+                        <p:growl id="messages" showDetail="true" sticky="true"/>
 
                         <p:menubar style="z-index:1000 !important;">
                             <p:submenu label="Archivo" icon="ui-icon-document">
@@ -61,7 +60,7 @@
                             Todos los derechos reservador Codefac 2018
                         </div>
                     </p:layoutUnit>
-                    <!--
+                    
                     <p:layoutUnit position="west" size="175" header="Barra Tareas" collapsible="true" collapsed="false" style="height: auto;text-align: center;padding: 5px;border: 1px;border-style: ridge">
                         
                         <h:graphicImage library="img" name="logoCodefac.gif" style="height: 20%;border:  0 auto" />
@@ -81,7 +80,7 @@
                                 <p:menuitem value="Servicios" icon="ui-icon-star"/>
                             </p:submenu>
                         </p:menu>
-                    </p:layoutUnit>-->
+                    </p:layoutUnit>
 
                     <p:layoutUnit position="center" style="border:1px;border-style: ridge">
                         <p:panel>

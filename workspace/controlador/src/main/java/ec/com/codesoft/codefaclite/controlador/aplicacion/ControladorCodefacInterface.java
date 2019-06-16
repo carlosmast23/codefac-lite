@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.aplicacion;
 
-import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 
 /**

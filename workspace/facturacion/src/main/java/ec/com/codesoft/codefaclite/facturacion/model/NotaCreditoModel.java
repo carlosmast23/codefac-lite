@@ -169,7 +169,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                 if(notaCredito.getFactura()!=null)
                 {
                     notaCredito.setNumDocModificado(notaCredito.getFactura().getPreimpreso());
-                    notaCredito.setFechaEmisionDocSustento(notaCredito.getFactura().getFechaEmision());
+                    notaCredito.setFechaEmisionDocSustento(new java.sql.Date(notaCredito.getFactura().getFechaEmision().getTime()));
                 }
                 break;
         

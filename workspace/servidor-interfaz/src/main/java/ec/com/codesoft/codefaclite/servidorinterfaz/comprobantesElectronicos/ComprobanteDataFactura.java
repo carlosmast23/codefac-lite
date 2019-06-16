@@ -87,7 +87,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
         
         InformacionFactura informacionFactura=new InformacionFactura();
         
-        informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(factura.getFechaEmision()));
+        informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(new java.sql.Date(factura.getFechaEmision().getTime())));
         
         //if(factura.getDireccionEstablecimiento()!=null && !factura.getDireccionEstablecimiento().isEmpty())
         //{

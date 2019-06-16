@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.utilidades;
 
-import ec.com.codesoft.codefaclite.controlador.session.Licencia;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;

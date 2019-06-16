@@ -14,32 +14,37 @@
     <navigation-rule>
         <navigation-case>
             <from-outcome>menu</from-outcome>
-            <to-view-id>faces/index.xhtml</to-view-id>
+            <to-view-id>index.xhtml</to-view-id>
         </navigation-case>
         
         <navigation-case>
             <from-outcome>principal</from-outcome>
-            <to-view-id>faces/principal.xhtml</to-view-id>
+            <to-view-id>principal.xhtml</to-view-id>
         </navigation-case>
         
         <navigation-case>
             <from-outcome>indexCodefac</from-outcome>
-            <to-view-id>faces/sistema/index.xhtml</to-view-id>
+            <to-view-id>sistema/index.xhtml</to-view-id>
         </navigation-case>
         
         <navigation-case>
             <from-outcome>empleado</from-outcome>
-            <to-view-id>faces/sistema/empleado/empleado.xhtml</to-view-id>
+            <to-view-id>sistema/empleado/empleado.xhtml</to-view-id>
         </navigation-case>
         
         <navigation-case>
             <from-outcome>dialogo_busqueda</from-outcome>
-            <to-view-id>faces/template/dialogo_busqueda.xhtml</to-view-id>
+            <to-view-id>template/dialogo_busqueda.xhtml</to-view-id>
         </navigation-case>
         
         <navigation-case>
             <from-outcome>construyendo</from-outcome>
-            <to-view-id>faces/sistema/facturacion/proforma.xhtml</to-view-id>
+            <to-view-id>sistema/facturacion/proforma.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>proforma</from-outcome>
+            <to-view-id>sistema/facturacion/proforma.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>

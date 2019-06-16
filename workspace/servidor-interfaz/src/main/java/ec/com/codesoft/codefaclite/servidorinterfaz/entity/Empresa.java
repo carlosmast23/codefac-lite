@@ -6,12 +6,17 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -29,7 +34,7 @@ public class Empresa implements Serializable {
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    public long id;
+    public Long id;
     //@Column(name = "TELEFONOS")
     //private String telefonos;
     @Column(name = "RAZON_SOCIAL")
@@ -52,12 +57,15 @@ public class Empresa implements Serializable {
     private String facebook;
     @Column(name = "TEXTO1")
     private String adicional;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa",fetch = FetchType.EAGER)
+    private List<Sucursal> sucursales;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -151,6 +159,16 @@ public class Empresa implements Serializable {
         this.adicional = adicional;
     }
 
+    public List<Sucursal> getSucursales() {
+        return sucursales;
+    }
+
+    public void setSucursales(List<Sucursal> sucursales) {
+        this.sucursales = sucursales;
+    }
+    
+    
+
     @Override
     public String toString() {
         String nameString="";
@@ -164,7 +182,33 @@ public class Empresa implements Serializable {
         }
         return nameString;
     }
-    
-    
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Empresa other = (Empresa) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
+    
 }

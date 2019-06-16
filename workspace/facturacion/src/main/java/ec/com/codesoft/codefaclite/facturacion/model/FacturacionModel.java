@@ -1951,17 +1951,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         //Cuando la facturacion es electronica
         PuntoEmision puntoEmisionSeleccionada=getPuntoEmisionSeleccionado();
-        //factura.setTipoFacturacion(puntoEmisionSeleccionada.getTipoFacturacion());
-        //if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
-        //{
-        //    factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
-        //}
-        //else //cuando la facturacion es normal
-        //{
-        //    factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor));
-        //}
-        
-        factura.setSubtotalSinImpuestos(BigDecimal.ZERO);
 
         /**
          * Seteado los valores temporales pero toca cambiar esta parte y setear

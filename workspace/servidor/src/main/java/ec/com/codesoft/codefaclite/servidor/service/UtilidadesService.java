@@ -7,8 +7,10 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import java.rmi.RemoteException;
 import java.rmi.server.RemoteServer;
@@ -27,10 +29,9 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
 
     public UtilidadesService() throws RemoteException {
     }
-    
+
     //TODO: Verificar porque no esta funcionando este metodo
-    public Object mergeEntity(Object entity) throws java.rmi.RemoteException 
-    {
+    public Object mergeEntity(Object entity) throws java.rmi.RemoteException {
         return AbstractFacade.entityManager.merge(entity);
     }
 
@@ -44,11 +45,10 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
 
     @Override
     public boolean verificarConexionesServidor() throws RemoteException {
-        int numeroConexionesPermitidas=1;
-        
+        int numeroConexionesPermitidas = 1;
+
         //Solo verificar los numero se conexiones para usuarios preimun , cuando es gratis siempre solo va a permitir 1 conexion
-        if(UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.PRO))                
-        {
+        if (UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.PRO)) {
             numeroConexionesPermitidas = UtilidadesServidor.cantidadUsuarios;
         }
 
@@ -60,7 +60,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             } else if (UtilidadesServidor.hostConectados.size() < numeroConexionesPermitidas) {
                 UtilidadesServidor.hostConectados.add(hostCliente);
                 if (UtilidadesServidor.monitorUpdate != null) {
-                    
+
                     String[] stockArr = new String[UtilidadesServidor.hostConectados.size()];
                     stockArr = UtilidadesServidor.hostConectados.toArray(stockArr);
                     UtilidadesServidor.monitorUpdate.actualizarNumeroConexiones(stockArr);
@@ -81,12 +81,29 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     public TipoLicenciaEnum getTipoLicencia() throws RemoteException {
         return UtilidadesServidor.tipoLicenciaEnum;
     }
-    
+
     @Override
-    public List<ModuloCodefacEnum> getModulosSistema()  throws RemoteException
-    {
+    public List<ModuloCodefacEnum> getModulosSistema() throws RemoteException {
         return UtilidadesServidor.modulosMap;
     }
-    
+
+    @Override
+    public SessionCodefac getSessionPreConstruido() throws RemoteException {
+        SessionCodefac session = new SessionCodefac();
+        //if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
+        //    session.setTipoLicenciaEnum(UtilidadesServidor.tipoLicenciaEnum);
+        //} else {
+        UtilidadesServiceIf utilidadesServiceIf = ServiceFactory.getFactory().getUtilidadesServiceIf();
+        TipoLicenciaEnum tipoLicencia = utilidadesServiceIf.getTipoLicencia();
+
+        session.setTipoLicenciaEnum(tipoLicencia);
+
+        session.setModulos(utilidadesServiceIf.getModulosSistema());
+
+        //}
+        session.setUsuarioLicencia(UtilidadesServidor.usuarioLicencia);
+        
+        return session;
+    }
 
 }

@@ -24,7 +24,7 @@ import ec.com.codesoft.codefaclite.controlador.logs.LogControlador;
 import ec.com.codesoft.codefaclite.main.actualizacion.ActualizacionSistemaUtil;
 import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
-import ec.com.codesoft.codefaclite.controlador.session.Licencia;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
 import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
@@ -40,7 +40,7 @@ import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
 import ec.com.codesoft.codefaclite.main.other.ArchivoDescarga;
 import ec.com.codesoft.codefaclite.main.other.BaseDatosCredenciales;
 import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
-import ec.com.codesoft.codefaclite.controlador.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.main.utilidades.UtilidadServicioWeb;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servicios.controller.ControllerServiceUtil;
@@ -590,7 +590,7 @@ public class Main {
              * Crear la session y cargar otro datos de la empresa
              */
 
-            SessionCodefac session = new SessionCodefac();
+            /*SessionCodefac session = new SessionCodefac();
             if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
                 session.setTipoLicenciaEnum(UtilidadesServidor.tipoLicenciaEnum);
             } else {
@@ -601,9 +601,11 @@ public class Main {
                 
                 session.setModulos(utilidadesServiceIf.getModulosSistema());                
                 
-            }
-
-            session.setUsuarioLicencia(UtilidadesServidor.usuarioLicencia);
+            }*/
+            
+            //session.setUsuarioLicencia(UtilidadesServidor.usuarioLicencia);
+            
+            SessionCodefac session=ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido();
             EmpresaServiceIf empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
             List<Empresa> empresaList = empresaService.obtenerTodos();
 

@@ -5,7 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
-import ec.com.codesoft.codefaclite.controlador.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
+import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -16,23 +17,25 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class SessionMb extends SessionCodefac{
- 
-    private String ejemplo;
-    
+public class SessionMb implements Serializable{
+
+    /**
+     * Entidad que se va a encargar de tener fisicamente los datos de la session
+     */
+    private SessionCodefac session;
+
     @PostConstruct
-    public void init()
-    {
-        ejemplo="hola a todos";
+    public void init() {
+        //ejemplo = "hola a todos";
     }
 
-    public String getEjemplo() {
-        return ejemplo;
+    public SessionCodefac getSession() {
+        return session;
     }
 
-    public void setEjemplo(String ejemplo) {
-        this.ejemplo = ejemplo;
+    public void setSession(SessionCodefac session) {
+        this.session = session;
     }
-    
+
     
 }

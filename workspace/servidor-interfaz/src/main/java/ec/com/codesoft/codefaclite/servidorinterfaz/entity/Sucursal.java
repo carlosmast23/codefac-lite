@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -57,6 +58,7 @@ public class Sucursal implements Serializable{
     private Integer codigoSucursal; 
     
     @JoinColumn(name ="EMPRESA_ID")
+    @ManyToOne(optional = false)
     private Empresa empresa;
 
     public Long getId() {

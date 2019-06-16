@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -30,4 +31,11 @@ public interface UtilidadesServiceIf extends Remote
     public boolean verificarConexionesServidor() throws java.rmi.RemoteException;
     public TipoLicenciaEnum getTipoLicencia() throws java.rmi.RemoteException;
     public List<ModuloCodefacEnum> getModulosSistema()  throws RemoteException;
+    /**
+     * Me devuelve un objeto session con algunos datos preconstruidos
+     * @return
+     * @throws RemoteException 
+     */
+    public SessionCodefac getSessionPreConstruido()  throws RemoteException;
+    
 }

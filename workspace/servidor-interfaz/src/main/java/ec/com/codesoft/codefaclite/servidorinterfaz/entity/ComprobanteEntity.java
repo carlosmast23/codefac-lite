@@ -47,7 +47,7 @@ public abstract class ComprobanteEntity implements Serializable{
     protected Date fechaCreacion;
     
     @Column(name = "FECHA_EMISION")
-    protected Date fechaEmision;
+    protected java.util.Date fechaEmision;
     
     @Column(name = "RAZON_SOCIAL")
     protected String razonSocial;
@@ -159,11 +159,11 @@ public abstract class ComprobanteEntity implements Serializable{
         this.fechaCreacion = fechaCreacion;
     }
 
-    public Date getFechaEmision() {
+    public java.util.Date getFechaEmision() {
         return fechaEmision;
     }
 
-    public void setFechaEmision(Date fechaEmision) {
+    public void setFechaEmision(java.util.Date fechaEmision) {
         this.fechaEmision = fechaEmision;
     }
     
