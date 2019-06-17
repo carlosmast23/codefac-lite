@@ -104,7 +104,7 @@ public class ProformaModel extends FacturacionModel{
     @Override
     protected void setearValoresDefaultFactura() {
         super.setearValoresDefaultFactura(); //To change body of generated methods, choose Tools | Templates.
-        factura.setSecuencial(Integer.parseInt(getLblSecuencial().getText()));
+        factura.setSecuencial(Integer.parseInt(getLblSecuencial().getText())); //TODO: Revisar que este de tema de setar el secuencial ya lo estoy haciendo desde el servicio
         //facrur
         
     }
@@ -118,13 +118,17 @@ public class ProformaModel extends FacturacionModel{
             validacionesGrabar(); //Metodo que realiza validaciones previas antes de grabar
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
             setearValoresDefaultFactura();
-            factura.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+            //factura.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
             factura = servicio.grabarProforma(factura);
             DialogoCodefac.mensaje("Correcto","Proforma generada correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             imprimirProforma();
         
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
         }        
 
     }
@@ -159,6 +163,8 @@ public class ProformaModel extends FacturacionModel{
     public List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando) {
         return super.getDetalleDataReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    
 
     @Override
     public Map<String, Object> getMapParametrosReporte(Factura facturaProcesando) {

@@ -229,6 +229,10 @@ public class FacturaDetalle implements Serializable {
         return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(this.tipoDocumento);
     }
     
+    public void setTipoDocumentoEnum(TipoDocumentoEnum tipoDocumentoEnum) {
+        this.tipoDocumento = tipoDocumentoEnum.getCodigo();
+    }
+    
     /**
      * Metodos personalizados
      * @return 

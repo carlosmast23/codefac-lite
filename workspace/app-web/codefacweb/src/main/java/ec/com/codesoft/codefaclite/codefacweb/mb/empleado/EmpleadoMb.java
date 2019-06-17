@@ -90,4 +90,9 @@ public class EmpleadoMb extends GeneralAbstractMb implements Serializable {
         this.empleado = empleado;
     }
 
+    @Override
+    public void imprimir() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

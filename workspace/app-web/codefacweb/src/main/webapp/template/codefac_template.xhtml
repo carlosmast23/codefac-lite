@@ -38,7 +38,7 @@
                                     <p:menuitem value="Empleado" action="empleado" />
                                 </p:submenu>
                             </p:submenu>
-                            
+
                             <p:submenu label="Facturación" icon="ui-icon-pencil">
                                 <p:submenu label="Proceso" icon="ui-icon-contact">
                                     <p:menuitem value="Proforma" action="facturacion/proforma" />
@@ -57,7 +57,7 @@
 
                             <p:submenu label="Ventanas" icon="ui-icon-gear">
                                 <p:submenu label="Mensajes SMS" icon="ui-icon-refresh">
-                                    <p:menuitem value="Save" actionListener="#{menuView.save}" icon="ui-icon-disk" update="messages"/>
+                                    <p:menuitem value="Save" ajax="false" action="#{menuView.save}" icon="ui-icon-disk" update="messages" />
                                     <p:menuitem value="Update" actionListener="#{menuView.update}" icon="ui-icon-arrowrefresh-1-w" update="messages"/>
                                 </p:submenu>
                                 <p:submenu label="Imprimir" icon="ui-icon-newwin">
@@ -76,25 +76,26 @@
                         <!-- BOTONES DE LAS ACCCIONES GENERALES !-->
                         <p:panel style="text-align: center">
                             <p:commandButton icon="home-icon" class="button-menu" title="Home" action="indexCodefac" />
-                            
+
                             <p:commandButton icon="new-icon" class="button-menu" title="Nuevo" process="@this" update="panelContenido">
                                 <p:resetInput target="panelContenido"/>
                             </p:commandButton>
-                            
-                            <p:commandButton icon="save-icon" class="button-menu" title="Grabar" disabled="false" actionListener="#{controllerCodefacMb.generalAbstractMb.grabar()}" />
-                            
+
+                            <p:commandButton icon="save-icon"  class="button-menu" type="button" onclick="PF('dialogConfirmarGrabar').show()" title="Grabar" disabled="false" >                                
+                            </p:commandButton>
+
                             <!-- IMPRIMI BOTON -->
                             <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" />
-                            
+
                             <!-- BUSCAR BOTON-->
                             <p:commandButton icon="find-icon" class="button-menu" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" >
                                 <p:ajax event="dialogReturn" listener="#{controllerCodefacMb.onObjectChosen}" update="panelContenido" />
                             </p:commandButton>
-                            
+
                             <!-- ELIMINAR BOTON -->
                             <p:commandButton icon="delete-icon" class="button-menu" title="Eliminar" actionListener="#{controllerCodefacMb.delete()}" />
-                                
-                            
+
+
                             <p:commandButton icon="refresh-icon" class="button-menu" title="Refrescar" disabled="true" />
                             <ui:insert name="btnAyuda">
                                 <p:commandButton icon="help-icon" class="button-menu" title="Ayuda" actionListener="#{controllerCodefacMb.mostrarAyuda()}" update="panelSecundario" process="@this" disabled="false" />
@@ -151,7 +152,7 @@
                     <p:layoutUnit position="center" style="border:1px;border-style: none">
                         <p:panel id="panelContenido" style="text-align: center">
                             <f:facet name="header" >
-                                
+
                                 <ui:insert name="titulo_contenido">
                                     Sin titulo por defecto
                                 </ui:insert>                                
@@ -169,6 +170,12 @@
                             </f:facet>
                         </p:panel>
                     </p:layoutUnit>
+
+                    <!-- DIALOGO PARA CONFIRMAR EL GUARDAR -->
+                    <p:confirmDialog message="Esta seguro que desea grabar los datos?" header="Alerta" severity="alert" widgetVar="dialogConfirmarGrabar">
+                        <p:commandButton value="Si" ajax="false" actionListener="#{controllerCodefacMb.generalAbstractMb.grabar()}" update="messages"  onclick="PF('dialogConfirmarGrabar').hide();"/>
+                        <p:commandButton value="No" onclick="PF('dialogConfirmarGrabar').hide();" type="button" />
+                    </p:confirmDialog>
 
                 </p:layout>
 

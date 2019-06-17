@@ -15,7 +15,7 @@ import org.primefaces.PrimeFaces;
 public class MensajeMb {
 
     public static void mostrarMensaje(String titulo,String mensaje,FacesMessage.Severity tipoMensaje) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,titulo, mensaje);
+        FacesMessage message = new FacesMessage(tipoMensaje,titulo, mensaje);
         PrimeFaces.current().dialog().showMessageDynamic(message);
     }
 

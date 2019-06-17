@@ -70,7 +70,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     }
     
     
-    public Factura grabarProforma(Factura proforma) throws RemoteException
+    public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -78,7 +78,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 public void transaccion() {
                     try
                     {
+                        proforma.setSecuencial(obtenerSecuencialProformas().intValue());
+                        proforma.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                        
                         proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
+                        setearDatosCliente(proforma);
                         grabarDetallesFactura(proforma);
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
                     }
@@ -93,6 +97,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
         
         return proforma;
+    }
+    
+    /**
+     * Metodo que permite setear los datos del cliente en la venta para poder datos estaticos para realizar control de la venta
+     * @param venta 
+     */
+    private void setearDatosCliente(Factura venta)
+    {
+        venta.setRazonSocial(venta.getCliente().getRazonSocial());
+        venta.setIdentificacion(venta.getCliente().getIdentificacion());
+        venta.setDireccion(venta.getCliente().getDireccion());
+        venta.setTelefono(venta.getCliente().getTelefonoCelular()); //todo: ver si hago un metodo para obtener los telefonos        
     }
     
 

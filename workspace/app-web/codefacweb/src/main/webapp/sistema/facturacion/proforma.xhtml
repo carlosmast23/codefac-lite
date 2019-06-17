@@ -14,9 +14,9 @@
 
         <ui:define name="contenido" >
 
-            <f:event listener="#{controllerCodefacMb.agregarVista(empleadoMb)}" type="preRenderView" />
-            
-            <p:panelGrid columns="3" layout="grid">            
+            <f:event listener="#{controllerCodefacMb.agregarVista(proformaMb)}" type="preRenderView" />
+
+            <p:panelGrid columns="4" layout="grid">            
                 <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
                     <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 70%" />
                     <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}">
@@ -30,10 +30,17 @@
 
 
                 <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
-                    <p:selectOneMenu id="car" value="">
-                        <f:selectItem itemLabel="Proforma" itemValue="" />
-                        <f:selectItems value="" />
+                    <p:selectOneMenu id="car" value="#{proformaMb.documentoSeleccionado}" converter="documentoEnumConverter" >
+                        <f:selectItems value="#{proformaMb.documentos}" var="documento" itemValue="#{documento.codigo}" />
                     </p:selectOneMenu>
+                </p:panel>
+
+                <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
+                    <p:outputLabel value="Punto Emisión:" />
+                    <p:selectOneMenu id="cmbPuntoEmision" value="#{proformaMb.puntoEmisionSeleccionado}" converter="puntoEmisionConverter" >
+                        <f:selectItems value="#{proformaMb.puntosEmision}" var="puntoEmision" itemValue="#{puntoEmision.id.toString()}" />
+                    </p:selectOneMenu>
+                    <p:outputLabel value="" />
                 </p:panel>
 
 
@@ -176,8 +183,12 @@
                 </p:dataTable>
             </p:panel>
 
-
-
+            <h:commandButton value="Ver Pdf" action="#{proformaMb.grabar()}" />
+            <p:commandButton value="Ver Pdf primefaces" actionListener="#{proformaMb.grabar()}" ajax="false" />
+            <p:commandLink value="Command link" actionListener="#{proformaMb.grabar()}" ajax="false" />
+            <p:menu>
+                <p:menuitem value="Save" ajax="false" actionListener="#{proformaMb.grabar()}" icon="ui-icon-disk" update="messages" />
+            </p:menu>
         </ui:define>
     </ui:composition>
 

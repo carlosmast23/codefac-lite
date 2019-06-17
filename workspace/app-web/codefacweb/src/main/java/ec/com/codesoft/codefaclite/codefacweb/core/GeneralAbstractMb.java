@@ -14,8 +14,8 @@ import java.io.Serializable;
  */
 public abstract class GeneralAbstractMb implements Serializable{
     public abstract void grabar();
-    /*public abstract void editar();
-    public abstract void imprimir();*/
+    /*public abstract void editar();*/
+    public abstract void imprimir();
     public abstract void eliminar();
     public abstract void buscar();
     public abstract void cargarBusqueda(Object obj);
