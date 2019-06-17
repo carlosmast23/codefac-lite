@@ -15,7 +15,7 @@
         </h:head>
 
         <h:body style="font-size: 11px">
-            <h:form id="formulario">
+            <h:form id="formulario" target="_blank">
 
                 <p:layout fullPage="true" >
 
@@ -173,7 +173,7 @@
 
                     <!-- DIALOGO PARA CONFIRMAR EL GUARDAR -->
                     <p:confirmDialog message="Esta seguro que desea grabar los datos?" header="Alerta" severity="alert" widgetVar="dialogConfirmarGrabar">
-                        <p:commandButton value="Si" ajax="false" actionListener="#{controllerCodefacMb.generalAbstractMb.grabar()}" update="messages"  onclick="PF('dialogConfirmarGrabar').hide();"/>
+                        <p:commandButton value="Si" ajax="false" actionListener="#{controllerCodefacMb.generalAbstractMb.grabar()}" update="messages"  onclick="PF('dialogConfirmarGrabar').hide();"  />
                         <p:commandButton value="No" onclick="PF('dialogConfirmarGrabar').hide();" type="button" />
                     </p:confirmDialog>
 

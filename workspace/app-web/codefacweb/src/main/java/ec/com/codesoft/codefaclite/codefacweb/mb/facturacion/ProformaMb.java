@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -58,6 +59,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
@@ -101,7 +103,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
             setearDatosAdicionales();
 
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
-            factura=servicio.grabarProforma(factura);
+            factura = servicio.grabarProforma(factura);
             MensajeMb.mostrarMensaje("Correcto", "Proforma grabada correctamente", FacesMessage.SEVERITY_INFO);
             imprimir();
         } catch (ServicioCodefacException ex) {
@@ -316,7 +318,44 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
             List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
             Map<String, Object> mapParametros = getMapParametrosReporte(factura);
             InputStream path = RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("proforma.jrxml");
-            JasperPrint jasperPrint=ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
+            JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
+            //JasperPrint jasperPrint = JasperFillManager.fillReport(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
+
+            mapParametros=ReporteCodefac.mapReportePlantilla(OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4,  sessionMb.getSession());
+            ByteArrayOutputStream baos =new ByteArrayOutputStream();
+            //HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint,baos);
+            //byte[] bytes = JasperRunManager.runReportToPdf(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            //response.setHeader("Content-disposition", "inline; filename=proforma");
+            response.setContentType("application/pdf");
+            response.setContentLength(baos.size());
+
+            ServletOutputStream outStream = response.getOutputStream();
+            baos.writeTo(outStream);
+            //outStream.write(baos, 0, baos.size());
+
+            outStream.flush();
+            outStream.close();
+
+            FacesContext.getCurrentInstance().responseComplete();
+
+        } catch (JRException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void imprimirArchivoAdjunto() {
+        try {
+            System.out.println("Imprimir ...");
+            List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
+            Map<String, Object> mapParametros = getMapParametrosReporte(factura);
+            InputStream path = RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("proforma.jrxml");
+            JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
             //JasperPrint jasperPrint = JasperFillManager.fillReport(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
 
             HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
@@ -329,9 +368,6 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
             stream.close();
             FacesContext.getCurrentInstance().responseComplete();
             System.out.println("termino de imprimir");
-            
-            
-            
 
         } catch (JRException ex) {
             ex.printStackTrace();
