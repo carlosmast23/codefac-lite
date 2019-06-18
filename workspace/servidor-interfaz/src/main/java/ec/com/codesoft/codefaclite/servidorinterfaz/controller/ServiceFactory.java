@@ -228,7 +228,13 @@ public abstract class ServiceFactory {
         return remote;
     }
     
-     
-    
+    /**
+     * Permite saber si existe una conexion creada anteriormente
+     * @return 
+     */
+    public static boolean isActiveController()
+    {
+        return serviceController !=null;
+    }
     
 }

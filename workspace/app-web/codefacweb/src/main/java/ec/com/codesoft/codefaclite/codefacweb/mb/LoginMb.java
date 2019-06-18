@@ -71,7 +71,7 @@ public class LoginMb implements Serializable {
         } catch (RemoteException ex) {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "login.xhtml";
+        return "login.xhtml?faces-redirect=true";
     }
 
     private void construirSession(Usuario usuario, Empresa empresa, Sucursal sucursal) {

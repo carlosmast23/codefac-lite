@@ -49,7 +49,7 @@ public class ConfiguracionInicialMb implements Serializable{
             //InputStreamReader input = new InputStreamReader(FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/WEB-INF/ejemplo.prop"));
             Properties propiedades=new Properties();
             propiedades.load(stream);
-            System.out.println("Ip servidor: "+propiedades.get("servicio_web_ip_servidor").toString());
+            System.out.println("Ip servidor archivo init: "+propiedades.get("servicio_web_ip_servidor").toString());
             ipServidor=propiedades.get("servicio_web_ip_servidor").toString();
             ServiceFactory.newController(ipServidor);   
             //Properties propiedades=getPropertiesFromClasspath("ejemplo.prop");

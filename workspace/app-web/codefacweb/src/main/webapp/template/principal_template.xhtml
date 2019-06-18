@@ -16,6 +16,7 @@
 
         <h:body style="font-size: 11px">
             <h:form id="formulario">
+                <p:remoteCommand name="onload" action="#{applicationCodefacMb.controladorConexionServidor()}" autoRun="true" process="@this" />
                 <p:layout fullPage="true">
 
                     <p:layoutUnit position="north" resizable="false" size="7%" > <!-- TODO: Revisar este tamanio de 10% porque solo es referencial , pero sn poner ningun valor deberia adaptarse al menu principal -->

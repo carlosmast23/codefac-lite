@@ -12,10 +12,16 @@
                 <h:outputStylesheet library="css" name="estilo.css" />
                 <title>PrimeFaces</title>
             </f:facet>
+
+            <!--<f:metadata>
+                <f:viewAction action="#{applicationCodefacMb.controladorConexionServidor()}" />
+            </f:metadata>-->
         </h:head>
 
         <h:body style="font-size: 11px">
             <h:form id="formulario" target="_blank">
+                
+                <p:remoteCommand name="onload" action="#{applicationCodefacMb.controladorConexionServidor()}" autoRun="true" />
 
                 <p:layout fullPage="true" >
 

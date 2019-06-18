@@ -89,6 +89,10 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     @PostConstruct
     public void init() {
         factura = new Factura();
+        factura.setCliente(new Persona());//Esto solo hago para evitar advertencias
+        productoSeleccionado=new Producto();
+        facturaDetalle=new FacturaDetalle();
+        
         factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
         documentos = new ArrayList<DocumentoEnum>();
         documentos.add(DocumentoEnum.PROFORMA);

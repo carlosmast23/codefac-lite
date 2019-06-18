@@ -45,6 +45,14 @@
         <navigation-case>
             <from-outcome>proforma</from-outcome>
             <to-view-id>sistema/facturacion/proforma.xhtml</to-view-id>
+                    <redirect>
+            <view-param>
+                <name>faces-redirect</name>
+                <value>true</value>
+            </view-param>
+        </redirect>
         </navigation-case>
+        
+        
     </navigation-rule>
 </faces-config>
