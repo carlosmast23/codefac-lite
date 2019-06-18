@@ -54,6 +54,12 @@ public class ControllerCodefacMb implements Serializable {
         System.err.println("Metodo para eliminar desde el controlador");
         generalAbstractMb.eliminar();
     }
+    
+    public void imprimir()
+    {
+        System.out.println("Metodo para imprimir");
+        generalAbstractMb.imprimir();
+    }
 
     public void abrirDialogoBusqueda() {
         System.out.println("abriendo dialogo");

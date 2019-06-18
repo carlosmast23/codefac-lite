@@ -91,7 +91,7 @@
                             </p:commandButton>
 
                             <!-- IMPRIMI BOTON -->
-                            <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" />
+                            <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" />
 
                             <!-- BUSCAR BOTON-->
                             <p:commandButton icon="find-icon" class="button-menu" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" >
