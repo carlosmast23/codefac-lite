@@ -42,6 +42,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +85,11 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     private Producto productoSeleccionado;
     private DocumentoEnum documentoSeleccionado;
     private PuntoEmision puntoEmisionSeleccionado;
+    /**
+     * TODO:Por el momento seteo con una variable adicional de la fecha porque en el modelo esta con sql y fuciona correctamente para las consultas
+     * pero cuando hago ese cambio en el modelo tengo problemas con otras funcionalidades
+     */
+    private java.util.Date fechaEmision;
 
     @ManagedProperty(value = "#{sessionMb}")
     private SessionMb sessionMb;
@@ -134,6 +140,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     @Override
     public void cargarBusqueda(Object obj) {
         factura=(Factura) obj;
+        fechaEmision=new java.sql.Date(factura.getFechaEmision().getTime());
     }
 
     @Override
@@ -213,6 +220,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         if (establecimiento != null) {
             factura.setCliente(establecimiento.getPersona());
             factura.setSucursal(establecimiento);
+            
         }
     }
 
@@ -263,7 +271,8 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
         factura.setEmpresa(sessionMb.getSession().getEmpresa());
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-
+        factura.setFechaEmision(new java.sql.Date(fechaEmision.getTime()));
+        
         factura.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
 
         factura.setObligadoLlevarContabilidad(sessionMb.getSession().getEmpresa().getObligadoLlevarContabilidad());
@@ -474,5 +483,15 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         }
         return datosAdicionalesData;
     }
+
+    public Date getFechaEmision() {
+        return fechaEmision;
+    }
+
+    public void setFechaEmision(Date fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
+    
+    
 
 }
