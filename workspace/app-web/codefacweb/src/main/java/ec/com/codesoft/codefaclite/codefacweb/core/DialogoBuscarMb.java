@@ -36,6 +36,10 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class DialogoBuscarMb implements Serializable {
 
+    private static final Logger LOG = Logger.getLogger(DialogoBuscarMb.class.getName());
+    
+    
+
     private List<Object> datosBusqueda;
     private List<String> propiedadesObjeto;
     private List<Vector<String>> datosConsulta;

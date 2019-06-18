@@ -65,11 +65,11 @@
                                 </p:submenu>
                             </p:submenu>
 
-                            <p:menuitem value="Salir" url="http://www.primefaces.org" icon="ui-icon-close" />
+                            <p:menuitem value="Salir"  icon="ui-icon-close" />
 
                             <f:facet name="options">
-                                <p:inputText style="margin-right:10px" placeholder="Buscar"/>
-                                <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
+                                <!--<p:inputText style="margin-right:10px" placeholder="Buscar"/>-->
+                                <p:commandButton process="@this" action="#{sessionMb.logout()}"  value="Salir" icon="ui-icon-extlink" />
                             </f:facet>
                         </p:menubar>
 
