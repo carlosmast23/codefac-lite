@@ -3,21 +3,21 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:c="http://xmlns.jcp.org/jsf/composite/componentes">
 
-    <ui:composition  template="template/principal_template.xhtml">
+    <ui:composition  template="template/codefac_template.xhtml">
 
-        <ui:define name="titulo_contenido">
-            Login Test
-        </ui:define>
+        <ui:define name="contenido" >
 
-        <ui:define name="contenido">
-            <p:outputLabel value="asdasd"/>
-            
+            <f:event listener="#{controllerCodefacMb.agregarVista(ejemploTestMb)}" type="preRenderView" />
+            <p:outputLabel value="Nuevo valor:"/>
+            <p:outputLabel id="txtEjemplo" value="#{ejemploTestMb.texto}"/>
+
+            <p:commandButton value="imprimir" actionListener="#{ejemploTestMb.imprimirOtro()}"  />
+
         </ui:define>
     </ui:composition>
 
 </html>
-
-
 

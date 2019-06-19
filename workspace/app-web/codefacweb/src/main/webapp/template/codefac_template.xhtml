@@ -26,7 +26,7 @@
                 <p:layout fullPage="true" >
 
                     <p:layoutUnit position="north" resizable="true" closable="true" collapsible="true" size="16%"  >
-                        <p:growl id="messages"/>
+                        <p:growl id="messages" showDetail="true" life="5000"/>
 
                         <p:menubar style="z-index:1000 !important;">
                             <p:submenu label="Archivo" icon="ui-icon-document">
@@ -83,7 +83,7 @@
                         <p:panel style="text-align: center">
                             <p:commandButton icon="home-icon" class="button-menu" title="Home" action="indexCodefac" />
 
-                            <p:commandButton icon="new-icon" class="button-menu" title="Nuevo" process="@this" update="panelContenido">
+                            <p:commandButton icon="new-icon" class="button-menu" title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}" update="panelContenido">
                                 <p:resetInput target="panelContenido"/>
                             </p:commandButton>
 
@@ -91,7 +91,7 @@
                             </p:commandButton>
 
                             <!-- IMPRIMI BOTON -->
-                            <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" />
+                            <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" update="messages" />
 
                             <!-- BUSCAR BOTON-->
                             <p:commandButton icon="find-icon" class="button-menu" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" >
@@ -158,10 +158,10 @@
                     <p:layoutUnit position="center" style="border:1px;border-style: none">
                         <p:panel id="panelContenido" style="text-align: center">
                             <f:facet name="header" >
-
-                                <ui:insert name="titulo_contenido">
+                                <p:outputLabel id="txtTituloPagina" value="#{controllerCodefacMb.getTituloPagina()}" />
+                                <!--<ui:insert name="titulo_contenido">
                                     Sin titulo por defecto
-                                </ui:insert>                                
+                                </ui:insert>-->
                             </f:facet>
 
                             <div  style="padding: 10px;text-align: left">
@@ -179,7 +179,7 @@
 
                     <!-- DIALOGO PARA CONFIRMAR EL GUARDAR -->
                     <p:confirmDialog message="Esta seguro que desea grabar los datos?" header="Alerta" severity="alert" widgetVar="dialogConfirmarGrabar">
-                        <p:commandButton value="Si" ajax="false" actionListener="#{controllerCodefacMb.generalAbstractMb.grabar()}" update="messages"  onclick="PF('dialogConfirmarGrabar').hide();"  />
+                        <p:commandButton value="Si" ajax="false" actionListener="#{controllerCodefacMb.save()}" update="messages"  onclick="PF('dialogConfirmarGrabar').hide();"  />
                         <p:commandButton value="No" onclick="PF('dialogConfirmarGrabar').hide();" type="button" />
                     </p:confirmDialog>
 

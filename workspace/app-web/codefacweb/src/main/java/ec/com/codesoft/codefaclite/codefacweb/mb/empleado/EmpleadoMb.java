@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.codefacweb.mb.empleado;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
@@ -16,6 +18,7 @@ import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -50,6 +53,7 @@ public class EmpleadoMb extends GeneralAbstractMb implements Serializable {
         try {
             ServiceFactory.getFactory().getEmpleadoServiceIf().grabar(empleado);
             System.out.println("Empleado guardado");
+            MensajeMb.mostrarMensaje("Correctamente","Ejemplo guardado correctamente",FacesMessage.SEVERITY_INFO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(EmpleadoMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
@@ -92,6 +96,21 @@ public class EmpleadoMb extends GeneralAbstractMb implements Serializable {
 
     @Override
     public void imprimir() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String titulo() {
+        return "Empleado";
+    }
+
+    @Override
+    public void editar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void nuevo() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

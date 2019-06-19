@@ -8,10 +8,6 @@
 
     <ui:composition  template="/template/codefac_template.xhtml">
 
-        <ui:define name="titulo_contenido">
-            proforma
-        </ui:define>
-
         <ui:define name="contenido" >
 
             <f:event listener="#{controllerCodefacMb.agregarVista(proformaMb)}" type="preRenderView" />

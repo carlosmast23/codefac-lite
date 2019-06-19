@@ -41,10 +41,7 @@ public class ApplicationCodefacMb  implements Serializable{
      * para restablecer o establecer la comunicacion con el servidor
      */
     public void controladorConexionServidor()
-    {
-        System.out.println("=====> Verificando conexion con el servidor ========>");
-        //Verifico si existe o con conexion con el servidor
-        //Si exite anteriormente creado no ejecuto nada
+    {       
         if(ServiceFactory.isActiveController())
         {
             return;

@@ -5,10 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstadoFormEnum;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -35,35 +38,78 @@ public class ControllerCodefacMb implements Serializable {
 
     private String indiceTabSecundario;
     private GeneralAbstractMb generalAbstractMb;
+    private EstadoFormEnum estadoEnum;
+    //private String titulo;
 
     @PostConstruct
     public void init() {
         indiceTabSecundario = "2";
+        this.estadoEnum = EstadoFormEnum.GRABAR;
+        //titulo="Sin titulo";
+    }
+
+    public void nuevo() {
+        System.out.println("presionado boton nuevo");
+        try {
+            generalAbstractMb.nuevo();
+            estadoEnum = EstadoFormEnum.GRABAR;
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
      * Metodo superior que contrala la forma como van a grabar
      */
     public void save() {
-        //Metodo save desde el controlador
         System.out.println("Metodo save desde el controlador");
-        generalAbstractMb.grabar();
+        //Metodo save desde el controlador
+        if (estadoEnum.equals(EstadoFormEnum.GRABAR)) {
+            try {
+                generalAbstractMb.grabar();
+                generalAbstractMb.nuevo();
+            } catch (ExcepcionCodefacLite ex) {
+                Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (estadoEnum.equals(EstadoFormEnum.EDITAR)) {
+            try {
+                generalAbstractMb.editar();
+                estadoEnum = EstadoFormEnum.GRABAR;
+            } catch (ExcepcionCodefacLite ex) {
+                Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public void delete() {
-        System.err.println("Metodo para eliminar desde el controlador");
-        generalAbstractMb.eliminar();
+        try {
+            System.err.println("Metodo para eliminar desde el controlador");
+            generalAbstractMb.eliminar();
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
-    public void imprimir()
-    {
-        System.out.println("Metodo para imprimir");
-        generalAbstractMb.imprimir();
+
+    public void imprimir() {
+        try {
+            System.out.println("Metodo para imprimir");
+            generalAbstractMb.imprimir();
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }  catch (UnsupportedOperationException ex) {
+            System.out.println("Metodo no implementado");
+            MensajeMb.mostrarMensajeDialogo("Error","Metodo imprimir no disponible",FacesMessage.SEVERITY_WARN);
+        }
     }
 
     public void abrirDialogoBusqueda() {
-        System.out.println("abriendo dialogo");
-        abrirDialogoBusqueda(generalAbstractMb.obtenerDialogoBusqueda());
+        try {
+            System.out.println("abriendo dialogo");
+            abrirDialogoBusqueda(generalAbstractMb.obtenerDialogoBusqueda());
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) {
@@ -73,7 +119,7 @@ public class ControllerCodefacMb implements Serializable {
         //Establecer objeto de la clase que tiene la implemetacion del dialogo de busqueda que necesito para construir el dialogo web
         //TODO: Solucion temporal porque es una gasto innesario de memoria , buscar otra forma
         Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-        sessionMap.put("busquedaClase",modeloBusqueda);
+        sessionMap.put("busquedaClase", modeloBusqueda);
 
         //Esstablecer porpiedades que se van a enviar al dialogo en map
         Map<String, Object> options = new HashMap<String, Object>();
@@ -88,10 +134,15 @@ public class ControllerCodefacMb implements Serializable {
 
     //Metodo que permite recibir el dato seleccionado
     public void onObjectChosen(SelectEvent event) {
-        Object objetoSeleccionado = (Object) event.getObject();
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Dato Seleccionado", "");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        generalAbstractMb.cargarBusqueda(objetoSeleccionado);
+        try {
+            Object objetoSeleccionado = (Object) event.getObject();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Dato Seleccionado", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            generalAbstractMb.cargarBusqueda(objetoSeleccionado);
+            estadoEnum = EstadoFormEnum.EDITAR;
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public String getIndiceTabSecundario() {
@@ -117,7 +168,38 @@ public class ControllerCodefacMb implements Serializable {
 
     public void agregarVista(GeneralAbstractMb vista) {
         generalAbstractMb = vista;
-        System.out.println("iniciando el metodo que setea la vista");
+        //titulo=getTituloPagina();
+        PrimeFaces.current().ajax().update("formulario:txtTituloPagina"); //Actualizar un componente desde la vista
+        //System.out.println("actualizando el titulo en la pagina:"+titulo);
     }
 
+    public String getTituloPagina() {
+        try {
+            String tituloPagina = this.generalAbstractMb.titulo();
+            return estadoEnum.construirFormato(tituloPagina);
+            //return "Errro Nombre";
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedOperationException ex) {
+            System.out.println("Metodo no implementado");
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage("Successful", "Your message: PRUEBA"));
+            context.addMessage(null, new FacesMessage("Second Message", "Additional Message Detail"));
+        }
+        return "error nombre pagina ";
+    }
+
+    /*
+    public String setTituloPagina(String titulo) {
+        return estadoEnum.construirFormato(this.generalAbstractMb.titulo());
+        //return "Errro Nombre";
+    }*/
+
+ /*public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }*/
 }

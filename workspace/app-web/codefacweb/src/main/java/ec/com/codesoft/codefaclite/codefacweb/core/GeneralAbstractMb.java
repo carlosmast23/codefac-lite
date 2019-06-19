@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import java.io.Serializable;
 
@@ -13,13 +14,15 @@ import java.io.Serializable;
  * @author Carlos
  */
 public abstract class GeneralAbstractMb implements Serializable{
-    public abstract void grabar();
-    /*public abstract void editar();*/
-    public abstract void imprimir();
-    public abstract void eliminar();
-    public abstract void buscar();
-    public abstract void cargarBusqueda(Object obj);
-    public abstract InterfaceModelFind obtenerDialogoBusqueda();
+    public abstract void nuevo() throws ExcepcionCodefacLite;
+    public abstract void grabar() throws ExcepcionCodefacLite;
+    public abstract void editar() throws ExcepcionCodefacLite;
+    public abstract void imprimir()throws ExcepcionCodefacLite,UnsupportedOperationException;
+    public abstract void eliminar() throws ExcepcionCodefacLite;
+    public abstract void buscar() throws ExcepcionCodefacLite;
+    public abstract void cargarBusqueda(Object obj) throws ExcepcionCodefacLite;
+    public abstract String titulo() throws ExcepcionCodefacLite,UnsupportedOperationException;
+    public abstract InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite;
     
     
     

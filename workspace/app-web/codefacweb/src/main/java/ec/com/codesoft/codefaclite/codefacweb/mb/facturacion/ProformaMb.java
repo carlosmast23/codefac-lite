@@ -14,8 +14,10 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Emplea
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.facturacion.model.ProformaModel;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -32,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -490,6 +493,21 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     public void setFechaEmision(Date fechaEmision) {
         this.fechaEmision = fechaEmision;
+    }
+
+    @Override
+    public String titulo() {
+        return "Proforma";
+    }
+
+    @Override
+    public void editar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void nuevo() throws ExcepcionCodefacLite {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     
