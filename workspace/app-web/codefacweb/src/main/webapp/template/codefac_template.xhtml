@@ -20,7 +20,7 @@
 
         <h:body style="font-size: 11px">
             <h:form id="formulario" target="_blank">
-                
+
                 <p:remoteCommand name="onload" action="#{applicationCodefacMb.controladorConexionServidor()}" autoRun="true" />
 
                 <p:layout fullPage="true" >
@@ -63,7 +63,7 @@
 
                             <p:submenu label="Ventanas" icon="ui-icon-gear">
                                 <p:submenu label="Mensajes SMS" icon="ui-icon-refresh">
-                                    <p:menuitem value="Save" ajax="false" action="#{menuView.save}" icon="ui-icon-disk" update="messages" />
+                                    <p:menuitem value="Save" ajax="false" action="#{menuView.save}" icon="ui-icon-disk" update="formulario" />
                                     <p:menuitem value="Update" actionListener="#{menuView.update}" icon="ui-icon-arrowrefresh-1-w" update="messages"/>
                                 </p:submenu>
                                 <p:submenu label="Imprimir" icon="ui-icon-newwin">
@@ -165,8 +165,10 @@
                             </f:facet>
 
                             <div  style="padding: 10px;text-align: left">
-                                <ui:insert name="contenido">
-                                    Contenido por defecto de la plantilla  
+                                <ui:insert  name="contenido">
+                                    <f:facet name="ejemplo" id="contenidoPagina2">
+                                        Contenido por defecto de la plantilla  
+                                    </f:facet>
                                 </ui:insert>
                             </div>
 
@@ -179,9 +181,23 @@
 
                     <!-- DIALOGO PARA CONFIRMAR EL GUARDAR -->
                     <p:confirmDialog message="Esta seguro que desea grabar los datos?" header="Alerta" severity="alert" widgetVar="dialogConfirmarGrabar">
-                        <p:commandButton value="Si" ajax="false" actionListener="#{controllerCodefacMb.save()}" update="messages"  onclick="PF('dialogConfirmarGrabar').hide();"  />
+                        <p:commandButton value="Si" process="@this" actionListener="#{controllerCodefacMb.save()}" update="messages,idDialogResultado"  onclick="PF('dialogConfirmarGrabar').hide();"  />
                         <p:commandButton value="No" onclick="PF('dialogConfirmarGrabar').hide();" type="button" />
                     </p:confirmDialog>
+
+                    <!-- DIALOGO DE RESULTADOS -->
+                    <p:dialog id="idDialogResultado" header="#{controllerCodefacMb.generalAbstractMb.resultadoDialogo.titulo}" widgetVar="dialogResultado" modal="true" height="100" style="text-align: center">
+                        <h:graphicImage library="img" name="logoCodefac.gif" style="height: 50%" />
+                        <p:separator />
+                        <p:outputLabel value="#{controllerCodefacMb.generalAbstractMb.resultadoDialogo.mensaje}" />
+                        <f:facet name="footer"  >
+                            <div style="text-align: center">
+                                <p:commandButton  value="Aceptar" process="@this" actionListener="#{controllerCodefacMb.cerrarDialogoResultados()}" icon="ui-icon-check" update="panelContenido"/>
+                                <p:commandButton value="Imprimir" process="@this" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" icon="ui-icon-print" />
+                            </div>
+                        </f:facet>
+
+                    </p:dialog> 
 
                 </p:layout>
 

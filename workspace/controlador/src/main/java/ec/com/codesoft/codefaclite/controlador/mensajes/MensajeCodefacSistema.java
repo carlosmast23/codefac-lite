@@ -39,6 +39,12 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj CARGAR_DATOS = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"Esta seguro que desea cargar los registro ?" ,DialogoCodefac.MENSAJE_INCORRECTO);
     }
     
+    public static abstract class ErroresComunes
+    {
+        public static final CodefacMsj METODO_SIN_IMPLEMENTAR = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"Accion no disponible ",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        
+    }
+    
     public static abstract class Consultas
     {
         public static final CodefacMsj NO_EXISTE_DATO_BUSCAR = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"No existen datos que coincidan con la busqueda",DialogoCodefac.MENSAJE_ADVERTENCIA);        
@@ -64,17 +70,5 @@ public abstract class MensajeCodefacSistema {
     {
         public static final CodefacMsj ERROR_VALIDAR_NUMEROS = new CodefacMsj(CodefacMsj.TITULO_ERROR,"El formato es incorrecto para el ingreso de números",DialogoCodefac.MENSAJE_INCORRECTO);
     }
-    
-    /*
-    public class  MensajeCodefacEnum {
-        public String titulo;
-        public String mensaje;
-        public int modoMensaje;
-
-        public MensajeCodefacEnum(String titulo, String mensaje, int modoMensaje) {
-            this.titulo = titulo;
-            this.mensaje = mensaje;
-            this.modoMensaje = modoMensaje;
-        }
-    }*/
+   
 }

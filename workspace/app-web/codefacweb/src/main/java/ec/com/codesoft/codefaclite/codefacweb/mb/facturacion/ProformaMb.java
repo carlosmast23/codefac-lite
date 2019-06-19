@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Client
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
@@ -89,8 +90,10 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     private DocumentoEnum documentoSeleccionado;
     private PuntoEmision puntoEmisionSeleccionado;
     /**
-     * TODO:Por el momento seteo con una variable adicional de la fecha porque en el modelo esta con sql y fuciona correctamente para las consultas
-     * pero cuando hago ese cambio en el modelo tengo problemas con otras funcionalidades
+     * TODO:Por el momento seteo con una variable adicional de la fecha porque
+     * en el modelo esta con sql y fuciona correctamente para las consultas pero
+     * cuando hago ese cambio en el modelo tengo problemas con otras
+     * funcionalidades
      */
     private java.util.Date fechaEmision;
 
@@ -101,26 +104,35 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public void init() {
         factura = new Factura();
         factura.setCliente(new Persona());//Esto solo hago para evitar advertencias
-        productoSeleccionado=new Producto();
-        facturaDetalle=new FacturaDetalle();
-        
-        factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
+        productoSeleccionado = new Producto();
+        facturaDetalle = new FacturaDetalle();
+
+        fechaEmision = UtilidadesFecha.getFechaHoy();
         documentos = new ArrayList<DocumentoEnum>();
         documentos.add(DocumentoEnum.PROFORMA);
         cargarDatosLista();
     }
 
     @Override
-    public void grabar() {
+    public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
+        //PrimeFaces current = PrimeFaces.current();
+        //current.executeScript("PF('dialogResultado').show();");
+        
         try {
             System.out.println("===========>INICIANDO PROCESO GRABAR <==============");
-            validar();
+            if(!validar()) //Si no valida mando una excepcion para cancelar el ciclo de vida
+            {
+                throw new ExcepcionCodefacLite("Error grabando el producto");
+            }
+            
             setearDatosAdicionales();
 
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
             factura = servicio.grabarProforma(factura);
-            MensajeMb.mostrarMensaje("Correcto", "Proforma grabada correctamente", FacesMessage.SEVERITY_INFO);
-            imprimir();
+            //MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+            mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+           
+            //imprimir();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
             MensajeMb.mostrarMensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
@@ -137,13 +149,13 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     @Override
     public void buscar() {
-        
+
     }
 
     @Override
     public void cargarBusqueda(Object obj) {
-        factura=(Factura) obj;
-        fechaEmision=new java.sql.Date(factura.getFechaEmision().getTime());
+        factura = (Factura) obj;
+        fechaEmision = new java.sql.Date(factura.getFechaEmision().getTime());
     }
 
     @Override
@@ -223,7 +235,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         if (establecimiento != null) {
             factura.setCliente(establecimiento.getPersona());
             factura.setSucursal(establecimiento);
-            
+
         }
     }
 
@@ -263,8 +275,25 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         this.sessionMb = sessionMb;
     }
 
-    private void validar() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Todo: Ver si esta validacion se puede unificar con la primera pantalla
+     *
+     * @return
+     */
+    private boolean validar() {
+        if (factura.getCliente() != null) {
+            if (factura.getCliente().getIdCliente() == null) {
+                MensajeMb.mostrarMensajeDialogo("Error Validación", "Seleccione un cliente", FacesMessage.SEVERITY_WARN);
+                return false;
+            }
+        }
+
+        if (factura.getDetalles() == null || factura.getDetalles().size() == 0) {
+            MensajeMb.mostrarMensajeDialogo("Error Validación", "No se puede grabar sin detalles", FacesMessage.SEVERITY_WARN);
+            return false;
+        }
+
+        return true;
     }
 
     private void setearDatosAdicionales() {
@@ -275,7 +304,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         factura.setEmpresa(sessionMb.getSession().getEmpresa());
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         factura.setFechaEmision(new java.sql.Date(fechaEmision.getTime()));
-        
+
         factura.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
 
         factura.setObligadoLlevarContabilidad(sessionMb.getSession().getEmpresa().getObligadoLlevarContabilidad());
@@ -339,10 +368,10 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
             JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
             //JasperPrint jasperPrint = JasperFillManager.fillReport(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
 
-            mapParametros=ReporteCodefac.mapReportePlantilla(OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4,  sessionMb.getSession());
-            ByteArrayOutputStream baos =new ByteArrayOutputStream();
+            mapParametros = ReporteCodefac.mapReportePlantilla(OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4, sessionMb.getSession());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
             //HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint,baos);
+            net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
             //byte[] bytes = JasperRunManager.runReportToPdf(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
             HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
             //response.setHeader("Content-disposition", "inline; filename=proforma");
@@ -507,9 +536,8 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        init(); //Llamo a este metodo para que se seteen en blanco las variables
+        System.err.println("Ejecutando metodo de nuevo");
     }
-    
-    
 
 }

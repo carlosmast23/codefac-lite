@@ -7,11 +7,13 @@ package ec.com.codesoft.codefaclite.codefacweb.core;
 
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstadoFormEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -55,6 +57,8 @@ public class ControllerCodefacMb implements Serializable {
             estadoEnum = EstadoFormEnum.GRABAR;
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedOperationException ex) {
+            MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
         }
     }
 
@@ -67,9 +71,11 @@ public class ControllerCodefacMb implements Serializable {
         if (estadoEnum.equals(EstadoFormEnum.GRABAR)) {
             try {
                 generalAbstractMb.grabar();
-                generalAbstractMb.nuevo();
+                //generalAbstractMb.nuevo();
             } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedOperationException ex) {
+                MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
             }
         } else if (estadoEnum.equals(EstadoFormEnum.EDITAR)) {
             try {
@@ -77,6 +83,8 @@ public class ControllerCodefacMb implements Serializable {
                 estadoEnum = EstadoFormEnum.GRABAR;
             } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedOperationException ex) {
+                MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
             }
         }
     }
@@ -96,10 +104,10 @@ public class ControllerCodefacMb implements Serializable {
             generalAbstractMb.imprimir();
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
-            
-        }  catch (UnsupportedOperationException ex) {
+
+        } catch (UnsupportedOperationException ex) {
             System.out.println("Metodo no implementado");
-            MensajeMb.mostrarMensajeDialogo("Error","Metodo imprimir no disponible",FacesMessage.SEVERITY_WARN);
+            MensajeMb.mostrarMensajeDialogo("Error", "Metodo imprimir no disponible", FacesMessage.SEVERITY_WARN);
         }
     }
 
@@ -109,6 +117,8 @@ public class ControllerCodefacMb implements Serializable {
             abrirDialogoBusqueda(generalAbstractMb.obtenerDialogoBusqueda());
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedOperationException ex) {
+            MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
         }
     }
 
@@ -187,6 +197,15 @@ public class ControllerCodefacMb implements Serializable {
             context.addMessage(null, new FacesMessage("Second Message", "Additional Message Detail"));
         }
         return "error nombre pagina ";
+    }
+    
+    public void cerrarDialogoResultados(){
+        System.out.println("Ocultando el dialogo de respuestas");
+        //generalAbstractMb.aceptarResultado();
+        nuevo();
+        PrimeFaces current = PrimeFaces.current();
+        current.executeScript("PF('dialogResultado').hide();"); //Todo: Parametrizar y poner en una funcion aparte este dialogo        
+    
     }
 
     /*
