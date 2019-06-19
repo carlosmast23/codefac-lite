@@ -69,6 +69,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -211,7 +212,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     private void cargarDetalleFacturaAgregar(Producto productoSeleccionado) {
         facturaDetalle = new FacturaDetalle();
-        facturaDetalle.setCantidad(BigDecimal.ZERO);
+        facturaDetalle.setCantidad(BigDecimal.ONE);
         facturaDetalle.setDescripcion(productoSeleccionado.getNombre());
         facturaDetalle.setPrecioUnitario(productoSeleccionado.getValorUnitario());
         facturaDetalle.setDescuento(BigDecimal.ZERO);
@@ -223,12 +224,30 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     }
 
     public void agregarProducto() {
+        
+        
+        if(facturaDetalle.getCantidad().compareTo(BigDecimal.ZERO)<=0)
+        {
+            MensajeMb.mostrarMensajeDialogo("Error","Porfavor ingrese un valor valido",FacesMessage.SEVERITY_WARN);
+            return;
+        }
         //facturaDetalle.        
         facturaDetalle.calcularTotalDetalle();
         facturaDetalle.calculaIva();
 
         factura.addDetalle(facturaDetalle);
         factura.calcularTotalesDesdeDetalles();
+        facturaDetalle=new FacturaDetalle();
+        productoSeleccionado = new Producto();
+        
+    }
+    
+    public void eliminarFilaProducto(FacturaDetalle detalle)
+    {
+        System.out.println("verificar si se ejecuta el parametro");
+        factura.getDetalles().remove(detalle);
+        factura.calcularTotalesDesdeDetalles();
+        
     }
 
     public void cargarDatosCliente(PersonaEstablecimiento establecimiento) {
@@ -538,6 +557,23 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public void nuevo() throws ExcepcionCodefacLite {
         init(); //Llamo a este metodo para que se seteen en blanco las variables
         System.err.println("Ejecutando metodo de nuevo");
+    }
+    
+       public void filaEditaTablaEvent(RowEditEvent event) {
+           FacturaDetalle detalleEditado=(FacturaDetalle) event.getObject();
+           detalleEditado.calcularTotalDetalle();
+           detalleEditado.calculaIva();
+           factura.calcularTotalesDesdeDetalles();
+           //FacesMessage msg = new FacesMessage("Car Edited", ((FacturaDeta) event.getObject()).getId());
+           //FacesContext.getCurrentInstance().addMessage(null, msg);
+           System.err.println("Evento editar la fila ");
+           System.err.println("cantidad editada: " + factura.getDetalles().get(0).getCantidad());
+           System.err.println("cantidad editada: " + factura.getDetalles().get(0).getTotal());
+           System.err.println("total final: " + factura.getTotal());
+           
+           //PrimeFaces.current().ajax().update(":formulario:tblProductoDetalles");
+
+        
     }
 
 }

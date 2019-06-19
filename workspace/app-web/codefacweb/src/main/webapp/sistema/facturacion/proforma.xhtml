@@ -11,6 +11,7 @@
         <ui:define name="contenido" >
 
             <f:event listener="#{controllerCodefacMb.agregarVista(proformaMb)}" type="preRenderView" />
+            <p:remoteCommand name="updateDataTable" update=":formulario:tblProductoDetalles"/>
 
             <p:panelGrid columns="4" layout="grid">            
                 <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
@@ -85,10 +86,11 @@
                         </p:ribbonGroup>
 
                         <p:ribbonGroup style="width:12%">
-                            <p:commandButton process="@this,txtValorUnitario,txtCantidad,txtDescuento" update=":formulario:tblProductoDetalles" icon="fa fa-plus"   styleClass="white-button" action="#{proformaMb.agregarProducto()}"/>
+                            <p:commandButton process="@this,txtValorUnitario,txtCantidad,txtDescuento" update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,:formulario:tblProductoDetalles,:formulario:messages" icon="fa fa-plus"   styleClass="white-button" action="#{proformaMb.agregarProducto()}" />
                             <p:commandButton process="@this" icon="fa fa-pencil"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}"/>
                             <p:commandButton process="@this" icon="fa fa-close"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}"/>
                         </p:ribbonGroup>
+                                                                        
                     </p:tab>
 
                     <p:tab title="View">
@@ -96,23 +98,17 @@
                     </p:tab>
                 </p:ribbon>
 
-                <p:dataTable id="tblProductoDetalles" var="detalle" value="#{proformaMb.factura.detalles}" editable="true" style="margin-bottom:20px">
+                <p:dataTable id="tblProductoDetalles" var="detalle" value="#{proformaMb.factura.detalles}" editable="true"  style="margin-bottom:20px">
                     <f:facet name="header">
                         Detalles Factura
                     </f:facet>
 
-                    <!--
-                    <p:column headerText="Código" style="width: 10%">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{detalle.referenciaId}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput1" value="asas" style="width:100%"/></f:facet>
-                        </p:cellEditor>
-                    </p:column>-->
-
+                    <p:ajax event="rowEdit" oncomplete="updateDataTable()"  listener="#{proformaMb.filaEditaTablaEvent}"  />
+                    
                     <p:column headerText="Descripción" style="width: 50%">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{detalle.descripcion}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput2" value="asas" style="width:100%"/></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput2" value="#{detalle.descripcion}" style="width:100%"/></f:facet>
                         </p:cellEditor>
                     </p:column>
 
@@ -120,28 +116,28 @@
                     <p:column headerText="Valor Unit">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{detalle.precioUnitario}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput3" value="asas" style="width:100%"/></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput3" value="#{detalle.precioUnitario}" style="width:100%"/></f:facet>
                         </p:cellEditor>
                     </p:column>
 
                     <p:column headerText="Cantidad">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{detalle.cantidad}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput6" value="asas" style="width:100%"/></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput6" value="#{detalle.cantidad}" style="width:100%"/></f:facet>
                         </p:cellEditor>
                     </p:column>
 
                     <p:column headerText="Descuento">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{detalle.descuento}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput4" value="asas" style="width:100%"/></f:facet>
+                            <f:facet name="input"><p:inputText  id="modelInput19" value="#{detalle.descuento}" style="width:100%"/></f:facet>
                         </p:cellEditor>
                     </p:column>
 
                     <p:column headerText="Total">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{detalle.total}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput" value="asas" style="width:100%"/></f:facet>
+                            <f:facet name="input"><p:inputText disabled="true" id="modelInput5" value="#{detalle.total}" style="width:100%"/></f:facet>
                         </p:cellEditor>
                     </p:column>
 
@@ -150,8 +146,14 @@
                         <p:rowEditor />
                     </p:column>
 
+                    <p:column style="width:35px">
+                        <p:commandButton ajax="true" icon=" fa fa-close" label="Eliminar item" action="#{proformaMb.eliminarFilaProducto(detalle)}" update="tblProductoDetalles" />
+                    </p:column>
+
+                   
+
                     <f:facet name="footer">
-                        <p:panelGrid columns="4" layout="grid" id="datosCliente">
+                        <p:panelGrid columns="4" layout="grid" id="totalesTabla">
                             <p:panel>
                                 <h:outputLabel style="font-weight: bold">Subtotal 12: </h:outputLabel>
                                 <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.subtotalImpuestos}" />
@@ -179,12 +181,7 @@
                 </p:dataTable>
             </p:panel>
 
-            <h:commandButton value="Ver Pdf" action="#{proformaMb.grabar()}" />
-            <p:commandButton value="Ver Pdf primefaces" actionListener="#{proformaMb.grabar()}" ajax="false" />
-            <p:commandLink value="Command link" actionListener="#{proformaMb.grabar()}" ajax="false" />
-            <p:menu>
-                <p:menuitem value="Save" ajax="false" actionListener="#{proformaMb.grabar()}" icon="ui-icon-disk" update="messages" />
-            </p:menu>
+       
         </ui:define>
     </ui:composition>
 
