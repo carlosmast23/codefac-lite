@@ -13,6 +13,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfacesPropertisFind
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.apache.commons.lang3.StringUtils;
 import org.primefaces.PrimeFaces;
 
 /**
@@ -117,22 +120,29 @@ public class DialogoBuscarMb implements Serializable {
 
     private Object buscarPropiedadEnObjecto(Object objeto, String propiedadNombre) {
 
-        Field[] fields = objeto.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            if (field.getName().equals(propiedadNombre)) {
-                if (Modifier.isPrivate(field.getModifiers())) {
+        Method[] metodos = objeto.getClass().getMethods();
+        String metodoNombre="get"+StringUtils.capitalize(propiedadNombre);
+        
+        for (Method metodo : metodos) {
+            if (metodo.getName().equals(metodoNombre)) {
+                
+                
+                //if (Modifier.isPrivate(field.getModifiers())) {
 
                     try {
-                        field.setAccessible(true);
-                        return field.get(objeto);
+                        Object resultado=metodo.invoke(objeto);
+                        //field.setAccessible(true);
+                        return resultado;
                         //System.out.println(field.getName()+" : "+field.get(book));
                     } catch (IllegalArgumentException ex) {
                         Logger.getLogger(DialogoBuscarMb.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IllegalAccessException ex) {
                         Logger.getLogger(DialogoBuscarMb.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
+                    } catch (InvocationTargetException ex) {
+                    Logger.getLogger(DialogoBuscarMb.class.getName()).log(Level.SEVERE, null, ex);
                 }
+
+                //}
             }
         }
 

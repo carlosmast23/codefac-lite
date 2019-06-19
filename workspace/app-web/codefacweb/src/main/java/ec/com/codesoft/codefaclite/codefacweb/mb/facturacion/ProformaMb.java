@@ -113,6 +113,22 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         documentos.add(DocumentoEnum.PROFORMA);
         cargarDatosLista();
     }
+    
+    @Override
+    public void editar()  throws ExcepcionCodefacLite, UnsupportedOperationException {
+        try {
+            if(!validar()) //Si no valida mando una excepcion para cancelar el ciclo de vida
+            {
+                throw new ExcepcionCodefacLite("Error grabando el producto");
+            }
+            
+            setearDatosAdicionales();
+            ServiceFactory.getFactory().getFacturacionServiceIf().editar(factura);
+            mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
@@ -548,10 +564,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         return "Proforma";
     }
 
-    @Override
-    public void editar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
