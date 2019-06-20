@@ -19,7 +19,7 @@
         </h:head>
 
         <h:body style="font-size: 11px">
-            <h:form id="formulario" target="_blank">
+            <h:form id="formulario" target="_blank" onkeypress="if (event.keyCode == 13) { return false; }">
 
                 <p:remoteCommand name="onload" action="#{applicationCodefacMb.controladorConexionServidor()}" autoRun="true" />
 

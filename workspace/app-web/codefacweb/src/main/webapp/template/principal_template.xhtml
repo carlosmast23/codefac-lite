@@ -68,16 +68,16 @@
                         
                         <p:menu toggleable="true"  style="margin: 5px">                            
                             <p:submenu label="Sistema">
-                                <p:menuitem value="Login" action="login.xhtml"  icon="ui-icon-home"/>
+                                <p:menuitem process="@this" value="Login" action="login.xhtml"  icon="ui-icon-home"/>
                             </p:submenu>
                             
                             <p:submenu label="Consultas">
-                                <p:menuitem value="Facturas" action="consultar_facturas.xhtml"  icon="ui-icon-disk" />
-                                <p:menuitem value="Ordenes Trabajo"  update="messages" icon="ui-icon-arrowrefresh-1-w"/>
+                                <p:menuitem process="@this" value="Facturas" action="consultar_facturas.xhtml"  icon="ui-icon-disk" />
+                                <p:menuitem process="@this" value="Ordenes Trabajo"  update="messages" icon="ui-icon-arrowrefresh-1-w"/>
                             </p:submenu>
                             
                             <p:submenu label=" Productos">
-                                <p:menuitem value="Productos" action="consultar_productos.xhtml"  icon="ui-icon-home"/>
+                                <p:menuitem process="@this" value="Productos" action="consultar_productos.xhtml"  icon="ui-icon-home"/>
                                 <p:menuitem value="Servicios" icon="ui-icon-star"/>
                             </p:submenu>
                         </p:menu>

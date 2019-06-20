@@ -20,10 +20,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
+import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -132,6 +134,7 @@ public class AtsModel extends AtsPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    /*try {
                     JAXBContext contexto = JAXBContext.newInstance(AtsJaxb.class);
                     Marshaller marshaller = contexto.createMarshaller();
                     marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -142,8 +145,14 @@ public class AtsModel extends AtsPanel {
                     marshaller.marshal(atsJaxb, file);
                     UtilidadesSistema.abrirDocumento(file);
                     //return sw;
-                } catch (JAXBException ex) {
+                    } catch (JAXBException ex) {
                     Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                    Logger.getLogger(AtsModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }*/
+                    File file = new File( ParametrosSistemaCodefac.CARPETA_DATOS_TEMPORALES+"/ejemplo.xml" );
+                    UtilidadesXml.convertirObjetoXmlEnArchivo(atsJaxb,file);
+                    UtilidadesSistema.abrirDocumento(file);
                 } catch (IOException ex) {
                     Logger.getLogger(AtsModel.class.getName()).log(Level.SEVERE, null, ex);
                 }

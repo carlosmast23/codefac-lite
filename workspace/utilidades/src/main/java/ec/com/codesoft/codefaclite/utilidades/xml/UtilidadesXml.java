@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.xml;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AtsJaxb;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 /**
  *
@@ -52,5 +56,25 @@ public abstract class UtilidadesXml {
             
         }
         return "";
+    }
+    
+    /**
+     * Este metodo unicamente sirve si esta trabajando con jaxb para guardar en un archivo fisico
+     * @return 
+     */
+    public static void convertirObjetoXmlEnArchivo(Object objecto ,File file)
+    {
+        try {
+            JAXBContext contexto = JAXBContext.newInstance(AtsJaxb.class);
+            Marshaller marshaller = contexto.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            //marshaller.setProperty(Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, "libro.xsd");
+            //StringWriter sw = new StringWriter();
+            //marshaller.marshal(libro, System.out);
+            //File file = new File( "tmp/ejemplo.xml" );
+            marshaller.marshal(objecto, file);
+        } catch (JAXBException ex) {
+            Logger.getLogger(UtilidadesXml.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -21,4 +21,14 @@ public class UtilidadesComboBox {
         comboBox.setEditable(false);
 
     }
+    
+    
+    public static void llenarComboBox(JComboBox comboBox,Object[] datos)
+    {
+        comboBox.removeAllItems();
+        for (Object object : datos) 
+        {
+            comboBox.addItem(object);
+        }
+    }
 }

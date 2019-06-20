@@ -152,6 +152,7 @@ public class UtilidadesFecha {
         return Integer.parseInt(obtenerMesStr(date));
     }
     
+
     public static String obtenerDiaStr(Date date) {
 
         if (null == date) {
