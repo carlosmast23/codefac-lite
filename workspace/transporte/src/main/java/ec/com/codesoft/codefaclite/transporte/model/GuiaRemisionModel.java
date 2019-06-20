@@ -523,6 +523,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                     else
                     {
                         //factura.getSucursal();
+                        getCmbFechaInicio().setDate(factura.getFechaEmision());
+                        getCmbFechaFin().setDate(factura.getFechaEmision());
                         cargarDatosDestinatario(factura.getSucursal());
                         cargarDatoFactura(factura);
                         agregarDetalleGuiaRemision();
