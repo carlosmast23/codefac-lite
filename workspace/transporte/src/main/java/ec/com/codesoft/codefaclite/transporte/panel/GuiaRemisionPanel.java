@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -93,13 +94,13 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         btnBuscarTransportista = new javax.swing.JButton();
         lblEspacio3 = new javax.swing.JLabel();
         txtDireccionPartida = new javax.swing.JTextField();
-        cmbFechaInicio = new com.toedter.calendar.JDateChooser();
-        cmbFechaFin = new com.toedter.calendar.JDateChooser();
         jLabel9 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         lblNombresTransportista = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        cmbFechaInicio = new org.jdesktop.swingx.JXDatePicker();
+        cmbFechaFin = new org.jdesktop.swingx.JXDatePicker();
         jPanel3 = new javax.swing.JPanel();
         lblCantidadProductos = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
@@ -491,20 +492,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(txtDireccionPartida, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 65;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(cmbFechaInicio, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 65;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(cmbFechaFin, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel9.setText("Fecha fin:");
@@ -545,6 +532,17 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
         jPanel2.add(jSeparator1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(cmbFechaInicio, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(cmbFechaFin, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -723,8 +721,8 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JComboBox<DestinatarioGuiaRemision> cmbDestinatarios;
     private com.toedter.calendar.JDateChooser cmbFechaFactura;
-    private com.toedter.calendar.JDateChooser cmbFechaFin;
-    private com.toedter.calendar.JDateChooser cmbFechaInicio;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaFin;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaInicio;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision> cmbPuntoEmision;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -899,14 +897,15 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         return txtDireccionPartida;
     }
 
-    public JDateChooser getCmbFechaFin() {
+    public JXDatePicker getCmbFechaFin() {
         return cmbFechaFin;
     }
 
-    public JDateChooser getCmbFechaInicio() {
+    public JXDatePicker getCmbFechaInicio() {
         return cmbFechaInicio;
     }
 
+    
     public JTextField getTxtCodigoDetalle() {
         return txtCodigoDetalle;
     }

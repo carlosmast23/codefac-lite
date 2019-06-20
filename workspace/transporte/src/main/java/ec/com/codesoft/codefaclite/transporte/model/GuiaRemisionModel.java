@@ -71,6 +71,8 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -86,6 +88,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.collections4.map.HashedMap;
 import org.eclipse.persistence.sessions.factories.SessionFactory;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -106,6 +109,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         listenerBotones();
         listenerComponentes();
         listenerCombos();
+        listenerFechas();
         iniciarComponentesPantalla();
     }
 
@@ -844,6 +848,43 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     @Override
     public List<ComprobanteAdicional> getDatosAdicionales() {
         return (List<ComprobanteAdicional>)(Object) guiaRemision.getDatosAdicionales();
+    }
+
+    private void listenerFechas() {
+        getCmbFechaInicio().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                validarFechaValida(getCmbFechaInicio());
+            }
+        });
+        
+        getCmbFechaFin().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                validarFechaValida(getCmbFechaFin());
+            }
+        });
+    }
+    
+    private void  validarFechaValida(JXDatePicker cmbFecha)
+    {
+        try {
+            java.sql.Date fechaSeleccionada=new java.sql.Date(cmbFecha.getDate().getTime());
+            java.sql.Date fechaHoy=UtilidadesFecha.getFechaHoy();
+            System.out.println(fechaSeleccionada.compareTo(fechaHoy));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            
+            if(sdf.parse(sdf.format(fechaSeleccionada)).compareTo(sdf.parse(sdf.format(fechaHoy)))<0)
+            {
+                Boolean respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Esta seguro que quiere seleccionar una fecha anterior a la fecha actual ?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if(!respuesta)
+                {
+                    cmbFecha.setDate(UtilidadesFecha.getFechaHoy());
+                }
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     

@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.UtilidadesServidorXml;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
@@ -293,7 +294,7 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
                     true); //generar anulados
             
             File file = new File(ParametrosSistemaCodefac.CARPETA_DATOS_TEMPORALES + "/ejemplo.xml");
-            UtilidadesXml.convertirObjetoXmlEnArchivo(atsJaxb, file);
+            UtilidadesServidorXml.convertirObjetoXmlEnArchivo(atsJaxb, file);
             if(file.exists()) //Solo si existe creado lo agrego al reporte
             {
                 archivosAdjuntos.put(FormatoArchivoEnum.XML.agregarExtension("Ats"+anio+mesEnum.getNombre()),file.getPath());
