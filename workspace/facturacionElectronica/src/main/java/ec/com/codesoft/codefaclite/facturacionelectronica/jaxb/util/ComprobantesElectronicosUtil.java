@@ -349,8 +349,10 @@ public abstract class ComprobantesElectronicosUtil {
             
         } catch (JAXBException ex) {
             Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("=============> Problema con el archivo:"+archivo.getAbsolutePath());
         } catch (Exception ex) {
             Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("=============> Problema con el archivo:"+archivo.getAbsolutePath());
         }
         return null;
     }
