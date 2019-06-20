@@ -31,3 +31,4 @@ en la pantalla de factura , cuando cargao
 El señor del gas solicita que no se pueda seleccionar una fecha inferior de la guia de remision a la cual esta ligada la factura
 Hacer el reporte del señor del gas agrupado por cliente , por ventas diaras y cantidad
 En la pantalla de factura unificar metodos por ejemplo de calcular iva y totales como en el modulo web para hacer mas escalable el sistema
+Revisar al momento de generar el reporte de las guias de remision para enviar , parece que genera el archivo y el pdf para mostrar en pantalla lo cual deberian estar separados para mostrar en el formulario o para enviar por archivo y eso vuelve mas lento el proceso de enviar los reportes por correo

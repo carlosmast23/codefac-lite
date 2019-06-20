@@ -68,6 +68,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         txtProducto = new javax.swing.JTextField();
         btnBuscarProducto = new javax.swing.JButton();
         chkTodosProductos = new javax.swing.JCheckBox();
+        chkReporteAgrupado = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -308,6 +309,15 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         gridBagConstraints.gridy = 3;
         getContentPane().add(chkTodosProductos, gridBagConstraints);
 
+        chkReporteAgrupado.setText("Reporte Agrupado");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(chkReporteAgrupado, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -322,6 +332,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
     private javax.swing.JButton btnBuscarTransportista;
     private javax.swing.JButton btnLimpiarFechaFin;
     private javax.swing.JButton btnLimpiarFechaInicio;
+    private javax.swing.JCheckBox chkReporteAgrupado;
     private javax.swing.JCheckBox chkTodosCliente;
     private javax.swing.JCheckBox chkTodosProductos;
     private javax.swing.JCheckBox chkTodosTransportista;
@@ -472,6 +483,10 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
 
     public JTextField getTxtProducto() {
         return txtProducto;
+    }
+
+    public JCheckBox getChkReporteAgrupado() {
+        return chkReporteAgrupado;
     }
     
     

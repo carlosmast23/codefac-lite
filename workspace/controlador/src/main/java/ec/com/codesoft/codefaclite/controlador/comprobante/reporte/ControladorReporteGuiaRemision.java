@@ -33,6 +33,8 @@ import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,6 +144,42 @@ public class ControladorReporteGuiaRemision {
         ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, listReporte, panelPadre, "Reporte Guía Remisión ", OrientacionReporteEnum.HORIZONTAL);
     }
     
+    /**
+     * Todo: Funcionar con el reporte de arriba porque se repite mucho codigo
+     * @param panelPadre
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException 
+     */
+    public void obtenerReporteAgrupadoArchivoPdf(InterfazComunicacionPanel panelPadre) throws IOException, FileNotFoundException, IllegalArgumentException, IllegalAccessException {
+        InputStream path =obtenerPathReporteAgrupado();        
+        InputStream subreporte=RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("subreporteGuiaRemisionProductos.jrxml");
+        Map<String,Object> parametros = new HashMap<String,Object>();
+        try {
+            JasperReport subreporteJasper = JasperCompileManager.compileReport(subreporte);
+            parametros.put("subreporte_productos_jasper",subreporteJasper);
+        } catch (JRException ex) {
+            Logger.getLogger(ControladorReporteGuiaRemision.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+        parametros.put("subreporte_productos", obtenerSubtotalesProducto());
+        ordenarListaDatos();
+        ReporteCodefac.generarReporteInternalFramePlantilla(path,parametros,listReporte, panelPadre, "Reporte Agrupado", OrientacionReporteEnum.HORIZONTAL);
+        
+    }
+    
+    public void ordenarListaDatos()
+    {
+        Collections.sort(listReporte,new Comparator<GuiaTransporteData>() {
+            @Override
+            public int compare(GuiaTransporteData o1, GuiaTransporteData o2) {
+                return o1.getIdentififacion().compareTo(o2.getIdentififacion())+o1.getFechaInicio().compareTo(o2.getFechaInicio());
+            }
+        });
+    }
+    
     public File obtenerReporteArchivoPdf(InterfazComunicacionPanel panelPadre) throws IOException, FileNotFoundException, IllegalArgumentException, IllegalAccessException {
         //InputStream path = obtenerPathReporte();
         //Map parameters = new HashMap();
@@ -167,6 +205,11 @@ public class ControladorReporteGuiaRemision {
     public InputStream obtenerPathReporte()
     {
         return RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("reporte_guiaRemision.jrxml");
+    }
+    
+    public InputStream obtenerPathReporteAgrupado()
+    {
+        return RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("reporte_guiaRemision_agrupado.jrxml");
     }
 
     private void llenarDatosReporte() {

@@ -43,6 +43,8 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -299,7 +301,14 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
                         /*InputStream path = RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("reporte_guiaRemision.jrxml");
                         Map parameters = new HashMap();
                         ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listReporte, panelPadre, "Reporte Guía Remisión ", OrientacionReporteEnum.HORIZONTAL);*/
-                        controladorReporte.obtenerReportePdf(panelPadre);
+                        if(getChkReporteAgrupado().isSelected())
+                        {                            
+                            controladorReporte.obtenerReporteAgrupadoArchivoPdf(panelPadre);
+                        }
+                        else
+                        {
+                            controladorReporte.obtenerReportePdf(panelPadre);
+                        }
                     } catch (IOException ex) {
                         Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IllegalArgumentException ex) {
