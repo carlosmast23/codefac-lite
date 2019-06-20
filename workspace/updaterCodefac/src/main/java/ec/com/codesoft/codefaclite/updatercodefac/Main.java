@@ -29,7 +29,14 @@ public class Main {
     
     private static final String VERSION_NUEVA_NAME="tmp/codefac.jar";
     private static final  String VERSION_ACTUAL_NAME="codefac.jar";
+    
+    private static final String VERSION_NUEVA_WAR="tmp/codefac.war";
+    private static final  String DIRECTORIO_DEPLOY_TOMCAT="tomcat9/webapps/";
+    private static final  String VERSION_ACTUAL_WAR="tomcat9/webapps/codefac.war";
+    
     public static String PID_PROCESO_CODEFAC="";
+    public static Boolean FORZAR_ACTUALIZAR=false;
+    
     
     public static void main(String[] args) {
         //args=new String[]{"15328"};
@@ -38,26 +45,29 @@ public class Main {
             /**
              * ===================> VERIFICAR QUE EL PROCESO ANTERIOR DE CODEFAC ESTE FINALIZADO <===============
              */
-            if(args.length>0)
+            if(!FORZAR_ACTUALIZAR)
             {
-                PID_PROCESO_CODEFAC=args[0];
-                
-                //Verificar si el proceso anterior esta vivo entonces lo elimino
-                if(verificarProcesoVivo())
+                if(args.length>0)
                 {
-                    matarProceso();
-                    //Verificar si despues de matar el proces sigue vivo por algun motivo entonces lanzo el monitor
+                    PID_PROCESO_CODEFAC=args[0];
+
+                    //Verificar si el proceso anterior esta vivo entonces lo elimino
                     if(verificarProcesoVivo())
                     {
-                        crearMonitor("No se puede eliminar el proceso de Codefac para actualizar la nueva versión");
-                        return;
+                        matarProceso();
+                        //Verificar si despues de matar el proces sigue vivo por algun motivo entonces lanzo el monitor
+                        if(verificarProcesoVivo())
+                        {
+                            crearMonitor("No se puede eliminar el proceso de Codefac para actualizar la nueva versión");
+                            return;
+                        }
                     }
                 }
-            }
-            else
-            {
-                crearMonitor("Error al pasar el pid del proceso");
-                return;
+                else
+                {
+                    crearMonitor("Error al pasar el pid del proceso");
+                    return;
+                }
             }
 
             /**
@@ -66,9 +76,24 @@ public class Main {
             // Creo un file de la ubicacion del archivo descargado de la nueva version y de la version funcional
             File aplicacionActualizada = new File(VERSION_NUEVA_NAME);
             File aplicacionNueva = new File(VERSION_ACTUAL_NAME);
-
-            //Muevo el archivo nuevo para actualizar el codefac 
+            
+           
+             //Muevo el archivo nuevo para actualizar el codefac 
             Files.move(aplicacionActualizada.toPath(), aplicacionNueva.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            
+            /**
+             * @Author: Carlos Sánchez
+             * @Date: 19/06/22019
+             */
+            File aplicacionWarActualizada=new File(VERSION_NUEVA_WAR);
+            File aplicacionWarNueva=new File(VERSION_ACTUAL_WAR);
+            File directorioTomcat = new File(DIRECTORIO_DEPLOY_TOMCAT);
+            if(aplicacionWarActualizada.exists() && directorioTomcat.exists()) //Solo actualizar si existen los 2 directorios 
+            {
+                Files.move(aplicacionWarActualizada.toPath(), aplicacionWarNueva.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+
+           
             
             //Actualizar las nuevas librerias descargadas
             instalarLibreriasNuevas();
@@ -95,6 +120,11 @@ public class Main {
             crearMonitor(problema);
             
         }
+    }
+    
+    public static void procesoActualizaSpirit()
+    {
+        
     }
     
     public static void crearMonitor(String problema)

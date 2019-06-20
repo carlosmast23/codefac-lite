@@ -48,6 +48,7 @@ public class MonitorPanel extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         btnSolucionarProblema = new javax.swing.JButton();
+        btnForzarActualizar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         lblEspacio1 = new javax.swing.JLabel();
@@ -132,6 +133,18 @@ public class MonitorPanel extends javax.swing.JFrame {
         });
         jToolBar1.add(btnSolucionarProblema);
 
+        btnForzarActualizar.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        btnForzarActualizar.setText("Forzar Actualizar");
+        btnForzarActualizar.setFocusable(false);
+        btnForzarActualizar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnForzarActualizar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnForzarActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnForzarActualizarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnForzarActualizar);
+
         btnSalir.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancel-ico.png"))); // NOI18N
         btnSalir.setText("Salir");
@@ -184,6 +197,12 @@ public class MonitorPanel extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnSolucionarProblemaActionPerformed
 
+    private void btnForzarActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForzarActualizarActionPerformed
+        this.dispose();
+        Main.FORZAR_ACTUALIZAR=true;
+        Main.main(new String[]{Main.PID_PROCESO_CODEFAC});
+    }//GEN-LAST:event_btnForzarActualizarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -220,6 +239,7 @@ public class MonitorPanel extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnForzarActualizar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnSolucionarProblema;
     private javax.swing.JLabel jLabel1;
