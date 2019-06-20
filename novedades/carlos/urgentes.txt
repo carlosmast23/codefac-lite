@@ -32,3 +32,7 @@ El señor del gas solicita que no se pueda seleccionar una fecha inferior de la g
 Hacer el reporte del señor del gas agrupado por cliente , por ventas diaras y cantidad
 En la pantalla de factura unificar metodos por ejemplo de calcular iva y totales como en el modulo web para hacer mas escalable el sistema
 Revisar al momento de generar el reporte de las guias de remision para enviar , parece que genera el archivo y el pdf para mostrar en pantalla lo cual deberian estar separados para mostrar en el formulario o para enviar por archivo y eso vuelve mas lento el proceso de enviar los reportes por correo
+Revisar el tema de la escuela crecer:
+   --->Verificar la factura de compra 179845 de 1704090891001
+	->tiene 3 items de retencion por alguna razon en el codigo 31
+	-> Cedula incorrecta 1712173805 es 1712163805

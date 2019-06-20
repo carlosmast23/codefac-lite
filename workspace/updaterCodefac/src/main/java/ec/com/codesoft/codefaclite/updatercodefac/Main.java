@@ -30,7 +30,7 @@ public class Main {
     private static final String VERSION_NUEVA_NAME="tmp/codefac.jar";
     private static final  String VERSION_ACTUAL_NAME="codefac.jar";
     
-    private static final String VERSION_NUEVA_WAR="tmp/codefac.war";
+    private static final String VERSION_NUEVA_WAR="lib/codefac.war.new";
     private static final  String DIRECTORIO_DEPLOY_TOMCAT="tomcat9/webapps/";
     private static final  String VERSION_ACTUAL_WAR="tomcat9/webapps/codefac.war";
     
@@ -88,8 +88,12 @@ public class Main {
             File aplicacionWarActualizada=new File(VERSION_NUEVA_WAR);
             File aplicacionWarNueva=new File(VERSION_ACTUAL_WAR);
             File directorioTomcat = new File(DIRECTORIO_DEPLOY_TOMCAT);
+            
+            System.out.println("War descargado existe: "+aplicacionWarActualizada.exists());
+            System.out.println("War directorio existe: "+directorioTomcat.exists());
             if(aplicacionWarActualizada.exists() && directorioTomcat.exists()) //Solo actualizar si existen los 2 directorios 
             {
+                System.out.println("War actualizado en el servidor tomcat 9 ...");
                 Files.move(aplicacionWarActualizada.toPath(), aplicacionWarNueva.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
 
