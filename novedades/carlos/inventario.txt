@@ -1,0 +1,5 @@
+Ver que en la pantalla de ingresos manuales de inventario te deja escoger si tiene o no iva el producto
+que te salga el ultimo precio de compra en la misma pantalla
+ver que pasa cuando anulo una compra con el inventario
+ver que pasa cuando edito una compra si ya esta ingresado en inventario debe generar problemas
+ver esos valores de los totales del kardex no tiene sentido llevar esa sumatorio porque no aporta nada

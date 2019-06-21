@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.crm.busqueda;
+package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import java.util.Vector;
@@ -17,7 +18,7 @@ import java.util.Vector;
  * TODO: Ver como unificar el dialogo con la factura y otras que usan similares
  * @author PC
  */
-public class ClienteBusquedaDialogo implements InterfaceModelFind<PersonaEstablecimiento>
+public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind<PersonaEstablecimiento> ,InterfacesPropertisFindWeb
 {
 
     @Override
@@ -54,6 +55,17 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<PersonaEstable
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter.toLowerCase());
         return queryDialog;
+    }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        Vector<String> propiedades = new Vector<String>();
+        propiedades.add("persona.identificacion");
+        propiedades.add("persona.razonSocial");
+        propiedades.add("nombreComercial");//TODO: Ver como puedo hacer para establecer una propiedad personalizada
+        propiedades.add("telefonoConvencional");
+        propiedades.add("telefonoCelular");
+        return propiedades;
     }
     
 }

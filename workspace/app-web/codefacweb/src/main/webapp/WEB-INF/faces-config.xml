@@ -45,12 +45,23 @@
         <navigation-case>
             <from-outcome>proforma</from-outcome>
             <to-view-id>sistema/facturacion/proforma.xhtml</to-view-id>
-                    <redirect>
-            <view-param>
-                <name>faces-redirect</name>
-                <value>true</value>
-            </view-param>
-        </redirect>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>cliente</from-outcome>
+            <to-view-id>sistema/crm/cliente.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+            </redirect>
         </navigation-case>
         
         

@@ -19,7 +19,9 @@
         </h:head>
 
         <h:body style="font-size: 11px">
-            <h:form id="formulario" target="_blank" onkeypress="if (event.keyCode == 13) { return false; }">
+            <h:form id="formulario" target="_blank" onkeypress="if (event.keyCode == 13) {
+                        return false;
+                    }">
 
                 <p:remoteCommand name="onload" action="#{applicationCodefacMb.controladorConexionServidor()}" autoRun="true" />
 
@@ -45,9 +47,16 @@
                                 </p:submenu>
                             </p:submenu>
 
+
                             <p:submenu label="Facturación" icon="ui-icon-pencil">
                                 <p:submenu label="Proceso" icon="ui-icon-contact">
-                                    <p:menuitem value="Proforma" action="facturacion/proforma" />
+                                    <p:menuitem value="Proforma" action="proforma" />
+                                </p:submenu>
+                            </p:submenu>
+
+                            <p:submenu label="CRM" icon="ui-icon-pencil">
+                                <p:submenu label="Proceso" icon="ui-icon-contact">
+                                    <p:menuitem value="Cliente" action="cliente" />
                                 </p:submenu>
                             </p:submenu>
 

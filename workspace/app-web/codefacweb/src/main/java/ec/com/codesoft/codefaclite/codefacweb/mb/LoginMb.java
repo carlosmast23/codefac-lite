@@ -64,7 +64,7 @@ public class LoginMb implements Serializable {
             Usuario usuario = ServiceFactory.getFactory().getUsuarioServicioIf().login(nick, clave);
             if (usuario != null) {
                 construirSession(usuario, empresaSeleccionada, sucursalSeleccionada);
-                return "proforma";
+                return "cliente";
             } else {
                 MensajeMb.mostrarMensaje("Error", "Credenciales incorrectass", FacesMessage.SEVERITY_ERROR);
             }
