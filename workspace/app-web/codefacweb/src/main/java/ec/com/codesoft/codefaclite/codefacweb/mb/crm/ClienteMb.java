@@ -115,6 +115,28 @@ public class ClienteMb extends GeneralAbstractMb implements Serializable {
     @Override
     public void cargarBusqueda(Object obj) throws ExcepcionCodefacLite, UnsupportedOperationException {
         cliente = ((PersonaEstablecimiento) (obj)).getPersona();
+        
+        ///Setear si es pasaporte o no
+        identificacionPasaporte=false;
+        if(cliente.getTipoIdentificacionEnum().equals(Persona.TipoIdentificacionEnum.PASAPORTE))
+        {
+            identificacionPasaporte=true;
+        }
+        
+        //Setear la nacionalidad
+        nacionalidadSeleccionada=cliente.getNacionalidad();
+        
+        //Setear el estado
+        estadoSeleccionada=cliente.getEstadoEnum();
+        
+        //Setear el tipo de cliente
+        operadorNegocioSeleccionado=cliente.getTipoEnum();
+        
+        //Setear al forma de defecto
+        sriFormaPagoSeleccionada=cliente.getSriFormaPago();
+        
+        
+        
     }
 
     @Override
