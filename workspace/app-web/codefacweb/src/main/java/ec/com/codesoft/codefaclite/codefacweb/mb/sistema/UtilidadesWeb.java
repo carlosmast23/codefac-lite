@@ -5,10 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.mb.sistema;
 
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadWeb;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
@@ -56,4 +59,20 @@ public class UtilidadesWeb {
 		stream.close();
 		FacesContext.getCurrentInstance().responseComplete();
 	}
+        
+    public static void redirigirPaginaInterna(String pagina) {
+        FacesContext contex = FacesContext.getCurrentInstance();
+        //contex.getExternalContext().redirect(pagina);
+        contex.getApplication().getNavigationHandler().handleNavigation(contex, null, pagina);
+    }
+    
+    public static void redirigirPaginaExterna(String pagina) {
+        try {
+            FacesContext contex = FacesContext.getCurrentInstance();
+            contex.getExternalContext().redirect(pagina);
+            //contex.getApplication().getNavigationHandler().handleNavigation(contex, null, pagina);
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadesWeb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

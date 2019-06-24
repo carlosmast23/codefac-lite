@@ -90,7 +90,7 @@
 
                         <!-- BOTONES DE LAS ACCCIONES GENERALES !-->
                         <p:panel style="text-align: center">
-                            <p:commandButton icon="home-icon" class="button-menu" title="Home" action="indexCodefac" />
+                            <p:commandButton icon="home-icon" process="@this" class="button-menu" title="Home" action="indexCodefac" />
 
                             <p:commandButton icon="new-icon" class="button-menu" title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}" update="panelContenido">
                                 <p:resetInput target="panelContenido"/>
