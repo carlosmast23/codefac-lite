@@ -43,7 +43,7 @@ public class LoginFilter implements Filter {
                 = (HttpServletResponse) response;
 
         // managed bean name is exactly the session attribute name
-        System.out.println("Datos Encontrados Session :"+httpServletRequest.getSession().getAttributeNames());
+        //System.out.println("Datos Encontrados Session :"+httpServletRequest.getSession().getAttributeNames());
         SessionMb sessionMb = (SessionMb) httpServletRequest
                 .getSession().getAttribute("sessionMb");
 

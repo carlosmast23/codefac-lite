@@ -11,20 +11,22 @@
         <ui:define name="contenido" >
 
             <f:event listener="#{controllerCodefacMb.agregarVista(clienteMb)}" type="preRenderView" />
-
+            <!--<p:remoteCommand process="@this" name="panelDatos" update="@form"/>-->
             <p:tabView>
                 <p:tab title="Datos Principales">
-                    <p:panelGrid columns="4"   layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-5,ui-grid-col-2, ui-grid-col-3"  >
+                    <p:panelGrid id="panelDatos" columns="4"   layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-5,ui-grid-col-2, ui-grid-col-3"  >
 
                         <h:outputLabel id="txtIdentificacion" style="float: right" value="Identificación:"/>
-                        <h:inputText required="true" value="#{clienteMb.cliente.identificacion}" />
+                        <h:inputText required="false" value="#{clienteMb.cliente.identificacion}" />
 
                         <h:outputLabel style="float: right" value="Pasaporte:"/>
                         <p:selectBooleanCheckbox value="#{clienteMb.identificacionPasaporte}" />
 
 
                         <h:outputLabel style="float: right" value="Nombres:"/>
-                        <h:inputText required="false" value="#{clienteMb.cliente.nombres}" />
+                        <p:inputText required="false" value="#{clienteMb.cliente.nombres}" >
+                            <p:ajax update="txtRazonSocial" event="keyup" listener="#{clienteMb.eventoNombreKeyUp()}" />
+                        </p:inputText>
 
                         <h:outputLabel style="float: right" value="Nacionalidad:"/>
 
@@ -35,7 +37,9 @@
 
 
                         <h:outputLabel style="float: right" value="Apellidos:"/>
-                        <h:inputText required="false" value="#{clienteMb.cliente.apellidos}" />
+                        <p:inputText required="false" value="#{clienteMb.cliente.apellidos}" >
+                            <p:ajax update="txtRazonSocial"  event="keyup"  listener="#{clienteMb.eventoNombreKeyUp()}" />
+                        </p:inputText>
 
                         <h:outputLabel style="float: right" value="Estado:"/>
                         <p:selectOneMenu id="console2" value="#{clienteMb.estadoSeleccionada}"  style="width:125px" converter="estadoEnumConverter">
@@ -43,7 +47,7 @@
                         </p:selectOneMenu>
 
                         <h:outputLabel style="float: right" value="Razón Social:"/>
-                        <h:inputText required="true" value="#{clienteMb.cliente.razonSocial}" style="width: 80%" />
+                        <p:inputText id="txtRazonSocial" required="false" value="#{clienteMb.cliente.razonSocial}" style="width: 80%" />
 
                         <p:spacer/><p:spacer/>
 

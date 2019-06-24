@@ -34,6 +34,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.PrimeFaces;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -51,6 +52,8 @@ public class DialogoBuscarMb implements Serializable {
     private List<String> propiedadesObjeto;
     private List<Vector<String>> datosConsulta;
     private Vector<ColumnaDialogo> columnasConsulta;
+    
+    private Object objetoSeleccionado;
 
     @PostConstruct
     public void init() {
@@ -73,7 +76,7 @@ public class DialogoBuscarMb implements Serializable {
 
             InterfaceModelFind busquedaDialogo = busquedaClase;
             QueryDialog queryDialog = busquedaDialogo.getConsulta("%%");
-            datosBusqueda = ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query, queryDialog.getParametros(), 0, 100);
+            datosBusqueda = ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query, queryDialog.getParametros(), 0, 10000);
 
             //Setear datos al controlador
             columnasConsulta = busquedaDialogo.getColumnas();
@@ -154,9 +157,18 @@ public class DialogoBuscarMb implements Serializable {
         return null;
     }
 
-    public void selecccionarObjecto(Integer indice) {
-        Object resultado = datosBusqueda.get(indice);
-        PrimeFaces.current().dialog().closeDynamic(resultado);
+    public void selecccionarObjecto() {
+        //Object resultado = datosBusqueda.get(indice);
+        System.out.println("Seleccionado objeto del dialogo");
+        if(objetoSeleccionado!=null)
+        {
+            System.out.println("");
+            PrimeFaces.current().dialog().closeDynamic(objetoSeleccionado);
+        }
+        else
+        {
+            System.out.println("Objeto vacio no se puede seleccionar!");
+        }
     }
 
     public boolean filterByName(Object value, Object filter, Locale locale) {
@@ -210,5 +222,26 @@ public class DialogoBuscarMb implements Serializable {
     public void setPropiedadesObjeto(List<String> propiedadesObjeto) {
         this.propiedadesObjeto = propiedadesObjeto;
     }
+
+    public Object getObjetoSeleccionado() {
+        return objetoSeleccionado;
+    }
+
+    public void setObjetoSeleccionado(Object objetoSeleccionado) {
+        this.objetoSeleccionado = objetoSeleccionado;
+    }
+    
+    public void filaSeleccionada(SelectEvent event) {
+        System.out.println("seleccionado objeto para devolver");
+        objetoSeleccionado= event.getObject();
+        PrimeFaces.current().dialog().closeDynamic(objetoSeleccionado);
+    }
+ 
+    /*public void onRowUnselect(UnselectEvent event) {
+        FacesMessage msg = new FacesMessage("Car Unselected", ((Car) event.getObject()).getId());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }*/
+    
+    
 
 }

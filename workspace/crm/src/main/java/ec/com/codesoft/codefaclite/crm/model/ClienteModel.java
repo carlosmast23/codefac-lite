@@ -725,7 +725,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     
     private void construirNombreSocial()
     {
-        getjTextNombreSocial().setText(getjTextApellidos().getText() + " " + getjTextNombres().getText());
+        getjTextNombreSocial().setText(Persona.construirRazonSocial(getjTextNombres().getText(), getjTextApellidos().getText()));
+        //getjTextNombreSocial().setText(getjTextApellidos().getText() + " " + getjTextNombres().getText());
     }
 
     @Override

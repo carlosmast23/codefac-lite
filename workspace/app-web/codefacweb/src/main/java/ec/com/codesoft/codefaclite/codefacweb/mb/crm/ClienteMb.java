@@ -285,7 +285,12 @@ public class ClienteMb extends GeneralAbstractMb implements Serializable {
         }
     }
     
-    
+    public void eventoNombreKeyUp() {
+        System.out.println("evento razon social");
+        System.out.println(cliente.getNombres() +" "+cliente.getApellidos());
+        cliente.contruirRazonSocialConNombreYApellidos();
+        System.out.println(cliente.getRazonSocial());
+    }
     
     
 

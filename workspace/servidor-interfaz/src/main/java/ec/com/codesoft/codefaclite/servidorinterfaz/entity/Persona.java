@@ -402,6 +402,16 @@ public class Persona implements Serializable, Comparable<Persona> {
         this.contactoClienteNombre = contactoClienteNombre;
     }
     
+    /**
+     * ==================> Metodos utilidaes <=====================
+     */
+    public static String construirRazonSocial(String nombre, String apellido)
+    {
+        nombre=(nombre!=null)?nombre:"";
+        apellido=(apellido!=null)?apellido:"";
+        return apellido + " " + nombre;
+    }
+    
     
     
     
@@ -436,6 +446,11 @@ public class Persona implements Serializable, Comparable<Persona> {
                 break;
         }
         return verificador;
+    }
+    
+    public void contruirRazonSocialConNombreYApellidos()
+    {
+        this.razonSocial=construirRazonSocial(nombres,apellidos);
     }
     
     
