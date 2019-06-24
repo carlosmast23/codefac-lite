@@ -71,6 +71,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import java.util.Arrays;
 
 /**
  *
@@ -190,6 +191,29 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         abrirDialogoBusqueda(clienteBusquedaDialogo);
         System.out.println("Abriendo dialogo fin");
     }
+    
+    public void abrirDialogoCrearCliente()
+    {
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("resizable", true);
+        options.put("draggable", false);
+        options.put("modal", true);
+        options.put("width", 800);
+        options.put("height", 800);
+        options.put("contentWidth", "100%");
+        options.put("contentHeight", "100%");
+        //options.put("busquedaClase", new EmpleadoBusquedaDialogo() ); //TODO: Mando por defecto un dialogo por defecto
+        String nombreDialogoBusqueda = "cliente";
+        //PrimeFaces.current().dialog()
+        
+        Map<String,List<String>> params=new HashMap<String,List<String>> ();
+        params.put("isDialog",Arrays.asList("true")); //TODO: Parametrizar esta variable
+        
+        PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, params);
+        
+    }
+    
+    
 
     public void abrirDialogoBusquedaProducto() {
         ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo();

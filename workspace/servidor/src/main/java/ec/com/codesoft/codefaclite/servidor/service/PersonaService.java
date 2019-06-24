@@ -102,12 +102,12 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
     }
 
-    public void editar(Persona p) {
+    public void editar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
         personaFacade.edit(p);
 
     }
 
-    public void eliminar(Persona p) {
+    public void eliminar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
         //personaFacade.remove(p);
         p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
         editar(p);

@@ -208,6 +208,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 System.out.println("Se elimino correctamente");
             } catch (RemoteException ex) {
                 Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                //throw new ExcepcionCodefacLite("Cancelado por error");
             }
         }
 

@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac.TipoEnvioComprobanteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
@@ -569,13 +570,15 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         try {
             clienteService = ServiceFactory.getFactory().getPersonaServiceIf();
             for (Persona c : clienteService.buscar()) {
-                if (c.getRazonSocial().equals("Cliente Final")) {
+                if (c.getRazonSocial().equals("Cliente Final")) { 
                     cliente = c;
                 }
             }
             cliente.setCorreoElectronico(getTxtCorreoElectronico().getText());
             clienteService.editar(cliente);
         } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

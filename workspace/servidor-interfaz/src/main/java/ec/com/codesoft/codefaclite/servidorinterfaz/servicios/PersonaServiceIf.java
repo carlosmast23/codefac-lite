@@ -20,9 +20,9 @@ public interface PersonaServiceIf extends ServiceAbstractIf<Persona>{
     
     public Persona grabar(Persona p) throws ServicioCodefacException,java.rmi.RemoteException;    
    
-    public void editar(Persona p) throws java.rmi.RemoteException;
+    public void editar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException;
     
-    public void eliminar(Persona p) throws java.rmi.RemoteException;
+    public void eliminar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException;
     
     public List<Persona> buscar() throws java.rmi.RemoteException;
     

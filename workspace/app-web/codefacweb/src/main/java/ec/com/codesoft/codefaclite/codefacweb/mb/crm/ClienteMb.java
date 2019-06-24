@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.mb.crm;
 
+import ec.com.codesoft.codefaclite.codefacweb.core.DialogoWeb;
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
@@ -42,7 +43,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
  */
 @ManagedBean
 @ViewScoped
-public class ClienteMb extends GeneralAbstractMb implements Serializable {
+public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>, Serializable {
 
     private Persona cliente;
     //private Persona.TipoIdentificacionEnum[] identificacionesEnumList;
@@ -51,7 +52,6 @@ public class ClienteMb extends GeneralAbstractMb implements Serializable {
     private String tiposClientes[];
     private OperadorNegocioEnum operadoresNegocio[];
     private List<SriFormaPago> sriFormaPagoList;
-    
 
     //private Persona.TipoIdentificacionEnum identificacionSeleccionada;
     private Nacionalidad nacionalidadSeleccionada;
@@ -60,13 +60,13 @@ public class ClienteMb extends GeneralAbstractMb implements Serializable {
     private SriFormaPago sriFormaPagoSeleccionada;
 
     private Boolean identificacionPasaporte;
-            
+
     @PostConstruct
     private void init() {
         cliente = new Persona();
         cargarListas();
         cargarDatosDefecto();
-        
+
     }
 
     @Override
@@ -77,14 +77,13 @@ public class ClienteMb extends GeneralAbstractMb implements Serializable {
     @Override
     public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
         setearDatos();
-        if(validarDatosVista())
-        {
+        if (validarDatosVista()) {
             try {
                 ServiceFactory.getFactory().getPersonaServiceIf().grabar(cliente);
                 mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
-                
+
             } catch (ServicioCodefacException ex) {
-                MensajeMb.mostrarMensajeDialogo("Error",ex.getMessage(),FacesMessage.SEVERITY_ERROR);
+                MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
                 Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
             } catch (RemoteException ex) {
                 Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -94,6 +93,19 @@ public class ClienteMb extends GeneralAbstractMb implements Serializable {
 
     @Override
     public void editar() throws ExcepcionCodefacLite, UnsupportedOperationException {
+        setearDatos();
+        if (validarDatosVista()) {
+            try {
+                ServiceFactory.getFactory().getPersonaServiceIf().editar(cliente);
+                mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+
+            } catch (ServicioCodefacException ex) {
+                mostrarDialogoResultado(new CodefacMsj("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO));
+                Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     }
 
@@ -115,28 +127,25 @@ public class ClienteMb extends GeneralAbstractMb implements Serializable {
     @Override
     public void cargarBusqueda(Object obj) throws ExcepcionCodefacLite, UnsupportedOperationException {
         cliente = ((PersonaEstablecimiento) (obj)).getPersona();
-        
+
         ///Setear si es pasaporte o no
-        identificacionPasaporte=false;
-        if(cliente.getTipoIdentificacionEnum().equals(Persona.TipoIdentificacionEnum.PASAPORTE))
-        {
-            identificacionPasaporte=true;
+        identificacionPasaporte = false;
+        if (cliente.getTipoIdentificacionEnum().equals(Persona.TipoIdentificacionEnum.PASAPORTE)) {
+            identificacionPasaporte = true;
         }
-        
+
         //Setear la nacionalidad
-        nacionalidadSeleccionada=cliente.getNacionalidad();
-        
+        nacionalidadSeleccionada = cliente.getNacionalidad();
+
         //Setear el estado
-        estadoSeleccionada=cliente.getEstadoEnum();
-        
+        estadoSeleccionada = cliente.getEstadoEnum();
+
         //Setear el tipo de cliente
-        operadorNegocioSeleccionado=cliente.getTipoEnum();
-        
+        operadorNegocioSeleccionado = cliente.getTipoEnum();
+
         //Setear al forma de defecto
-        sriFormaPagoSeleccionada=cliente.getSriFormaPago();
-        
-        
-        
+        sriFormaPagoSeleccionada = cliente.getSriFormaPago();
+
     }
 
     @Override
@@ -157,15 +166,12 @@ public class ClienteMb extends GeneralAbstractMb implements Serializable {
         this.cliente = cliente;
     }
 
-   /* private void setearDatosAdicionales() {
+    /* private void setearDatosAdicionales() {
         this.cliente.setTipoIdentificacionEnum(identificacionSeleccionada);
         this.cliente.setNacionalidad(nacionalidadSeleccionada);
         this.cliente.setEstadoEnum(estadoSeleccionada);
         ClienteModel.crearEstablecimiento(EstadoFormEnum.GRABAR, cliente, interfaceVista);
     }*/
-
-
-
     public List<Nacionalidad> getNacionalidadesList() {
         return nacionalidadesList;
     }
@@ -181,7 +187,6 @@ public class ClienteMb extends GeneralAbstractMb implements Serializable {
     public void setEstadosEnumList(GeneralEnumEstado[] estadosEnumList) {
         this.estadosEnumList = estadosEnumList;
     }
-
 
     public Nacionalidad getNacionalidadSeleccionada() {
         return nacionalidadSeleccionada;
@@ -202,41 +207,37 @@ public class ClienteMb extends GeneralAbstractMb implements Serializable {
     private void cargarListas() {
         try {
             //identificacionesEnumList = Persona.TipoIdentificacionEnum.values();
-            tiposClientes=Persona.tiposClientes;
+            tiposClientes = Persona.tiposClientes;
             nacionalidadesList = ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerTodos();
             estadosEnumList = GeneralEnumEstado.values();
-            operadoresNegocio=OperadorNegocioEnum.values();
-            sriFormaPagoList=ServiceFactory.getFactory().getSriServiceIf().obtenerFormasPagoActivo();
+            operadoresNegocio = OperadorNegocioEnum.values();
+            sriFormaPagoList = ServiceFactory.getFactory().getSriServiceIf().obtenerFormasPagoActivo();
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-    
+
     public void setearDatos() {
         System.out.println("---seteando datos---");
         cliente.setTipoIdentificacionEnum(obtenerTipoIdentificacion());
         cliente.setNacionalidad(nacionalidadSeleccionada);
-        cliente.setEstadoEnum(estadoSeleccionada);       
+        cliente.setEstadoEnum(estadoSeleccionada);
         cliente.setSriFormaPago(sriFormaPagoSeleccionada);
         cliente.setTipoEnum(operadorNegocioSeleccionado);
-        System.out.println("---->"+cliente.getIdentificacion());
-        System.out.println("---->"+cliente.getTipoIdentificacion());
-        
+        System.out.println("---->" + cliente.getIdentificacion());
+        System.out.println("---->" + cliente.getTipoIdentificacion());
+
     }
-    
-    private Persona.TipoIdentificacionEnum obtenerTipoIdentificacion()
-    {
-        if(identificacionPasaporte)
-        {
+
+    private Persona.TipoIdentificacionEnum obtenerTipoIdentificacion() {
+        if (identificacionPasaporte) {
             return Persona.TipoIdentificacionEnum.PASAPORTE;
-        }else
-        {
-            if(cliente.getIdentificacion().length()==13) //Tamanio del ruc , ver si se crea una variable global para este valor
+        } else {
+            if (cliente.getIdentificacion().length() == 13) //Tamanio del ruc , ver si se crea una variable global para este valor
             {
                 return Persona.TipoIdentificacionEnum.RUC;
-            }
-            else //Caso contrario asumo que es cedula
+            } else //Caso contrario asumo que es cedula
             {
                 return Persona.TipoIdentificacionEnum.CEDULA;
             }
@@ -297,25 +298,27 @@ public class ClienteMb extends GeneralAbstractMb implements Serializable {
 
     private void cargarDatosDefecto() {
         cliente.setDiasCreditoCliente(0);
-        
+
         try {
-            nacionalidadSeleccionada=ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerDefaultEcuador();
+            nacionalidadSeleccionada = ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerDefaultEcuador();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void eventoNombreKeyUp() {
         System.out.println("evento razon social");
-        System.out.println(cliente.getNombres() +" "+cliente.getApellidos());
+        System.out.println(cliente.getNombres() + " " + cliente.getApellidos());
         cliente.contruirRazonSocialConNombreYApellidos();
         System.out.println(cliente.getRazonSocial());
     }
-    
-    
 
-    
-    
+    public Persona getResultDialogo() {
+        return cliente;
+    }
+
+
+
 }

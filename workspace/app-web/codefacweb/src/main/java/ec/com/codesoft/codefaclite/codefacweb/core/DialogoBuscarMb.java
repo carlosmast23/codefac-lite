@@ -65,6 +65,9 @@ public class DialogoBuscarMb implements Serializable {
         Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
         Object busquedaClase= sessionMap.get("busquedaClase");
        
+        //Despues de leer el dato de sessionMap lo elimino para evitar tener pesada la pagina
+        sessionMap.remove("busquedaClase");
+        
         InterfaceModelFind controller =(InterfaceModelFind)busquedaClase;
        
         buscarDatos(controller);

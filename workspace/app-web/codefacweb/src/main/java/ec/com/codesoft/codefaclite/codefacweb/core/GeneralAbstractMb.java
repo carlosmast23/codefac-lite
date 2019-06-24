@@ -50,7 +50,7 @@ public abstract class GeneralAbstractMb implements Serializable {
         this.resultadoDialogo = resultadoDialogo;
     }
 
-    protected void mostrarDialogoResultado(CodefacMsj codefacMensaje) {
+    protected void mostrarDialogoResultado(CodefacMsj codefacMensaje){
         resultadoDialogo.setMensaje(codefacMensaje.mensaje);
         resultadoDialogo.setTitulo(codefacMensaje.titulo);
         PrimeFaces current = PrimeFaces.current();

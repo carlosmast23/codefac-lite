@@ -15,10 +15,11 @@
 
             <p:panelGrid columns="4" layout="grid">            
                 <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
-                    <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 70%" />
+                    <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 55%" />                    
                     <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}">
                         <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarCliente}" update="txtCliente,datosCliente"  />
-                    </p:commandButton>  
+                    </p:commandButton>                    
+                    <p:commandButton process="@this" icon="fa fa-plus"  styleClass="white-button" action="#{proformaMb.abrirDialogoCrearCliente()}"/>                    
                 </p:panel>
 
                 <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">

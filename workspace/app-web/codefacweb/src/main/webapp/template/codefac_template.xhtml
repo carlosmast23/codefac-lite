@@ -27,7 +27,7 @@
 
                 <p:layout fullPage="true" >
 
-                    <p:layoutUnit position="north" resizable="true" closable="true" collapsible="true" size="16%"  >
+                    <p:layoutUnit position="north" resizable="true" closable="true" collapsible="true" size="16%"  visible="#{!controllerCodefacMb.modoDialogo}" >
                         <p:growl id="messages" showDetail="true" life="5000"/>
 
                         <p:menubar style="z-index:1000 !important;">
@@ -142,7 +142,7 @@
                         </p:menu>
                     </p:layoutUnit>-->
 
-                    <p:layoutUnit position="east" size="270" header="Menu" collapsible="true" style="border: 1px;border-style: ridge" >
+                    <p:layoutUnit position="east" size="270" header="Menu" collapsible="true" style="border: 1px;border-style: ridge" visible="#{!controllerCodefacMb.modoDialogo}" >
                         <p:tabView id="panelSecundario" dynamic="true" cache="true" effect="fold"  activeIndex="#{controllerCodefacMb.indiceTabSecundario}">
                             <p:tab title="Panel">
                                 <h:panelGrid columns="2" cellpadding="10">
@@ -174,6 +174,11 @@
                             </f:facet>
 
                             <div  style="padding: 10px;text-align: left">
+                                
+                                <div style="text-align: center">
+                                    <p:commandButton rendered="#{controllerCodefacMb.modoDialogo}" process="@this" onclick="PF('dialogConfirmarGrabar').show()" style="float: contour;margin-bottom:  10px;margin-right: 50px" label="Grabar" value="G U A R D A R" icon="save-icon" />
+                                </div>
+                                
                                 <ui:insert  name="contenido">
                                     <f:facet name="ejemplo" id="contenidoPagina2">
                                         Contenido por defecto de la plantilla  
