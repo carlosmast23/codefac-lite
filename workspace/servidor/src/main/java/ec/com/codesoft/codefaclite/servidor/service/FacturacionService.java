@@ -120,6 +120,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 
                 factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
                 factura.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.NO);
+                
+                //Setear los datos del cliente en la factura para tener un historico y vovler a consultar
+                //Todo: Ver si es necesario corregir este problema tambien en la factura cuando edita
+                factura.setRazonSocial(factura.getCliente().getRazonSocial());
+                factura.setIdentificacion(factura.getCliente().getIdentificacion());
+                factura.setDireccion(factura.getSucursal().getDireccion());
+                factura.setTelefono(factura.getSucursal().getTelefonoConvencional());
 
                 ComprobantesService servicioComprobante = new ComprobantesService();
                 servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);            
