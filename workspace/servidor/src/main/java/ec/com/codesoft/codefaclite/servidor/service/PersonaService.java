@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
@@ -31,29 +32,23 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author PC
  */
-public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> implements PersonaServiceIf
-{
+public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> implements PersonaServiceIf {
+
     private PersonaFacade personaFacade;
 
-    public PersonaService() throws RemoteException 
-    {
+    public PersonaService() throws RemoteException {
         super(PersonaFacade.class);
-        this.personaFacade=new PersonaFacade();
+        this.personaFacade = new PersonaFacade();
     }
-    
-    
-    public void editarPersona(Persona p) throws ServicioCodefacException,java.rmi.RemoteException
-    {
+
+    public void editarPersona(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) 
-                {
-                    if(establecimiento.getId()==null)
-                    {
+                for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) {
+                    if (establecimiento.getId() == null) {
                         entityManager.persist(establecimiento);
-                    }else
-                    {
+                    } else {
                         entityManager.merge(establecimiento);
                     }
                 }
@@ -62,17 +57,40 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
         });
     }
 
-    public Persona grabar(Persona p) throws ServicioCodefacException,java.rmi.RemoteException
-    {
+    public Persona grabar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                
-                if(p.getEstablecimientos()==null || p.getEstablecimientos().size()==0)
+                /**
+                 * Validaciones previas de los datos
+                 */
+                if(!p.validarCedula())
                 {
-                    throw new ServicioCodefacException("Al menos tiene que existir un establecimiento para grabar");
+                    throw new ServicioCodefacException("Error al validar la identificación");
                 }
                 
+                if(p.getRazonSocial()==null || p.getRazonSocial().isEmpty())
+                {
+                    throw new ServicioCodefacException("La razón social no puede ser vacia");
+                }
+                
+
+                if (p.getEstablecimientos() == null || p.getEstablecimientos().size() == 0) {
+                    //Si no tiene un establecimiento lo creo automaticamente 
+                    PersonaEstablecimiento personaEstablecimiento = PersonaEstablecimiento.buildFromPersona(p);
+                    personaEstablecimiento.setCodigoSucursal("1");
+                    personaEstablecimiento.setCorreoElectronico(""); //implementar de forma posterior
+                    personaEstablecimiento.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
+                    //Si no ingreso un nombre comercial se graba como matriz
+                    if(personaEstablecimiento.getNombreComercial().isEmpty())
+                    {
+                        personaEstablecimiento.setNombreComercial(Sucursal.TipoSucursalEnum.MATRIZ.getNombre());
+                    }
+                    
+                    entityManager.persist(personaEstablecimiento);
+                    p.addEstablecimiento(personaEstablecimiento);
+                }
+
                 p.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                 for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) {
                     entityManager.persist(establecimiento);
@@ -80,71 +98,59 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
                 entityManager.persist(p);
             }
         });
-        return p;       
-        
+        return p;
+
     }
-    
-    public void editar(Persona p)
-    {
+
+    public void editar(Persona p) {
         personaFacade.edit(p);
-       
+
     }
-    
-    public void eliminar(Persona p)
-    {
+
+    public void eliminar(Persona p) {
         //personaFacade.remove(p);
         p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
         editar(p);
     }
-    
-    public List<Persona> buscar()
-    {
+
+    public List<Persona> buscar() {
         return personaFacade.findAll();
     }
-    
-    public Persona buscarPorIdentificacionYestado(String identificacion,GeneralEnumEstado estado) throws ServicioCodefacException,java.rmi.RemoteException
-    {
 
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("identificacion",identificacion);
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        
-        List<Persona> resultados=getFacade().findByMap(mapParametros);
-        if(resultados.size()==0)
-        {
+    public Persona buscarPorIdentificacionYestado(String identificacion, GeneralEnumEstado estado) throws ServicioCodefacException, java.rmi.RemoteException {
+
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("identificacion", identificacion);
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+
+        List<Persona> resultados = getFacade().findByMap(mapParametros);
+        if (resultados.size() == 0) {
             return null;
-        }
-        else
-        {
+        } else {
             return resultados.get(0);
         }
-        
-        
+
     }
-    
+
     @Override
-    public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum,GeneralEnumEstado estado) throws java.rmi.RemoteException
-    {
-        return getFacade().buscarPorTipoFacade(tipoEnum,estado);
+    public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum, GeneralEnumEstado estado) throws java.rmi.RemoteException {
+        return getFacade().buscarPorTipoFacade(tipoEnum, estado);
     }
-    
+
     @Override
-    public Persona buscarPorIdentificacion(String identificacion) throws java.rmi.RemoteException
-    {
+    public Persona buscarPorIdentificacion(String identificacion) throws java.rmi.RemoteException {
         //Persona p;
         //p.getIdentificacion();
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("identificacion", identificacion);
-        
-        List<Persona> personas=getFacade().findByMap(mapParametros);
-        if(personas.size()>0)
-        {
+
+        List<Persona> personas = getFacade().findByMap(mapParametros);
+        if (personas.size() > 0) {
             return personas.get(0);
         }
-        
+
         return null;
 
     }
-   
-    
+
 }

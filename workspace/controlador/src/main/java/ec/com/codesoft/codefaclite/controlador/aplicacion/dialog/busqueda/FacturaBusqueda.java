@@ -7,7 +7,6 @@ package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -20,6 +19,7 @@ import java.util.List;
 import java.util.Vector;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 
 /**
  *

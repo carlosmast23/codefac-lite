@@ -159,4 +159,18 @@ public class PersonaEstablecimiento implements  Serializable{
         return this.persona.getRazonSocial();
     }
     
+    
+    public static PersonaEstablecimiento buildFromPersona(Persona persona)
+    {
+        PersonaEstablecimiento personaEstablecimiento = new PersonaEstablecimiento();
+        personaEstablecimiento.setNombreComercial(persona.getNombreLegal());
+        personaEstablecimiento.setDireccion(persona.getDireccion());
+        personaEstablecimiento.setExtensionTelefono((persona.getExtensionTelefono()));
+        personaEstablecimiento.setPersona(persona);
+        personaEstablecimiento.setTelefonoCelular((persona.getTelefonoCelular()));
+        personaEstablecimiento.setTelefonoConvencional(persona.getTelefonoConvencional());
+        return personaEstablecimiento;
+    }
+    
+    
 }

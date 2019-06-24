@@ -9,7 +9,6 @@ import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -21,6 +20,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 
 /**
  *

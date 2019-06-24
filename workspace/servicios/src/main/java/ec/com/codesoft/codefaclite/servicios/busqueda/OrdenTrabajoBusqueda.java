@@ -7,10 +7,10 @@ package ec.com.codesoft.codefaclite.servicios.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 
 /**
  *

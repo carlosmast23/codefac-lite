@@ -6,12 +6,13 @@
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import java.io.Serializable;
 
 /**
  *
  * @author Carlos
  */
-public class ResultadoDialogo {
+public class ResultadoDialogo implements Serializable{
     private String titulo;
     private String mensaje;
 

@@ -197,23 +197,6 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             persona.setContactoClientePorcentaje(new BigDecimal(getTxtPorcentajeComision().getText()));
         }
         
-        if(estadoFormulario.equals(ESTADO_GRABAR))
-        {
-            if(persona.getEstablecimientos()!=null)
-            {
-                persona.getEstablecimientos().add(0, crearEstablecimientoPorDefecto(null));
-                //persona.getEstablecimientos().set(0,crearEstablecimientoPorDefecto(null));
-            }
-            else
-            {
-                persona.addEstablecimiento(crearEstablecimientoPorDefecto(null));
-            }
-        }
-        else
-        {
-            //Cargar el primer establecimiento de la lista
-            crearEstablecimientoPorDefecto(persona.getEstablecimientos().get(0));
-        }
     }
 
     @Override
@@ -292,6 +275,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @validacionPersonalizadaAnotacion(errorTitulo = "Formato de identificacion")
     public boolean validarIdentificacionSegunOpcionEstablecida() {
+        /**
+         * Todo: Ver si usar el mismo metodo que esta en la persona de validar cedula , pero primero tengo que setear los datos
+         */
         boolean verificador = false;
         Persona.TipoIdentificacionEnum tipoIdentificacion=(Persona.TipoIdentificacionEnum) getjComboIdentificacion().getSelectedItem();
         
@@ -317,6 +303,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         }
         return verificador;
     }
+    
     
     private void cargarDatos() {
         getjTextNombres().setText(persona.getNombres());
@@ -931,28 +918,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         return true;
     }
     
-    private PersonaEstablecimiento crearEstablecimientoPorDefecto(PersonaEstablecimiento personaEstablecimiento) {
-        if(personaEstablecimiento==null)
-            personaEstablecimiento = new PersonaEstablecimiento();
         
-        personaEstablecimiento.setNombreComercial(getTxtNombreLegal().getText());
-        personaEstablecimiento.setDireccion(getjTextAreaDireccion().getText());
-        personaEstablecimiento.setExtensionTelefono(getjTextExtension().getText());
-        personaEstablecimiento.setPersona(persona);
-        personaEstablecimiento.setTelefonoCelular(getjTextCelular().getText());
-        personaEstablecimiento.setTelefonoConvencional(getjTextTelefono().getText());
-        //TipoSucursalEnum tipoSucursalEnum = (TipoSucursalEnum) getCmbTipoEstablecimiento().getSelectedItem();
-        
-        if(estadoFormulario.equals(ESTADO_GRABAR))
-        {
-            personaEstablecimiento.setCodigoSucursal("1");
-            personaEstablecimiento.setCorreoElectronico(""); //implementar de forma posterior
-            personaEstablecimiento.setTipoSucursalEnum(TipoSucursalEnum.MATRIZ);
-        }
-        
-        return personaEstablecimiento;
-    }
-    
     private void cargarEstablecimientoPorDefecto() {
         PersonaEstablecimiento establecimiento=persona.getEstablecimientos().get(0);
         if(establecimiento!=null)

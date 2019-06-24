@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -409,6 +410,35 @@ public class Persona implements Serializable, Comparable<Persona> {
      * TODO: Terminar de hacer la validacion para casos mas complicados
      * @return 
      */
+    public boolean validarCedula()
+    {
+        boolean verificador = false;
+        Persona.TipoIdentificacionEnum tipoIdentificacion=getTipoIdentificacionEnum();
+        
+        if(tipoIdentificacion==null)
+            return false;
+        
+        switch (tipoIdentificacion) {
+            case RUC:
+                verificador = UtilidadesJuridicas.validarTodosRuc(identificacion);
+                break;
+            case CEDULA:
+                verificador = UtilidadesJuridicas.validarCedula(identificacion);
+                break;
+            case PASAPORTE:
+                verificador = true;
+                break;
+            case CLIENTE_FINAL:
+                verificador=(identificacion.equals("9999999999999"))?true:false;
+                break;
+            default :
+                verificador = false;
+                break;
+        }
+        return verificador;
+    }
+    
+    
     public ValidacionCedulaEnum validarIdentificacion()
     {
         if(identificacion==null)
@@ -507,6 +537,10 @@ public class Persona implements Serializable, Comparable<Persona> {
     public int compareTo(Persona o) {
         return this.getIdCliente().compareTo(o.getIdCliente());
     }
+    
+    public static final String[] tiposClientes = {"CLIENTE",
+        "SUJETO RETENIDO",
+        "DESTINATARIO"};
     
     public enum TipoClienteEnum
     {

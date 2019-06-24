@@ -7,12 +7,12 @@ package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 
 /**
  *

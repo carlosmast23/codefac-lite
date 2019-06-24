@@ -89,6 +89,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public String estadoFormularioEnum;
     
     
+    
    
     /**
      * Lista que me permite grabar componentes que se desean excluir para no tomar en cuenta para la validacion de no salir si existen datos ingresados 

@@ -7,8 +7,7 @@ package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfacesPropertisFindWeb;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -16,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 
 /**
  *

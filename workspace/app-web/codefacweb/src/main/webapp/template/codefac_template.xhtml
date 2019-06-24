@@ -50,7 +50,7 @@
 
                             <p:submenu label="Facturación" icon="ui-icon-pencil">
                                 <p:submenu label="Proceso" icon="ui-icon-contact">
-                                    <p:menuitem value="Proforma" action="proforma" />
+                                    <p:menuitem process="@this" value="Proforma" action="proforma" />
                                 </p:submenu>
                             </p:submenu>
 
@@ -103,7 +103,7 @@
                             <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" update="messages" />
 
                             <!-- BUSCAR BOTON-->
-                            <p:commandButton icon="find-icon" class="button-menu" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" >
+                            <p:commandButton icon="find-icon" class="button-menu" process="@this" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" >
                                 <p:ajax event="dialogReturn" listener="#{controllerCodefacMb.onObjectChosen}" update="panelContenido" />
                             </p:commandButton>
 
@@ -190,7 +190,7 @@
 
                     <!-- DIALOGO PARA CONFIRMAR EL GUARDAR -->
                     <p:confirmDialog message="Esta seguro que desea grabar los datos?" header="Alerta" severity="alert" widgetVar="dialogConfirmarGrabar">
-                        <p:commandButton value="Si" process="@this" actionListener="#{controllerCodefacMb.save()}" update="messages,idDialogResultado"  onclick="PF('dialogConfirmarGrabar').hide();"  />
+                        <p:commandButton value="Si" process="@form" actionListener="#{controllerCodefacMb.save()}" update="messages,idDialogResultado"  onclick="PF('dialogConfirmarGrabar').hide();"  />
                         <p:commandButton value="No" onclick="PF('dialogConfirmarGrabar').hide();" type="button" />
                     </p:confirmDialog>
 

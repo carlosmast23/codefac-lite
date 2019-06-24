@@ -30,7 +30,6 @@ import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
@@ -155,6 +154,7 @@ import javax.swing.table.TableModel;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.collections4.map.HashedMap;
 import org.jdesktop.swingx.prompt.PromptSupport;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 
 /**
  *

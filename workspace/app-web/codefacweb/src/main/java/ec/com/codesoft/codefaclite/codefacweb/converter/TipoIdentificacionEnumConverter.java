@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.converter;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.rmi.RemoteException;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -14,13 +14,12 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Carlos
  */
-
-@FacesConverter("puntoEmisionConverter")
-public class PuntoEmisionConverter extends AbstractConverter implements Converter{
+@FacesConverter("tipoIdentificacionEnumConverter")
+public class TipoIdentificacionEnumConverter extends AbstractConverter implements Converter {
 
     @Override
-    public Object buscarObjetoPorId(String id) throws RemoteException {
-        return ServiceFactory.getFactory().getPuntoVentaServiceIf().buscarPorId(Long.parseLong(id));
+    public Object buscarObjetoPorId(String valor) throws RemoteException {
+        return Persona.TipoIdentificacionEnum.obtenerPorLetra(valor);
     }
     
 }

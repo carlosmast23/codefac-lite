@@ -5,11 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
+import ec.com.codesoft.codefaclite.codefacweb.mb.facturacion.ProformaMb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
+//import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfacesPropertisFindWeb;
+//import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -30,6 +33,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.PrimeFaces;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 
 /**
  *
@@ -56,9 +60,10 @@ public class DialogoBuscarMb implements Serializable {
          * dialogo
          */
         Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-        InterfaceModelFind controller = (InterfaceModelFind) sessionMap.get("busquedaClase");
-        sessionMap.remove("busquedaClase", controller); //Despues de obtener el dato eliminar para no tener recursos inecesarios TODO: Solucion temporal
-
+        Object busquedaClase= sessionMap.get("busquedaClase");
+       
+        InterfaceModelFind controller =(InterfaceModelFind)busquedaClase;
+       
         buscarDatos(controller);
 
     }
@@ -66,12 +71,12 @@ public class DialogoBuscarMb implements Serializable {
     public void buscarDatos(InterfaceModelFind busquedaClase) {
         try {
 
-            InterfaceModelFind empleadoBusquedaDialogo = busquedaClase;
-            QueryDialog queryDialog = empleadoBusquedaDialogo.getConsulta("%%");
+            InterfaceModelFind busquedaDialogo = busquedaClase;
+            QueryDialog queryDialog = busquedaDialogo.getConsulta("%%");
             datosBusqueda = ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query, queryDialog.getParametros(), 0, 100);
 
             //Setear datos al controlador
-            columnasConsulta = empleadoBusquedaDialogo.getColumnas();
+            columnasConsulta = busquedaDialogo.getColumnas();
             datosConsulta = new ArrayList<Vector<String>>();
 
             //buscar si la clase implementa la interfaz para busqueda de las propiedaes
@@ -83,7 +88,7 @@ public class DialogoBuscarMb implements Serializable {
 
             for (Object object : datosBusqueda) {
                 Vector datoFila = new Vector();
-                empleadoBusquedaDialogo.agregarObjeto(object, datoFila);
+                busquedaDialogo.agregarObjeto(object, datoFila);
                 datosConsulta.add(datoFila);
             }
             System.out.println("La busqueda genero " + datosConsulta.size() + " registros");

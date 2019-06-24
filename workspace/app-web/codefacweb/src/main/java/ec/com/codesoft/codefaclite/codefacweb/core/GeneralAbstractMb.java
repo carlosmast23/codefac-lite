@@ -7,9 +7,9 @@ package ec.com.codesoft.codefaclite.codefacweb.core;
 
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import java.io.Serializable;
 import org.primefaces.PrimeFaces;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 
 /**
  *

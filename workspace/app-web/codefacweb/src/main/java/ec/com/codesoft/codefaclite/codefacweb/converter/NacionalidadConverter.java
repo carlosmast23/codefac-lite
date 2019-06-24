@@ -7,10 +7,6 @@ package ec.com.codesoft.codefaclite.codefacweb.converter;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -18,12 +14,12 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Carlos
  */
-@FacesConverter("empresaConverter")
-public class EmpresaConverter extends AbstractConverter implements Converter{
+@FacesConverter("nacionalidadConverter")
+public class NacionalidadConverter extends AbstractConverter implements Converter {
 
     @Override
-    public Object buscarObjetoPorId(String id) throws RemoteException {
-        return ServiceFactory.getFactory().getEmpresaServiceIf().buscarPorId(Long.parseLong(id));
+    public Object buscarObjetoPorId(String valor) throws RemoteException {
+        return ServiceFactory.getFactory().getNacionalidadServiceIf().buscarPorId(Long.parseLong(valor));
     }
     
 }

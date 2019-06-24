@@ -10,7 +10,6 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Emplea
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstadoFormEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
@@ -29,6 +28,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 
 /**
  *
@@ -45,6 +45,7 @@ public class ControllerCodefacMb implements Serializable {
 
     @PostConstruct
     public void init() {
+        System.out.println("Iniciando el postConstruct del controlador");
         indiceTabSecundario = "2";
         this.estadoEnum = EstadoFormEnum.GRABAR;
         //titulo="Sin titulo";
@@ -113,7 +114,7 @@ public class ControllerCodefacMb implements Serializable {
 
     public void abrirDialogoBusqueda() {
         try {
-            System.out.println("abriendo dialogo");
+            System.out.println("ejecutar abrir dialogo controlador");
             abrirDialogoBusqueda(generalAbstractMb.obtenerDialogoBusqueda());
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -124,7 +125,7 @@ public class ControllerCodefacMb implements Serializable {
 
     public void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) {
         //find();
-        System.out.println("Abriendo dialogo busqueda");
+        //System.out.println("Abriendo dialogo busqueda");
 
         //Establecer objeto de la clase que tiene la implemetacion del dialogo de busqueda que necesito para construir el dialogo web
         //TODO: Solucion temporal porque es una gasto innesario de memoria , buscar otra forma

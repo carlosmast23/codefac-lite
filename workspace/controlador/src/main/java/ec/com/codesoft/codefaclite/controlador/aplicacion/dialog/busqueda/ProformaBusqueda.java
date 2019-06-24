@@ -7,20 +7,23 @@ package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfacesPropertisFindWeb;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import java.io.Serializable;
 import java.util.Vector;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 
 /**
  *
  * @author Carlos
  */
-public class ProformaBusqueda implements InterfaceModelFind<Factura>, InterfacesPropertisFindWeb {
-
+public class ProformaBusqueda implements InterfaceModelFind<Factura>, InterfacesPropertisFindWeb,Serializable {
+    
+    private static final long serialVersionUID = -1238278914412853685L;
+    
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();

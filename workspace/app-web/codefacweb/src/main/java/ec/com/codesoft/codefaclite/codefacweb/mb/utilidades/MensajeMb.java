@@ -36,6 +36,7 @@ public class MensajeMb {
         context.addMessage(null, new FacesMessage(tipoMensaje,titulo,mensaje));        
     }
     
+    
     public static void mostrarMensajeDialogo(CodefacMsj codefacMensaje) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(homologarAlertasMap.get(codefacMensaje.modoMensaje),codefacMensaje.titulo,codefacMensaje.mensaje));        

@@ -18,7 +18,7 @@ import javax.faces.convert.FacesConverter;
 public class SucursalConverter extends AbstractConverter implements Converter {
 
     @Override
-    public Object buscarObjetoPorId(Long id) throws RemoteException {
-       return ServiceFactory.getFactory().getSucursalServiceIf().buscarPorId(id);
+    public Object buscarObjetoPorId(String id) throws RemoteException {
+       return ServiceFactory.getFactory().getSucursalServiceIf().buscarPorId(Long.parseLong(id));
     }
 }

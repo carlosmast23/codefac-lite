@@ -16,187 +16,100 @@
                 <p:tab title="Datos Principales">
                     <p:panelGrid columns="4"   layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-5,ui-grid-col-2, ui-grid-col-3"  >
 
-                        <h:outputLabel style="float: right" value="Identificación:"/>
-                        <h:inputText value="#{clienteMb.cliente.identificacion}" />
+                        <h:outputLabel id="txtIdentificacion" style="float: right" value="Identificación:"/>
+                        <h:inputText required="true" value="#{clienteMb.cliente.identificacion}" />
 
-                        <h:outputLabel style="float: right" value="Tipo:"/>
-                        <p:selectOneMenu id="console"  style="width:125px">
-                            <f:selectItem itemLabel="Select One" itemValue="" />
-                        </p:selectOneMenu>
+                        <h:outputLabel style="float: right" value="Pasaporte:"/>
+                        <p:selectBooleanCheckbox value="#{clienteMb.identificacionPasaporte}" />
 
 
                         <h:outputLabel style="float: right" value="Nombres:"/>
-                        <h:inputText value="#{clienteMb.cliente.nombres}" />
+                        <h:inputText required="false" value="#{clienteMb.cliente.nombres}" />
 
                         <h:outputLabel style="float: right" value="Nacionalidad:"/>
-                        <p:selectOneMenu id="console1"  style="width:125px">
-                            <f:selectItem itemLabel="Select One" itemValue="" />
+
+                        <p:selectOneMenu id="console1" value="#{clienteMb.nacionalidadSeleccionada}"  style="width:125px" converter="nacionalidadConverter">
+                            <f:selectItems var="nacionalidad" value="#{clienteMb.nacionalidadesList}" itemValue="#{nacionalidad.idNacionalidad.toString()}"    />
                         </p:selectOneMenu>
 
 
 
                         <h:outputLabel style="float: right" value="Apellidos:"/>
-                        <h:inputText value="#{clienteMb.cliente.apellidos}" />
+                        <h:inputText required="false" value="#{clienteMb.cliente.apellidos}" />
 
                         <h:outputLabel style="float: right" value="Estado:"/>
-                        <p:selectOneMenu id="console2"  style="width:125px">
-                            <f:selectItem itemLabel="Select One" itemValue="" />
+                        <p:selectOneMenu id="console2" value="#{clienteMb.estadoSeleccionada}"  style="width:125px" converter="estadoEnumConverter">
+                            <f:selectItems var="estado" value="#{clienteMb.estadosEnumList}" itemValue="#{estado.estado}"    />
                         </p:selectOneMenu>
 
                         <h:outputLabel style="float: right" value="Razón Social:"/>
-                        <h:inputText value="#{clienteMb.cliente.razonSocial}" style="width: 80%" />
+                        <h:inputText required="true" value="#{clienteMb.cliente.razonSocial}" style="width: 80%" />
 
                         <p:spacer/><p:spacer/>
 
                         <h:outputLabel style="float: right" value="Nombre Legal:"/>
-                        <h:inputText value="#{clienteMb.cliente.nombreLegal}" style="width: 80%" />
+                        <h:inputText required="false" value="#{clienteMb.cliente.nombreLegal}" style="width: 80%" />
 
                         <p:spacer/><p:spacer/>
 
                         <h:outputLabel style="float: right" value="Nombre Contacto:"/>
-                        <h:inputText value="#{clienteMb.cliente.contactoClienteNombre}" style="width: 80%" />
+                        <h:inputText  required="false" value="#{clienteMb.cliente.contactoClienteNombre}" style="width: 80%" />
 
                         <p:spacer/><p:spacer/>
 
                         <h:outputLabel style="float: right" value="Dirección:"/>
-                        <h:inputText value="#{clienteMb.cliente.direccion}"  style="width: 80%"/> 
+                        <h:inputText required="false" value="#{clienteMb.cliente.direccion}"  style="width: 80%"/> 
 
                         <p:spacer/><p:spacer/>
 
                         <h:outputLabel style="float: right" value="Teléfono Convencional:"/>
-                        <h:inputText value="#{clienteMb.cliente.telefonoConvencional}" />
+                        <h:inputText required="false" value="#{clienteMb.cliente.telefonoConvencional}" />
 
                         <h:outputLabel style="float: right" value="Extensión:"/>
-                        <h:inputText value="#{clienteMb.cliente.extensionTelefono}" style="width: 50%" />
+                        <h:inputText required="false" value="#{clienteMb.cliente.extensionTelefono}" style="width: 50%" />
 
                         <h:outputLabel style="float: right" value="Teléfono Celular:"/>
-                        <h:inputText value="#{clienteMb.cliente.telefonoCelular}" />
+                        <h:inputText required="false" value="#{clienteMb.cliente.telefonoCelular}" />
 
                         <p:spacer/><p:spacer/>
 
                         <h:outputLabel style="float: right" value="Correo Electrónico:"/>
-                        <h:inputText value="#{clienteMb.cliente.correoElectronico}" style="width: 80%" />
+                        <h:inputText  required="false" value="#{clienteMb.cliente.correoElectronico}" style="width: 80%" />
 
                         <p:spacer/><p:spacer/>
 
                     </p:panelGrid>
                 </p:tab>
                 <p:tab title="Datos Adicionales">
-                    <p:panelGrid style="margin-top:20px;"  >
-                        <f:facet name="header">
-                            <p:row>
-                                <p:column colspan="7">1995-96 NBA Playoffs</p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column colspan="2">Conf. Semifinals</p:column>
-                                <p:column colspan="2">Conf. Finals</p:column>
-                                <p:column colspan="2">NBA Finals</p:column>
-                                <p:column>Champion</p:column>
-                            </p:row>
+                    <p:panelGrid columns="4"   layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-5,ui-grid-col-2, ui-grid-col-3" >
 
-                        </f:facet>
+                        <h:outputLabel  style="float: right" value="Tipo Cliente:"/>
+                        <p:selectOneMenu  value="#{clienteMb.cliente.tipCliente}"  style="width:125px" converter="stringConverter" >
+                            <f:selectItems var="tipo" value="#{clienteMb.tiposClientes}" itemValue="#{tipo}"    />
+                        </p:selectOneMenu>
+                        
+                        <p:spacer/><p:spacer/>
 
-                        <p:row>
-                            <p:column style="font-weight: bold;">Seattle</p:column>
-                            <p:column style="font-weight: bold;">4</p:column>
+                        <h:outputLabel  style="float: right" value="Tipo :"/>
+                        <p:selectOneMenu  value="#{clienteMb.operadorNegocioSeleccionado}"  style="width:125px" converter="operadorNegocioConverter">
+                            <f:selectItems var="operador" value="#{clienteMb.operadoresNegocio}" itemValue="#{operador.letra}"    />
+                        </p:selectOneMenu>
+                        
+                        <p:spacer/><p:spacer/>
 
-                            <p:column rowspan="2" style="font-weight: bold;">Seattle</p:column>
-                            <p:column rowspan="2" style="font-weight: bold;">4</p:column>
+                        <h:outputLabel  style="float: right" value="Forma pago por defecto :"/>
+                        <p:selectOneMenu id="cmbFormaPago"   style="width:125px" value="#{clienteMb.sriFormaPagoSeleccionada}" converter="formaPagoConverter">
+                            <f:selectItems var="formaPago" value="#{clienteMb.sriFormaPagoList}" itemValue="#{formaPago.id.toString()}"    />
+                        </p:selectOneMenu>
+                        
+                        <p:spacer/><p:spacer/>
+                        
+                        <h:outputLabel  style="float: right" value="Dias crédito cobro :"/>
+                        <h:inputText required="false" value="#{clienteMb.cliente.diasCreditoCliente}"  style="width: 20%"/> 
+                        
 
-                            <p:column rowspan="5">Seattle</p:column>
-                            <p:column rowspan="5">2</p:column>
-
-                            <p:column rowspan="11" style="font-weight: bold;">Chicago</p:column>
-                        </p:row>
-
-                        <p:row>
-                            <p:column>Houston</p:column>
-                            <p:column >0</p:column>
-                        </p:row>
-
-                        <p:row>
-                            <p:column colspan="4" styleClass="ui-widget-header">
-                                <p:spacer height="0"/>
-                            </p:column>
-                        </p:row>
-
-                        <p:row>
-                            <p:column style="font-weight: bold;">Utah</p:column>
-                            <p:column style="font-weight: bold;">4</p:column>
-
-                            <p:column rowspan="2">Utah</p:column>
-                            <p:column rowspan="2">3</p:column>
-                        </p:row>
-
-                        <p:row>
-                            <p:column>San Antonio</p:column>
-                            <p:column >2</p:column>
-                        </p:row>
-
-                        <p:row>
-                            <p:column colspan="6" styleClass="ui-widget-header">
-                                <p:spacer height="0"/>
-                            </p:column>
-                        </p:row>
-
-                        <p:row>
-                            <p:column style="font-weight: bold;">Chicago</p:column>
-                            <p:column style="font-weight: bold;">4</p:column>
-
-                            <p:column rowspan="2" style="font-weight: bold;">Chicago</p:column>
-                            <p:column rowspan="2" style="font-weight: bold;">4</p:column>
-
-                            <p:column rowspan="5" style="font-weight: bold;">Chicago</p:column>
-                            <p:column rowspan="5" style="font-weight: bold;">4</p:column>
-                        </p:row>
-
-                        <p:row>
-                            <p:column>New York</p:column>
-                            <p:column >1</p:column>
-                        </p:row>
-
-                        <p:row>
-                            <p:column colspan="4" styleClass="ui-widget-header">
-                                <p:spacer height="0"/>
-                            </p:column>
-                        </p:row>
-
-                        <p:row>
-                            <p:column>Atlanta</p:column>
-                            <p:column >1</p:column>
-
-                            <p:column rowspan="2">Orlando</p:column>
-                            <p:column rowspan="2">0</p:column>
-                        </p:row>
-
-                        <p:row>
-                            <p:column style="font-weight: bold;">Orlando</p:column>
-                            <p:column style="font-weight: bold;">4</p:column>
-                        </p:row>
-
-
-                        <f:facet name="footer">
-                            <p:row>
-                                <p:column  colspan="4" style="text-align: right">
-                                    Finals MVP
-                                </p:column>
-                                <p:column  colspan="3" rowspan="3">
-                                    Michael Jordan (Chicago)
-                                </p:column>
-                            </p:row>
-
-                            <p:row>
-                                <p:column  colspan="4" style="text-align: right">
-                                    Season MVP
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column  colspan="4" style="text-align: right">
-                                    Top Scorer
-                                </p:column>
-                            </p:row>
-                        </f:facet>
                     </p:panelGrid>
+
 
                 </p:tab>
                 <p:tab title="Referencias">

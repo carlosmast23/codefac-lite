@@ -11,21 +11,44 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
  * @author Carlos
  */
 public enum EstadoFormEnum {
-    GRABAR("grabar"),
-    EDITAR("editar");
+    GRABAR("grabar","G"),
+    EDITAR("editar","E");
     
     private final static String SIGNO_APERTURA="[";
     private final static String SIGNO_CIERRE="]";
     
     private String nombre;
+    private String letra;
 
-    private EstadoFormEnum(String nombre) {
+    private EstadoFormEnum(String nombre,String letra) {
         this.nombre = nombre;
+        this.letra=letra;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getLetra() {
+        return letra;
+    }
+    
+    
     
     public String construirFormato(String nombreFormulario)
     {
         return nombreFormulario+" "+" "+SIGNO_APERTURA+nombre+" "+SIGNO_CIERRE;
+    }
+    
+    public static EstadoFormEnum getByLetra(String letra)
+    {
+        for (EstadoFormEnum value : EstadoFormEnum.values()) {
+            if(value.getLetra().equals(letra))
+            {
+                return value;
+            }
+        }
+        return null;
     }
     
 }

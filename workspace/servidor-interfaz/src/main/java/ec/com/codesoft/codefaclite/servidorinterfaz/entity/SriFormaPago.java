@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,7 +23,7 @@ public class SriFormaPago implements Serializable {
 
     @Id
     @Column(name = "ID")
-    private long id;
+    private Long id;
 
     @Column(name = "NOMBRE")
     private String nombre;
@@ -43,11 +44,11 @@ public class SriFormaPago implements Serializable {
 
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -100,8 +101,8 @@ public class SriFormaPago implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + (int) (this.id ^ (this.id >>> 32));
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -117,10 +118,14 @@ public class SriFormaPago implements Serializable {
             return false;
         }
         final SriFormaPago other = (SriFormaPago) obj;
-        if (this.id != other.id) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
     }
+    
+    
+
+    
 
 }

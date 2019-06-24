@@ -6,11 +6,12 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 
 /**
  *
  * @author CodesoftDesarrollo
  */
 public interface NacionalidadServiceIf extends ServiceAbstractIf<Nacionalidad>{
-    
+     public Nacionalidad obtenerDefaultEcuador() throws ServicioCodefacException,java.rmi.RemoteException;
 }

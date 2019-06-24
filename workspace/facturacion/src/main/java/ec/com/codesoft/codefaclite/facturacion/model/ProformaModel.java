@@ -14,7 +14,6 @@ import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ProformaDetalleData;
@@ -48,6 +47,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 
 /**
  *

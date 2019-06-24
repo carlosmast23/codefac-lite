@@ -21,14 +21,14 @@ import javax.faces.convert.FacesConverter;
  */
 public abstract class AbstractConverter {
 
-    public abstract Object buscarObjetoPorId(Long id) throws RemoteException ;
+    public abstract Object buscarObjetoPorId(String valor) throws RemoteException ;
     
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         
         if(!value.isEmpty())
         {
             try {
-                return buscarObjetoPorId(Long.parseLong(value));
+                return buscarObjetoPorId(value);
                 //empresa= ServiceFactory.getFactory().getEmpresaServiceIf().buscarPorId(Long.parseLong(value));
             } catch (RemoteException ex) {
                 Logger.getLogger(AbstractConverter.class.getName()).log(Level.SEVERE, null, ex);

@@ -5171,8 +5171,8 @@
 											"showShadow": true,
 											"containerChangeable": false,
 											"containerExtending": false,
-											"left": 712,
-											"top": 456,
+											"left": 728,
+											"top": 488,
 											"width": 128,
 											"height": 129,
 											"autoResize": false,
@@ -5201,7 +5201,7 @@
 												"$ref": "AAAAAAFhoel8D3RCnHE="
 											},
 											"lineStyle": 1,
-											"points": "711:507;596:483"
+											"points": "727:532;596:490"
 										},
 										{
 											"_type": "UMLNoteView",

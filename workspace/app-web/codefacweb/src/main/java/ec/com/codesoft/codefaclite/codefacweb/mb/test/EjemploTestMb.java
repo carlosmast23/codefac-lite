@@ -7,15 +7,20 @@ package ec.com.codesoft.codefaclite.codefacweb.mb.test;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EjemploDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import java.io.Serializable;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import org.primefaces.PrimeFaces;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 
 /**
  *
@@ -26,6 +31,12 @@ import org.primefaces.PrimeFaces;
 public class EjemploTestMb  extends GeneralAbstractMb implements Serializable {
 
     private String texto;
+    
+    @PostConstruct
+    public void init()
+    {
+        System.out.println("Iniciando la aplicacion por primera vez");
+    }
     
     @Override
     public void grabar() throws ExcepcionCodefacLite {
@@ -67,17 +78,46 @@ public class EjemploTestMb  extends GeneralAbstractMb implements Serializable {
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite {
-        return new ProformaBusqueda();
+        return new ClienteEstablecimientoBusquedaDialogo();
     }
     
     
     public void imprimirOtro()
     {
-        texto="seteado mas nuevo";
+        /*texto="seteado mas nuevo";
         PrimeFaces.current().ajax().update("formulario:txtEjemplo");
         PrimeFaces.current().ajax().update("formulario:txtTituloPagina"); //Actualizar un componente desde la vista
-        System.out.println("otro nuevo ejemplo actualizar");
+        System.out.println("otro nuevo ejemplo actualizar");*/
+        //ProformaBusqueda p=new  ProformaBusqueda();
         
+        EjemploDialogo p=new EjemploDialogo();
+        DialogTest p2=new DialogTest();
+        InterfaceModelFind i=p;
+        InterfaceModelFind i2=(InterfaceModelFind)p;
+        System.out.println("Columnas 2:"+p.getColumnas());
+        System.out.println("Columnas 3:"+p2.getColumnas());
+        
+        
+        if(p2 instanceof InterfacesPropertisFindWeb)
+        {
+            System.out.println("WEB SI implementa la interfaz");
+        }
+        else
+        {
+            System.out.println("WEB No implementa la interfaz");
+        }
+        
+        if(p instanceof InterfacesPropertisFindWeb)
+        {
+            System.out.println("LIB SI implementa la interfaz");
+        }
+        else
+        {
+            System.out.println("LIB No implementa la interfaz");
+        }
+        
+        //System.out.println("Columnas 1:"+i.getColumnas());        
+        //System.out.println("Columnas 2"+i.getColumnas());        */
     }
 
     public String getTexto() {

@@ -6,7 +6,6 @@
 package ec.com.codesoft.codefaclite.corecodefaclite.dialog;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.panel.DialogoBuscadorForm;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesDerby;
