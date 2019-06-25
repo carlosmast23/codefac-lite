@@ -270,6 +270,12 @@ public class Main {
         return ids[0];
     }
     
+    /**
+     * Lista de las librerias que tienen que descargarse de manera obligatoria
+     * @param path
+     * @param carpetaDescarga
+     * @return 
+     */
     private static List<ArchivoDescarga> buscarLibreriasActualizar(String path,String carpetaDescarga)
     {
         final String ARCHIVO_LISTA_LIBRERIAS = "librerias.txt";
@@ -311,6 +317,8 @@ public class Main {
         conjuntoOnline.add("ws-codefac-1.0-SNAPSHOT.jar");
         conjuntoOnline.add("ws-virtualmall-1.0-SNAPSHOT.jar");
         conjuntoOnline.add("transporte-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("recursosWeb-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("codefac.war");
        
         //Crear el map con los datos para descargar
         List<ArchivoDescarga> listLibreriasDescargar=new ArrayList<ArchivoDescarga>();
