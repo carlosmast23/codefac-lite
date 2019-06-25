@@ -13,13 +13,12 @@
 
         <ui:define name="contenido">
 
-            <h:form >
-
                 <h:panelGrid columns="3">
 
                     <p:outputLabel value="Ingrese su cédula:" />
-                    <p:inputText value="#{consultaFacturasMb.identificacion}"/>
-                    <p:commandButton value="Buscar" actionListener="#{consultaFacturasMb.consultarCedula()}" update="tablaFacturas" />
+                    <p:inputText id="txtIdentificacion" value="#{consultaFacturasMb.identificacion}"/>
+                    <p:commandButton process="@form" value="Buscar" actionListener="#{consultaFacturasMb.consultarCedula()}" update="tablaFacturas" />
+                    
                 </h:panelGrid>
 
                 <p:spacer  height="10" />
@@ -54,7 +53,6 @@
                     </p:column>
 
                 </p:dataTable>
-            </h:form>
         </ui:define>
     </ui:composition>
 

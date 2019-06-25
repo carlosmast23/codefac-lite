@@ -47,6 +47,7 @@ public class ConsultaFacturasMb implements Serializable {
 
     public void consultarCedula() {
         try {
+            System.out.println("Consultado la factura ...");
             //Factura f;
             //f.getIdentificacion();
             FacturacionServiceIf facturaService = ServiceFactory.getFactory().getFacturacionServiceIf();
@@ -88,6 +89,11 @@ public class ConsultaFacturasMb implements Serializable {
         } catch (JRException ex) {
             Logger.getLogger(ConsultaFacturasMb.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void ejemplo()
+    {
+        System.out.println("Metodo de ejemplo .....");
     }
 
     /**

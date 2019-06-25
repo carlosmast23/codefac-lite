@@ -94,6 +94,19 @@ public class ControllerCodefacMb implements Serializable {
             try {
                 generalAbstractMb.grabar();
                 //generalAbstractMb.nuevo();
+                
+                //Programacion para retornar el valor cuando se seleccione un dialogo
+                if(modoDialogo)
+                {
+                    if(generalAbstractMb instanceof DialogoWeb)
+                    {
+                        DialogoWeb dialogoWeb=(DialogoWeb) generalAbstractMb;
+                        PrimeFaces.current().dialog().closeDynamic(dialogoWeb.getResultDialogo());
+                    }
+                    
+                }
+                
+                
             } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
             } catch (UnsupportedOperationException ex) {
@@ -110,7 +123,7 @@ public class ControllerCodefacMb implements Serializable {
             }
         }
         
-        //Programacion para retornar el valor cuando se seleccione un dialogo
+        
         
     }
 
@@ -202,10 +215,16 @@ public class ControllerCodefacMb implements Serializable {
     }
 
     public void agregarVista(GeneralAbstractMb vista) {
-        generalAbstractMb = vista;
-        //titulo=getTituloPagina();
-        PrimeFaces.current().ajax().update("formulario:txtTituloPagina"); //Actualizar un componente desde la vista
-        //System.out.println("actualizando el titulo en la pagina:"+titulo);
+        try {
+            generalAbstractMb = vista; 
+            System.out.println("Agregando Vista"+vista.titulo());
+            PrimeFaces.current().ajax().update("formulario:txtTituloPagina"); //Actualizar un componente desde la vista
+            //System.out.println("actualizando el titulo en la pagina:"+titulo);
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedOperationException ex) {
+            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public String getTituloPagina() {

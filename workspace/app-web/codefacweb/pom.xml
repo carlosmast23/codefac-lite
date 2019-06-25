@@ -29,6 +29,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>recursosWeb</artifactId>
             <version>${project.version}</version>
+            
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -40,17 +41,19 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>controlador</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope><!-- Este problema dejo de esa manera en modo de desarrollo tengo problemas con las referencias -->
+            <scope>provided</scope><!-- Este problema dejo de esa manera en modo de desarrollo tengo problemas con las referencias -->
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>facturacion</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>crm</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax</groupId>

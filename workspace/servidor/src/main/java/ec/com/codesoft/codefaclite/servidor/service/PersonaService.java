@@ -87,7 +87,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
                         personaEstablecimiento.setNombreComercial(Sucursal.TipoSucursalEnum.MATRIZ.getNombre());
                     }
                     
-                    entityManager.persist(personaEstablecimiento);
+                    //entityManager.persist(personaEstablecimiento);
                     p.addEstablecimiento(personaEstablecimiento);
                 }
 

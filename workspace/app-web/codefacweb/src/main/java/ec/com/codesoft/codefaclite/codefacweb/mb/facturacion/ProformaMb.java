@@ -10,14 +10,12 @@ import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.core.SessionMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
-import ec.com.codesoft.codefaclite.facturacion.model.ProformaModel;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -29,12 +27,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -62,11 +58,8 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
@@ -104,6 +97,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     @PostConstruct
     public void init() {
+        
         factura = new Factura();
         factura.setCliente(new Persona());//Esto solo hago para evitar advertencias
         productoSeleccionado = new Producto();
@@ -138,18 +132,18 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         
         try {
             System.out.println("===========>INICIANDO PROCESO GRABAR <==============");
-            if(!validar()) //Si no valida mando una excepcion para cancelar el ciclo de vida
+            if (!validar()) //Si no valida mando una excepcion para cancelar el ciclo de vida
             {
                 throw new ExcepcionCodefacLite("Error grabando el producto");
             }
-            
+
             setearDatosAdicionales();
 
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
             factura = servicio.grabarProforma(factura);
             //MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
-           
+
             //imprimir();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -243,6 +237,11 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public void seleccionarCliente(SelectEvent event) {
         PersonaEstablecimiento clienteOficina = (PersonaEstablecimiento) event.getObject();
         cargarDatosCliente(clienteOficina);
+    }
+    
+    public void seleccionarClienteCreado(SelectEvent event) {
+        Persona cliente = (Persona) event.getObject();
+        cargarDatosCliente(cliente.getEstablecimientos().get(0));
     }
 
     public void seleccionarProducto(SelectEvent event) {

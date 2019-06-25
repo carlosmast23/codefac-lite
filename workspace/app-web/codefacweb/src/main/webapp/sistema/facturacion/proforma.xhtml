@@ -19,7 +19,9 @@
                     <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}">
                         <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarCliente}" update="txtCliente,datosCliente"  />
                     </p:commandButton>                    
-                    <p:commandButton process="@this" icon="fa fa-plus"  styleClass="white-button" action="#{proformaMb.abrirDialogoCrearCliente()}"/>                    
+                    <p:commandButton process="@this" icon="fa fa-plus"  styleClass="white-button" action="#{proformaMb.abrirDialogoCrearCliente()}">
+                        <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarClienteCreado}" update="txtCliente,datosCliente"  />
+                    </p:commandButton>                    
                 </p:panel>
 
                 <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">

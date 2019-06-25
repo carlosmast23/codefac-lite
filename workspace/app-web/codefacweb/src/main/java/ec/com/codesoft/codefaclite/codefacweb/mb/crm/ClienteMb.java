@@ -79,7 +79,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         setearDatos();
         if (validarDatosVista()) {
             try {
-                ServiceFactory.getFactory().getPersonaServiceIf().grabar(cliente);
+                cliente=ServiceFactory.getFactory().getPersonaServiceIf().grabar(cliente);
                 mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
 
             } catch (ServicioCodefacException ex) {

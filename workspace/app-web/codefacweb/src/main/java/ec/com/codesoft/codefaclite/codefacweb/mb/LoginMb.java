@@ -66,8 +66,8 @@ public class LoginMb implements Serializable {
             Usuario usuario = ServiceFactory.getFactory().getUsuarioServicioIf().login(nick, clave);
             if (usuario != null) {
                 construirSession(usuario, empresaSeleccionada, sucursalSeleccionada);
-                //return "indexCodefac";
-                return "cliente";
+                return "indexCodefac";
+                //return "proforma";
             } else {
                 MensajeMb.mostrarMensaje("Error", "Credenciales incorrectass", FacesMessage.SEVERITY_ERROR);
             }
@@ -182,9 +182,9 @@ public class LoginMb implements Serializable {
 
     private void cargarSucursales(Empresa empresa) {
         try {
-            System.err.println(empresaSeleccionada.getId());
+            //System.err.println(empresaSeleccionada.getId());
             sucursales = ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(empresaSeleccionada);
-            System.out.println("Datos encontrados" + sucursales.size());
+            //System.out.println("Datos encontrados" + sucursales.size());
         } catch (RemoteException ex) {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
