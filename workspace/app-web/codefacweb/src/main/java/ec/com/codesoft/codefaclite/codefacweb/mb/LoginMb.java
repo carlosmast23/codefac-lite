@@ -54,8 +54,8 @@ public class LoginMb implements Serializable {
 
     @PostConstruct
     public void init() {
-        nick="carlos";
-        clave="123";
+        //nick="carlos";
+        //clave="123";
         iniciarDatos();
     }
 

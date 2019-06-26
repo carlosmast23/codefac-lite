@@ -16,10 +16,14 @@ import ec.com.codesoft.codefaclite.servidor.facade.UsuarioFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
+import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,6 +41,9 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  * @author Carlos
  */
 public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> implements UsuarioServicioIf{
+
+    private static final Logger LOG = Logger.getLogger(UsuarioServicio.class.getName());
+    
     UsuarioFacade usuarioFacade=new UsuarioFacade();
     PerfilUsuarioFacade perfilUsuarioFacade=new PerfilUsuarioFacade();
     PerfilFacade perfilFacade=new PerfilFacade();
@@ -50,9 +57,93 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     
     public Usuario login(String nick,String clave)
     {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        //String clave=new String(getTxtClave().getPassword());
+        //String usuarioTxt=getTxtUsuario().getText();
+        Usuario usuario=null;
+        
+        if(!nick.equals("") && !clave.equals(""))
+        {
+            /**
+             * Validacion para verificar si no es un usuario root es decir para soporte
+             */
+            if(nick.toLowerCase().indexOf("root")>=0) //Si contiene la palabra root asumo que es de soporte
+            {
+                //Consultar el usuario root
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("nick", Usuario.SUPER_USUARIO);
+                Usuario usuarioRoot = null; //variable para consultar la variable root
+                try {
+                    usuarioRoot = ServiceFactory.getFactory().getUsuarioServicioIf().obtenerPorMap(mapParametros).get(0);//obtiene el usuario root de la base de datos 
+                    usuarioRoot.isRoot = true;
+                } catch (RemoteException ex) {
+                    Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                
+                if(ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) //Cuando esta en modo produccion para el root consulto desde los web services
+                {
+                    if(WebServiceCodefac.getVerificarSoporte(nick, clave))
+                    {                            
+                            usuario=usuarioRoot;
+                            LOG.log(Level.INFO, "Ingresando con el usuario root: "+nick);
+                            //setVisible(false);
+                    }
+                    else
+                    {
+                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + nick);                        
+                    }
+                }
+                else
+                {
+                    //Seteo directemente una clave independiente de lo que este grabado en la base, ademas como solo es para modo desarrollo no afecta para el desarrollo
+                    if(clave.equals("1234")) //Todo: ver si se setea esta variable de forma global aunque no hay necesidad
+                    {
+                        usuario=usuarioRoot;
+                        LOG.log(Level.INFO, "Ingresando con el usuario root en produccion: " + nick);
+                        //setVisible(false);
+                    }
+                    else
+                    {
+                        //DialogoCodefac.mensaje("Error Login","Datos Incorrectos para root en modo desarrollo",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }
+
+                }
+                    
+            }
+            else //Validacion para usuarios normales que no son root
+            {            
+                //usuario=usuarioServicio.login(usuarioTxt,clave);
+                usuario=verificarCredencialesUsuario(nick, clave);
+                if(usuario!=null)
+                {
+                    LOG.log(Level.INFO, "Ingresando con el usuario: "+nick);
+                    //setVisible(false);
+                }
+                else
+                {
+                    LOG.log(Level.WARNING, "Error al ingresar con el usuario: "+nick);
+                    //DialogoCodefac.mensaje("Error Login","Datos Incorrectos",DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+            }
+
+        }
+        /*else
+        {
+            //DialogoCodefac.mensaje("Advertencia Login","Ingrese todos los campos",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }*/
+        
+        return usuario;
+        
+    }
+    
+    private Usuario verificarCredencialesUsuario(String nick,String clave)
+    {
+         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("nick",nick);
         List<Usuario> usuarios=usuarioFacade.findByMap(mapParametros);
+        
         if(usuarios.size()>0)
         {
             if(UtilidadesHash.verificarHashBcrypt(clave,usuarios.get(0).getClave()))

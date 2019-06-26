@@ -163,6 +163,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         //Agregar las opcion para esocger si o no en activar los comprobantes de venta
         getCmbActivarReporteSimpleGuiaRemision().removeAllItems();
         getCmbActivarReporteSimpleGuiaRemision().addItem(EnumSiNo.NO);
+        getCmbActivarReporteSimpleGuiaRemision().addItem(EnumSiNo.SI);
 
         //Agregar las opcion para esocger si o no en activar los comprobantes de venta
         getCmbCargarProductoIvaFactura().removeAllItems();
