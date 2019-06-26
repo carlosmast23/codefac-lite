@@ -85,8 +85,10 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
             } catch (ServicioCodefacException ex) {
                 MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
                 Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ExcepcionCodefacLite(ex.getMessage());
             } catch (RemoteException ex) {
                 Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ExcepcionCodefacLite(ex.getMessage());
             }
         }
     }
