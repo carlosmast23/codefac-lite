@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  * @author Carlos
  */
 public class UtilidadesWeb {
+
     /*
     public void exportarPDF(ActionEvent actionEvent) throws JRException, IOException{
 		Map<String,Object> parametros= new HashMap<String,Object>();
@@ -45,27 +46,27 @@ public class UtilidadesWeb {
 		stream.close();
 		FacesContext.getCurrentInstance().responseComplete();
 	}*/
-    
-        public static void exportarPDF(JasperPrint jasperPrint) throws JRException, IOException{
 
-		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-		//response.addHeader("Content-disposition","attachment; filename=jsfReporte.pdf"); //Con este metodo descarga en el navegador
-                response.setContentType("application/pdf");  //Con este metodo abre en el navegador
-		ServletOutputStream stream = response.getOutputStream();
-		
-		JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-		
-		stream.flush();
-		stream.close();
-		FacesContext.getCurrentInstance().responseComplete();
-	}
-        
+    public static void exportarPDF(JasperPrint jasperPrint) throws JRException, IOException {
+
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        //response.addHeader("Content-disposition","attachment; filename=jsfReporte.pdf"); //Con este metodo descarga en el navegador
+        response.setContentType("application/pdf");  //Con este metodo abre en el navegador
+        ServletOutputStream stream = response.getOutputStream();
+
+        JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+
+        stream.flush();
+        stream.close();
+        FacesContext.getCurrentInstance().responseComplete();
+    }
+
     public static void redirigirPaginaInterna(String pagina) {
         FacesContext contex = FacesContext.getCurrentInstance();
         //contex.getExternalContext().redirect(pagina);
         contex.getApplication().getNavigationHandler().handleNavigation(contex, null, pagina);
     }
-    
+
     public static void redirigirPaginaExterna(String pagina) {
         try {
             FacesContext contex = FacesContext.getCurrentInstance();
@@ -75,4 +76,19 @@ public class UtilidadesWeb {
             Logger.getLogger(UtilidadesWeb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    /**
+     * Obtiene los parametros enviados desde la peticion
+     * @return 
+     */
+    public static Map<String,String> obtenerParametrosPeticion()
+    {
+        return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+    }
+    
+    public static String buscarParametroPeticion(String clave)
+    {
+        return obtenerParametrosPeticion().get(clave);
+    }
+    
 }

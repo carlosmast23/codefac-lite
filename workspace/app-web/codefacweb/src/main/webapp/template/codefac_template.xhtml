@@ -50,8 +50,14 @@
 
                             <p:submenu label="Facturación" icon="ui-icon-pencil">
                                 <p:submenu label="Proceso" icon="ui-icon-contact">
-                                    <p:menuitem process="@this" value="Proforma" action="proforma" />
+                                    <p:menuitem process="@this" value="Proforma" action="proforma" >
+                                        <f:param name="#{parametrosWeb.campoTipoFacturaOProforma}" value="#{parametrosWeb.tipoProforma}"/> <!-- Parametrizar estas varaibles por ejemplo en alguna clase de configuraciones genereales similares a laversion descritorio -->
+                                    </p:menuitem>
+                                    <p:menuitem process="@this" value="Factura" action="factura" >
+                                        <f:param name="#{parametrosWeb.campoTipoFacturaOProforma}" value="factura"/>;
+                                    </p:menuitem>
                                 </p:submenu>
+                                
                             </p:submenu>
 
                             <p:submenu label="CRM" icon="ui-icon-pencil">
@@ -174,11 +180,11 @@
                             </f:facet>
 
                             <div  style="padding: 10px;text-align: left">
-                                
+
                                 <div style="text-align: center">
                                     <p:commandButton rendered="#{controllerCodefacMb.modoDialogo}" process="@this" onclick="PF('dialogConfirmarGrabar').show()" style="float: contour;margin-bottom:  10px;margin-right: 50px" label="Grabar" value="G U A R D A R" icon="save-icon" />
                                 </div>
-                                
+
                                 <ui:insert  name="contenido">
                                     <f:facet name="ejemplo" id="contenidoPagina2">
                                         Contenido por defecto de la plantilla  

@@ -9,7 +9,11 @@
     <ui:composition  template="/template/codefac_template.xhtml">
 
         <ui:define name="contenido" >
-
+            <f:metadata>
+                <f:viewParam name="tipo" value="#{proformaMb.tipoPagina}"/>
+                <f:event type="preRenderView" listener="#{proformaMb.verificarPagina()}"/>
+            </f:metadata>
+            
             <f:event listener="#{controllerCodefacMb.agregarVista(proformaMb)}" type="preRenderView" />
             <p:remoteCommand name="updateDataTable" update=":formulario:tblProductoDetalles"/>
 

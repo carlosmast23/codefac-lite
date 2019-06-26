@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.codefacweb.mb.facturacion;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.core.SessionMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.ParametrosWeb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
@@ -73,6 +75,9 @@ import java.util.Arrays;
 @ManagedBean
 @ViewScoped
 public class ProformaMb extends GeneralAbstractMb implements Serializable {
+    
+    private static final String TITULO_PAGINA_FACTURA="Factura";
+    private static final String TITULO_PAGINA_PROFORMA="Proforma";
 
     private Factura factura;
 
@@ -84,6 +89,8 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     private Producto productoSeleccionado;
     private DocumentoEnum documentoSeleccionado;
     private PuntoEmision puntoEmisionSeleccionado;
+    private String tipoPagina;
+    private String tituloPagina;
     /**
      * TODO:Por el momento seteo con una variable adicional de la fecha porque
      * en el modelo esta con sql y fuciona correctamente para las consultas pero
@@ -94,9 +101,23 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     @ManagedProperty(value = "#{sessionMb}")
     private SessionMb sessionMb;
+    
+    @ManagedProperty(value = "#{parametrosWeb}")
+    private ParametrosWeb parametrosWeb;
+    
+    
 
     @PostConstruct
     public void init() {
+        String tipoPagina=UtilidadesWeb.buscarParametroPeticion(parametrosWeb.getCampoTipoFacturaOProforma());
+        //System.out.println("tipo pagina:"+tipoPagina);
+        if(tipoPagina.equals(parametrosWeb.getTipoFactura()))
+        {
+            tituloPagina=TITULO_PAGINA_FACTURA;
+        }else if(tipoPagina.equals(parametrosWeb.getTipoProforma()))
+        {
+            tituloPagina=TITULO_PAGINA_PROFORMA;
+        }
         
         factura = new Factura();
         factura.setCliente(new Persona());//Esto solo hago para evitar advertencias
@@ -584,7 +605,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     @Override
     public String titulo() {
-        return "Proforma";
+        return tituloPagina;
     }
 
 
@@ -611,5 +632,30 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
         
     }
+       
+    public void verificarPagina()
+    {
+        //this=new FacturaMb()
+        System.out.println(">>>> Tipo Pagina >>"+ tipoPagina);
+    }
+
+    public ParametrosWeb getParametrosWeb() {
+        return parametrosWeb;
+    }
+
+    public void setParametrosWeb(ParametrosWeb parametrosWeb) {
+        this.parametrosWeb = parametrosWeb;
+    }
+
+    public String getTipoPagina() {
+        return tipoPagina;
+    }
+
+    public void setTipoPagina(String tipoPagina) {
+        this.tipoPagina = tipoPagina;
+    }
+       
+    
+       
 
 }

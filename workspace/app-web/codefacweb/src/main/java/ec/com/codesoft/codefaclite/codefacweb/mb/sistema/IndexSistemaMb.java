@@ -35,7 +35,7 @@ public class IndexSistemaMb  extends GeneralAbstractMb implements Serializable {
     private MindmapNode selectedNode;
 
     public IndexSistemaMb() {
-        root = new DefaultMindmapNode(FACTURA_ETIQUETA, "Google WebSite", "FFCC00", false);
+        root = new DefaultMindmapNode(FACTURA_ETIQUETA, "Google WebSite", "FFCC00", true);
 
         MindmapNode ips = new DefaultMindmapNode(CLIENTE_ETIQUETA, "IP Numbers", "FFFFFF", true);
         MindmapNode ns = new DefaultMindmapNode(PROFORMA_ETIQUETA, "Namespaces", "FFFFFF", true);
@@ -68,6 +68,9 @@ public class IndexSistemaMb  extends GeneralAbstractMb implements Serializable {
         }else if(node.getLabel().equals(CLIENTE_ETIQUETA))
         {
             UtilidadesWeb.redirigirPaginaInterna("cliente");
+        }else if(node.getLabel().equals(FACTURA_ETIQUETA))
+        {
+            UtilidadesWeb.redirigirPaginaInterna("factura");
         }
         /*
         //populate if not already loaded

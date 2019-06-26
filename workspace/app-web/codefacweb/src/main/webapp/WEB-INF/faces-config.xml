@@ -56,6 +56,25 @@
                     <name>faces-redirect</name>
                     <value>true</value>
                 </view-param>
+                <view-param>
+                    <name>tipo</name>
+                    <value>proforma</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>factura</from-outcome>
+            <to-view-id>sistema/facturacion/proforma.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+                <view-param>
+                    <name>tipo</name>
+                    <value>factura</value>
+                </view-param>
             </redirect>
         </navigation-case>
         
