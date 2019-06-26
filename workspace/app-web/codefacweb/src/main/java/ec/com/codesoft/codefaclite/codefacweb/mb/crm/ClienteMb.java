@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.codefacweb.mb.crm;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.DialogoWeb;
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadWeb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -45,6 +47,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 @ViewScoped
 public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>, Serializable {
 
+    private static final String TITULO_CLIENTE="Cliente";
+    private static final String TITULO_PROVEEDOR="Proveedor";
     private Persona cliente;
     //private Persona.TipoIdentificacionEnum[] identificacionesEnumList;
     private List<Nacionalidad> nacionalidadesList;
@@ -58,11 +62,21 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
     private GeneralEnumEstado estadoSeleccionada;
     private OperadorNegocioEnum operadorNegocioSeleccionado;
     private SriFormaPago sriFormaPagoSeleccionada;
+    private String tituloPagina;
 
     private Boolean identificacionPasaporte;
 
     @PostConstruct
     private void init() {
+        String titulo=UtilidadesWeb.buscarParametroPeticion("tipo");
+        if(titulo.equals("cliente"))
+        {
+            tituloPagina=TITULO_CLIENTE;
+        }else if(titulo.equals("proveedor"))
+        {
+            tituloPagina=TITULO_PROVEEDOR;
+        }
+        
         cliente = new Persona();
         cargarListas();
         cargarDatosDefecto();
@@ -152,7 +166,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
 
     @Override
     public String titulo() throws ExcepcionCodefacLite, UnsupportedOperationException {
-        return "Cliente";
+        return tituloPagina;
     }
 
     @Override
@@ -308,6 +322,11 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        if(tituloPagina.equals(TITULO_PROVEEDOR))
+        {
+            operadorNegocioSeleccionado=OperadorNegocioEnum.PROVEEDOR;
+        }
     }
 
     public void eventoNombreKeyUp() {
@@ -321,6 +340,15 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         return cliente;
     }
 
+    public String getTituloPagina() {
+        return tituloPagina;
+    }
 
+    public void setTituloPagina(String tituloPagina) {
+        this.tituloPagina = tituloPagina;
+    }
+
+
+    
 
 }

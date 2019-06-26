@@ -86,6 +86,25 @@
                     <name>faces-redirect</name>
                     <value>true</value>
                 </view-param>
+                <view-param>
+                    <name>tipo</name>
+                    <value>cliente</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>proveedor</from-outcome>
+            <to-view-id>sistema/crm/cliente.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+                <view-param>
+                    <name>tipo</name>
+                    <value>proveedor</value>
+                </view-param>
             </redirect>
         </navigation-case>
         
