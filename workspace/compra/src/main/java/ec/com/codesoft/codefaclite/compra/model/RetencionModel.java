@@ -140,7 +140,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
             
                     
         } catch (ServicioCodefacException ex) {
-            DialogoCodefac.mensaje("Error","Error al grabar los datos",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite("error: "+ex.getMessage());
         } catch (RemoteException ex) {
@@ -857,6 +857,9 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         //Llenar los detalles de la retencion
         if(retencion.getCompra().getDetalles()!=null)
         {
+            if(retencion.getDetalles()!=null)
+                retencion.getDetalles().clear(); //TODO: Corregido problema que cuando guardo y sale error nuevamente se vuelve a seguir agregando detalles
+            
             for (CompraDetalle compraDetalle : retencion.getCompra().getDetalles()) {
                 
                 //Validaciones cuando hay detalles que no requerien enviar retencion con iva 0

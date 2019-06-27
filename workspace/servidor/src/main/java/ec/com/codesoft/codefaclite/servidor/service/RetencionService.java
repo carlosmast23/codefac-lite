@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,9 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                validarRetencion(entity);
+                
                 
                 //Verificar si es una retencion libre o tiene una referencia
                 if(entity.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
@@ -97,6 +101,29 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         //transaction.begin();        
         //transaction.commit();
         return entity;
+    }
+    
+    private void validarRetencion(Retencion retencion) throws ServicioCodefacException, RemoteException
+    {
+        if(retencion.getDetalles()==null|| retencion.getDetalles().size()==0)
+        {
+            throw new ServicioCodefacException("No se puede grabar retenciones sin detalles");
+        }
+        
+        ///Validar que no existan codigos duplicados porque eso no permite el Sri
+        List<String> codigosRetencion=new ArrayList<String>();
+        for (RetencionDetalle detalle : retencion.getDetalles()) {
+            if(codigosRetencion.contains(detalle.getCodigoRetencionSri()))
+            {
+                throw new ServicioCodefacException("Los detalles de la retención no pueden tener códigos duplicados");
+            }
+            else
+            {
+                codigosRetencion.add(detalle.getCodigoRetencionSri());
+            }
+            
+        }
+        
     }
 
     @Override
