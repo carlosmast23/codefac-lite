@@ -48,7 +48,7 @@ public class ControllerCodefacMb implements Serializable {
     public void init() {
         System.out.println("Iniciando el postConstruct del controlador");
         modoDialogo=false;
-        indiceTabSecundario = "2";
+        indiceTabSecundario = "0";
         this.estadoEnum = EstadoFormEnum.GRABAR;
         //titulo="Sin titulo";
         

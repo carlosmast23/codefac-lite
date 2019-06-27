@@ -21,6 +21,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -77,6 +78,12 @@ public class UtilidadesWeb {
         }
     }
     
+    public static void actualizaComponente(String id) 
+    {        
+        PrimeFaces.current().ajax().update(id); 
+    }  
+     
+    
     /**
      * Obtiene los parametros enviados desde la peticion
      * @return 
@@ -89,6 +96,12 @@ public class UtilidadesWeb {
     public static String buscarParametroPeticion(String clave)
     {
         return obtenerParametrosPeticion().get(clave);
+    }
+    
+    public static void ejecutarJavascript(String script)
+    {
+        PrimeFaces current = PrimeFaces.current();
+        current.executeScript(script); //Todo: Parametrizar y poner en una funcion aparte este dialogo        
     }
     
 }

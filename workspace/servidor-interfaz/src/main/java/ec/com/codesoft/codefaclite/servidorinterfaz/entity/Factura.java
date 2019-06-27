@@ -9,13 +9,16 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional.
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -550,6 +553,20 @@ public class Factura extends ComprobanteEntity implements Serializable {
         this.vendedor = vendedor;
     }
     
+    /**
+     * Metodo que devuelve los datos adicionales de la factura en tipo de dato Map
+     */
+    public Map<String, String> getMapAdicional() {
+       Map<String,String> parametroMap=new HashMap<String ,String>();
+        if(getDatosAdicionales()!=null)
+        {
+            for (FacturaAdicional datoAdicional : getDatosAdicionales()) 
+            {
+                parametroMap.put(datoAdicional.getCampo(),datoAdicional.getValor());
+            }
+        }
+        return parametroMap;
+    }
     
     
     /**

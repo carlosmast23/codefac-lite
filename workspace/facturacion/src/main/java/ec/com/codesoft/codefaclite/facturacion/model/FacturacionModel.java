@@ -1006,7 +1006,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private ComprobanteDataFactura obtenerComprobanteDataFactura()
     {
         ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
-        comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
+        comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
         return comprobanteData;
     }
 
@@ -1032,6 +1032,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             
             //Si la factura en manual no continua el proceso de facturacion electronica
+            //TODO: Ver si esta logica va incluida en el servidor
             if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
             {
                 DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
@@ -1130,18 +1131,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     }
     
-    private Map<String,String> getMapAdicional(Factura factura)
-    {
-        Map<String,String> parametroMap=new HashMap<String ,String>();
-        if(factura.getDatosAdicionales()!=null)
-        {
-            for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) 
-            {
-                parametroMap.put(datoAdicional.getCampo(),datoAdicional.getValor());
-            }
-        }
-        return parametroMap;
-    }
+    
     
     public Map<String, Object> getParametroReporte(DocumentoEnum documento)
     {

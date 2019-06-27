@@ -6,12 +6,14 @@
 package ec.com.codesoft.codefaclite.codefacweb.mb.facturacion;
 
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import ec.com.codesoft.codefaclite.codefacweb.core.DialogoWeb;
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.core.SessionMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.ParametrosWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
@@ -66,6 +68,14 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 
 /**
@@ -75,13 +85,13 @@ import java.util.Arrays;
 @ManagedBean
 @ViewScoped
 public class ProformaMb extends GeneralAbstractMb implements Serializable {
-    
-    private static final String TITULO_PAGINA_FACTURA="Factura";
-    private static final String TITULO_PAGINA_PROFORMA="Proforma";
 
+    private static final String ID_COMPONENTE_MONITOR="monitor";
+    //private static final String TITULO_PAGINA_FACTURA = "Factura";
+    //private static final String TITULO_PAGINA_PROFORMA = "Proforma";
     private Factura factura;
 
-    private FacturaDetalle facturaDetalle;
+    private FacturaDetalle facturaDetalle; 
 
     private List<DocumentoEnum> documentos;
     private List<PuntoEmision> puntosEmision;
@@ -89,8 +99,9 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     private Producto productoSeleccionado;
     private DocumentoEnum documentoSeleccionado;
     private PuntoEmision puntoEmisionSeleccionado;
-    private String tipoPagina;
-    private String tituloPagina;
+    private TipoPaginaEnum tipoPaginaEnum;
+    //private String tipoPagina;
+    //private String tituloPagina;
     /**
      * TODO:Por el momento seteo con una variable adicional de la fecha porque
      * en el modelo esta con sql y fuciona correctamente para las consultas pero
@@ -101,43 +112,36 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     @ManagedProperty(value = "#{sessionMb}")
     private SessionMb sessionMb;
-    
+
     @ManagedProperty(value = "#{parametrosWeb}")
     private ParametrosWeb parametrosWeb;
-    
-    
 
     @PostConstruct
     public void init() {
-        String tipoPagina=UtilidadesWeb.buscarParametroPeticion(parametrosWeb.getCampoTipoFacturaOProforma());
-        //System.out.println("tipo pagina:"+tipoPagina);
-        if(tipoPagina.equals(parametrosWeb.getTipoFactura()))
-        {
-            tituloPagina=TITULO_PAGINA_FACTURA;
-        }else if(tipoPagina.equals(parametrosWeb.getTipoProforma()))
-        {
-            tituloPagina=TITULO_PAGINA_PROFORMA;
-        }
-        
+        String tipoPagina = UtilidadesWeb.buscarParametroPeticion(parametrosWeb.getCampoTipoFacturaOProforma());
+        tipoPaginaEnum = TipoPaginaEnum.getByNombreParametro(tipoPagina);
+        limpiar();
+
+    }
+
+    public void limpiar() {
         factura = new Factura();
         factura.setCliente(new Persona());//Esto solo hago para evitar advertencias
         productoSeleccionado = new Producto();
         facturaDetalle = new FacturaDetalle();
 
-        fechaEmision = UtilidadesFecha.getFechaHoy();
-        documentos = new ArrayList<DocumentoEnum>();
-        documentos.add(DocumentoEnum.PROFORMA);
+        cargarDatosPorDefecto();
         cargarDatosLista();
     }
-    
+
     @Override
-    public void editar()  throws ExcepcionCodefacLite, UnsupportedOperationException {
+    public void editar() throws ExcepcionCodefacLite, UnsupportedOperationException {
         try {
-            if(!validar()) //Si no valida mando una excepcion para cancelar el ciclo de vida
+            if (!validar()) //Si no valida mando una excepcion para cancelar el ciclo de vida
             {
                 throw new ExcepcionCodefacLite("Error grabando el producto");
             }
-            
+
             setearDatosAdicionales();
             ServiceFactory.getFactory().getFacturacionServiceIf().editar(factura);
             mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.EDITADO);
@@ -150,7 +154,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
         //PrimeFaces current = PrimeFaces.current();
         //current.executeScript("PF('dialogResultado').show();");
-        
+
         try {
             System.out.println("===========>INICIANDO PROCESO GRABAR <==============");
             if (!validar()) //Si no valida mando una excepcion para cancelar el ciclo de vida
@@ -161,10 +165,29 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
             setearDatosAdicionales();
 
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
-            factura = servicio.grabarProforma(factura);
-            //MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
-            mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
 
+            if (tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA)) {
+                factura = servicio.grabarProforma(factura);
+                mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+
+            } else if (tipoPaginaEnum.equals(TipoPaginaEnum.FACTURA)) {
+                factura = servicio.grabar(factura);
+                ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+                comprobanteServiceIf.procesarComprobante(
+                        obtenerComprobanteDataFactura(),
+                        factura,
+                        sessionMb.getSession().getUsuario(),
+                        new InterfazCallBack());
+                
+                sessionMb.setActualizarMonitor(true);                         
+                nuevo();
+                UtilidadesWeb.ejecutarJavascript("PF('poll').start();"); //iniciar el comenten de actualizar monitor
+                //UtilidadesWeb.actualizaComponente(":formulario:panelSecundario:barMonitor");       
+                MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+
+            }
+
+            //MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             //imprimir();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -173,6 +196,12 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private ComprobanteDataFactura obtenerComprobanteDataFactura() {
+        ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+        comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+        return comprobanteData;
     }
 
     @Override
@@ -193,7 +222,12 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
-        return new ProformaBusqueda();
+        if (tipoPaginaEnum.equals(tipoPaginaEnum.PROFORMA)) {
+            return new ProformaBusqueda();
+        } else if (tipoPaginaEnum.equals(tipoPaginaEnum.FACTURA)) {
+            return new FacturaBusqueda();
+        }
+        return null;
     }
 
     public void saludo() {
@@ -206,9 +240,8 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         abrirDialogoBusqueda(clienteBusquedaDialogo);
         System.out.println("Abriendo dialogo fin");
     }
-    
-    public void abrirDialogoCrearCliente()
-    {
+
+    public void abrirDialogoCrearCliente() {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("resizable", true);
         options.put("draggable", false);
@@ -220,15 +253,13 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         //options.put("busquedaClase", new EmpleadoBusquedaDialogo() ); //TODO: Mando por defecto un dialogo por defecto
         String nombreDialogoBusqueda = "cliente";
         //PrimeFaces.current().dialog()
-        
-        Map<String,List<String>> params=new HashMap<String,List<String>> ();
-        params.put("isDialog",Arrays.asList("true")); //TODO: Parametrizar esta variable
-        
+
+        Map<String, List<String>> params = new HashMap<String, List<String>>();
+        params.put("isDialog", Arrays.asList("true")); //TODO: Parametrizar esta variable
+
         PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, params);
-        
+
     }
-    
-    
 
     public void abrirDialogoBusquedaProducto() {
         ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo();
@@ -259,7 +290,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         PersonaEstablecimiento clienteOficina = (PersonaEstablecimiento) event.getObject();
         cargarDatosCliente(clienteOficina);
     }
-    
+
     public void seleccionarClienteCreado(SelectEvent event) {
         Persona cliente = (Persona) event.getObject();
         cargarDatosCliente(cliente.getEstablecimientos().get(0));
@@ -284,11 +315,9 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     }
 
     public void agregarProducto() {
-        
-        
-        if(facturaDetalle.getCantidad().compareTo(BigDecimal.ZERO)<=0)
-        {
-            MensajeMb.mostrarMensajeDialogo("Error","Porfavor ingrese un valor valido",FacesMessage.SEVERITY_WARN);
+
+        if (facturaDetalle.getCantidad().compareTo(BigDecimal.ZERO) <= 0) {
+            MensajeMb.mostrarMensajeDialogo("Error", "Porfavor ingrese un valor valido", FacesMessage.SEVERITY_WARN);
             return;
         }
         //facturaDetalle.        
@@ -297,17 +326,16 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
         factura.addDetalle(facturaDetalle);
         factura.calcularTotalesDesdeDetalles();
-        facturaDetalle=new FacturaDetalle();
+        facturaDetalle = new FacturaDetalle();
         productoSeleccionado = new Producto();
-        
+
     }
-    
-    public void eliminarFilaProducto(FacturaDetalle detalle)
-    {
+
+    public void eliminarFilaProducto(FacturaDetalle detalle) {
         System.out.println("verificar si se ejecuta el parametro");
         factura.getDetalles().remove(detalle);
         factura.calcularTotalesDesdeDetalles();
-        
+
     }
 
     public void cargarDatosCliente(PersonaEstablecimiento establecimiento) {
@@ -605,38 +633,33 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     @Override
     public String titulo() {
-        return tituloPagina;
+        return tipoPaginaEnum.getNombre();
     }
-
-
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        init(); //Llamo a este metodo para que se seteen en blanco las variables
+        limpiar(); //Llamo a este metodo para que se seteen en blanco las variables
         System.err.println("Ejecutando metodo de nuevo");
     }
-    
-       public void filaEditaTablaEvent(RowEditEvent event) {
-           FacturaDetalle detalleEditado=(FacturaDetalle) event.getObject();
-           detalleEditado.calcularTotalDetalle();
-           detalleEditado.calculaIva();
-           factura.calcularTotalesDesdeDetalles();
-           //FacesMessage msg = new FacesMessage("Car Edited", ((FacturaDeta) event.getObject()).getId());
-           //FacesContext.getCurrentInstance().addMessage(null, msg);
-           System.err.println("Evento editar la fila ");
-           System.err.println("cantidad editada: " + factura.getDetalles().get(0).getCantidad());
-           System.err.println("cantidad editada: " + factura.getDetalles().get(0).getTotal());
-           System.err.println("total final: " + factura.getTotal());
-           
-           //PrimeFaces.current().ajax().update(":formulario:tblProductoDetalles");
 
-        
+    public void filaEditaTablaEvent(RowEditEvent event) {
+        FacturaDetalle detalleEditado = (FacturaDetalle) event.getObject();
+        detalleEditado.calcularTotalDetalle();
+        detalleEditado.calculaIva();
+        factura.calcularTotalesDesdeDetalles();
+        //FacesMessage msg = new FacesMessage("Car Edited", ((FacturaDeta) event.getObject()).getId());
+        //FacesContext.getCurrentInstance().addMessage(null, msg);
+        System.err.println("Evento editar la fila ");
+        System.err.println("cantidad editada: " + factura.getDetalles().get(0).getCantidad());
+        System.err.println("cantidad editada: " + factura.getDetalles().get(0).getTotal());
+        System.err.println("total final: " + factura.getTotal());
+
+        //PrimeFaces.current().ajax().update(":formulario:tblProductoDetalles");
     }
-       
-    public void verificarPagina()
-    {
+
+    public void verificarPagina() {
         //this=new FacturaMb()
-        System.out.println(">>>> Tipo Pagina >>"+ tipoPagina);
+        //System.out.println(">>>> Tipo Pagina >>" + tipoPagina);
     }
 
     public ParametrosWeb getParametrosWeb() {
@@ -647,15 +670,130 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         this.parametrosWeb = parametrosWeb;
     }
 
-    public String getTipoPagina() {
-        return tipoPagina;
+    public TipoPaginaEnum getTipoPaginaEnum() {
+        return tipoPaginaEnum;
     }
 
-    public void setTipoPagina(String tipoPagina) {
-        this.tipoPagina = tipoPagina;
+    public void setTipoPaginaEnum(TipoPaginaEnum tipoPaginaEnum) {
+        this.tipoPaginaEnum = tipoPaginaEnum;
     }
-       
-    
-       
+
+    private void cargarDatosPorDefecto() {
+        fechaEmision = UtilidadesFecha.getFechaHoy();
+        documentos = new ArrayList<DocumentoEnum>();
+
+        //TODO: Mejorar este metodo para cargar otras formas de pago de forma dinamica , pensar en la solucion de permisos de documentos
+        if (tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA)) {
+            documentos.add(DocumentoEnum.PROFORMA);
+        } else if (tipoPaginaEnum.equals(TipoPaginaEnum.FACTURA)) {
+            documentos.add(DocumentoEnum.FACTURA);
+        }
+    }
+
+    public enum TipoPaginaEnum {
+        FACTURA("Factura", "factura"),
+        PROFORMA("Proforma", "proforma");
+
+        private String nombre;
+        private String nombreParametro;
+
+        private TipoPaginaEnum(String nombre, String nombreParametro) {
+            this.nombre = nombre;
+            this.nombreParametro = nombreParametro;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public String getNombreParametro() {
+            return nombreParametro;
+        }
+
+        public static TipoPaginaEnum getByNombre(String nombre) {
+            for (TipoPaginaEnum value : TipoPaginaEnum.values()) {
+                if (value.getNombre().equals(nombre)) {
+                    return value;
+                }
+            }
+            return null;
+        }
+
+        public static TipoPaginaEnum getByNombreParametro(String nombre) {
+            for (TipoPaginaEnum value : TipoPaginaEnum.values()) {
+                if (value.getNombreParametro().equals(nombre)) {
+                    return value;
+                }
+            }
+            return null;
+        }
+    }
+
+    public class InterfazCallBack extends UnicastRemoteObject implements ClienteInterfaceComprobante {
+
+        public InterfazCallBack() throws RemoteException {
+        }
+        
+
+        public void termino(byte[] byteJasperPrint, List<AlertaComprobanteElectronico> alertas) throws RemoteException {
+            sessionMb.setProgreso(100);
+            sessionMb.setActualizarMonitor(false);
+        }
+
+        public void iniciado() throws RemoteException {
+            sessionMb.setProgreso(0);
+            sessionMb.setActualizarMonitor(true);
+        }
+
+        public void procesando(int etapa, ClaveAcceso clave) throws RemoteException {
+            if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
+                sessionMb.setProgreso(20);                
+                //monitorData.getBarraProgreso().setValue(20);
+
+            }
+
+            if (etapa == ComprobanteElectronicoService.ETAPA_PRE_VALIDAR) {
+                sessionMb.setProgreso(30);
+                //monitorData.getBarraProgreso().setValue(30);
+            }
+
+            if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
+                sessionMb.setProgreso(50);
+                //monitorData.getBarraProgreso().setValue(50);
+            }
+
+            if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
+                sessionMb.setProgreso(65);
+                //monitorData.getBarraProgreso().setValue(65);
+
+            }
+
+            if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
+                sessionMb.setProgreso(80);
+                //monitorData.getBarraProgreso().setValue(80);
+
+            }
+
+            if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
+                sessionMb.setProgreso(90);
+                //monitorData.getBarraProgreso().setValue(90);
+            }
+
+            if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
+                sessionMb.setProgreso(100);
+                sessionMb.setActualizarMonitor(false);
+                //monitorData.getBarraProgreso().setValue(100);
+
+            }
+            
+            //UtilidadesWeb.actualizaComponente(ID_COMPONENTE_MONITOR);
+        }
+
+        public void error(ComprobanteElectronicoException cee, String claveAcceso) throws RemoteException {
+            System.out.println("error ...");
+            sessionMb.setActualizarMonitor(false);
+        }
+    };
+
 
 }

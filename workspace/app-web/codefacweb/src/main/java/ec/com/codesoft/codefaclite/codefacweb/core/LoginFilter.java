@@ -32,7 +32,7 @@ public class LoginFilter implements Filter {
     
 
     public void init(FilterConfig filterConfig) throws ServletException {
-        LOG.log(Level.INFO,"loginFilter initialized");
+        //LOG.log(Level.INFO,"loginFilter initialized");
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

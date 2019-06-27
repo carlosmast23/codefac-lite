@@ -10,13 +10,13 @@
 
         <ui:define name="contenido" >
             <f:metadata>
-                <f:viewParam name="tipo" value="#{proformaMb.tipoPagina}"/>
+                <!--<f:viewParam name="tipo" value="#{proformaMb.tipoPagina}"/>-->
                 <f:event type="preRenderView" listener="#{proformaMb.verificarPagina()}"/>
             </f:metadata>
             
             <f:event listener="#{controllerCodefacMb.agregarVista(proformaMb)}" type="preRenderView" />
             <p:remoteCommand name="updateDataTable" update=":formulario:tblProductoDetalles"/>
-
+            
             <p:panelGrid columns="4" layout="grid">            
                 <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
                     <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 55%" />                    
@@ -187,6 +187,8 @@
                     </f:facet>
                 </p:dataTable>
             </p:panel>
+            
+            <p:commandButton process="@this" actionListener="#{sessionMb.ejemploActivar()}" value="ejemplo" oncomplete="PF('poll').start();" update=":formulario:remoteCommand" />
 
        
         </ui:define>

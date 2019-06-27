@@ -20,12 +20,13 @@ import java.util.Vector;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 
 /**
  *
  * @author Carlos
  */
-public class FacturaBusqueda implements InterfaceModelFind<Factura> {   
+public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPropertisFindWeb {   
     private Persona cliente;
     private PersonaEstablecimiento establecimiento;
     private EnumSiNo estadoEnviadoGuiaRemision;
@@ -127,6 +128,20 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
 
     public void setEstadoEnviadoGuiaRemision(EnumSiNo estadoEnviadoGuiaRemision) {
         this.estadoEnviadoGuiaRemision = estadoEnviadoGuiaRemision;
+    }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        Factura f;
+        //f.getd
+        Vector<String> propiedades = new Vector<String>();
+        propiedades.add("Preimpreso");
+        propiedades.add("cliente.razonSocial");
+        propiedades.add("");//TODO: Ver como puedo hacer para establecer una propiedad personalizada
+        propiedades.add("estado");
+        propiedades.add("fechaEmision");
+        propiedades.add("total");
+        return propiedades;
     }
     
     

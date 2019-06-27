@@ -38,9 +38,9 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class FacturaMb extends ProformaMb {
 
-    @Override
+    /*@Override
     public String getTipoPagina() {
         return "Factura";
-    }
+    }*/
     
 }

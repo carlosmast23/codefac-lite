@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
+import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -18,7 +19,9 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class SessionMb implements Serializable{
-
+    
+    private Integer porcentaje=0;
+    private Boolean actualizarMonitor=false;
     /**
      * Entidad que se va a encargar de tener fisicamente los datos de la session
      */
@@ -38,6 +41,7 @@ public class SessionMb implements Serializable{
 
     public void setSession(SessionCodefac session) {
         this.session = session;
+        this.actualizarMonitor=false;
     }
 
     /**
@@ -59,4 +63,38 @@ public class SessionMb implements Serializable{
         return LOGOUT_PAGE_REDIRECT;
     }
       
+    public Integer getProgreso()
+    {
+        return porcentaje;
+    }
+    
+    public void setProgreso(Integer porcentaje)
+    {
+        this.porcentaje=porcentaje;
+    }
+    
+    public void ejemploContador()
+    {
+        //this.actualizarMonitor=true;
+        System.out.println("Actualizando monitor");
+    }
+    
+    public void ejemploActivar()
+    {
+        
+        this.actualizarMonitor=!this.actualizarMonitor;
+        System.out.println("Activando o apagando monitor");
+    }
+
+    public Boolean getActualizarMonitor() {
+        return actualizarMonitor;
+    }
+
+    public void setActualizarMonitor(Boolean actualizarMonitor) {
+        this.actualizarMonitor = actualizarMonitor;
+        //this.actualizarMonitor=false;
+    }
+    
+    
+    
 }
