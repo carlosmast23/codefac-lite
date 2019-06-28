@@ -68,6 +68,8 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
+import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -75,6 +77,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteE
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 
@@ -86,9 +89,9 @@ import java.util.Arrays;
 @ViewScoped
 public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
-    private static final String ID_COMPONENTE_MONITOR="monitor";
-    //private static final String TITULO_PAGINA_FACTURA = "Factura";
-    //private static final String TITULO_PAGINA_PROFORMA = "Proforma";
+    private static final String ID_COMPONENTE_MONITOR="monitor"; 
+    
+        
     private Factura factura;
 
     private FacturaDetalle facturaDetalle; 
@@ -172,13 +175,51 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
             } else if (tipoPaginaEnum.equals(TipoPaginaEnum.FACTURA)) {
                 factura = servicio.grabar(factura);
+                
+                BarraProgreso<Factura> barraProgreso=new BarraProgreso<Factura>(factura,new BarraProgreso.InterfazBoton<Factura>() {
+                    public void alertaListener() {
+                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    }
+
+                    public void imprimirListener(Factura dato) {
+                        try {
+                            dato=(Factura) ServiceFactory.getFactory().getFacturacionServiceIf().buscarPorId(dato.getId()); //Vuelvo a consultar porque el antigua dato no tenia la clave de acceso
+                            imprimirFactura(dato);
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
+                    public String tituloBarra(Factura dato) {
+                        return dato.getPreimpreso();
+                    }
+                });
+                /*
+                BarraProgreso barraProgreso=new BarraProgreso(factura,new BarraProgreso.InterfazBoton() {
+                    public void alertaListener() {
+                        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    }
+
+                    public void imprimirListener(Object dato) {
+                        Factura factura= (Factura) dato;
+                        imprimirFactura(factura);
+                    }
+
+                    public String tituloBarra(Object dato) {
+                        Factura factura= (Factura) dato;
+                        return factura.getPreimpreso();
+                    }
+                });*/
+                
+                
                 ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
                 comprobanteServiceIf.procesarComprobante(
                         obtenerComprobanteDataFactura(),
                         factura,
                         sessionMb.getSession().getUsuario(),
-                        new InterfazCallBack());
+                        new InterfazCallBack(barraProgreso));
                 
+                sessionMb.getBarraProgresoList().add(barraProgreso);
                 sessionMb.setActualizarMonitor(true);                         
                 nuevo();
                 UtilidadesWeb.ejecutarJavascript("PF('poll').start();"); //iniciar el comenten de actualizar monitor
@@ -341,8 +382,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public void cargarDatosCliente(PersonaEstablecimiento establecimiento) {
         if (establecimiento != null) {
             factura.setCliente(establecimiento.getPersona());
-            factura.setSucursal(establecimiento);
-
+            factura.setSucursal(establecimiento); 
         }
     }
 
@@ -467,6 +507,17 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     @Override
     public void imprimir() {
+        if(tipoPaginaEnum.equals(tipoPaginaEnum.PROFORMA))
+        {
+            imprimirProforma();
+        }else if(tipoPaginaEnum.equals(tipoPaginaEnum.FACTURA))
+        {
+            imprimirFactura(factura);
+        }
+    }
+    
+    private void imprimirProforma()
+    {
         try {
             System.out.println("Imprimir ...");
             List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
@@ -500,6 +551,46 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         } catch (IOException ex) {
             ex.printStackTrace();
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void imprimirFactura(Factura factura)
+    {
+        
+         //if (this.factura != null && estadoFormulario.equals(ESTADO_EDITAR)) {
+        if (factura != null) {
+            try {
+                String claveAcceso = factura.getClaveAcceso();
+                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura.getClaveAcceso());
+                JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                //HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+                net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
+                //byte[] bytes = JasperRunManager.runReportToPdf(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
+                HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+                //response.setHeader("Content-disposition", "inline; filename=proforma");
+                response.setContentType("application/pdf");
+                response.setContentLength(baos.size());
+
+                ServletOutputStream outStream = response.getOutputStream();
+                baos.writeTo(outStream);
+                //outStream.write(baos, 0, baos.size());
+
+                outStream.flush();
+                outStream.close();
+
+                FacesContext.getCurrentInstance().responseComplete();
+                
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (JRException ex) {
+                Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -731,56 +822,59 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     public class InterfazCallBack extends UnicastRemoteObject implements ClienteInterfaceComprobante {
 
-        public InterfazCallBack() throws RemoteException {
+        private BarraProgreso barraProgreso;
+        
+        public InterfazCallBack(BarraProgreso barraProgreso) throws RemoteException {
+            this.barraProgreso=barraProgreso;
         }
         
 
         public void termino(byte[] byteJasperPrint, List<AlertaComprobanteElectronico> alertas) throws RemoteException {
-            sessionMb.setProgreso(100);
+            barraProgreso.setPorcentaje(100);
             sessionMb.setActualizarMonitor(false);
         }
 
         public void iniciado() throws RemoteException {
-            sessionMb.setProgreso(0);
+            barraProgreso.setPorcentaje(0);
             sessionMb.setActualizarMonitor(true);
         }
 
         public void procesando(int etapa, ClaveAcceso clave) throws RemoteException {
             if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
-                sessionMb.setProgreso(20);                
+                barraProgreso.setPorcentaje(20);                
                 //monitorData.getBarraProgreso().setValue(20);
 
             }
 
             if (etapa == ComprobanteElectronicoService.ETAPA_PRE_VALIDAR) {
-                sessionMb.setProgreso(30);
+                barraProgreso.setPorcentaje(30);
                 //monitorData.getBarraProgreso().setValue(30);
             }
 
             if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
-                sessionMb.setProgreso(50);
+                barraProgreso.setPorcentaje(50);
                 //monitorData.getBarraProgreso().setValue(50);
             }
 
             if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
-                sessionMb.setProgreso(65);
+                barraProgreso.setPorcentaje(65);
                 //monitorData.getBarraProgreso().setValue(65);
 
             }
 
             if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
-                sessionMb.setProgreso(80);
+                barraProgreso.setPorcentaje(80);
                 //monitorData.getBarraProgreso().setValue(80);
 
             }
 
             if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
-                sessionMb.setProgreso(90);
+                barraProgreso.setPorcentaje(90);
                 //monitorData.getBarraProgreso().setValue(90);
             }
 
             if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
-                sessionMb.setProgreso(100);
+                barraProgreso.setPorcentaje(100);
                 sessionMb.setActualizarMonitor(false);
                 //monitorData.getBarraProgreso().setValue(100);
 

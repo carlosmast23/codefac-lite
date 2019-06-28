@@ -5,9 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
+import ec.com.codesoft.codefaclite.codefacweb.mb.facturacion.BarraProgreso;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -20,7 +23,7 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class SessionMb implements Serializable{
     
-    private Integer porcentaje=0;
+    //private Integer porcentaje=0;
     private Boolean actualizarMonitor=false;
     /**
      * Entidad que se va a encargar de tener fisicamente los datos de la session
@@ -29,9 +32,14 @@ public class SessionMb implements Serializable{
     
     public static final String LOGOUT_PAGE_REDIRECT =
       "/login.xhtml?faces-redirect=true";
+    
+    public List<BarraProgreso> barraProgresoList;
 
     @PostConstruct
     public void init() {
+        this.barraProgresoList=new ArrayList<BarraProgreso>();
+        //this.barraProgresoList.add(new BarraProgreso(90));
+        //this.barraProgresoList.add(new BarraProgreso(70));
         //ejemplo = "hola a todos";
     }
 
@@ -63,7 +71,7 @@ public class SessionMb implements Serializable{
         return LOGOUT_PAGE_REDIRECT;
     }
       
-    public Integer getProgreso()
+    /*public Integer getProgreso()
     {
         return porcentaje;
     }
@@ -71,7 +79,7 @@ public class SessionMb implements Serializable{
     public void setProgreso(Integer porcentaje)
     {
         this.porcentaje=porcentaje;
-    }
+    }*/
     
     public void ejemploContador()
     {
@@ -82,7 +90,7 @@ public class SessionMb implements Serializable{
     public void ejemploActivar()
     {
         
-        this.actualizarMonitor=!this.actualizarMonitor;
+        //this.actualizarMonitor=!this.actualizarMonitor;
         System.out.println("Activando o apagando monitor");
     }
 
@@ -94,6 +102,15 @@ public class SessionMb implements Serializable{
         this.actualizarMonitor = actualizarMonitor;
         //this.actualizarMonitor=false;
     }
+
+    public List<BarraProgreso> getBarraProgresoList() {
+        return barraProgresoList;
+    }
+
+    public void setBarraProgresoList(List<BarraProgreso> barraProgresoList) {
+        this.barraProgresoList = barraProgresoList;
+    }
+    
     
     
     

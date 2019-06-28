@@ -197,6 +197,16 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             persona.setContactoClientePorcentaje(new BigDecimal(getTxtPorcentajeComision().getText()));
         }
         
+        /**
+         * Editar los datos de la primera sucursal por defecto
+         */
+        PersonaEstablecimiento establecimiento=persona.getEstablecimientos().get(0);
+        establecimiento.setNombreComercial(getTxtNombreLegal().getText());
+        establecimiento.setDireccion(getjTextAreaDireccion().getText());
+        establecimiento.setTelefonoConvencional(getjTextTelefono().getText());
+        establecimiento.setExtensionTelefono(getjTextExtension().getText());
+        establecimiento.setTelefonoCelular(getjTextCelular().getText());        
+        
     }
 
     @Override

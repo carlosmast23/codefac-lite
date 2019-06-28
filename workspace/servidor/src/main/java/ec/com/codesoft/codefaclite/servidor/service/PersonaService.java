@@ -82,10 +82,10 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
                     personaEstablecimiento.setCorreoElectronico(""); //implementar de forma posterior
                     personaEstablecimiento.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
                     //Si no ingreso un nombre comercial se graba como matriz
-                    if(personaEstablecimiento.getNombreComercial()==null || personaEstablecimiento.getNombreComercial().isEmpty())
-                    {
-                        personaEstablecimiento.setNombreComercial(Sucursal.TipoSucursalEnum.MATRIZ.getNombre());
-                    }
+                    //if(personaEstablecimiento.getNombreComercial()==null || personaEstablecimiento.getNombreComercial().isEmpty())
+                    //{
+                    //    personaEstablecimiento.setNombreComercial(Sucursal.TipoSucursalEnum.MATRIZ.getNombre());
+                    //}
                     
                     //entityManager.persist(personaEstablecimiento);
                     p.addEstablecimiento(personaEstablecimiento);

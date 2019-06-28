@@ -19,13 +19,13 @@
         </h:head>
 
         <h:body style="font-size: 11px">
-            
+
             <h:form id="formulario" target="_blank" onkeypress="if (event.keyCode == 13) {
                         return false;
                     }">
-                                                                        <p:poll process="@this" interval="1" listener="#{sessionMb.ejemploContador()}" update=":formulario:panelSecundario:barMonitor" stop="#{!sessionMb.actualizarMonitor}" autoStart="true" widgetVar="poll" />
+                <p:poll process="@this" interval="1" listener="#{sessionMb.ejemploContador()}" update=":formulario:panelSecundario" stop="#{!sessionMb.actualizarMonitor}" autoStart="true" widgetVar="poll" />
 
-                <p:remoteCommand id="remoteCommand" name="updatePoll" update=":formulario:panelSecundario:barMonitor"/>
+                <p:remoteCommand id="remoteCommand" name="updatePoll" update=":formulario:panelSecundario"/>
                 <p:remoteCommand name="onload" action="#{applicationCodefacMb.controladorConexionServidor()}" autoRun="true" />
 
                 <p:layout fullPage="true" >
@@ -154,13 +154,21 @@
 
                     <p:layoutUnit position="east" size="270" header="Menu" collapsible="true" style="border: 1px;border-style: ridge" visible="#{!controllerCodefacMb.modoDialogo}" >
                         <p:tabView id="panelSecundario" dynamic="true" cache="true" effect="fold"  activeIndex="#{controllerCodefacMb.indiceTabSecundario}">
-                            
-                            <p:tab title="Monitor" id="monitor">                               
-                                <p:progressBar id="barMonitor" widgetVar="pbAjax" ajax="true" value="#{sessionMb.progreso}"  labelTemplate="{value}%" styleClass="animated" global="false">
-                                    <p:ajax event="complete"   oncomplete="PF('startButton2').enable()"/>
-                                </p:progressBar>                                
+
+                            <p:tab title="Monitor" id="monitor">
+                                <p:repeat id="barMonitor" value="#{sessionMb.barraProgresoList}" var="barra">
+                                    <p:panelGrid columns="4" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-9, ui-grid-col-1,ui-grid-col-1, ui-grid-col-1">
+                                        <p:progressBar   widgetVar="pbAjax" ajax="true" value="#{barra.porcentaje}"  labelTemplate="#{barra.titulo()}" styleClass="animated " style="border: 2px;border-style: inset;background-color:  darkcyan;font-size: 12px;font-weight: normal;font-family: monospace" global="false">
+                                            <p:ajax event="complete"   oncomplete="PF('startButton2').enable()"/>
+                                        </p:progressBar>
+                                        <p:commandButton id="btnMonitorAlerta" process="@this"  icon="fa fa-bell-o"  />
+                                        <p:commandButton id="btnMonitorBuscar" process="@this" ajax="false" actionListener="#{barra.imprimir()}"  icon="fa fa-search"  />
+                                        <p:commandButton id="btnMonitorImprimir" process="@this" icon="fa fa-close"  />
+                                    </p:panelGrid>
+                                </p:repeat>
+
                             </p:tab>
-                            
+
                             <p:tab title="Ayuda">
                                 <iframe id="iframeCenter" src="#{controllerCodefacMb.generalAbstractMb.linkAyuda()}"  
                                         height="800px" frameborder="0">  
@@ -206,7 +214,7 @@
 
                     <!-- DIALOGO PARA CONFIRMAR EL GUARDAR -->
                     <p:confirmDialog message="Esta seguro que desea grabar los datos?" header="Alerta" severity="alert" widgetVar="dialogConfirmarGrabar">
-                        <p:commandButton value="Si" process="@form" actionListener="#{controllerCodefacMb.save()}" update="messages,idDialogResultado,:formulario:panelSecundario:barMonitor,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
+                        <p:commandButton value="Si" process="@form" actionListener="#{controllerCodefacMb.save()}" update="messages,idDialogResultado,:formulario:panelSecundario,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
                         <p:commandButton value="No" onclick="PF('dialogConfirmarGrabar').hide();" type="button" />
                     </p:confirmDialog>
 
@@ -217,7 +225,7 @@
                         <p:outputLabel value="#{controllerCodefacMb.generalAbstractMb.resultadoDialogo.mensaje}" />
                         <f:facet name="footer"  >
                             <div style="text-align: center">
-                                <p:commandButton  value="Aceptar" process="@this" actionListener="#{controllerCodefacMb.cerrarDialogoResultados()}" icon="ui-icon-check" update="panelContenido"/>
+                                <p:commandButton value="Si" process="@form" actionListener="#{controllerCodefacMb.save()}" update="messages,idDialogResultado,:formulario:panelSecundario:barMonitor,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
                                 <p:commandButton value="Imprimir" process="@this" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" icon="ui-icon-print" />
                             </div>
                         </f:facet>
