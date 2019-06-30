@@ -6,11 +6,13 @@
 package ec.com.codesoft.codefaclite.codefacweb.mb.dialogmodel;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -47,6 +49,11 @@ public class DatoAdicionalDialogoMb implements Serializable{
             habilitarCampo=true;
             comprobanteAdicional.setCampo("");
         }
+    }
+    
+    public void retornarValor()
+    {
+        UtilidadesWeb.retornarResultadoDialogo(comprobanteAdicional);
     }
 
     public ComprobanteAdicional getComprobanteAdicional() {

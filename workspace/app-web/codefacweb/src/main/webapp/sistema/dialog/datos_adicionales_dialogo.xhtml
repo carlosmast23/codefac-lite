@@ -30,15 +30,15 @@
 
 
                     <p:outputLabel id="txtCampo" value="Campo:" style="float: right" />
-                    <p:inputText value="#{datoAdicionalDialogoMb.comprobanteAdicional.campo}" disabled="#{!datoAdicionalDialogoMb.habilitarCampo}" />
+                    <p:inputText required="true" value="#{datoAdicionalDialogoMb.comprobanteAdicional.campo}" disabled="#{!datoAdicionalDialogoMb.habilitarCampo}" />
 
                     <p:outputLabel value="Dato:" style="float: right" />
-                    <p:inputText value="#{datoAdicionalDialogoMb.comprobanteAdicional.valor}" />
+                    <p:inputText required="true" value="#{datoAdicionalDialogoMb.comprobanteAdicional.valor}" />
 
                     <f:facet name="footer">
                         <div style="text-align: center">
-                            <p:commandButton value="Grabar"/>
-                            <p:commandButton value="Cancelar"/>
+                            <p:commandButton actionListener="#{datoAdicionalDialogoMb.retornarValor()}" value="Grabar"/>
+                            <!--<p:commandButton value="Cancelar"/>-->
                         </div>
                     </f:facet>
 

@@ -371,7 +371,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     if(tipoEnum.equals(FacturaAdicional.Tipo.TIPO_CORREO))
                     {
-                        factura.addDatosAdicionalCorreo(valor,FacturaAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO);
+                        factura.addDatoAdicional(new FacturaAdicional(
+                                valor,
+                                FacturaAdicional.Tipo.TIPO_CORREO,
+                                ComprobanteAdicional.CampoDefectoEnum.CORREO));
+                        //factura.addDatosAdicionalCorreo(valor,FacturaAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO);
                     }
                     else
                     {
@@ -591,7 +595,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void actionPerformed(ActionEvent e) {
                 factura.setVendedor(null);
                 getTxtVendedor().setText("");
-                FacturaAdicional facturaAdicional= factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR);
+                FacturaAdicional facturaAdicional= (FacturaAdicional) factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR);
                 if(facturaAdicional!=null)
                 {
                     factura.getDatosAdicionales().remove(facturaAdicional);
@@ -611,7 +615,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if (empleadoTmp != null) {
                     factura.setVendedor(empleadoTmp);
                     getTxtVendedor().setText(empleadoTmp.getIdentificacion() + " - " + empleadoTmp.getNombresCompletos());
-                    factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(),factura.getVendedor().getNombresCompletos());
+                    
+                    factura.addDatoAdicional(new FacturaAdicional(
+                            ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
+                            factura.getVendedor().getNombresCompletos(), 
+                            ComprobanteAdicional.Tipo.TIPO_OTRO) {
+                    });
+                    
+                    //factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(),factura.getVendedor().getNombresCompletos());
                     cargarTablaDatosAdicionales();
                 }
 
@@ -1746,9 +1757,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Cargar el correo solo cuando exista 
         //factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
 
-        factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudiante.getNombreCompleto());
+        //factura.addDatoAdicional(new FacturaAdicional(title, title, ComprobanteAdicional.Tipo.TIPO_OTRO));
+        factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudiante.getNombreCompleto(),ComprobanteAdicional.Tipo.TIPO_OTRO));
 
-        factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante() + "");
+        factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante() + "",ComprobanteAdicional.Tipo.TIPO_OTRO));
     }
     
     private void cargarDatosAdicionales()
@@ -1758,7 +1770,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
                        
             //Obtiene el campo del correo por defecto sis existe
-            FacturaAdicional campoAdicional=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.CORREO);
+            FacturaAdicional campoAdicional=(FacturaAdicional) factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.CORREO);
             //Si no existe el campo del correo del cliente lo creo
             
             String correoElectronico=null;
@@ -1771,7 +1783,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             {
                 if (correoElectronico != null) 
                 {
-                    factura.addDatosAdicionalCorreo(correoElectronico, FacturaAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO);
+                    factura.addDatoAdicional(new FacturaAdicional(correoElectronico, FacturaAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
                 }
             } 
             else //Si existe el campo del correo del cliente lo edito
@@ -1794,7 +1806,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Cargar el numero e celular del cliente
         if (factura.getSucursal().getTelefonoCelular() != null) {
             //Obtiene el campo del correo por defecto sis existe
-            FacturaAdicional campoAdicional=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.CELULAR);
+            FacturaAdicional campoAdicional=(FacturaAdicional) factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.CELULAR);
             //Si no existe el campo del correo del cliente lo creo
             
             String numeroCelular=null;
@@ -1804,7 +1816,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             if(campoAdicional==null)
             {
                 if(numeroCelular!=null)
-                    factura.addDatosAdicionalCorreo(numeroCelular,FacturaAdicional.Tipo.TIPO_CELULAR,ComprobanteAdicional.CampoDefectoEnum.CELULAR);
+                    factura.addDatoAdicional(new FacturaAdicional(numeroCelular,FacturaAdicional.Tipo.TIPO_CELULAR,ComprobanteAdicional.CampoDefectoEnum.CELULAR));
             }
             else //Si existe el campo del telefono del cliente lo edito
             {
@@ -1860,7 +1872,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Cargar la fecha de vencimiento de la factura si existe ingresado una fecha
         if(estadoFormulario.equals(ESTADO_GRABAR))
         {
-            FacturaAdicional datoAdicional=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
+            FacturaAdicional datoAdicional=(FacturaAdicional) factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
             if(factura.getCliente().getDiasCreditoCliente()!=null && !factura.getCliente().getDiasCreditoCliente().equals(0))
             {
                 //Eliminar dato anterior si ya fue ingresado
@@ -2555,7 +2567,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         cargarCliente(persona.getEstablecimientos().get(0)); //carga los datos del representante en los campos del cliente
                         
                         //Modificar el correo principal de los datos adicionales por el del nuevo cliente
-                        FacturaAdicional facturaAdicional=factura.obtenerDatoAdicionalPorCampo(FacturaAdicional.CampoDefectoEnum.CORREO);
+                        FacturaAdicional facturaAdicional=(FacturaAdicional) factura.obtenerDatoAdicionalPorCampo(FacturaAdicional.CampoDefectoEnum.CORREO);
                         //Si el campo ya existe solo lo modifico
                         if(facturaAdicional!=null)
                         {   
@@ -2569,7 +2581,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             //Solo agregar si el cliente tiene un correo por defecto
                             if(persona.getCorreoElectronico()!=null)
                             {
-                                factura.addDatosAdicionalCorreo(persona.getCorreoElectronico(),FacturaAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO);
+                                factura.addDatoAdicional(new FacturaAdicional(persona.getCorreoElectronico(),FacturaAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO));
 
                             }
                         }
@@ -3086,7 +3098,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     if(getCmbFechaVencimiento().getDate()!=null)
                     {
                         String fechaStr = UtilidadesFecha.formatoDiaMesAño(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));
-                        factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO.getNombre(), fechaStr);
+                        factura.addDatoAdicional(new FacturaAdicional(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO.getNombre(), fechaStr,ComprobanteAdicional.Tipo.TIPO_OTRO));
                         factura.setFechaVencimiento(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));
                     
                     }                    
@@ -3094,7 +3106,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     getChkActivarFechaVencimiento().setSelected(true);
 
                 } else {
-                    FacturaAdicional fechaVencimientoDato=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
+                    FacturaAdicional fechaVencimientoDato=(FacturaAdicional) factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
                     if(fechaVencimientoDato!=null)
                     {
                         factura.getDatosAdicionales().remove(fechaVencimientoDato);
@@ -3114,7 +3126,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void actionPerformed(ActionEvent e) {
                 if(getCmbFechaVencimiento().getDate()!=null)
                 {
-                    FacturaAdicional fechaVencimientoDato=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
+                    FacturaAdicional fechaVencimientoDato=(FacturaAdicional) factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
                     String fechaStr = UtilidadesFecha.formatoDiaMesAño(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));                    
                     fechaVencimientoDato.setValor(fechaStr);
                     factura.setFechaVencimiento(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));

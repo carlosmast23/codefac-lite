@@ -76,6 +76,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronico
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.rmi.server.UnicastRemoteObject;
@@ -340,6 +341,14 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public void seleccionarProducto(SelectEvent event) {
         productoSeleccionado = (Producto) event.getObject();
         cargarDetalleFacturaAgregar(productoSeleccionado); 
+    }
+    
+    public void seleccionarDatoAdicional(SelectEvent event) {
+        ComprobanteAdicional comprobanteAdicional = (ComprobanteAdicional) event.getObject();
+        FacturaAdicional fa;
+        
+        //factura.addDatoAdicional(ESTADO_EDITAR, ESTADO_EDITAR);
+        
     }
 
     private void cargarDetalleFacturaAgregar(Producto productoSeleccionado) {    

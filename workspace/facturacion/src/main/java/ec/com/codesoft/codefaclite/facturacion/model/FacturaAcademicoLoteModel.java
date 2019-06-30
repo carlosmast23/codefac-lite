@@ -415,9 +415,9 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
                 Factura factura = generarFactura(estudianteInscrito, rubrosEstudiantes);
 
                 //Datos adicionales en la factura
-                factura.addDatosAdicionalCorreo(estudianteInscrito.getEstudiante().getRepresentante().getCorreoElectronico(),ComprobanteAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO);
-                factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudianteInscrito.getEstudiante().getNombreCompleto());
-                factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudianteInscrito.getEstudiante().getIdEstudiante().toString());
+                factura.addDatoAdicional(new FacturaAdicional(estudianteInscrito.getEstudiante().getRepresentante().getCorreoElectronico(),ComprobanteAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO));
+                factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudianteInscrito.getEstudiante().getNombreCompleto(),ComprobanteAdicional.Tipo.TIPO_OTRO));
+                factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudianteInscrito.getEstudiante().getIdEstudiante().toString(),ComprobanteAdicional.Tipo.TIPO_OTRO));
 
                 ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
                 comprobanteData.setMapInfoAdicional(getMapAdicional(factura));

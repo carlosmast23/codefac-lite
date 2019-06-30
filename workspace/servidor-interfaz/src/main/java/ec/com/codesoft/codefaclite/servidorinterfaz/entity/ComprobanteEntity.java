@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
@@ -20,10 +21,12 @@ import javax.persistence.Transient;
  * @author Carlos
  */
 @MappedSuperclass
-public abstract class ComprobanteEntity implements Serializable{
+public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implements Serializable{
     
     
-    public abstract List<ComprobanteAdicional> getDatosAdicionalesComprobante();
+    public abstract List<T> getDatosAdicionalesComprobante();
+    public abstract void addDatoAdicionalAbstract(T comprobanteAdicional);
+    //public abstract void(ComprobanteEntity comprobante);
     
     @Column(name = "CLAVE_ACCESO")
     protected String claveAcceso;
@@ -277,12 +280,87 @@ public abstract class ComprobanteEntity implements Serializable{
     }
     
     
+    public void addDatoAdicional(T comprobante)
+    {
+        if(comprobante.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_OTRO))
+        {
+            addDatoAdicionalAbstract(comprobante);
+        }
+        else
+        {
+            if(comprobante.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_CORREO))
+            {
+                addDatosAdicionalCorreo(comprobante);
+            }
+        }
+    }
     
     
     /**
-     * Metodos Personalizados
+     * ==================> Metodos Personalizados <================================
      * @return 
      */
+    
+    protected void addDatosAdicionalCorreo(T comprobanteAdicional)
+    {
+        
+        //if (this.datosAdicionales == null) {
+        //    this.datosAdicionales = new ArrayList<FacturaAdicional>();
+        //}
+        
+        //Buscar si existe un correo anterior para nombrar de forma secuencial
+        Integer numeroMaximo=0;
+        if(getDatosAdicionalesComprobante()!=null)
+        {
+            for (ComprobanteAdicional datoAdicional : getDatosAdicionalesComprobante()) {            
+                if(datoAdicional.getTipo().equals(comprobanteAdicional.getTipo()))
+                {
+                    if(datoAdicional.getNumero()>numeroMaximo)
+                    {
+                        numeroMaximo=datoAdicional.getNumero();
+                    }
+                }
+            }
+        }
+        
+        comprobanteAdicional.setNumero(numeroMaximo+1);
+        //Modificar el nombre si el correo es mas de 2
+        if(comprobanteAdicional.getNumero()>1)
+        {
+            comprobanteAdicional.setCampo(comprobanteAdicional.getCampo()+" "+comprobanteAdicional.getNumero());
+        }
+
+        addDatoAdicionalAbstract(comprobanteAdicional);
+    
+    }
+    
+    public ComprobanteAdicional obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum campo)
+    {
+        if(getDatosAdicionalesComprobante()!=null)
+        {
+            for (ComprobanteAdicional comprobanteAdicional : getDatosAdicionalesComprobante()) {
+                if(comprobanteAdicional.getCampo().equals(campo.getNombre()))
+                {
+                    return comprobanteAdicional;
+                }
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Elimina datos adicionales de la factura como correos o codigos de enlace de los documentos
+     */
+    public void eliminarTodosDatosAdicionales()
+    {
+        if(getDatosAdicionalesComprobante()!=null)
+        {
+            getDatosAdicionalesComprobante().clear();
+        }
+    }
+    
+    
+    
     public String getPreimpreso()
     {
        return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");

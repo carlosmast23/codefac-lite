@@ -20,6 +20,9 @@ import javax.persistence.MappedSuperclass;
  */
 @MappedSuperclass
 public class ComprobanteAdicional implements Serializable{
+    
+    //public abstract ComprobanteAdicional crearInstancia(ComprobanteEntity padre);
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,10 +48,18 @@ public class ComprobanteAdicional implements Serializable{
     public ComprobanteAdicional() {
     }
 
-    public ComprobanteAdicional(String campo, String valor, String tipo) {
+    public ComprobanteAdicional(String campo, String valor, ComprobanteAdicional.Tipo tipo) {
         this.campo = campo;
         this.valor = valor;
-        this.tipo = tipo;
+        this.tipo = tipo.getLetra();
+    }
+    
+    public ComprobanteAdicional(String correo, ComprobanteAdicional.Tipo tipo, ComprobanteAdicional.CampoDefectoEnum campoDefecto) {
+        //ComprobanteAdicional comprobante = crearInstancia(padre);
+        //comprobante.setCampo(CampoDefectoEnum.);
+        this.campo=campoDefecto.getNombre();
+        this.tipo=tipo.getLetra();
+        this.valor=correo;
     }
     
     
@@ -97,6 +108,27 @@ public class ComprobanteAdicional implements Serializable{
     public void setNumero(Integer numero) {
         this.numero = numero;
     }
+    
+    public Tipo getTipoEnum() {
+        return Tipo.getByLetra(tipo);
+    }
+    
+    /**
+     * =====================> METODOS PERSONALIZADOS ==================>
+     */
+    /*public ComprobanteAdicional crearComprobanteAdicional(ComprobanteEntity padre,String correo,ComprobanteAdicional.Tipo tipoCorreo,ComprobanteAdicional.CampoDefectoEnum campoDefecto)
+    {
+        ComprobanteAdicional comprobante= crearInstancia(padre);
+        //comprobante.setCampo(CampoDefectoEnum.);
+        comprobante.setCampo(campoDefecto.getNombre());
+        comprobante.setTipo(tipoCorreo.getLetra());
+        comprobante.setValor(correo);
+        return comprobante;
+    }*/
+
+    /*public void setTipoEnum(Tipo tipo) {
+        this.tipo=tipo.getLetra();
+    }*/
 
     /**
      * Enum que contiene los nombres de los campos por defecto que puede almacenar esta tabla

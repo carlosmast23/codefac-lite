@@ -355,6 +355,11 @@ public class Retencion extends ComprobanteEntity implements Serializable {
     public List<ComprobanteAdicional> getDatosAdicionalesComprobante() {
         return (List<ComprobanteAdicional>)(ArrayList<?>)getDatosAdicionales();
     }
+
+    @Override
+    public void addDatoAdicionalAbstract(ComprobanteAdicional comprobanteAdicional) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 
 

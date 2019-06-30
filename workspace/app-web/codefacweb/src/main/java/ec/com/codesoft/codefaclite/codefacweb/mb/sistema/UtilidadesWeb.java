@@ -123,4 +123,9 @@ public class UtilidadesWeb {
         
     }
     
+    public static void retornarResultadoDialogo(Object resultado)
+    {
+        PrimeFaces.current().dialog().closeDynamic(resultado);
+    }
+    
 }

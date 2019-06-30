@@ -39,7 +39,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "FACTURA")
-public class Factura extends ComprobanteEntity implements Serializable {
+public class Factura extends ComprobanteEntity<FacturaAdicional> implements Serializable {
 
     private static final long serialVersionUID = -1238278914412853684L;
     
@@ -356,7 +356,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
     
     }
     
-    public void addDatoAdicional(String campo, String valor)
+    
+    
+    /*public void addDatoAdicional(String campo, String valor)
     {
         FacturaAdicional dato=new FacturaAdicional();
         dato.setCampo(campo);
@@ -365,10 +367,10 @@ public class Factura extends ComprobanteEntity implements Serializable {
         dato.setValor(valor);
         
         addDatoAdicional(dato);
-    }
+    }*/
     
     
-    public void addDatoAdicional(FacturaAdicional datoAdicional)
+    /*public void addDatoAdicional(FacturaAdicional datoAdicional)
     {
         if(this.datosAdicionales==null)
         {
@@ -376,9 +378,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
         }
         datoAdicional.setFactura(this);
         this.datosAdicionales.add(datoAdicional);
-    }
+    }*/
     
-    public void addDatosAdicionalCorreo(String correo,FacturaAdicional.Tipo tipoCorreo,FacturaAdicional.CampoDefectoEnum campoDefecto)
+    /*public void addDatosAdicionalCorreo(String correo,FacturaAdicional.Tipo tipoCorreo,FacturaAdicional.CampoDefectoEnum campoDefecto)
     {
         FacturaAdicional facturaAdicional=new FacturaAdicional();
         facturaAdicional.setCampo(campoDefecto.getNombre());
@@ -411,32 +413,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
 
         this.datosAdicionales.add(facturaAdicional);
     
-    }
+    }*/
     
-    public FacturaAdicional obtenerDatoAdicionalPorCampo(CampoDefectoEnum campo)
-    {
-        if(this.datosAdicionales!=null)
-        {
-            for (FacturaAdicional facturaAdicional : datosAdicionales) {
-                if(facturaAdicional.getCampo().equals(campo.getNombre()))
-                {
-                    return facturaAdicional;
-                }
-            }
-        }
-        return null;
-    }
     
-    /**
-     * Elimina datos adicionales de la factura como correos o codigos de enlace de los documentos
-     */
-    public void eliminarTodosDatosAdicionales()
-    {
-        if(this.datosAdicionales!=null)
-        {
-            this.datosAdicionales.clear();
-        }
-    }
 
 
     @Override
@@ -591,8 +570,21 @@ public class Factura extends ComprobanteEntity implements Serializable {
     }
 
     @Override
-    public List<ComprobanteAdicional> getDatosAdicionalesComprobante() {
-        return (List<ComprobanteAdicional>)(ArrayList<?>)getDatosAdicionales();
+    public List<FacturaAdicional> getDatosAdicionalesComprobante() {
+        return getDatosAdicionales();
+        //List<FacturaAdicional> detalles=getDatosAdicionales();
+        //return (List<FacturaAdicional>)(ArrayList<?>)detalles;
+    }
+
+    @Override
+    public void addDatoAdicionalAbstract(FacturaAdicional comprobanteAdicional) {
+        FacturaAdicional datoAdicional=(FacturaAdicional) comprobanteAdicional;
+        if(this.datosAdicionales==null)
+        {
+            this.datosAdicionales=new ArrayList<FacturaAdicional>();
+        }
+        datoAdicional.setFactura(this);
+        this.datosAdicionales.add(datoAdicional);
     }
     
     

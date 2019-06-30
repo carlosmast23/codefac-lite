@@ -33,10 +33,20 @@ public class FacturaAdicional extends ComprobanteAdicional implements Serializab
 
     public FacturaAdicional() {
     }
+    
+    public FacturaAdicional(String campo, String valor, Tipo tipo) {
+        super(campo, valor, tipo);
+        //this.factura = factura;
+    }
 
-    public FacturaAdicional(Factura factura, String campo, String valor, String tipo) {
+    public FacturaAdicional(Factura factura, String campo, String valor, Tipo tipo) {
         super(campo, valor, tipo);
         this.factura = factura;
+    }
+
+    public FacturaAdicional(String correo, Tipo tipoCorreo, CampoDefectoEnum campoDefecto) {
+        super(correo, tipoCorreo, campoDefecto);
+        //this.factura = factura;
     }
     
     
@@ -48,6 +58,7 @@ public class FacturaAdicional extends ComprobanteAdicional implements Serializab
     public void setFactura(Factura factura) {
         this.factura = factura;
     }
+
 
     
 }
