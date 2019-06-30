@@ -102,7 +102,7 @@ public class ValidacionLicenciaCodefac{
         }
     }
     
-    public Properties obtenerLicencia()
+    public Properties obtenerLicencia() 
     {
         try {
             Properties p = new Properties();

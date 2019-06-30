@@ -89,17 +89,17 @@ import java.util.Arrays;
 @ViewScoped
 public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
-    private static final String ID_COMPONENTE_MONITOR="monitor"; 
+    private static final String ID_COMPONENTE_MONITOR="monitor";   
     
         
-    private Factura factura;
+    private Factura factura;   
 
     private FacturaDetalle facturaDetalle; 
 
-    private List<DocumentoEnum> documentos;
-    private List<PuntoEmision> puntosEmision;
+    private List<DocumentoEnum> documentos; 
+    private List<PuntoEmision> puntosEmision;     
 
-    private Producto productoSeleccionado;
+    private Producto productoSeleccionado;  
     private DocumentoEnum documentoSeleccionado;
     private PuntoEmision puntoEmisionSeleccionado;
     private TipoPaginaEnum tipoPaginaEnum;
@@ -159,8 +159,8 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         //current.executeScript("PF('dialogResultado').show();");
 
         try {
-            System.out.println("===========>INICIANDO PROCESO GRABAR <==============");
-            if (!validar()) //Si no valida mando una excepcion para cancelar el ciclo de vida
+            System.out.println("===========>INICIANDO PROCESO GRABAR <==============");     
+            if (!validar()) //Si no valida mando una excepcion para cancelar el ciclo de vida 
             {
                 throw new ExcepcionCodefacLite("Error grabando el producto");
             }
@@ -324,8 +324,8 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         //options.put("busquedaClase", new EmpleadoBusquedaDialogo() ); //TODO: Mando por defecto un dialogo por defecto
         String nombreDialogoBusqueda = "dialogo_busqueda";
         //PrimeFaces.current().dialog()
-        PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, null);
-    }
+        PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, null);           
+    } 
 
     public void seleccionarCliente(SelectEvent event) {
         PersonaEstablecimiento clienteOficina = (PersonaEstablecimiento) event.getObject();
@@ -339,16 +339,16 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     public void seleccionarProducto(SelectEvent event) {
         productoSeleccionado = (Producto) event.getObject();
-        cargarDetalleFacturaAgregar(productoSeleccionado);
+        cargarDetalleFacturaAgregar(productoSeleccionado); 
     }
 
-    private void cargarDetalleFacturaAgregar(Producto productoSeleccionado) {
+    private void cargarDetalleFacturaAgregar(Producto productoSeleccionado) {    
         facturaDetalle = new FacturaDetalle();
         facturaDetalle.setCantidad(BigDecimal.ONE);
         facturaDetalle.setDescripcion(productoSeleccionado.getNombre());
-        facturaDetalle.setPrecioUnitario(productoSeleccionado.getValorUnitario());
-        facturaDetalle.setDescuento(BigDecimal.ZERO);
-        facturaDetalle.setIvaPorcentaje(sessionMb.getSession().obtenerIvaActual().intValue());
+        facturaDetalle.setPrecioUnitario(productoSeleccionado.getValorUnitario());   
+        facturaDetalle.setDescuento(BigDecimal.ZERO); 
+        facturaDetalle.setIvaPorcentaje(sessionMb.getSession().obtenerIvaActual().intValue());     
 
         facturaDetalle.setTipoDocumentoEnum(TipoDocumentoEnum.LIBRE);//TODO: Por el momento solo dejo como documento por defecto libre
         facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
@@ -780,8 +780,13 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
             documentos.add(DocumentoEnum.FACTURA);
         }
     }
+    
+    public void abrirDialogoDatosAdicionales()
+    {
+        UtilidadesWeb.abrirDialogo("datos_adicionales_dialogo",250); 
+    }
 
-    public enum TipoPaginaEnum {
+    public enum TipoPaginaEnum {  
         FACTURA("Factura", "factura"),
         PROFORMA("Proforma", "proforma");
 

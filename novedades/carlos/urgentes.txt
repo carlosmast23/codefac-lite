@@ -36,3 +36,10 @@ Revisar el tema de la escuela crecer:
    --->Verificar la factura de compra 179845 de 1704090891001
 	->tiene 3 items de retencion por alguna razon en el codigo 31
 	-> Cedula incorrecta 1712173805 es 1712163805
+Revisar para la escuela crecer
+	-> Cambiar la forma de clasificar el credito tributario ahora que se por cada detalle de la compra
+	-> Crear un reporte para visualizar los detalles por credito tributaria
+	-> Ver si se puede hacer alguna forma de en als notificaciones del modulo academico poder incrustar html
+		-> Ver si puedo configurar con footer general para todos los mensajes
+	-> Ver alguna forma de copiar los cursos, rubros y configuraciones del periodo anterior para el nuevo periodo
+	-> Agregar la fecha de pago en los rubros para poder enviar un reporte de deudas vencidas

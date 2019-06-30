@@ -104,4 +104,23 @@ public class UtilidadesWeb {
         current.executeScript(script); //Todo: Parametrizar y poner en una funcion aparte este dialogo        
     }
     
+    public static void abrirDialogo(String nombreDialogo,Integer ancho)
+    {
+        Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+        //sessionMap.put("busquedaClase", modeloBusqueda); 
+
+        //Esstablecer porpiedades que se van a enviar al dialogo en map
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("resizable", true);
+        options.put("draggable", false);
+        options.put("modal", true);
+        options.put("width", ancho+15);
+        //options.put("height", 340);
+        //options.put("busquedaClase", new EmpleadoBusquedaDialogo() ); //TODO: Mando por defecto un dialogo por defecto
+        //String nombreDialogoBusqueda = "dialogo_busqueda";
+        //PrimeFaces.current().dialog()
+        PrimeFaces.current().dialog().openDynamic(nombreDialogo, options, null);
+        
+    }
+    
 }

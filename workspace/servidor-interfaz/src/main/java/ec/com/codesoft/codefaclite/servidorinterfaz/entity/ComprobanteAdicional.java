@@ -154,6 +154,16 @@ public class ComprobanteAdicional implements Serializable{
             return nombre;
         }
         
+        public static Tipo getByLetra(String letra)
+        {
+            for (Tipo value : Tipo.values()) {
+                if(value.getLetra().equals(letra))
+                {
+                    return value;
+                }
+            }
+            return null;
+        }
         
     }    
     

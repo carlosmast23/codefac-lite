@@ -51,6 +51,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
     /**
      * Referencia que guardar el periodo por defecto todos
      */
+    private Periodo periodoActivo;
     private NivelAcademico defaultTodos;
     private DefaultTableModel modeloTablaEstudiantes;
     private List<EstudianteInscrito> dataEstudiantes;
@@ -287,6 +288,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
     }
 
     private void cargarDefecto() {
+        
         try {
             List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerPeriodosSinEliminar();
             getCmbPeriodo().removeAllItems();
@@ -294,14 +296,23 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             for (Periodo periodo : periodos) {
                 getCmbPeriodo().addItem(periodo);
             }
+            getCmbPeriodo().setSelectedItem(periodoActivo);
+            
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void iniciarValores() {
-        defaultTodos=new NivelAcademico();
-        defaultTodos.setNombre("TODOS");
+        try {
+            defaultTodos=new NivelAcademico();
+            defaultTodos.setNombre("TODOS");
+            
+            periodoActivo=ServiceFactory.getFactory().getPeriodoServiceIf().obtenerUnicoPeriodoActivo();
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     

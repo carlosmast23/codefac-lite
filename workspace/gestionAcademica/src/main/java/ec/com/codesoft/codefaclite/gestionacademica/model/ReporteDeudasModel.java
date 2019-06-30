@@ -62,6 +62,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
     //private boolean banderaNiveles = false;
     //private boolean banderaRubros = false;
     private List<RubrosNivel> listaRubros;
+    private Periodo periodoActivo;
 
     private DefaultListModel<RubroPlantillaMes> modeloLista;
 
@@ -70,6 +71,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
         modeloLista = new DefaultListModel();
         listener();
         try {
+            periodoActivo=ServiceFactory.getFactory().getPeriodoServiceIf().obtenerUnicoPeriodoActivo();
             Periodo p1 = new Periodo();
             p1.setNombre("Seleccione:");
             List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerPeriodosSinEliminar();
@@ -78,6 +80,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             for (Periodo periodo : periodos) {
                 getCmbPeriodo().addItem(periodo);
             }
+            getCmbPeriodo().setSelectedItem(periodoActivo);
 
             getCmbTipoRubroPorMes().removeAllItems();
             List<CatalogoProducto> tipoRubros = ServiceFactory.getFactory().getCatalogoProductoServiceIf().obtenerPorModulo(ModuloCodefacEnum.GESTIONA_ACADEMICA);
