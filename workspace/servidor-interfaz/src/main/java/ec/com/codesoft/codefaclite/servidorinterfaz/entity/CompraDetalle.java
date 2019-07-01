@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -69,6 +70,9 @@ public class CompraDetalle implements Serializable {
     
     @Column(name="VALOR_RETENCION_RENTA")
     private BigDecimal valorSriRetencionRenta;
+    
+    @Column(name = "CODIGO_SUSTENTO_SRI")
+    private String codigoSustentoSri;
     
     public CompraDetalle() {
     }
@@ -233,6 +237,24 @@ public class CompraDetalle implements Serializable {
     public void setValorSriRetencionRenta(BigDecimal valorSriRetencionRenta) {
         this.valorSriRetencionRenta = valorSriRetencionRenta;
     }
+
+    public String getCodigoSustentoSri() {
+        return codigoSustentoSri;
+    }
+
+    public void setCodigoSustentoSri(String codigoSustentoSri) {
+        this.codigoSustentoSri = codigoSustentoSri;
+    }
+    
+    public void setCodigoSustentoSriEnum(SriSustentoComprobanteEnum codigoEnum) {
+        this.codigoSustentoSri = codigoEnum.getCodigo();
+    }
+    
+    public SriSustentoComprobanteEnum getCodigoSustentoSriEnum() {
+        return SriSustentoComprobanteEnum.obtenerPorCodigo(codigoSustentoSri);        
+    }
+            
+    
     
     /**
      * Metodos adicionales

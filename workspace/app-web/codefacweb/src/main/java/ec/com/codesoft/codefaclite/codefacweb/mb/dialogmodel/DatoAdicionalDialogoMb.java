@@ -53,6 +53,7 @@ public class DatoAdicionalDialogoMb implements Serializable{
     
     public void retornarValor()
     {
+        comprobanteAdicional.setTipoEnum(tipoSeleccionado);
         UtilidadesWeb.retornarResultadoDialogo(comprobanteAdicional);
     }
 

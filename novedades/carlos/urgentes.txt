@@ -1,4 +1,3 @@
-Agregar la opcion para tambien poder enviar el reporte de las compras y los ats en el software
 Hacer el filtro de las guias de remision por cliente
 Hacer el reporte de facturas por productos
 Restructrar para poder eliminar no de la base de datos si no con estados:
@@ -19,23 +18,18 @@ ver si podemos agregar numero telefonicos y el ruc en el reporte de la proforma 
 en los rides al parecer cuando se manda por correo no aparece los numeros completos de la autorizacion revisar en los demas porque en la factura esta corregido
 En la pantalla de proforma que permita enviar a los correos.
 manejan correos independientes para proformas.
-Hacer el reporte de ibarra de presupuestos por detalles de las facturas de compra.
 Hacer el cambio de la mitad del mundo que desean grabar comisiones por cada empleado.
-Hacer el cambio para poder enviar el reporte de compras desde la utilidad de envio de reportes.
-Hacer el cambio para poder enviar el archivo del ats a la contadora (esperemos)
 Optimizar la forma de enviar los reportes porque esta generando 2 veces la misma consulta para generar en excel y pdf
 Ver porque los correos que tiene punto despues en el sistema no verifican las credenciales
 revisar el reporte de kardex , en la columna de los totales no tiene sentido que se sumarice precion de venta de los inventarios porque no cuadra , o bien separo 2 saldos por los precios de compra y venta o bien solo muestro los precios de compra
 Hacer un modulo que utilice selenium para que puedan subir automaticamente los registros a la pagina del Gas 
 en la pantalla de factura , cuando cargao
 El señor del gas solicita que no se pueda seleccionar una fecha inferior de la guia de remision a la cual esta ligada la factura
-Hacer el reporte del señor del gas agrupado por cliente , por ventas diaras y cantidad
 En la pantalla de factura unificar metodos por ejemplo de calcular iva y totales como en el modulo web para hacer mas escalable el sistema
 Revisar al momento de generar el reporte de las guias de remision para enviar , parece que genera el archivo y el pdf para mostrar en pantalla lo cual deberian estar separados para mostrar en el formulario o para enviar por archivo y eso vuelve mas lento el proceso de enviar los reportes por correo
 Revisar el tema de la escuela crecer:
    --->Verificar la factura de compra 179845 de 1704090891001
 	->tiene 3 items de retencion por alguna razon en el codigo 31
-	-> Cedula incorrecta 1712173805 es 1712163805
 Revisar para la escuela crecer
 	-> Cambiar la forma de clasificar el credito tributario ahora que se por cada detalle de la compra
 	-> Crear un reporte para visualizar los detalles por credito tributaria

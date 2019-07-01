@@ -21,11 +21,11 @@
 
                             <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 55%" />                    
                             <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}">
-                                <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarCliente}" update="txtCliente,datosCliente"  />
+                                <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarCliente}" update="txtCliente,datosCliente,formulario:tabDatosFactura:tblDatosAdicional"  />
                             </p:commandButton>                    
 
                             <p:commandButton process="@this" icon="fa fa-plus"  styleClass="white-button" action="#{proformaMb.abrirDialogoCrearCliente()}">
-                                <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarClienteCreado}" update="txtCliente,datosCliente"  />
+                                <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarClienteCreado}" update="txtCliente,datosCliente,formulario:tabDatosFactura:tblDatosAdicional"  />
                             </p:commandButton>                    
 
                         </p:panel>
@@ -81,8 +81,8 @@
 
 
 
-            <p:panel>
-                <p:tabView>
+            <p:panel id="pnlDatosFactura">
+                <p:tabView id="tabDatosFactura">
                     <p:tab title="Productos" >
                         <p:panelGrid columns="4" styleClass="ui-noborder" columnClasses="ui-grid-col-3, ui-grid-col-4,ui-grid-col-3, ui-grid-col-2">
 
@@ -117,45 +117,62 @@
 
                     <p:tab title="Formas de Pago y Datos Adicionales">
 
-                        <p:panelGrid columns="4" styleClass="ui-noborder">
+                        <p:panelGrid id="pnlDatosAdicionales" columns="4" styleClass="ui-noborder">
 
                             <p:panel  >
                                 <div style="text-align: center;margin-bottom: 10px">
-                                    <p:commandButton process="@this"  actionListener="#{proformaMb.abrirDialogoDatosAdicionales()}" id="btnAgregarFormaPago"  icon="fa fa-plus" value="Agregar" style="margin: 0 auto" />
+                                    <p:commandButton process="@this"   id="btnAgregarFormaPago"  icon="fa fa-plus" value="Agregar" style="margin: 0 auto" />
                                 </div>
 
-                                <p:dataTable var="detalle" value="#{proformaMb.factura.detalles}">
+                                <p:dataTable 
+                                    var="detalleFormaPago" 
+                                    value="#{proformaMb.factura.formaPagos}">
+                                    
                                     <f:facet name="header">
                                         Forma de Pago
                                     </f:facet>
                                     <p:column headerText="Forma Pago">
-                                        <h:outputText value="#{detalle.id}" />
+                                        <h:outputText value="#{detalleFormaPago.sriFormaPago.nombre}" />
                                     </p:column>
                                     <p:column headerText="Valor">
-                                        <h:outputText value="#{detalle.id}" />
+                                        <h:outputText value="#{detalleFormaPago.total}" />
                                     </p:column>
                                 </p:dataTable>
                             </p:panel>
 
-                            <p:panel  >
+                            <p:panel id="pnlAdicionalDatos"  >
 
                                 <div style="text-align: center;margin-bottom: 10px">
                                     <p:commandButton  process="@this"  actionListener="#{proformaMb.abrirDialogoDatosAdicionales()}" id="btnAgregarDatosAdicional"   icon="fa fa-plus" value="Agregar" style="margin: 0 auto" >
-                                        <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}" update=""  />
+                                        <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarDatoAdicional}" update="tblDatosAdicional"  />
                                     </p:commandButton>
                                 </div>
 
-                                <p:dataTable var="detalle" value="#{proformaMb.factura.detalles}">
+                                <p:dataTable 
+                                    id="tblDatosAdicional" 
+                                    var="detalleAdicional" 
+                                    value="#{proformaMb.factura.datosAdicionales}"
+                                    selectionMode="single"
+                                    selection="#{proformaMb.facturaAdicionalSeleccionada}"
+                                    rowKey="#{detalleAdicional}"
+                                    >
+                                    
+                                    
                                     <f:facet name="header">
                                         Datos Adicionales
                                     </f:facet>
                                     <p:column headerText="Nombre">
-                                        <h:outputText value="#{detalle.id}" />
+                                        <h:outputText value="#{detalleAdicional.campo}" />
                                     </p:column>
                                     <p:column headerText="Valor">
-                                        <h:outputText value="#{detalle.id}" />
+                                        <h:outputText value="#{detalleAdicional.valor}" />
                                     </p:column>
                                 </p:dataTable>
+
+                                <p:contextMenu for="tblDatosAdicional">
+                                    <!--<p:menuitem value="Ver" update="carDetail" icon="pi pi-search" oncomplete="PF('carDialog').show()"/>-->
+                                    <p:menuitem value="Eliminar" update="tblDatosAdicional" icon="pi pi-times" action="#{proformaMb.eliminarDatoAdicional()}"/>
+                                </p:contextMenu>
 
                             </p:panel>
 
@@ -246,10 +263,7 @@
                     </f:facet>
                 </p:dataTable>
             </p:panel>
-
-            <p:commandButton process="@this" actionListener="#{sessionMb.ejemploActivar()}" value="ejemplo" oncomplete="PF('poll').start();" update=":formulario:remoteCommand" />
-            <p:commandButton process="@this" actionListener="#{sessionMb.ejemploActivar()}" value="ejemplo2"  update=":formulario:panelSecundario" />
-
+         
         </ui:define>
     </ui:composition>
 

@@ -151,6 +151,8 @@ public class Compra implements Serializable {
     @Column(name ="CODIGO_DOCUMENTO_SRI")
     private String codigoDocumentoSri;
     
+    
+    @Deprecated
     @Column(name = "CODIGO_SUSTENTO_SRI")
     private String codigoSustentoSri;
     
@@ -481,6 +483,7 @@ public class Compra implements Serializable {
         this.codigoDocumentoSri = documentoEnum.getCodigoSri();
     }
 
+    @Deprecated
     public void setCodigoSustentoSriEnum(SriSustentoComprobanteEnum codigoEnum) {
         this.codigoSustentoSri = codigoEnum.getCodigo();
     }

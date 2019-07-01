@@ -34,6 +34,11 @@ public class FacturaAdicional extends ComprobanteAdicional implements Serializab
     public FacturaAdicional() {
     }
     
+    public FacturaAdicional(ComprobanteAdicional comprobanteAdicional)
+    {
+        super(comprobanteAdicional.getCampo(),comprobanteAdicional.getValor(),comprobanteAdicional.getTipoEnum());
+    }
+    
     public FacturaAdicional(String campo, String valor, Tipo tipo) {
         super(campo, valor, tipo);
         //this.factura = factura;

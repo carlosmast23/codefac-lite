@@ -25,7 +25,9 @@
                     <h:panelGrid columns="1" style="width:100%">
                         <p:graphicImage library="img" name="sinImagen.jpg" style="height: 30%"/> 
 
-                        <h:outputText value="#{producto.valorUnitario}" style="font-size: 18px;" />
+                        <h:outputText value="#{producto.valorUnitario}" style="font-size: 18px;" >
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                        </h:outputText>
 
                     </h:panelGrid>
                 </p:panel>

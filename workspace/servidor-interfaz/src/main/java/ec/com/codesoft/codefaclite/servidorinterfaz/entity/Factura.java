@@ -134,6 +134,9 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> implements Seri
     private List<NotaCredito> notasCredito;
 
     public Factura() {
+        this.datosAdicionales=new ArrayList<FacturaAdicional>();
+        this.formaPagos=new ArrayList<FormaPago>();
+        
     }
     
     

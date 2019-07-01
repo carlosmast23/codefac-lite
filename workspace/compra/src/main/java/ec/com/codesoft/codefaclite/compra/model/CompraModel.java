@@ -218,7 +218,7 @@ public class CompraModel extends CompraPanel{
         compra.setEstadoRetencion(estadoRetencion.getEstado());
         
         compra.setCodigoComprobanteSriEnum(documentoEnum);
-        compra.setCodigoSustentoSriEnum((SriSustentoComprobanteEnum) getCmbSustentoComprobante().getSelectedItem());
+        //compra.setCodigoSustentoSriEnum((SriSustentoComprobanteEnum) getCmbSustentoComprobante().getSelectedItem());
         //Setear el tipo de emision de la factura
         if(getRdbEmisionElectronica().isSelected())
         {
@@ -705,6 +705,8 @@ public class CompraModel extends CompraPanel{
                     //----------------------------------------------------------------------
                     productoSeleccionado = compraDetalle.getProductoProveedor().getProducto();
                     verificarExistenciadeProductoProveedor();
+                    
+                    getCmbSustentoComprobante().setSelectedItem(compraDetalle.getCodigoSustentoSriEnum());
                 }
                 
             }
@@ -987,6 +989,9 @@ public class CompraModel extends CompraPanel{
             //compraDetalle.setTotal(compraDetalle.getTotal().subtract(valorTotalRetencion));
             
             compraDetalle.setValorIce(BigDecimal.ZERO);
+            
+            
+            compraDetalle.setCodigoSustentoSriEnum((SriSustentoComprobanteEnum)getCmbSustentoComprobante().getSelectedItem());
 
             if(agregar)
             {
@@ -994,6 +999,7 @@ public class CompraModel extends CompraPanel{
             }
             getTxtProductoItem().requestFocus(); //Despues de agregar setear nuevamente en el campo para ingresar otro codigo
             actualizarDatosMostrarVentana();
+            getCmbSustentoComprobante().setSelectedIndex(0); //Selecionar el primer sustento despues de agregar
         }
      
     }

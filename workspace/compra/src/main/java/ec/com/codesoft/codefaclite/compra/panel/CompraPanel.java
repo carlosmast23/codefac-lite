@@ -137,6 +137,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         txtProductoItem = new javax.swing.JTextField();
         btnCrearProducto = new javax.swing.JButton();
         btnBuscarProductoProveedor = new javax.swing.JButton();
+        lblSustentoSri = new javax.swing.JLabel();
+        cmbSustentoComprobante = new javax.swing.JComboBox<>();
+        lblSustentoSri1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         txtDescuentoImpuestos = new javax.swing.JTextField();
@@ -157,7 +160,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         lblEspacio15 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDetalleProductos = new javax.swing.JTable();
-        lblSustentoSri = new javax.swing.JLabel();
         cmbDocumento = new javax.swing.JComboBox<>();
         lblEspacio10 = new javax.swing.JLabel();
         lblEspacio12 = new javax.swing.JLabel();
@@ -174,7 +176,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jLabel25 = new javax.swing.JLabel();
         txtEstablecimientoCompra = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
-        cmbSustentoComprobante = new javax.swing.JComboBox<>();
         rdbEmisionFisica = new javax.swing.JRadioButton();
         rdbEmisionElectronica = new javax.swing.JRadioButton();
         jLabel8 = new javax.swing.JLabel();
@@ -332,13 +333,13 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
         txtDescripcionItem.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.gridwidth = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(txtDescripcionItem, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -376,6 +377,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(txtPrecionUnitarioItem, gridBagConstraints);
 
         btnAgregarItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
@@ -427,6 +429,32 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         jPanel2.add(jToolBar1, gridBagConstraints);
+
+        lblSustentoSri.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblSustentoSri.setText("Descripción:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(lblSustentoSri, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(cmbSustentoComprobante, gridBagConstraints);
+
+        lblSustentoSri1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblSustentoSri1.setText("Sustento Sri:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(lblSustentoSri1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -642,15 +670,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 1.0;
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
-        lblSustentoSri.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblSustentoSri.setText("Sustento Sri:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(lblSustentoSri, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 19;
         gridBagConstraints.gridy = 3;
@@ -783,13 +802,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel17, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 13;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        getContentPane().add(cmbSustentoComprobante, gridBagConstraints);
-
         grupoTipoCompra.add(rdbEmisionFisica);
         rdbEmisionFisica.setSelected(true);
         rdbEmisionFisica.setText("Físico");
@@ -872,6 +884,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblSubtotalSinImpuestoSinDescuento;
     private javax.swing.JLabel lblSubtotalSinImpuestos;
     private javax.swing.JLabel lblSustentoSri;
+    private javax.swing.JLabel lblSustentoSri1;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JPanel panelRetencion;
     private javax.swing.JRadioButton rdbEmisionElectronica;

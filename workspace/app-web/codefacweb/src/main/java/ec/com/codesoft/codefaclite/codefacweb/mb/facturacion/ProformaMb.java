@@ -77,6 +77,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteE
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.rmi.server.UnicastRemoteObject;
@@ -99,10 +100,14 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     private List<DocumentoEnum> documentos; 
     private List<PuntoEmision> puntosEmision;     
+    //private List<SriFormaPago> sriFormaPagosList;
 
     private Producto productoSeleccionado;  
     private DocumentoEnum documentoSeleccionado;
     private PuntoEmision puntoEmisionSeleccionado;
+    private FacturaAdicional facturaAdicionalSeleccionada;
+    private SriFormaPago sriFormaPagoSeleccionado;
+    
     private TipoPaginaEnum tipoPaginaEnum;
     //private String tipoPagina;
     //private String tituloPagina;
@@ -331,11 +336,14 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public void seleccionarCliente(SelectEvent event) {
         PersonaEstablecimiento clienteOficina = (PersonaEstablecimiento) event.getObject();
         cargarDatosCliente(clienteOficina);
+        cargarDatosAdicionalesCliente();
+        
     }
 
     public void seleccionarClienteCreado(SelectEvent event) {
         Persona cliente = (Persona) event.getObject();
         cargarDatosCliente(cliente.getEstablecimientos().get(0));
+        cargarDatosAdicionalesCliente();   
     }
 
     public void seleccionarProducto(SelectEvent event) {
@@ -345,7 +353,8 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     
     public void seleccionarDatoAdicional(SelectEvent event) {
         ComprobanteAdicional comprobanteAdicional = (ComprobanteAdicional) event.getObject();
-        FacturaAdicional fa;
+        System.out.println("Obteniendo comprobanteAdicional: "+comprobanteAdicional);
+        factura.addDatoAdicional(new FacturaAdicional(comprobanteAdicional));
         
         //factura.addDatoAdicional(ESTADO_EDITAR, ESTADO_EDITAR);
         
@@ -395,42 +404,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         }
     }
 
-    /**
-     * ==========================> METODOS GET AND SET
-     * <=============================
-     */
-    public Factura getFactura() {
-        return factura;
-    }
-
-    public void setFactura(Factura factura) {
-        this.factura = factura;
-    }
-
-    public FacturaDetalle getFacturaDetalle() {
-        return facturaDetalle;
-    }
-
-    public void setFacturaDetalle(FacturaDetalle facturaDetalle) {
-        this.facturaDetalle = facturaDetalle;
-    }
-
-    public Producto getProductoSeleccionado() {
-        return productoSeleccionado;
-    }
-
-    public void setProductoSeleccionado(Producto productoSeleccionado) {
-        this.productoSeleccionado = productoSeleccionado;
-    }
-
-    public SessionMb getSessionMb() {
-        return sessionMb;
-    }
-
-    public void setSessionMb(SessionMb sessionMb) {
-        this.sessionMb = sessionMb;
-    }
-
+    
     /**
      * Todo: Ver si esta validacion se puede unificar con la primera pantalla
      *
@@ -471,48 +445,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     }
 
-    public List<DocumentoEnum> getDocumentos() {
-        return documentos;
-    }
-
-    public void setDocumentos(List<DocumentoEnum> documentos) {
-        this.documentos = documentos;
-    }
-
-    public DocumentoEnum getDocumentoSeleccionado() {
-        return documentoSeleccionado;
-    }
-
-    public void setDocumentoSeleccionado(DocumentoEnum documentoSeleccionado) {
-        this.documentoSeleccionado = documentoSeleccionado;
-    }
-
-    private void cargarDatosLista() {
-        try {
-            puntosEmision = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sessionMb.getSession().getSucursal());
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    public List<PuntoEmision> getPuntosEmision() {
-        return puntosEmision;
-    }
-
-    public void setPuntosEmision(List<PuntoEmision> puntosEmision) {
-        this.puntosEmision = puntosEmision;
-    }
-
-    public PuntoEmision getPuntoEmisionSeleccionado() {
-        return puntoEmisionSeleccionado;
-    }
-
-    public void setPuntoEmisionSeleccionado(PuntoEmision puntoEmisionSeleccionado) {
-        this.puntoEmisionSeleccionado = puntoEmisionSeleccionado;
-    }
+    
 
     @Override
     public void imprimir() {
@@ -731,6 +664,16 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         this.fechaEmision = fechaEmision;
     }
 
+    public FacturaAdicional getFacturaAdicionalSeleccionada() {
+        return facturaAdicionalSeleccionada;
+    }
+
+    public void setFacturaAdicionalSeleccionada(FacturaAdicional facturaAdicionalSeleccionada) {
+        this.facturaAdicionalSeleccionada = facturaAdicionalSeleccionada;
+    }
+    
+    
+
     @Override
     public String titulo() {
         return tipoPaginaEnum.getNombre();
@@ -793,6 +736,16 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public void abrirDialogoDatosAdicionales()
     {
         UtilidadesWeb.abrirDialogo("datos_adicionales_dialogo",250); 
+    }
+    
+    public void eliminarDatoAdicional()
+    {
+        factura.getDatosAdicionales().remove(facturaAdicionalSeleccionada); 
+    }
+
+    private void cargarDatosAdicionalesCliente() {
+        factura.eliminarTodosDatosAdicionales(); //TODO: Por el momento solo elimino todos los datos adicionales para no hacerme problema
+        factura.addDatoAdicional(new FacturaAdicional(factura.getCliente().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
     }
 
     public enum TipoPaginaEnum {  
@@ -903,5 +856,94 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         }
     };
 
+
+
+    public SriFormaPago getSriFormaPagoSeleccionado() {
+        return sriFormaPagoSeleccionado;
+    }
+
+    public void setSriFormaPagoSeleccionado(SriFormaPago sriFormaPagoSeleccionado) {
+        this.sriFormaPagoSeleccionado = sriFormaPagoSeleccionado;
+    }
+
+    public List<DocumentoEnum> getDocumentos() {
+        return documentos;
+    }
+
+    public void setDocumentos(List<DocumentoEnum> documentos) {
+        this.documentos = documentos;
+    }
+
+    public DocumentoEnum getDocumentoSeleccionado() {
+        return documentoSeleccionado;
+    }
+
+    public void setDocumentoSeleccionado(DocumentoEnum documentoSeleccionado) {
+        this.documentoSeleccionado = documentoSeleccionado;
+    }
+
+    private void cargarDatosLista() {
+        try {
+            puntosEmision = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sessionMb.getSession().getSucursal());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public List<PuntoEmision> getPuntosEmision() {
+        return puntosEmision;
+    }
+
+    public void setPuntosEmision(List<PuntoEmision> puntosEmision) {
+        this.puntosEmision = puntosEmision;
+    }
+
+    public PuntoEmision getPuntoEmisionSeleccionado() {
+        return puntoEmisionSeleccionado;
+    }
+
+    public void setPuntoEmisionSeleccionado(PuntoEmision puntoEmisionSeleccionado) {
+        this.puntoEmisionSeleccionado = puntoEmisionSeleccionado;
+    }
+    
+    /**
+     * ==========================> METODOS GET AND SET
+     * <=============================
+     */
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;
+    }
+
+    public FacturaDetalle getFacturaDetalle() {
+        return facturaDetalle;
+    }
+
+    public void setFacturaDetalle(FacturaDetalle facturaDetalle) {
+        this.facturaDetalle = facturaDetalle;
+    }
+
+    public Producto getProductoSeleccionado() {
+        return productoSeleccionado;
+    }
+
+    public void setProductoSeleccionado(Producto productoSeleccionado) {
+        this.productoSeleccionado = productoSeleccionado;
+    }
+
+    public SessionMb getSessionMb() {
+        return sessionMb;
+    }
+
+    public void setSessionMb(SessionMb sessionMb) {
+        this.sessionMb = sessionMb;
+    }
+    
 
 }
