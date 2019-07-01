@@ -200,12 +200,38 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         /**
          * Editar los datos de la primera sucursal por defecto
          */
-        PersonaEstablecimiento establecimiento=persona.getEstablecimientos().get(0);
-        establecimiento.setNombreComercial(getTxtNombreLegal().getText());
+        PersonaEstablecimiento establecimiento=new PersonaEstablecimiento();
+        if(estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            if(persona.getEstablecimientos()!=null && persona.getEstablecimientos().size()>0)
+            {
+                establecimiento=persona.getEstablecimientos().get(0);                
+            }
+        }
+        
+        PersonaEstablecimiento.buildFromPersona(
+                establecimiento, 
+                getTxtNombreLegal().getText(), 
+                getjTextAreaDireccion().getText(), 
+                getjTextExtension().getText(), 
+                getjTextCelular().getText(), 
+                getjTextTelefono().getText(),
+                TipoSucursalEnum.MATRIZ
+                );
+        
+        /*establecimiento.setNombreComercial(getTxtNombreLegal().getText());
         establecimiento.setDireccion(getjTextAreaDireccion().getText());
         establecimiento.setTelefonoConvencional(getjTextTelefono().getText());
         establecimiento.setExtensionTelefono(getjTextExtension().getText());
-        establecimiento.setTelefonoCelular(getjTextCelular().getText());        
+        establecimiento.setTelefonoCelular(getjTextCelular().getText());
+        establecimiento.setTipoSucursalEnum(TipoSucursalEnum.MATRIZ);*/
+        
+        if(estadoFormulario.equals(ESTADO_GRABAR))
+        {
+            establecimiento.setCodigoSucursal("1");
+            persona.addEstablecimiento(establecimiento);        
+        }
+        
         
     }
 
@@ -978,7 +1004,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         personaEstablecimientoEditar= persona.getEstablecimientos().get(filaSeleccionada);
         
         getTxtNombreLegalEstablecimiento().setText(personaEstablecimientoEditar.getNombreComercial());
-        getTxtCodigoEstablecimiento().setValue(new Integer(personaEstablecimientoEditar.getCodigoSucursal()));
+        String codigoEstablecimiento=(personaEstablecimientoEditar.getCodigoSucursal()!=null)?personaEstablecimientoEditar.getCodigoSucursal():"1";
+        getTxtCodigoEstablecimiento().setValue(new Integer(codigoEstablecimiento));
+        
         getjTextAreaDireccionEstablecimiento().setText(personaEstablecimientoEditar.getDireccion());
         getjTextExtensionEstablecimiento().setText(personaEstablecimientoEditar.getExtensionTelefono());
         getjTextCelularEstablecimiento().setText(personaEstablecimientoEditar.getTelefonoCelular());
@@ -994,4 +1022,5 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         
     }
     
+
 }

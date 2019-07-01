@@ -168,7 +168,16 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                     
             if(compra.getCodigoSustentoSri()==null)
             {
-                compraAts.setCodSustento(SriSustentoComprobanteEnum.CREDITO_TRIBUTARIO_IVA.getCodigo()); //TODO: Por defecto dejo este valor para tener retrocompatiblidad con datos anteriores
+                if(compra.getDetalles().get(0).getCodigoSustentoSriEnum()==null) //Si tampoco en el detalle tiene un dato definido lo pongo como null 
+                {
+                    compraAts.setCodSustento(SriSustentoComprobanteEnum.CREDITO_TRIBUTARIO_IVA.getCodigo()); //TODO: Por defecto dejo este valor para tener retrocompatiblidad con datos anteriores
+                }
+                else
+                {
+                    //TODO: Esta parte toca revisar porque solo estoy seleccionado por el momento el primer item para obtener ekl codigo de sustento tributario
+                    //TODO: Pero lo correcto es si tiene distintos valores por cada detalle hacer varios registros agrupando los similares
+                    compraAts.setCodSustento((compra.getDetalles().get(0).getCodigoSustentoSri()));
+                }
             }else
             {
                 compraAts.setCodSustento(compra.getCodigoSustentoSri());
@@ -274,6 +283,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         return comprasAts;
         
     }
+    
     
     private List<RetencionDetalle> consultarRetencionesRenta(Compra compra,SriRetencion sriRetencion) throws RemoteException
     {

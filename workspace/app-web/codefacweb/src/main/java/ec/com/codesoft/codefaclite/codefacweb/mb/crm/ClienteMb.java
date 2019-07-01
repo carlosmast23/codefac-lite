@@ -38,6 +38,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 
 /**
  *
@@ -50,14 +51,13 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
     private static final String TITULO_CLIENTE="Cliente";
     private static final String TITULO_PROVEEDOR="Proveedor";
     private Persona cliente;
-    //private Persona.TipoIdentificacionEnum[] identificacionesEnumList;
     private List<Nacionalidad> nacionalidadesList;
     private GeneralEnumEstado[] estadosEnumList;
     private String tiposClientes[];
     private OperadorNegocioEnum operadoresNegocio[];
     private List<SriFormaPago> sriFormaPagoList;
 
-    //private Persona.TipoIdentificacionEnum identificacionSeleccionada;
+
     private Nacionalidad nacionalidadSeleccionada;
     private GeneralEnumEstado estadoSeleccionada;
     private OperadorNegocioEnum operadorNegocioSeleccionado;
@@ -65,16 +65,22 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
     private String tituloPagina;
 
     private Boolean identificacionPasaporte;
+    private PersonaEstablecimiento establecimientoDefecto;
 
     @PostConstruct
     private void init() {
-        String titulo=UtilidadesWeb.buscarParametroPeticion("tipo");
-        if(titulo.equals("cliente"))
+        
+        if(tituloPagina==null)
         {
-            tituloPagina=TITULO_CLIENTE;
-        }else if(titulo.equals("proveedor"))
-        {
-            tituloPagina=TITULO_PROVEEDOR;
+            UtilidadesWeb.buscarParametroPeticion("tipo");        
+            String titulo=UtilidadesWeb.buscarParametroPeticion("tipo");
+            if(titulo.equals("cliente"))
+            {
+                tituloPagina=TITULO_CLIENTE;
+            }else if(titulo.equals("proveedor"))
+            {
+                tituloPagina=TITULO_PROVEEDOR;
+            }
         }
         
         cliente = new Persona();
@@ -90,11 +96,13 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
-        setearDatos();
+        setearDatos(false);
         if (validarDatosVista()) {
             try {
                 cliente=ServiceFactory.getFactory().getPersonaServiceIf().grabar(cliente);
-                mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+                //mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+                MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+                nuevo();
 
             } catch (ServicioCodefacException ex) {
                 MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
@@ -109,14 +117,15 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
 
     @Override
     public void editar() throws ExcepcionCodefacLite, UnsupportedOperationException {
-        setearDatos();
+        setearDatos(true);
         if (validarDatosVista()) {
             try {
                 ServiceFactory.getFactory().getPersonaServiceIf().editar(cliente);
-                mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+                MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+                nuevo();
 
             } catch (ServicioCodefacException ex) {
-                mostrarDialogoResultado(new CodefacMsj("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO));
+                MensajeMb.mostrarMensajeDialogo(new CodefacMsj("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO));
                 Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
             } catch (RemoteException ex) {
                 Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -161,6 +170,13 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
 
         //Setear al forma de defecto
         sriFormaPagoSeleccionada = cliente.getSriFormaPago();
+        
+        //Setear el primer establecimiento para editar
+        if(cliente.getEstablecimientos()!=null && cliente.getEstablecimientos().size()>0)
+            establecimientoDefecto=cliente.getEstablecimientos().get(0);
+        else
+            establecimientoDefecto=new PersonaEstablecimiento();
+        
 
     }
 
@@ -234,15 +250,21 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
 
     }
 
-    public void setearDatos() {
-        System.out.println("---seteando datos---");
+    public void setearDatos(Boolean editar) {
+
         cliente.setTipoIdentificacionEnum(obtenerTipoIdentificacion());
         cliente.setNacionalidad(nacionalidadSeleccionada);
         cliente.setEstadoEnum(estadoSeleccionada);
         cliente.setSriFormaPago(sriFormaPagoSeleccionada);
         cliente.setTipoEnum(operadorNegocioSeleccionado);
-        System.out.println("---->" + cliente.getIdentificacion());
-        System.out.println("---->" + cliente.getTipoIdentificacion());
+        
+        if(!editar) //Cuando se va a grabar
+        {
+            establecimientoDefecto.setCodigoSucursal("1");
+            establecimientoDefecto.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
+            cliente.addEstablecimiento(establecimientoDefecto);
+        }
+        
 
     }
 
@@ -313,6 +335,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
     }
 
     private void cargarDatosDefecto() {
+        establecimientoDefecto=new PersonaEstablecimiento();
         cliente.setDiasCreditoCliente(0);
 
         try {
@@ -327,6 +350,11 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         {
             operadorNegocioSeleccionado=OperadorNegocioEnum.PROVEEDOR;
         }
+    }
+    
+    public void ejemplo()
+    {
+    
     }
 
     public void eventoNombreKeyUp() {
@@ -348,7 +376,16 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         this.tituloPagina = tituloPagina;
     }
 
+    public PersonaEstablecimiento getEstablecimientoDefecto() {
+        return establecimientoDefecto;
+    }
 
+    public void setEstablecimientoDefecto(PersonaEstablecimiento establecimientoDefecto) {
+        this.establecimientoDefecto = establecimientoDefecto;
+    }
+
+
+    
     
 
 }

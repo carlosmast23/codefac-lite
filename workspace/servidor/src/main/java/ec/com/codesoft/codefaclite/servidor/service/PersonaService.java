@@ -74,8 +74,13 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
                     throw new ServicioCodefacException("La razón social no puede ser vacia");
                 }
                 
+                if(p.getEstablecimientos()==null || p.getEstablecimientos().size()==0)
+                {
+                    throw new ServicioCodefacException("No se puede crear el registro sin establecimientos");
+                }
+                
 
-                if (p.getEstablecimientos() == null || p.getEstablecimientos().size() == 0) {
+                /*if (p.getEstablecimientos() == null || p.getEstablecimientos().size() == 0) {
                     //Si no tiene un establecimiento lo creo automaticamente 
                     PersonaEstablecimiento personaEstablecimiento = PersonaEstablecimiento.buildFromPersona(p);
                     personaEstablecimiento.setCodigoSucursal("1");
@@ -89,7 +94,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
                     
                     //entityManager.persist(personaEstablecimiento);
                     p.addEstablecimiento(personaEstablecimiento);
-                }
+                }*/
 
                 p.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                 for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) {

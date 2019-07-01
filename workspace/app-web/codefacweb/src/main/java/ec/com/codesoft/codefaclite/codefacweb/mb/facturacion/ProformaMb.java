@@ -200,22 +200,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
                         return dato.getPreimpreso();
                     }
                 });
-                /*
-                BarraProgreso barraProgreso=new BarraProgreso(factura,new BarraProgreso.InterfazBoton() {
-                    public void alertaListener() {
-                        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-
-                    public void imprimirListener(Object dato) {
-                        Factura factura= (Factura) dato;
-                        imprimirFactura(factura);
-                    }
-
-                    public String tituloBarra(Object dato) {
-                        Factura factura= (Factura) dato;
-                        return factura.getPreimpreso();
-                    }
-                });*/
+                
                 
                 
                 ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();

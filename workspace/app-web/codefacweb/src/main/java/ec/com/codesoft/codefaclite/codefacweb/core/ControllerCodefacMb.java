@@ -71,6 +71,11 @@ public class ControllerCodefacMb implements Serializable {
           
           
     }
+    
+    public void aceptar()
+    {
+    
+    }
 
     public void nuevo() {
         System.out.println("presionado boton nuevo");

@@ -37,3 +37,8 @@ Revisar para la escuela crecer
 		-> Ver si puedo configurar con footer general para todos los mensajes
 	-> Ver alguna forma de copiar los cursos, rubros y configuraciones del periodo anterior para el nuevo periodo
 	-> Agregar la fecha de pago en los rubros para poder enviar un reporte de deudas vencidas
+
+En los ats terminar de hacer correctamente que divida en varios registros de compras agrupadas por el sustento tributario
+Ver si en el ciclo de vida de la parte web , es necesario contralar el limpiar manualemene despues de grabar o editar o se debe programar siempre , esto genera problemas cuando existe un cuadro de dialogo para mostrar resultados e imprimir algo necesito que siga vivo el objeto
+	-Analizar si agregar una variable para controlar este ciclo de vida para los casos especiales cuando se necesite mostrar el dialogo de resultados
+	Nota: Ver si puedo agregar un parametro al iniciar la pagina jsf para indicarle al controlador como actuar

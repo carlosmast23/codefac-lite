@@ -40,8 +40,8 @@ import org.primefaces.event.SelectEvent;
 @ManagedBean
 @RequestScoped
 public class LoginMb implements Serializable {
-    //private static final String PAGINA_INICIO_ADMIN="indexCodefac";
-    private static final String PAGINA_INICIO_ADMIN="proforma";
+    private static final String PAGINA_INICIO_ADMIN="indexCodefac";
+    //private static final String PAGINA_INICIO_ADMIN="proforma";
 
     private String nick;
     private String clave;

@@ -160,16 +160,17 @@ public class PersonaEstablecimiento implements  Serializable{
     }
     
     
-    public static PersonaEstablecimiento buildFromPersona(Persona persona)
+    public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String nombreComercial,String direccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum)
     {
-        PersonaEstablecimiento personaEstablecimiento = new PersonaEstablecimiento();
-        personaEstablecimiento.setNombreComercial(persona.getNombreLegal());
-        personaEstablecimiento.setDireccion(persona.getDireccion());
-        personaEstablecimiento.setExtensionTelefono((persona.getExtensionTelefono()));
-        personaEstablecimiento.setPersona(persona);
-        personaEstablecimiento.setTelefonoCelular((persona.getTelefonoCelular()));
-        personaEstablecimiento.setTelefonoConvencional(persona.getTelefonoConvencional());
-        return personaEstablecimiento;
+        //PersonaEstablecimiento personaEstablecimiento = new PersonaEstablecimiento();
+        establecimiento.setNombreComercial(nombreComercial);
+        establecimiento.setDireccion(direccion);
+        establecimiento.setExtensionTelefono(extensionTelefono);
+        //establecimiento.setPersona(persona);
+        establecimiento.setTelefonoCelular(telefonoCelular);
+        establecimiento.setTelefonoConvencional(telefonoConvencional);
+        establecimiento.setTipoSucursalEnum(tipoEnum);
+        return establecimiento;
     }
     
     

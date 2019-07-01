@@ -103,7 +103,6 @@
                             <p:commandButton icon="home-icon" process="@this" class="button-menu" title="Home" action="indexCodefac" />
 
                             <p:commandButton icon="new-icon" class="button-menu" title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}" update="panelContenido">
-                                <p:resetInput target="panelContenido"/>
                             </p:commandButton>
 
                             <p:commandButton icon="save-icon"  class="button-menu" type="button" onclick="PF('dialogConfirmarGrabar').show()" title="Grabar" disabled="false" >                                
@@ -225,7 +224,7 @@
                         <p:outputLabel value="#{controllerCodefacMb.generalAbstractMb.resultadoDialogo.mensaje}" />
                         <f:facet name="footer"  >
                             <div style="text-align: center">
-                                <p:commandButton value="Si" process="@form" actionListener="#{controllerCodefacMb.save()}" update="messages,idDialogResultado,:formulario:panelSecundario:barMonitor,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
+                                <p:commandButton value="Aceptar" process="@form" actionListener="#{controllerCodefacMb.nuevo()}" update="messages,idDialogResultado,:formulario:panelSecundario:barMonitor,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
                                 <p:commandButton value="Imprimir" process="@this" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" icon="ui-icon-print" />
                             </div>
                         </f:facet>
