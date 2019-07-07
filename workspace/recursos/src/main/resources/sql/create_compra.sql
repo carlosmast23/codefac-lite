@@ -71,6 +71,7 @@ create table COMPRA_DETALLE
     IVA decimal(13,2),
     TOTAL decimal(13,2),
     DESCRIPCION varchar(150),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.7.9.4)*/
     CODIGO_SUSTENTO_SRI varchar(16),
     primary key (ID)
 );
