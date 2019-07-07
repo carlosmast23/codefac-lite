@@ -175,7 +175,18 @@ public class ControladorReporteGuiaRemision {
         Collections.sort(listReporte,new Comparator<GuiaTransporteData>() {
             @Override
             public int compare(GuiaTransporteData o1, GuiaTransporteData o2) {
-                return o1.getIdentififacion().compareTo(o2.getIdentififacion())+o1.getFechaInicio().compareTo(o2.getFechaInicio());
+                if(o1.getIdentififacion().equals("0103445417001") && o2.getIdentififacion().equals("1723612030"))
+                {
+                    System.out.println("Comparando"+o1.getIdentififacion()+"=>"+o2.getIdentififacion());
+                }
+                
+                int comparacion=o1.getDestinatarios().compareTo(o2.getDestinatarios());
+                if(comparacion==0) //Si las identificaciones son iguales procedo a compar por el siguiente campo
+                {
+                    comparacion=o1.getFechaInicio().compareTo(o2.getFechaInicio());
+                }
+                //return o1.getIdentififacion().compareTo(o2.getIdentififacion())+o1.getFechaInicio().compareTo(o2.getFechaInicio());
+                return comparacion;
             }
         });
     }

@@ -27,6 +27,7 @@ nb-configuration.xml
 /workspace/main/Derby2.DB.bk2/
 /workspace/main/Derby2.DB.escuela/
 /workspace/main/Derby2.DB2/
+/workspace/main/Derby2.DB.original/
 #excluir archivo temporal
 /workspace/main/tmp/
 
@@ -57,6 +58,7 @@ workspace/main/codefac.ini
 /workspace/main/lib/
 /workspace/main/codefac.jar
 /workspace/main/updater.jar
+/workspace/main/key.codefac.original
 /workspace/main/key.codefac
 /workspace/main/key.codefac.bk
 /workspace/main/key.codefac.bk2

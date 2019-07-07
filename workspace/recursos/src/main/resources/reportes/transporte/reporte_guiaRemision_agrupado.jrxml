@@ -74,7 +74,7 @@
 	</variable>
 	<variable name="CANTIDAD_CLIENTE" class="java.lang.String"/>
 	<group name="grupo_cliente">
-		<groupExpression><![CDATA[$F{identififacion}]]></groupExpression>
+		<groupExpression><![CDATA[$F{destinatarios}]]></groupExpression>
 		<groupHeader>
 			<band height="21">
 				<textField>
@@ -86,11 +86,11 @@
 						<bottomPen lineWidth="1.0" lineStyle="Double"/>
 						<rightPen lineWidth="1.0" lineStyle="Double"/>
 					</box>
-					<textElement textAlignment="Center">
-						<font size="14"/>
+					<textElement>
+						<font size="13"/>
 						<paragraph leftIndent="4" rightIndent="4"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{identififacion}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{destinatarios}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
