@@ -2474,6 +2474,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Agregar los tipos de documentos disponibles
         getCmbTipoDocumento().removeAllItems();
         List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION,session.getModulos());
+        
+        if(tipoDocumentos.size()==0)
+        {
+            DialogoCodefac.mensaje("Advertencia","No tiene disponible ningun modo para facturar",DialogoCodefac.MENSAJE_INCORRECTO);
+        }
+        
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
             getCmbTipoDocumento().addItem(tipoDocumento);
         }
