@@ -80,6 +80,12 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> implements Seri
      */
     @Column(name = "IVA")
     private BigDecimal iva;
+    
+    /**
+     * Valor del iva cobrado
+     */
+    @Column(name = "VALOR_ICE")
+    private BigDecimal ice;
 
     //@Column(name = "IVA_SRI_ID")
     @JoinColumn(name = "IVA_SRI_ID")
@@ -308,6 +314,16 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> implements Seri
         this.sucursal = sucursal;
     }
 
+    public BigDecimal getIce() {
+        return ice;
+    }
+
+    public void setIce(BigDecimal ice) {
+        this.ice = ice;
+    }
+
+    
+    
     
     
     
@@ -471,9 +487,14 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> implements Seri
         BigDecimal impuestoIva=BigDecimal.ZERO; //
         
         BigDecimal ivaDecimal=BigDecimal.ZERO; //Todo: Variable donde se almacena el iva de uno de los detalles (pero si tuviera varias ivas distintos de 0 , se generaria poroblemas)
+        BigDecimal ice=BigDecimal.ZERO;
         
         for (FacturaDetalle detalle : detalles) {
+            
+            //Sumar el valor del Ice
+            ice=ice.add(detalle.getValorIce());
             //Sumar los subtotales
+            //TODO: Ver si estos calculos los puede hacer internamente en la clase FacturaDetalle
             if(detalle.getIvaPorcentaje().equals(0))
             {
                 subTotalSinImpuestos=subTotalSinImpuestos.add(detalle.getPrecioUnitario().multiply(detalle.getCantidad()));
@@ -485,16 +506,20 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> implements Seri
                 descuentoConImpuestos=descuentoConImpuestos.add(detalle.getDescuento());
                 
                 ivaDecimal=new BigDecimal(detalle.getIvaPorcentaje().toString()).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
-                impuestoIva=subTotalConImpuestos.subtract(descuentoConImpuestos).multiply(ivaDecimal);
+                impuestoIva=subTotalConImpuestos.add(ice).subtract(descuentoConImpuestos).multiply(ivaDecimal);
             }
+            
            
             
         }
         
+        this.ice=ice;
+        
         //Calcula el total de los totales
         total=subTotalSinImpuestos.subtract(descuentoSinImpuestos)
                 .add(subTotalConImpuestos.subtract(descuentoConImpuestos))
-                .add(impuestoIva);
+                .add(impuestoIva)
+                .add(ice);
         
        
         /**

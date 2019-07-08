@@ -1715,6 +1715,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getLblSubtotalSinImpuesto().setText("" + factura.getSubtotalSinImpuestos().add(factura.getSubtotalImpuestos()));
         getLblSubtotal12().setText("" + factura.getSubtotalImpuestos());
         getLblSubtotal0().setText("" + factura.getSubtotalSinImpuestos());
+        getLblValorIce().setText(""+factura.getIce());
         getLblIva12().setText("" + factura.getIva());
         getTxtValorTotal().setText("" + this.factura.getTotal());
         getLblSubTotalDescuentoConImpuesto().setText("" + factura.getDescuentoImpuestos());
@@ -2273,8 +2274,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 facturaDetalle.setPrecioUnitario(valorTotalUnitario);
                 
                 
-                facturaDetalle.setValorIce(BigDecimal.ZERO);
-                
+                                
                 BigDecimal descuento;
                 if (!getCheckPorcentaje().isSelected()) { //Cuando no es porcentaje el valor se setea directo
                     if (!getTxtDescuento().getText().equals("")) {
@@ -2303,12 +2303,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                  */
                 facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
                 
-                if (catalogoProducto.getIva().getTarifa().equals(0)) {
+                if(catalogoProducto.getIce()!=null)
+                {
+                    facturaDetalle.calcularValorIce(catalogoProducto.getIce().getPorcentaje());
+                }
+                
+                facturaDetalle.calculaIva();
+                //facturaDetalle.calcularValorIce(catalogoProducto.getIce().getPorcentaje())
+                
+                /*if (catalogoProducto.getIva().getTarifa().equals(0)) {
                     facturaDetalle.setIva(BigDecimal.ZERO);
                 } else {
                     BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
                     facturaDetalle.setIva(iva);
-                }
+                }*/
                 
                 if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) >= 0) {
                     

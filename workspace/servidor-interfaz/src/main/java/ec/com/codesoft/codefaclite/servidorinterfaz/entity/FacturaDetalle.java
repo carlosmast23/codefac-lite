@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 import javax.inject.Singleton;
 import javax.persistence.Column;
@@ -26,6 +28,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "FACTURA_DETALLE")
 public class FacturaDetalle implements Serializable {
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,10 +43,10 @@ public class FacturaDetalle implements Serializable {
     private BigDecimal descuento;
     @Column(name = "VALOR_ICE")
     private BigDecimal valorIce;
-    
-    @Column(name = "DESCRIPCION" ,length = 150)
+
+    @Column(name = "DESCRIPCION", length = 150)
     private String descripcion;
-    
+
     /**
      * El total del detalle corresonde a la siguiente formular
      * Total=cantidad*valorUnitario-descuento
@@ -52,33 +55,31 @@ public class FacturaDetalle implements Serializable {
     private BigDecimal total;
     @Column(name = "IVA")
     private BigDecimal iva;
-    
+
     @Column(name = "IVA_PORCENTAJE")
     private Integer ivaPorcentaje;
-    
+
     @Column(name = "ICE_PORCENTAJE")
     private BigDecimal icePorcentaje;
-    
-    
-    @JoinColumn(name="FACTURA_ID")
+
+    @JoinColumn(name = "FACTURA_ID")
     @ManyToOne(optional = false)
     private Factura factura;
-    
+
     @Column(name = "REFERENCIA_ID")
     private Long referenciaId;
-    
+
     @Column(name = "TIPO_REFERENCIA")
     private String tipoDocumento;
-    
 
     public FacturaDetalle() {
+        valorIce=BigDecimal.ZERO;
+        icePorcentaje=BigDecimal.ZERO;
     }
-    
+
     public Long getId() {
         return id;
     }
-
-
 
     public BigDecimal getCantidad() {
         return cantidad;
@@ -99,8 +100,6 @@ public class FacturaDetalle implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
-
 
     public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
@@ -206,51 +205,58 @@ public class FacturaDetalle implements Serializable {
         }
         return true;
     }
-    
-    
+
     /**
-     * ====================> METODOS PERSONALIZADOS <=====================     * 
+     * ====================> METODOS PERSONALIZADOS <===================== *
      */
-    public void calcularTotalDetalle()
-    {
+    public void calcularValorIce(BigDecimal porcentajeIce) {
+        if(porcentajeIce.compareTo(BigDecimal.ZERO)>0)
+        {
+            this.icePorcentaje=porcentajeIce;
+            this.valorIce=UtilidadBigDecimal.calcularValorPorcentaje(porcentajeIce, getSubtotalSinDescuentos()).setScale(2, RoundingMode.HALF_UP);        
+        }
+    }
+
+    
+    public void calcularTotalDetalle() {
         BigDecimal setTotal = getCantidad().multiply(getPrecioUnitario()).subtract(getDescuento());
-        total=setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);        
+        total = setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
     
-    public void calculaIva()
+    public BigDecimal totalSinImpuestosConRise()
     {
-        BigDecimal valorIvaDecimal=new BigDecimal(ivaPorcentaje.toString()).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP);        
-        iva = getTotal().multiply(valorIvaDecimal).setScale(2, BigDecimal.ROUND_HALF_UP);        
+        return total.add(valorIce);
     }
 
+    public void calculaIva() {
+        BigDecimal valorIvaDecimal = new BigDecimal(ivaPorcentaje.toString()).divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+        iva = getTotal().add(valorIce).multiply(valorIvaDecimal).setScale(2, BigDecimal.ROUND_HALF_UP); //Para calcular el iva tomo en cuenta el vlaor del Ice
+    }
 
-    public TipoDocumentoEnum getTipoDocumentoEnum()
-    {
+    public TipoDocumentoEnum getTipoDocumentoEnum() {
         return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(this.tipoDocumento);
     }
-    
+
     public void setTipoDocumentoEnum(TipoDocumentoEnum tipoDocumentoEnum) {
         this.tipoDocumento = tipoDocumentoEnum.getCodigo();
     }
-    
+
     /**
      * Metodos personalizados
-     * @return 
+     *
+     * @return
      */
-    public BigDecimal getSubtotalSinDescuentos()
-    {
+    public BigDecimal getSubtotalSinDescuentos() {
         return precioUnitario.multiply(cantidad);
     }
-    
+
     /**
      * Metodos que devuelve el subtotal restado impuestos
-     * @return 
+     *
+     * @return
      */
-    public BigDecimal getSubtotalRestadoDescuentos()
-    {
+    public BigDecimal getSubtotalRestadoDescuentos() {
         return precioUnitario.multiply(cantidad).subtract(descuento);
     }
 
-        
-    
 }

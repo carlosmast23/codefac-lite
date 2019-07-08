@@ -679,7 +679,8 @@ public class Main {
             /**
              * Agregando Hilo de Publicidad si es usuario Gratuito
              */
-            if (session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS)) {
+            if (session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS) && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) 
+            {
                 HiloPublicidadCodefac hiloPublicidad = new HiloPublicidadCodefac(panel);
                 hiloPublicidad.setPublicidades(obtenerPublicidades());
                 hiloPublicidad.start();

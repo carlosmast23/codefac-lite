@@ -58,6 +58,8 @@ create table FACTURA
     TIPO_AMBIENTE varchar(1),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.7.0.4)*/
     FECHA_AUTORIZACION_SRI date,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.7.9.5)*/
+    VALOR_ICE decimal(13,2),
     
     primary key (ID),
     CONSTRAINT id_cliente_factura_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID)

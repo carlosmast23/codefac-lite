@@ -53,27 +53,36 @@ public class FacturaElectronicaReporte extends ComprobanteElectronicoReporte{
         BigDecimal subTotalCero=BigDecimal.ZERO;
         BigDecimal subTotalImpuesto=BigDecimal.ZERO;
         BigDecimal iva=BigDecimal.ZERO;
+        BigDecimal ice=BigDecimal.ZERO;
         
         for (TotalImpuesto impuesto : impuestos) {
-            if(impuesto.getValor().compareTo(BigDecimal.ZERO)==0)
+            
+            if(impuesto.getCodigo().equals("2"))//TODO: Parametriza esta valor por el momento e codigo 1 significa IVA
             {
-                //subTotalCero=subTotalCero.add(impuesto.getBaseImponible().add(new BigDecimal(impuesto.getDescuentoAdicional())));
-                subTotalCero=subTotalCero.add(impuesto.getBaseImponible());
-                
+                if(impuesto.getValor().compareTo(BigDecimal.ZERO)==0)
+                {
+                    subTotalCero=subTotalCero.add(impuesto.getBaseImponible());
+
+                }
+                else
+                {
+                    subTotalImpuesto=subTotalImpuesto.add(impuesto.getBaseImponible());
+                    iva=iva.add(impuesto.getValor());
+                }
             }
-            else
+            else if(impuesto.getCodigo().equals("3")) //TODO: Parametrizar este valor por el momento significa ICE
             {
-                //subTotalImpuesto=subTotalImpuesto.add(impuesto.getBaseImponible().add(new BigDecimal(impuesto.getDescuentoAdicional())));
-                subTotalImpuesto=subTotalImpuesto.add(impuesto.getBaseImponible());
-                iva=iva.add(impuesto.getValor());
+                ice=ice.add(impuesto.getValor());
             }
         }
         
         Map<String,Object> map=new HashMap<String,Object>();
+        
         map.put("subtotal_cero",subTotalCero.toString());
         map.put("subtotal",subTotalImpuesto.toString());
         map.put("descuento",facturaComprobante.getInformacionFactura().getTotalDescuento().toString());
         
+        map.put("ice",ice.toString());
         map.put("iva",iva.toString());
         map.put("total",facturaComprobante.getInformacionFactura().getImporteTotal()+"");
         /**
