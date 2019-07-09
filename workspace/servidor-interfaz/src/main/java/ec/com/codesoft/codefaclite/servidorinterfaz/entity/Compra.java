@@ -85,6 +85,8 @@ public class Compra implements Serializable {
     @Column(name = "SUBTOTAL_IVA_CERO")
     private BigDecimal subtotalSinImpuestos;
     
+    @Column(name = "VALOR_ICE")
+    private BigDecimal ice;
     /**
      * Valor del iva cobrado
      */
@@ -160,6 +162,7 @@ public class Compra implements Serializable {
     public Compra() {
         this.descuentoImpuestos=BigDecimal.ZERO;
         this.descuentoSinImpuestos=BigDecimal.ZERO;
+        this.ice=BigDecimal.ZERO;
         
     }
     
@@ -487,6 +490,14 @@ public class Compra implements Serializable {
     public void setCodigoSustentoSriEnum(SriSustentoComprobanteEnum codigoEnum) {
         this.codigoSustentoSri = codigoEnum.getCodigo();
     }
+
+    public BigDecimal getIce() {
+        return ice;
+    }
+
+    public void setIce(BigDecimal ice) {
+        this.ice = ice;
+    }
     
     
     
@@ -533,6 +544,7 @@ public class Compra implements Serializable {
     
    
     /**
+     * @deprecated ver como hacer que no depende del iva externamente porque va a ocacionar problemas al cargar los datos , y ver si los calculos del iva depende de los detalles y en esta pantalla solo sumariza
      * Informacion adicional
      * TODO: Ver si en vez de enviar el iva desde el formulario se puede grabar el dato para calcular internamente 
      */
@@ -554,12 +566,13 @@ public class Compra implements Serializable {
                 else
                 { //Sumar los subtotales con valor 12
                     subtotalImpuestos=subtotalImpuestos.add(detalle.getTotal());
+                    
                     //iva=iva.add(detalle.getIva());
                 }
             }
             
             //Obtengo los subtotal menos los decuentos
-            subtotalImpuestos=subtotalImpuestos.subtract(descuentoImpuestos);
+            subtotalImpuestos=subtotalImpuestos.add(ice).subtract(descuentoImpuestos);
             subtotalSinImpuestos=subtotalSinImpuestos.subtract(descuentoSinImpuestos);
             
             

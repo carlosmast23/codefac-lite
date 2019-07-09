@@ -253,7 +253,8 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 retencionRentaAts.setCodRetAir(retencionRenta.getCodigoRetencionSri());
                 retencionRentaAts.setPorcentajeAir(retencionRenta.getPorcentajeRetener().setScale(2,BigDecimal.ROUND_UP));
                 retencionRentaAts.setValRetAir(retencionRenta.getValorRetenido().setScale(2,BigDecimal.ROUND_UP));
-                retencionesAts.add(retencionRentaAts);
+                //retencionesAts.add(retencionRentaAts);
+                agregarAirAts(retencionesAts,retencionRentaAts);
             }
             compraAts.setDetalleAir(retencionesAts);
             
@@ -282,6 +283,24 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
         return comprasAts;
         
+    }
+    
+    private void agregarAirAts(List<AirAts> retencionesAts,AirAts retencionRentaAts)
+    {
+        if(retencionesAts!=null)
+        {
+            for (AirAts retencionesAt : retencionesAts) {
+                //Si ya existe mismos codigos de la retencion duplicados solo los agrupo
+                if(retencionesAt.getCodRetAir().equals(retencionRentaAts.getCodRetAir()) && retencionesAt.getPorcentajeAir().equals(retencionRentaAts.getPorcentajeAir()))
+                {
+                    retencionesAt.setBaseImpAir(retencionesAt.getBaseImpAir().add(retencionRentaAts.getBaseImpAir()));
+                    retencionesAt.setValRetAir(retencionesAt.getValRetAir().add(retencionRentaAts.getValRetAir()));
+                    return;
+                }
+            }
+        }
+        //Si no encuentra un item con el mismo codigo los agrego
+        retencionesAts.add(retencionRentaAts);
     }
     
     

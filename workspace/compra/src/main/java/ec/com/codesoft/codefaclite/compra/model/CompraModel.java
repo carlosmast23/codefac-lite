@@ -164,8 +164,10 @@ public class CompraModel extends CompraPanel{
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Incorrecto","No se puede gurdar la compra",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (RemoteException ex) {
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         }
     }
     
@@ -764,6 +766,14 @@ public class CompraModel extends CompraPanel{
         }
     }
     
+    private void calcularIceImpuesto()
+    {
+        BigDecimal ice = new BigDecimal(getTxtIce().getText());
+        compra.setIce(ice.setScale(2, RoundingMode.HALF_UP));
+        actualizarTotales();
+        mostrarDatosTotales();
+    }
+    
     private void verificarExistenciadeProductoProveedor()
     {
         if(productoSeleccionado!=null)
@@ -995,7 +1005,7 @@ public class CompraModel extends CompraPanel{
 
             if(agregar)
             {
-                compra.addDetalle(compraDetalle);                
+                compra.addDetalle(compraDetalle);              
             }
             getTxtProductoItem().requestFocus(); //Despues de agregar setear nuevamente en el campo para ingresar otro codigo
             actualizarDatosMostrarVentana();
@@ -1251,6 +1261,22 @@ public class CompraModel extends CompraPanel{
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) 
                 {
                     calcularDescuentoSinImpuestosVista();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+        
+        getTxtIce().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) 
+                {
+                    calcularIceImpuesto();
                 }
             }
 
