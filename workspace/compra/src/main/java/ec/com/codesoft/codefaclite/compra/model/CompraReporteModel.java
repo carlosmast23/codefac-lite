@@ -91,6 +91,7 @@ public class CompraReporteModel extends CompraReportePanel {
 
         agregarListener();
         agregarListenerChecks();
+        agregaValoresDefecto();
         //crearVariables();
         //this.compraServiceIf = ServiceFactory.getFactory().getCompraServiceIf();
         iniciarValoresVentana();
@@ -140,14 +141,22 @@ public class CompraReporteModel extends CompraReportePanel {
                     public void excel() {
                         try {
                             
-                            if(getChkReporteAgrupadoPorCategoria().isSelected())
+                            switch((TipoReporteEnum)getCmbTipoReporte().getSelectedItem())
                             {
-                                controladorReporteCompra.reporteCompraAgrupadaCategoriaExcel();
+                                case NORMAL:
+                                    controladorReporteCompra.reporteCompraExcel();
+                                    break;
+                                    
+                                case AGRUPADO_POR_CATEGORIA:
+                                    controladorReporteCompra.reporteCompraAgrupadaCategoriaExcel();
+                                    break;
+                                    
+                                case AGRUPADO_POR_SUSTENTO_SRI:
+                                    controladorReporteCompra.reporteCompraAgrupadaCategoriaExcel();
+                                    break;
+                                    
                             }
-                            else 
-                            {
-                                controladorReporteCompra.reporteCompraExcel();
-                            }                           
+                                                 
                             
                             //excel.abrirDocumento();
 
@@ -160,13 +169,23 @@ public class CompraReporteModel extends CompraReportePanel {
                     @Override
                     public void pdf() {
                         try {
-                            if(getChkReporteAgrupadoPorCategoria().isSelected())
+                            
+                            switch((TipoReporteEnum)getCmbTipoReporte().getSelectedItem())
                             {
-                                controladorReporteCompra.reporteCompraAgrupadaCategoriaPdf(panelPadre);
-                            }else
-                            {
-                                controladorReporteCompra.reporteCompraPdf(panelPadre);
+                                case NORMAL:
+                                    controladorReporteCompra.reporteCompraPdf(panelPadre);
+                                    break;
+                                    
+                                case AGRUPADO_POR_CATEGORIA:
+                                    controladorReporteCompra.reporteCompraAgrupadaCategoriaPdf(panelPadre);
+                                    break;
+                                    
+                                case AGRUPADO_POR_SUSTENTO_SRI:
+                                    controladorReporteCompra.reporteCompraAgrupadaSustentoSriPdf(panelPadre);
+                                    break;
+                                    
                             }
+                            
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -461,5 +480,37 @@ public class CompraReporteModel extends CompraReportePanel {
                 getCmbTipoDocumento().setEnabled(!getChkTipoDocumento().isSelected());
             }
         });
+    }
+
+    private void agregaValoresDefecto() {
+        
+        getCmbTipoReporte().removeAllItems();
+        for (TipoReporteEnum tipo : TipoReporteEnum.values()) {
+            getCmbTipoReporte().addItem(tipo);
+        }
+        
+    }
+    
+    public enum TipoReporteEnum
+    {
+        NORMAL("Normal"),
+        AGRUPADO_POR_CATEGORIA("Agrupado por categoria"),
+        AGRUPADO_POR_SUSTENTO_SRI("Agrupado por sustento Sri");
+
+        private TipoReporteEnum(String nombre) {
+            this.nombre = nombre;
+        }
+        
+        private String nombre;
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
     }
 }

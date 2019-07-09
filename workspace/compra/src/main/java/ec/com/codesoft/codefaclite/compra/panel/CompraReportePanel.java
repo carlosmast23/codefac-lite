@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.compra.panel;
 
 import com.toedter.calendar.JDateChooser;
+import ec.com.codesoft.codefaclite.compra.model.CompraReporteModel.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -76,7 +77,8 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         chkTipoDocumento = new javax.swing.JCheckBox();
         btnLimpiarFechaInicial = new javax.swing.JButton();
         btnLimpiarFechaFinal = new javax.swing.JButton();
-        chkReporteAgrupadoPorCategoria = new javax.swing.JCheckBox();
+        jLabel13 = new javax.swing.JLabel();
+        cmbTipoReporte = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -388,14 +390,23 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         getContentPane().add(btnLimpiarFechaFinal, gridBagConstraints);
 
-        chkReporteAgrupadoPorCategoria.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        chkReporteAgrupadoPorCategoria.setText("Reporte Agrupado por Categoria");
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel13.setText("Tipo Reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel13, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        getContentPane().add(chkReporteAgrupadoPorCategoria, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbTipoReporte, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -539,6 +550,11 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
     public JButton getBtnLimpiarFechaInicial() {
         return btnLimpiarFechaInicial;
     }
+
+    public JComboBox<TipoReporteEnum> getCmbTipoReporte() {
+        return cmbTipoReporte;
+    }
+    
     
     
 
@@ -548,18 +564,19 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnLimpiarFechaFinal;
     private javax.swing.JButton btnLimpiarFechaInicial;
     private javax.swing.JCheckBox chkDocumento;
-    private javax.swing.JCheckBox chkReporteAgrupadoPorCategoria;
     private javax.swing.JCheckBox chkTipoDocumento;
     private javax.swing.JCheckBox chkTodos;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
+    private javax.swing.JComboBox<TipoReporteEnum> cmbTipoReporte;
     private com.toedter.calendar.JDateChooser dateFechaFinal;
     private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -582,11 +599,5 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtProveedor;
     // End of variables declaration//GEN-END:variables
 
-    public JCheckBox getChkReporteAgrupadoPorCategoria() {
-        return chkReporteAgrupadoPorCategoria;
-    }
 
-    public void setChkReporteAgrupadoPorCategoria(JCheckBox chkReporteAgrupadoPorCategoria) {
-        this.chkReporteAgrupadoPorCategoria = chkReporteAgrupadoPorCategoria;
-    }
 }

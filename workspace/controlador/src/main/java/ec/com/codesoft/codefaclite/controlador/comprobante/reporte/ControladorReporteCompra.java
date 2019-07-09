@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import java.io.File;
@@ -122,6 +123,12 @@ public class ControladorReporteCompra {
         ReporteCodefac.generarReporteInternalFramePlantilla(path, getParametros(), construirDataAgrupado(compras), panelPadre, "Reporte Compra Agrupado");
     }
     
+    public void reporteCompraAgrupadaSustentoSriPdf(InterfazComunicacionPanel panelPadre)
+    {
+        InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_compra_agrupado_sustento_sri.jrxml");
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, getParametros(), construirDataAgrupadoSri(compras), panelPadre, "Reporte Compra Sustento Sri");
+    }
+    
     //Todo:Reutilizar el otro metodo de generar el excel
     public File reporteCompraExcelGetFile() {
         try {
@@ -158,7 +165,7 @@ public class ControladorReporteCompra {
     {
         try {
             Excel excel = new Excel();
-            String[] nombreCabeceras = new String[] {"Categoria","Producto","Compra","Fecha","Subtotal12", "Sutotal0", "Descuento","IVA","Total"};
+            String[] nombreCabeceras = new String[] {"Categoria","Producto","Compra","Sustento Sri","Fecha","Subtotal12", "Sutotal0", "Descuento","IVA","Total"};
             excel.gestionarIngresoInformacionExcel(nombreCabeceras,construirDataAgrupado(compras));
             excel.abrirDocumento();
         } catch (IOException ex) {
@@ -168,6 +175,49 @@ public class ControladorReporteCompra {
         } catch (IllegalAccessException ex) {
             Logger.getLogger(ControladorReporteCompra.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public List<CompraAgrupadoCategoriaData> construirDataAgrupadoSri(List<Compra> compras) {
+        
+        Map<SriSustentoComprobanteEnum, List<CompraDetalle>> mapAgrupado = new HashMap<SriSustentoComprobanteEnum, List<CompraDetalle>>();
+        
+        for (Compra compra : compras) {            
+            for (CompraDetalle detalle : compra.getDetalles()) {
+                
+                //Si no existe un valor del sustento obtengo de la compra , esto para tener compatiblidad con los cambios anteriores
+                SriSustentoComprobanteEnum sustentoSri=null;
+                if(detalle.getCodigoSustentoSriEnum()==null)
+                {
+                    sustentoSri=compra.getCodigoSustentoSriEnum();
+                }
+                else
+                {
+                    sustentoSri=detalle.getCodigoSustentoSriEnum();
+                }   
+                
+                List<CompraDetalle> detalles = mapAgrupado.get(sustentoSri);
+                if (detalles == null) {
+                    detalles= new ArrayList<CompraDetalle>();
+                    detalles.add(detalle);
+                    mapAgrupado.put(sustentoSri, detalles);
+                } else {
+                    detalles.add(detalle);
+                }
+                
+            }
+        }
+        
+        List<CompraAgrupadoCategoriaData> resultado = new ArrayList<CompraAgrupadoCategoriaData>();
+        for (Map.Entry<SriSustentoComprobanteEnum, List<CompraDetalle>> entry : mapAgrupado.entrySet()) {
+            SriSustentoComprobanteEnum sustentoSri = entry.getKey();
+            List<CompraDetalle> detalle = entry.getValue();
+            
+            for (CompraDetalle compraDetalle : detalle) {
+                resultado.add(crearCategoriaData(compraDetalle));
+            }
+        }
+        return resultado;
+         
     }
     
     public List<CompraAgrupadoCategoriaData> construirDataAgrupado(List<Compra> compras) {
@@ -197,7 +247,7 @@ public class ControladorReporteCompra {
 
             for (CompraDetalle compraDetalle : detallesCompra) {
 
-                CompraAgrupadoCategoriaData compraAgrupadoData = new CompraAgrupadoCategoriaData();
+                /*CompraAgrupadoCategoriaData compraAgrupadoData = new CompraAgrupadoCategoriaData();
                 compraAgrupadoData.setCategoria(categoria.getNombre());
                 compraAgrupadoData.setProducto(compraDetalle.getProductoProveedor().getProducto().getNombre());
                 compraAgrupadoData.setCompra(compraDetalle.getCompra().getPreimpreso());
@@ -215,14 +265,41 @@ public class ControladorReporteCompra {
                 {
                     compraAgrupadoData.setSubtotalCero(BigDecimal.ZERO);
                     compraAgrupadoData.setSubtotalDoce((compraDetalle.getSubtotal()!=null)?compraDetalle.getSubtotal():BigDecimal.ZERO);
-                }
+                }*/
                 
-                resultado.add(compraAgrupadoData);
+                //resultado.add(compraAgrupadoData);
+                resultado.add(crearCategoriaData(compraDetalle));
             }
 
         }
 
         return resultado;
+    }
+    
+    private CompraAgrupadoCategoriaData crearCategoriaData(CompraDetalle compraDetalle) {
+        CompraAgrupadoCategoriaData compraAgrupadoData = new CompraAgrupadoCategoriaData();
+        
+        CategoriaProducto categoria=compraDetalle.getProductoProveedor().getProducto().getCatalogoProducto().getCategoriaProducto();
+        compraAgrupadoData.setCategoria((categoria!=null)?categoria.getNombre():"");
+        
+        SriSustentoComprobanteEnum sustentoSriEnum=compraDetalle.getCodigoSustentoSriEnum();
+        compraAgrupadoData.setSustentoSri((sustentoSriEnum!=null)?sustentoSriEnum.getDescripcionCorta():"");
+        
+        compraAgrupadoData.setProducto(compraDetalle.getProductoProveedor().getProducto().getNombre());
+        compraAgrupadoData.setCompra(compraDetalle.getCompra().getPreimpreso());
+        compraAgrupadoData.setFecha(compraDetalle.getCompra().getFechaFactura().toString());
+        compraAgrupadoData.setIva((compraDetalle.getIva() != null) ? compraDetalle.getIva() : BigDecimal.ZERO);
+        compraAgrupadoData.setSubtotalDescuento(compraDetalle.getDescuento());
+        compraAgrupadoData.setTotal((compraDetalle.getTotalCalculado() != null) ? compraDetalle.getTotalCalculado() : BigDecimal.ZERO);
+
+        if (compraDetalle.isImpuestoIvaCero()) {
+            compraAgrupadoData.setSubtotalCero((compraDetalle.getSubtotal() != null) ? compraDetalle.getSubtotal() : BigDecimal.ZERO);
+            compraAgrupadoData.setSubtotalDoce(BigDecimal.ZERO);
+        } else {
+            compraAgrupadoData.setSubtotalCero(BigDecimal.ZERO);
+            compraAgrupadoData.setSubtotalDoce((compraDetalle.getSubtotal() != null) ? compraDetalle.getSubtotal() : BigDecimal.ZERO);
+        }
+        return compraAgrupadoData;
     }
 
     public void sumarTotalesComprasIndividuales(List<Compra> compras) {

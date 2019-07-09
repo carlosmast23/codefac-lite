@@ -26,6 +26,9 @@ public class CompraAgrupadoCategoriaData implements ExcelDatosInterface {
     private BigDecimal subtotalDescuento;
     private BigDecimal iva;
     private BigDecimal total;
+    private String sustentoSri;
+    
+    
 
     public CompraAgrupadoCategoriaData() {
     }
@@ -102,6 +105,15 @@ public class CompraAgrupadoCategoriaData implements ExcelDatosInterface {
         this.fecha = fecha;
     }
 
+    public String getSustentoSri() {
+        return sustentoSri;
+    }
+
+    public void setSustentoSri(String sustentoSri) {
+        this.sustentoSri = sustentoSri;
+    }
+
+    
     
 
     @Override
@@ -110,6 +122,7 @@ public class CompraAgrupadoCategoriaData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.categoria,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.producto,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.compra,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.sustentoSri,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fecha,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.subtotalDoce,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.subtotalCero,Excel.TipoDataEnum.NUMERO));
