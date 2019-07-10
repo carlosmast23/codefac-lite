@@ -730,7 +730,10 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     private void cargarDatosAdicionalesCliente() {
         factura.eliminarTodosDatosAdicionales(); //TODO: Por el momento solo elimino todos los datos adicionales para no hacerme problema
-        factura.addDatoAdicional(new FacturaAdicional(factura.getCliente().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
+        if(factura.getCliente().getCorreoElectronico()!=null && !factura.getCliente().getCorreoElectronico().isEmpty())
+        {
+            factura.addDatoAdicional(new FacturaAdicional(factura.getCliente().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
+        }
     }
 
     public enum TipoPaginaEnum {  
