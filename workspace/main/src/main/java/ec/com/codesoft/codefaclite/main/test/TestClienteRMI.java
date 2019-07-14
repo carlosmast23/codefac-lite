@@ -27,8 +27,9 @@ import java.util.logging.Logger;
 public class TestClienteRMI {
     public static void main(String[] args) {
         try {
-            ServiceFactory.newController("192.168.100.14");
-            List<Class> listaServicios=new ArrayList<Class>();
+            //ServiceFactory.newController("186.4.212.15");
+            ServiceFactory.newController("186.4.212.15");
+            
             PersonaServiceIf personaServiceIf= ServiceFactory.getFactory().getPersonaServiceIf();
             List<Persona> buscarList= personaServiceIf.buscar();
             
@@ -60,6 +61,7 @@ public class TestClienteRMI {
             } catch (InterruptedException ex) {
             Logger.getLogger(TestClienteRMI.class.getName()).log(Level.SEVERE, null, ex);
             }*/
+        
         } catch (RemoteException ex) {
             Logger.getLogger(TestClienteRMI.class.getName()).log(Level.SEVERE, null, ex);
         }

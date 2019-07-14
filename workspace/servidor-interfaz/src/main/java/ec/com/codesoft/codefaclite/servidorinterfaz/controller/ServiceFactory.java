@@ -85,6 +85,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRem
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
+import java.rmi.Naming;
 
 /**
  *
@@ -212,7 +213,15 @@ public abstract class ServiceFactory {
         {
             try {
                 Registry registro= LocateRegistry.getRegistry(ipServidor,ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);    
-                remote= registro.lookup("rmi://"+ipServidor+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+"/"+clase.getSimpleName());
+                for (String object : registro.list()) {
+                    System.out.println("Algo==>"+object);
+                }
+                
+                //Naming.lookup(ipServidor);
+                //String ipServidorInterno="192.168.100.13";
+                //remote= registro.lookup("rmi://"+ipServidor+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+"/"+clase.getSimpleName());
+                remote= registro.lookup(clase.getName());
+                //remote= registro.lookup("ec.com.codesoft.codefaclite.servidor.service.PersonaService");
                 mapRecursosRMI.put(clase,remote);
                 
                 
