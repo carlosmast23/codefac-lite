@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.main.model;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.panel.ServidorMonitorPanel;
 import ec.com.codesoft.codefaclite.servidor.service.interfacePanel.ServidorMonitorUpdateInterface;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
@@ -45,15 +46,11 @@ public class ServidorMonitorModel extends ServidorMonitorPanel implements Servid
     }
 
     private void valoresIniciales() {
-        try {
-            //Todo: Este valor esta de revisar porque esta cogiendo por defecto el primero de la interfaz y cuando tenga varias interfacez va a generar error
-            String ipServidor=InetAddress.getLocalHost().getHostAddress();
-            getLblDireccionIp().setText(ipServidor);
-            
-            getLblEstado().setText("Activo");
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(ServidorMonitorModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //Todo: Este valor esta de revisar porque esta cogiendo por defecto el primero de la interfaz y cuando tenga varias interfacez va a generar error
+        //String ipServidor=InetAddress.getLocalHost().getHostAddress();
+        String ipServidor=UtilidadVarios.obtenerIpServidor();
+        getLblDireccionIp().setText(ipServidor);
+        getLblEstado().setText("Activo");
     }
 
     @Override

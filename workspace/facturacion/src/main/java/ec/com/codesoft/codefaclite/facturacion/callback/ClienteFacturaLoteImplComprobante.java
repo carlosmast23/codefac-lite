@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.logging.Level;
@@ -45,10 +46,12 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
     private ControladorCodefacInterface controlador;
 
     public ClienteFacturaLoteImplComprobante(ControladorCodefacInterface controlador) throws RemoteException {
+        super(Registry.REGISTRY_PORT);
         this.controlador=controlador;
     }
     
     public ClienteFacturaLoteImplComprobante(ControladorCodefacInterface controlador,InterfaceCallbakClient listener) throws RemoteException {
+        super(Registry.REGISTRY_PORT);
         this.controlador = controlador;
         this.listener=listener;
     }

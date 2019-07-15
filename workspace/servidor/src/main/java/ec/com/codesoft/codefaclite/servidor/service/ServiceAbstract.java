@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     public Object tmp;
 
     public ServiceAbstract() throws RemoteException {
+        super(Registry.REGISTRY_PORT);
         this.entityManager=AbstractFacade.entityManager;
     }
     
@@ -54,6 +56,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
  
     public ServiceAbstract(Class<Facade> clase) throws java.rmi.RemoteException
     {
+        super(Registry.REGISTRY_PORT);
         try {
             this.facade =(AbstractFacade<Entity>) clase.newInstance();
             this.entityManager=AbstractFacade.entityManager;

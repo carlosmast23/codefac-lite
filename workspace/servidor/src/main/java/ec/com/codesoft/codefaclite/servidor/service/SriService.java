@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.facade.SriFormaPagoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.SriIdentificacionFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public class SriService extends UnicastRemoteObject implements SriServiceIf
     private SriIdentificacionFacade sriIdentificacionFacade;
 
     public SriService() throws java.rmi.RemoteException {
-        super();
+        super(Registry.REGISTRY_PORT);
         this.sriFormaPagoFacade = new SriFormaPagoFacade();
         this.sriIdentificacionFacade = new SriIdentificacionFacade();
     }

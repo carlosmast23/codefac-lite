@@ -11,7 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
@@ -56,6 +58,55 @@ public abstract class UtilidadVarios {
             e.printStackTrace();
         }
         return "";
+    }
+    
+    public static String obtenerIpServidor()
+    {
+        Vector<String> excepcionesMac=new Vector<String>();
+        excepcionesMac.add("VirtualBox Host-Only Ethernet Adapter");
+        excepcionesMac.add("Microsoft Wi-Fi Direct Virtual Adapter");
+        excepcionesMac.add("Bluetooth Device (Personal Area Network)");
+        
+        try {
+            final Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
+            while (e.hasMoreElements()) 
+            {
+                NetworkInterface networkInterface=e.nextElement();
+                final byte [] mac = networkInterface.getHardwareAddress();
+                if (mac != null) {
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < mac.length; i++)
+                        sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+                    
+                    String nombreInterface=networkInterface.getName().toLowerCase();
+                    int indiceNet=nombreInterface.indexOf("eth");
+                    int indiceWlan=nombreInterface.indexOf("wlan");
+                    int indiceEnp=nombreInterface.indexOf("enp"); //Interfaces centos
+                    if((indiceNet>=0 || indiceWlan>=0 || indiceEnp>=0) && !excepcionesMac.contains(networkInterface.getDisplayName()))
+                    {
+                        System.out.println(networkInterface.getDisplayName());
+                        System.out.println(networkInterface.getName());
+                        System.out.println(sb.toString());
+                        //Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                        Enumeration<InetAddress> inetAddress = networkInterface.getInetAddresses();
+                        InetAddress currentAddress=inetAddress.nextElement();
+                        while (inetAddress.hasMoreElements()) {
+                            currentAddress = inetAddress.nextElement();
+                            
+                            if (currentAddress instanceof Inet4Address && !currentAddress.isLoopbackAddress()) {
+                                //System.out.println(currentAddress);
+                                return currentAddress.getHostAddress();
+                            }
+                        }
+                        //eturn currentAddress.getHostAddress();
+                    }
+                }
+                //break;
+            }
+        } catch (SocketException ex) {
+            Logger.getLogger(UtilidadVarios.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "localhost";
     }
     
     public static  String obtenerMacSinInternet()

@@ -29,6 +29,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.logging.Level;
@@ -47,6 +48,7 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
     private NotaCredito notaCreditoProcesando;
 
     public ClienteNotaCreditoImplComprobante(NotaCreditoModel notaCreditoModel, NotaCredito notaCreditoProcesando) throws RemoteException {
+        super(Registry.REGISTRY_PORT);
         this.notaCreditoModel = notaCreditoModel;
         this.notaCreditoProcesando = notaCreditoProcesando;
     }

@@ -87,6 +87,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
@@ -475,8 +476,8 @@ public class Main {
     /**
      * Cargar Recursos servicios protocolo RMI
      */
-    public static void cargarRecursosServidor() {
-        ControllerServiceUtil.cargarRecursosServidor();
+    public static void cargarRecursosServidor(String ipServidor) {
+        ControllerServiceUtil.cargarRecursosServidor(ipServidor);
     }
 
     public static void cargarRecursosCliente(String ipServidor) {
@@ -520,10 +521,19 @@ public class Main {
                  * Componentes iniciales que utilizo tanto para modo servidor y modo cliente-servidor
                  */
                 componentesBaseDatos(false);
-                cargarRecursosServidor();                
+                
+                ipServidor=UtilidadVarios.obtenerIpServidor();
+                //ipServidor="192.168.100.13";
+                //TODO: Esta linea se debe descomentar para funcionar con una ip publica pero generaba erro con la libreria healthmarketscience
+                System.setProperty("java.rmi.server.hostname","186.4.212.15"); 
+                System.setProperty("com.healthmarketscience.rmiio.exporter.port", "1099");
+                cargarRecursosServidor(ipServidor); 
+                
                 //Todo: Veriicar este metodo que obtiene la ip del servidor, porque cuando tienen varias interfaces o una virtual puede levantarse el servicio en una IP que no se desea
-                ipServidor = InetAddress.getLocalHost().getHostAddress();
+                //ipServidor = InetAddress.getLocalHost().getHostAddress();
+                
                 cargarRecursosCliente(ipServidor);
+                
                 
                 ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
                 //Si no existe el parametro seteo la ruta por defecto que va a ser el directorio del usuario para no tener problemas de permisos                
@@ -695,6 +705,8 @@ public class Main {
             //frameAplicacion.dispose(); //Libero el recurso de la pantalla que tiene el icono en la barra de tareas
             panel.setVisible(true);
             
+            //java.rmi.activation.port
+            //System.setProperty("java.rmi.activation.port","1099");
 
 
             

@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +39,7 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
 {
 
     public RecursosService() throws RemoteException {
+        super(Registry.REGISTRY_PORT);
     }
 
     @Override

@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,6 +65,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     private Boolean facturacionOffline;
 
     public ClienteFacturaImplComprobante(FacturacionModel facturacionModel, Factura facturaProcesando,Boolean facturacionOffline) throws RemoteException {
+        super(Registry.REGISTRY_PORT);
         this.facturacionModel = facturacionModel;
         //this.servicio = servicio;
         this.facturaProcesando = facturaProcesando;

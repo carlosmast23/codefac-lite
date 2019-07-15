@@ -37,6 +37,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -52,7 +53,7 @@ import java.util.Map;
 public class AtsService extends UnicastRemoteObject implements Serializable,AtsServiceIf {
 
     public AtsService() throws RemoteException {
-        
+        super(Registry.REGISTRY_PORT);
     }
     
     private String formatearMes(Integer mes)

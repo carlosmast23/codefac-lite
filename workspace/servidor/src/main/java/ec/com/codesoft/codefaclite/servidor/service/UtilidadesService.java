@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 import java.rmi.server.RemoteServer;
 import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
@@ -28,6 +29,7 @@ import java.util.logging.Logger;
 public class UtilidadesService extends UnicastRemoteObject implements UtilidadesServiceIf {
 
     public UtilidadesService() throws RemoteException {
+        super(Registry.REGISTRY_PORT);
     }
 
     //TODO: Verificar porque no esta funcionando este metodo

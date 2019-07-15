@@ -129,7 +129,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     
     public ComprobantesService() throws RemoteException {
-        super();
+        //super();
         clientesLista=new Vector<ClienteInterfaceComprobante>();
     }
     

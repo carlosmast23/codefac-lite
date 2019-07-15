@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.test;
 
+import ec.com.codesoft.codefaclite.servicios.controller.ControllerServiceUtil;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
@@ -68,6 +69,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
+import java.util.Scanner;
 
 /**
  *
@@ -77,9 +79,11 @@ public class TestPruebaRMI {
     public static void main(String[] args) {
         try {
             //try {
+            AbstractFacade.usuarioDb="root";
+            AbstractFacade.claveDb="1234";
             AbstractFacade.cargarEntityManager();
             //PersonaServiceIf servicioIf;
-            
+            /*
             Map<Class,Class> mapRecursos=new HashMap<Class, Class>();
             
             mapRecursos.put(ProductoService.class,ProductoServiceIf.class);
@@ -106,7 +110,10 @@ public class TestPruebaRMI {
             mapRecursos.put(SriService.class,SriServiceIf.class);
             mapRecursos.put(UsuarioServicio.class, UsuarioServicioIf.class);
             mapRecursos.put(UtilidadesService.class,UtilidadesServiceIf.class);
-            ServiceControllerServer.cargarRecursos(mapRecursos);
+            */
+            System.setProperty("java.rmi.server.hostname","186.4.212.15");
+            ControllerServiceUtil.cargarRecursosServidor("192.168.100.13");
+            //ServiceControllerServer.cargarRecursos(mapRecursos,"1099");
             System.out.println("servidor iniciado");
             /*
             String host=InetAddress.getLocalHost().getHostAddress();
@@ -123,6 +130,7 @@ public class TestPruebaRMI {
             } catch (UnknownHostException ex) {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
             }*/
+            new Scanner(System.in).next();
         } catch (PersistenceException ex) {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PersistenciaDuplicadaException ex) {

@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +51,7 @@ public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implemen
 
 
     public ClienteUtilidadImplComprobante(UtilidadComprobanteAvanzadoModel panel) throws RemoteException {
+        super(Registry.REGISTRY_PORT);
         this.panel=panel;
     }
 

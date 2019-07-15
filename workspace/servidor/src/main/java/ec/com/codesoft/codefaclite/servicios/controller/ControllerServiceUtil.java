@@ -160,7 +160,7 @@ public abstract class ControllerServiceUtil {
     private static final Logger LOG = Logger.getLogger(ControllerServiceUtil.class.getName());
     
     
-    public static void cargarRecursosServidor() {
+    public static void cargarRecursosServidor(String host) {
         try {
             //AbstractFacade.cargarEntityManager();
 
@@ -238,7 +238,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(FacturaDetalleService.class, FacturaDetalleServiceIf.class);
             mapRecursos.put(TipoDocumentoService.class, TipoDocumentoServiceIf.class);
             
-            ServiceControllerServer.cargarRecursos(mapRecursos);
+            ServiceControllerServer.cargarRecursos(mapRecursos,host);
             LOG.log(Level.INFO,"Servidor Iniciado");
 
         } catch (PersistenceException ex) {

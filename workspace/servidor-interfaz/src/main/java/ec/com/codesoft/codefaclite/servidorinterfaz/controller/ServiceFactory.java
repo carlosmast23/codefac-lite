@@ -213,9 +213,9 @@ public abstract class ServiceFactory {
         {
             try {
                 Registry registro= LocateRegistry.getRegistry(ipServidor,ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);    
-                for (String object : registro.list()) {
-                    System.out.println("Algo==>"+object);
-                }
+                //for (String object : registro.list()) {
+                //    System.out.println("Algo==>"+object);
+                //}
                 
                 //Naming.lookup(ipServidor);
                 //String ipServidorInterno="192.168.100.13";
