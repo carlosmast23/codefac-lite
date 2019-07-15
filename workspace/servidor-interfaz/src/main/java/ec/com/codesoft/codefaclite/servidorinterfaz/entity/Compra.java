@@ -553,6 +553,7 @@ public class Compra implements Serializable {
         this.subtotalImpuestos=BigDecimal.ZERO;
         this.subtotalSinImpuestos=BigDecimal.ZERO;
         this.iva=BigDecimal.ZERO;
+        this.ice=(this.ice!=null)?this.ice:BigDecimal.ZERO;
         
         if(detalles!=null)
         {

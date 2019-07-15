@@ -28,6 +28,9 @@ public class CompraAgrupadoCategoriaData implements ExcelDatosInterface {
     private BigDecimal total;
     private String sustentoSri;
     
+    private String descripcionDetalle;
+    private String descripcionCompra;
+    
     
 
     public CompraAgrupadoCategoriaData() {
@@ -113,6 +116,23 @@ public class CompraAgrupadoCategoriaData implements ExcelDatosInterface {
         this.sustentoSri = sustentoSri;
     }
 
+    public String getDescripcionDetalle() {
+        return descripcionDetalle;
+    }
+
+    public void setDescripcionDetalle(String descripcionDetalle) {
+        this.descripcionDetalle = descripcionDetalle;
+    }
+
+    public String getDescripcionCompra() {
+        return descripcionCompra;
+    }
+
+    public void setDescripcionCompra(String descripcionCompra) {
+        this.descripcionCompra = descripcionCompra;
+    }
+
+    
     
     
 
@@ -120,6 +140,8 @@ public class CompraAgrupadoCategoriaData implements ExcelDatosInterface {
     public List<TipoDato> getDatos() {
         List<TipoDato> tiposDatos = new ArrayList<>();
         tiposDatos.add(new TipoDato(this.categoria,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.descripcionCompra,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.descripcionDetalle,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.producto,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.compra,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.sustentoSri,Excel.TipoDataEnum.TEXTO));
@@ -131,6 +153,7 @@ public class CompraAgrupadoCategoriaData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.total,Excel.TipoDataEnum.NUMERO));
         return tiposDatos;
     }
+    
     
     
 }

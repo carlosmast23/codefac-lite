@@ -91,12 +91,12 @@ public abstract class UtilidadVarios {
                         Enumeration<InetAddress> inetAddress = networkInterface.getInetAddresses();
                         InetAddress currentAddress=inetAddress.nextElement();
                         while (inetAddress.hasMoreElements()) {
-                            currentAddress = inetAddress.nextElement();
-                            
+                                                       
                             if (currentAddress instanceof Inet4Address && !currentAddress.isLoopbackAddress()) {
                                 //System.out.println(currentAddress);
                                 return currentAddress.getHostAddress();
                             }
+                            currentAddress = inetAddress.nextElement();
                         }
                         //eturn currentAddress.getHostAddress();
                     }

@@ -165,7 +165,7 @@ public class ControladorReporteCompra {
     {
         try {
             Excel excel = new Excel();
-            String[] nombreCabeceras = new String[] {"Categoria","Producto","Compra","Sustento Sri","Fecha","Subtotal12", "Sutotal0", "Descuento","IVA","Total"};
+            String[] nombreCabeceras = new String[] {"Categoria","Descripción Compra","Descripción detalle","Producto","Compra","Sustento Sri","Fecha","Subtotal12", "Sutotal0", "Descuento","IVA","Total"};
             excel.gestionarIngresoInformacionExcel(nombreCabeceras,construirDataAgrupado(compras));
             excel.abrirDocumento();
         } catch (IOException ex) {
@@ -284,6 +284,8 @@ public class ControladorReporteCompra {
         
         SriSustentoComprobanteEnum sustentoSriEnum=compraDetalle.getCodigoSustentoSriEnum();
         compraAgrupadoData.setSustentoSri((sustentoSriEnum!=null)?sustentoSriEnum.getDescripcionCorta():"");
+        compraAgrupadoData.setDescripcionCompra(compraDetalle.getCompra().getObservacion());
+        compraAgrupadoData.setDescripcionDetalle(compraDetalle.getDescripcion());
         
         compraAgrupadoData.setProducto(compraDetalle.getProductoProveedor().getProducto().getNombre());
         compraAgrupadoData.setCompra(compraDetalle.getCompra().getPreimpreso());

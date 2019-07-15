@@ -525,8 +525,8 @@ public class Main {
                 ipServidor=UtilidadVarios.obtenerIpServidor();
                 //ipServidor="192.168.100.13";
                 //TODO: Esta linea se debe descomentar para funcionar con una ip publica pero generaba erro con la libreria healthmarketscience
-                System.setProperty("java.rmi.server.hostname","186.4.212.15"); 
-                System.setProperty("com.healthmarketscience.rmiio.exporter.port", "1099");
+                //System.setProperty("java.rmi.server.hostname","186.4.212.15"); 
+                //System.setProperty("com.healthmarketscience.rmiio.exporter.port", "1099");
                 cargarRecursosServidor(ipServidor); 
                 
                 //Todo: Veriicar este metodo que obtiene la ip del servidor, porque cuando tienen varias interfaces o una virtual puede levantarse el servicio en una IP que no se desea
