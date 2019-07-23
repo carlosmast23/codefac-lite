@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -132,7 +133,7 @@ public class SucursalModel extends SucursalPanel {
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        return new BuscarDialogoModel(new SucursalBusquedaDialogo());
+        return new BuscarDialogoModel(new SucursalBusquedaDialogo(session.getEmpresa()));
     }
 
     @Override
@@ -171,15 +172,21 @@ public class SucursalModel extends SucursalPanel {
 
     private void cargarValoresIniciales() {
         
-        //Cargar los tipos de datos
-        getCmbTipo().removeAllItems();
-        for (Sucursal.TipoSucursalEnum tipo : Sucursal.TipoSucursalEnum.values()) {
-            getCmbTipo().addItem(tipo);
+        try {
+            //Cargar los tipos de datos
+            getCmbTipo().removeAllItems();
+            for (Sucursal.TipoSucursalEnum tipo : Sucursal.TipoSucursalEnum.values()) {
+                getCmbTipo().addItem(tipo);
+            }
+            
+            //Cargar la empresa activa
+            getCmbEmpresa().removeAllItems();
+            List<Empresa> empresas=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodos(); //Todo: Cambiar este codigo para mostrar solo empresas activas
+            UtilidadesComboBox.llenarComboBox(getCmbEmpresa(),empresas);
+            getCmbEmpresa().addItem(session.getEmpresa());
+        } catch (RemoteException ex) {
+            Logger.getLogger(SucursalModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        //Cargar la empresa activa
-        getCmbEmpresa().removeAllItems();
-        getCmbEmpresa().addItem(session.getEmpresa());
     }
     
 }

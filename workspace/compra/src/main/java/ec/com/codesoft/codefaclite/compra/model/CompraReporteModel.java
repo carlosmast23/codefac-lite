@@ -311,7 +311,7 @@ public class CompraReporteModel extends CompraReportePanel {
         getBtnBuscarProveedor().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
+                ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 proveedor = ((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();

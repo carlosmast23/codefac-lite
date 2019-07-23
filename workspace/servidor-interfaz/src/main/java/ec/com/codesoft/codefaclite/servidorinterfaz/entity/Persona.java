@@ -120,6 +120,9 @@ public class Persona implements Serializable, Comparable<Persona> {
     @Column(name = "CONTACTO_CLIENTE_NOMBRE")
     private String contactoClienteNombre;
     
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona",fetch = FetchType.EAGER)
     private List<PersonaEstablecimiento> establecimientos;
 
@@ -322,6 +325,16 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setDiasCreditoCliente(Integer diasCreditoCliente) {
         this.diasCreditoCliente = diasCreditoCliente;
     }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
     
     public void addEstablecimiento(PersonaEstablecimiento establecimiento) {
         if (this.establecimientos == null) {

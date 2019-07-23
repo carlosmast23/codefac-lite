@@ -624,12 +624,12 @@ public class Main {
             //session.setUsuarioLicencia(UtilidadesServidor.usuarioLicencia);
             
             SessionCodefac session=ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido();
-            EmpresaServiceIf empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
-            List<Empresa> empresaList = empresaService.obtenerTodos();
+            //EmpresaServiceIf empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
+            //List<Empresa> empresaList = empresaService.obtenerTodos();
 
-            if (empresaList != null && empresaList.size() > 0) {
-                session.setEmpresa(empresaList.get(0));
-            }
+            //if (empresaList != null && empresaList.size() > 0) {
+            //    session.setEmpresa(empresaList.get(0));
+            //}
 
             //session.setParametrosCodefac(getParametros());
             splashScren.siguiente();
@@ -684,6 +684,7 @@ public class Main {
             session.setPerfiles(obtenerPerfilesUsuario(datosLogin.usuario));
             session.setSucursal(datosLogin.sucursal);
             session.setMatriz(datosLogin.matriz);
+            session.setEmpresa(datosLogin.empresa);
             panel.setVentanasMenuList(null);
 
             /**

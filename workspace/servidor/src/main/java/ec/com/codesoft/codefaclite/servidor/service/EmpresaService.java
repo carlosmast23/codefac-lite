@@ -51,7 +51,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         return p;
     }
     
-    public void editar(Empresa p)
+    /*public void editar(Empresa p)
     {
         try
         {
@@ -67,7 +67,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
             e.printStackTrace();
         }
         
-    }
+    }*/
     
     public void eliminar(Empresa p)
     {

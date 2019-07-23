@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -143,11 +144,12 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     }
 
     @Override
-    public Persona buscarPorIdentificacion(String identificacion) throws java.rmi.RemoteException {
+    public Persona buscarPorIdentificacion(String identificacion,Empresa empresa) throws java.rmi.RemoteException {
         //Persona p;
         //p.getIdentificacion();
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("identificacion", identificacion);
+        mapParametros.put("empresa",empresa);
 
         List<Persona> personas = getFacade().findByMap(mapParametros);
         if (personas.size() > 0) {

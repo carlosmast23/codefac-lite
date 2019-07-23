@@ -353,6 +353,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 sessionCodefac.setSucursal(datosLogin.sucursal);
                 sessionCodefac.setMatriz(datosLogin.matriz);
                 sessionCodefac.setPerfiles(Main.obtenerPerfilesUsuario(datosLogin.usuario));
+                sessionCodefac.setEmpresa(datosLogin.empresa);
                 setVentanasMenuList(null);
                 setearEtiquetasPantallaPrincipal();
                 setVisible(true);

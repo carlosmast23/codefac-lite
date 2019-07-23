@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 
 /**
  *
@@ -19,6 +20,13 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
  */
 public class SucursalBusquedaDialogo implements InterfaceModelFind<Sucursal> {
 
+    private Empresa empresa;
+
+    public SucursalBusquedaDialogo(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<ColumnaDialogo>();
@@ -31,14 +39,16 @@ public class SucursalBusquedaDialogo implements InterfaceModelFind<Sucursal> {
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        Sucursal s;
+        //Sucursal s;
+        //s.getEmpresa().
         //s.getNombre();
         //pv.getDescripcion()
-        String queryString = "SELECT s FROM Sucursal s WHERE s.estado=?1 and ";
+        String queryString = "SELECT s FROM Sucursal s WHERE s.estado=?1 and s.empresa=?3 and ";
         queryString += "(LOWER(s.nombre) like ?2) ";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2, filter);
+        queryDialog.agregarParametro(3,empresa);
         
         return queryDialog;
     }

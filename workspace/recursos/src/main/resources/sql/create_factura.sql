@@ -61,8 +61,8 @@ create table FACTURA
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.7.9.5)*/
     VALOR_ICE decimal(13,2),
     
-    primary key (ID),
-    CONSTRAINT id_cliente_factura_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID)
+    primary key (ID)
+    /*CONSTRAINT id_cliente_factura_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID)*/
 
 );
 

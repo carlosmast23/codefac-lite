@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import java.io.Serializable;
 import org.primefaces.PrimeFaces;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import javax.faces.bean.ManagedProperty;
 
 /**
  *
@@ -36,6 +37,9 @@ public abstract class GeneralAbstractMb implements Serializable {
     public abstract InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite;
 
     private ResultadoDialogo resultadoDialogo = new ResultadoDialogo();
+    
+    @ManagedProperty(value = "#{sessionMb}")
+    protected SessionMb sessionMb;
 
     public String linkAyuda() {
         System.out.println("ayuda presionada");

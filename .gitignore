@@ -23,6 +23,7 @@ nb-configuration.xml
 #excluir base de datos
 /workspace/main/DB/
 /workspace/main/Derby2.DB/
+/workspace/main/Derby2.DB.otro/
 /workspace/main/Derby2.DB.bk/
 /workspace/main/Derby2.DB.bk2/
 /workspace/main/Derby2.DB.escuela/
@@ -58,6 +59,7 @@ workspace/main/codefac.ini
 /workspace/main/lib/
 /workspace/main/codefac.jar
 /workspace/main/updater.jar
+/workspace/main/key.codefac.otro
 /workspace/main/key.codefac.original
 /workspace/main/key.codefac
 /workspace/main/key.codefac.bk

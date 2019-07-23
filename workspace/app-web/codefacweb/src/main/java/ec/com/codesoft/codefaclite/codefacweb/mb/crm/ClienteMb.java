@@ -187,7 +187,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite {
-        return new ClienteEstablecimientoBusquedaDialogo();
+        return new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession().getEmpresa());
     }
 
     public Persona getCliente() {
@@ -257,6 +257,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         cliente.setEstadoEnum(estadoSeleccionada);
         cliente.setSriFormaPago(sriFormaPagoSeleccionada);
         cliente.setTipoEnum(operadorNegocioSeleccionado);
+        cliente.setEmpresa(sessionMb.getSession().getEmpresa());
         
         if(!editar) //Cuando se va a grabar
         {

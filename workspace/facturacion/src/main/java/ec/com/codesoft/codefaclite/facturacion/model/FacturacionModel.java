@@ -1970,6 +1970,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
         factura.setDireccionEstablecimiento(session.getSucursal().getDirecccion());
         factura.setDireccionMatriz(session.getMatriz().getDirecccion());
+        factura.setEmpresa(session.getEmpresa());
         
         //factura.setIvaSriId(session.get;
         

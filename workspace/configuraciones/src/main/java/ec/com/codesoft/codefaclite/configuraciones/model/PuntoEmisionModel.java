@@ -133,7 +133,7 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        return new BuscarDialogoModel(new PuntoEmisionBusquedaDialogo());
+        return new BuscarDialogoModel(new PuntoEmisionBusquedaDialogo(session.getEmpresa()));
     }
 
     @Override

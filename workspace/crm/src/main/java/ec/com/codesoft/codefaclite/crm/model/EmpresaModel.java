@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.crm.model;
 
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpresaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -65,7 +67,7 @@ public class EmpresaModel extends EmpresaForm
          /**
          * Desactivo el ciclo de vida para controlar manualmente
          */
-        super.cicloVida = false;
+        //super.cicloVida = false;
         
         //Todo: Por el momento oculto estos 2 campos porque se los va a coger de la sucursal matriz
         getLblCelular().setVisible(false); 
@@ -119,11 +121,11 @@ public class EmpresaModel extends EmpresaForm
     @Override
     public void grabar() throws ExcepcionCodefacLite 
     {
-        if(session.getEmpresa()==null)
-        {
+        //if(session.getEmpresa()==null)
+        //{
             try {
                 empresa=empresaService.grabar(setDatosEmisor());
-                session.setEmpresa(empresa);
+                //session.setEmpresa(empresa);
                 moverArchivo();
                 DialogoCodefac.mensaje("Exito","Empresa grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             } catch (ServicioCodefacException ex) {
@@ -131,7 +133,7 @@ public class EmpresaModel extends EmpresaForm
             } catch (RemoteException ex) {
                 Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        /*}
         else
         {
             try {
@@ -143,15 +145,20 @@ public class EmpresaModel extends EmpresaForm
                 Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        dispose();
+        dispose();*/
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite 
     {
         try {
+            
             empresaService.editar(setDatosEmisor());
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
         } catch (RemoteException ex) {
+            Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -197,8 +204,13 @@ public class EmpresaModel extends EmpresaForm
     public Map<Integer, Boolean> permisosFormulario() 
     {
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
-        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_REFRESCAR, true);
         return permisos;
     }
     
@@ -229,7 +241,8 @@ public class EmpresaModel extends EmpresaForm
 
     @Override
     public void iniciar() {
-        if(session.getEmpresa()!=null)
+        this.empresa=new Empresa();
+        /*if(session.getEmpresa()!=null)
         {
             empresa=session.getEmpresa();
             cargarDatosEmpresa();
@@ -237,7 +250,7 @@ public class EmpresaModel extends EmpresaForm
         else
         {
             this.empresa=new Empresa();
-        }
+        }*/
         
     }
 
@@ -328,20 +341,21 @@ public class EmpresaModel extends EmpresaForm
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new BuscarDialogoModel(new EmpresaBusquedaDialogo());
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        empresa=(Empresa) entidad;
+        getjTextRuc().setText(empresa.getIdentificacion());
+        getjTextNombreSocial().setText(empresa.getRazonSocial());
+        getjTextNombreComercial().setText(empresa.getNombreLegal());
+        getjTextNumContribuyente().setText(empresa.getContribuyenteEspecial());
+        getjCheckBLlevaContabilidad().setSelected(empresa.getObligadoLlevarContabilidadEnum().getBool());
+        getjTextLogo().setText(empresa.getImagenLogoPath());
+        getTxtFacebook().setText(empresa.getFacebook());
+        getTxtAdicional().setText(empresa.getAdicional());
     }
-
-    @Override
-    public boolean salirSinGrabar() {
-        return true ;  //Esta pantalla necesito que siempre salga sin preguntar
-    }
-
-    
 
     
     

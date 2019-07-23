@@ -188,7 +188,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                 buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
             break;
             case "Proveedor":
-                ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
+                ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo(session.getEmpresa());
                 buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
             break;
         }
@@ -235,7 +235,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                     }
                 }else if(getCmbTipoReporte().getSelectedItem().equals("Proveedor"))
                 {
-                    ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
+                    ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo(session.getEmpresa());
                     BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
                     buscarDialogoModel.setVisible(true);
                     Persona proveedorTemp = ((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 
 /**
  *
@@ -18,6 +19,13 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
  */
 public class PuntoEmisionBusquedaDialogo implements InterfaceModelFind<PuntoEmision>{
 
+    private Empresa empresa;
+
+    public PuntoEmisionBusquedaDialogo(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<ColumnaDialogo>();
@@ -30,14 +38,16 @@ public class PuntoEmisionBusquedaDialogo implements InterfaceModelFind<PuntoEmis
     @Override
     public QueryDialog getConsulta(String filter) {
         //PuntoEmision pv;
+        //pv.getSucursal().getEmpresa();
         //pv.getEstado();
         //pv.getDescripcion();
         //pv.getDescripcion()
         String queryString = "SELECT pv FROM PuntoEmision pv WHERE pv.estado=?1 AND ";
-        queryString += "(LOWER(pv.descripcion) like ?2) ";
+        queryString += " pv.sucursal.empresa=?3 and  (LOWER(pv.descripcion) like ?2) ";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2, filter);
+        queryDialog.agregarParametro(3,empresa);
         
         return queryDialog;
         

@@ -67,7 +67,6 @@ public class LoginFormDialog extends javax.swing.JDialog {
         cmbSucursal = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(558, 300));
         setResizable(false);
 
         panelPrincipal.setBackground(new java.awt.Color(255, 255, 255));

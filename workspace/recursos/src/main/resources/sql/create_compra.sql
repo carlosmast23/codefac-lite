@@ -52,8 +52,8 @@ create table COMPRA
     CODIGO_SUSTENTO_SRI varchar(16),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.7.9.5)*/
     VALOR_ICE decimal(13,2),
-    primary key (ID),
-    CONSTRAINT id_cliente_compra_fk FOREIGN KEY (PROVEEDOR_ID) REFERENCES CLIENTE(CLIENTE_ID)
+    primary key (ID)
+    /*CONSTRAINT id_cliente_compra_fk FOREIGN KEY (PROVEEDOR_ID) REFERENCES CLIENTE(CLIENTE_ID)*/
 
 );
 
@@ -97,8 +97,8 @@ create table ORDEN_COMPRA
     SUBTOTAL_IVA decimal(13,2),
     SUBTOTAL_IVA_CERO decimal(13,2),
 
-    primary key (ID),
-    CONSTRAINT id_cliente_orden_compra_fk FOREIGN KEY (PROVEEDOR_ID) REFERENCES CLIENTE(CLIENTE_ID)
+    primary key (ID)
+    /*CONSTRAINT id_cliente_orden_compra_fk FOREIGN KEY (PROVEEDOR_ID) REFERENCES CLIENTE(CLIENTE_ID)*/
 
 );
 

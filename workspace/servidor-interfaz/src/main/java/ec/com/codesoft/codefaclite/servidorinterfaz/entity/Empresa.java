@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -112,6 +113,10 @@ public class Empresa implements Serializable {
 
     public String getObligadoLlevarContabilidad() {
         return obligadoLlevarContabilidad;
+    }
+    
+    public EnumSiNo getObligadoLlevarContabilidadEnum() {
+        return EnumSiNo.getEnumByNombre(obligadoLlevarContabilidad);
     }
 
     public void setObligadoLlevarContabilidad(String obligadoLlevarContabilidad) {

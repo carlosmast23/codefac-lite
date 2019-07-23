@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.swing;
 
+import java.util.List;
 import javax.swing.JComboBox;
 
 /**
@@ -24,6 +25,15 @@ public class UtilidadesComboBox {
     
     
     public static void llenarComboBox(JComboBox comboBox,Object[] datos)
+    {
+        comboBox.removeAllItems();
+        for (Object object : datos) 
+        {
+            comboBox.addItem(object);
+        }
+    }
+    
+    public static void llenarComboBox(JComboBox comboBox,List datos)
     {
         comboBox.removeAllItems();
         for (Object object : datos) 

@@ -754,7 +754,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         getBtnBuscarProveedor().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProveedorBusquedaDialogo clienteBusquedaDialogo = new ProveedorBusquedaDialogo();
+                ProveedorBusquedaDialogo clienteBusquedaDialogo = new ProveedorBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 Persona proveedorTmp=((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();

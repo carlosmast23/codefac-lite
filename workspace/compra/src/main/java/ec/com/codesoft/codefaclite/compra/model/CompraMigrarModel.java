@@ -118,7 +118,7 @@ public class CompraMigrarModel extends MigrarModel{
     private Persona buscarCliente(String cedula)
     {
         try {
-            return ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(cedula);
+            return ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(cedula,session.getEmpresa());
         } catch (RemoteException ex) {
             Logger.getLogger(CompraMigrarModel.class.getName()).log(Level.SEVERE, null, ex);
         }

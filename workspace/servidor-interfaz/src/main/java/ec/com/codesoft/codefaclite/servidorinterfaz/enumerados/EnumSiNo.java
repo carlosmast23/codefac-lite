@@ -56,6 +56,20 @@ public enum EnumSiNo {
         return null;
     }
     
+    public static EnumSiNo getEnumByNombre(String letra)
+    {
+
+        for (EnumSiNo enumerador : EnumSiNo.values())
+        {
+            if(enumerador.getNombre().toLowerCase().equals(letra.toLowerCase()))
+            {
+                return enumerador;
+            }
+        }
+        return null;
+    }
+    
+    
     public static EnumSiNo getEnumByBoolean(Boolean opcion)
     {
         if(opcion)

@@ -179,6 +179,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setSriFormaPago((SriFormaPago) getCmbFormaPagoDefecto().getSelectedItem());
         persona.setDiasCreditoCliente((Integer) getTxtDiasCredito().getValue());
         persona.setContactoClienteNombre(getTxtNombreContacto().getText());
+        persona.setEmpresa(session.getEmpresa());
         
         //Grabar la variable de obligado a llevar contabilidad
         if(getChkObligadoLlevarContabilidad().isSelected())
@@ -705,7 +706,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 //Seleccionar el tipo de identificacion de forma automatica
                 seleccionarTipoIdentificacion();
                 
-                 Persona persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(getjTextIdentificacion().getText());
+                 Persona persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(getjTextIdentificacion().getText(),session.getEmpresa());
                 //Si no esta ingresado ninguna persona continuar con el proceso normal
                 if(persona==null)
                 {
@@ -791,7 +792,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo();
+        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         return buscarDialogoModel;
     }
