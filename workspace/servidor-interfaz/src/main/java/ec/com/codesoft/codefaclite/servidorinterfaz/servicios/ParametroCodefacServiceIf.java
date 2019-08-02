@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import java.rmi.Remote;
 import java.util.List;
@@ -17,9 +18,9 @@ import java.util.Map;
 public interface ParametroCodefacServiceIf extends ServiceAbstractIf<ParametroCodefac>
 {
        
-    public Map<String ,ParametroCodefac> getParametrosMap() throws java.rmi.RemoteException;
+    public Map<String ,ParametroCodefac> getParametrosMap(Empresa empresaIf) throws java.rmi.RemoteException;
     
-    public ParametroCodefac getParametroByNombre(String nombre) throws java.rmi.RemoteException;
+    public ParametroCodefac getParametroByNombre(String nombre,Empresa empresa) throws java.rmi.RemoteException;
     
     /**
      * Edita todos los parametros 

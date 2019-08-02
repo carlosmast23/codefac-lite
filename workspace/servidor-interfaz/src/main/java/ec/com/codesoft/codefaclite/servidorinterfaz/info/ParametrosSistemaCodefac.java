@@ -23,7 +23,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * El modo de configuracion del sistema
      */
-    public static final ModoSistemaEnum MODO=ModoSistemaEnum.DESARROLLO;
+    public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;
 
     /**
      * Puerto por defecto para configurar las conexiones en red no es final porque puedo modificar al momento de leer el archivo de configuraciones
@@ -76,4 +76,13 @@ public abstract class ParametrosSistemaCodefac {
     {
         public static final String MENSAJE_PIE_PAGINA_GRATIS="Reporte generado con Codefac versión gratuita, descargada en www.cf.codesoft-ec.com";
     }
+    
+    /**
+     * Enlaces de los Web Service del Sri
+     */
+    public static final String SRI_WS_RECEPCION="https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
+    public static final String SRI_WS_RECEPCION_PRUEBA="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
+    public static final String SRI_WS_AUTORIZACION="https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";
+    public static final String SRI_WS_AUTORIZACION_PRUEBA="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";
+    
 }

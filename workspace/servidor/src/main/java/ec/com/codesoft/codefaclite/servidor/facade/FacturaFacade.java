@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -28,7 +29,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    public List<Factura> lista(Persona persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido) {
+    public List<Factura> lista(Persona persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,Empresa empresa) {
         //Factura factura;
         //factura.getCodigoDocumentoEnum();
         String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="";
@@ -73,7 +74,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
 
         try {
-            String queryString = "SELECT u FROM Factura u WHERE u.codigoDocumento=?6 and  " + cliente + fecha + estadoFactura +filtrarReferidos+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
+            String queryString = "SELECT u FROM Factura u WHERE u.empresa=?7 and u.codigoDocumento=?6 and  " + cliente + fecha + estadoFactura +filtrarReferidos+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
             Query query = getEntityManager().createQuery(queryString);
             //System.err.println("QUERY--->"+query.toString());
             if (persona != null) {
@@ -105,6 +106,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             }
             
             query.setParameter(6,DocumentoEnum.FACTURA.getCodigo());
+            query.setParameter(7,empresa);
             
             return query.getResultList();
         } catch (NoResultException e) {

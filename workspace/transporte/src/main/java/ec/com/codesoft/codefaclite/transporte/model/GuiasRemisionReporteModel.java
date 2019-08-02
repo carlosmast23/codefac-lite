@@ -189,7 +189,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         getBtnBuscarProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
+                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 Producto productoTmp = (Producto) buscarDialogoModel.getResultado();
@@ -204,7 +204,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
+                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 persona = ((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();

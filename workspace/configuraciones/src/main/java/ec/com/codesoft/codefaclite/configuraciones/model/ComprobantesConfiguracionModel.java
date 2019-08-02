@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac.TipoEnvioComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
@@ -76,31 +77,14 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private ImpuestoDetalleServiceIf impuestoDetalleService;
     private JFileChooser jFileChooser;
     private Path origen = null;
-    private Path destino = null;
+    //private Path destino = null;
     private Persona cliente;
     private PersonaServiceIf clienteService;
     
     private DialogoCopiarArchivos dialogoCopiarFondoEscritorio;
 
     public ComprobantesConfiguracionModel() {
-        impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
-        this.parametroCodefacService = ServiceFactory.getFactory().getParametroCodefacServiceIf();
-        cargarDatosIva();
-        cargarTipoFactura();
-        cargarModosFacturacion();
-        cargarDatosConfiguraciones();
-        jFileChooser = new JFileChooser();
-        jFileChooser.setDialogTitle("Elegir archivo");
-        jFileChooser.setFileFilter(new FileNameExtensionFilter("Firma Electronica SRI", "p12"));
-        dialogoCopiarFondoEscritorio=new DialogoCopiarArchivos("Elegir archivo", "Imagen Escritorio", "jpg","png","bpm");
-        addListenerButtons();
-        addListenerCombos();
-        /**
-         * Desactivo el ciclo de vida para controlar manualmente
-         */
-        super.cicloVida = false;
-        super.validacionDatosIngresados=false;
-
+        
     }
 
     @Override
@@ -194,57 +178,67 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     private void actualizarDatosVista() {
         parametrosEditar=new ArrayList<ParametroCodefac>();
-               
+              
         String ivaDefacto = ((ImpuestoDetalle) getCmbIvaDefault().getSelectedItem()).getTarifa().toString();
-        parametros.get(ParametroCodefac.IVA_DEFECTO).setValor(ivaDefacto);
-        parametrosEditar.add(parametros.get(ParametroCodefac.IVA_DEFECTO));
+        setearParametro(ParametroCodefac.IVA_DEFECTO,ivaDefacto);
         
-        parametros.get(ParametroCodefac.CORREO_USUARIO).setValor(getTxtCorreoElectronico().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.CORREO_USUARIO));
+        setearParametro(ParametroCodefac.CORREO_USUARIO,getTxtCorreoElectronico().getText());
         
-        parametros.get(ParametroCodefac.CORREO_CLAVE).setValor(UtilidadesEncriptar.encriptar(new String(getTxtPasswordCorreo().getPassword()),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-        parametrosEditar.add(parametros.get(ParametroCodefac.CORREO_CLAVE));
+        setearParametro(ParametroCodefac.CORREO_CLAVE,UtilidadesEncriptar.encriptar(new String(getTxtPasswordCorreo().getPassword()),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
         
-        parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).setValor(UtilidadesEncriptar.encriptar(new String(getTxtClaveFirma().getPassword()),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-        parametrosEditar.add(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA));
-
-        parametros.get(ParametroCodefac.MODO_FACTURACION).setValor(getCmbModoFacturacion().getSelectedItem().toString());
-        parametrosEditar.add(parametros.get(ParametroCodefac.MODO_FACTURACION));
+        setearParametro(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA,UtilidadesEncriptar.encriptar(new String(getTxtClaveFirma().getPassword()),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
         
-        parametros.get(ParametroCodefac.TIPO_FACTURACION).setValor(((ComprobanteEntity.TipoEmisionEnum)getCmbTipoFacturacion().getSelectedItem()).getLetra());
-        parametrosEditar.add(parametros.get(ParametroCodefac.TIPO_FACTURACION));
+        setearParametro(ParametroCodefac.MODO_FACTURACION,getCmbModoFacturacion().getSelectedItem().toString());
         
-        parametros.get(ParametroCodefac.SMTP_HOST).setValor(getTxtSmtpHost().getText());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SMTP_HOST));
+        setearParametro(ParametroCodefac.TIPO_FACTURACION,((ComprobanteEntity.TipoEmisionEnum)getCmbTipoFacturacion().getSelectedItem()).getLetra());
         
-        parametros.get(ParametroCodefac.SMTP_PORT).setValor(getTxtSmtpPuerto().getValue().toString());
-        parametrosEditar.add(parametros.get(ParametroCodefac.SMTP_PORT));
+        setearParametro(ParametroCodefac.SMTP_HOST,getTxtSmtpHost().getText());
+        
+        setearParametro(ParametroCodefac.SMTP_PORT,getTxtSmtpPuerto().getValue().toString());
+        
+        setearParametro(ParametroCodefac.DIRECTORIO_RECURSOS,getTxtDirectorioRecurso().getText());
         
         ParametroCodefac.TipoEnvioComprobanteEnum tipoEnvioEnum=(ParametroCodefac.TipoEnvioComprobanteEnum) getCmbTipoEnvioComprobante().getSelectedItem();
-        parametros.get(ParametroCodefac.TIPO_ENVIO_COMPROBANTE).setValor(tipoEnvioEnum.getLetra());
-        parametrosEditar.add(parametros.get(ParametroCodefac.TIPO_ENVIO_COMPROBANTE));
-        
-        
+        setearParametro(ParametroCodefac.TIPO_ENVIO_COMPROBANTE,tipoEnvioEnum.getLetra());
         
         //verificarFirmaElectronica();
+    }
+    
+    private void setearParametro(String parametro,String valor)
+    {
+        ParametroCodefac parametroCodefac=new ParametroCodefac();
+        if(parametros.get(parametro)!=null)
+        {
+            parametroCodefac=parametros.get(parametro);
+        }
+        else
+        {
+            parametroCodefac.setNombre(parametro);
+        }        
+ 
+        parametroCodefac.setEmpresa(session.getEmpresa());
+        parametroCodefac.setValor(valor);    
+        parametrosEditar.add(parametroCodefac);
+        
     }
 
     private void cargarDatosConfiguraciones() {
         try {
-            parametros = parametroCodefacService.getParametrosMap();
+            parametros = parametroCodefacService.getParametrosMap(session.getEmpresa());
             //ParametroCodefac param = parametros.get(ParametroCodefac.SECUENCIAL_FACTURA);
             
             getTxtDirectorioRecurso().setText((parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS)!=null)?parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor():"");
             
-            //getTxtDirectorioRecurso().setText(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
-            //getTxtEstablecimiento().setText(parametros.get(ParametroCodefac.ESTABLECIMIENTO).getValor());
-            //getTxtPuntoEmision().setText(parametros.get(ParametroCodefac.PUNTO_EMISION).getValor());
+            
             getTxtCorreoElectronico().setText(parametros.get(ParametroCodefac.CORREO_USUARIO).getValor());
             getTxtPasswordCorreo().setText(UtilidadesEncriptar.desencriptar(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             getTxtNombreFirma().setText(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor());
             
             getTxtClaveFirma().setText(UtilidadesEncriptar.desencriptar(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-            getTxtFondoEscritorio().setText(parametros.get(ParametroCodefac.IMAGEN_FONDO).getValor());
+            if(parametros.get(parametros.get(ParametroCodefac.IMAGEN_FONDO))!=null)
+            {
+                getTxtFondoEscritorio().setText(parametros.get(ParametroCodefac.IMAGEN_FONDO).getValor());
+            }
             
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("tarifa", Integer.parseInt(parametros.get(ParametroCodefac.IVA_DEFECTO).getValor()));
@@ -318,15 +312,13 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         String nombreArchivo = archivo.getName();
         getTxtNombreFirma().setText(nombreArchivo);
         //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
-        String rutaDestino ="";
-        //String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
-        rutaDestino += nombreArchivo;
-        establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
+        //rutaDestino += nombreArchivo;
+        establecerDondeMoverArchivo(rutaArchivo/*, rutaDestino*/);
     }
 
-    public void establecerDondeMoverArchivo(String rutaArchivo, String rutaDestino) {
+    public void establecerDondeMoverArchivo(String rutaArchivo/*,String rutaDestino*/) {
         this.origen = FileSystems.getDefault().getPath(rutaArchivo);
-        this.destino = FileSystems.getDefault().getPath(rutaDestino);
+        //this.destino = FileSystems.getDefault().getPath(rutaDestino);
     }
 
     /**
@@ -335,7 +327,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     public void moverArchivo() {
         try {
             //Verifica que solo cuando exista un origen y destino exista se copien los datos
-            if (origen == null || destino == null) {
+            //if (origen == null || destino == null) {
+            if (origen == null) {
                 return;
             }
             
@@ -343,12 +336,17 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
                     new FileInputStream(origen.toFile()));
             
-            ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(DirectorioCodefac.CONFIGURACION, istream,origen.getFileName().toString());
+            String directorioServidor=(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS)!=null)?parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor:getTxtDirectorioRecurso().getText();
+            ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(directorioServidor,DirectorioCodefac.CONFIGURACION, istream,origen.getFileName().toString());
             
-            getTxtNombreFirma().setText("" + destino.getFileName());
-            ParametroCodefac parametro = parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
-            parametro.setValor(destino.getFileName().toString());            
-            parametrosEditar.add(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA));
+            //getTxtNombreFirma().setText("" + destino.getFileName());
+            getTxtNombreFirma().setText("" + origen.getFileName());
+            
+            setearParametro(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA,origen.getFileName().toString());
+            //ParametroCodefac parametro = parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
+            //parametro.setValor(destino.getFileName().toString());            
+            //parametro.setValor(origen.getFileName().toString());            
+            //parametrosEditar.add(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA));
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -358,6 +356,15 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     }
 
     private void addListenerButtons() {
+        
+        getBtnBuscarDirectorio().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                seleccionarDirectorioRecursos();
+            }
+        });
+        
         getBtnFirmaElectronica().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -426,7 +433,6 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                 getTxtFondoEscritorio().setText(nombreArchivo);
                 //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
                 String rutaDestino ="";
-                //String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/";
                 rutaDestino += nombreArchivo;
                 dialogoCopiarFondoEscritorio.establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
                 
@@ -516,8 +522,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             String nombreArchivo = getTxtNombreFirma().getText();
             //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
             String rutaDestino = "";
-            //String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
-
+            
             String pathFirma = "";
 
             if (origen != null) { //Si selecciona una archivo para recien grabar se verifica con el archivo del cliente
@@ -533,7 +538,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             } else {
                 //Cuando el archivo de la firma ya esta en el servidor se consulta por un servicio
 
-                Boolean validacion = ServiceFactory.getFactory().getComprobanteServiceIf().verificarCredencialesFirma(claveFirma);
+                Boolean validacion = ServiceFactory.getFactory().getComprobanteServiceIf().verificarCredencialesFirma(claveFirma,session.getEmpresa());
 
                 if (!validacion) {
                     getTxtClaveFirma().setText("");
@@ -549,7 +554,25 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     }
 
     @Override
-    public void iniciar() {
+    public void iniciar() {        
+        impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
+        this.parametroCodefacService = ServiceFactory.getFactory().getParametroCodefacServiceIf();
+        cargarDatosIva();
+        cargarTipoFactura();
+        cargarModosFacturacion();
+        cargarDatosConfiguraciones();
+        jFileChooser = new JFileChooser();
+        jFileChooser.setDialogTitle("Elegir archivo");
+        jFileChooser.setFileFilter(new FileNameExtensionFilter("Firma Electronica SRI", "p12"));
+        dialogoCopiarFondoEscritorio=new DialogoCopiarArchivos("Elegir archivo", "Imagen Escritorio", "jpg","png","bpm");
+        addListenerButtons();
+        addListenerCombos();
+        /**
+         * Desactivo el ciclo de vida para controlar manualmente
+         */
+        super.cicloVida = false;
+        super.validacionDatosIngresados=false;
+        
         listenerTextos();
     }
 
@@ -643,6 +666,25 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             getTxtSmtpHost().setText("");
             getTxtSmtpPuerto().setValue("");        
         }
+    }
+    
+    private void seleccionarDirectorioRecursos()
+    {
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        
+        int respuesta = fc.showOpenDialog(this);
+        //Comprobar si se ha pulsado Aceptar
+        if (respuesta == JFileChooser.APPROVE_OPTION) 
+        {
+            //Crear un objeto File con el archivo elegido
+            File archivoElegido = fc.getSelectedFile().getAbsoluteFile();
+            getTxtDirectorioRecurso().setText(archivoElegido.getAbsolutePath());
+            //Mostrar el nombre del archvivo en un campo de texto
+            //if()
+        }
+        
+        
     }
 
 }

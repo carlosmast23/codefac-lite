@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPan
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -62,14 +63,16 @@ public class ControladorReporteFactura {
     private TotalSumatoria total;    //en este campo se van a calcular el valor total de todos los comprobantes     
     private TotalSumatoria totalAnulados; //en esta variable se van a calcular los totales de los anulados
     private TotalSumatoria totalNotasCredito; //en este campo se van a guardar los valores solo de las notas de credito
+    protected Empresa empresa;
 
-    public ControladorReporteFactura() {
+    public ControladorReporteFactura(Empresa empresa) {
+        this.empresa=empresa;
         this.data = new ArrayList<ReporteFacturaData>();
     }
     
     
     
-    public ControladorReporteFactura(Persona persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentosConsultarEnum documentoConsultaEnum) {
+    public ControladorReporteFactura(Persona persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentosConsultarEnum documentoConsultaEnum,Empresa empresa) {
         this.persona = persona;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -79,6 +82,7 @@ public class ControladorReporteFactura {
         this.reporteAgrupado = reporteAgrupado;
         this.afectarNotaCredito = afectarNotaCredito;
         this.documentoConsultaEnum = documentoConsultaEnum;
+        this.empresa=empresa;
         //this.mapTotales = new HashMap<String,BigDecimal>();
         this.data = new ArrayList<ReporteFacturaData>();
     }
@@ -96,7 +100,7 @@ public class ControladorReporteFactura {
         try {
             buildMapTotales();
             FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
-            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado);
+            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,empresa);
             
             //DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
             NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();

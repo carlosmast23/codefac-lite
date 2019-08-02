@@ -452,7 +452,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                     
                                        
                     ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
-                    comprobantes = comprobanteServiceIf.getComprobantesObjectByFolder(getCmbCarpetaComprobante().getSelectedItem().toString());
+                    comprobantes = comprobanteServiceIf.getComprobantesObjectByFolder(getCmbCarpetaComprobante().getSelectedItem().toString(),session.getEmpresa());
                     cargarDatosComprobantesTabla(comprobantes);
                     cargarSiguienteEtapaPorCarpeta(getCmbCarpetaComprobante().getSelectedItem().toString());
                    

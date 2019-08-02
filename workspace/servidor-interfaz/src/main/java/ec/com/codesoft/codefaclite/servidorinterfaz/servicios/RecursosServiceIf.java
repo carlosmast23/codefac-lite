@@ -21,4 +21,5 @@ public interface RecursosServiceIf extends Remote {
     public RemoteInputStream getResourceInputStreamByFile(DirectorioCodefac directorio,String nameFile) throws RemoteException;
     public RemoteInputStream getDataBaseResources() throws RemoteException;
     public void uploadFileServer(DirectorioCodefac directorio,RemoteInputStream recurso,String nombre) throws RemoteException;
+    public void uploadFileServer(String pathServidor,DirectorioCodefac directorio,RemoteInputStream recurso,String nombre) throws RemoteException;
 }

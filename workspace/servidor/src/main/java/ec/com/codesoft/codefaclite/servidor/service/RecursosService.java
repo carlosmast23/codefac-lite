@@ -87,13 +87,10 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
         return null; //Si falla el servidor devuelve null    
     }
     
-    /**
-     * Agregar recursos al servidor
-     */
-    public void uploadFileServer(DirectorioCodefac directorio,RemoteInputStream recurso,String nombre) throws RemoteException
+    public void uploadFileServer(String pathServidor,DirectorioCodefac directorio,RemoteInputStream recurso,String nombre) throws RemoteException
     {
         try {
-            File fileDestino=new File(UtilidadesServidor.pathRecursos+"/"+directorio.getNombre()+"/"+nombre);
+            File fileDestino=new File(pathServidor+"/"+directorio.getNombre()+"/"+nombre);
                         //crear toda la ruta si no existe
             if (!fileDestino.exists()) {
                 fileDestino.getParentFile().mkdirs();
@@ -118,6 +115,13 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
         } catch (IOException ex) {
             Logger.getLogger(RecursosService.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    /**
+     * Agregar recursos al servidor
+     */
+    public void uploadFileServer(DirectorioCodefac directorio,RemoteInputStream recurso,String nombre) throws RemoteException
+    {
+        uploadFileServer(UtilidadesServidor.pathRecursos,directorio,recurso,nombre);
           
     }
 

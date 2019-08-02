@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -25,11 +26,12 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     
     public void eliminar(Producto p) throws java.rmi.RemoteException;
     
-    public List<Producto> buscar() throws java.rmi.RemoteException;
+    public List<Producto> buscar(Empresa empresa) throws java.rmi.RemoteException;
     
-    public Producto buscarPorNombreyEstado(String nombre,GeneralEnumEstado estadoEnum) throws RemoteException;
+    public Producto buscarPorNombreyEstado(String nombre,GeneralEnumEstado estadoEnum,Empresa empresa) throws RemoteException;
     
-    public Producto buscarProductoActivoPorCodigo(String codigo) throws RemoteException;
+    public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws RemoteException;
     
-    public List<Producto> obtenerTodosActivos() throws java.rmi.RemoteException;
+    public List<Producto> obtenerTodosActivos(Empresa empresa) throws java.rmi.RemoteException;
+    
 }

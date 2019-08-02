@@ -102,7 +102,7 @@ public class ReferidosReporteModel extends FacturaReporteModel{
 
     @Override
     public ControladorReporteFactura crearControlador() {
-        return new ControladorReporteReferidos();
+        return new ControladorReporteReferidos(session.getEmpresa());
     }
     
     

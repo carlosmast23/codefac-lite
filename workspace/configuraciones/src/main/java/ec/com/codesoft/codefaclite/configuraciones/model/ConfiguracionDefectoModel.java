@@ -203,16 +203,22 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
     private void cargarDatos() {
         try {
             ParametroCodefacServiceIf service = ServiceFactory.getFactory().getParametroCodefacServiceIf();
-            parametrosTodos = service.getParametrosMap();
+            parametrosTodos = service.getParametrosMap(session.getEmpresa());
 
             ParametroCodefac parametroTipoDocumento = parametrosTodos.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA);
-            TipoDocumentoEnum tipoDocumentoEnum = TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroTipoDocumento.getValor());
-            getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnum);
+            if(parametroTipoDocumento!=null)
+            {
+                TipoDocumentoEnum tipoDocumentoEnum = TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroTipoDocumento.getValor());
+                getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnum);
+            }
 
             //Cargar el documento de la compra
             ParametroCodefac parametroTipoDocumentoCompra = parametrosTodos.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA);
-            TipoDocumentoEnum tipoDocumentoCompraEnum = TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroTipoDocumentoCompra.getValor());
-            getCmbTipoDocumentoCompra().setSelectedItem(tipoDocumentoCompraEnum);
+            if(parametroTipoDocumento!=null)
+            {
+                TipoDocumentoEnum tipoDocumentoCompraEnum = TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroTipoDocumentoCompra.getValor());
+                getCmbTipoDocumentoCompra().setSelectedItem(tipoDocumentoCompraEnum);
+            }
 
             //Cargar el documento de la compra
             ParametroCodefac parametroOrdenCompraObservacion = parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);

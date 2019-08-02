@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.io.FileNotFoundException;
@@ -54,13 +55,14 @@ public class ClienteReporte extends ControladorCodefacInterface{
             List<Persona> clientes=obtenerConsulta(); //Todo: Obtener filtrar solo por clientes
             
             for (Persona cliente : clientes) {
+                PersonaEstablecimiento establecimiento=(cliente.getEstablecimientos()!=null && cliente.getEstablecimientos().size()>0)?cliente.getEstablecimientos().get(0):null;
                 ClienteData clienteData=new ClienteData();
-                clienteData.setDireccion(cliente.getEstablecimientos().get(0).getDireccion());
+                clienteData.setDireccion((establecimiento!=null)?establecimiento.getDireccion():"");
                 clienteData.setEmail(cliente.getCorreoElectronico());
                 clienteData.setIdentificacion(cliente.getIdentificacion());
                 clienteData.setNombresCompletos(cliente.getRazonSocial());
-                clienteData.setNombreLegal(cliente.getEstablecimientos().get(0).getNombreComercial());
-                clienteData.setTelefono(cliente.getEstablecimientos().get(0).getTelefonoCelular());
+                clienteData.setNombreLegal((establecimiento!=null)?establecimiento.getNombreComercial():"");
+                clienteData.setTelefono((establecimiento!=null)?establecimiento.getTelefonoCelular():"");
                 data.add(clienteData);
             }
             
@@ -107,7 +109,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
         persona.getTipo()
         persona.getTipoEnum().*/
         PersonaServiceIf service=ServiceFactory.getFactory().getPersonaServiceIf();
-        return service.buscarPorTipo(OperadorNegocioEnum.CLIENTE,GeneralEnumEstado.ACTIVO); //Todo: Obtener filtrar solo por clientes
+        return service.buscarPorTipo(OperadorNegocioEnum.CLIENTE,GeneralEnumEstado.ACTIVO,session.getEmpresa()); //Todo: Obtener filtrar solo por clientes
     }
 
     public String getNombreReporte()

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
@@ -43,16 +44,18 @@ public class PersonaFacade extends AbstractFacade<Persona>
         return numberA - numberB;
     }
     
-    public List<Persona> buscarPorTipoFacade(OperadorNegocioEnum tipoEnum,GeneralEnumEstado estado)
+    public List<Persona> buscarPorTipoFacade(OperadorNegocioEnum tipoEnum,GeneralEnumEstado estado,Empresa empresa)
     {
-        Persona persona;
-        //persona.getTipo();
-        String queryString = "SELECT p FROM Persona p WHERE (p.tipo=?1 or p.tipo=?2 ) and p.estado=?3 ";
+        //Persona persona;
+        //persona.getEmpresa();
+        ////persona.getTipo();
+        String queryString = "SELECT p FROM Persona p WHERE (p.tipo=?1 or p.tipo=?2 ) and p.estado=?3 and p.empresa=?4";
         Query query = getEntityManager().createQuery(queryString);
         
         query.setParameter(1,OperadorNegocioEnum.AMBOS.getLetra());
         query.setParameter(2,tipoEnum.getLetra());
         query.setParameter(3,estado.getEstado());
+        query.setParameter(4,empresa);
         
         return query.getResultList();
     }

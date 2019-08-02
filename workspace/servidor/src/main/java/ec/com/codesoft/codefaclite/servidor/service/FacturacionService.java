@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle.EstadoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
@@ -302,8 +303,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return facturaFacade.findAll();
     }
 
-    public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido) throws java.rmi.RemoteException {
-        return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido);
+    public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,Empresa empresa) throws java.rmi.RemoteException {
+        return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,empresa);
     }
 
     public List<Factura> obtenerFacturasActivas()

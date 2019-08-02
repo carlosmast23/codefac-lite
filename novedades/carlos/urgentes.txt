@@ -49,3 +49,4 @@ que en la razon social revisar la ñ
 aumentar campo de descripcion en la factura que permita ingresar datos de hasta 300 caracteres
 en la pantalla de ingreso de mercaderia aparecen compras eliminadas
 Hacer alguna funcionalidad adicional para que se puedan trasladar los rubros del antiguo periodo al nuevo periodo
+Cuando se crea un proveedor en la compra no se esta cargando directo

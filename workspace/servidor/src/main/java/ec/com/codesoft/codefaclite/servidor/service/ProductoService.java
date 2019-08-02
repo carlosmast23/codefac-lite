@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
@@ -90,17 +91,28 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
-    public List<Producto> buscar()
+    public List<Producto> buscar(Empresa empresa)
     {
-        return productoFacade.findAll();
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        //mapParametros.put("estado",estadoEnum.getEstado());
+        mapParametros.put("empresa",empresa);
+        
+        List<Producto> productos=getFacade().findByMap(mapParametros);
+        /*if(productos.size()>0)
+        {
+            return productos.;
+        }*/
+        return productos;
+        //return productoFacade.findAll();
     }
     
-    public Producto buscarPorNombreyEstado(String nombre,GeneralEnumEstado estadoEnum) throws RemoteException
+    public Producto buscarPorNombreyEstado(String nombre,GeneralEnumEstado estadoEnum,Empresa empresa) throws RemoteException
     {
 
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("nombre",nombre);
         mapParametros.put("estado",estadoEnum.getEstado());
+        mapParametros.put("empresa",empresa);
         
         List<Producto> productos=getFacade().findByMap(mapParametros);
         if(productos.size()>0)
@@ -111,13 +123,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
-    public Producto buscarProductoActivoPorCodigo(String codigo) throws RemoteException
+    public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws RemoteException
     {
         //Producto p;
         //p.getCodigoPersonalizado();
         //p.getEstado();GeneralEnumEstado
         Map<String,Object> mapParametros=new HashMap<String,Object>();        
         mapParametros.put("codigoPersonalizado",codigo);
+        mapParametros.put("empresa",empresa);        
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());        
         
         List<Producto> productos=getFacade().findByMap(mapParametros);
@@ -129,12 +142,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
             
-    public List<Producto> obtenerTodosActivos() throws java.rmi.RemoteException
+    public List<Producto> obtenerTodosActivos(Empresa empresa) throws java.rmi.RemoteException
     {
         //Producto producto;
         //producto.getEstado()
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("empresa",empresa);
         List<Producto> resultados=getFacade().findByMap(mapParametros);
         return resultados;
     }

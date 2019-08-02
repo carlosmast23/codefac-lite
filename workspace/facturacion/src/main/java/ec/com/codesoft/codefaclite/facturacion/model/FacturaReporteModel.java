@@ -98,7 +98,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     
     public ControladorReporteFactura crearControlador()
     {
-        return new ControladorReporteFactura();
+        return new ControladorReporteFactura(session.getEmpresa());
     }
     
     
@@ -427,7 +427,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
+                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 persona = ((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();

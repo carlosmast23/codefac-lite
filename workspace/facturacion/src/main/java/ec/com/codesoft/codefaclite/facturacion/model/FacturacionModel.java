@@ -744,7 +744,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     private void btnListenerBuscarCliente() {
-        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
+        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         //factura.setCliente((Persona) buscarDialogoModel.getResultado());        
@@ -939,7 +939,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     private void agregarProducto(EnumSiNo manejaInventario) {
-        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario);
+        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
@@ -1058,7 +1058,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this,facturaProcesando,true);
                 ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
                 
-                if (ServiceFactory.getFactory().getComprobanteServiceIf().verificarDisponibilidadSri()) {
+                if (ServiceFactory.getFactory().getComprobanteServiceIf().verificarDisponibilidadSri(session.getEmpresa())) {
                     Boolean repuestaFacturaElectronica = DialogoCodefac.dialogoPregunta("Correcto", "La factura se grabo correctamente,Desea autorizar en el SRI ahora?", DialogoCodefac.MENSAJE_CORRECTO);
 
                     //Si quiere que se procese en ese momento le ejecuto el proceso normal
@@ -1239,7 +1239,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     public InterfaceModelFind getBusquedaInterface()
     {
-        FacturaBusqueda facturaBusqueda = new FacturaBusqueda();
+        FacturaBusqueda facturaBusqueda = new FacturaBusqueda(session.getEmpresa());
         return facturaBusqueda;
     }
     
@@ -2495,8 +2495,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         //Seleccionar el tipo de documento configurado por defecto
         ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA);
-        TipoDocumentoEnum tipoDocumentoEnumDefault=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroCodefac.getValor());
-        getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnumDefault);
+        if(parametroCodefac!=null)
+        {
+            TipoDocumentoEnum tipoDocumentoEnumDefault=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroCodefac.getValor());
+            getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnumDefault);
+        }
         
         getCmbIva().removeAllItems();
         getCmbIva().addItem(EnumSiNo.SI);

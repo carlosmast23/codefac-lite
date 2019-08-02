@@ -335,7 +335,7 @@ public class Main {
      *
      * @param pathBase
      */
-    private static void verificarLicencia(String pathBase) {
+    private static void verificarLicencia(String pathBase,Empresa empresa) {
         /**
          * Realizar Analisis para verificar si existe la licencia instalada
          */
@@ -349,7 +349,7 @@ public class Main {
 
             //Esta validacion es solo para usuario premium para cuando no paguen y tengamos que disminuir la licencia
             if (!TipoLicenciaEnum.GRATIS.equals(tipoLicencia)) {
-                validacionCodefacOnline(validacion);
+                validacionCodefacOnline(validacion,empresa);
                 validacion = new ValidacionLicenciaCodefac(pathBase);
                 tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
             }
@@ -507,7 +507,7 @@ public class Main {
                     //Cargar los recursos para funcionar en modo cliente
                     ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ",(ipServidorDefecto==null)?"":ipServidorDefecto);
                     cargarRecursosCliente(ipServidor);
-                    verificarConexionesPermitidas();
+                    //verificarConexionesPermitidas();
                     
                     //Grabar la ip del ultimo servidor accedido para no ingresar nuevamente el dato
                     propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR, ipServidor + "");
@@ -535,48 +535,13 @@ public class Main {
                 cargarRecursosCliente(ipServidor);
                 
                 
-                ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
-                //Si no existe el parametro seteo la ruta por defecto que va a ser el directorio del usuario para no tener problemas de permisos                
-                if(parametroDirectorioRecursos==null || parametroDirectorioRecursos.getValor().equals(""))
-                {                 
-                    String directorioUsuario=System.getProperty("user.home")+"/codefacRecursos";         
-                    
-                    if(parametroDirectorioRecursos==null)
-                    {
-                        //Abrir un dialogo para preguntar si desea cambiar de ubicacion de la carpeta de recursos
-                        if(DialogoCodefac.dialogoPregunta("Directorio Recursos","Por defecto la carpeta de recursos se creará en el directorio del usuario \n Desea cambiar el directorio por defecto? ",DialogoCodefac.MENSAJE_ADVERTENCIA))
-                        {
-                            JFileChooser f = new JFileChooser();
-                            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                            f.showSaveDialog(null);
-                            if(f.getSelectedFile()!=null)
-                            {
-                                directorioUsuario=f.getSelectedFile().getPath();
-                            }                            
-                        }
-                        
-                        parametroDirectorioRecursos=new ParametroCodefac();
-                        parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
-                        parametroDirectorioRecursos.setValor(directorioUsuario);
-                        ServiceFactory.getFactory().getParametroCodefacServiceIf().grabar(parametroDirectorioRecursos);                        
-                    }
-                    else
-                    {
-                        parametroDirectorioRecursos.setValor(directorioUsuario);
-                        ServiceFactory.getFactory().getParametroCodefacServiceIf().editar(parametroDirectorioRecursos);
-                    }
-                }
-                
-                verificarLicencia(parametroDirectorioRecursos.getValor());
                 //Verificar si la fecha maximo de pago no esta vencida para que el sistema alerte o no deje seguir usando el software
                 //TODO: Ver si esta validacion se la hace antes , la unica razon porque se lo hace en esta parte es porque la variable global del usuario esta en el metodo verificarLicencia
-                verificarFechaMaximaPago(UtilidadesServidor.usuarioLicencia);
+                //verificarFechaMaximaPago(UtilidadesServidor.usuarioLicencia);
                 
                 //Cargar el servidor de mensajeria
                 ServidorSMS.getInstance().iniciarServidor();
                 
-                //Seteo el path de los directorio como una referencia global de todo el sistema
-                UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
                 ejecutarActualizacionesCodefac();
                 
                 if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
@@ -590,7 +555,7 @@ public class Main {
                 else
                 {
                     if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE_SERVIDOR)) {
-                        verificarConexionesPermitidas();
+                        //verificarConexionesPermitidas();
                         LOG.log(Level.INFO, "Modo Cliente Servidor Activado");
                     }
                 }
@@ -623,7 +588,7 @@ public class Main {
             
             //session.setUsuarioLicencia(UtilidadesServidor.usuarioLicencia);
             
-            SessionCodefac session=ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido();
+            //SessionCodefac session=ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido();
             //EmpresaServiceIf empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
             //List<Empresa> empresaList = empresaService.obtenerTodos();
 
@@ -640,7 +605,7 @@ public class Main {
              * Seteando la session de los datos a utilizar en el aplicativo
              */
             GeneralPanelModel panel = new GeneralPanelModel();
-            panel.setSessionCodefac(session);
+            //panel.setSessionCodefac(session);
             splashScren.siguiente();
 
             /**
@@ -679,25 +644,28 @@ public class Main {
                 LOG.log(Level.WARNING, "Error en la licencia ");
                 return;
             }
+            validacionesEmpresa(datosLogin.empresa, panel); //Haciendo verificacion de validacion de la licencia y datos de la empresa
+            SessionCodefac session=ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido();
+            //panel.setSessionCodefac(session);
 
             session.setUsuario(datosLogin.usuario);
             session.setPerfiles(obtenerPerfilesUsuario(datosLogin.usuario));
             session.setSucursal(datosLogin.sucursal);
             session.setMatriz(datosLogin.matriz);
             session.setEmpresa(datosLogin.empresa);
+            panel.setSessionCodefac(session);
             panel.setVentanasMenuList(null);
-
-            /**
-             * Agregando Hilo de Publicidad si es usuario Gratuito
-             */
-            if (session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS) && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) 
-            {
+            
+            //Agregando Hilo de Publicidad si es usuario Gratuito
+            if (session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS) && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) {
                 HiloPublicidadCodefac hiloPublicidad = new HiloPublicidadCodefac(panel);
                 hiloPublicidad.setPublicidades(obtenerPublicidades());
                 hiloPublicidad.start();
                 panel.setHiloPublicidadCodefac(hiloPublicidad);
             }
+
             
+            //TODO:Aqui esta verificando para ver si podemos poner publicidad
            
             panel.ipServidor=ipServidor;
             panel.setearEtiquetasPantallaPrincipal();
@@ -717,10 +685,58 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    /**
+     * Validacion que me permite verificar las licencias de la empresa y el tema de los pagos
+     * @param empresa 
+     */
+    private static void validacionesEmpresa(Empresa empresa,GeneralPanelModel panel)
+    {
+        try {
+            ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,empresa);
+            //Si no existe el parametro seteo la ruta por defecto que va a ser el directorio del usuario para no tener problemas de permisos
+            if (parametroDirectorioRecursos == null || parametroDirectorioRecursos.getValor().equals("")) {
+                String directorioUsuario = System.getProperty("user.home") + "/codefacRecursos";
+                
+                if (parametroDirectorioRecursos == null) {
+                    //Abrir un dialogo para preguntar si desea cambiar de ubicacion de la carpeta de recursos
+                    if (DialogoCodefac.dialogoPregunta("Directorio Recursos", "Por defecto la carpeta de recursos se creará en el directorio del usuario \n Desea cambiar el directorio por defecto? ", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
+                        JFileChooser f = new JFileChooser();
+                        f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                        f.showSaveDialog(null);
+                        if (f.getSelectedFile() != null) {
+                            directorioUsuario = f.getSelectedFile().getPath();
+                        }
+                    }
+                    
+                    parametroDirectorioRecursos = new ParametroCodefac();
+                    parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
+                    parametroDirectorioRecursos.setValor(directorioUsuario);
+                    ServiceFactory.getFactory().getParametroCodefacServiceIf().grabar(parametroDirectorioRecursos);
+                } else {
+                    parametroDirectorioRecursos.setValor(directorioUsuario);
+                    ServiceFactory.getFactory().getParametroCodefacServiceIf().editar(parametroDirectorioRecursos);
+                }
+            }
+            
+            verificarLicencia(parametroDirectorioRecursos.getValor(),empresa);
+            
+            //Seteo el path de los directorio como una referencia global de todo el sistema
+            UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
+            
+            //Verificar si la fecha maximo de pago no esta vencida para que el sistema alerte o no deje seguir usando el software
+            //TODO: Ver si esta validacion se la hace antes , la unica razon porque se lo hace en esta parte es porque la variable global del usuario esta en el metodo verificarLicencia
+            verificarFechaMaximaPago(UtilidadesServidor.usuarioLicencia);
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+                
     }
     
     private static void activarServicioWeb()
@@ -750,10 +766,11 @@ public class Main {
      *
      * @return
      */
-    private static void verificarConexionesPermitidas() {
+    /*private static void verificarConexionesPermitidas() {
         try {
             Boolean respuesta = ServiceFactory.getFactory().getUtilidadesServiceIf().verificarConexionesServidor();
             if (!respuesta) {
+                
                 DialogoCodefac.mensaje("Error", "Excedio el numero de clientes permitidos", DialogoCodefac.MENSAJE_INCORRECTO);
                 System.exit(0);
             }
@@ -761,7 +778,7 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
+    }*/
 
     /**
      * Metodo para cargar los estilos disponibles
@@ -791,7 +808,7 @@ public class Main {
 
     }
 
-    public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion) {
+    public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion,Empresa empresa) {
 
         /**
          * Dias Limite para verificar la licencia en ese periodo de tiempo
@@ -807,7 +824,7 @@ public class Main {
             /**
              * Verificar si la licencia actual es la misma que tiene el servidor
              */
-            ParametroCodefac parametroFechaValidacion = servicio.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
+            ParametroCodefac parametroFechaValidacion = servicio.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION,empresa);
             if (parametroFechaValidacion != null && !parametroFechaValidacion.getValor().equals("")) {
                 //String fechaStr = parametroFechaValidacion.getValor();
                 String fechaStr = UtilidadesEncriptar.desencriptar(parametroFechaValidacion.getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
@@ -1130,7 +1147,7 @@ public class Main {
         }
 
         //ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
-        //String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+        
         ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
         validacion.setPath(pathBase);
         

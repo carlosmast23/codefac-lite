@@ -185,6 +185,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         enumSiNo=enumSiNo.getEnumByBoolean(getChkTransportarGuiaRemision().isSelected());        
         producto.setTransportarEnGuiaRemisionEnum(enumSiNo);
+        producto.setEmpresa(session.getEmpresa());
 
     }
     
@@ -244,7 +245,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
+        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         Producto productoTmp = (Producto) buscarDialogoModel.getResultado();
@@ -510,7 +511,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getBtnBuscarProductoEnsamble().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
+                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 productoEnsamble = (Producto) buscarDialogoModel.getResultado();

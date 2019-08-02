@@ -637,7 +637,7 @@ public class CompraModel extends CompraPanel{
         getBtnBuscarProductoProveedor().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo();
+                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
                 productoSeleccionado = (Producto) buscarDialogo.getResultado();
@@ -1218,7 +1218,7 @@ public class CompraModel extends CompraPanel{
                          }
                          
                          ProductoServiceIf productoServiceIf=ServiceFactory.getFactory().getProductoServiceIf();
-                         Producto productoSeleccionadoTmp=productoServiceIf.buscarProductoActivoPorCodigo(getTxtProductoItem().getText());
+                         Producto productoSeleccionadoTmp=productoServiceIf.buscarProductoActivoPorCodigo(getTxtProductoItem().getText(),session.getEmpresa());
                          if(productoSeleccionadoTmp!=null)
                          {
                             productoSeleccionado=productoSeleccionadoTmp;

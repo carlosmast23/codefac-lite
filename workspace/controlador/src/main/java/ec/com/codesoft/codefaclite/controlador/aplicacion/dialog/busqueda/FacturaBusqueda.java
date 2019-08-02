@@ -21,6 +21,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 
 /**
  *
@@ -30,17 +31,20 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
     private Persona cliente;
     private PersonaEstablecimiento establecimiento;
     private EnumSiNo estadoEnviadoGuiaRemision;
+    private Empresa empresa;
 
-    public FacturaBusqueda(Persona cliente) {
+    public FacturaBusqueda(Persona cliente,Empresa empresa) {
         this.cliente = cliente;    
+        this.empresa=empresa;
     }
     
-    public FacturaBusqueda(PersonaEstablecimiento establecimiento) {
+    public FacturaBusqueda(PersonaEstablecimiento establecimiento,Empresa empresa) {
         this.establecimiento = establecimiento;    
+        this.empresa=empresa;
     }
 
-    public FacturaBusqueda() {
-        
+    public FacturaBusqueda(Empresa empresa) {
+        this.empresa=empresa;
     }
     
     
@@ -60,10 +64,17 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        //Factura f;
+        Factura f;
+        //f.getEmpresa();
         //f.getEstadoEnviadoGuiaRemision()
         //f.getSecuencial();
         String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 ";
+        
+        if(empresa!=null)
+        {
+            queryString+=" AND u.empresa=?13 ";
+        }
+        
         if(cliente!=null)
         {
             queryString+=" AND u.cliente=?10 ";
@@ -88,6 +99,11 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         queryDialog.agregarParametro(2,filter);
         queryDialog.agregarParametro(3,DocumentoEnum.FACTURA.getCodigo());
         queryDialog.agregarParametro(4,DocumentoEnum.NOTA_VENTA.getCodigo());
+        
+        
+        if (empresa != null) {
+            queryDialog.agregarParametro(13,empresa);
+        }
         
         if (cliente != null) {
             queryDialog.agregarParametro(10,cliente);

@@ -413,7 +413,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     }
     
     private void btnListenerBuscarCliente() {
-        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
+        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         //factura.setCliente((Persona) buscarDialogoModel.getResultado());      
@@ -579,9 +579,9 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                 FacturaBusqueda facturaBusqueda =null;
                 
                 if(destinatarioEstablecimiento!=null)
-                    facturaBusqueda = new FacturaBusqueda(destinatarioEstablecimiento);
+                    facturaBusqueda = new FacturaBusqueda(destinatarioEstablecimiento,session.getEmpresa());
                 else
-                    facturaBusqueda = new FacturaBusqueda(destinatario);
+                    facturaBusqueda = new FacturaBusqueda(destinatario,session.getEmpresa());
                     
                 facturaBusqueda.setEstadoEnviadoGuiaRemision(EnumSiNo.NO);
                 

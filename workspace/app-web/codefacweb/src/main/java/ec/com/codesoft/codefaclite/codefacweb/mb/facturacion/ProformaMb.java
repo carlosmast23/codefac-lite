@@ -257,7 +257,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         if (tipoPaginaEnum.equals(tipoPaginaEnum.PROFORMA)) {
             return new ProformaBusqueda();
         } else if (tipoPaginaEnum.equals(tipoPaginaEnum.FACTURA)) {
-            return new FacturaBusqueda();
+            return new FacturaBusqueda(sessionMb.getSession().getEmpresa());
         }
         return null;
     }
@@ -268,7 +268,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     public void abrirDialogoBuscarCliente() {
         System.out.println("Abriendo dialogo init");
-        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
+        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(sessionMb.getSession().getEmpresa());
         abrirDialogoBusqueda(clienteBusquedaDialogo);
         System.out.println("Abriendo dialogo fin");
     }
@@ -294,7 +294,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     }
 
     public void abrirDialogoBusquedaProducto() {
-        ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo();
+        ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo(sessionMb.getSession().getEmpresa());
         abrirDialogoBusqueda(dialogModel);
     }
 

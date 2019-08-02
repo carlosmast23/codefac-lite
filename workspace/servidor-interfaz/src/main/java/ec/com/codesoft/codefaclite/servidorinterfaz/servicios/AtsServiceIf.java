@@ -19,7 +19,7 @@ import java.util.List;
  * @author Carlos
  */
 public interface AtsServiceIf extends Remote {
-    public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal) throws  RemoteException,ServicioCodefacException;
+    public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException;
     public AtsJaxb consultarAts(Integer anio, MesEnum mes,Empresa empresa,String numeroSucursal,boolean  comprasBool, boolean  ventasBool,boolean anuladosBool) throws  RemoteException,ServicioCodefacException;
     
 }

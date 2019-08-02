@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.ParametroCodefacFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import java.rmi.RemoteException;
@@ -31,22 +32,26 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         parametroCodefacFacade=new ParametroCodefacFacade();
     }
     
-    public Map<String ,ParametroCodefac> getParametrosMap() throws java.rmi.RemoteException
+    public Map<String ,ParametroCodefac> getParametrosMap(Empresa empresaIf) throws java.rmi.RemoteException
     {
         Map<String ,ParametroCodefac> parametrosCodefacMap=new HashMap<String,ParametroCodefac>();
         
         List<ParametroCodefac> parametros=parametroCodefacFacade.findAll();
         for (ParametroCodefac parametro : parametros) {
-            parametrosCodefacMap.put(parametro.getNombre(),parametro);
+            if(parametro.getEmpresa()!=null && parametro.getEmpresa().equals(empresaIf))
+            {
+                parametrosCodefacMap.put(parametro.getNombre(),parametro);
+            }
         }
         
         return parametrosCodefacMap;
     }
     
-    public ParametroCodefac getParametroByNombre(String nombre) throws java.rmi.RemoteException
+    public ParametroCodefac getParametroByNombre(String nombre,Empresa empresa) throws java.rmi.RemoteException
     {
         Map<String,Object> map=new HashMap<String, Object>();
         map.put("nombre",nombre);
+        map.put("empresa",empresa);
         List<ParametroCodefac> parametroCodefacList=parametroCodefacFacade.findByMap(map);
         if(parametroCodefacList!=null && parametroCodefacList.size()>0 )
             return ((List<ParametroCodefac>) (parametroCodefacFacade.findByMap(map))).get(0);

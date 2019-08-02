@@ -128,7 +128,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
+        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         return buscarDialogoModel;
     }
@@ -165,7 +165,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         getBtnBuscarProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo();
+                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
                 

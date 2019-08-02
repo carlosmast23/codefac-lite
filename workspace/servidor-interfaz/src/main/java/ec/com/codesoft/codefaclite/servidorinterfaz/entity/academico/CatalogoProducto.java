@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
@@ -65,6 +66,9 @@ public class CatalogoProducto implements Serializable{
     @JoinColumn(name = "CATEGORIA_ID")
     @ManyToOne
     private CategoriaProducto categoriaProducto;
+    
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
     
     public CatalogoProducto() {
     }
@@ -144,6 +148,16 @@ public class CatalogoProducto implements Serializable{
     public void setCategoriaProducto(CategoriaProducto categoriaProducto) {
         this.categoriaProducto = categoriaProducto;
     }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
     
     // Metodos adicionales
     

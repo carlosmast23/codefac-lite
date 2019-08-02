@@ -287,7 +287,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     public void obtenerUbicacionCarpetaRespaldo()
     {
         try {
-            this.parametro = this.parametroCodefacServiceIf.getParametrosMap();
+            this.parametro = this.parametroCodefacServiceIf.getParametrosMap(session.getEmpresa());
             ParametroCodefac p = this.parametro.get(ParametroCodefac.DIRECTORIO_RESPALDO);
             if(p.getValor() != null)
             {

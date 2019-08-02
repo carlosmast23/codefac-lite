@@ -232,7 +232,7 @@ public class NotificacionEstudiantesModel extends NotificacionEstudiantesPanel {
         };
 
         try {
-            correoCodefac.enviarCorreo();
+            correoCodefac.enviarCorreo(session.getEmpresa());
             //Todo:Ver si poner un mensaje para saber que el correo fue enviado correctamente
         } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);

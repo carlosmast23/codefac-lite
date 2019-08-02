@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronico
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.main.panel.WidgetNotificacionesCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
@@ -30,8 +31,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac{
 
-    public WidgetNotificacionCodefacModelo(JDesktopPane parentPanel) {
-        super(parentPanel);               
+    private Empresa empresa;
+    public WidgetNotificacionCodefacModelo(JDesktopPane parentPanel,Empresa empresa) {
+        super(parentPanel); 
+        this.empresa=empresa;
         listenerBotones();
         actualizarNotificaciones();
         
@@ -51,8 +54,8 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
             
             
             ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
-            List<ComprobanteElectronico> comprobantesFirmadoSinEnviar = comprobanteServiceIf.getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR);
-            List<ComprobanteElectronico> comprobantesEnviadosSinRespuesta = comprobanteServiceIf.getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA);
+            List<ComprobanteElectronico> comprobantesFirmadoSinEnviar = comprobanteServiceIf.getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR,empresa);
+            List<ComprobanteElectronico> comprobantesEnviadosSinRespuesta = comprobanteServiceIf.getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA,empresa);
             
             Integer totalComprobantesSinEnviar=comprobantesFirmadoSinEnviar.size()+comprobantesEnviadosSinRespuesta.size();
             

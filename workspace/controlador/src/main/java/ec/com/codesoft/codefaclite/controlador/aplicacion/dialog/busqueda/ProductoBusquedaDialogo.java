@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 
 /**
  *
@@ -21,14 +22,16 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
  */
 public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , InterfacesPropertisFindWeb
 {
+    private Empresa empresa;
     /**
      * Variable para hacer ese filtro cuando lo requiera
      */
     private EnumSiNo generarCodigoBarrasEnum; 
 
-    public ProductoBusquedaDialogo() 
+    public ProductoBusquedaDialogo(Empresa empresa) 
     {
         this.generarCodigoBarrasEnum = null; //Le pongo en null para que filtre todo
+        this.empresa=empresa;
     }
     
     
@@ -68,7 +71,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     public QueryDialog getConsulta(String filter) {
         //Producto p;
         //p.getGenerarCodigoBarras()
-        String queryString = "SELECT u FROM Producto u WHERE (u.estado=?1) ";
+        String queryString = "SELECT u FROM Producto u WHERE u.empresa=?4 and (u.estado=?1) ";
         
         if (generarCodigoBarrasEnum != null) {
             queryString+=" and  u.generarCodigoBarras=?3 ";
@@ -84,6 +87,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         {
             queryDialog.agregarParametro(3,generarCodigoBarrasEnum.getLetra());
         }
+        queryDialog.agregarParametro(4,empresa);
         //queryDialog.agregarParametro(2,ProductoEnumEstado.INACTIVO.getEstado());
         return queryDialog;
     }

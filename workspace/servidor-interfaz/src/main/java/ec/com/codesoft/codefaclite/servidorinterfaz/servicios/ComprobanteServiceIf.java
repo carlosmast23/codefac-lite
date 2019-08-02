@@ -38,14 +38,16 @@ public interface ComprobanteServiceIf extends Remote {
     
     //public Integer obtenerSecuencialFacturaYAvanzar() throws RemoteException;
     
-    public boolean verificarCredencialesFirma(String claveFirma) throws RemoteException;
+    public boolean verificarCredencialesFirma(String claveFirma,Empresa empresa) throws RemoteException;
 
     public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo,Boolean asincrono) throws RemoteException;
     
     @Deprecated
     public List<AlertaComprobanteElectronico> procesarComprobantesPendienteSinCallBack(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos) throws RemoteException,ServicioCodefacException;
     
-    public List<ComprobanteElectronico> getComprobantesObjectByFolder(String carpetaConfiguracion) throws RemoteException;
+    //public List<ComprobanteElectronico> getComprobantesObjectByFolder(String carpetaConfiguracion) throws RemoteException;
+    
+    public List<ComprobanteElectronico> getComprobantesObjectByFolder(String carpetaConfiguracion,Empresa empresa) throws RemoteException;
     
     public byte[] getReporteComprobante(String claveAcceso) throws RemoteException;
 
@@ -66,7 +68,7 @@ public interface ComprobanteServiceIf extends Remote {
      */
     public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario,String ruc,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException;
     
-    public boolean verificarDisponibilidadSri() throws RemoteException;
+    public boolean verificarDisponibilidadSri(Empresa empresa) throws RemoteException;
     
     public RemoteInputStream obtenerXmlFirmadoComprobante(Empresa empresa,String claveAcceso) throws RemoteException, ServicioCodefacException;
     

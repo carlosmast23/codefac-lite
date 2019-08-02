@@ -98,7 +98,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
          */
         if(ventasBool)
         {
-            List<VentaAts> ventas=consultarVentasAts(fechaInicial, fechaFinal);
+            List<VentaAts> ventas=consultarVentasAts(fechaInicial, fechaFinal,empresa);
             ats.setVentas(ventas);
             ats.calcularTotalVentas();
             
@@ -338,10 +338,10 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
     }
     
-    public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal) throws  RemoteException,ServicioCodefacException
+    public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
     {
         FacturacionService facturacionService=new FacturacionService();
-        List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,false,null,false);
+        List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,false,null,false,empresa);
         
         Map<String,VentaAts> mapVentas=new HashMap<String,VentaAts>();
         

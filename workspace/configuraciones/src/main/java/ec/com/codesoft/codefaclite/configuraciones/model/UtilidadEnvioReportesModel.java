@@ -265,7 +265,7 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
                 };
 
                 try {
-                    correoCodefac.enviarCorreo();
+                    correoCodefac.enviarCorreo(session.getEmpresa());
                     panelPadre.cambiarCursorNormal();
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
                 } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
@@ -436,7 +436,8 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
                 null,
                 false,
                 true,
-                documentoEnum);
+                documentoEnum,
+                session.getEmpresa());
 
         controlador.generarReporte();
 

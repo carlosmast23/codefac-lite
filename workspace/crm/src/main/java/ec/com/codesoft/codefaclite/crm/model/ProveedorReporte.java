@@ -29,7 +29,7 @@ public class ProveedorReporte extends ClienteReporte{
     @Override    
     public List<Persona> obtenerConsulta() throws RemoteException {
        PersonaServiceIf service=ServiceFactory.getFactory().getPersonaServiceIf();
-        return service.buscarPorTipo(OperadorNegocioEnum.PROVEEDOR,GeneralEnumEstado.ACTIVO); //Todo: Obtener filtrar solo por clientes
+        return service.buscarPorTipo(OperadorNegocioEnum.PROVEEDOR,GeneralEnumEstado.ACTIVO,session.getEmpresa()); //Todo: Obtener filtrar solo por clientes
     }
     
     

@@ -412,7 +412,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         getBtnBuscarProductoProveedor().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo();
+                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
                 productoSeleccionado = (Producto) buscarDialogo.getResultado();

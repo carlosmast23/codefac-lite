@@ -381,7 +381,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         if(!widgetVirtualMall.getTxtCelular().equals(""))
         {
             try {
-                ParametroCodefac parametro=servicio.getParametroByNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL);
+                ParametroCodefac parametro=servicio.getParametroByNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL,sessionCodefac.getEmpresa());
                 //Si no existe el parametro la crea en la base de datos
                 if(parametro==null)
                 {
@@ -427,7 +427,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             {
                 try {
                     ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
-                    Map<String,ParametroCodefac> map=servicio.getParametrosMap();
+                    Map<String,ParametroCodefac> map=servicio.getParametrosMap(sessionCodefac.getEmpresa());
                     if(map!=null)
                     {
                         ParametroCodefac parametroCodefac=map.get(ParametroCodefac.IMAGEN_FONDO);
@@ -2328,7 +2328,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             /**
              * WIDGET NOTIFICACIONES CODEFAC
              */
-                widgetNotificacionCodefac=new WidgetNotificacionCodefacModelo(getjDesktopPane1());
+                widgetNotificacionCodefac=new WidgetNotificacionCodefacModelo(getjDesktopPane1(),sessionCodefac.getEmpresa());
                 widgetNotificacionCodefac.panelPadre=this;
                 widgetNotificacionCodefac.setPreferredSize(new Dimension(500,100));
                 widgetNotificacionCodefac.setBounds(100,0,400,90);
@@ -3127,7 +3127,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     try {
                         dispose();
                         ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
-                        String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+                        String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,sessionCodefac.getEmpresa()).valor;
                         ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
                         validacion.setPath(pathBase);
                         ValidarLicenciaModel dialogo=new ValidarLicenciaModel(null,true,true);
@@ -3196,7 +3196,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
              * Setear el parametro del celular si ya fue ingresado alguna vez
              */
             ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
-            ParametroCodefac parametro=servicio.getParametroByNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL);
+            ParametroCodefac parametro=servicio.getParametroByNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL,sessionCodefac.getEmpresa());
             if(parametro!=null)
             {
                 widgetVirtualMall.getTxtCelular().setText(parametro.getValor());

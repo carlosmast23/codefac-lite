@@ -102,7 +102,7 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        CatalogoProductoBusquedaDialogo busquedDialog = new CatalogoProductoBusquedaDialogo();
+        CatalogoProductoBusquedaDialogo busquedDialog = new CatalogoProductoBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedDialog);
         buscarDialogoModel.setVisible(true);
         CatalogoProducto catalogoProductoTemp= (CatalogoProducto) buscarDialogoModel.getResultado();
@@ -273,6 +273,8 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
         
         ModuloCodefacEnum moduloEnum=(ModuloCodefacEnum) getCmbModulo().getSelectedItem();
         catalogoProducto.setModuloCod(moduloEnum.getCodigo());
+        
+        catalogoProducto.setEmpresa(session.getEmpresa());
     }
 
     @Override

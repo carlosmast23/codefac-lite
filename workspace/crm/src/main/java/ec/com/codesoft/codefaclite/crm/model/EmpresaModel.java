@@ -154,6 +154,7 @@ public class EmpresaModel extends EmpresaForm
         try {
             
             empresaService.editar(setDatosEmisor());
+            moverArchivo();
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
         } catch (RemoteException ex) {
             Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -186,7 +187,7 @@ public class EmpresaModel extends EmpresaForm
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getjTextLogo().setText("");        
     }
 
 //    @Override

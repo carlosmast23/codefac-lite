@@ -180,12 +180,12 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     }
     
     
-    public boolean verificarCredencialesFirma(String claveFirma) throws RemoteException
+    public boolean verificarCredencialesFirma(String claveFirma,Empresa empresa) throws RemoteException
     {
         
         try {
             ParametroCodefacService servicioParametros=new ParametroCodefacService();
-            Map<String,ParametroCodefac> parametrosMap=  servicioParametros.getParametrosMap();
+            Map<String,ParametroCodefac> parametrosMap=  servicioParametros.getParametrosMap(empresa);
             
             String pathFirma=parametrosMap.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor();
             String rutaDestino = parametrosMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/"+pathFirma;
@@ -215,7 +215,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         comprobanteElectronico.setRuc(ruc);
         
         
-        Integer secuencialLote=obtenerSecuencialLote(); //Verificar que solo debe dar un secuencial si la etapa es superior a enviar comprobante
+        Integer secuencialLote=obtenerSecuencialLote(empresa); //Verificar que solo debe dar un secuencial si la etapa es superior a enviar comprobante
         
         comprobanteElectronico.setSecuencialLote(secuencialLote);
         
@@ -380,7 +380,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         comprobanteElectronico.enviarSoloCorreosAdjuntos=true;
         
         //TODO; Revisar esta parte
-        ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.TIPO_ENVIO_COMPROBANTE);
+        ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.TIPO_ENVIO_COMPROBANTE,empresa);
         if (parametroCodefac != null && parametroCodefac.getValor().equals(ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_AUTORIZADO.getLetra())) {
            comprobanteElectronico.setEnviarCorreoComprobanteAutorizado(true);
         }
@@ -635,11 +635,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         return null;
     }
     
-    public List<ComprobanteElectronico> getComprobantesObjectByFolder(String carpetaConfiguracion) throws RemoteException
+    public List<ComprobanteElectronico> getComprobantesObjectByFolder(String carpetaConfiguracion,Empresa empresa) throws RemoteException
     {
         ParametroCodefacService parametroService=new ParametroCodefacService();
-        String path= parametroService.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
-        String modoFacturacion=parametroService.getParametroByNombre(ParametroCodefac.MODO_FACTURACION).valor;
+        String path= parametroService.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,empresa).valor;
+        String modoFacturacion=parametroService.getParametroByNombre(ParametroCodefac.MODO_FACTURACION,empresa).valor;
         String pathComprobantes="";
         
         if (modoFacturacion.equals(ComprobanteElectronicoService.MODO_PRODUCCION)) {
@@ -679,11 +679,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     }
     
       
-    private Integer obtenerSecuencialLote() throws RemoteException
+    private Integer obtenerSecuencialLote(Empresa empresa) throws RemoteException
     {
         //Obtener el numero de secuencial siguiente
         ParametroCodefacServiceIf servicio=new ParametroCodefacService();
-        ParametroCodefac parametroCodefac = servicio.getParametroByNombre(ParametroCodefac.SECUENCIAL_LOTE);
+        ParametroCodefac parametroCodefac = servicio.getParametroByNombre(ParametroCodefac.SECUENCIAL_LOTE,empresa);
         Integer secuencialLote = Integer.parseInt(parametroCodefac.getValor());
         parametroCodefac.setValor((secuencialLote + 1) + "");
         entityManager.merge(parametroCodefac);
@@ -697,7 +697,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     {
         ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantesLote(comprobantesData, usuario);
         
-        Integer secuencialLote=obtenerSecuencialLote();
+        //comprobantesData.get(0).getEmpresa()
+        Integer secuencialLote=obtenerSecuencialLote(comprobantesData.get(0).getEmpresa());
         
         
         comprobanteElectronico.setSecuencialLote(secuencialLote);
@@ -1019,10 +1020,10 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
     }
     
-    public boolean verificarDisponibilidadSri() throws RemoteException
+    public boolean verificarDisponibilidadSri(Empresa empresa) throws RemoteException
     {
         ComprobanteElectronicoService comprobanteElectronico=new ComprobanteElectronicoService();
-        cargarDirectoriosWebService(comprobanteElectronico);
+        cargarDirectoriosWebService(comprobanteElectronico,empresa);
         return comprobanteElectronico.disponibilidadServidorSri();
     }
     
@@ -1248,7 +1249,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         //Consultar la modalidad como se van a procesar los correos
         ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
-        ParametroCodefac parametroTipoEnvio=parametroCodefacService.getParametroByNombre(ParametroCodefac.TIPO_ENVIO_COMPROBANTE);
+        ParametroCodefac parametroTipoEnvio=parametroCodefacService.getParametroByNombre(ParametroCodefac.TIPO_ENVIO_COMPROBANTE,comprobanteData.getEmpresa());
         if(parametroTipoEnvio!=null && ParametroCodefac.TipoEnvioComprobanteEnum.buscarPorLetra(parametroTipoEnvio.valor).equals(ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_AUTORIZADO))
         {
             //Si requiere que se envie el correo con el xml autorizado se pone en true
@@ -1264,7 +1265,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
         //EmpresaService empresaService = new EmpresaService();
         Empresa empresa = comprobanteData.getEmpresa();
-        Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
+        Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap(empresa);
 
         if (parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION).valor.equals(ComprobanteElectronicoService.MODO_PRODUCCION)) {
             infoTributaria.setAmbiente(ComprobanteElectronicoService.CODIGO_SRI_MODO_PRODUCCION + "");
@@ -1331,11 +1332,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         return listaInfoAdicional;
     }
     
-    private void cargarDirectoriosWebService(ComprobanteElectronicoService servicio) {
+    private void cargarDirectoriosWebService(ComprobanteElectronicoService servicio,Empresa empresa) {
         
         try {
             ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
-            Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
+            Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap(empresa);
             
             String modoFacturacion = parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION).valor;
             servicio.setModoFacturacion(modoFacturacion);
@@ -1343,17 +1344,17 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
              * Cargar los web services dependiendo el modo de facturacion
              */
             if (ComprobanteElectronicoService.MODO_PRODUCCION.equals(modoFacturacion)) {
-                String autorizacion = parametroCodefacMap.get(ParametroCodefac.SRI_WS_AUTORIZACION).valor;
+                String autorizacion = ParametrosSistemaCodefac.SRI_WS_AUTORIZACION;
                 servicio.setUriAutorizacion(autorizacion);
                 
-                String recepcion = parametroCodefacMap.get(ParametroCodefac.SRI_WS_RECEPCION).valor;
+                String recepcion = ParametrosSistemaCodefac.SRI_WS_RECEPCION;
                 servicio.setUriRecepcion(recepcion);
                 
             } else {
-                String autorizacion = parametroCodefacMap.get(ParametroCodefac.SRI_WS_AUTORIZACION_PRUEBA).valor;
+                String autorizacion = ParametrosSistemaCodefac.SRI_WS_AUTORIZACION_PRUEBA;
                 servicio.setUriAutorizacion(autorizacion);
                 
-                String recepcion = parametroCodefacMap.get(ParametroCodefac.SRI_WS_RECEPCION_PRUEBA).valor;
+                String recepcion = ParametrosSistemaCodefac.SRI_WS_RECEPCION_PRUEBA;
                 servicio.setUriRecepcion(recepcion);
             }
         } catch (RemoteException ex) {
@@ -1365,7 +1366,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     private void cargarConfiguraciones(ComprobanteElectronicoService servicio,Empresa empresa) {
         try {
             ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
-            Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
+            Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap(empresa);
             //String pathBase de los directorios
             servicio.setPathBase(UtilidadesServidor.pathRecursos);
             servicio.setNombreFirma(parametroCodefacMap.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
@@ -1379,24 +1380,24 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
              * Cargar los web services dependiendo el modo de facturacion
              */
             if (ComprobanteElectronicoService.MODO_PRODUCCION.equals(modoFacturacion)) {
-                String autorizacion = parametroCodefacMap.get(ParametroCodefac.SRI_WS_AUTORIZACION).valor;
+                String autorizacion = ParametrosSistemaCodefac.SRI_WS_AUTORIZACION;
                 servicio.setUriAutorizacion(autorizacion);
 
-                String recepcion = parametroCodefacMap.get(ParametroCodefac.SRI_WS_RECEPCION).valor;
+                String recepcion = ParametrosSistemaCodefac.SRI_WS_RECEPCION;
                 servicio.setUriRecepcion(recepcion);
 
             } else {
-                String autorizacion = parametroCodefacMap.get(ParametroCodefac.SRI_WS_AUTORIZACION_PRUEBA).valor;
+                String autorizacion = ParametrosSistemaCodefac.SRI_WS_AUTORIZACION_PRUEBA;
                 servicio.setUriAutorizacion(autorizacion);
 
-                String recepcion = parametroCodefacMap.get(ParametroCodefac.SRI_WS_RECEPCION_PRUEBA).valor;
+                String recepcion = ParametrosSistemaCodefac.SRI_WS_RECEPCION_PRUEBA;
                 servicio.setUriRecepcion(recepcion);
             }
 
             /**
              * Cargar variables para el envio del correo
              */
-            cargarConfiguracionesCorreo(servicio);
+            cargarConfiguracionesCorreo(servicio,empresa);
             cargarConfiguracionesSms(servicio);
             
             
@@ -1456,7 +1457,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         //EmpresaService empresaService = new EmpresaService();
         //Empresa empresa = empresaService.obtenerTodos().get(0);
-        Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
+        Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap(empresa);
         /**
          * Setear variables de configuracion para los reportes
          */
@@ -1560,7 +1561,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
         //EmpresaService empresaService = new EmpresaService();
         //Empresa empresa = empresaService.obtenerTodos().get(0);
-        Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
+        Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap(empresa);
         
         //TODO:Revisar esta parte porque va a salir con la informacion de la matriz princiapl ,talvez deberia salir con la informacion de la sucursal que estan usando
         SucursalService sucursalService=new SucursalService();
@@ -1669,7 +1670,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         });
     }
     
-    private void cargarConfiguracionesCorreo(ComprobanteElectronicoService servicio) throws RuntimeException
+    private void cargarConfiguracionesCorreo(ComprobanteElectronicoService servicio,Empresa empresa) throws RuntimeException
     {
         servicio.setMetodoEnvioInterface(new MetodosEnvioInterface() {
             @Override
@@ -1698,7 +1699,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 
                 try
                 {
-                    correo.enviarCorreo();
+                    correo.enviarCorreo(empresa);
                 }catch(RuntimeException e)
                 {
                     e.printStackTrace();
@@ -1734,7 +1735,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     private void agregarParametrosGenerales(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
     {
         ParametroCodefacService parametroService=new ParametroCodefacService();
-        ParametroCodefac parametroCodefac=parametroService.getParametroByNombre(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS);
+        ParametroCodefac parametroCodefac=parametroService.getParametroByNombre(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS,comprobante.getEmpresa());
         if(parametroCodefac!=null && parametroCodefac.getValor()!=null && !parametroCodefac.getValor().isEmpty())
         {
             Gson json = new Gson();
@@ -2110,6 +2111,6 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         return null;
         
     }
-    
+
 
 }

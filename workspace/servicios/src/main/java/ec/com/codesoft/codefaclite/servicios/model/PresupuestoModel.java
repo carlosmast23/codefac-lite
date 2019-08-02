@@ -549,7 +549,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getBtnProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
+                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 producto = (Producto) buscarDialogoModel.getResultado();
@@ -1459,7 +1459,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         };
 
         try {
-            correoCodefac.enviarCorreo();
+            correoCodefac.enviarCorreo(session.getEmpresa());
         } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
             Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
         }

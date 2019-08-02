@@ -96,8 +96,10 @@ public class Producto implements Serializable, Comparable<Producto> {
     
     @Column(name = "TRANSPORTAR_EN_GUIA_REMISION")
     private String transportarEnGuiaRemision;
-
-
+    
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
+    
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     @ManyToOne    
     private CatalogoProducto catalogoProducto;
@@ -322,6 +324,15 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setTransportarEnGuiaRemisionEnum(EnumSiNo transportarEnGuiaRemisionEnum) {
         this.transportarEnGuiaRemision = transportarEnGuiaRemisionEnum.getLetra();
     }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
     
     
     

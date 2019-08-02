@@ -136,7 +136,7 @@ public class ComponenteEnvioCorreoPanel extends javax.swing.JPanel {
                 };
 
                 try {
-                    correoCodefac.enviarCorreo();
+                    correoCodefac.enviarCorreo(correoInterface.getEmpresa());
                     DialogoCodefac.mensaje(MensajeCodefacSistema.CorreoElectronico.CORREO_ENVIADO);
                 } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
                     Logger.getLogger(ComponenteEnvioCorreoPanel.class.getName()).log(Level.SEVERE, null, ex);

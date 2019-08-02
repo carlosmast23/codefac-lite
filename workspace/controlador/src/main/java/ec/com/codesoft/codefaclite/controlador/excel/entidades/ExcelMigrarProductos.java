@@ -27,7 +27,7 @@ public class ExcelMigrarProductos extends ExcelMigrar{
     {
         CODIGO("Identificación",0,String.class),
         NOMBRE("Nombres",1,String.class),
-        PRECIO_VENTA_PUBLICO("Precio 1",2,String.class),
+        PRECIO_VENTA_PUBLICO("Precio 1",2,Double.class),
         CATALOGO_PRODUCTO("Catalogo producto",3,String.class),
         
         ESTADO("Estado",4,String.class);

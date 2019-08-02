@@ -71,7 +71,7 @@ public class SessionCodefac implements SessionCodefacInterface,Serializable{
     public Map<String,ParametroCodefac>  getParametrosCodefac() {
         try {
             //return parametrosCodefac;
-            return ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametrosMap();
+            return ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametrosMap(empresa);
         } catch (RemoteException ex) {
             Logger.getLogger(SessionCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -30,10 +31,10 @@ public class ParametroCodefac implements Serializable {
     public static final String MODO_FACTURACION= "modo_facturacion";
     public static final String IVA_DEFECTO= "iva_defecto";
     
-    public static final String SRI_WS_RECEPCION= "sri_ws_recepcion";
-    public static final String SRI_WS_AUTORIZACION= "sri_ws_autorizacion";
-    public static final String SRI_WS_RECEPCION_PRUEBA= "sri_ws_recepcion_prueba";
-    public static final String SRI_WS_AUTORIZACION_PRUEBA= "sri_ws_autorizacion_prueba";
+    //public static final String SRI_WS_RECEPCION= "sri_ws_recepcion";
+    //public static final String SRI_WS_AUTORIZACION= "sri_ws_autorizacion";
+    //public static final String SRI_WS_RECEPCION_PRUEBA= "sri_ws_recepcion_prueba";
+    //public static final String SRI_WS_AUTORIZACION_PRUEBA= "sri_ws_autorizacion_prueba";
     
     /*
     public static final String SECUENCIAL_FACTURA= "secuencial_factura";
@@ -105,6 +106,9 @@ public class ParametroCodefac implements Serializable {
     @Column(name = "VALOR")    
     public String valor;
 
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
+
     public ParametroCodefac() {
     }
 
@@ -132,6 +136,15 @@ public class ParametroCodefac implements Serializable {
         this.valor = valor;
     }
 
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
     @Override
     public int hashCode() {
         int hash = 5;

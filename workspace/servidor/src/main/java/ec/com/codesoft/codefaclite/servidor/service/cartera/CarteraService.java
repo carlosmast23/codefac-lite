@@ -127,7 +127,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     public void grabarDocumentoCartera(ComprobanteEntity comprobante,Cartera.TipoCarteraEnum tipo) throws RemoteException 
     {
         ParametroCodefacService parametroCodefacService=new ParametroCodefacService();
-        ParametroCodefac parametro=parametroCodefacService.getParametroByNombre(ParametroCodefac.ACTIVAR_CARTERA);
+        ParametroCodefac parametro=parametroCodefacService.getParametroByNombre(ParametroCodefac.ACTIVAR_CARTERA,comprobante.getEmpresa());
         
         //Si no existe este dato asumo que esta trabajando sin cartera
         if(parametro==null )

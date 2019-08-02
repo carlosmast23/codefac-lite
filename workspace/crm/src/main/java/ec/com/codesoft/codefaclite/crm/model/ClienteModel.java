@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
@@ -1021,6 +1022,11 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         //TipoSucursalEnum tipoSucursalEnum = (TipoSucursalEnum) getCmbTipoEstablecimiento().getSelectedItem();
         //personaEstablecimiento.setTipoSucursalEnum(TipoSucursalEnum.MATRIZ);
         
+    }
+
+    @Override
+    public Empresa getEmpresa() {
+        return session.getEmpresa();
     }
     
 

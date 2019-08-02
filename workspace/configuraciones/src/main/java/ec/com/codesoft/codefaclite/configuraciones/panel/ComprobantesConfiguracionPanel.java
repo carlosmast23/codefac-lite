@@ -76,6 +76,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         txtSmtpHost = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         txtSmtpPuerto = new javax.swing.JSpinner();
+        btnBuscarDirectorio = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
@@ -234,7 +235,8 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         jLabel20.setText("                              ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         panelConfiguracionesGenerales.add(jLabel20, gridBagConstraints);
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -350,6 +352,15 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         panelConfiguracionesGenerales.add(txtSmtpPuerto, gridBagConstraints);
 
+        btnBuscarDirectorio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscarDirectorio.setToolTipText("Busca Imagen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelConfiguracionesGenerales.add(btnBuscarDirectorio, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -400,6 +411,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscarDirectorio;
     private javax.swing.JButton btnBuscarImagen;
     private javax.swing.JButton btnFirmaElectronica;
     private javax.swing.JComboBox<ImpuestoDetalle> cmbIvaDefault;
@@ -554,6 +566,15 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     public void setCmbTipoEnvioComprobante(JComboBox<TipoEnvioComprobanteEnum> cmbTipoEnvioComprobante) {
         this.cmbTipoEnvioComprobante = cmbTipoEnvioComprobante;
     }
+
+    public JButton getBtnBuscarDirectorio() {
+        return btnBuscarDirectorio;
+    }
+
+    public void setBtnBuscarDirectorio(JButton btnBuscarDirectorio) {
+        this.btnBuscarDirectorio = btnBuscarDirectorio;
+    }
+    
     
 
 }

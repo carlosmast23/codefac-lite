@@ -239,7 +239,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                 {
                     try {
                         int etapaEnviarCorreo=ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE; //Por defecto elijo que los correos se envie solo el xml firmado
-                        ParametroCodefac parametroCodefac=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.TIPO_ENVIO_COMPROBANTE);
+                        ParametroCodefac parametroCodefac=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.TIPO_ENVIO_COMPROBANTE,comprobante.getEmpresa());
                         if(parametroCodefac!=null && parametroCodefac.getValor().equals(ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_AUTORIZADO.getLetra()))
                         {
                             etapaEnviarCorreo=ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE_AUTORIZADO;

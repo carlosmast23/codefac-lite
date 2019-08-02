@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
@@ -38,21 +39,21 @@ public abstract class CorreoCodefac {
         
     }
     
-    public void enviarCorreo() throws ExcepcionCorreoCodefac
+    public void enviarCorreo(Empresa empresa) throws ExcepcionCorreoCodefac
     {
         try
         {
             //ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO);
-            String correo=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO).getValor();
+            String correo=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO,empresa).getValor();
             
 
-            String clave=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_CLAVE).getValor();
+            String clave=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_CLAVE,empresa).getValor();
             //Obtener clave desencriptada
             clave=UtilidadesEncriptar.desencriptar(clave,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
             
             //Construir los datos de las propiedades si existen
-            String smtpHost=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_HOST).getValor();
-            String smtpPort=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_PORT).getValor();
+            String smtpHost=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_HOST,empresa).getValor();
+            String smtpPort=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_PORT,empresa).getValor();
             
             PropiedadCorreo propiedadCorreo=null;
             if(!smtpHost.isEmpty() && !smtpPort.isEmpty())

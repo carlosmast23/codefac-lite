@@ -50,7 +50,7 @@ public class MigrarProductoModel extends MigrarModel {
                    producto.setCodigoPersonalizado((String) fila.getByEnum(ExcelMigrarProductos.Enum.CODIGO).valor);
                    producto.setNombre((String) fila.getByEnum(ExcelMigrarProductos.Enum.NOMBRE).valor);
                    
-                   String precioVentaPublico=(String) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PUBLICO).valor;
+                   Double precioVentaPublico=(Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PUBLICO).valor;
                    String catalogoProducto=(String) fila.getByEnum(ExcelMigrarProductos.Enum.CATALOGO_PRODUCTO).valor;
                   
                    CatalogoProducto catalogoProductoTmp=ServiceFactory.getFactory().getCatalogoProductoServiceIf().obtenerPorNombre(catalogoProducto); 
@@ -64,7 +64,7 @@ public class MigrarProductoModel extends MigrarModel {
                    if(catalogoProductoTmp.getIva().getTarifa().equals(0))
                    {
                        
-                       precioVenta=new BigDecimal(precioVentaPublico);
+                       precioVenta=new BigDecimal(precioVentaPublico.toString());
                    }
                    else
                    {
@@ -77,7 +77,7 @@ public class MigrarProductoModel extends MigrarModel {
                    producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                    //producto.setCatalogoProducto(CatalogoPro);
                    
-                   Producto productoTmp=ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), GeneralEnumEstado.ACTIVO);
+                   Producto productoTmp=ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), GeneralEnumEstado.ACTIVO,session.getEmpresa());
                    if(productoTmp!=null)
                    {
                        throw new ExcelMigrar.ExcepcionExcelRegistroDuplicado("El dato ya se encuentra registrado en el sistema");

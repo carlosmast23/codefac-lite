@@ -214,7 +214,7 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
                 }
                 else if(getCmbTipoReporte().getSelectedItem().equals("Categoria"))
                 {
-                    CatalogoProductoBusquedaDialogo busquedaDialogo = new CatalogoProductoBusquedaDialogo();
+                    CatalogoProductoBusquedaDialogo busquedaDialogo = new CatalogoProductoBusquedaDialogo(session.getEmpresa());
                     BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
                     buscarDialogoModel.setVisible(true);
                     CategoriaProducto categoriaProductoTemp = (CategoriaProducto) buscarDialogoModel.getResultado();

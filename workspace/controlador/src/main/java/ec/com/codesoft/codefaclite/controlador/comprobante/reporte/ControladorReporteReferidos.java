@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.controlador.comprobante.reporte;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.io.InputStream;
 import java.sql.Date;
@@ -17,15 +18,15 @@ import java.util.Vector;
  * @author Carlos
  */
 public class ControladorReporteReferidos extends ControladorReporteFactura{
-    
 
-    public ControladorReporteReferidos() {
+    public ControladorReporteReferidos(Empresa empresa) {
+        super(empresa);
     }
     
+
     
-    
-    public ControladorReporteReferidos(Persona persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentosConsultarEnum documentoConsultaEnum) {
-        super(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado, afectarNotaCredito, documentoConsultaEnum);
+    public ControladorReporteReferidos(Persona persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentosConsultarEnum documentoConsultaEnum,Empresa empresa) {
+        super(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado, afectarNotaCredito, documentoConsultaEnum,empresa);
     }
 
     @Override

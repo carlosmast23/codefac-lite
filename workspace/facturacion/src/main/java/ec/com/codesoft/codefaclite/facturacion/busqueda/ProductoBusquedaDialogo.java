@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 
 /**
  *
@@ -24,9 +25,11 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>, InterfacesPropertisFindWeb {
 
     private EnumSiNo isManejoInvetario;
+    private Empresa empresa;
 
-    public ProductoBusquedaDialogo(EnumSiNo isManejoInvetario) {
+    public ProductoBusquedaDialogo(EnumSiNo isManejoInvetario,Empresa empresa) {
         this.isManejoInvetario = isManejoInvetario;
+        this.empresa=empresa;
     }
 
     public ProductoBusquedaDialogo() {
@@ -74,11 +77,12 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>, In
     public QueryDialog getConsulta(String filter) {
         String subQueryManejar = "and u.manejarInventario=?3";
 
-        String queryString = "SELECT u FROM Producto u WHERE (u.estado=?1) " + (isManejoInvetario != null ? subQueryManejar : "") + " and";
+        String queryString = "SELECT u FROM Producto u WHERE u.empresa=?4 and (u.estado=?1) " + (isManejoInvetario != null ? subQueryManejar : "") + " and";
         queryString += " ( LOWER(u.nombre) like ?2 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2, filter);
+        queryDialog.agregarParametro(4, empresa);
 
         if (isManejoInvetario != null) {
             queryDialog.agregarParametro(3, isManejoInvetario.getLetra());
