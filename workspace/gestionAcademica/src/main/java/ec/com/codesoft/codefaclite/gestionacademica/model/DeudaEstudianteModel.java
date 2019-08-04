@@ -459,13 +459,13 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
     private void cargarRubrosAsociados(EstudianteInscrito estudiante,Periodo periodo)
     {
         try {
-            Map<String,Object> parametrosMap=new HashMap<String,Object>();
-            parametrosMap.put("periodo",periodo);
-            parametrosMap.put("nivel",null);
-            parametrosMap.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+            //Map<String,Object> parametrosMap=new HashMap<String,Object>();
+            //parametrosMap.put("periodo",periodo);
+            //parametrosMap.put("nivel",null);
+            //parametrosMap.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
             
             //Agregar todos los rubros que no estan asigandos a un nivel
-            List<RubrosNivel> rubrosGeneral=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(parametrosMap);
+            List<RubrosNivel> rubrosGeneral=ServiceFactory.getFactory().getRubrosNivelServiceIf().buscarPorPeriodoYNivel(periodo,null);
             getCmbRubro().removeAllItems();
             
             for (RubrosNivel rubro : rubrosGeneral) {
@@ -473,12 +473,12 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
             }
             
             
-            parametrosMap.put("periodo",periodo);
-            parametrosMap.put("nivel",estudiante.getNivelAcademico().getNivel());
-            parametrosMap.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+            //parametrosMap.put("periodo",periodo);
+            //parametrosMap.put("nivel",estudiante.getNivelAcademico().getNivel());
+            //parametrosMap.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
             
             //Agregar solo los niveles disponibles para el curso del estudiante en especifico
-            List<RubrosNivel> rubrosNivel=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(parametrosMap);
+            List<RubrosNivel> rubrosNivel=ServiceFactory.getFactory().getRubrosNivelServiceIf().buscarPorPeriodoYNivel(periodo,estudiante.getNivelAcademico().getNivel());
             for (RubrosNivel rubroNivel : rubrosNivel) 
             {
                 getCmbRubro().addItem(rubroNivel);

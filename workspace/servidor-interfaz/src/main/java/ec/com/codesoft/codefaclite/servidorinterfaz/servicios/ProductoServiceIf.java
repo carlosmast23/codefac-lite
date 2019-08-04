@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -30,8 +31,10 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     
     public Producto buscarPorNombreyEstado(String nombre,GeneralEnumEstado estadoEnum,Empresa empresa) throws RemoteException;
     
-    public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws RemoteException;
+    public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws ServicioCodefacException,RemoteException;
     
     public List<Producto> obtenerTodosActivos(Empresa empresa) throws java.rmi.RemoteException;
+    
+    public Producto buscarGenerarCodigoBarras(EnumSiNo enumSiNo ) throws ServicioCodefacException,RemoteException;
     
 }

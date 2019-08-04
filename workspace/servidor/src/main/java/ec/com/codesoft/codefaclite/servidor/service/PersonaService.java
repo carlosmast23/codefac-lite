@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
@@ -150,7 +151,8 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("identificacion", identificacion);
         mapParametros.put("empresa",empresa);
-
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        
         List<Persona> personas = getFacade().findByMap(mapParametros);
         if (personas.size() > 0) {
             return personas.get(0);
@@ -158,6 +160,22 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
         return null;
 
+    }
+    
+    @Override
+    public Persona buscarPorRazonSocial(String nombre,Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
+    {
+        PersonaServiceIf cliente = ServiceFactory.getFactory().getPersonaServiceIf();
+        Map<String, Object> clienteMap = new HashMap<String, Object>();
+        clienteMap.put("razonSocial", "Consumidor Final");
+        clienteMap.put("empresa",empresa);
+        clienteMap.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        List<Persona> resultados= getFacade().findByMap(clienteMap);
+        if(resultados.size()>0)
+        {
+            return resultados.get(0);
+        }
+        return null;
     }
 
 }

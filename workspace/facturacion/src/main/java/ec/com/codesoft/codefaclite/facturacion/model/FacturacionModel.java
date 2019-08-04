@@ -1113,9 +1113,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(reporteOriginal);
             ComprobanteFisicoDisenioServiceIf servicioComprobanteDisenio = ServiceFactory.getFactory().getComprobanteFisicoDisenioServiceIf();;
-            Map<String, Object> parametroComprobanteMap = new HashMap<String, Object>();
-            parametroComprobanteMap.put("codigoDocumento", documentoEnum.getCodigo());
-            ComprobanteFisicoDisenio documento = servicioComprobanteDisenio.obtenerPorMap(parametroComprobanteMap).get(0);
+            //Map<String, Object> parametroComprobanteMap = new HashMap<String, Object>();
+            //parametroComprobanteMap.put("codigoDocumento", documentoEnum.getCodigo());
+            ComprobanteFisicoDisenio documento = servicioComprobanteDisenio.buscarPorCodigoDocumento(documentoEnum.getCodigo());
             manager.setearNuevosValores(documento);
             InputStream reporteNuevo = manager.generarNuevoDocumento();
             
@@ -2790,9 +2790,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         try {
-                            Map<String, Object> mapParametros = new HashedMap<String, Object>();
-                            mapParametros.put("persona.identificacion", identificacion);
-                            List<PersonaEstablecimiento> resultados=ServiceFactory.getFactory().getPersonaEstablecimientoServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
+                            //Map<String, Object> mapParametros = new HashedMap<String, Object>();
+                            //mapParametros.put("persona.identificacion", identificacion);
+                            //List<PersonaEstablecimiento> resultados=ServiceFactory.getFactory().getPersonaEstablecimientoServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
+                            List<PersonaEstablecimiento> resultados=ServiceFactory.getFactory().getPersonaEstablecimientoServiceIf().buscarActivoPorIdentificacion(identificacion,session.getEmpresa()); //Todo crear mejor un metodo que ya obtener filtrado los datos
                             if(resultados.size()==0)
                             {
                                 if(DialogoCodefac.dialogoPregunta("Crear Cliente","No existe el Cliente, lo desea crear?",DialogoCodefac.MENSAJE_ADVERTENCIA))
@@ -2847,10 +2848,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             case INVENTARIO:
                             case LIBRE:
                                 
-                                Map<String,Object> mapParametros=new HashMap<String,Object>();
-                                mapParametros.put("codigoPersonalizado", getTxtCodigoDetalle().getText()); //TODO: VER COMO MANEJAR TODOS LOS TIPOS DE CODIGO, VER UNA OPCION DE PARAMETRIZAR POR QUE CODIGO SE QUIERE TRABAJAR
-                                List<Producto> productos=ServiceFactory.getFactory().getProductoServiceIf().obtenerPorMap(mapParametros);
-                                if(productos.size()==0)
+                                //Map<String,Object> mapParametros=new HashMap<String,Object>();
+                                //mapParametros.put("codigoPersonalizado", getTxtCodigoDetalle().getText()); //TODO: VER COMO MANEJAR TODOS LOS TIPOS DE CODIGO, VER UNA OPCION DE PARAMETRIZAR POR QUE CODIGO SE QUIERE TRABAJAR
+                                //List<Producto> productos=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(getTxtCodigoDetalle().getText(),session.getEmpresa());
+                                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(getTxtCodigoDetalle().getText(),session.getEmpresa());
+                                if(producto==null)
                                 {
                                     if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
                                        btnListenerCrearProducto();
@@ -2858,7 +2860,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 }
                                 else
                                 {
-                                    agregarProductoVista(productos.get(0));
+                                    agregarProductoVista(producto);
                                 }
 
                                 break;

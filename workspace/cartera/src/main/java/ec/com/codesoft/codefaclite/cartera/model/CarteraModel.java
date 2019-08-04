@@ -227,12 +227,13 @@ public class CarteraModel extends CarteraPanel{
         
         for (CarteraDetalle carteraDetalle : cartera.getDetalles()) {
             try {
-                Map<String, Object> parametros = new HashMap<String, Object>();
+                //Map<String, Object> parametros = new HashMap<String, Object>();
                 //if(cartera.getTipoCarteraEnum().equals(tipoCarteraEnum.CL))
                 //{
-                parametros.put("carteraDetalle", carteraDetalle);
+                //parametros.put("carteraDetalle", carteraDetalle);
                 //}
-                List<CarteraCruce> cruces = servicio.obtenerPorMap(parametros);
+                //List<CarteraCruce> cruces = servicio.obtenerPorMap(parametros);
+                List<CarteraCruce> cruces = servicio.buscarPorCarteraDetalle(carteraDetalle);
                 this.cruces.addAll(cruces);
             
             } catch (RemoteException ex) {
@@ -311,10 +312,10 @@ public class CarteraModel extends CarteraPanel{
 
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         try {
-                            Map<String, Object> mapParametros = new HashedMap<String, Object>();
-                            mapParametros.put("identificacion", identificacion);
-                            List<Persona> resultados=ServiceFactory.getFactory().getPersonaServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
-                            if(resultados.size()==0)
+                            //Map<String, Object> mapParametros = new HashedMap<String, Object>();
+                            //mapParametros.put("identificacion", identificacion);
+                            Persona persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(identificacion,session.getEmpresa()); //Todo crear mejor un metodo que ya obtener filtrado los datos
+                            if(persona==null)
                             {
                                 if(DialogoCodefac.dialogoPregunta("Crear Cliente","No existe el Cliente, lo desea crear?",DialogoCodefac.MENSAJE_ADVERTENCIA))
                                 {
@@ -333,13 +334,11 @@ public class CarteraModel extends CarteraPanel{
                             }
                             else
                             {
-                                cartera.setPersona(resultados.get(0));
-                                cargarDatosCliente(resultados.get(0));
+                                cartera.setPersona(persona);
+                                cargarDatosCliente(persona);
                                //Opcion cuando encuentra los datos del cliente 
                             }
                         } catch (RemoteException ex) {
-                            Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ServicioCodefacException ex) {
                             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         

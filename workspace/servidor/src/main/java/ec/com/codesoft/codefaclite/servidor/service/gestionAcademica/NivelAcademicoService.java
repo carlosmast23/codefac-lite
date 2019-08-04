@@ -8,8 +8,11 @@ package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.NivelAcademicoFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
@@ -96,5 +99,14 @@ public class NivelAcademicoService extends ServiceAbstract<NivelAcademico, Nivel
         }
        
     }
+    
+    public List<NivelAcademico> buscarPorPeriodo(Periodo p) throws RemoteException, ServicioCodefacException {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("periodo", p);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());        
+        return getFacade().findByMap(mapParametros);
+
+    }
+    
 
 }

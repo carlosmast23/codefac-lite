@@ -182,13 +182,13 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             List<RubroPlantillaMes> mesesSeleccionados = obtenerMesesEnum();
             List<RubroEstudiante> dataRubro;
 
-            Map<String, Object> mapParametros = new HashMap<String, Object>();
+            NivelAcademico nivelBuscar=null;
             //if (banderaNiveles == false) {
             if (getChkTodosNiveles().isSelected() == false) {
-                mapParametros.put("nivelAcademico", (NivelAcademico) getCmbNivelAcademico().getSelectedItem());
+                nivelBuscar=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
             }
             EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
-            List<EstudianteInscrito> dataEstudiante = na.obtenerPorMap(mapParametros);
+            List<EstudianteInscrito> dataEstudiante = na.buscarPorNivelAcademico(nivelBuscar);
 
             List<ReporteDeudasData> data = new ArrayList<ReporteDeudasData>();
             for (EstudianteInscrito estudiante : dataEstudiante) {
@@ -309,11 +309,11 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
         try {
 
             NivelAcademicoServiceIf servicio = ServiceFactory.getFactory().getNivelAcademicoServiceIf();
-            Map<String, Object> mapBusqueda = new HashMap<String, Object>();
-            mapBusqueda.put("periodo", periodo);
-            mapBusqueda.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+            //Map<String, Object> mapBusqueda = new HashMap<String, Object>();
+            //mapBusqueda.put("periodo", periodo);
+            //mapBusqueda.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
             
-            List<NivelAcademico> resultados = servicio.obtenerPorMap(mapBusqueda);
+            List<NivelAcademico> resultados = servicio.obtenerTodosActivosPorPeriodo(periodo);
 
             comboNivel.removeAllItems();
             if (!resultados.isEmpty()) {
@@ -327,9 +327,6 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             Logger.getLogger(MatriculaModel.class
                     .getName()).log(Level.SEVERE, null, ex);
 
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(MatriculaModel.class
-                    .getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -398,14 +395,14 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                     titulo.add("Valor");
 
                     DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
-                    Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    
+                    //Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    NivelAcademico nivelBuscar=null;
                     if (getChkTodosNiveles().isSelected() == false) {
                     //if (banderaNiveles == false) {
-                        mapParametros.put("nivelAcademico", (NivelAcademico) getCmbNivelAcademico().getSelectedItem());
+                        nivelBuscar=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
                     }
                     EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
-                    List<EstudianteInscrito> dataEstudiante = na.obtenerPorMap(mapParametros);
+                    List<EstudianteInscrito> dataEstudiante = na.buscarPorNivelAcademico(nivelBuscar);
                     for (EstudianteInscrito estudiante : dataEstudiante) {
                         Vector<String> fila = new Vector<String>();
                         RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();

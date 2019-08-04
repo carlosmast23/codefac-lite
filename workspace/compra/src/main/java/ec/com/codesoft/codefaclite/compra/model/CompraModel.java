@@ -781,10 +781,11 @@ public class CompraModel extends CompraPanel{
                     try {
                         //Buscar si existe el producto vinculado con un proveedor
                         ProductoProveedorServiceIf serviceProductoProveedor = ServiceFactory.getFactory().getProductoProveedorServiceIf();
-                        Map<String, Object> mapParametros = new HashMap<String, Object>();
-                        mapParametros.put("producto", productoSeleccionado);
-                        mapParametros.put("proveedor", compra.getProveedor());
-                        List<ProductoProveedor> resultados = serviceProductoProveedor.obtenerPorMap(mapParametros);
+                        //Map<String, Object> mapParametros = new HashMap<String, Object>();
+                        //mapParametros.put("producto", productoSeleccionado);
+                        //mapParametros.put("proveedor", compra.getProveedor());
+                        List<ProductoProveedor> resultados = serviceProductoProveedor.buscarProductoCompraActivo(productoSeleccionado,compra);
+                        
                         if (resultados != null && resultados.size() > 0) {
                             productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
                             getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto()+"");
@@ -1227,6 +1228,8 @@ public class CompraModel extends CompraPanel{
                             getTxtCantidadItem().requestFocus();
                          }
                      } catch (RemoteException ex) {
+                         Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                     } catch (ServicioCodefacException ex) {
                          Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
                      }
                  }

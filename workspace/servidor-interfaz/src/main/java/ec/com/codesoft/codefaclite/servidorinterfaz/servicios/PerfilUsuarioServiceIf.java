@@ -5,12 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
+import java.util.List;
 
 /**
  *
  * @author Carlos
  */
 public interface PerfilUsuarioServiceIf extends ServiceAbstractIf<PerfilUsuario> {
-    
+    public List<PerfilUsuario> buscarPorPerfil(Perfil perfil) throws java.rmi.RemoteException;
 }

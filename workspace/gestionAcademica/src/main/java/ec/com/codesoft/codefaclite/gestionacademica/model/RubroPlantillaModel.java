@@ -795,11 +795,11 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
              * Cargar los datos del nivel academico en el combo
              * TODO: Vericar la modalidad cuando recien se crea y cuando ya existe datos
              */
-            Map<String,Object> mapParametroMap=new HashMap<String,Object>();
-            mapParametroMap.put("periodo",periodo);  
-            mapParametroMap.put("estado",GeneralEnumEstado.ACTIVO.getEstado()); 
+            //Map<String,Object> mapParametroMap=new HashMap<String,Object>();
+            //mapParametroMap.put("periodo",periodo);  
+            //mapParametroMap.put("estado",GeneralEnumEstado.ACTIVO.getEstado()); 
             
-            List<NivelAcademico> niveles=ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerPorMap(mapParametroMap);            
+            List<NivelAcademico> niveles=ServiceFactory.getFactory().getNivelAcademicoServiceIf().buscarPorPeriodo(periodo);            
             getCmbCursoSinRegistrar().removeAllItems();
             for (NivelAcademico nivelAcademico : niveles) {
                 getCmbCursoSinRegistrar().addItem(nivelAcademico);

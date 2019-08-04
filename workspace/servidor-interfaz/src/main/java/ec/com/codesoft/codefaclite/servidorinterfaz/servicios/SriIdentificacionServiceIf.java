@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.Remote;
 
 /**
@@ -16,4 +17,5 @@ import java.rmi.Remote;
 public interface SriIdentificacionServiceIf extends ServiceAbstractIf<SriIdentificacion>
 {
     public SriIdentificacion obtenerPorTransaccionEIdentificacion(Persona.TipoIdentificacionEnum tipoIdentificacion,SriIdentificacion.tipoTransaccionEnum tipoTransaccion) throws java.rmi.RemoteException;
+    public SriIdentificacion buscarPorCodigo(String codigo) throws ServicioCodefacException,java.rmi.RemoteException;
 }

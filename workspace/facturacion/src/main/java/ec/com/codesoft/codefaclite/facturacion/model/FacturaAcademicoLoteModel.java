@@ -162,9 +162,9 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Periodo periodoSeleccionado = (Periodo) getCmbPeriodo().getSelectedItem();
-                    Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    mapParametros.put("periodo", periodoSeleccionado);
-                    List<NivelAcademico> niveles = ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerPorMap(mapParametros);
+                    //Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    //mapParametros.put("periodo", periodoSeleccionado);
+                    List<NivelAcademico> niveles = ServiceFactory.getFactory().getNivelAcademicoServiceIf().buscarPorPeriodo(periodoSeleccionado);
 
                     //Cargar todos los niveles disponibles para ese periodo activo
                     getCmbNivelAcademico().removeAllItems();
@@ -187,20 +187,20 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
                 try {
                     getCmbRubrosNivel().removeAllItems();
                     NivelAcademico nivelSeleccionado = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
-                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    //Map<String, Object> mapParametros = new HashMap<String, Object>();
                     //Cargar rubros generales para todos los niveles
-                    mapParametros.put("nivel", null);
-                    mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
-                    List<RubrosNivel> rubrosSinNivel = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+                    //mapParametros.put("nivel", null);
+                    //mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
+                    List<RubrosNivel> rubrosSinNivel = ServiceFactory.getFactory().getRubrosNivelServiceIf().buscarPorPeriodoYNivel(nivelSeleccionado.getPeriodo(),null);
                     for (RubrosNivel rubrosNivel : rubrosSinNivel) {
                         getCmbRubrosNivel().addItem(rubrosNivel);
                     }
 
                     //Cargar rubros exclusivos de los niveles actuales
-                    mapParametros.clear();
-                    mapParametros.put("nivel", nivelSeleccionado.getNivel());
-                    mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
-                    List<RubrosNivel> rubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+                    //mapParametros.clear();
+                    //mapParametros.put("nivel", nivelSeleccionado.getNivel());
+                    //mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
+                    List<RubrosNivel> rubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().buscarPorPeriodoYNivel(nivelSeleccionado.getPeriodo(),nivelSeleccionado.getNivel());
 
                     //Agregar todos los rubros disponibles para el nivels
                     for (RubrosNivel rubro : rubros) {
@@ -238,9 +238,9 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
 
         if (nivelAcademico != null) {
             try {
-                Map<String, Object> mapParametros = new HashMap<String, Object>();
-                mapParametros.put("nivelAcademico", nivelAcademico);
-                List<EstudianteInscrito> estudiantesInscritos = ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerPorMap(mapParametros);
+                //Map<String, Object> mapParametros = new HashMap<String, Object>();
+                //mapParametros.put("nivelAcademico", nivelAcademico);
+                List<EstudianteInscrito> estudiantesInscritos = ServiceFactory.getFactory().getEstudianteInscritoServiceIf().buscarPorNivelAcademico(nivelAcademico);
 
                 for (EstudianteInscrito estudiantesInscrito : estudiantesInscritos) {
                     mapEstudianteRubros.put(estudiantesInscrito, new ArrayList<RubroEstudiante>());
@@ -593,11 +593,11 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
                 EstudianteInscrito estudianteInscrito = entry.getKey();
                 List<RubroEstudiante> rubrosLista = entry.getValue();
 
-                Map<String, Object> mapParametro = new HashMap<String, Object>();
-                mapParametro.put("estudianteInscrito", estudianteInscrito);
-                mapParametro.put("rubroNivel", rubroNivel);
+                //Map<String, Object> mapParametro = new HashMap<String, Object>();
+                //mapParametro.put("estudianteInscrito", estudianteInscrito);
+                //mapParametro.put("rubroNivel", rubroNivel);
 
-                List<RubroEstudiante> rubrosEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerPorMap(mapParametro);
+                List<RubroEstudiante> rubrosEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorEstudianteInscritoYRubroNivel(estudianteInscrito,rubroNivel);
 
                 if (rubrosEstudiante.size() > 0) {
                     RubroEstudiante rubroEstudiante = rubrosEstudiante.get(0);

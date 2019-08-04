@@ -172,10 +172,10 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
             public void actionPerformed(ActionEvent e) {
                 try {
                     Periodo periodoSeleccionado = (Periodo) getCmbPeriodo().getSelectedItem();
-                    Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    mapParametros.put("periodo", periodoSeleccionado);
-                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-                    List<NivelAcademico> niveles= ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerPorMap(mapParametros);
+                    //Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    //mapParametros.put("periodo", periodoSeleccionado);
+                    //mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                    List<NivelAcademico> niveles= ServiceFactory.getFactory().getNivelAcademicoServiceIf().buscarPorPeriodo(periodoSeleccionado);
 
                     //Cargar todos los niveles disponibles para ese periodo activo
                     getCmbNivelAcademico().removeAllItems();
@@ -200,20 +200,20 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
                     NivelAcademico nivelSeleccionado=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
                     if(nivelSeleccionado!=null)
                     {
-                        Map<String, Object> mapParametros = new HashMap<String, Object>();
-                        mapParametros.put("nivel", null);
-                        mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
-                        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-                        List<RubrosNivel> rubrosSinNivel = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+                        //Map<String, Object> mapParametros = new HashMap<String, Object>();
+                        //mapParametros.put("nivel", null);
+                        //mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
+                        //mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                        List<RubrosNivel> rubrosSinNivel = ServiceFactory.getFactory().getRubrosNivelServiceIf().buscarPorPeriodoYNivel(nivelSeleccionado.getPeriodo(),null);
                         for (RubrosNivel rubrosNivel : rubrosSinNivel) {
                             getCmbRubrosNivel().addItem(rubrosNivel);
                         }
 
-                        mapParametros.clear();
-                        mapParametros.put("nivel", nivelSeleccionado.getNivel());
-                        mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
-                        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-                        List<RubrosNivel> rubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+                        //mapParametros.clear();
+                        //mapParametros.put("nivel", nivelSeleccionado.getNivel());
+                        //mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
+                        //mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                        List<RubrosNivel> rubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().buscarPorPeriodoYNivel(nivelSeleccionado.getPeriodo(),nivelSeleccionado.getNivel());
 
                         //Agregar todos los rubros disponibles para el nivels
                         for (RubrosNivel rubro : rubros) {
@@ -246,17 +246,17 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
             RubrosNivel rubroNivel = (RubrosNivel) getCmbRubrosNivel().getSelectedItem();
 
             if (nivelAcademico != null && rubroNivel != null) {
-                Map<String, Object> mapParametros = new HashMap<String, Object>();
-                mapParametros.put("nivelAcademico", nivelAcademico);
-                mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-                List<EstudianteInscrito> estudiantesInscritos = ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerPorMap(mapParametros);
+                //Map<String, Object> mapParametros = new HashMap<String, Object>();
+                //mapParametros.put("nivelAcademico", nivelAcademico);
+                //mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+                List<EstudianteInscrito> estudiantesInscritos = ServiceFactory.getFactory().getEstudianteInscritoServiceIf().buscarPorNivelAcademico(nivelAcademico);
                
                 for (EstudianteInscrito estudiantesInscrito : estudiantesInscritos) {
-                    Map<String, Object> mapParametroNivelAcademico = new HashMap<String, Object>();
-                    mapParametroNivelAcademico.put("estudianteInscrito", estudiantesInscrito);
-                    mapParametroNivelAcademico.put("rubroNivel",rubroNivel);
+                    //Map<String, Object> mapParametroNivelAcademico = new HashMap<String, Object>();
+                    //mapParametroNivelAcademico.put("estudianteInscrito", estudiantesInscrito);
+                    //mapParametroNivelAcademico.put("rubroNivel",rubroNivel);
 
-                    List<RubroEstudiante> rubrosEstudiantes= ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerPorMap(mapParametroNivelAcademico);
+                    List<RubroEstudiante> rubrosEstudiantes= ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorEstudianteInscritoYRubroNivel(estudiantesInscrito,rubroNivel);
                     
                     if(rubrosEstudiantes.size()==0)
                     {

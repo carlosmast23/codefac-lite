@@ -10,8 +10,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import java.rmi.RemoteException;
@@ -123,7 +125,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
-    public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws RemoteException
+    public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws ServicioCodefacException, RemoteException
     {
         //Producto p;
         //p.getCodigoPersonalizado();
@@ -151,6 +153,20 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         mapParametros.put("empresa",empresa);
         List<Producto> resultados=getFacade().findByMap(mapParametros);
         return resultados;
+    }
+    
+    public Producto buscarGenerarCodigoBarras(EnumSiNo enumSiNo ) throws ServicioCodefacException,RemoteException
+    {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("generarCodigoBarras", EnumSiNo.SI.getLetra());
+
+        List<Producto> resultado=getFacade().findByMap(mapParametros);
+        if(resultado.size()>0)
+        {
+            return resultado.get(0);
+        }
+        return null;
     }
     
 

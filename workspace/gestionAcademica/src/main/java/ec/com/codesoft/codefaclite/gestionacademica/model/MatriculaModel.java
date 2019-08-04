@@ -459,9 +459,9 @@ public class MatriculaModel extends MatriculaPanel {
         try {
 
             NivelAcademicoServiceIf servicio = ServiceFactory.getFactory().getNivelAcademicoServiceIf();
-            Map<String, Object> mapBusqueda = new HashMap<String, Object>();
-            mapBusqueda.put("periodo", periodo);
-            List<NivelAcademico> resultados = servicio.obtenerPorMap(mapBusqueda);
+            //Map<String, Object> mapBusqueda = new HashMap<String, Object>();
+            //mapBusqueda.put("periodo", periodo);
+            List<NivelAcademico> resultados = servicio.buscarPorPeriodo(periodo);
 
             comboNivel.removeAllItems();
             for (NivelAcademico resultado : resultados) {

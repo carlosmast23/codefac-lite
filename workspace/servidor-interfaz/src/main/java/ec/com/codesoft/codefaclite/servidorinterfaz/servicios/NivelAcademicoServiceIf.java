@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -21,4 +22,6 @@ public interface NivelAcademicoServiceIf extends ServiceAbstractIf<NivelAcademic
     public void eliminarNivelAcademico(NivelAcademico n) throws RemoteException,ServicioCodefacException;
     public NivelAcademico obtenerPorNombreYEstadoYPeriodo(String nombre,GeneralEnumEstado estado,Periodo periodo) throws RemoteException;
     public NivelAcademico obtenerPorNombreYEstado(String nombre,GeneralEnumEstado estado) throws RemoteException;
+    public List<NivelAcademico> buscarPorPeriodo(Periodo p) throws RemoteException,ServicioCodefacException;
+    
 }

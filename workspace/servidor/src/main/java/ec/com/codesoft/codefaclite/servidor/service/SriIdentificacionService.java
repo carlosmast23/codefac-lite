@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.facade.SriFormaPagoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.SriIdentificacionFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -26,6 +27,18 @@ public class SriIdentificacionService extends ServiceAbstract<SriIdentificacion,
         super(SriIdentificacionFacade.class);
     }
     
+    public SriIdentificacion buscarPorCodigo(String codigo) throws ServicioCodefacException, java.rmi.RemoteException
+    {
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        parametros.put("codigo",codigo);
+        List<SriIdentificacion> resultados=getFacade().findByMap(parametros);
+        if(resultados.size()>0)
+        {
+            return resultados.get(0);
+        }
+        return null;
+        //SriIdentificacion identificacion = service.obtenerPorMap(parametros).get(0);
+    }
     /**
      * 
      * @param tipoIdentificacion

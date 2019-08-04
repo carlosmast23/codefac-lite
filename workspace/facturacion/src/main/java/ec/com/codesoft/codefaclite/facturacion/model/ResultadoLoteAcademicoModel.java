@@ -114,8 +114,8 @@ public class ResultadoLoteAcademicoModel extends ResultadoLoteAcademicoPanel{
             try {
                 
                 FacturacionServiceIf servicio=ServiceFactory.getFactory().getFacturacionServiceIf();
-                Map<String,Object> mapParametros=new HashMap<String,Object>();
-                List<Factura> facturas=servicio.obtenerPorMap(mapParametros);
+                //Map<String,Object> mapParametros=new HashMap<String,Object>();
+                List<Factura> facturas=servicio.obtenerTodos(); //Todo: deberia filtrar por emepresa o algo
                 
                 if(facturas.size()>0)
                 {
@@ -128,8 +128,6 @@ public class ResultadoLoteAcademicoModel extends ResultadoLoteAcademicoPanel{
                 }
                 
             } catch (RemoteException ex) {
-                Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
                 Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);

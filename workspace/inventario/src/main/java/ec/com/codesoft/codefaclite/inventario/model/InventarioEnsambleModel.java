@@ -315,14 +315,14 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                 Vector<String> fila=new Vector<String>();
                 
                 Producto componente=componenteProducto.getComponenteEnsamble();
-                Map<String,Object> mapParametros=new HashMap<String,Object>();
+                /*Map<String,Object> mapParametros=new HashMap<String,Object>();
                 mapParametros.put("producto",componente);
-                mapParametros.put("bodega",bodega);
+                mapParametros.put("bodega",bodega);*/
                 KardexServiceIf servicioKardex=ServiceFactory.getFactory().getKardexServiceIf();
-                List<Kardex> listaKardex= servicioKardex.obtenerPorMap(mapParametros);
-                if(listaKardex!=null && listaKardex.size()>0)
+                Kardex kardexResultado= servicioKardex.buscarKardexPorProductoyBodega(bodega,componente);
+                if(kardexResultado!=null)
                 {
-                    Kardex kardexComponente=listaKardex.get(0);
+                    Kardex kardexComponente=kardexResultado;
                     fila.add(componente.getNombre());
                     fila.add(componenteProducto.getCantidad()+"");
                     fila.add(componenteProducto.getCantidad()*cantidad+"");
@@ -352,8 +352,6 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                 }
                 tableModel.addRow(fila);
             } catch (RemoteException ex) {
-                Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
                 Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
             }
             

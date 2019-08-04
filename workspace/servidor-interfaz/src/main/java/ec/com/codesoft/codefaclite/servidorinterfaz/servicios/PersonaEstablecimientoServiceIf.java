@@ -5,13 +5,16 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import java.util.List;
 
 /**
  *
  * @author Carlos
  */
 public interface PersonaEstablecimientoServiceIf  extends ServiceAbstractIf<PersonaEstablecimiento>{
-    
+    public List<PersonaEstablecimiento>  buscarActivoPorIdentificacion(String identificacion,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException;
 }

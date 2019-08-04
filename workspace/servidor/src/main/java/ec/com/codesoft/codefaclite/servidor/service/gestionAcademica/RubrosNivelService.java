@@ -8,8 +8,10 @@ package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.RubrosNivelFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
@@ -152,6 +154,25 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
     }
     
     
+    public List<RubrosNivel> buscarPorPeriodoYNivel(Periodo p,Nivel nivel) throws RemoteException,ServicioCodefacException
+    {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        //Cargar rubros generales para todos los niveles
+        mapParametros.put("nivel", nivel);
+        mapParametros.put("periodo", p);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+    }
+
+    
+    public List<RubrosNivel> buscarPorPeriodoYCatalogo(Periodo p,CatalogoProducto catalogoProducto) throws RemoteException,ServicioCodefacException
+    {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("periodo", p);
+        mapParametros.put("catalogoProducto", catalogoProducto);
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+    }
     
     
             

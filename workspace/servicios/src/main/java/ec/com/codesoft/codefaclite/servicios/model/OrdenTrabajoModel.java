@@ -336,9 +336,9 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 try {
                     getCmbAsignadoADetalle().removeAllItems();
                     Departamento departamento = (Departamento)getCmbTipoOrdenDetalle().getSelectedItem();
-                    Map<String, Object> parametroMap = new HashMap<String, Object>();
-                    parametroMap.put("departamento", departamento);
-                    List<Empleado> empleados = ServiceFactory.getFactory().getEmpleadoServiceIf().obtenerPorMap(parametroMap);
+                    //Map<String, Object> parametroMap = new HashMap<String, Object>();
+                    //parametroMap.put("departamento", departamento);
+                    List<Empleado> empleados = ServiceFactory.getFactory().getEmpleadoServiceIf().buscarPorDepartamento(departamento,session.getEmpresa());
                     for (Empleado empleado : empleados) {
                         getCmbAsignadoADetalle().addItem(empleado);
                     }
@@ -722,8 +722,9 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                         try {
                             Map<String, Object> mapParametros = new HashedMap<String, Object>();
                             mapParametros.put("identificacion", identificacion);
-                            List<Persona> resultados=ServiceFactory.getFactory().getPersonaServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
-                            if(resultados.size()==0)
+                            //ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(identificacion, session.getEmpresa());
+                            Persona persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(identificacion,session.getEmpresa()); //Todo crear mejor un metodo que ya obtener filtrado los datos
+                            if(persona==null)
                             {
                                 if(DialogoCodefac.dialogoPregunta("Crear Cliente","No existe el Cliente, lo desea crear?",DialogoCodefac.MENSAJE_ADVERTENCIA))
                                 {
@@ -742,13 +743,11 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                             }
                             else
                             {
-                                ordenTrabajo.setCliente(resultados.get(0));
-                                cargarDatosCliente(resultados.get(0));
+                                ordenTrabajo.setCliente(persona);
+                                cargarDatosCliente(persona);
                                //Opcion cuando encuentra los datos del cliente 
                             }
                         } catch (RemoteException ex) {
-                            Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ServicioCodefacException ex) {
                             Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         

@@ -52,16 +52,17 @@ public class ConsultaFacturasMb implements Serializable {
             //f.getIdentificacion();
             FacturacionServiceIf facturaService = ServiceFactory.getFactory().getFacturacionServiceIf();
 
-            Map<String, Object> mapParametros = new HashMap<String, Object>();
+            //Map<String, Object> mapParametros = new HashMap<String, Object>();
             //mapParametros.put("identifacion", "1724218951001");
 
             listaFacturas = facturaService.obtenerFacturasPorIdentificacion(identificacion);
 
             //Usuarios
-            mapParametros = new HashMap<String, Object>();
-            mapParametros.put("nick", "root");
+            //mapParametros = new HashMap<String, Object>();
+            //mapParametros.put("nick", "root");
             UsuarioServicioIf usuarioServiceIf = ServiceFactory.getFactory().getUsuarioServicioIf();
-            List<Usuario> usuarios = usuarioServiceIf.obtenerPorMap(mapParametros);
+            
+            List<Usuario> usuarios = (List<Usuario>) usuarioServiceIf.consultarUsuarioActivoPorEmpresa("root",null); //Todo: Falta parametrizar para consultar las facturas por empresa
             for (Usuario usuario : usuarios) {
                 System.out.println(usuario.getNick());
             }

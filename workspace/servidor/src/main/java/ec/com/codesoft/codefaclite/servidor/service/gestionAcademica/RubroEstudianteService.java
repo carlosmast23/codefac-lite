@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.RubroEstudianteFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
@@ -302,6 +303,14 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     public List<RubroEstudiante> consultarPorEstudianteInscritoSinFacturar(EstudianteInscrito estudianteInscrito) throws RemoteException
     {
         return getFacade().consultarPorEstudianteInscritoSinFacturarFacade(estudianteInscrito);
+    }
+    
+    public List<RubroEstudiante> buscarPorEstudianteInscritoYRubroNivel(EstudianteInscrito estudianteInscrito, RubrosNivel rubroNivel) throws ServicioCodefacException, RemoteException {
+        Map<String, Object> mapParametro = new HashMap<String, Object>();
+        mapParametro.put("estudianteInscrito", estudianteInscrito);
+        mapParametro.put("rubroNivel", rubroNivel);
+
+        return getFacade().findByMap(mapParametro);
     }
 
 }

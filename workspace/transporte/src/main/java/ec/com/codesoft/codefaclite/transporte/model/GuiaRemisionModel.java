@@ -354,9 +354,9 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                 {
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         try {
-                            Map<String, Object> mapParametros = new HashedMap<String, Object>();
-                            mapParametros.put("identificacion", identificacion);
-                            List<PersonaEstablecimiento> resultados=ServiceFactory.getFactory().getPersonaEstablecimientoServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
+                            //Map<String, Object> mapParametros = new HashedMap<String, Object>();
+                            //mapParametros.put("identificacion", identificacion);
+                            List<PersonaEstablecimiento> resultados=ServiceFactory.getFactory().getPersonaEstablecimientoServiceIf().buscarActivoPorIdentificacion(identificacion,session.getEmpresa()); //Todo crear mejor un metodo que ya obtener filtrado los datos
                             if(resultados.size()==0)
                             {
                                 if(DialogoCodefac.dialogoPregunta("Crear Cliente","No existe el Cliente, lo desea crear?",DialogoCodefac.MENSAJE_ADVERTENCIA))

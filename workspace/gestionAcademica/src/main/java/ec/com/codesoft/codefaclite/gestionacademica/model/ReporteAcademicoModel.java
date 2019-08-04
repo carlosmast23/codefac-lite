@@ -205,11 +205,11 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
         try {
             
             NivelAcademicoServiceIf servicio = ServiceFactory.getFactory().getNivelAcademicoServiceIf();
-            Map<String, Object> mapBusqueda = new HashMap<String, Object>();
-            mapBusqueda.put("periodo", periodo);
-            mapBusqueda.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+            //Map<String, Object> mapBusqueda = new HashMap<String, Object>();
+            //mapBusqueda.put("periodo", periodo);
+            //mapBusqueda.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
             
-            List<NivelAcademico> resultados = servicio.obtenerPorMap(mapBusqueda);
+            List<NivelAcademico> resultados = servicio.buscarPorPeriodo(periodo);
             comboNivel.removeAllItems();
             
             comboNivel.addItem(defaultTodos);

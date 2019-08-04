@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.EstudianteInscritoFacade;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
@@ -196,6 +197,13 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
             resultadoObjetos.add(dato);
         }
         return resultadoObjetos;
+    }
+    
+    public List<EstudianteInscrito> buscarPorNivelAcademico(NivelAcademico nivel) throws ServicioCodefacException, java.rmi.RemoteException {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("nivelAcademico", nivel);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
     }
 
    

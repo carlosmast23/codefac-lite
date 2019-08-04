@@ -338,34 +338,36 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
     public void buscarPorProductoProveedor(int opc) throws RemoteException, ServicioCodefacException
     {
         ProductoProveedorServiceIf productoProveedorServiceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        //Map<String, Object> mapParametros = new HashMap<String, Object>();
         switch(opc)
         {
             case 1:
-                mapParametros.put("producto", producto);
+                //mapParametros.put("producto", producto);
+                productoProveedores = productoProveedorServiceIf.buscarPorProductoActivo(producto); 
             break;
             case 2:
-                mapParametros.put("proveedor", proveedor);
+                //mapParametros.put("proveedor", proveedor);
+                productoProveedores = productoProveedorServiceIf.buscarPorProveedorActivo(proveedor); 
             break;
         }   
-        productoProveedores = productoProveedorServiceIf.obtenerPorMap(mapParametros); 
+        //productoProveedores = productoProveedorServiceIf.obtenerPorMap(mapParametros); 
         
     }
     
     public void buscarPorProveedor() throws RemoteException, ServicioCodefacException
     {
         ProductoProveedorServiceIf productoProveedorServiceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
-        Map<String, Object> mapParametros = new HashMap<>();
-        mapParametros.put("proveedor", proveedor);
-        productoProveedores = productoProveedorServiceIf.obtenerPorMap(mapParametros);
+        //Map<String, Object> mapParametros = new HashMap<>();
+        //mapParametros.put("proveedor", proveedor);
+        productoProveedores = productoProveedorServiceIf.buscarPorProveedorActivo(proveedor);
     }
     
     public void buscarPorProductor() throws RemoteException, ServicioCodefacException
     {
         ProductoProveedorServiceIf productoProveedorServiceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
-        mapParametros.put("producto", producto);
-        productoProveedores = productoProveedorServiceIf.obtenerPorMap(mapParametros);
+        //Map<String, Object> mapParametros = new HashMap<String, Object>();
+        //mapParametros.put("producto", producto);
+        productoProveedores = productoProveedorServiceIf.buscarPorProductoActivo(producto);
     }
     
     public void buscarTodosProductoProveedor() throws RemoteException, RemoteException

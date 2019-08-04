@@ -339,12 +339,12 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                     Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
                     CatalogoProducto catalogoProducto = (CatalogoProducto) getCmbTipoRubroPorRubro().getSelectedItem();
 
-                    Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    mapParametros.put("periodo", periodo);
-                    mapParametros.put("catalogoProducto", catalogoProducto);
-                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                    //Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    //mapParametros.put("periodo", periodo);
+                    //mapParametros.put("catalogoProducto", catalogoProducto);
+                    //mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
 
-                    List<RubrosNivel> listaRubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+                    List<RubrosNivel> listaRubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().buscarPorPeriodoYCatalogo(periodo,catalogoProducto);
 
                     //Cargar la lista de rubros segun la seleccion del combo
                     getCmbRubro().removeAllItems();
@@ -430,7 +430,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
             mapParametros.put("periodo", periodo);
             mapParametros.put("catalogoProducto", tipoRubro);
 
-            List<RubrosNivel> rubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+            List<RubrosNivel> rubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().buscarPorPeriodoYCatalogo(periodo,tipoRubro);
             agregarRubroLista(rubros);
             construirTablaRubros();
 

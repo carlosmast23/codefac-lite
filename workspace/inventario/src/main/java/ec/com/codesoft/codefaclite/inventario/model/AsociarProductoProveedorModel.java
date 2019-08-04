@@ -213,11 +213,11 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
         try {
             String[] titulos={"Producto","Costo","Iva"};
             DefaultTableModel modeloTabla=new DefaultTableModel(titulos,0);
-            Map<String,Object> parametros=new HashMap<String,Object>();
-            parametros.put("proveedor",persona);
+            //Map<String,Object> parametros=new HashMap<String,Object>();
+            //parametros.put("proveedor",persona);
             
             ProductoProveedorServiceIf servicio=ServiceFactory.getFactory().getProductoProveedorServiceIf();
-            List<ProductoProveedor> lista= servicio.obtenerPorMap(parametros);
+            List<ProductoProveedor> lista= servicio.buscarPorProveedorActivo(persona);
             
             for (ProductoProveedor productoProveedor : lista) {
                 Vector<String> fila=new Vector<String>();

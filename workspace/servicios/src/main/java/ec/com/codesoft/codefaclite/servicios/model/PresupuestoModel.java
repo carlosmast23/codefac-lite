@@ -1321,7 +1321,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                 mapParametros.put("producto", this.producto);
                 mapParametros.put("proveedor", this.persona);
-                List<ProductoProveedor> resultados = serviceProductoProveedor.obtenerPorMap(mapParametros);
+                List<ProductoProveedor> resultados = serviceProductoProveedor.buscarProductoProveedorActivo(producto,persona);
                 if (resultados != null && resultados.size() > 0) {
                     productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
                     getTxtPrecioCompra().setText(productoProveedor.getCosto() + "");

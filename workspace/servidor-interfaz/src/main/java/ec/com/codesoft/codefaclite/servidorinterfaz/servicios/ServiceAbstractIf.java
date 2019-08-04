@@ -26,5 +26,5 @@ public interface ServiceAbstractIf<Entity> extends Remote {
     
     public Entity buscarPorId(Object primaryKey) throws java.rmi.RemoteException;
     
-    public List<Entity> obtenerPorMap(Map<String,Object> parametros) throws java.rmi.RemoteException,ServicioCodefacException;
+    //public List<Entity> obtenerPorMap(Map<String,Object> parametros) throws java.rmi.RemoteException,ServicioCodefacException;
 }

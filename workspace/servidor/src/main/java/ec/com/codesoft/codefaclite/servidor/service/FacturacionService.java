@@ -251,12 +251,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     private void afectarInventario(FacturaDetalle detalle)
     {
         try {
-            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
-            
-            Map<String,Object> mapParametros=new HashMap<String,Object>();
-            mapParametros.put("producto", producto);
+            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());            
+            //Map<String,Object> mapParametros=new HashMap<String,Object>();
+            //mapParametros.put("producto", producto);
             KardexService kardexService=new KardexService();
-            List<Kardex> kardexs= kardexService.obtenerPorMap(mapParametros);
+            List<Kardex> kardexs= kardexService.buscarPorProducto(producto);
             //TODO: Definir especificamente cual es la bodega principal
             if(kardexs!=null && kardexs.size()>0)
             {
@@ -285,6 +284,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 entityManager.merge(kardex);
             }
         } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }
     

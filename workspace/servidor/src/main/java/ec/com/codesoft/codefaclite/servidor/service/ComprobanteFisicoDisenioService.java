@@ -7,8 +7,11 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteFisicoDisenio;
 import ec.com.codesoft.codefaclite.servidor.facade.ComprobanteFisicoDisenioFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -18,6 +21,14 @@ public class ComprobanteFisicoDisenioService extends ServiceAbstract<Comprobante
     
     public ComprobanteFisicoDisenioService() throws RemoteException {
         super(ComprobanteFisicoDisenioFacade.class);
+    }
+    
+    public ComprobanteFisicoDisenio buscarPorCodigoDocumento(String codigo) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        Map<String, Object> parametroComprobanteMap = new HashMap<String, Object>();
+        parametroComprobanteMap.put("codigoDocumento", codigo);
+        return getFacade().findByMap(parametroComprobanteMap).get(0);
+            //ComprobanteFisicoDisenio documento = servicioComprobanteDisenio.obtenerPorMap(parametroComprobanteMap).get(0);
     }
     
 }

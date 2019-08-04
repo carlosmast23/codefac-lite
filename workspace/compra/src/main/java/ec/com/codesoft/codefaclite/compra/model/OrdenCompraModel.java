@@ -520,7 +520,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                 mapParametros.put("producto", productoSeleccionado);
                 mapParametros.put("proveedor", ordenCompra.getProveedor());
-                List<ProductoProveedor> resultados = serviceProductoProveedor.obtenerPorMap(mapParametros);
+                List<ProductoProveedor> resultados = serviceProductoProveedor.buscarProductoProveedorActivo(productoSeleccionado,ordenCompra.getProveedor());
                 if (resultados != null && resultados.size() > 0) {
                     productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
                     getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto() + "");

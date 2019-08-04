@@ -206,7 +206,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             Map<String,Object> mapParametros=new HashMap<String,Object>();
             mapParametros.put("producto", producto);
             KardexService kardexService=new KardexService();
-            List<Kardex> kardexs= kardexService.obtenerPorMap(mapParametros);
+            List<Kardex> kardexs= kardexService.getFacade().findByMap(mapParametros);
             //TODO: Definir especificamente cual es la bodega principal
             if(kardexs!=null && kardexs.size()>0)
             {

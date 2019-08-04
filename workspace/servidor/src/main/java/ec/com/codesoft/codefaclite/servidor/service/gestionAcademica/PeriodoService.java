@@ -66,7 +66,7 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
     {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        List<Periodo> periodos= obtenerPorMap(mapParametros);
+        List<Periodo> periodos= getFacade().findByMap(mapParametros);
         return periodos;
     }
     
@@ -74,7 +74,7 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
     {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        List<Periodo> periodos= obtenerPorMap(mapParametros);
+        List<Periodo> periodos= getFacade().findByMap(mapParametros);
         if(periodos.size()>0)
         {
             return periodos.get(0);

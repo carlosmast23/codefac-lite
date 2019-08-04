@@ -104,7 +104,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         this.facade.remove(entity);
     }
     
-    public List<Entity> obtenerPorMap(Map<String,Object> parametros)
+    public List<Entity> obtenerPorMap(Map<String,Object> parametros) throws ServicioCodefacException, java.rmi.RemoteException 
     {
         return this.facade.findByMap(parametros);
     }
@@ -231,5 +231,6 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     {
         AbstractFacade.detachRecursive(entidad);
     }
+    
     
 }

@@ -317,9 +317,9 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
     public List<ProductoProveedor> buscarProducto() throws RemoteException, ServicioCodefacException
     {
         ProductoProveedorServiceIf serviceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
-        Map<String,Object> parametros = new HashMap<>();
-        parametros.put("producto", this.producto);
-        List<ProductoProveedor> productos = serviceIf.obtenerPorMap(parametros);
+        //Map<String,Object> parametros = new HashMap<>();
+        //parametros.put("producto", this.producto);
+        List<ProductoProveedor> productos = serviceIf.buscarPorProductoActivo(producto);
         return productos;
     }
     

@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
@@ -73,7 +74,8 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                 mapParametros.put("nick", Usuario.SUPER_USUARIO);
                 Usuario usuarioRoot = null; //variable para consultar la variable root
                 try {
-                    usuarioRoot = ServiceFactory.getFactory().getUsuarioServicioIf().obtenerPorMap(mapParametros).get(0);//obtiene el usuario root de la base de datos 
+                    UsuarioServicio usuarioServicio=new UsuarioServicio();
+                    usuarioRoot = usuarioServicio.obtenerPorMap(mapParametros).get(0);//obtiene el usuario root de la base de datos 
                     usuarioRoot.isRoot = true;
                 } catch (RemoteException ex) {
                     Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
@@ -338,5 +340,21 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    
+    public Usuario consultarUsuarioActivoPorEmpresa(String nick,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();        
+        mapParametros = new HashMap<String, Object>();
+        mapParametros.put("nick", "root");
+        //mapParametros.put("empresa",empresa); TODO: Terminar de implementar esta funcionalidad
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        //UsuarioServicioIf usuarioServiceIf = ServiceFactory.getFactory().getUsuarioServicioIf();
+        List<Usuario> usuarios=getFacade().findByMap(mapParametros);
+        if(usuarios.size()>0)
+        {
+            return usuarios.get(0);
+        }
+        return null;
     }
 }

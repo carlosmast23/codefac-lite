@@ -58,6 +58,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEs
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
 import ec.com.codesoft.codefaclite.servidor.facade.ComprobanteEntityFacade;
+import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
+import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
+import ec.com.codesoft.codefaclite.servidor.facade.RetencionFacade;
+import ec.com.codesoft.codefaclite.servidor.facade.transporte.GuiaRemisionFacade;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
@@ -598,31 +602,31 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         switch(claveAcceso.getTipoComprobante())
         {
             case FACTURA:
-                FacturacionService servicio=new FacturacionService();                
-                List<Factura> comprobantes=servicio.obtenerPorMap(mapParametros);
+                FacturaFacade servicio=new FacturaFacade();                
+                List<Factura> comprobantes=servicio.findByMap(mapParametros);
                 if(comprobantes.size()>0)
                     return comprobantes.get(0);
                 break;
 
             case COMPROBANTE_RETENCION:
-                RetencionService servicio2 = new RetencionService();
-                List<Retencion> comprobantes2 = servicio2.obtenerPorMap(mapParametros);
+                RetencionFacade servicio2 = new RetencionFacade();
+                List<Retencion> comprobantes2 = servicio2.findByMap(mapParametros);
                 if (comprobantes2.size() > 0) {
                     return comprobantes2.get(0);
                 }
                 break;
 
             case GUIA_REMISION:
-                GuiaRemisionService servicio3 = new GuiaRemisionService();
-                List<GuiaRemision> comprobantes3 = servicio3.obtenerPorMap(mapParametros);
+                GuiaRemisionFacade servicio3 = new GuiaRemisionFacade();
+                List<GuiaRemision> comprobantes3 = servicio3.findByMap(mapParametros);
                 if (comprobantes3.size() > 0) {
                     return comprobantes3.get(0);
                 }
                 break;
 
             case NOTA_CREDITO:
-                NotaCreditoService servicio4 = new NotaCreditoService();
-                List<NotaCredito> comprobantes4 = servicio4.obtenerPorMap(mapParametros);
+                NotaCreditoFacade servicio4 = new NotaCreditoFacade();
+                List<NotaCredito> comprobantes4 = servicio4.findByMap(mapParametros);
                 if (comprobantes4.size() > 0) {
                     return comprobantes4.get(0);
                 }
@@ -840,7 +844,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     FacturacionService servicio = new FacturacionService();
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
                     mapParametros.put("claveAcceso",autorizacion.getNumeroAutorizacion());
-                    List<Factura> facturas= servicio.obtenerPorMap(mapParametros);
+                    List<Factura> facturas= servicio.getFacade().findByMap(mapParametros);
                     if(facturas.size()>0)
                     {
                         Factura facturaEditar=facturas.get(0);

@@ -252,7 +252,7 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
             NivelAcademicoServiceIf servicio = ServiceFactory.getFactory().getNivelAcademicoServiceIf();
             Map<String, Object> mapBusqueda = new HashMap<String, Object>();
             mapBusqueda.put("periodo", periodo);
-            List<NivelAcademico> resultados = servicio.obtenerPorMap(mapBusqueda);
+            List<NivelAcademico> resultados = servicio.buscarPorPeriodo(periodo);
 
             comboNivel.removeAllItems();
             if (!resultados.isEmpty()) {

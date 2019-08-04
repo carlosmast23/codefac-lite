@@ -127,9 +127,10 @@ public class PerfilModel extends PerfilPanel{
         }
         
         try {
-            Map<String,Object> mapParametros=new HashMap<String,Object>();
-            mapParametros.put("perfil",perfil);            
-            List<PerfilUsuario> perfilesUsuario=ServiceFactory.getFactory().getPerfilUsuarioServiceIf().obtenerPorMap(mapParametros);
+            //Map<String,Object> mapParametros=new HashMap<String,Object>();
+            //mapParametros.put("perfil",perfil);            
+            //List<PerfilUsuario> perfilesUsuario=ServiceFactory.getFactory().getPerfilUsuarioServiceIf().obtenerPorMap(mapParametros);
+            List<PerfilUsuario> perfilesUsuario=ServiceFactory.getFactory().getPerfilUsuarioServiceIf().buscarPorPerfil(perfil);
             //Solo eliminar si ningun usuario tiene activo este perfil
             if(perfilesUsuario.size()==0)
             {

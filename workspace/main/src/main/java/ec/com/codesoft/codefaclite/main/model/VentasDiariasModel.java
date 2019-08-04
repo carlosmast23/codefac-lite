@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
@@ -61,9 +62,11 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     private Producto productoSeleccionado;
     private int fila;
     private boolean banderaProducto;
+    private Empresa empresa;
     
-    public VentasDiariasModel(JDesktopPane parentPanel) {
+    public VentasDiariasModel(JDesktopPane parentPanel,Empresa empresa) {
         super(parentPanel);
+        this.empresa=empresa;
         iniciarValores();
         agregarListenerBotones();
         agregarListenerMovimiento();
@@ -316,9 +319,9 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     {
         try {
             PersonaServiceIf cliente = ServiceFactory.getFactory().getPersonaServiceIf();
-            Map<String,Object> clienteMap = new HashMap<String, Object>();
-            clienteMap.put("razonSocial", "Consumidor Final");
-            this.factura.setCliente(cliente.obtenerPorMap(clienteMap).get(0));
+            //Map<String,Object> clienteMap = new HashMap<String, Object>();
+            //clienteMap.put("razonSocial", "Consumidor Final");
+            this.factura.setCliente(cliente.buscarPorRazonSocial("Consumidor Final",empresa));
         } catch (RemoteException ex) {
             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
