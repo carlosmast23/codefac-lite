@@ -285,16 +285,22 @@ public class ServicioSri {
                    }
                    else
                    {
-                       //Boolean autorizadoAlguno=false;
+                       Boolean esperarAutorizacion=false;
                        for (Autorizacion autorizacion : autorizaciones) {
-                           if (autorizacion.getEstado().equals("AUTORIZADO")) {
-
-                               //autorizadoAlguno=true;
+                           if (autorizacion.getEstado().equals("AUTORIZADO")) {                               
                                break;
+                           }else if(autorizacion.getEstado().equals("EN PROCESO"))
+                           {
+                               esperarAutorizacion=true;
                            }
                        }
                        
-                       return true;
+                       
+                       if(!esperarAutorizacion)
+                       {
+                            return true;
+                       }
+                       
  
                    }
                } catch (InterruptedException ex) {

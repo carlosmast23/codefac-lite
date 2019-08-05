@@ -219,7 +219,12 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         comprobanteElectronico.setRuc(ruc);
         
         
-        Integer secuencialLote=obtenerSecuencialLote(empresa); //Verificar que solo debe dar un secuencial si la etapa es superior a enviar comprobante
+        Integer secuencialLote=null;
+        try {
+            secuencialLote = obtenerSecuencialLote(empresa); //Verificar que solo debe dar un secuencial si la etapa es superior a enviar comprobante
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         comprobanteElectronico.setSecuencialLote(secuencialLote);
         
@@ -683,19 +688,24 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     }
     
       
-    private Integer obtenerSecuencialLote(Empresa empresa) throws RemoteException
+    private Integer obtenerSecuencialLote(Empresa empresa) throws RemoteException,ServicioCodefacException
     {
-        //Obtener el numero de secuencial siguiente
-        ParametroCodefacServiceIf servicio=new ParametroCodefacService();
-        ParametroCodefac parametroCodefac = servicio.getParametroByNombre(ParametroCodefac.SECUENCIAL_LOTE,empresa);
-        if(parametroCodefac==null)
-        {
-            
+
+        ParametroCodefacServiceIf servicio = new ParametroCodefacService();
+        ParametroCodefac parametroCodefac = servicio.getParametroByNombre(ParametroCodefac.SECUENCIAL_LOTE, empresa);
+        //Si la variable para enviar por lote no se encuentra creada generar un numero secuencial
+        if (parametroCodefac == null) {
+            parametroCodefac = new ParametroCodefac();
+            parametroCodefac.setEmpresa(empresa);
+            parametroCodefac.setNombre(ParametroCodefac.SECUENCIAL_LOTE);
+            parametroCodefac.setValor("0");//Si no existe el primer dato lo creo en la base de datos
+            entityManager.persist(parametroCodefac);
         }
         Integer secuencialLote = Integer.parseInt(parametroCodefac.getValor());
         parametroCodefac.setValor((secuencialLote + 1) + "");
         entityManager.merge(parametroCodefac);
         return secuencialLote;
+
     }
     /**
      * Metodo que permite procesar varios comprobante en Lote
@@ -706,7 +716,12 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantesLote(comprobantesData, usuario);
         
         //comprobantesData.get(0).getEmpresa()
-        Integer secuencialLote=obtenerSecuencialLote(comprobantesData.get(0).getEmpresa());
+        Integer secuencialLote=null;
+        try {
+            secuencialLote = obtenerSecuencialLote(comprobantesData.get(0).getEmpresa());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
         comprobanteElectronico.setSecuencialLote(secuencialLote);
