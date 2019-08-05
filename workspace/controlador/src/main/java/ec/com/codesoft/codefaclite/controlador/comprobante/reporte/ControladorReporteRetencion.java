@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPan
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
@@ -52,6 +53,7 @@ public class ControladorReporteRetencion {
     private SriRetencionRenta sriRetencionRenta;
     private SriRetencion sriRetencion;
     private ComprobanteEntity.ComprobanteEnumEstado estadoEnum;
+    private Empresa empresa;
     
     private List<RetencionDetalle> dataretencion;
     private List<ReporteRetencionesData> dataReporte;
@@ -65,7 +67,7 @@ public class ControladorReporteRetencion {
     //public InputStream path=RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_retenciones.jrxml");
 
 
-    public ControladorReporteRetencion(Persona proveedor, Date fechaInicio, Date fechaFin, SriRetencionIva sriRetencionIva, SriRetencionRenta sriRetencionRenta,SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum) {
+    public ControladorReporteRetencion(Persona proveedor, Date fechaInicio, Date fechaFin, SriRetencionIva sriRetencionIva, SriRetencionRenta sriRetencionRenta,SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Empresa empresa) {
         this.proveedor = proveedor;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -73,6 +75,7 @@ public class ControladorReporteRetencion {
         this.sriRetencionRenta = sriRetencionRenta;
         this.sriRetencion=sriRetencion;
         this.estadoEnum = estadoEnum;
+        this.empresa=empresa;
         cargarMapsTiposRetenciones();
     }
     
@@ -80,7 +83,7 @@ public class ControladorReporteRetencion {
     {
         try {
             RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
-            dataretencion = fs.obtenerRetencionesReportes(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, sriRetencion, estadoEnum);
+            dataretencion = fs.obtenerRetencionesReportes(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, sriRetencion, estadoEnum,empresa);
             dataReporte = new ArrayList<ReporteRetencionesData>();
             for (RetencionDetalle retencion : dataretencion) {
                 ReporteRetencionesData data = new ReporteRetencionesData(retencion.getRetencion().getClaveAcceso(),

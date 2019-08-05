@@ -505,7 +505,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                 //RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
                 
                 ComprobanteEntity.ComprobanteEnumEstado estadoEnum=(ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
-                controladorReporte=new ControladorReporteRetencion(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, sriRetencion,estadoEnum);
+                controladorReporte=new ControladorReporteRetencion(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, sriRetencion,estadoEnum,session.getEmpresa());
                 controladorReporte.generarReporte();
                 construirTablaRetenciones();
                 construirTablaTotalesIva();

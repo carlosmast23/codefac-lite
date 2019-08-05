@@ -240,6 +240,9 @@ public class ServicioSri {
                        if(autorizaciones.get(0).getEstado().equals(AUTORIZADO))
                        {
                             return true;
+                       }if(autorizaciones.get(0).getEstado().equals("EN PROCESO"))
+                       {
+                           //TODO: Si el mensaje es en proceso sigue esperando hasta que devuelva autorizado o error
                        }
                        else
                        {

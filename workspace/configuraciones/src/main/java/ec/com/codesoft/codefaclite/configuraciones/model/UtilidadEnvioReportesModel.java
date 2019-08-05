@@ -392,7 +392,7 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
                 null,
                 null,
                 null,
-                (ComprobanteEntity.ComprobanteEnumEstado) getCmbTipoEstadoReporte().getSelectedItem());
+                (ComprobanteEntity.ComprobanteEnumEstado) getCmbTipoEstadoReporte().getSelectedItem(),session.getEmpresa());
         controladorReporte.generarReporte();
 
         File archivoReporte = null;

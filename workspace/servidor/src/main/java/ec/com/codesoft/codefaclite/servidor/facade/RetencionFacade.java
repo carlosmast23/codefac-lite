@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
@@ -31,7 +32,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         super(Retencion.class);
     }
     
-    public List<RetencionDetalle> obtenerRetencionesReportesFacade(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum) {
+    public List<RetencionDetalle> obtenerRetencionesReportesFacade(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Empresa empresa) {
         //RetencionDetalle rd;
         //rd.getRetencion().getEstado();
         //rd.getCodigoRetencionSri();
@@ -39,7 +40,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         //rd.getRetencion().getFechaEmision();
         //rd.getRetencion().getProveedor();
         //String queryString = "SELECT d FROM RetencionDetalle d where d.retencion.estado<>?1 ";
-        String queryString = "SELECT d FROM RetencionDetalle d where 1=1 ";
+        String queryString = "SELECT d FROM RetencionDetalle d where d.retencion.empresa=?11 ";
         
         if(persona!=null)
         {
@@ -129,7 +130,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
             
         }
 
-        
+        query.setParameter(11,empresa);
         
         
         return query.getResultList();        

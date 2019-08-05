@@ -21,6 +21,7 @@ import com.jtattoo.plaf.texture.TextureLookAndFeel;
 import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
 import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
@@ -356,6 +357,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 sessionCodefac.setPerfiles(Main.obtenerPerfilesUsuario(datosLogin.usuario));
                 sessionCodefac.setEmpresa(datosLogin.empresa);
                 setVentanasMenuList(null);
+                actualizarNotificacionesCodefac();
+                MonitorComprobanteModel.getInstance().eliminarTodosDatos();
                 setearEtiquetasPantallaPrincipal();
                 setVisible(true);
                 break;

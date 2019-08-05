@@ -136,24 +136,27 @@ public class MonitorComprobanteModel extends MonitorComprobantesPanel {
         getBtnQuitarTerminados().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Component[] componentes=getjPanelComponentesCarga().getComponents();
-                for (Component componente : componentes) {
-                    JPanel panel=(JPanel) componente;
-                    
-                    Component[] componentesMonitor= panel.getComponents();
-                    JProgressBar barraProgreso=(JProgressBar) componentesMonitor[0];
-                    
-                    if(barraProgreso.getPercentComplete()==1d)
-                    {
-                        getjPanelComponentesCarga().remove(componente);
-                        getjPanelComponentesCarga().revalidate();
-                        getjPanelComponentesCarga().repaint();
-                    }
-                    
-                }
-                
+                eliminarTodosDatos();
             }
         });
+    }
+    
+    public void eliminarTodosDatos()
+    {
+        Component[] componentes = getjPanelComponentesCarga().getComponents();
+        for (Component componente : componentes) {
+            JPanel panel = (JPanel) componente;
+
+            Component[] componentesMonitor = panel.getComponents();
+            JProgressBar barraProgreso = (JProgressBar) componentesMonitor[0];
+
+            if (barraProgreso.getPercentComplete() == 1d) {
+                getjPanelComponentesCarga().remove(componente);
+                getjPanelComponentesCarga().revalidate();
+                getjPanelComponentesCarga().repaint();
+            }
+
+        }
     }
 
     @Override
