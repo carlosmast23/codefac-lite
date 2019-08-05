@@ -89,7 +89,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
          */
         if(comprasBool)
         {
-            List<CompraAts> compras=consultarComprasAts(fechaInicial, fechaFinal);
+            List<CompraAts> compras=consultarComprasAts(fechaInicial, fechaFinal,empresa);
             ats.setCompras(compras);
         }
         
@@ -152,7 +152,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
     }
    
     
-    public List<CompraAts> consultarComprasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal) throws  RemoteException,ServicioCodefacException
+    public List<CompraAts> consultarComprasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
     {
         SriRetencionService sriRetencionService=new SriRetencionService();
         SriRetencion sriRetencionIva=sriRetencionService.consultarPorNombre(SriRetencion.NOMBRE_RETENCION_IVA);//Variable que necesito para las retenciones
@@ -160,7 +160,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
         List<CompraAts> comprasAts=new ArrayList<CompraAts>();
         CompraService compraService=new CompraService();
-        List<Compra> compras=compraService.obtenerCompraReporte(null, fechaInicial, fechaFinal,null,null,GeneralEnumEstado.ACTIVO);
+        List<Compra> compras=compraService.obtenerCompraReporte(null, fechaInicial, fechaFinal,null,null,GeneralEnumEstado.ACTIVO,empresa);
         
         for (Compra compra : compras) {
             CompraAts compraAts=new CompraAts();

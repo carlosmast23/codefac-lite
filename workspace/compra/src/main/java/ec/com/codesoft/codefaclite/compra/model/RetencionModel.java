@@ -209,7 +209,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        RetencionBusquedaDialogo retencionBusqueda = new RetencionBusquedaDialogo();
+        RetencionBusquedaDialogo retencionBusqueda = new RetencionBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(retencionBusqueda);
         buscarDialogoModel.setVisible(true);
 
@@ -492,7 +492,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getBtnBuscarFacturaCompra().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CompraBusquedaDialogo compraBusqueda = new CompraBusquedaDialogo();
+                CompraBusquedaDialogo compraBusqueda = new CompraBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(compraBusqueda);
                 buscarDialogoModel.setVisible(true);
                 

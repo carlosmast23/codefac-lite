@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -21,6 +22,13 @@ import java.util.Vector;
  */
 public class RetencionBusquedaDialogo implements InterfaceModelFind<Retencion> {
 
+    private Empresa empresa;
+
+    public RetencionBusquedaDialogo(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
@@ -34,7 +42,7 @@ public class RetencionBusquedaDialogo implements InterfaceModelFind<Retencion> {
     public QueryDialog getConsulta(String filter) {
         //Retencion ret;
         //ret.getEstadoEnum()
-        String queryString = "SELECT r FROM Retencion r WHERE r.estado<>?2 ";
+        String queryString = "SELECT r FROM Retencion r WHERE r.empresa=?5 and r.estado<>?2 ";
         //queryString += " ( LOWER(r.secuencial) like ?1 )";
         queryString += "AND ( LOWER(r.proveedor.razonSocial) like ?3 OR CONCAT(r.secuencial, '') like ?4 )";
         queryString += " ORDER BY r.secuencial+0 DESC ";
@@ -44,6 +52,7 @@ public class RetencionBusquedaDialogo implements InterfaceModelFind<Retencion> {
         queryDialog.agregarParametro(2,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(3, filter);
         queryDialog.agregarParametro(4, filter);
+        queryDialog.agregarParametro(5, empresa);
         return queryDialog;
     }
 

@@ -374,7 +374,8 @@ public class CompraReporteModel extends CompraReportePanel {
                 documentoEnum,
                 tipoDocumentoEnum,
                 estadoEnum,
-                banderaBusqueda);
+                banderaBusqueda,
+                session.getEmpresa());
         controladorReporteCompra.generarReporte();
                         
         //this.compras = compraServiceIf.obtenerCompraReporte(proveedor, fechaInicio, fechaFinal, documentoEnum, tipoDocumentoEnum, estadoEnum);

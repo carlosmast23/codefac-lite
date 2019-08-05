@@ -349,6 +349,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 cerrarTodasPantallas();
                 setVisible(false);
                 LoginModel.DatosLogin datosLogin = Main.cargarLoginUsuario();
+                Main.validacionesEmpresa(datosLogin.empresa, this); //Haciendo verificacion de validacion de la licencia y datos de la empresa
                 sessionCodefac.setUsuario(datosLogin.usuario);
                 sessionCodefac.setSucursal(datosLogin.sucursal);
                 sessionCodefac.setMatriz(datosLogin.matriz);

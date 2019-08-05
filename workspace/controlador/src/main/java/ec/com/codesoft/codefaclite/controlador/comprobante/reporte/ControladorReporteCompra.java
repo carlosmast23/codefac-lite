@@ -14,7 +14,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -56,6 +58,7 @@ public class ControladorReporteCompra {
      * Todo: Ver si eleiminar esta varaible porque bastaria con setear null la variable de proveedor
      */
     private boolean banderaBusqueda;
+    private Empresa empresa;
 
     //Variables que me permiten realizar la sumatoria de los totales de cada compra
     private BigDecimal subtotal = BigDecimal.ZERO;
@@ -67,7 +70,7 @@ public class ControladorReporteCompra {
     private BigDecimal iva = BigDecimal.ZERO;
     private BigDecimal total = BigDecimal.ZERO;
 
-    public ControladorReporteCompra(Persona proveedor, Date fechaInicio, Date fechaFinal, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum, GeneralEnumEstado estadoEnum, boolean banderaBusqueda) {
+    public ControladorReporteCompra(Persona proveedor, Date fechaInicio, Date fechaFinal, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum, GeneralEnumEstado estadoEnum, boolean banderaBusqueda,Empresa empresa) {
         this.proveedor = proveedor;
         this.fechaInicio = fechaInicio;
         this.fechaFinal = fechaFinal;
@@ -75,16 +78,19 @@ public class ControladorReporteCompra {
         this.tipoDocumentoEnum = tipoDocumentoEnum;
         this.estadoEnum = estadoEnum;
         this.banderaBusqueda = banderaBusqueda;
+        this.empresa=empresa;
     }
 
     public void generarReporte() {
         try {
             encerarValoresTotales();
             CompraServiceIf compraServiceIf = ServiceFactory.getFactory().getCompraServiceIf();
-            compras = compraServiceIf.obtenerCompraReporte(proveedor, fechaInicio, fechaFinal, documentoEnum, tipoDocumentoEnum, estadoEnum);
+            compras = compraServiceIf.obtenerCompraReporte(proveedor, fechaInicio, fechaFinal, documentoEnum, tipoDocumentoEnum, estadoEnum,empresa);
             sumarTotalesComprasIndividuales(compras);
 
         } catch (RemoteException ex) {
+            Logger.getLogger(ControladorReporteCompra.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ControladorReporteCompra.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
@@ -19,7 +20,12 @@ import java.util.Vector;
  */
 public class CompraBusqueda implements InterfaceModelFind<Compra>
 {
+    private Empresa empresa;
 
+    public CompraBusqueda(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
@@ -36,11 +42,12 @@ public class CompraBusqueda implements InterfaceModelFind<Compra>
     public QueryDialog getConsulta(String filter) {
         //Compra c;
         //c.getId();
-        String queryString = "SELECT c FROM Compra c WHERE c.estado=?2 AND ";
+        String queryString = "SELECT c FROM Compra c WHERE c.empresa=?3 AND c.estado=?2 AND ";
         queryString+=" ( LOWER(c.secuencial) like ?1 ) order by c.id desc ";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
         queryDialog.agregarParametro(2,GeneralEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(3,empresa);
         return queryDialog;
     }
 

@@ -87,7 +87,7 @@ public class CompraModel extends CompraPanel{
     /**
      * Referencia donde se va a almacenar la compra gestionado
      */
-    private Empresa empresa;
+    //private Empresa empresa;
     private Compra compra;
     private Producto productoSeleccionado;
     //private Persona proveedor;
@@ -180,6 +180,7 @@ public class CompraModel extends CompraPanel{
         String preimpreso = "";
         compra.setClaveAcceso("");
         DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
+        compra.setEmpresa(session.getEmpresa());
         compra.setCodigoDocumento(documentoEnum.getCodigo());        
         compra.setEstado(GeneralEnumEstado.ACTIVO.getEstado()); //TODO: cambiar el estado de las ordenes de compra
         compra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
@@ -290,7 +291,7 @@ public class CompraModel extends CompraPanel{
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        CompraBusqueda compraBusqueda = new CompraBusqueda();
+        CompraBusqueda compraBusqueda = new CompraBusqueda(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(compraBusqueda);
         buscarDialogoModel.setVisible(true);
         Compra compra = (Compra)buscarDialogoModel.getResultado();
@@ -528,7 +529,7 @@ public class CompraModel extends CompraPanel{
         
         compra.setDescuentoImpuestos(ordenCompra.getDescuentoImpuestos());
         compra.setDescuentoSinImpuestos(ordenCompra.getDescuentoSinImpuestos());
-        compra.setEmpresaId(ordenCompra.getEmpresa_id());
+        compra.setEmpresa(ordenCompra.getEmpresa());
         compra.setIva(ordenCompra.getIva());
         compra.setIvaSriId(ordenCompra.getIvaSriId());
         compra.setSubtotalImpuestos(ordenCompra.getSubtotalImpuestos());
@@ -876,7 +877,7 @@ public class CompraModel extends CompraPanel{
 
     private void crearVariables() {
         this.compra = new Compra();
-        this.empresa = new Empresa();
+        //this.empresa = new Empresa();
     }
     
     private void initModelTablaDetalleCompra() {
@@ -1094,9 +1095,9 @@ public class CompraModel extends CompraPanel{
     {
         EmpresaServiceIf empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
         List<Empresa> listadoEmpresas = empresaService.obtenerTodos();
-        this.empresa = listadoEmpresas.get(0);
+        Empresa empresa = session.getEmpresa();
         
-        if(this.empresa.getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
+        if(empresa.getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
         {
             this.getPanelRetencion().setVisible(true);
             /*getCmbSustentoComprobante().setVisible(true);
@@ -1114,8 +1115,11 @@ public class CompraModel extends CompraPanel{
         
         //Seleccionar el tipo de documento configurado por defecto para la compra
         ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA);
-        TipoDocumentoEnum tipoDocumentoEnumDefault=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroCodefac.getValor());
-        getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnumDefault);
+        if(parametroCodefac!=null)
+        {
+            TipoDocumentoEnum tipoDocumentoEnumDefault=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroCodefac.getValor());
+            getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnumDefault);
+        }
     }
 
     @Override

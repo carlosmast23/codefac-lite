@@ -53,8 +53,8 @@ public class Compra implements Serializable {
     private Long id;
     @Column(name = "CLAVE_ACCESO")
     private String claveAcceso;
-    @Column(name = "EMPRESA_ID")
-    private Long empresaId;
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
     @Column(name = "TIPO_IDENTIFICACION_ID")
     private Long tipoClienteId;
     @Column(name = "SECUENCIAL")
@@ -174,9 +174,6 @@ public class Compra implements Serializable {
         return claveAcceso;
     }
 
-    public Long getEmpresaId() {
-        return empresaId;
-    }
 
     public Long getTipoClienteId() {
         return tipoClienteId;
@@ -262,10 +259,6 @@ public class Compra implements Serializable {
 
     public void setClaveAcceso(String claveAcceso) {
         this.claveAcceso = claveAcceso;
-    }
-
-    public void setEmpresaId(Long empresaId) {
-        this.empresaId = empresaId;
     }
 
     public void setTipoClienteId(Long tipoClienteId) {
@@ -473,6 +466,16 @@ public class Compra implements Serializable {
     public void setAutorizacion(String autorizacion) {
         this.autorizacion = autorizacion;
     }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
 
     public void setCodigoComprobanteSri(String codigoComprobanteSri) {
         this.codigoDocumentoSri = codigoComprobanteSri;

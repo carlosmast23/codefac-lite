@@ -361,7 +361,8 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
                 null,
                 null,
                 GeneralEnumEstado.ACTIVO,
-                true);
+                true,
+                session.getEmpresa());
         controladorReporte.generarReporte();
         File archivoReporte = null;
         if (formatoReporteEnum.EXCEL.equals(formatoReporteEnum)) {

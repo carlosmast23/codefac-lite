@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import es.mityc.firmaJava.ocsp.config.ProveedorInfo;
@@ -38,8 +39,10 @@ public class OrdenCompra implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;  
     
-    @Column(name = "EMPRESA_ID")
-    private Long empresa_id;
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
+    //@Column(name = "EMPRESA_ID")
+    //private Long empresa_id;
     
     @Column(name = "ESTADO")
     private String estado;
@@ -224,13 +227,14 @@ public class OrdenCompra implements Serializable{
         this.detalles = detalles;
     }
 
-    public Long getEmpresa_id() {
-        return empresa_id;
+    public Empresa getEmpresa() {
+        return empresa;
     }
 
-    public void setEmpresa_id(Long empresa_id) {
-        this.empresa_id = empresa_id;
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
+
     
     
     

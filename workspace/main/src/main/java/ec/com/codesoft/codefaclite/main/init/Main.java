@@ -693,7 +693,7 @@ public class Main {
      * Validacion que me permite verificar las licencias de la empresa y el tema de los pagos
      * @param empresa 
      */
-    private static void validacionesEmpresa(Empresa empresa,GeneralPanelModel panel)
+    public static void validacionesEmpresa(Empresa empresa,GeneralPanelModel panel)
     {
         try {
             ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,empresa);
