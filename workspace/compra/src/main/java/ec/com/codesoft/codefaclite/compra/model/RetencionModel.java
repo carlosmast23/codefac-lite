@@ -991,6 +991,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
     
     private boolean  validarDesdeModelo()
     {
+        //Revisar este mensaje porque causa error cuando el mismo rato se graba la 
         if(retencion.getFechaEmision().compareTo(retencion.getFechaEmisionDocumento())<0)
         {
             DialogoCodefac.mensaje("Advertencia","La fecha de emisón no puede ser inferior  a la fecha de la compra",DialogoCodefac.MENSAJE_ADVERTENCIA);

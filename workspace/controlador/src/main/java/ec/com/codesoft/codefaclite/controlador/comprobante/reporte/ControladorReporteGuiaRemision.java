@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPan
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -58,14 +59,16 @@ public class ControladorReporteGuiaRemision {
     private Transportista transportista;
     private Persona destinatario;
     private String codigoProducto;
+    private Empresa empresa;
 
-    public ControladorReporteGuiaRemision(Date fechaInicial, Date fechaFinal, ComprobanteEntity.ComprobanteEnumEstado estado,Transportista transportista,Persona destinatario,String codigoProducto) {
+    public ControladorReporteGuiaRemision(Date fechaInicial, Date fechaFinal, ComprobanteEntity.ComprobanteEnumEstado estado,Transportista transportista,Persona destinatario,String codigoProducto,Empresa empresa) {
         this.fechaInicial = fechaInicial;
         this.fechaFinal = fechaFinal;
         this.estado = estado;
         this.transportista=transportista;
         this.destinatario=destinatario;
         this.codigoProducto=codigoProducto;
+        this.empresa=empresa;
     }
    
     
@@ -73,7 +76,7 @@ public class ControladorReporteGuiaRemision {
     {
         try {
             GuiaRemisionServiceIf guiaRemisionServiceIf=ServiceFactory.getFactory().getGuiaRemisionServiceIf();
-            listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal,estado, transportista,destinatario,codigoProducto);
+            listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal,estado, transportista,destinatario,codigoProducto,empresa);
             llenarDatosReporte();
         //} catch (ServicioCodefacException ex) {
         //    Logger.getLogger(ControladorReporteGuiaRemision.class.getName()).log(Level.SEVERE, null, ex);

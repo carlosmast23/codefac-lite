@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.facade.transporte;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
@@ -27,7 +28,7 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
         super(GuiaRemision.class);
     }
     
-    public List<GuiaRemision> obtenerConsultaFacade(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado, Transportista transportista,Persona destinatario,String codigoProducto) throws ServicioCodefacException, RemoteException    
+    public List<GuiaRemision> obtenerConsultaFacade(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado, Transportista transportista,Persona destinatario,String codigoProducto,Empresa empresa) throws ServicioCodefacException, RemoteException    
     {
         //GuiaRemision guia;
         ///guia.getDestinatarios().get(0).getDetallesProductos().get(0).getDescripcion();
@@ -36,7 +37,7 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
         //guia.getFechaEmision()
         //guia.getEs
         //guia.getFechaIniciaTransporte();
-        String queryString="select distinct u from GuiaRemision u Join u.destinatarios d Join d.detallesProductos dp where 1=1 ";
+        String queryString="select distinct u from GuiaRemision u Join u.destinatarios d Join d.detallesProductos dp where u.empresa=?11 ";
         
         if(fechaInicial!=null)
         {
@@ -75,6 +76,8 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
         {
             queryString+=" AND dp.descripcion=?10 " ; //TODO: Ver alguna mas eficaz de buscar
         }        
+        
+        
         /**
          * ===================> SETEAR VALORES <=====================
          */
@@ -115,6 +118,8 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
         {
             query.setParameter(10,codigoProducto);
         }  
+        
+        query.setParameter(11,empresa);
                 
         return query.getResultList();        
     }

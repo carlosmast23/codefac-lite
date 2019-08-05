@@ -140,7 +140,7 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        TransportistaBusquedaDialogo transportistaBusquedaDialogo = new TransportistaBusquedaDialogo();
+        TransportistaBusquedaDialogo transportistaBusquedaDialogo = new TransportistaBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(transportistaBusquedaDialogo);
         return buscarDialogoModel;
     }
@@ -193,6 +193,7 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
         transportista.setTipoIdentificacion(identificacionEnum.getLetra());
         TransportistaEnumEstado transportistaEnumEstado = (TransportistaEnumEstado) getCmbEstado().getSelectedItem();
         transportista.setEstado(transportistaEnumEstado.getEstado());
+        transportista.setEmpresa(session.getEmpresa());
     }
     
     private boolean prevalidar() {

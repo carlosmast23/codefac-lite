@@ -540,7 +540,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         getBtnBuscarTransportista().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TransportistaBusquedaDialogo transportistaBusquedaDialogo = new TransportistaBusquedaDialogo();
+                TransportistaBusquedaDialogo transportistaBusquedaDialogo = new TransportistaBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(transportistaBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 Transportista transportistaTemp = (Transportista) buscarDialogoModel.getResultado();

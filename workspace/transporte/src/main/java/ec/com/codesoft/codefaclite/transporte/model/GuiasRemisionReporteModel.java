@@ -218,7 +218,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         getBtnBuscarTransportista().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TransportistaBusquedaDialogo transportistaBusquedaDialogo = new TransportistaBusquedaDialogo();
+                TransportistaBusquedaDialogo transportistaBusquedaDialogo = new TransportistaBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(transportistaBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 transportista = (Transportista) buscarDialogoModel.getResultado();
@@ -260,7 +260,8 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
                     estado,
                     transportista,
                     persona,
-                    codigoProducto);
+                    codigoProducto,
+                    session.getEmpresa());
             
             controladorReporte.generarReporte();
             //listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal,estado);

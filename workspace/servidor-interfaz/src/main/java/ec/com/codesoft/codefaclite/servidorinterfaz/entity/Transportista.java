@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -50,6 +51,9 @@ public class Transportista implements Serializable
     private String estado;
     @Column(name = "TIPO_IDENTIFICACION")
     private String tipoIdentificacion;
+    
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
 
 
     public Long getId() {
@@ -164,7 +168,15 @@ public class Transportista implements Serializable
         this.tipoIdentificacion = enumerador.getLetra();
     }
 
- 
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    
     
     @Override
     public int hashCode() {
