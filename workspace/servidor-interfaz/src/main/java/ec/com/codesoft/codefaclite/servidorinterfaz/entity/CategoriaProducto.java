@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -13,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -39,6 +41,9 @@ public class CategoriaProducto implements Serializable {
     private String imagenPath;
     @Column(name = "ESTADO")
     private String estado;
+    
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
 
     public Long getIdCatProducto() {
         return idCatProducto;
@@ -79,6 +84,23 @@ public class CategoriaProducto implements Serializable {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+        
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
+    }
+
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
+    }
+    
 
     @Override
     public String toString() {

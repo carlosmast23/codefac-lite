@@ -122,7 +122,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
          */
         if(anuladosBool)
         {
-            List<AnuladoAts> anulados=consultarAnuladosAts(fechaInicial, fechaFinal);
+            List<AnuladoAts> anulados=consultarAnuladosAts(fechaInicial, fechaFinal,empresa);
             ats.setAnuladosAts(anulados);
         }
         
@@ -130,11 +130,11 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
     }
     
-    public List<AnuladoAts> consultarAnuladosAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal) throws  RemoteException,ServicioCodefacException
+    public List<AnuladoAts> consultarAnuladosAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
     {
         List<AnuladoAts> anuladosAts=new ArrayList<AnuladoAts>();
         NotaCreditoService notaCreditoService=new NotaCreditoService();
-        List<NotaCredito> notasCredito=notaCreditoService.obtenerNotasReporte(null, fechaInicial, fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
+        List<NotaCredito> notasCredito=notaCreditoService.obtenerNotasReporte(null, fechaInicial, fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,empresa);
         
         for (NotaCredito notaCredito : notasCredito) {
             AnuladoAts anuladoAts=new AnuladoAts();

@@ -688,6 +688,10 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //Obtener el numero de secuencial siguiente
         ParametroCodefacServiceIf servicio=new ParametroCodefacService();
         ParametroCodefac parametroCodefac = servicio.getParametroByNombre(ParametroCodefac.SECUENCIAL_LOTE,empresa);
+        if(parametroCodefac==null)
+        {
+            
+        }
         Integer secuencialLote = Integer.parseInt(parametroCodefac.getValor());
         parametroCodefac.setValor((secuencialLote + 1) + "");
         entityManager.merge(parametroCodefac);

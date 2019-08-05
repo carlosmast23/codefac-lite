@@ -9,7 +9,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaProductoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
 /**
@@ -17,7 +18,13 @@ import java.util.Vector;
  * @author CodesoftDesarrollo
  */
 public class CategoriaProductoBusquedaDialogo implements InterfaceModelFind<CategoriaProducto> {
+    private Empresa empresa;
 
+    public CategoriaProductoBusquedaDialogo(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
@@ -28,11 +35,14 @@ public class CategoriaProductoBusquedaDialogo implements InterfaceModelFind<Cate
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM CategoriaProducto u WHERE (u.estado=?1) and";
+        CategoriaProducto u=new CategoriaProducto();
+        
+        String queryString = "SELECT u FROM CategoriaProducto u WHERE u.empresa=?3 and (u.estado=?1) and";
         queryString += " ( LOWER(u.nombre) LIKE ?2 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1,CategoriaProductoEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2,filter);
+        queryDialog.agregarParametro(3,empresa);
         
         return queryDialog;
     }

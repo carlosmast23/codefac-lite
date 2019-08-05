@@ -135,7 +135,7 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
                 buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
             break;
             case "Categoria":
-                CategoriaProductoBusquedaDialogo categoriaProductoBusquedaDialogo = new CategoriaProductoBusquedaDialogo();
+                CategoriaProductoBusquedaDialogo categoriaProductoBusquedaDialogo = new CategoriaProductoBusquedaDialogo(session.getEmpresa());
                 buscarDialogoModel = new BuscarDialogoModel(categoriaProductoBusquedaDialogo);
             break;
         }

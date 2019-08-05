@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -399,12 +400,14 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             }
             
             //Agregar las categorias disponibles
+            
             getCmbCategoriaProducto().removeAllItems();
             CategoriaProductoServiceIf catProdService=ServiceFactory.getFactory().getCategoriaProductoServiceIf();
-            List<CategoriaProducto> catProdList = catProdService.obtenerTodos();
-            for (CategoriaProducto cat : catProdList) {
-                getCmbCategoriaProducto().addItem(cat);
-            }
+            List<CategoriaProducto> catProdList = catProdService.obtenerTodosPorEmpresa(session.getEmpresa());
+            UtilidadesComboBox.llenarComboBox(getCmbCategoriaProducto(), catProdList);
+            //for (CategoriaProducto cat : catProdList) {
+            //    getCmbCategoriaProducto().addItem(cat);
+            //}
             
             //Agregar los tipos de producto
             getCmbTipoProducto().removeAllItems();

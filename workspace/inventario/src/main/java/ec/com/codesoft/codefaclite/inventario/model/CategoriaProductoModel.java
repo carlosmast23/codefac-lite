@@ -14,10 +14,10 @@ import ec.com.codesoft.codefaclite.inventario.busqueda.BodegaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.CategoriaProductoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +56,8 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
     }
 
     private void setearValoresCatProducto(CategoriaProducto cat) {
-        cat.setEstado(CategoriaProductoEnumEstado.ACTIVO.getEstado());
+        cat.setEmpresa(session.getEmpresa());
+        cat.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
         cat.setNombre(getTxtNombre().getText());
         cat.setDescripcion(getTxtDescripcion().getText());
         //cat.setImagenPath(getTxtFoto().getText());
@@ -114,7 +115,7 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        CategoriaProductoBusquedaDialogo catProdBusquedaDialogo = new CategoriaProductoBusquedaDialogo();
+        CategoriaProductoBusquedaDialogo catProdBusquedaDialogo = new CategoriaProductoBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(catProdBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         catProducto = (CategoriaProducto) buscarDialogoModel.getResultado();
