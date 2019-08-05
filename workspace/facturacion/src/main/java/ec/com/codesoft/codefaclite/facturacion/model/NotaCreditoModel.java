@@ -311,7 +311,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        NotaCreditoBusqueda notaCreditoBusqueda = new NotaCreditoBusqueda();
+        NotaCreditoBusqueda notaCreditoBusqueda = new NotaCreditoBusqueda(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(notaCreditoBusqueda);
         buscarDialogoModel.setVisible(true);
         NotaCredito notaCreditoTmp = (NotaCredito) buscarDialogoModel.getResultado();
@@ -844,7 +844,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         getBtnBuscarFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FacturaBusquedaNotaCredito  facturaBusqueda = new FacturaBusquedaNotaCredito();
+                FacturaBusquedaNotaCredito  facturaBusqueda = new FacturaBusquedaNotaCredito(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);
                 buscarDialogoModel.setVisible(true);
                 Factura factura = (Factura) buscarDialogoModel.getResultado();

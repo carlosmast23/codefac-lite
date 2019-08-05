@@ -107,9 +107,9 @@ public class ControladorReporteFactura {
             List<NotaCredito> dataNotCre = null;
             
             if (documentoConsultaEnum.equals(DocumentosConsultarEnum.VENTAS)) {
-                dataNotCre = nc.obtenerNotasReporte(persona, null, null, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
+                dataNotCre = nc.obtenerNotasReporte(persona, null, null, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,empresa);
             } else {
-                dataNotCre = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin, estadoFactura);
+                dataNotCre = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin, estadoFactura,empresa);
             }
             
             data = new ArrayList<ReporteFacturaData>();

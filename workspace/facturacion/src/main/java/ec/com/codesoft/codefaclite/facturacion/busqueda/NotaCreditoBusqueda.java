@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 
 /**
  *
@@ -20,6 +21,12 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>
 {
 
+    private Empresa empresa;
+
+    public NotaCreditoBusqueda(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
@@ -33,7 +40,9 @@ public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM NotaCredito u WHERE u.estado<>?1 ";
+        //NotaCredito nc;
+        //nc.getEmpresa()
+        String queryString = "SELECT u FROM NotaCredito u WHERE u.empresa=?5 and u.estado<>?1 ";
         //queryString+="AND ( u.cliente.razonSocial like ?4 )";
         queryString+="AND ( LOWER(u.cliente.razonSocial) like ?4 OR CONCAT(u.secuencial, '') like ?3 )";
         queryString+=" ORDER BY u.secuencial+0 DESC ";
@@ -44,6 +53,7 @@ public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>
         //queryDialog.agregarParametro(3,NotaCreditoEnumEstado.SIN_AUTORIZAR.getEstado());
         queryDialog.agregarParametro(3,filter);
         queryDialog.agregarParametro(4,filter);
+        queryDialog.agregarParametro(5,empresa);
         return queryDialog;
     }
 

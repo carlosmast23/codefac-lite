@@ -19,7 +19,6 @@ import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexItemEspecificoService;
-import ec.com.codesoft.codefaclite.servidor.service.KardexService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.PerfilService;

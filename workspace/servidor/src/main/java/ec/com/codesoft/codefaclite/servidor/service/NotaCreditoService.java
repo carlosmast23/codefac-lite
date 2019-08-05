@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
@@ -262,8 +263,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         return notaCreditoFacade.findAll();
     }
 
-    public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado) throws RemoteException {
-        return notaCreditoFacade.lista(persona, fi, ff,estado);
+    public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa) throws RemoteException {
+        return notaCreditoFacade.lista(persona, fi, ff,estado,empresa);
     }
 
     @Override

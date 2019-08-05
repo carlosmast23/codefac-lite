@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.sql.Date;
@@ -23,7 +24,7 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
         super(NotaCredito.class);
     }
 
-    public List<NotaCredito> lista(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado) {
+    public List<NotaCredito> lista(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa) {
 
         String cliente = "", fecha = "",estadoStr="";
         if (persona != null) {
@@ -55,7 +56,7 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
 
                 
         try {
-            String queryString = "SELECT u FROM NotaCredito u WHERE 1=1 AND " + cliente + fecha +estadoStr;
+            String queryString = "SELECT u FROM NotaCredito u WHERE 1=1 AND u.empresa=?7 AND " + cliente + fecha +estadoStr;
             Query query = getEntityManager().createQuery(queryString);
             
             if (persona != null) {
@@ -67,6 +68,8 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
             if (ff != null) {
                 query.setParameter(3, ff);
             }
+            
+            query.setParameter(7,empresa);
             
             if (estado != null) {
                 if (estado.equals(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI)) {
