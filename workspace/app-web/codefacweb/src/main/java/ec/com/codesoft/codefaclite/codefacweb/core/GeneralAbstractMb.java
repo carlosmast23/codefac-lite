@@ -66,6 +66,16 @@ public abstract class GeneralAbstractMb implements Serializable {
         PrimeFaces current = PrimeFaces.current();
         current.executeScript("PF('dialogResultado').hide();"); //Todo: Parametrizar y poner en una funcion aparte este dialogo        
     }
+
+    public SessionMb getSessionMb() {
+        return sessionMb;
+    }
+
+    public void setSessionMb(SessionMb sessionMb) {
+        this.sessionMb = sessionMb;
+    }
+    
+    
     
     
 }

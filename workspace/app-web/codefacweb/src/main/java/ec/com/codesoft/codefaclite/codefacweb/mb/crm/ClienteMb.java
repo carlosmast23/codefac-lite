@@ -251,7 +251,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
     }
 
     public void setearDatos(Boolean editar) {
-
+        cliente.setEmpresa(sessionMb.getSession().getEmpresa());
         cliente.setTipoIdentificacionEnum(obtenerTipoIdentificacion());
         cliente.setNacionalidad(nacionalidadSeleccionada);
         cliente.setEstadoEnum(estadoSeleccionada);

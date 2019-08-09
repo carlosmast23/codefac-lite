@@ -76,6 +76,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                     UsuarioServicio usuarioServicio=new UsuarioServicio();
                     usuarioRoot = usuarioServicio.obtenerPorMap(mapParametros).get(0);//obtiene el usuario root de la base de datos 
                     usuarioRoot.isRoot = true;
+                    usuarioRoot.setEmpresa(empresa); //Seteo con el nombre de la empresa que vayan a usar
                 } catch (RemoteException ex) {
                     Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {

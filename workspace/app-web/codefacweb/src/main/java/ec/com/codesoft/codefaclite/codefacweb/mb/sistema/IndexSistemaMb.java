@@ -72,26 +72,7 @@ public class IndexSistemaMb  extends GeneralAbstractMb implements Serializable {
         {
             UtilidadesWeb.redirigirPaginaInterna("factura");
         }
-        /*
-        //populate if not already loaded
-        if (node.getChildren().isEmpty()) {
-            Object label = node.getLabel();
-
-            if (label.equals("NS(s)")) {
-                for (int i = 0; i < 25; i++) {
-                    node.addNode(new DefaultMindmapNode("ns" + i + ".google.com", "Namespace " + i + " of Google", "82c542", false));
-                }
-            } else if (label.equals("IPs")) {
-                for (int i = 0; i < 18; i++) {
-                    node.addNode(new DefaultMindmapNode("1.1.1." + i, "IP Number: 1.1.1." + i, "fce24f", false));
-                }
-            } else if (label.equals("Malware")) {
-                for (int i = 0; i < 18; i++) {
-                    String random = UUID.randomUUID().toString();
-                    node.addNode(new DefaultMindmapNode("Malware-" + random, "Malicious Software: " + random, "3399ff", false));
-                }
-            }
-        }*/
+        
     }
 
     public void onNodeDblselect(SelectEvent event) {
