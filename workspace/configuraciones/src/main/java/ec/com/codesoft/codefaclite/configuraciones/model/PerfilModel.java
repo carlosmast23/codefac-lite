@@ -162,7 +162,7 @@ public class PerfilModel extends PerfilPanel{
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        PerfilBusquedaDialogo perfilBusquedaDialogo=new PerfilBusquedaDialogo();
+        PerfilBusquedaDialogo perfilBusquedaDialogo=new PerfilBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(perfilBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         Perfil perfilTemp = (Perfil) buscarDialogoModel.getResultado();
@@ -327,6 +327,7 @@ public class PerfilModel extends PerfilPanel{
     }
 
     private void setearValoresPantalla() {
+        perfil.setEmpresa(session.getEmpresa());
         perfil.setNombre(getTxtNombrePerfil().getText());
     }
 

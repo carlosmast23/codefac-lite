@@ -56,10 +56,9 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     }    
     
     
-    public Usuario login(String nick,String clave)
+    public Usuario login(String nick,String clave,Empresa empresa)
     {
-        //String clave=new String(getTxtClave().getPassword());
-        //String usuarioTxt=getTxtUsuario().getText();
+
         Usuario usuario=null;
         
         if(!nick.equals("") && !clave.equals(""))
@@ -117,7 +116,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             else //Validacion para usuarios normales que no son root
             {            
                 //usuario=usuarioServicio.login(usuarioTxt,clave);
-                usuario=verificarCredencialesUsuario(nick, clave);
+                usuario=verificarCredencialesUsuario(nick, clave,empresa);
                 if(usuario!=null)
                 {
                     LOG.log(Level.INFO, "Ingresando con el usuario: "+nick);
@@ -140,10 +139,11 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         
     }
     
-    private Usuario verificarCredencialesUsuario(String nick,String clave)
+    private Usuario verificarCredencialesUsuario(String nick,String clave,Empresa empresa)
     {
-         Map<String,Object> mapParametros=new HashMap<String,Object>();
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("nick",nick);
+        mapParametros.put("empresa",empresa);
         List<Usuario> usuarios=usuarioFacade.findByMap(mapParametros);
         
         if(usuarios.size()>0)
@@ -242,42 +242,26 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     
     public Usuario grabar(Usuario entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        EntityTransaction transaccion = getTransaccion();
-        try {
-            
-            //Si la licencia es gratis restringir que solo pueda tener 1 solo usuario
-            if(UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS))
-            {
-                Map<String,Object> mapParametros=new HashMap<String, Object>();
-                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-                List<Usuario> usuariosActivos= obtenerPorMap(mapParametros);
-                if(usuariosActivos.size()>0)
-                {
-                    throw new ServicioCodefacException("En la licencia gratuita solo puede crear 1 usuario \n Si desea mas usuarios necesita una licencia PREMIUN");
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                if (UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS)) {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                    mapParametros.put("empresa",entity.getEmpresa());
+                    List<Usuario> usuariosActivos = obtenerPorMap(mapParametros);
+                    if (usuariosActivos.size() > 0) {
+                        throw new ServicioCodefacException("En la licencia gratuita solo puede crear 1 usuario \n Si desea mas usuarios necesita una licencia PREMIUN");
+                    }
                 }
-            }
-            
-            transaccion.begin();
-            entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave())); //Cifrar la clave para que no puede ser legible 
-            entityManager.persist(entity);
-            transaccion.commit();
-            return entity;
-        } 
-        catch (PersistenceException ex) 
-        {
-            if (transaccion.isActive()) {
-                transaccion.rollback();
-            }
 
-            ExcepcionDataBaseEnum excepcionEnum = UtilidadesExcepciones.analizarExcepcionDataBase(ex);
-            Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
-            if (excepcionEnum.equals(ExcepcionDataBaseEnum.CLAVE_DUPLICADO)) {
-                throw new ServicioCodefacException(ExcepcionDataBaseEnum.CLAVE_DUPLICADO.getMensaje());
-            } else {
-                throw new ServicioCodefacException(ExcepcionDataBaseEnum.DESCONOCIDO.getMensaje());
+                entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave())); //Cifrar la clave para que no puede ser legible 
+                entityManager.persist(entity);
+
             }
-        }        
-        
+        });
+                
+        return entity;
     
     }
     

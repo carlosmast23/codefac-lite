@@ -19,6 +19,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -51,7 +52,10 @@ public class Perfil implements Serializable{
     @Column (name = "ESTADO")
     private String estado;
     
-     @OneToMany(cascade = CascadeType.ALL, mappedBy = "perfil",fetch = FetchType.EAGER)
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "perfil",fetch = FetchType.EAGER)
     private List<PermisoVentana> ventanasPermisos;
 
     public Perfil() {
@@ -96,6 +100,16 @@ public class Perfil implements Serializable{
     public void setVentanasPermisos(List<PermisoVentana> ventanasPermisos) {
         this.ventanasPermisos = ventanasPermisos;
     }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
 
     @Override
     public int hashCode() {

@@ -159,7 +159,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                 else
                 {
                     try {
-                        if(ServiceFactory.getFactory().getUsuarioServicioIf().login(usuario.getNick(),claveAnterior)==null)
+                        if(ServiceFactory.getFactory().getUsuarioServicioIf().login(usuario.getNick(),claveAnterior,session.getEmpresa())==null)
                         {
                             DialogoCodefac.mensaje("Error", "La clave anterior es incorrecta no se puede grabar la nueva clave", DialogoCodefac.MENSAJE_ADVERTENCIA);
                         }
@@ -209,7 +209,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        PerfilUsuarioBusquedaDialogo perfilBusquedaDialogo=new PerfilUsuarioBusquedaDialogo();
+        PerfilUsuarioBusquedaDialogo perfilBusquedaDialogo=new PerfilUsuarioBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(perfilBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         Usuario usuarioTemp = (Usuario) buscarDialogoModel.getResultado();
@@ -286,7 +286,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getBtnAgregarPerfil().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PerfilBusquedaDialogo perfilBusquedaDialogo = new PerfilBusquedaDialogo();
+                PerfilBusquedaDialogo perfilBusquedaDialogo = new PerfilBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(perfilBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 Perfil perfilTemp = (Perfil) buscarDialogoModel.getResultado();
@@ -339,6 +339,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
     }
 
     private void setearValoresPantalla() {
+        usuario.setEmpresa(session.getEmpresa());
         usuario.setNick(getTxtUsuario().getText());
         //usuario.setClave(new String(getTxtClave().getPassword()));
         GeneralEnumEstado estadoEnum=(GeneralEnumEstado) getCmbEstado().getSelectedItem();

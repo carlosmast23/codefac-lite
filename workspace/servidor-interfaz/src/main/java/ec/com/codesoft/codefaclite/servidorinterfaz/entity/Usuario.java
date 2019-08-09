@@ -14,6 +14,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,6 +34,11 @@ public class Usuario implements Serializable{
     public static final String SUPER_USUARIO="root";
     
     @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    //@Id
     @Column (name = "NICK")
     private String nick;
     
@@ -44,6 +51,9 @@ public class Usuario implements Serializable{
     @JoinColumn(name = "EMPLEADO_ID")
     @ManyToOne 
     private Empleado empleado;
+    
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
     
     /**
      * Variable que me sirve solo para saber si el usuario ingresado es root
@@ -64,9 +74,16 @@ public class Usuario implements Serializable{
     public Usuario() {
         this.isRoot=false;
     }
-    
-    
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    
     public String getNick() {
         return nick;
     }
@@ -98,6 +115,16 @@ public class Usuario implements Serializable{
     public void setEmpleado(Empleado empleado) {
         this.empleado = empleado;
     }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
     
     
 

@@ -38,7 +38,7 @@ public class PerfilUsuario implements Serializable {
     @Column(name = "FECHA_CREACION")
     private Date fechaCreacion;
     
-    @JoinColumn(name = "NICK")
+    @JoinColumn(name = "USUARIO_ID")
     @ManyToOne    
     private Usuario usuario;
 

@@ -137,7 +137,7 @@ public class LoginModel extends LoginFormDialog{
         String usuarioTxt = getTxtUsuario().getText();
         if (!usuarioTxt.equals("") && !clave.equals("")) {
             try {
-                usuario = usuarioServicio.login(usuarioTxt, clave);
+                usuario = usuarioServicio.login(usuarioTxt, clave, (Empresa) getCmbEmpresa().getSelectedItem());
                 
                 if (usuario != null) {
                     LOG.log(Level.INFO, "Ingresando con el usuario: " + usuarioTxt);

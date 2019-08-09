@@ -17,7 +17,7 @@ import java.rmi.Remote;
 public interface UsuarioServicioIf extends ServiceAbstractIf<Usuario>
 {
     public Usuario consultarUsuarioActivoPorEmpresa(String nick,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException;
-    public Usuario login(String nick,String clave) throws java.rmi.RemoteException;
+    public Usuario login(String nick,String clave,Empresa empresa) throws java.rmi.RemoteException;
     public void grabarUsuario(Usuario usuario,String nombrePerfil) throws ServicioCodefacException,java.rmi.RemoteException;
     public Usuario cambiarClave(Usuario usuario,String claveAnterior,String claveNueva) throws java.rmi.RemoteException, ServicioCodefacException;
 }

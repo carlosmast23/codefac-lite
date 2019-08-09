@@ -65,7 +65,7 @@ public class LoginMb implements Serializable {
         try {
             System.out.println("Login Empresa:" + empresaSeleccionada);
             System.out.println("Login Sucursal:" + sucursalSeleccionada);
-            Usuario usuario = ServiceFactory.getFactory().getUsuarioServicioIf().login(nick, clave);
+            Usuario usuario = ServiceFactory.getFactory().getUsuarioServicioIf().login(nick, clave,empresaSeleccionada);
             if (usuario != null) {
                 construirSession(usuario, empresaSeleccionada, sucursalSeleccionada);
                 return PAGINA_INICIO_ADMIN;

@@ -11,12 +11,19 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 
 /**
  *
  * @author Carlos
  */
 public class PerfilBusquedaDialogo implements InterfaceModelFind<Perfil>{
+
+    private Empresa empresa;
+
+    public PerfilBusquedaDialogo(Empresa empresa) {
+        this.empresa = empresa;
+    }
 
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
@@ -27,11 +34,12 @@ public class PerfilBusquedaDialogo implements InterfaceModelFind<Perfil>{
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Perfil u WHERE u.estado=?1 and ";
+        String queryString = "SELECT u FROM Perfil u WHERE u.empresa=?3 and u.estado=?1 and ";
         queryString+=" ( LOWER(u.nombre) like ?2 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2,filter);
+        queryDialog.agregarParametro(3,empresa);
         return queryDialog;
     }
 
