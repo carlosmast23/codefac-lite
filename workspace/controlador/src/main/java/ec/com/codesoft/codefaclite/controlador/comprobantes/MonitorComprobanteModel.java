@@ -128,20 +128,19 @@ public class MonitorComprobanteModel extends MonitorComprobantesPanel {
         getBtnLimpiarTodo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getjPanelComponentesCarga().removeAll();
-                getjPanelComponentesCarga().repaint();
+                eliminarTodosDatos();
             }
         });
         
         getBtnQuitarTerminados().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                eliminarTodosDatos();
+                eliminarTerminados();
             }
         });
     }
     
-    public void eliminarTodosDatos()
+    public void eliminarTerminados()
     {
         Component[] componentes = getjPanelComponentesCarga().getComponents();
         for (Component componente : componentes) {
@@ -157,6 +156,13 @@ public class MonitorComprobanteModel extends MonitorComprobantesPanel {
             }
 
         }
+    }
+    
+    public void eliminarTodosDatos()
+    {
+        getjPanelComponentesCarga().removeAll();
+        getjPanelComponentesCarga().repaint();
+        
     }
 
     @Override

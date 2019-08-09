@@ -310,11 +310,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         parametrosEditar = new ArrayList<ParametroCodefac>();
 
         TipoDocumentoEnum tipoDocumento = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-        parametrosTodos.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA).setValor(tipoDocumento.getCodigo());
+        agregarParametro(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA,tipoDocumento.getCodigo());
         agregarParametroEditar(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA);
 
         TipoDocumentoEnum tipoDocumentoCompra = (TipoDocumentoEnum) getCmbTipoDocumentoCompra().getSelectedItem();
-        parametrosTodos.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA).setValor(tipoDocumentoCompra.getCodigo());
+        agregarParametro(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA,tipoDocumentoCompra.getCodigo());        
         agregarParametroEditar(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA);
 
         //Agregar detalle para la orden de trabajo
@@ -322,7 +322,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametroEditar(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
 
         EnumSiNo enumSiNo = (EnumSiNo) getCmbActivarModuloCartera().getSelectedItem();
-        agregarParametro(ParametroCodefac.ACTIVAR_CARTERA, enumSiNo.getLetra());
+        agregarParametro(ParametroCodefac.ACTIVAR_CARTERA,(enumSiNo!=null)?enumSiNo.getLetra():EnumSiNo.NO.getLetra()); //Por defecto va a guardar no activar cartera
         agregarParametroEditar(ParametroCodefac.ACTIVAR_CARTERA);
 
         enumSiNo = (EnumSiNo) getCmbActivarComprobanteVenta().getSelectedItem();
@@ -403,6 +403,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         } else {
             parametroCodefac.setValor(valor);
         }
+        parametroCodefac.setEmpresa(session.getEmpresa());
     }
 
     @Override
