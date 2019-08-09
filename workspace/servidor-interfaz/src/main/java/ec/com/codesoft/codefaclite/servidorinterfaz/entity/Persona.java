@@ -350,6 +350,15 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     ///Metodos personalizados
     
+    public boolean isClienteFinal()
+    {
+        if(identificacion.equals(IDENTIFICACION_CONSUMIDOR_FINAL))
+        {
+            return true;
+        }
+        return false;
+    }
+    
     
     public String getNombresCompletos() {
         String nombresTmp = (nombres != null) ? nombres : "";

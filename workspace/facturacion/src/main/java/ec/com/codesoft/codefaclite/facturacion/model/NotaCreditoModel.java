@@ -255,6 +255,8 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
 
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (RemoteException ex) {
             Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
