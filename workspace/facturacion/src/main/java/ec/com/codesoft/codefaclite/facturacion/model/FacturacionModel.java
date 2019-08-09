@@ -1354,12 +1354,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //datosAdicionales = new HashMap<String, String>();
         //facturaElectronica = new FacturacionElectronica(session, this.panelPadre);
 
-        //Limpiar los campos del cliente
-        getLblNombreCliente().setText("");
-        getLblTelefonoCliente().setText("");
-        getLblDireccionCliente().setText("");
-        getTxtCliente().setText("");
-
+        limpiarVistaDatosCliente();
         //Limpiar campos de los detalles de la factura
         getTxtCodigoDetalle().setText("");
         getTxtValorUnitario().setText("");
@@ -1414,8 +1409,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtVendedor().setText("");
         
         getCmbPreciosVenta().removeAllItems();
-       
+        getCmbConsumidorFinal().setSelected(false); //Ver si esta dato esta parametrizado en configuraciones
 
+    }
+    
+    private void limpiarVistaDatosCliente()
+    {
+        
+        //Limpiar los campos del cliente
+        getLblNombreCliente().setText("");
+        getLblTelefonoCliente().setText("");
+        getLblDireccionCliente().setText("");
+        getTxtCliente().setText("");
     }
     
     
@@ -2542,6 +2547,38 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     private void addListenerCombos() {
         
+        getCmbConsumidorFinal().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(getCmbConsumidorFinal().isSelected())//Si esta seleccionado cliente final cargo ese dato
+                {
+                    try {
+                            List<PersonaEstablecimiento> resultados=ServiceFactory.getFactory().getPersonaEstablecimientoServiceIf().buscarActivoPorIdentificacion(Persona.IDENTIFICACION_CONSUMIDOR_FINAL,session.getEmpresa()); //Todo crear mejor un metodo que ya obtener filtrado los datos
+                            if(resultados.size()==0)
+                            {
+                                if(DialogoCodefac.dialogoPregunta("Crear Consumidor Final","No existe el Consumidor Final, lo desea crear?",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                                {
+                                    btnListenerAgregarCliente();
+                                }
+                            }
+                            else
+                            {
+                                cargarCliente(resultados.get(0));
+                            }
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ServicioCodefacException ex) {
+                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                }
+                else//Si esta sin seleccionar limpio el campo para que puedan cargar otro dato
+                {
+                    limpiarVistaDatosCliente();
+                    factura.setCliente(null);
+                }
+            }
+        });
+        
         getCmbPreciosVenta().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2786,13 +2823,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 String identificacion=getTxtCliente().getText();
                 if(!identificacion.equals(""))
                 {
-                    //mapParametros.put("tipo",OperadorNegocioEnum.CLIENTE); //TODO: Falta optimizar cuando sean clientes y proveedores o ambos 
-
+                    
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         try {
-                            //Map<String, Object> mapParametros = new HashedMap<String, Object>();
-                            //mapParametros.put("persona.identificacion", identificacion);
-                            //List<PersonaEstablecimiento> resultados=ServiceFactory.getFactory().getPersonaEstablecimientoServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
                             List<PersonaEstablecimiento> resultados=ServiceFactory.getFactory().getPersonaEstablecimientoServiceIf().buscarActivoPorIdentificacion(identificacion,session.getEmpresa()); //Todo crear mejor un metodo que ya obtener filtrado los datos
                             if(resultados.size()==0)
                             {

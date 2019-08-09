@@ -36,6 +36,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Persona implements Serializable, Comparable<Persona> {
 
+    public static final String IDENTIFICACION_CONSUMIDOR_FINAL="9999999999999";
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

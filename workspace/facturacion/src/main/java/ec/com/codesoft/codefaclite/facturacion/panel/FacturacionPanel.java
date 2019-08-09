@@ -200,6 +200,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnAgregarCliente = new javax.swing.JButton();
         btnBuscarCliente = new javax.swing.JButton();
         lblEspacioBlanco = new javax.swing.JLabel();
+        cmbConsumidorFinal = new javax.swing.JCheckBox();
         lblEspacioVertical = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         txtReferenciaContacto = new javax.swing.JTextField();
@@ -1146,6 +1147,17 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         panelDatosEmpresa.add(lblEspacioBlanco, gridBagConstraints);
 
+        cmbConsumidorFinal.setFont(new java.awt.Font("Arial", 3, 11)); // NOI18N
+        cmbConsumidorFinal.setText("Consumidor Final");
+        cmbConsumidorFinal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbConsumidorFinalActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        panelDatosEmpresa.add(cmbConsumidorFinal, gridBagConstraints);
+
         jTabbedPane1.addTab("Datos del Cliente", panelDatosEmpresa);
 
         lblEspacioVertical.setLayout(new java.awt.GridBagLayout());
@@ -1314,6 +1326,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarProductoActionPerformed
 
+    private void cmbConsumidorFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbConsumidorFinalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbConsumidorFinalActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelDatosAdicionales;
@@ -1338,6 +1354,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox checkPorcentaje;
     private javax.swing.JCheckBox chkActivarFechaVencimiento;
     private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
+    private javax.swing.JCheckBox cmbConsumidorFinal;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private org.jdesktop.swingx.JXDatePicker cmbFechaVencimiento;
     private javax.swing.JComboBox<EnumSiNo> cmbIva;
@@ -1842,6 +1859,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public JComboBox<Producto.PrecioVenta> getCmbPreciosVenta() {
         return cmbPreciosVenta;
+    }
+
+    public JCheckBox getCmbConsumidorFinal() {
+        return cmbConsumidorFinal;
+    }
+
+    public void setCmbConsumidorFinal(JCheckBox cmbConsumidorFinal) {
+        this.cmbConsumidorFinal = cmbConsumidorFinal;
     }
     
     
