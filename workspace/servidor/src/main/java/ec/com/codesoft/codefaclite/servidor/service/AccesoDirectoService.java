@@ -24,10 +24,11 @@ public class AccesoDirectoService extends ServiceAbstract<AccesoDirecto,AccesoDi
         super(AccesoDirectoFacade.class);
     }
     
+    
     public AccesoDirecto buscarPorNombre(String nombre)  throws RemoteException ,ServicioCodefacException
     {
         Map<String,Object> mapBuscar=new HashMap<String, Object>();
-        mapBuscar.put("nombre","WidgetVirtualMall");
+        mapBuscar.put("nombre",nombre);
         List<AccesoDirecto> resultados= getFacade().findByMap(mapBuscar);
         if(resultados.size()>0)
         {

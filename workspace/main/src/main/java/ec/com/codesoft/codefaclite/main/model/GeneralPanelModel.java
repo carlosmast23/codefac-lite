@@ -2241,7 +2241,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             //Cargar el componente de publicidad para que siempre exista
             cargarPublicidad();
-            URL url=null;
+            //URL url=null;
             //Map<String,Object> mapBuscar;
             AccesoDirectoServiceIf servicio=ServiceFactory.getFactory().getAccesoDirectoServiceIf();
             
@@ -2284,14 +2284,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             });
             getjDesktopPane1().add(widgetVirtualMall);
             widgetVirtualMall.setVisible(false); //TODO: Por el momento dejo desactivado este componente porque no estamos usando
-            
-            /***
-             * Agregar el widget de Ventas diarias
-             */
-            //mapBuscar = new HashMap<>();
-            //mapBuscar.put("nombre", "WidgetVentasDiarias");
-            //int xVd=servicio.obtenerPorMap(mapBuscar).get(0).x;
-            //int yVd=servicio.obtenerPorMap(mapBuscar).get(0).y;
+
             
             int xVd=100;
             int yVd=100;
@@ -2347,58 +2340,39 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             /**
              * ===============> FIN WIDGET NOTIFICACIONES CODEFAC <=============
              */
+            AccesoDirecto accesoDirectoTmp=null;
             listaIconos=new ArrayList<IconoPanel>();
             
-            //mapBuscar = new HashMap<>();
-            //mapBuscar.put("nombre", FacturacionModel.class.getName());
-            url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("factura.png");
-            IconoPanel iconoFactura=new IconoPanel("Factura",url,getjDesktopPane1(),servicio.buscarPorNombre(FacturacionModel.class.getName()).x,servicio.buscarPorNombre(FacturacionModel.class.getName()).y);
-            iconoFactura.addListenerIcono(new ListenerIcono(FacturacionModel.class,true));
-            getjDesktopPane1().add(iconoFactura);
-            listaIconos.add(iconoFactura);
+            crearWidget("factura.png", FacturacionModel.class,"Factura");
+            crearWidget("producto.png", ProductoModel.class,"Producto");
+            crearWidget("calculadora.png", CalculadoraModel.class,"Calculadora");
+            crearWidget("cliente.png", ClienteModel.class,"Cliente");
+            crearWidget("configuracion.png", ComprobantesConfiguracionModel.class,"Configurar");
             
             
-            //mapBuscar=new HashMap<>();
-            //mapBuscar.put("nombre",ProductoModel.class.getName());
-            url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("producto.png");
-            IconoPanel iconoPanel=new IconoPanel("Producto",url,getjDesktopPane1(),servicio.buscarPorNombre(ProductoModel.class.getName()).x,servicio.buscarPorNombre(ProductoModel.class.getName()).y);
-            iconoPanel.addListenerIcono(new ListenerIcono(ProductoModel.class, true));
-            getjDesktopPane1().add(iconoPanel);
-            listaIconos.add(iconoPanel);
-            
-            
-            //mapBuscar = new HashMap<>();
-            //mapBuscar.put("nombre", CalculadoraModel.class.getName());
-            url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("calculadora.png");
-            IconoPanel iconoCalcu=new IconoPanel("Calculadora",url,getjDesktopPane1(),servicio.buscarPorNombre(CalculadoraModel.class.getName()).x,servicio.buscarPorNombre(CalculadoraModel.class.getName()).y);
-            iconoCalcu.addListenerIcono(new ListenerIcono(CalculadoraModel.class,false));
-            getjDesktopPane1().add(iconoCalcu);
-            listaIconos.add(iconoCalcu);
-            
-            
-            
-            //mapBuscar = new HashMap<>();
-            //mapBuscar.put("nombre", ClienteModel.class.getName());
-            url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("cliente.png");
-            IconoPanel iconoCliente=new IconoPanel("Cliente",url,getjDesktopPane1(),servicio.buscarPorNombre(ClienteModel.class.getName()).x,servicio.buscarPorNombre(ClienteModel.class.getName()).y);
-            iconoCliente.addListenerIcono(new ListenerIcono(ClienteModel.class,true));
-            getjDesktopPane1().add(iconoCliente);
-            listaIconos.add(iconoCliente);
-            
-            
-            //mapBuscar = new HashMap<>();
-            //mapBuscar.put("nombre", ComprobantesConfiguracionModel.class.getName());
-            url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("configuracion.png");
-            IconoPanel iconoConfig=new IconoPanel("Configurar",url,getjDesktopPane1(),servicio.buscarPorNombre(ComprobantesConfiguracionModel.class.getName()).x,servicio.buscarPorNombre(ComprobantesConfiguracionModel.class.getName()).y);
-            iconoConfig.addListenerIcono(new ListenerIcono(ComprobantesConfiguracionModel.class,true));
-            getjDesktopPane1().add(iconoConfig);
-            listaIconos.add(iconoConfig);
         } catch (RemoteException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    private void crearWidget(String nombreImg,Class clase,String titulo)
+    {
+        try {
+            AccesoDirectoServiceIf servicio=ServiceFactory.getFactory().getAccesoDirectoServiceIf();
+            URL url = RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL(nombreImg);
+            AccesoDirecto accesoDirectoTmp = servicio.buscarPorNombre(clase.getName());
+            IconoPanel iconoFactura = new IconoPanel(titulo, url, getjDesktopPane1(), accesoDirectoTmp.x, accesoDirectoTmp.y);
+            iconoFactura.addListenerIcono(new ListenerIcono(clase, true));
+            getjDesktopPane1().add(iconoFactura);
+            listaIconos.add(iconoFactura);
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void seleccionaPanel(ControladorCodefacInterface panelInterface)
@@ -3370,6 +3344,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     @Override
     public void actualizarNotificacionesCodefac() {
+        this.widgetNotificacionCodefac.setEmpresa(sessionCodefac.getEmpresa()); //Actualizo este dato porque puede ser que esta cambiando de empresa
         this.widgetNotificacionCodefac.actualizarNotificaciones();
     }
 

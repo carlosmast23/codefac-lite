@@ -124,5 +124,15 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
             }
         });
     }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
     
 }
