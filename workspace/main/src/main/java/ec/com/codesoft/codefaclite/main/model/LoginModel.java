@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.panel.LoginFormDialog;
 import ec.com.codesoft.codefaclite.main.utilidades.UtilidadServicioWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
@@ -17,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
@@ -135,23 +137,79 @@ public class LoginModel extends LoginFormDialog{
         
         String clave = new String(getTxtClave().getPassword());
         String usuarioTxt = getTxtUsuario().getText();
+        Empresa empresaSeleccionada=(Empresa) getCmbEmpresa().getSelectedItem();
         if (!usuarioTxt.equals("") && !clave.equals("")) {
             try {
-                usuario = usuarioServicio.login(usuarioTxt, clave, (Empresa) getCmbEmpresa().getSelectedItem());
+                //usuario = usuarioServicio.login(usuarioTxt, clave, (Empresa) getCmbEmpresa().getSelectedItem());
+                LoginRespuesta loginRespuesta = usuarioServicio.login(usuarioTxt, clave, empresaSeleccionada);
                 
-                if (usuario != null) {
-                    LOG.log(Level.INFO, "Ingresando con el usuario: " + usuarioTxt);
-                    setVisible(false);
-                } else {
-                    LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
-                    DialogoCodefac.mensaje("Error Login", "Datos Incorrectos", DialogoCodefac.MENSAJE_INCORRECTO);
+                switch(loginRespuesta.estadoEnum)
+                {
+                    case CORRECTO_USUARIO:
+                        LOG.log(Level.INFO, "Ingresando con el usuario: " + usuarioTxt);
+                        setVisible(false);
+                        usuario=loginRespuesta.usuario;
+                        break;
+                    case INCORRECTO_USUARIO:
+                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
+                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
+                        break;
+                    case NO_EXISTE_DIRECTORIO_LICENCIA:
+                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
+                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.NO_EXISTE_DIRECTORIO_LICENCIA.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
+                        Main.seleccionarDirectorioRecursos(empresaSeleccionada);
+                        //validacionesEmpresa
+                        break;
+                    
+                    case LICENCIA_DESACTUALIZADA:
+                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
+                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.LICENCIA_DESACTUALIZADA.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
+                        pantallaRegistrarLicencia();
+                        //validacionesEmpresa
+                        break;
+                    
+                    default:
+                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
+                        DialogoCodefac.mensaje("Error Login",loginRespuesta.estadoEnum.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
+                        break;
+                        
+                
                 }
+                if(loginRespuesta.alertas!=null)
+                {
+                    DialogoCodefac.mensaje("Alertas",loginRespuesta.obtenerAlertasConFormato(),DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+               
             } catch (RemoteException ex) {
                 Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje("Error Login", "Datos Incorrectos", DialogoCodefac.MENSAJE_INCORRECTO);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     
+    }
+    
+    public void pantallaRegistrarLicencia()
+    {
+        //Crear un dialogo si no existe la licencia o esta desactualizada o con alguna incoherencia
+        //ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, existeLicencia);
+        Empresa empresa=(Empresa) getCmbEmpresa().getSelectedItem();
+        ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true,false,empresa);
+        licenciaDialog.setVisible(true);
+        //licenciaDialog.setValidacionLicenciaCodefac
+        //licenciaDialog.licenciaCreada
+        /*if (validacion.verificarConexionInternet()) {
+            licenciaDialog.setVisible(true);
+            if (licenciaDialog.licenciaCreada) {
+                return comprobarLicencia(pathBase); //volver a verificar la licencia
+            } else {
+                return false;
+            }
+        } else {
+            DialogoCodefac.mensaje("Error", "Para activar su producto conéctese a Internet", DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }*/
     }
 
     private void valoresIniciales() {

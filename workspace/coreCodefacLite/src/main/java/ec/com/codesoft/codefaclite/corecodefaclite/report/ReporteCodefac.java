@@ -250,7 +250,7 @@ public class ReporteCodefac {
             }
             else
             {
-                RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(DirectorioCodefac.IMAGENES, nombreImagen);
+                RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(sessionCodefac.getEmpresa(),DirectorioCodefac.IMAGENES, nombreImagen);
                 //verifica que existe una imagen
                 if (remoteInputStream != null) {
                     inputStream = RemoteInputStreamClient.wrap(remoteInputStream);

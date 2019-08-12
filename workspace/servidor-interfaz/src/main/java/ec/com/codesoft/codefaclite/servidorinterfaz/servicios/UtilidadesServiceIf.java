@@ -5,13 +5,18 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  *
@@ -28,14 +33,22 @@ public interface UtilidadesServiceIf extends Remote
     public Object mergeEntity(Object entity) throws java.rmi.RemoteException;
     public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException;
     public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException;
-    public boolean verificarConexionesServidor() throws java.rmi.RemoteException;
-    public TipoLicenciaEnum getTipoLicencia() throws java.rmi.RemoteException;
-    public List<ModuloCodefacEnum> getModulosSistema()  throws RemoteException;
+    public boolean verificarConexionesServidor(Empresa empresa) throws java.rmi.RemoteException;
+    public TipoLicenciaEnum getTipoLicencia(Empresa empresa) throws java.rmi.RemoteException;
+    public List<ModuloCodefacEnum> getModulosSistema(Empresa empresa)  throws RemoteException;
     /**
      * Me devuelve un objeto session con algunos datos preconstruidos
      * @return
      * @throws RemoteException 
      */
-    public SessionCodefac getSessionPreConstruido()  throws RemoteException;
+    public SessionCodefac getSessionPreConstruido(Empresa empresa)  throws RemoteException;
+    
+    public EmpresaLicencia obtenerLicenciaEmpresa(Empresa empresa) throws RemoteException,ServicioCodefacException;
+    
+    public Properties crearLicencia(Empresa empresa,Licencia licencia) throws RemoteException,ServicioCodefacException;
+    
+    public Properties crearLicenciaDescargada(Empresa empresa,Licencia licencia) throws RemoteException,ServicioCodefacException;
+    
+    
     
 }

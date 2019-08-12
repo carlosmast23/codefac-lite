@@ -7,9 +7,9 @@ package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
-import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
-import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
-import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
+import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
+import ec.com.codesoft.codefaclite.licence.NoExisteLicenciaException;
+import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaExcepcion;
 import ec.com.codesoft.codefaclite.main.panel.ValidarLicenciaDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
@@ -53,6 +54,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import org.eclipse.persistence.internal.sessions.factories.SessionsFactory;
 import sun.applet.Main;
 
 /**
@@ -63,13 +65,15 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
     
     public Boolean licenciaCreada;
     public Boolean actualizaLicencia;
+    public Empresa empresa;
     
-    public ValidarLicenciaModel(Frame parent, boolean modal,Boolean actualizarLicencia) {
+    public ValidarLicenciaModel(Frame parent, boolean modal,Boolean actualizarLicencia,Empresa empresa) {
         super(parent, modal);
         addListener();
         iniciarComponentes();
         this.licenciaCreada=false;
         this.actualizaLicencia=actualizarLicencia;
+        this.empresa=empresa;
     }
 
     private void addListener() {
@@ -78,16 +82,26 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
     
     private void crearLicencia()
     {
-        String usuarioTxt=getTxtUsuarioVerificar().getText();
-        //Crea la nueva licencia con el usuario
-        Licencia licencia=new Licencia();
-        licencia.cargarLicenciaOnline(usuarioTxt);
-        
-        Properties propiedad = validacionLicenciaCodefac.crearLicenciaMaquina(licencia);
 
-        
+        String usuarioTxt = getTxtUsuarioVerificar().getText();
+        //Crea la nueva licencia con el usuario
+        Licencia licencia = new Licencia();
+        licencia.cargarLicenciaOnline(usuarioTxt);
+
+        Properties propiedad = null;
+        try {
+            propiedad = ServiceFactory.getFactory().getUtilidadesServiceIf().crearLicencia(empresa, licencia);
+
+            //Properties propiedad = validacionLicenciaCodefac.crearLicenciaMaquina(licencia);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         //Actualizar la nueva licencia en el servidor
         WebServiceCodefac.actualizarLicencia(getTxtUsuarioVerificar().getText(), propiedad.getProperty(Licencia.PROPIEDAD_LICENCIA));
+
                 
     }
     
@@ -96,21 +110,21 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         getBtnSalirRegistro().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                dispose();
             }
         });
         
         getBtnSalirRegistro1().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                dispose();
             }
         });
         
         getBtnSalirVerificar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                dispose();
             }
         });
         
@@ -134,6 +148,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 usuario.setClave(clave);
                 usuario.setNick(getTxtUsuarioRegistrar().getText());    
                 usuario.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                usuario.setEmpresa(empresa);
                                 
                 try {
                     
@@ -203,7 +218,14 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                         licenciaDescargada.setCantidadClientes(licenciaInternet.getCantidadClientes());
                         licenciaDescargada.cargarModulosOnline();
                         
-                        validacionLicenciaCodefac.crearLicenciaDescargada(licenciaDescargada);
+                        try {
+                            ServiceFactory.getFactory().getUtilidadesServiceIf().crearLicenciaDescargada(empresa, licenciaInternet);
+                            //validacionLicenciaCodefac.crearLicenciaDescargada(licenciaDescargada);
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ServicioCodefacException ex) {
+                            Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         
                         licenciaCreada=true;
                         DialogoCodefac.mensaje("Adverencia","La licencia ya esta registrada y fue descargada",DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -282,7 +304,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
     
     public static void main(String[] args)
     {
-        ValidarLicenciaModel validar=new ValidarLicenciaModel(null,true,true);
+        ValidarLicenciaModel validar=new ValidarLicenciaModel(null,true,true,null); //TODO:Esta parte queda temporal de esta manera porque puede ser que o funcione porque no se esta mandando ninguna empresa
         validar.setVisible(true);
     }
 

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.codefacweb.mb;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.SessionMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
@@ -14,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -65,15 +67,25 @@ public class LoginMb implements Serializable {
         try {
             System.out.println("Login Empresa:" + empresaSeleccionada);
             System.out.println("Login Sucursal:" + sucursalSeleccionada);
-            Usuario usuario = ServiceFactory.getFactory().getUsuarioServicioIf().login(nick, clave,empresaSeleccionada);
-            if (usuario != null) {
-                construirSession(usuario, empresaSeleccionada, sucursalSeleccionada);
-                return PAGINA_INICIO_ADMIN;
-                //return "proforma";
-            } else {
-                MensajeMb.mostrarMensaje("Error", "Credenciales incorrectass", FacesMessage.SEVERITY_ERROR);
+            
+            LoginRespuesta loginRespuesta = ServiceFactory.getFactory().getUsuarioServicioIf().login(nick, clave,empresaSeleccionada);
+            
+            switch (loginRespuesta.estadoEnum) {
+                case CORRECTO_USUARIO:
+                    construirSession(loginRespuesta.usuario, empresaSeleccionada, sucursalSeleccionada);
+                    return PAGINA_INICIO_ADMIN;
+                case INCORRECTO_USUARIO:
+                    MensajeMb.mostrarMensaje("Error",LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje() , FacesMessage.SEVERITY_ERROR);
+                    break;
+                default:
+                    MensajeMb.mostrarMensaje("Error Login", loginRespuesta.estadoEnum.getMensaje(), FacesMessage.SEVERITY_ERROR);
+                    break;
+
             }
+            
         } catch (RemoteException ex) {
+            Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "login.xhtml?faces-redirect=true";
@@ -81,7 +93,7 @@ public class LoginMb implements Serializable {
 
     private void construirSession(Usuario usuario, Empresa empresa, Sucursal sucursal) {
         try {
-            SessionCodefac session = ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido();
+            SessionCodefac session = ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido(empresa);
 
             session.setEmpresa(empresa);
 

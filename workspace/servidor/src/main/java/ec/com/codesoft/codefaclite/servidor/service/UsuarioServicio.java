@@ -20,8 +20,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
@@ -56,11 +58,24 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     }    
     
     
-    public Usuario login(String nick,String clave,Empresa empresa)
+    public LoginRespuesta login(String nick,String clave,Empresa empresa) throws java.rmi.RemoteException,ServicioCodefacException
     {
-
-        Usuario usuario=null;
+        LoginRespuesta loginRespuesta=new LoginRespuesta();
         
+        /////////==========> VALIDAR LA LICENCIA DE LA EMPRESA PARA VER SI TIENE PERMISO PARA ABRIR EL SISTEMA <==========//////
+        UtilidadesService servicioUtilidades=new UtilidadesService();
+        EmpresaLicencia empresaLicencia=servicioUtilidades.obtenerLicenciaEmpresa(empresa);
+        //Si la licencia es distinta de correcta termino el Login y aviso al usuario final
+        loginRespuesta.alertas=loginRespuesta.alertas;
+        if(!empresaLicencia.estadoEnum.equals(empresaLicencia.estadoEnum.LICENCIA_CORRECTA))
+        {
+            loginRespuesta.estadoEnum=empresaLicencia.estadoEnum;
+            return loginRespuesta;
+        }
+        
+        
+        ////////===========> VALIDACION DE LOS USUARIOS DE LA EMPRESA <=================================================== /////
+        //Usuario usuario=null;        
         if(!nick.equals("") && !clave.equals(""))
         {
             /**
@@ -88,13 +103,16 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                 {
                     if(WebServiceCodefac.getVerificarSoporte(nick, clave))
                     {                            
-                            usuario=usuarioRoot;
+                            //usuario=usuarioRoot;
                             LOG.log(Level.INFO, "Ingresando con el usuario root: "+nick);
+                            loginRespuesta.usuario=usuarioRoot;
+                            loginRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.CORRECTO_USUARIO;
                             //setVisible(false);
                     }
                     else
                     {
-                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + nick);                        
+                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + nick);     
+                        loginRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO;
                     }
                 }
                 else
@@ -102,12 +120,15 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                     //Seteo directemente una clave independiente de lo que este grabado en la base, ademas como solo es para modo desarrollo no afecta para el desarrollo
                     if(clave.equals("1234")) //Todo: ver si se setea esta variable de forma global aunque no hay necesidad
                     {
-                        usuario=usuarioRoot;
+                        //usuario=usuarioRoot;
                         LOG.log(Level.INFO, "Ingresando con el usuario root en produccion: " + nick);
+                        loginRespuesta.usuario=usuarioRoot;
+                        loginRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.CORRECTO_USUARIO;
                         //setVisible(false);
                     }
                     else
                     {
+                        loginRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO;
                         //DialogoCodefac.mensaje("Error Login","Datos Incorrectos para root en modo desarrollo",DialogoCodefac.MENSAJE_INCORRECTO);
                     }
 
@@ -117,16 +138,17 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             else //Validacion para usuarios normales que no son root
             {            
                 //usuario=usuarioServicio.login(usuarioTxt,clave);
-                usuario=verificarCredencialesUsuario(nick, clave,empresa);
+                Usuario usuario=verificarCredencialesUsuario(nick, clave,empresa);
                 if(usuario!=null)
                 {
                     LOG.log(Level.INFO, "Ingresando con el usuario: "+nick);
-                    //setVisible(false);
+                    loginRespuesta.usuario=usuario;
+                    loginRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.CORRECTO_USUARIO;
                 }
                 else
                 {
-                    LOG.log(Level.WARNING, "Error al ingresar con el usuario: "+nick);
-                    //DialogoCodefac.mensaje("Error Login","Datos Incorrectos",DialogoCodefac.MENSAJE_INCORRECTO);
+                    LOG.log(Level.WARNING, "Error al ingresar con el usuario: "+nick);                    
+                    loginRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO;
                 }
             }
 
@@ -136,7 +158,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             //DialogoCodefac.mensaje("Advertencia Login","Ingrese todos los campos",DialogoCodefac.MENSAJE_ADVERTENCIA);
         }*/
         
-        return usuario;
+        return loginRespuesta;
         
     }
     
@@ -246,7 +268,8 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                if (UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS)) {
+                
+                if (UtilidadesServidor.mapEmpresasLicencias.get(entity.getEmpresa()).tipoLicencia.equals(TipoLicenciaEnum.GRATIS)) {
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
                     mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
                     mapParametros.put("empresa",entity.getEmpresa());
@@ -269,62 +292,36 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     @Deprecated //Todo este metodo ya esta definido en guardar
     public void grabarUsuario(Usuario usuario,String nombrePerfil) throws ServicioCodefacException
     {
-        EntityTransaction transaccion=this.getTransaccion();
-        try {
-            
-            transaccion.begin();
-            usuario.setClave(UtilidadesHash.generarHashBcrypt(usuario.getClave()));
-            entityManager.persist(usuario);            
-            Map<String,Object> parametros=new HashMap<String, Object>();
-            parametros.put("nombre",nombrePerfil);
-            List<Perfil> perfilesList= this.perfilFacade.findByMap(parametros);
-            Perfil perfil=null;
-            
-            if(perfilesList.size()>0)
-            {
-                perfil=perfilesList.get(0);                
-                
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                usuario.setClave(UtilidadesHash.generarHashBcrypt(usuario.getClave()));
+                entityManager.persist(usuario);
+                Map<String, Object> parametros = new HashMap<String, Object>();
+                parametros.put("nombre", nombrePerfil);
+                List<Perfil> perfilesList = perfilFacade.findByMap(parametros);
+                Perfil perfil = null;
+
+                if (perfilesList.size() > 0) { //Por defecto esta seteando el primer perfil que encuentra, revisar este tema 
+                    perfil = perfilesList.get(0);
+                }
+
+                PerfilUsuario perfilUsuario = new PerfilUsuario();
+                perfilUsuario.setUsuario(usuario);
+                perfilUsuario.setPerfil(perfil);
+                perfilUsuario.setFechaCreacion(new java.sql.Date(new Date().getTime()));
+
+                entityManager.persist(perfilUsuario);
+
+                //Actualizar la referencia del usuario
+                usuario.addPerfilUsuario(perfilUsuario);
+                if(perfil!=null)
+                {
+                    entityManager.merge(perfil);
+                }
             }
-            
-            PerfilUsuario perfilUsuario=new PerfilUsuario();
-            perfilUsuario.setUsuario(usuario);
-            perfilUsuario.setPerfil(perfil);
-            perfilUsuario.setFechaCreacion(new java.sql.Date(new Date().getTime()));
-            
-            entityManager.persist(perfilUsuario);
-            
-            //Actualizar la referencia del usuario
-            usuario.addPerfilUsuario(perfilUsuario);
-            entityManager.merge(perfil);
-            
-            //this.perfilUsuarioFacade.create(perfilUsuario);
-            transaccion.commit();
-                    
-        } catch (PersistenceException ex) {
-            
-            //verifica que la transaccion esta activa para hacer un rollback
-            //Nota: Algunas veces el commit automaticamente hace un rollback es decir no es necesario hacer rollback y la sesion ya no esta activa
-            if(transaccion.isActive())
-            {
-                transaccion.rollback();
-            }
-            
-            ExcepcionDataBaseEnum excepcionEnum=UtilidadesExcepciones.analizarExcepcionDataBase(ex);
-            Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
-            if(excepcionEnum.equals(ExcepcionDataBaseEnum.CLAVE_DUPLICADO))
-            {
-                throw new ServicioCodefacException(ExcepcionDataBaseEnum.CLAVE_DUPLICADO.getMensaje());
-            }
-            else
-            {
-                throw new ServicioCodefacException(ExcepcionDataBaseEnum.DESCONOCIDO.getMensaje());
-            }            
-            //throw  new ServicioCodefacException("Error sql desconocido");
-        
-        } catch (DatabaseException ex) {
-            Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        });
+       
     }
     
     public Usuario consultarUsuarioActivoPorEmpresa(String nick,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException

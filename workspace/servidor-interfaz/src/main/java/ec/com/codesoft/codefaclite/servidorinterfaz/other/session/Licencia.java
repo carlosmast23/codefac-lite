@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.io.FileWriter;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import org.jfree.util.Log;
  *
  * @author Carlos
  */
-public class Licencia {
+public class Licencia implements Serializable{
 
     private static final Logger LOG = Logger.getLogger(Licencia.class.getName());
     
@@ -136,7 +137,13 @@ public class Licencia {
     }
 
     public void cargarLicenciaFisica(Properties propiedades)
-    {      
+    {   
+        //Si no existe ningun propiedad cargada omito este paso porque no va a cargar ningun dato
+        if(propiedades==null)
+        {
+            return ;
+        }
+        
         this.usuario = propiedades.getProperty(Licencia.PROPIEDAD_USUARIO);
         this.licencia = propiedades.getProperty(Licencia.PROPIEDAD_LICENCIA);
         this.tipoLicenciaEnum = TipoLicenciaEnum.getEnumByNombre(propiedades.getProperty(Licencia.PROPIEDAD_TIPO_LICENCIA));

@@ -49,7 +49,7 @@ import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.interfaces.BusquedaCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
-import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
+import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.panel.VentanaManualUsuario;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
@@ -217,6 +217,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         mapPantallaAbiertas=new HashMap<GeneralPanelInterface, JMenuItem>();
     }
     
+    /**
+     * Iniciar todos los componentes de la aplicacion de escritorio
+     */
     public void iniciarComponentesGenerales()
     {
         iniciarComponentesPantalla();
@@ -350,7 +353,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 cerrarTodasPantallas();
                 setVisible(false);
                 LoginModel.DatosLogin datosLogin = Main.cargarLoginUsuario();
-                Main.validacionesEmpresa(datosLogin.empresa, this); //Haciendo verificacion de validacion de la licencia y datos de la empresa
+                //Main.validacionesEmpresa(datosLogin.empresa, this); //Haciendo verificacion de validacion de la licencia y datos de la empresa
                 sessionCodefac.setUsuario(datosLogin.usuario);
                 sessionCodefac.setSucursal(datosLogin.sucursal);
                 sessionCodefac.setMatriz(datosLogin.matriz);
@@ -441,7 +444,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             if(!valor.equals(""))
                             {
                                 
-                                InputStream inputStream=RemoteInputStreamClient.wrap(ServiceFactory.getFactory().getRecursosServiceIf().getResourceInputStreamByFile(DirectorioCodefac.IMAGENES,valor));
+                                InputStream inputStream=RemoteInputStreamClient.wrap(ServiceFactory.getFactory().getRecursosServiceIf().getResourceInputStreamByFile(sessionCodefac.getEmpresa(),DirectorioCodefac.IMAGENES,valor));
                                 //String pathImagen=map.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+valor;
                                 BufferedImage bufferImage= ImageIO.read(inputStream);
                                 fondoImg = bufferImage;
@@ -2821,7 +2824,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
             else
             {
-                RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(DirectorioCodefac.IMAGENES, nombreImagen);
+                RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(sessionCodefac.getEmpresa(),DirectorioCodefac.IMAGENES, nombreImagen);
                 //verifica que existe una imagen
                 if (remoteInputStream != null) {
                     inputStream = RemoteInputStreamClient.wrap(remoteInputStream);
@@ -3111,8 +3114,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,sessionCodefac.getEmpresa()).valor;
                         ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
                         validacion.setPath(pathBase);
-                        ValidarLicenciaModel dialogo=new ValidarLicenciaModel(null,true,true);
-                        dialogo.validacionLicenciaCodefac=validacion;
+                        ValidarLicenciaModel dialogo=new ValidarLicenciaModel(null,true,true,sessionCodefac.getEmpresa());
+                        //dialogo.validacionLicenciaCodefac=validacion;
                         dialogo.setVisible(true);
                         ec.com.codesoft.codefaclite.main.init.Main.iniciarComponentes();
                     } catch (RemoteException ex) {
@@ -3328,6 +3331,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         });
     }
     
+    /**
+     * Metodo que permite escribir los datos inferiores de la empresa y el usuario
+     */
     public void setearEtiquetasPantallaPrincipal()
     {
         try {
@@ -3335,7 +3341,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             //Obtener el tipo de licencia para imprimir en la pantalla inicio
             UtilidadesServiceIf utilidadesService = ServiceFactory.getFactory().getUtilidadesServiceIf();
-            TipoLicenciaEnum tipoLicenciaEnum = utilidadesService.getTipoLicencia();
+            TipoLicenciaEnum tipoLicenciaEnum = utilidadesService.getTipoLicencia(sessionCodefac.getEmpresa());
             getLblTextoSecundario().setText("Servidor IP: " + ipServidor + " | Licencia: " + tipoLicenciaEnum.getNombre() + " | Versión: " + ParametrosSistemaCodefac.VERSION);
         } catch (RemoteException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);

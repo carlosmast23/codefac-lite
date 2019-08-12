@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.panel;
 
-import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
+import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarResponseType;
@@ -25,7 +25,7 @@ import javax.swing.JTextField;
  */
 public class ValidarLicenciaDialog extends javax.swing.JDialog {
 
-    public ValidacionLicenciaCodefac validacionLicenciaCodefac;
+    //public ValidacionLicenciaCodefac validacionLicenciaCodefac;
     /**
      * Creates new form ValidarLicenciaDialog
      */
@@ -626,7 +626,7 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirVerificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirVerificarActionPerformed
-        System.exit(0);
+        
     }//GEN-LAST:event_btnSalirVerificarActionPerformed
 
     private void btnSalirRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirRegistroActionPerformed
@@ -825,13 +825,13 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         this.jTabbedPane1 = jTabbedPane1;
     }
 
-    public ValidacionLicenciaCodefac getValidacionLicenciaCodefac() {
+    /*public ValidacionLicenciaCodefac getValidacionLicenciaCodefac() {
         return validacionLicenciaCodefac;
     }
 
     public void setValidacionLicenciaCodefac(ValidacionLicenciaCodefac validacionLicenciaCodefac) {
         this.validacionLicenciaCodefac = validacionLicenciaCodefac;
-    }
+    }*/
 
     public JButton getBtnActualizarLicencia() {
         return btnActualizarLicencia;

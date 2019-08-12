@@ -25,9 +25,9 @@ import ec.com.codesoft.codefaclite.main.actualizacion.ActualizacionSistemaUtil;
 import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
-import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
-import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
-import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
+import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
+import ec.com.codesoft.codefaclite.licence.NoExisteLicenciaException;
+import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaExcepcion;
 import ec.com.codesoft.codefaclite.main.model.ConfiguracionesInicalesModel;
 import ec.com.codesoft.codefaclite.main.model.DescargaModel;
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
@@ -51,6 +51,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
@@ -335,34 +336,34 @@ public class Main {
      *
      * @param pathBase
      */
-    private static void verificarLicencia(String pathBase,Empresa empresa) {
-        /**
-         * Realizar Analisis para verificar si existe la licencia instalada
-         */
-        if (!comprobarLicencia(pathBase)) {
-            System.exit(0);
-        } else {
-
-            //Buscar el tipo de licencia paa setear en el sistema
-            ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac(pathBase);
-            TipoLicenciaEnum tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
-
-            //Esta validacion es solo para usuario premium para cuando no paguen y tengamos que disminuir la licencia
-            if (!TipoLicenciaEnum.GRATIS.equals(tipoLicencia)) {
-                validacionCodefacOnline(validacion,empresa);
-                validacion = new ValidacionLicenciaCodefac(pathBase);
-                tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
-            }
-
-            //Este valor seteo para que sea accesible desde el servidor
-            //TODO: Verficar si se puede mejorar esta linea de codigo
-            UtilidadesServidor.tipoLicenciaEnum = tipoLicencia;
-            UtilidadesServidor.modulosMap = validacion.getLicencia().getModulosSistema();
-            UtilidadesServidor.cantidadUsuarios = Integer.parseInt(validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
-            UtilidadesServidor.usuarioLicencia = validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
-
-        }
-    }
+//    private static void verificarLicencia(String pathBase,Empresa empresa) {
+//        /**
+//         * Realizar Analisis para verificar si existe la licencia instalada
+//         */
+//        if (!comprobarLicencia(pathBase)) {
+//            System.exit(0);
+//        } else {
+//
+//            //Buscar el tipo de licencia paa setear en el sistema
+//            ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac(pathBase);
+//            TipoLicenciaEnum tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
+//
+//            //Esta validacion es solo para usuario premium para cuando no paguen y tengamos que disminuir la licencia
+//            if (!TipoLicenciaEnum.GRATIS.equals(tipoLicencia)) {
+//                validacionCodefacOnline(validacion,empresa);
+//                validacion = new ValidacionLicenciaCodefac(pathBase);
+//                tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
+//            }
+//
+//            //Este valor seteo para que sea accesible desde el servidor
+//            //TODO: Verficar si se puede mejorar esta linea de codigo
+//            UtilidadesServidor.tipoLicenciaEnum = tipoLicencia;
+//            UtilidadesServidor.modulosMap = validacion.getLicencia().getModulosSistema();
+//            UtilidadesServidor.cantidadUsuarios = Integer.parseInt(validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
+//            UtilidadesServidor.usuarioLicencia = validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
+//
+//        }
+//    }
 
     /**
      * Verifica si existe o selecciona el modo del aplicativo (Cliente,
@@ -500,7 +501,7 @@ public class Main {
             String ipServidor ="";
             
             if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) {
-                  //Consultar si existe grabado la ip del servidor para cargar por defecto la ultima
+                    //Consultar si existe grabado la ip del servidor para cargar por defecto la ultima
                     Properties propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
                     String ipServidorDefecto=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR);
                     
@@ -528,17 +529,10 @@ public class Main {
                 //System.setProperty("java.rmi.server.hostname","186.4.212.15"); 
                 //System.setProperty("com.healthmarketscience.rmiio.exporter.port", "1099");
                 cargarRecursosServidor(ipServidor); 
-                
-                //Todo: Veriicar este metodo que obtiene la ip del servidor, porque cuando tienen varias interfaces o una virtual puede levantarse el servicio en una IP que no se desea
-                //ipServidor = InetAddress.getLocalHost().getHostAddress();
-                
+                                
                 cargarRecursosCliente(ipServidor);
                 
-                
-                //Verificar si la fecha maximo de pago no esta vencida para que el sistema alerte o no deje seguir usando el software
-                //TODO: Ver si esta validacion se la hace antes , la unica razon porque se lo hace en esta parte es porque la variable global del usuario esta en el metodo verificarLicencia
-                //verificarFechaMaximaPago(UtilidadesServidor.usuarioLicencia);
-                
+               
                 //Cargar el servidor de mensajeria
                 ServidorSMS.getInstance().iniciarServidor();
                 
@@ -555,7 +549,7 @@ public class Main {
                 else
                 {
                     if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE_SERVIDOR)) {
-                        //verificarConexionesPermitidas();
+                        //verificarConexionesPermitidas(); //Todo este codigo se lo debe manejar en el login
                         LOG.log(Level.INFO, "Modo Cliente Servidor Activado");
                     }
                 }
@@ -644,8 +638,8 @@ public class Main {
                 LOG.log(Level.WARNING, "Error en la licencia ");
                 return;
             }
-            validacionesEmpresa(datosLogin.empresa, panel); //Haciendo verificacion de validacion de la licencia y datos de la empresa
-            SessionCodefac session=ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido();
+            //validacionesEmpresa(datosLogin.empresa, panel); //Haciendo verificacion de validacion de la licencia y datos de la empresa
+            SessionCodefac session=ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido(datosLogin.empresa);
             //panel.setSessionCodefac(session);
 
             session.setUsuario(datosLogin.usuario);
@@ -674,10 +668,6 @@ public class Main {
             //frameAplicacion.dispose(); //Libero el recurso de la pantalla que tiene el icono en la barra de tareas
             panel.setVisible(true);
             
-            //java.rmi.activation.port
-            //System.setProperty("java.rmi.activation.port","1099");
-
-
             
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -693,7 +683,7 @@ public class Main {
      * Validacion que me permite verificar las licencias de la empresa y el tema de los pagos
      * @param empresa 
      */
-    public static void validacionesEmpresa(Empresa empresa,GeneralPanelModel panel)
+    public static void seleccionarDirectorioRecursos(Empresa empresa)
     {
         try {
             ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,empresa);
@@ -715,6 +705,7 @@ public class Main {
                     parametroDirectorioRecursos = new ParametroCodefac();
                     parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
                     parametroDirectorioRecursos.setValor(directorioUsuario);
+                    parametroDirectorioRecursos.setEmpresa(empresa);
                     ServiceFactory.getFactory().getParametroCodefacServiceIf().grabar(parametroDirectorioRecursos);
                 } else {
                     parametroDirectorioRecursos.setValor(directorioUsuario);
@@ -722,14 +713,15 @@ public class Main {
                 }
             }
             
-            verificarLicencia(parametroDirectorioRecursos.getValor(),empresa);
+            //ServiceFactory.getFactory().getUtilidadesServiceIf().obtenerLicenciaEmpresa(empresa);
+            //verificarLicencia(parametroDirectorioRecursos.getValor(),empresa);
             
             //Seteo el path de los directorio como una referencia global de todo el sistema
-            UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
+            //UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor(); TODO: Ver si ya no es necesario setear esa variable porque se setean al momento de hacer Login supuestamente
             
             //Verificar si la fecha maximo de pago no esta vencida para que el sistema alerte o no deje seguir usando el software
             //TODO: Ver si esta validacion se la hace antes , la unica razon porque se lo hace en esta parte es porque la variable global del usuario esta en el metodo verificarLicencia
-            verificarFechaMaximaPago(UtilidadesServidor.usuarioLicencia);
+            //verificarFechaMaximaPago(UtilidadesServidor.mapEmpresasLicencias.get(empresa).usuarioLicencia);
             
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -752,7 +744,7 @@ public class Main {
         LoginModel loginModel = new LoginModel();
         loginModel.setVisible(true);
         
-        if(loginModel.salirAplicacion)System.exit(0);
+        //if(loginModel.salirAplicacion)System.exit(0);
         
         LoginModel.DatosLogin usuarioLogin = loginModel.getDatosLogin();
         frameAplicacion.dispose();
@@ -808,205 +800,8 @@ public class Main {
 
     }
 
-    public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion,Empresa empresa) {
-
-        /**
-         * Dias Limite para verificar la licencia en ese periodo de tiempo
-         */
-        int diasLimiteVerificacion=9;
-        /**
-         * Numero de dias antes de empezar a verificar la licencia
-         */
-        int diasToleraciaVerificacion=3;
-        
-        try {
-            ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
-            /**
-             * Verificar si la licencia actual es la misma que tiene el servidor
-             */
-            ParametroCodefac parametroFechaValidacion = servicio.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION,empresa);
-            if (parametroFechaValidacion != null && !parametroFechaValidacion.getValor().equals("")) {
-                //String fechaStr = parametroFechaValidacion.getValor();
-                String fechaStr = UtilidadesEncriptar.desencriptar(parametroFechaValidacion.getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
-                System.out.println(fechaStr);
-                if (!fechaStr.equals("")) {
-                    try {
-                        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-                        Date fechaUltimaRevision = formato.parse(fechaStr);
-                        
-                        Date fechaRevisar=UtilidadesFecha.hoy(); //Por feecto compara con la hora del sistema
-                        try
-                        {
-                            fechaRevisar=UtilidadesFecha.getFechaNTP(); //Si no existe internet hace el calculo con la hora del sistema
-                        }
-                        catch(java.lang.NoSuchMethodError nse)
-                        {
-                            nse.printStackTrace();
-                        } catch (Exception ex) {
-                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                                
-                        
-                        int dias = UtilidadesFecha.obtenerDistanciaDias(fechaUltimaRevision, fechaRevisar);//Esta fecha 
-
-                        //Validacion para evitar que cambien fechas del sistema o que corrompan la fecha poniendo una fecha superior
-                        if (dias < 0) {
-                            DialogoCodefac.mensaje("Error", "No se puede validar su licencia ,inconsistencia con las fechas", DialogoCodefac.MENSAJE_INCORRECTO);
-                            System.exit(0);
-
-                        }
-
-                        //Revisar la licencia cada 5 dias con un rango maximo de 8 dias 
-                        if (dias > diasToleraciaVerificacion && dias < diasLimiteVerificacion) {
-                            if (verificarLicenciaOnline(validacion)) {
-                                grabarFechaRevision(parametroFechaValidacion, false);
-                            }
-                            else
-                            {
-                                DialogoCodefac.mensaje("Advertencia", "Le quedan "+(diasLimiteVerificacion-dias)+" días para verificar su licencia por internet. \n\nCausas: \n - No tiene conexion a internet por varios días \n - Esta usando una versión  ilegal \n\n Si el problema persiste comuníquese con un asesor\n Nota: Si no soluciona el problema pasado la fecha limite el programa yo no funcionara" , dias);
-                            }
-                        }
-
-                        //Si execede los dias limite sin validar por internet ya no permite el acceso
-                        if (dias >= diasLimiteVerificacion) {
-                            if (verificarLicenciaOnline(validacion)) {
-                                grabarFechaRevision(parametroFechaValidacion, false);
-                            } else {
-                                //Si no se logro validar la licencia durante 30 dias ya no se abre el software
-                                DialogoCodefac.mensaje("Advertencia", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                                System.exit(0);
-                            }
-                        }
-
-                    } catch (ParseException ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                } else {
-                    if (verificarLicenciaOnline(validacion)) //no se pone en un if, porque esta controlado en el metodo si no existe salir
-                    {
-                        grabarFechaRevision(parametroFechaValidacion, false);
-                    } else {
-                        //Si no se logro validar la licencia por primera vez  no se abre el software
-                        DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
-                        System.exit(0);
-
-                    }
-                }
-
-            } else //cuando no se tiene registro de la fecha de validacion
-            {
-                if (verificarLicenciaOnline(validacion)) {
-                    grabarFechaRevision(parametroFechaValidacion, true);
-                } else {
-                    //Si no se logro validar la licencia por primera vez  no se abre el software
-                    DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
-                    System.exit(0);
-                }
-
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    /**
-     * Funcion que graba la fecha de la ultima revision de la licencia y me
-     * permite hacer un control para evitar que el softare funcione sin
-     * verificar alteraciones en su licencia o cuando se requiera cambiar el
-     * tipo de licencia por ejemplo cuando no realiza los pagos de la licencia
-     *
-     * @param parametroFechaValidacion
-     * @param crear
-     */
-    private static void grabarFechaRevision(ParametroCodefac parametroFechaValidacion, boolean crear) {
-        try {
-            if (crear) {
-                parametroFechaValidacion = new ParametroCodefac();
-                parametroFechaValidacion.setNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
-            }
-
-            ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date fechaHoy = UtilidadesFecha.getFechaNTP();
-            String dateStr=format.format(fechaHoy);
-            parametroFechaValidacion.setValor(UtilidadesEncriptar.encriptar(dateStr,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-            if (crear) {
-                servicio.grabar(parametroFechaValidacion);
-            } else {
-                servicio.editar(parametroFechaValidacion);
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    /**
-     * Verifica que la licencia que esta en el computador sea la misma que la
-     * del servidor
-     *
-     * @param validacion
-     * @return
-     */
-
-    public static boolean verificarLicenciaOnline(ValidacionLicenciaCodefac validacion)
-    {
-            //Si esta en modo desarrollo omito el tema de comprobar la licencias
-            if (ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO)) {
-                return true;
-            }            
-            
-            String usuario=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
-            Licencia licenciaOnline=new Licencia();
-            licenciaOnline.cargarLicenciaOnline(usuario);
-            
-            
-            Licencia licenciaFisica=new Licencia();
-            licenciaFisica.cargarLicenciaFisica(validacion.obtenerLicencia());
-
-
-            if(licenciaOnline.compararOtraLicencia(licenciaFisica))
-            {
-                return true;
-            }
-            else //Si existe diferencias con la otra licencia lanza el dialogo para actualizar la licencia
-            {                
-                //validacion.crearLicenciaDescargada(licenciaOnline);a
-                //validacion.crearLicencia(usuario,tipoLicencia,cantidadCliente,modulosActivos);
-                //if(validacion.validar())
-                //{
-                //    return true;
-                //}
-                //Pantalla para actualizar la licencia si existe la licencia
-                DialogoCodefac.mensaje("Advertencia","Su licencia esta desactualizada o es incorrecta. \n Porfavor actualice su licencia para continuar", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, true);
-                licenciaDialog.setValidacionLicenciaCodefac(validacion);
-                if (validacion.verificarConexionInternet()) {
-                    licenciaDialog.setVisible(true);
-                    if (licenciaDialog.licenciaCreada) {
-                        return comprobarLicencia(validacion.getPath()); //volver a verificar la licencia
-                    } else {
-                        return false;
-                    }
-                } else {
-                    DialogoCodefac.mensaje("Error", "Para activar su producto conéctese a Internet", DialogoCodefac.MENSAJE_INCORRECTO);
-                    return false;
-                }
-
-            }            
-
-        //}
-        //catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
-        //{
-        //    return false;
-        //}
-
-    }
-
+   
+   
     /**
      * Agrega todas las pantallas secundarias que puedo utilizar en la pantalla secuendaria del menu principal
      * @return 
@@ -1138,56 +933,7 @@ public class Main {
         }
     }
 
-    private static boolean comprobarLicencia(String pathBase) {
-        
-        //Si esta en modo desarrollo omito el tema de comprobar la licencias
-        if(ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO))
-        {
-            return true;
-        }
-
-        //ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
-        
-        ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
-        validacion.setPath(pathBase);
-        
-        Boolean existeLicencia=false;
-
-        if (validacion.verificarExisteLicencia()) {
-            try {
-                if (validacion.validar()) {
-                    return true;
-                } else {//Si la licencia es incorrecta abre el dialogo de verificacion
-                    DialogoCodefac.mensaje("Error", "No se puede validar la licencia, Posibles causas:\n - La licencia esta desactualizada \n - El archivo de la licencia fue modificado", DialogoCodefac.MENSAJE_INCORRECTO);
-                    existeLicencia=true;
-                }
-            } catch (ValidacionLicenciaExcepcion ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoExisteLicenciaException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }  //Cuando no existe la licencia
-
-        
-        
-        //Crear un dialogo si no existe la licencia o esta desactualizada o con alguna incoherencia
-        ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, existeLicencia);
-        licenciaDialog.setValidacionLicenciaCodefac(validacion);
-        if (validacion.verificarConexionInternet()) {
-            licenciaDialog.setVisible(true);
-            if (licenciaDialog.licenciaCreada) {
-                return comprobarLicencia(pathBase); //volver a verificar la licencia
-            } else {
-                return false;
-            }
-        } else {
-            DialogoCodefac.mensaje("Error", "Para activar su producto conéctese a Internet", DialogoCodefac.MENSAJE_INCORRECTO);
-            return false;
-        }
-
-
-    }
-
+    
     public static List<Perfil> obtenerPerfilesUsuario(Usuario usuario) {
         try {
             PerfilServiceIf servicio = ServiceFactory.getFactory().getPerfilServicioIf();

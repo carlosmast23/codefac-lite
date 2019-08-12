@@ -3,11 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.main.license;
+package ec.com.codesoft.codefaclite.licence;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
-import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
-import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
@@ -275,30 +273,6 @@ public class ValidacionLicenciaCodefac{
         return null;
     }
     
-    /*
-    private void setearPropiedadesModulos(Properties propiedades,List<String> modulosActivos)
-    {
-        String[] modulos=Licencia.MODULOS;
-        for (String modulo : modulos) {
-            if(modulosActivos.contains(modulo))
-            {
-                propiedades.setProperty(modulo,"si");
-            }
-            else
-            {
-                propiedades.setProperty(modulo,"no");
-            }
-        }
-    }*/
-   /* 
-    static void saveProperties(Properties p)throws IOException
-    {
-            FileOutputStream fr=new FileOutputStream(file);
-            p.store(fr,"Properties");
-            fr.close();
-            System.out.println("After saving properties:"+p);
-    }*/
-
     public String getPath() {
         return path;
     }

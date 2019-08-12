@@ -1390,8 +1390,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         try {
             ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
             Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap(empresa);
-            //String pathBase de los directorios
-            servicio.setPathBase(UtilidadesServidor.pathRecursos);
+            //String pathBase de los directorios            
+            servicio.setPathBase(UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa);
             servicio.setNombreFirma(parametroCodefacMap.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
             servicio.setClaveFirma(UtilidadesEncriptar.desencriptar(parametroCodefacMap.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             String modoFacturacion = parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION).valor;
@@ -1536,7 +1536,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg").getPath();
         //Segun el tipo de licencia cargar los recursos
         servicio.pathLogoImagen = UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
-        if (UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.PRO)) {
+        if (UtilidadesServidor.mapEmpresasLicencias.get(empresa).tipoLicencia.equals(TipoLicenciaEnum.PRO)) {
 
             InputStream inputStream = null;
             try {
@@ -1549,8 +1549,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
                 }
                 else
-                {
-                    String pathImagen = UtilidadesServidor.pathRecursos + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/" + imagenLogo;
+                {                    
+                    String pathImagen = UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/" + imagenLogo;
                     inputStream = new FileInputStream(pathImagen);
                     //Si no existe imagen en la version de pago setea un imagen por defecto
                     if (inputStream == null) {
@@ -1608,7 +1608,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         parametros.put("pl_facebook",(empresa.getFacebook()!=null)?empresa.getFacebook():"");
         //parametros.put("pl_adicional", empresa.getAdicional());
         
-        if (UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS)) {
+        if (UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa.equals(TipoLicenciaEnum.GRATIS)) {
             parametros.put("pl_adicional",ParametrosSistemaCodefac.MensajesSistemaCodefac.MENSAJE_PIE_PAGINA_GRATIS);
         } else {
             parametros.put("pl_adicional",(empresa.getAdicional()!=null)?empresa.getAdicional():"");
@@ -1618,7 +1618,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         InputStream input=null;
         
         //Si la licencia es gratis entonces cargar por defecto una imagen por defecto
-        if(UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS))
+        if(UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa.equals(TipoLicenciaEnum.GRATIS))
         {
             input=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
         }
@@ -1627,7 +1627,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             //Verifica si esta guardado el path de la imagen 
             if(empresa.getImagenLogoPath()!=null && !empresa.getImagenLogoPath().equals("") )
             {
-                RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(DirectorioCodefac.IMAGENES, empresa.getImagenLogoPath());
+                RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(empresa,DirectorioCodefac.IMAGENES, empresa.getImagenLogoPath());
 
                 if (remoteInputStream != null) {
                     try {

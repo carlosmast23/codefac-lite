@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.main.license.excepcion;
+package ec.com.codesoft.codefaclite.licence;
 
 /**
  *
  * @author Carlos
  */
-public class NoExisteLicenciaException extends Exception {
+public class ValidacionLicenciaExcepcion extends Exception {
 
-    public NoExisteLicenciaException(String message) {
+    public ValidacionLicenciaExcepcion(String message) {
         super(message);
     }
     

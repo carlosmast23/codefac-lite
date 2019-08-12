@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
@@ -159,7 +160,8 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                 else
                 {
                     try {
-                        if(ServiceFactory.getFactory().getUsuarioServicioIf().login(usuario.getNick(),claveAnterior,session.getEmpresa())==null)
+                        LoginRespuesta loginRespuesta= ServiceFactory.getFactory().getUsuarioServicioIf().login(usuario.getNick(),claveAnterior,session.getEmpresa());
+                        if(loginRespuesta.estadoEnum.equals(loginRespuesta.estadoEnum.CORRECTO_USUARIO))
                         {
                             DialogoCodefac.mensaje("Error", "La clave anterior es incorrecta no se puede grabar la nueva clave", DialogoCodefac.MENSAJE_ADVERTENCIA);
                         }
@@ -168,6 +170,8 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                             return true; //Si todos los datos son validados retorno true
                         }
                     } catch (RemoteException ex) {
+                        Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
                         Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }

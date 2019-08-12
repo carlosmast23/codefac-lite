@@ -11,6 +11,7 @@ import com.healthmarketscience.rmiio.RemoteInputStreamServer;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
@@ -56,10 +57,10 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
         return null; //Si falla el servidor devuelve null
     }
 
-    public RemoteInputStream getResourceInputStreamByFile(DirectorioCodefac directorio,String nameFile) throws RemoteException
+    public RemoteInputStream getResourceInputStreamByFile(Empresa empresa,DirectorioCodefac directorio,String nameFile) throws RemoteException
     {
         try {
-            File file=new File(UtilidadesServidor.pathRecursos+"/"+directorio.getNombre()+"/"+nameFile);
+            File file=new File(UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa+"/"+directorio.getNombre()+"/"+nameFile);
             InputStream input= new  FileInputStream(file);
             RemoteInputStreamServer istream =new SimpleRemoteInputStream(input);
             RemoteInputStream result = istream.export();
@@ -121,7 +122,8 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
      */
     public void uploadFileServer(DirectorioCodefac directorio,RemoteInputStream recurso,String nombre) throws RemoteException
     {
-        uploadFileServer(UtilidadesServidor.pathRecursos,directorio,recurso,nombre);
+        //uploadFileServer(UtilidadesServidor.pathRecursos,directorio,recurso,nombre);
+        uploadFileServer(UtilidadesServidor.mapEmpresasLicencias.get(null).pathEmpresa,directorio,recurso,nombre);
           
     }
 

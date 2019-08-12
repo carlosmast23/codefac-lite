@@ -8,8 +8,10 @@ package ec.com.codesoft.codefaclite.servidor.util;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.interfacePanel.ServidorMonitorUpdateInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.test.CrearBaseDatos;
@@ -51,17 +53,21 @@ public class UtilidadesServidor {
     //Listado de conexiones en el Servidor
     public static List<String> hostConectados = new ArrayList<String>();
 
+    //Interfaz para controlar el numero de pantallas conectadas
     public static ServidorMonitorUpdateInterface monitorUpdate;
+    
+    //Metodo que me sirve como proxi para coger los datos cargados previamente y no tener que estar haciendo la validacion siempre
+    public static Map<Empresa,EmpresaLicencia> mapEmpresasLicencias=new HashMap<Empresa,EmpresaLicencia>();
 
-    public static TipoLicenciaEnum tipoLicenciaEnum;
+    //public static TipoLicenciaEnum tipoLicenciaEnum;
 
-    public static String usuarioLicencia;
+    //public static String usuarioLicencia;
 
-    public static String pathRecursos;
+    //public static String pathRecursos;
 
-    public static Integer cantidadUsuarios;
+    //public static Integer cantidadUsuarios;
 
-    public static List<ModuloCodefacEnum> modulosMap;
+    //public static List<ModuloCodefacEnum> modulosMap;
 
     /**
      * Querys que solo se ejecutaran en el modo de desarrollo Ejemplo: Querys de
