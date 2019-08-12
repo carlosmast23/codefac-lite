@@ -120,10 +120,10 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
     /**
      * Agregar recursos al servidor
      */
-    public void uploadFileServer(DirectorioCodefac directorio,RemoteInputStream recurso,String nombre) throws RemoteException
+    public void uploadFileServer(DirectorioCodefac directorio,RemoteInputStream recurso,String nombre,Empresa empresa) throws RemoteException
     {
         //uploadFileServer(UtilidadesServidor.pathRecursos,directorio,recurso,nombre);
-        uploadFileServer(UtilidadesServidor.mapEmpresasLicencias.get(null).pathEmpresa,directorio,recurso,nombre);
+        uploadFileServer(UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa,directorio,recurso,nombre);
           
     }
 

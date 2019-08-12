@@ -328,7 +328,7 @@ public class EmpresaModel extends EmpresaForm
             SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
                     new FileInputStream(origen.toFile()));
             
-            ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(DirectorioCodefac.IMAGENES, istream,origen.getFileName().toString());
+            ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(DirectorioCodefac.IMAGENES, istream,origen.getFileName().toString(),session.getEmpresa());
             
             getjTextLogo().setText(origen.getFileName().toString());
             

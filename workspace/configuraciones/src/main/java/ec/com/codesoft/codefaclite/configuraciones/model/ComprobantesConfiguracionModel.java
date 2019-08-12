@@ -297,8 +297,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     }
 
     private void cargarModosFacturacion() {
-        getCmbModoFacturacion().addItem(ComprobanteElectronicoService.MODO_PRODUCCION);
         getCmbModoFacturacion().addItem(ComprobanteElectronicoService.MODO_PRUEBAS);
+        getCmbModoFacturacion().addItem(ComprobanteElectronicoService.MODO_PRODUCCION);
+        
         
         getCmbTipoEnvioComprobante().removeAllItems();
         for (ParametroCodefac.TipoEnvioComprobanteEnum tipoEnvio : TipoEnvioComprobanteEnum.values()) {

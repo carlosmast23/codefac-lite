@@ -648,7 +648,15 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     {
         ParametroCodefacService parametroService=new ParametroCodefacService();
         String path= parametroService.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,empresa).valor;
-        String modoFacturacion=parametroService.getParametroByNombre(ParametroCodefac.MODO_FACTURACION,empresa).valor;
+        ParametroCodefac modoFacturacionParam=parametroService.getParametroByNombre(ParametroCodefac.MODO_FACTURACION, empresa);
+        
+        //Si tiene configurado el modo de facturacion retorno vacio
+        if(modoFacturacionParam==null)
+        {
+            return new ArrayList<>();
+        }
+            
+        String modoFacturacion=modoFacturacionParam.valor;
         String pathComprobantes="";
         
         if (modoFacturacion.equals(ComprobanteElectronicoService.MODO_PRODUCCION)) {

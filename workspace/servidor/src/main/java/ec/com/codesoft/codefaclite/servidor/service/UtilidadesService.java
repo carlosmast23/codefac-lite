@@ -208,6 +208,8 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             empresaLicencia.cantidadUsuarios=Integer.parseInt(validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
             empresaLicencia.usuarioLicencia=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
             
+            ParametroCodefacService servicioParametros=new ParametroCodefacService();
+            empresaLicencia.pathEmpresa=servicioParametros.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS, empresa).valor;
             
             empresaLicencia.fechaUltimaValidacion=UtilidadesFecha.getFechaHoy(); //Obtiene la fecha cuando se valido la licencia
             UtilidadesServidor.mapEmpresasLicencias.put(empresa, empresaLicencia); //Seteo el valor de la empresa con la ultima validacion

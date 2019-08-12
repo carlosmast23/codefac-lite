@@ -183,7 +183,8 @@ public class SucursalModel extends SucursalPanel {
             getCmbEmpresa().removeAllItems();
             List<Empresa> empresas=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodos(); //Todo: Cambiar este codigo para mostrar solo empresas activas
             UtilidadesComboBox.llenarComboBox(getCmbEmpresa(),empresas);
-            getCmbEmpresa().addItem(session.getEmpresa());
+            getCmbEmpresa().setSelectedItem(session.getEmpresa());
+            //getCmbEmpresa().addItem(session.getEmpresa());
         } catch (RemoteException ex) {
             Logger.getLogger(SucursalModel.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -38,8 +38,7 @@ create table PRODUCTO
     TRANSPORTAR_EN_GUIA_REMISION  varchar(1),  
  
 
-    primary key (ID_PRODUCTO),
-    UNIQUE(CODIGO_PERSONALIZADO,CODIGO_EAN,CODIGO_UPC)
+    primary key (ID_PRODUCTO)
 );
 
 

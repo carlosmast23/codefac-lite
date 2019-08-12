@@ -2117,7 +2117,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         boolean validado = true;
         
         //Validacion cuando solo sea facturacion manual
-        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
+        ParametroCodefac tipoFacturacionParam=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION);
+        
+        if (tipoFacturacionParam == null) 
+        {
+            mensajeValidacion += " - Tipo Modo de Facturación \n";
+            validado = false;
+            
+        }else if(tipoFacturacionParam.getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
         {
             if (session.getEmpresa() == null) 
             {
@@ -2125,7 +2132,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 validado = false;
             }
         }
-        else         {        
+        else         
+        {        
        
             try //Validacion cunando es facturacion electronica
             {

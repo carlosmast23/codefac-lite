@@ -91,5 +91,12 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         }
         return null;
     }
+    
+    public List<Empresa> obtenerTodosActivos() throws RemoteException
+    {
+        //TODO: Pendiente implementar esta busqueda
+        return null;
+        
+    }
         
 }
