@@ -24,16 +24,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaRequestType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarResponseType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaRequestType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaResponseType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaRequestType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaResponseType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServerPortType;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.Desktop;
 import java.awt.Frame;
@@ -86,7 +76,11 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         String usuarioTxt = getTxtUsuarioVerificar().getText();
         //Crea la nueva licencia con el usuario
         Licencia licencia = new Licencia();
-        licencia.cargarLicenciaOnline(usuarioTxt);
+        try {
+            licencia.cargarLicenciaOnline(usuarioTxt);
+        } catch (Exception ex) {
+            Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         Properties propiedad = null;
         try {
@@ -175,13 +169,22 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 if(WebServiceCodefac.verificarCredenciales(getTxtUsuarioVerificar().getText(),new String(getTxtClaveVerificar().getPassword())))
                 { 
                     //Verificar si existe la licencia para solo descargar
-                    String licencia=WebServiceCodefac.getLicencia(getTxtUsuarioVerificar().getText());
+                    String licencia=null;
+                    try {
+                        licencia = WebServiceCodefac.getLicencia(getTxtUsuarioVerificar().getText());
+                    } catch (Exception ex) {
+                        Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
                     //String tipoLicencia=WebServiceCodefac.getTipoLicencia(getTxtUsuarioVerificar().getText());
                     //Integer cantidadUsuarios=WebServiceCodefac.getCantidadClientes(getTxtUsuarioVerificar().getText());
 
                     Licencia licenciaInternet=new Licencia();
-                    licenciaInternet.cargarLicenciaOnline(getTxtUsuarioVerificar().getText());
+                    try {
+                        licenciaInternet.cargarLicenciaOnline(getTxtUsuarioVerificar().getText());
+                    } catch (Exception ex) {
+                        Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     //No hace verificaciones porque esta accion solo es accesible desde la pantalla de menu
                     //y se supone que ya esta validando la licencia anterior
                     if(actualizaLicencia)

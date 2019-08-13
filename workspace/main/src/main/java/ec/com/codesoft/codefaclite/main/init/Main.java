@@ -1047,26 +1047,5 @@ public class Main {
         }
     }
 
-    private static void verificarFechaMaximaPago(String usuario) {
-        Date fechaLimite=WebServiceCodefac.obtenerFechaLimitePago(usuario);
-        
-        if(fechaLimite!=null)
-        {
-            int diasFaltantes=UtilidadesFecha.obtenerDistanciaDias(UtilidadesFecha.getFechaHoy(),fechaLimite);
-            //System.out.println("Hoy:"+UtilidadesFecha.hoy());
-            //System.out.println("otro:"+fechaLimite);
-            //diasFaltantes=diasFaltantes+1; //Le sumo un digito porqe la distancia me devuelve con un numero menos TODO: revisar esta parte
-            if(diasFaltantes<=0)
-            {//Validacion cuando ya no tenga dias de espera ya no permite acceder al sistema
-                DialogoCodefac.mensaje("Error","El sistema detecta valores pendientes de pago y no se puede abrir\n Porfavor cancele los valores pendientes para continuar con el servicio.", DialogoCodefac.MENSAJE_INCORRECTO);
-                System.exit(0);
-            }
-            else if(diasFaltantes<=10)
-            {
-                DialogoCodefac.mensaje("Advertencia","El sistema registra valores pendientes por cancelar , le restan "+diasFaltantes+" días para usar el sistema,\n Si no cancela los valores pendientes el sistema automáticamente se bloqueará .",DialogoCodefac.MENSAJE_ADVERTENCIA);
-            }
-        }
-                
-    }
     
 }

@@ -3092,7 +3092,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 String usuarioLicencia=sessionCodefac.getUsuarioLicencia();
                 //String tipoLicencia=WebServiceCodefac.getTipoLicencia(usuarioLicencia);
                 Licencia licenciaInternet=new Licencia();
-                licenciaInternet.cargarLicenciaOnline(usuarioLicencia);
+                try {
+                    licenciaInternet.cargarLicenciaOnline(usuarioLicencia);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
                 ValidacionLicenciaCodefac validacionLicencia = new ValidacionLicenciaCodefac(sessionCodefac.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
                 

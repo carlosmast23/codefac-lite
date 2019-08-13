@@ -67,23 +67,23 @@ public abstract class WebServiceCodefac {
      * @param email
      * @return 
      */
-    public static String getLicencia(String email){
+    public static String getLicencia(String email) throws Exception{
         /**
          * Obtener el tipo de licencia del usuario
          */
-        //try
-        //{
+        try
+        {
             SOAPServer soapServer = new SOAPServer();
             SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
             ObtenerlicenciaRequestType parametrosLicencia = new ObtenerlicenciaRequestType();
             parametrosLicencia.setEmail(email);        
             ObtenerlicenciaResponseType respuestaLicencia = soapServerPort.obtenerlicencia(parametrosLicencia);
             return respuestaLicencia.getReturn();
-        //}
-        //catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
-        //{
-        //    throw cte;
-        //}
+        }
+        catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
+        {
+            throw cte;
+        }
 
     
     }

@@ -143,6 +143,12 @@ public class LoginModel extends LoginFormDialog{
                 //usuario = usuarioServicio.login(usuarioTxt, clave, (Empresa) getCmbEmpresa().getSelectedItem());
                 LoginRespuesta loginRespuesta = usuarioServicio.login(usuarioTxt, clave, empresaSeleccionada);
                 
+                //Mostrar las alertas del sistema 
+                if(loginRespuesta.alertas!=null)
+                {
+                    DialogoCodefac.mensaje("Alertas",loginRespuesta.obtenerAlertasConFormato(),DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+                
                 switch(loginRespuesta.estadoEnum)
                 {
                     case CORRECTO_USUARIO:
@@ -167,18 +173,18 @@ public class LoginModel extends LoginFormDialog{
                         pantallaRegistrarLicencia();
                         //validacionesEmpresa
                         break;
-                    
+                        
+                    case PAGOS_PENDIENTES:
+                        LOG.log(Level.WARNING, "Error con las fechas de pago excedidas " + usuarioTxt);
+                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.PAGOS_PENDIENTES.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);                        
+                        break;
+
                     default:
                         LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
                         DialogoCodefac.mensaje("Error Login",loginRespuesta.estadoEnum.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
                         break;
-                        
+                }
                 
-                }
-                if(loginRespuesta.alertas!=null)
-                {
-                    DialogoCodefac.mensaje("Alertas",loginRespuesta.obtenerAlertasConFormato(),DialogoCodefac.MENSAJE_ADVERTENCIA);
-                }
                
             } catch (RemoteException ex) {
                 Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);

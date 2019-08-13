@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.other.session;
 
+//import com.sun.xml.internal.ws.client.ClientTransportException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
@@ -117,7 +119,7 @@ public class Licencia implements Serializable{
     }
     
 
-    public void cargarLicenciaOnline(String usuario)
+    public void cargarLicenciaOnline(String usuario) throws Exception 
     {
         this.usuario=usuario;
         this.licencia = WebServiceCodefac.getLicencia(usuario);

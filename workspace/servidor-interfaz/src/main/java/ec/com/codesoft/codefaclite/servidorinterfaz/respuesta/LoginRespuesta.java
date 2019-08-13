@@ -45,7 +45,10 @@ public class LoginRespuesta implements Serializable{
         for (String alerta : alertas) {
             mensaje="- "+alerta+"\n";
         }
+        //String nl = System.getProperty("line.separator");
+
         return mensaje;
+        
     }
     
     
@@ -54,7 +57,7 @@ public class LoginRespuesta implements Serializable{
         /**
          * Estado cuando se el usuario esta logueado correctamente
          */
-        CORRECTO_USUARIO("Usuaro Correcto"),
+        CORRECTO_USUARIO("Usuario Correcto"),
         /**
          * Estado cuando el usuario ingreso mal los datos
          */
@@ -90,6 +93,11 @@ public class LoginRespuesta implements Serializable{
          * Estado que me permite informar que no existe novedades con la licencia
          */
         LICENCIA_CORRECTA("Licencia Correcta"),
+        
+        /**
+         * Mensaje cuando el sistema detecta pagos pendientes
+         */
+        PAGOS_PENDIENTES("El sistema detecta valores pendientes de pago y no se puede abrir\n Porfavor cancele los valores pendientes para continuar con el servicio."),
         
         /**
          * Estado cuando sucede algun problema pero no esta clasificado

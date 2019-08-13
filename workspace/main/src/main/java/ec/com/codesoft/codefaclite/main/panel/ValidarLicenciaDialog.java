@@ -7,10 +7,6 @@ package ec.com.codesoft.codefaclite.main.panel;
 
 import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarResponseType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServerPortType;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;

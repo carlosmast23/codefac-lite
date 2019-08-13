@@ -258,11 +258,11 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         /**
          * Dias Limite para verificar la licencia en ese periodo de tiempo
          */
-        int diasLimiteVerificacion=9;
+        int diasLimiteVerificacion=14;
         /**
          * Numero de dias antes de empezar a verificar la licencia
          */
-        int diasToleraciaVerificacion=3;
+        int diasToleraciaVerificacion=7;
         
         try {
             ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
@@ -309,7 +309,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                             else
                             {
                                 validacionRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.LICENCIA_CORRECTA;
-                                String mensajeAdvertencia="Le quedan "+(diasLimiteVerificacion-dias)+" días para verificar su licencia por internet. \\n\\nCausas: \\n - No tiene conexion a internet por varios días \\n - Esta usando una versión  ilegal \\n\\n Si el problema persiste comuníquese con un asesor\\n Nota: Si no soluciona el problema pasado la fecha limite el programa yo no funcionara";
+                                String mensajeAdvertencia="Le quedan "+(diasLimiteVerificacion-dias)+" días para verificar su licencia por internet. \n\nCausas: \n - No tiene conexion a internet por varios días \n - Esta usando una versión  ilegal \n\n Si el problema persiste comuníquese con un asesor\n Nota: Si no soluciona el problema pasado la fecha limite el programa yo no funcionara";
                                 validacionRespuesta.alertas=Arrays.asList(mensajeAdvertencia);
                                 //TODO: Pendiente como devolver advertencias al cliente
                                 //DialogoCodefac.mensaje("Advertencia", "Le quedan "+(diasLimiteVerificacion-dias)+" días para verificar su licencia por internet. \n\nCausas: \n - No tiene conexion a internet por varios días \n - Esta usando una versión  ilegal \n\n Si el problema persiste comuníquese con un asesor\n Nota: Si no soluciona el problema pasado la fecha limite el programa yo no funcionara" , dias);
@@ -380,7 +380,15 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             
             String usuario=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
             Licencia licenciaOnline=new Licencia();
-            licenciaOnline.cargarLicenciaOnline(usuario);
+            
+            try
+            {
+                licenciaOnline.cargarLicenciaOnline(usuario);
+            }catch(Exception e)
+            {
+                //TODO: Si exite un problema al consultar la licencia en internet retorno falso
+                return false;
+            }
             
             
             Licencia licenciaFisica=new Licencia();

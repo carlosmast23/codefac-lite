@@ -23,11 +23,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FechaMaximoPagoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -66,11 +69,29 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         UtilidadesService servicioUtilidades=new UtilidadesService();
         EmpresaLicencia empresaLicencia=servicioUtilidades.obtenerLicenciaEmpresa(empresa);
         //Si la licencia es distinta de correcta termino el Login y aviso al usuario final
-        loginRespuesta.alertas=loginRespuesta.alertas;
+        loginRespuesta.alertas=empresaLicencia.alertas;
         if(!empresaLicencia.estadoEnum.equals(empresaLicencia.estadoEnum.LICENCIA_CORRECTA))
         {
             loginRespuesta.estadoEnum=empresaLicencia.estadoEnum;
             return loginRespuesta;
+        }
+        
+        /////////=========> VALIDAR QUE NO TENGA DEUDAS EN EL SISTEMA PARA SEGUIR USANDO <================================///
+        FechaMaximoPagoRespuesta respuestaPago=verificarFechaMaximaPago(empresaLicencia.usuarioLicencia);
+        if(respuestaPago.estadoEnum.equals(respuestaPago.estadoEnum.FECHA_PAGO_SUPERADA))
+        {
+            loginRespuesta.estadoEnum=loginRespuesta.estadoEnum.PAGOS_PENDIENTES;
+            return loginRespuesta;
+        }else if(respuestaPago.estadoEnum.equals(respuestaPago.estadoEnum.PROXIMO_PAGO_CERCA)) //Validacion solo para emitir una alerta de la fecha de pago 
+        {
+            if(loginRespuesta.alertas==null)
+            {
+                loginRespuesta.alertas=Arrays.asList(respuestaPago.mensajePagoCerca());
+            }
+            else
+            {
+                loginRespuesta.alertas.addAll(Arrays.asList(respuestaPago.mensajePagoCerca()));
+            }    
         }
         
         
@@ -339,4 +360,36 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         }
         return null;
     }
+    
+    private static FechaMaximoPagoRespuesta verificarFechaMaximaPago(String usuario) {
+        FechaMaximoPagoRespuesta respuesta=new FechaMaximoPagoRespuesta();
+        
+        Date fechaLimite = WebServiceCodefac.obtenerFechaLimitePago(usuario);
+
+        if (fechaLimite != null) {
+            int diasFaltantes = UtilidadesFecha.obtenerDistanciaDias(UtilidadesFecha.getFechaHoy(), fechaLimite);
+            respuesta.diasRestantes=diasFaltantes;
+            respuesta.estadoEnum=FechaMaximoPagoRespuesta.EstadoEnum.VALORES_PENDIENTES;
+            //System.out.println("Hoy:"+UtilidadesFecha.hoy());
+            //System.out.println("otro:"+fechaLimite);
+            //diasFaltantes=diasFaltantes+1; //Le sumo un digito porqe la distancia me devuelve con un numero menos TODO: revisar esta parte
+            if (diasFaltantes <= 0) {//Validacion cuando ya no tenga dias de espera ya no permite acceder al sistema
+                //DialogoCodefac.mensaje("Error", "El sistema detecta valores pendientes de pago y no se puede abrir\n Porfavor cancele los valores pendientes para continuar con el servicio.", DialogoCodefac.MENSAJE_INCORRECTO);
+                //System.exit(0);
+                respuesta.estadoEnum=FechaMaximoPagoRespuesta.EstadoEnum.FECHA_PAGO_SUPERADA;
+            } else if (diasFaltantes <= 10) {
+                //DialogoCodefac.mensaje("Advertencia", "El sistema registra valores pendientes por cancelar , le restan " + diasFaltantes + " días para usar el sistema,\n Si no cancela los valores pendientes el sistema automáticamente se bloqueará .", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                respuesta.estadoEnum=FechaMaximoPagoRespuesta.EstadoEnum.PROXIMO_PAGO_CERCA;
+            }
+        }
+        else
+        {
+            //TODO: Mejorar este metodo porque el error de sin valores pendientes le puede salir porque no tiene internet
+            respuesta.estadoEnum=FechaMaximoPagoRespuesta.EstadoEnum.SIN_VALORES_PENDIENTES; 
+        }
+        return respuesta;
+
+    }
+    
+    
 }
