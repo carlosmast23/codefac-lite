@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FechaMaximoPagoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
@@ -67,42 +68,61 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         
         /////////==========> VALIDAR LA LICENCIA DE LA EMPRESA PARA VER SI TIENE PERMISO PARA ABRIR EL SISTEMA <==========//////
         UtilidadesService servicioUtilidades=new UtilidadesService();
-        EmpresaLicencia empresaLicencia=servicioUtilidades.obtenerLicenciaEmpresa(empresa);
-        //Si la licencia es distinta de correcta termino el Login y aviso al usuario final
-        loginRespuesta.alertas=empresaLicencia.alertas;
-        if(!empresaLicencia.estadoEnum.equals(empresaLicencia.estadoEnum.LICENCIA_CORRECTA))
-        {
-            loginRespuesta.estadoEnum=empresaLicencia.estadoEnum;
-            return loginRespuesta;
-        }
         
-        /////////=========> VALIDAR QUE NO TENGA DEUDAS EN EL SISTEMA PARA SEGUIR USANDO <================================///
-        FechaMaximoPagoRespuesta respuestaPago=verificarFechaMaximaPago(empresaLicencia.usuarioLicencia);
-        if(respuestaPago.estadoEnum.equals(respuestaPago.estadoEnum.FECHA_PAGO_SUPERADA))
+        //Solo hago la validación cuando ya tiene creado la empresa porque la primera vez debe dejar ingresar al sistema para que puedan configurar los datos principales
+        if(empresa!=null)
         {
-            loginRespuesta.estadoEnum=loginRespuesta.estadoEnum.PAGOS_PENDIENTES;
-            return loginRespuesta;
-        }else if(respuestaPago.estadoEnum.equals(respuestaPago.estadoEnum.PROXIMO_PAGO_CERCA)) //Validacion solo para emitir una alerta de la fecha de pago 
-        {
-            if(loginRespuesta.alertas==null)
+            EmpresaLicencia empresaLicencia=servicioUtilidades.obtenerLicenciaEmpresa(empresa);
+            //Si la licencia es distinta de correcta termino el Login y aviso al usuario final
+            loginRespuesta.alertas=empresaLicencia.alertas;
+            if(!empresaLicencia.estadoEnum.equals(empresaLicencia.estadoEnum.LICENCIA_CORRECTA))
             {
-                loginRespuesta.alertas=Arrays.asList(respuestaPago.mensajePagoCerca());
+                loginRespuesta.estadoEnum=empresaLicencia.estadoEnum;
+                return loginRespuesta;
             }
-            else
+            
+            /////////=========> VALIDAR QUE NO TENGA DEUDAS EN EL SISTEMA PARA SEGUIR USANDO <================================///
+            FechaMaximoPagoRespuesta respuestaPago = verificarFechaMaximaPago(empresaLicencia.usuarioLicencia);
+            if (respuestaPago.estadoEnum.equals(respuestaPago.estadoEnum.FECHA_PAGO_SUPERADA)) {
+                loginRespuesta.estadoEnum = loginRespuesta.estadoEnum.PAGOS_PENDIENTES;
+                return loginRespuesta;
+            } 
+            else if (respuestaPago.estadoEnum.equals(respuestaPago.estadoEnum.PROXIMO_PAGO_CERCA)) //Validacion solo para emitir una alerta de la fecha de pago 
             {
-                loginRespuesta.alertas.addAll(Arrays.asList(respuestaPago.mensajePagoCerca()));
-            }    
+                if (loginRespuesta.alertas == null) {
+                    loginRespuesta.alertas = Arrays.asList(respuestaPago.mensajePagoCerca());
+                } else {
+                    loginRespuesta.alertas.addAll(Arrays.asList(respuestaPago.mensajePagoCerca()));
+                }
+            }
         }
-        
+              
         
         ////////===========> VALIDACION DE LOS USUARIOS DE LA EMPRESA <=================================================== /////
         //Usuario usuario=null;        
         if(!nick.equals("") && !clave.equals(""))
         {
             /**
-             * Validacion para verificar si no es un usuario root es decir para soporte
+             * Este usuario es para configurar la primera vez el sistema
              */
-            if(nick.toLowerCase().indexOf("root")>=0) //Si contiene la palabra root asumo que es de soporte
+            if(nick.toLowerCase().equals(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION) && empresa==null)
+            {
+                if(clave.toLowerCase().equals(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION))
+                {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("nick", Usuario.SUPER_USUARIO);
+                    List<Usuario> resultados= getFacade().findByMap(mapParametros);
+                    LOG.log(Level.INFO,"Ingresando con usuario de configuracion");
+                    //UsuarioServicio usuarioServicio=new UsuarioServicio();
+                    //Usuario usuarioConfig = usuarioServicio.obtenerUsuarioConfiguracion();//obtiene el usuario root de la base de datos 
+                    //usuarioRoot.isConfig=true;
+                    //loginRespuesta.usuario = usuarioRoot;                    
+                    loginRespuesta.estadoEnum = LoginRespuesta.EstadoLoginEnum.CORRECTO_USUARIO;
+                    loginRespuesta.usuario=resultados.get(0);
+                }
+                
+            }//Validacion para verificar si no es un usuario root es decir para soporte
+            else if(nick.toLowerCase().indexOf("root")>=0) //Si contiene la palabra root asumo que es de soporte
             {
                 //Consultar el usuario root
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
@@ -231,56 +251,54 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     
     public void editar(Usuario entity) throws ServicioCodefacException
     {
-                
-        EntityTransaction transaccion=getTransaccion();
-        transaccion.begin();
-        
-        Usuario usuarioOriginal=getFacade().find(entity.getNick());
-        
-        //Verificar que no sea el usuario root el quieren editar
-        if(usuarioOriginal.getNick().equals(Usuario.SUPER_USUARIO))
-        {
-            transaccion.rollback();
-            throw new ServicioCodefacException("El usuario root no se puede editar");
-            
-        }
-        
-        ///Funcionalidad que permite eliminar perfiles que fueron eliminados
-        if(usuarioOriginal.getPerfilesUsuario()!=null)
-        {
-            for (PerfilUsuario perfilUsuario : usuarioOriginal.getPerfilesUsuario()) {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                //EntityTransaction transaccion = getTransaccion();
+                //transaccion.begin();
 
-                //Si en el nuevo objeto que mando a editar no contiene el perfil usuario lo elimino
-                if(!entity.getPerfilesUsuario().contains(perfilUsuario))
-                {
-                    //Elimino de la persistencia
-                    entityManager.remove(perfilUsuario);
+                Usuario usuarioOriginal = getFacade().find(entity.getNick());
+
+                //Verificar que no sea el usuario root el quieren editar
+                if (usuarioOriginal.getNick().equals(Usuario.SUPER_USUARIO)) {
+                    throw new ServicioCodefacException("El usuario root no se puede editar");
+
                 }
 
-            }
-        }
-        
-        //Funcionalidad que permite agregar nuevos perfiles agregados
-        if(entity.getPerfilesUsuario()!=null)
-        {
-            for (PerfilUsuario perfilUsuario : entity.getPerfilesUsuario()) {
+                ///Funcionalidad que permite eliminar perfiles que fueron eliminados
+                if (usuarioOriginal.getPerfilesUsuario() != null) {
+                    for (PerfilUsuario perfilUsuario : usuarioOriginal.getPerfilesUsuario()) {
 
-                //Si en el objeto origina no tiene el perfil lo agrego
-                if(!usuarioOriginal.getPerfilesUsuario().contains(perfilUsuario))
-                {
-                    //Elimino de la persistencia
-                    entityManager.persist(perfilUsuario);
+                        //Si en el nuevo objeto que mando a editar no contiene el perfil usuario lo elimino
+                        if (!entity.getPerfilesUsuario().contains(perfilUsuario)) {
+                            //Elimino de la persistencia
+                            entityManager.remove(perfilUsuario);
+                        }
+
+                    }
                 }
 
+                //Funcionalidad que permite agregar nuevos perfiles agregados
+                if (entity.getPerfilesUsuario() != null) {
+                    for (PerfilUsuario perfilUsuario : entity.getPerfilesUsuario()) {
+
+                        //Si en el objeto origina no tiene el perfil lo agrego
+                        if (!usuarioOriginal.getPerfilesUsuario().contains(perfilUsuario)) {
+                            //Elimino de la persistencia
+                            entityManager.persist(perfilUsuario);
+                        }
+
+                    }
+                }
+
+                //Actualizo el objeto editado
+                entityManager.merge(entity);
+                //Actualizo las referencia del nuevo objecto a editar
+                //entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave()));
+                //entityManager.merge(entity);
+                //transaccion.commit();
             }
-        }
-        
-        //Actualizo el objeto editado
-        entityManager.merge(entity);
-        //Actualizo las referencia del nuevo objecto a editar
-        //entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave()));
-        //entityManager.merge(entity);
-        transaccion.commit();
+        });
         
     }
     
@@ -389,6 +407,37 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         }
         return respuesta;
 
+    }
+    
+    public Usuario obtenerUsuarioConfiguracion() throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        //Usuario u;
+        //u.get
+        //Usuario usuario=null;
+        Map<String,Object> mapParametro=new HashMap<String,Object>();
+        mapParametro.put("nick",ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION);
+                
+        List<Usuario> resultados=getFacade().findByMap(mapParametro);
+        if(resultados.size()>0)
+        {
+            resultados.get(0);
+        }
+        else
+        {            
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+                    Usuario usuario=new Usuario();
+                    usuario.setNick(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION);
+                    usuario.setClave(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION);
+                    usuario.setEstadoEnum(GeneralEnumEstado.ACTIVO);     
+                    entityManager.persist(usuario);
+                }
+            });
+            
+            return getFacade().findByMap(mapParametro).get(0);
+        }
+        return null;
     }
     
     

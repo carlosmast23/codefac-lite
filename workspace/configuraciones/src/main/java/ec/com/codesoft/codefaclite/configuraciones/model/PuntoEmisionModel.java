@@ -96,15 +96,15 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
         getCmbSucursal().setSelectedIndex(0);
         getCmbTipoFacturacion().setSelectedIndex(0);
         
-        getTxtPuntoEmision().setValue(new Integer(0));
+        getTxtPuntoEmision().setValue(new Integer(1));
         
-        getTxtFactura().setValue(new Integer(0));
-        getTxtNotaCredito().setValue(new Integer(0));
-        getTxtNotaDebito().setValue(new Integer(0));
-        getTxtGuiaRemision().setValue(new Integer(0));
-        getTxtRetenciones().setValue(new Integer(0));
-        getTxtRetenciones().setValue(new Integer(0));
-        getTxtNotaVenta().setValue(new Integer(0));
+        getTxtFactura().setValue(new Integer(1));
+        getTxtNotaCredito().setValue(new Integer(1));
+        getTxtNotaDebito().setValue(new Integer(1));
+        getTxtGuiaRemision().setValue(new Integer(1));
+        getTxtRetenciones().setValue(new Integer(1));
+        getTxtRetenciones().setValue(new Integer(1));
+        getTxtNotaVenta().setValue(new Integer(1));
         
         
     }

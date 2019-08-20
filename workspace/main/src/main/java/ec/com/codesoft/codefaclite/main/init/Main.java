@@ -633,23 +633,26 @@ public class Main {
             /**
              * Si el usuario devuuelto es incorrecto terminar el aplicativo
              */
-            LoginModel.DatosLogin  datosLogin= cargarLoginUsuario();
+            LoginModel.DatosLogin  datosLogin= cargarLoginUsuario(panel);
             if (datosLogin.usuario == null) {
                 LOG.log(Level.WARNING, "Error en la licencia ");
-                return;
+                //return;
             }
             //validacionesEmpresa(datosLogin.empresa, panel); //Haciendo verificacion de validacion de la licencia y datos de la empresa
-            SessionCodefac session=ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido(datosLogin.empresa);
+            //SessionCodefac session=ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido(datosLogin.empresa);
+            //SessionCodefac session=;
             //panel.setSessionCodefac(session);
 
-            session.setUsuario(datosLogin.usuario);
+            /*session.setUsuario(datosLogin.usuario);
             session.setPerfiles(obtenerPerfilesUsuario(datosLogin.usuario));
             session.setSucursal(datosLogin.sucursal);
             session.setMatriz(datosLogin.matriz);
-            session.setEmpresa(datosLogin.empresa);
-            panel.setSessionCodefac(session);
+            session.setEmpresa(datosLogin.empresa);*/
+            //panel.setSessionCodefac(session);
+            SessionCodefac session=panel.getSessionCodefac(); //Solo obtengo la session porque se supone que ya fue creada en el login
             panel.setVentanasMenuList(null);
             
+            //TODO:Analizar que este codigo de activar o desactivar el tema de la publicidad deberia ejecutar el login de manera independiente
             //Agregando Hilo de Publicidad si es usuario Gratuito
             if (session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS) && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) {
                 HiloPublicidadCodefac hiloPublicidad = new HiloPublicidadCodefac(panel);
@@ -678,6 +681,24 @@ public class Main {
         }
 
     }
+    
+    /*public static SessionCodefac construirSession(LoginModel.DatosLogin  datosLogin)
+    {
+        try {
+            SessionCodefac session = ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido(datosLogin.empresa);
+            //panel.setSessionCodefac(session);
+            
+            session.setUsuario(datosLogin.usuario);
+            session.setPerfiles(obtenerPerfilesUsuario(datosLogin.usuario));
+            session.setSucursal(datosLogin.sucursal);
+            session.setMatriz(datosLogin.matriz);
+            session.setEmpresa(datosLogin.empresa);
+            return session;
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }*/
     
     /**
      * Validacion que me permite verificar las licencias de la empresa y el tema de los pagos
@@ -739,9 +760,9 @@ public class Main {
         }
     }
     
-    public static LoginModel.DatosLogin cargarLoginUsuario() {
+    public static LoginModel.DatosLogin cargarLoginUsuario(GeneralPanelModel generalPanel) {
         frameAplicacion.setVisible(true); //muestro el hilo de ejcucion porque el login es un dialog que no tiene icono en la barra de tareas
-        LoginModel loginModel = new LoginModel();
+        LoginModel loginModel = new LoginModel(generalPanel);
         loginModel.setVisible(true);
         
         //if(loginModel.salirAplicacion)System.exit(0);

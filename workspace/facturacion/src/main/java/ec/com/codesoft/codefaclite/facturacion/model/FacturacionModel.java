@@ -314,7 +314,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnCargarProforma().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProformaBusqueda proformaBusqueda = new ProformaBusqueda();
+                ProformaBusqueda proformaBusqueda = new ProformaBusqueda(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(proformaBusqueda);
                 buscarDialogoModel.setVisible(true);
                 if(buscarDialogoModel.getResultado()!=null)

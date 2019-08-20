@@ -79,7 +79,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 public void transaccion() {
                     try
                     {
-                        proforma.setSecuencial(obtenerSecuencialProformas().intValue());
+                        proforma.setSecuencial(obtenerSecuencialProformas(proforma.getEmpresa()).intValue());
                         proforma.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                         
                         proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
@@ -387,9 +387,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     }
     
     @Override
-    public Long obtenerSecuencialProformas() throws RemoteException
+    public Long obtenerSecuencialProformas(Empresa empresa) throws RemoteException
     {
-        Long secuencial=getFacade().getSecuencialProforma();
+        Long secuencial=getFacade().getSecuencialProforma(empresa);
         return (secuencial!=null)?(secuencial+1):1; //Si no existe ningun valor por defecto retorna 1
     }
     
@@ -404,9 +404,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         });
     }
     
-    public List<Factura> consultarProformasReporte(Persona cliente,Date fechaInicial,Date fechaFinal,GeneralEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException
+    public List<Factura> consultarProformasReporte(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,GeneralEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException
     {
-        return getFacade().consultarProformasReporteFacade(cliente, fechaInicial, fechaFinal, estado);
+        return getFacade().consultarProformasReporteFacade(cliente, fechaInicial, fechaFinal, empresa,estado);
     }
 
 }

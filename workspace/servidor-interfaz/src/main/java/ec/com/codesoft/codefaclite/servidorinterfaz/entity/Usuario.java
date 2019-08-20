@@ -32,6 +32,7 @@ import javax.persistence.Transient;
 public class Usuario implements Serializable{
     
     public static final String SUPER_USUARIO="root";
+    public static final String CONSUMIDOR_FINAL_NOMBRE="CONSUMIDOR FINAL";
     
     @Id
     @Column(name = "ID")
@@ -61,6 +62,12 @@ public class Usuario implements Serializable{
     @Transient
     public boolean isRoot;
     
+    /**
+     * Variable que me permite saber si el usuario solo es para configurar la primera vez
+     */
+    //@Transient
+    //public boolean isConfig;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
     private List<PerfilUsuario> perfilesUsuario;
     
@@ -69,6 +76,7 @@ public class Usuario implements Serializable{
         this.nick = nick;
         this.clave = clave;
         this.isRoot=false;
+        
     }
 
     public Usuario() {
@@ -107,6 +115,15 @@ public class Usuario implements Serializable{
     public void setEstado(String estado) {
         this.estado = estado;
     }
+    
+    public GeneralEnumEstado getEstadoEnum() 
+    {
+        return GeneralEnumEstado.getEnum(estado);
+    }
+
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
+    }
 
     public Empleado getEmpleado() {
         return empleado;
@@ -123,8 +140,6 @@ public class Usuario implements Serializable{
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
-    
-    
     
     
 
@@ -184,11 +199,6 @@ public class Usuario implements Serializable{
         
         this.perfilesUsuario.add(perfilUsuario);
         
-    }
-    
-    public GeneralEnumEstado getEstadoEnum()
-    {
-        return GeneralEnumEstado.getEnum(estado);
     }
     
     

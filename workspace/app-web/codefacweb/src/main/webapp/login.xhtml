@@ -15,7 +15,7 @@
 
             <div style="display:block; text-align:center;" >
 
-                <h:panelGrid columns="2" cellpadding="5" width="100" style="text-align: center" >
+                <h:panelGrid  columns="2" cellpadding="5" width="100" style="text-align: center" >
                     <h:outputLabel for="username" value="Usuario:" />
                     <p:inputText id="username"  required="true" label="username" value="#{loginMb.nick}"  />
 
@@ -25,7 +25,7 @@
                     <h:outputLabel for="password" value="Empresa:" />
                     <p:selectOneMenu id="cmbEmpresa" value="#{loginMb.empresaSeleccionada}" style="width: 100%" converter="empresaConverter"  >
                         <f:selectItems value="#{loginMb.empresas}" var="empresa" itemValue="#{empresa.id.toString()}"/>                        
-                        <p:ajax event="itemSelect" listener="#{loginMb.cargarSucursales}" update="" />
+                        <p:ajax event="itemSelect" listener="#{loginMb.cargarSucursalEvento()}" update=":formulario:cmbSucursal"  />
                     </p:selectOneMenu> 
 
                     

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.io.Serializable;
 import java.util.Objects;
@@ -79,6 +80,10 @@ public class PermisoVentana implements Serializable{
     public void setPermisoGrabar(String permisoGrabar) {
         this.permisoGrabar = permisoGrabar;
     }
+    
+    public void setPermisoGrabarEnum(EnumSiNo permisoGrabarEnum) {
+        this.permisoGrabar = permisoGrabarEnum.getLetra();
+    }
 
     public String getPermisoEliminar() {
         return permisoEliminar;
@@ -86,6 +91,10 @@ public class PermisoVentana implements Serializable{
 
     public void setPermisoEliminar(String permisoEliminar) {
         this.permisoEliminar = permisoEliminar;
+    }
+    
+    public void setPermisoEliminarEnum(EnumSiNo permisoEliminarEnum) {
+        this.permisoEliminar = permisoEliminarEnum.getLetra();
     }
 
     public String getPermisoImprimir() {
@@ -95,6 +104,10 @@ public class PermisoVentana implements Serializable{
     public void setPermisoImprimir(String permisoImprimir) {
         this.permisoImprimir = permisoImprimir;
     }
+    
+    public void setPermisoImprimirEnum(EnumSiNo permisoImprimirEnum) {
+        this.permisoImprimir = permisoImprimirEnum.getLetra();
+    }
 
     public String getPermisoEditar() {
         return permisoEditar;
@@ -103,6 +116,10 @@ public class PermisoVentana implements Serializable{
     public void setPermisoEditar(String permisoEditar) {
         this.permisoEditar = permisoEditar;
     }
+    
+    public void setPermisoEditarEnum(EnumSiNo permisoEditarEnum) {
+        this.permisoEditar = permisoEditarEnum.getLetra();
+    }
 
     public String getPermisoBuscar() {
         return permisoBuscar;
@@ -110,6 +127,10 @@ public class PermisoVentana implements Serializable{
 
     public void setPermisoBuscar(String permisoBuscar) {
         this.permisoBuscar = permisoBuscar;
+    }
+    
+    public void setPermisoBuscarEnum(EnumSiNo permisoBuscarEnum) {
+        this.permisoBuscar = permisoBuscarEnum.getLetra();
     }
 
     public Perfil getPerfil() {

@@ -88,7 +88,7 @@ public class ProformaModel extends FacturacionModel{
     public void cargarSecuencial() {
         try {
             //Obtener los secuenciales para las proformas
-            Long secuencial = ServiceFactory.getFactory().getFacturacionServiceIf().obtenerSecuencialProformas();
+            Long secuencial = ServiceFactory.getFactory().getFacturacionServiceIf().obtenerSecuencialProformas(session.getEmpresa());
             getLblSecuencial().setText(secuencial.toString());
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -98,14 +98,14 @@ public class ProformaModel extends FacturacionModel{
 
     @Override
     public InterfaceModelFind getBusquedaInterface() {
-        return new ProformaBusqueda();
+        return new ProformaBusqueda(session.getEmpresa());
     }
 
     @Override
     protected void setearValoresDefaultFactura() {
         super.setearValoresDefaultFactura(); //To change body of generated methods, choose Tools | Templates.
         factura.setSecuencial(Integer.parseInt(getLblSecuencial().getText())); //TODO: Revisar que este de tema de setar el secuencial ya lo estoy haciendo desde el servicio
-        //facrur
+        
         
     }
     

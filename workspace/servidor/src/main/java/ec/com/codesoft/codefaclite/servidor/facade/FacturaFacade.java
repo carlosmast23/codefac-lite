@@ -140,28 +140,30 @@ public class FacturaFacade extends AbstractFacade<Factura> {
 
     }
     
-      public Long getSecuencialProforma() {
+      public Long getSecuencialProforma(Empresa empresa) {
         try {
-
-            String queryString="SELECT MAX(CAST (F.SECUENCIAL AS BIGINT)) FROM FACTURA F WHERE  F.CODIGO_DOCUMENTO=?1"; //TODO: Por el momento dejo una consulta nativa porque tengo un problema al evaluar el secuencial que en la base de datos esta como string pero esta mapeado como entero y al hacer casting en jpql el compilador se confunde
+            //Factura f;
+            //f.getEmpresa();
+            String queryString="SELECT MAX(CAST (F.SECUENCIAL AS BIGINT)) FROM FACTURA F WHERE F.EMPRESA_ID=?2 AND F.CODIGO_DOCUMENTO=?1"; //TODO: Por el momento dejo una consulta nativa porque tengo un problema al evaluar el secuencial que en la base de datos esta como string pero esta mapeado como entero y al hacer casting en jpql el compilador se confunde
             //String queryString = "SELECT max( CAST(u.secuencial CHAR(64))  ) FROM Factura u WHERE  u.codigoDocumento=?1";
             Query query = getEntityManager().createNativeQuery(queryString);
             query.setParameter(1, DocumentoEnum.PROFORMA.getCodigo());
-
+            query.setParameter(2,empresa.getId());
+            System.out.println("QueryStringNative:"+queryString);
             return (Long) query.getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
     }
       
-      public List<Factura> consultarProformasReporteFacade(Persona cliente,Date fechaInicial,Date fechaFinal,GeneralEnumEstado estado) 
+      public List<Factura> consultarProformasReporteFacade(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,GeneralEnumEstado estado) 
       {
           Factura factura;
           //factura.getCodigoDocumento()
           //factura.getEstado();
           //factura.getFechaEmision();
           //factura.getCliente()
-          String queryString="SELECT F FROM Factura F WHERE F.codigoDocumento=?1 ";
+          String queryString="SELECT F FROM Factura F WHERE F.empresa=?6 and F.codigoDocumento=?1 ";
           if(fechaInicial!=null)
           {
               queryString+=" AND F.fechaEmision>= ?2";
@@ -203,6 +205,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
               query.setParameter(5, estado.getEstado());
           }
           
+          query.setParameter(6,empresa);
           return query.getResultList();
           
       }

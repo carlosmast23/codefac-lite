@@ -32,10 +32,10 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public List<Factura> obtenerFacturasActivas() throws java.rmi.RemoteException;
     //public String getPreimpresoSiguiente() throws java.rmi.RemoteException;
     public void eliminarFactura(Factura factura) throws java.rmi.RemoteException;
-    public Long obtenerSecuencialProformas() throws RemoteException;
+    public Long obtenerSecuencialProformas(Empresa empresa) throws RemoteException;
     public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException;
     public void eliminarProforma(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException;
-    public List<Factura> consultarProformasReporte(Persona cliente,Date fechaInicial,Date fechaFinal,GeneralEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException;
+    public List<Factura> consultarProformasReporte(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,GeneralEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException;
     public Factura buscarPorPremimpresoYEstado(Integer secuencial,String puntoEstablecimiento,String puntoEmision,ComprobanteEntity.ComprobanteEnumEstado estadoEnum) throws RemoteException;
     
 }

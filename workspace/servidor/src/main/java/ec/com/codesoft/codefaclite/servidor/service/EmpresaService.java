@@ -32,22 +32,25 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         this.empresaFacade = new EmpresaFacade();
     }
     
-    public Empresa grabar(Empresa p)
+    public Empresa grabar(Empresa p) throws ServicioCodefacException
     {
-        try {
-            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                @Override
-                public void transaccion() {
-                    try {
-                        entityManager.persist(p);
-                    } catch (DatabaseException ex) {
-                        Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                //Grabar la empresa
+                entityManager.persist(p);
+                
+                //Grabar un perfil por defecto
+                PerfilService perfilService = new PerfilService();
+                perfilService.crearPerfilPorDefectoSinTransaccion(p);
+                
+                //Grabar el usuario de consumidor final por defecto
+                PersonaService personaService=new PersonaService();
+                personaService.crearConsumidorFinalSinTransaccion(p);
+                
+            }
+        });
+        
         return p;
     }
     

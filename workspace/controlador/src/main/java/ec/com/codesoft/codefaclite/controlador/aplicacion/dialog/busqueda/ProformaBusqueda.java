@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import java.io.Serializable;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 
 /**
  *
@@ -22,7 +23,13 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
  */
 public class ProformaBusqueda implements InterfaceModelFind<Factura>, InterfacesPropertisFindWeb,Serializable {
     
+    private Empresa empresa;
     private static final long serialVersionUID = -1238278914412853685L;
+
+    public ProformaBusqueda(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
     
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
@@ -38,7 +45,10 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Factura u WHERE u.estado=?1 ";
+        //Factura factura;
+        //factura.getEmpresa();
+        String queryString = "SELECT u FROM Factura u WHERE u.empresa=?4 and u.estado=?1 ";
+        
 
         queryString += " AND (u.codigoDocumento=?3) ";
 
@@ -48,6 +58,7 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2, filter);
         queryDialog.agregarParametro(3, DocumentoEnum.PROFORMA.getCodigo());
+        queryDialog.agregarParametro(4,empresa);
 
         return queryDialog;
     }

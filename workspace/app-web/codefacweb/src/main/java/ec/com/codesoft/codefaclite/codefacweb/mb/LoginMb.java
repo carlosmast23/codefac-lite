@@ -40,7 +40,7 @@ import org.primefaces.event.SelectEvent;
  * @author Carlos
  */
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class LoginMb implements Serializable {
     private static final String PAGINA_INICIO_ADMIN="indexCodefac";
     //private static final String PAGINA_INICIO_ADMIN="proforma";
@@ -175,13 +175,13 @@ public class LoginMb implements Serializable {
     }
 
     private void iniciarDatos() {
-
+        System.out.println("iniciando datos ...");
         try {
             empresas = ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodos();
             if (empresas.size() > 0) //Selecciono por defecto la primera empresa y carga la sucursal
             {
                 empresaSeleccionada = empresas.get(0);
-                cargarSucursales(empresaSeleccionada);
+                cargarSucursales(empresaSeleccionada); 
             }
         } catch (RemoteException ex) {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -190,14 +190,26 @@ public class LoginMb implements Serializable {
     }
 
     public void cargarSucursalesEvento(SelectEvent event) {
-        //System.out.println("ejecuntando evento seleccionar");
+        System.out.println("cargando sucursales ...");
         cargarSucursales(empresaSeleccionada);
     }
+    
+    public void cargarSucursalEvento()
+    {
+        System.out.println("cargando sucursales de la empresa:"+empresaSeleccionada.getRazonSocial());  
+        cargarSucursales(empresaSeleccionada);       
+        
+    }
+    
 
     private void cargarSucursales(Empresa empresa) {
         try {
+            System.out.println("cargando sucursales");
             //System.err.println(empresaSeleccionada.getId());
             sucursales = ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(empresaSeleccionada);
+            for (Sucursal sucursal : sucursales) {
+                System.out.println("sucursal:"+sucursal.getNombre());
+            }
             //System.out.println("Datos encontrados" + sucursales.size());
         } catch (RemoteException ex) {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);

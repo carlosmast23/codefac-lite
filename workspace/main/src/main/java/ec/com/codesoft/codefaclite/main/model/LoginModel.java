@@ -47,16 +47,21 @@ public class LoginModel extends LoginFormDialog{
     private static final Logger LOG = Logger.getLogger(LoginModel.class.getName());
     public boolean salirAplicacion=false;
     
-    UsuarioServicioIf usuarioServicio;
-    Usuario usuario;
+    private UsuarioServicioIf usuarioServicio;
+    private Usuario usuario;
+    /**
+     * Contenedor principal especialmente necesito este dato para poder setear la session despues de cargar el login
+     */
+    private GeneralPanelModel panelPrincipal;
 
-    public LoginModel() {
+    public LoginModel(GeneralPanelModel panelPrincipal) {
         super(null,true);
         valoresIniciales();
         initListenerBotones();
         initListenerCombos();
         initListenerPantalla();
         this.usuarioServicio=ServiceFactory.getFactory().getUsuarioServicioIf();
+        this.panelPrincipal=panelPrincipal;
         
         //Image fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoInicial.jpg")).getImage();
         //getPanelPrincipal().setBorder(new Fondo2(fondoImg));
@@ -155,6 +160,7 @@ public class LoginModel extends LoginFormDialog{
                         LOG.log(Level.INFO, "Ingresando con el usuario: " + usuarioTxt);
                         setVisible(false);
                         usuario=loginRespuesta.usuario;
+                        panelPrincipal.setSessionCodefac(getDatosLogin());
                         break;
                     case INCORRECTO_USUARIO:
                         LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);

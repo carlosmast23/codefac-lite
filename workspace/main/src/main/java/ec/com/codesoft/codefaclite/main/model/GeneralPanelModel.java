@@ -50,6 +50,7 @@ import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.interfaces.BusquedaCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
+import static ec.com.codesoft.codefaclite.main.init.Main.obtenerPerfilesUsuario;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.panel.VentanaManualUsuario;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
@@ -352,7 +353,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             case 1: //opcion cambiar de usuario
                 cerrarTodasPantallas();
                 setVisible(false);
-                LoginModel.DatosLogin datosLogin = Main.cargarLoginUsuario();
+                LoginModel.DatosLogin datosLogin = Main.cargarLoginUsuario(this);
                 //Main.validacionesEmpresa(datosLogin.empresa, this); //Haciendo verificacion de validacion de la licencia y datos de la empresa
                 sessionCodefac.setUsuario(datosLogin.usuario);
                 sessionCodefac.setSucursal(datosLogin.sucursal);
@@ -2916,6 +2917,27 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         this.sessionCodefac = sessionCodefac;
     }
     
+    /**
+     * construir la session con los datos del login
+     * @param datosLogin 
+     */
+    public void setSessionCodefac(LoginModel.DatosLogin  datosLogin) {
+        try {
+            SessionCodefac session = ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido(datosLogin.empresa);
+            //panel.setSessionCodefac(session);
+            
+            session.setUsuario(datosLogin.usuario);
+            session.setPerfiles(obtenerPerfilesUsuario(datosLogin.usuario));
+            session.setSucursal(datosLogin.sucursal);
+            session.setMatriz(datosLogin.matriz);
+            session.setEmpresa(datosLogin.empresa);
+            this.sessionCodefac=session;
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
      @Override
     public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,GeneralPanelInterface panelPadre)
     {
@@ -3111,11 +3133,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
                 
                 
-                boolean respuesta=DialogoCodefac.dialogoPregunta("Confirmar","Para actualizar la licencia debe cerrar todas las ventas , desea continuar?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                boolean respuesta=DialogoCodefac.dialogoPregunta("Confirmar","Existe una actualización de su licencia , desea continuar?",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if(respuesta)
                 {
                     try {
-                        dispose();
+                        //dispose();
                         ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
                         String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,sessionCodefac.getEmpresa()).valor;
                         ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
@@ -3123,7 +3145,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         ValidarLicenciaModel dialogo=new ValidarLicenciaModel(null,true,true,sessionCodefac.getEmpresa());
                         //dialogo.validacionLicenciaCodefac=validacion;
                         dialogo.setVisible(true);
-                        ec.com.codesoft.codefaclite.main.init.Main.iniciarComponentes();
+                        //ec.com.codesoft.codefaclite.main.init.Main.iniciarComponentes();
                     } catch (RemoteException ex) {
                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -3343,12 +3365,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public void setearEtiquetasPantallaPrincipal()
     {
         try {
-            getLblNombreEmpresa().setText(" Empresa: " + ((sessionCodefac.getEmpresa() != null) ? sessionCodefac.getEmpresa().getNombreLegal() : "Sin asignar") + " | Usuario: " + sessionCodefac.getUsuario().getNick());
+            String nombreUsuario=(sessionCodefac.getUsuario()!=null)?sessionCodefac.getUsuario().getNick():"sin usuario";
+            getLblNombreEmpresa().setText(" Empresa: " + ((sessionCodefac.getEmpresa() != null) ? sessionCodefac.getEmpresa().getNombreLegal() : "Sin asignar") + " | Usuario: " + nombreUsuario);
             
             //Obtener el tipo de licencia para imprimir en la pantalla inicio
             UtilidadesServiceIf utilidadesService = ServiceFactory.getFactory().getUtilidadesServiceIf();
-            TipoLicenciaEnum tipoLicenciaEnum = utilidadesService.getTipoLicencia(sessionCodefac.getEmpresa());
-            getLblTextoSecundario().setText("Servidor IP: " + ipServidor + " | Licencia: " + tipoLicenciaEnum.getNombre() + " | Versión: " + ParametrosSistemaCodefac.VERSION);
+            String licenciaNombre="sin licencia";
+            if(sessionCodefac.getEmpresa()!=null)
+            {
+                TipoLicenciaEnum tipoLicenciaEnum = utilidadesService.getTipoLicencia(sessionCodefac.getEmpresa());
+                licenciaNombre=tipoLicenciaEnum.getNombre();
+            }
+            
+            getLblTextoSecundario().setText("Servidor IP: " + ipServidor + " | Licencia: " + licenciaNombre + " | Versión: " + ParametrosSistemaCodefac.VERSION);
         } catch (RemoteException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -335,7 +335,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         {
             for (PerfilUsuario perfilUsuario : usuario.getPerfilesUsuario()) 
             {
-                listaModel.addElement(perfilUsuario.getPerfil().getNombre());
+                listaModel.addElement((perfilUsuario.getPerfil()!=null)?perfilUsuario.getPerfil().getNombre():"Sin perfil");
             }
         }
         

@@ -103,7 +103,7 @@ public class ProformaReporteModel extends ProformaReportePanel {
             for (Factura proforma : proformasConsulta) {
                 
                 ReporteProformaData dato=new ReporteProformaData();
-                dato.setNumeroFactura(proforma.getSecuencial().toString());
+                dato.setNumeroFactura((proforma.getSecuencial()!=null)?proforma.getSecuencial().toString():"");
                 dato.setFechaFactura(dateFormat.format(proforma.getFechaEmision()));
                 dato.setIdentificacionCliente(proforma.getIdentificacion());
                 dato.setRazonSocialCliente(proforma.getRazonSocial());
@@ -297,7 +297,7 @@ public class ProformaReporteModel extends ProformaReportePanel {
                     }
                     
                     
-                    proformasConsulta=ServiceFactory.getFactory().getFacturacionServiceIf().consultarProformasReporte(cliente,fechaInicial,fechaFinal, (GeneralEnumEstado) getCmbEstado().getSelectedItem());
+                    proformasConsulta=ServiceFactory.getFactory().getFacturacionServiceIf().consultarProformasReporte(cliente,fechaInicial,fechaFinal,session.getEmpresa(),(GeneralEnumEstado) getCmbEstado().getSelectedItem());
                     construirDataReporte();
                     construirTabla();
                     //ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporte(cliente,getDateFechaInicio().getDate(),getDateFechaFin().getDate(), title, formularioCerrando, referido, formularioCerrando)

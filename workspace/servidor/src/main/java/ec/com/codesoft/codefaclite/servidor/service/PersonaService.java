@@ -16,11 +16,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,6 +178,32 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
             return resultados.get(0);
         }
         return null;
+    }
+    
+    public Persona crearConsumidorFinalSinTransaccion(Empresa empresa)
+    {
+        Persona persona=new Persona();
+        persona.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        persona.setIdentificacion("9999999999999");
+        persona.setRazonSocial(Usuario.CONSUMIDOR_FINAL_NOMBRE);
+        persona.setTipClienteEnum(Persona.TipoClienteEnum.CLIENTE);
+        persona.setTipoEnum(OperadorNegocioEnum.AMBOS);
+        persona.setTipoIdentificacionEnum(Persona.TipoIdentificacionEnum.CLIENTE_FINAL);
+        persona.setEmpresa(empresa);
+        entityManager.persist(persona);
+        
+        PersonaEstablecimiento establecimiento=new PersonaEstablecimiento();
+        establecimiento.setCodigoSucursal("1");
+        establecimiento.setNombreComercial(Usuario.CONSUMIDOR_FINAL_NOMBRE);
+        establecimiento.setPersona(persona);
+        establecimiento.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
+        entityManager.persist(establecimiento);
+        
+        //Agrear el establecimiento creado a la lista de la persona para grabar
+        persona.setEstablecimientos(Arrays.asList(establecimiento));
+        entityManager.merge(persona);
+        
+        return persona;
     }
 
 }

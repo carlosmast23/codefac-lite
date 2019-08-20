@@ -646,6 +646,12 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     public List<ComprobanteElectronico> getComprobantesObjectByFolder(String carpetaConfiguracion,Empresa empresa) throws RemoteException
     {
+        //Esta validacion se la hacer porque la primera vez que no tiene une empresa por defecto no debe hacer esta validacion
+        if(empresa==null)
+        {
+            return new ArrayList<ComprobanteElectronico>();
+        }
+        
         ParametroCodefacService parametroService=new ParametroCodefacService();
         String path= parametroService.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,empresa).valor;
         ParametroCodefac modoFacturacionParam=parametroService.getParametroByNombre(ParametroCodefac.MODO_FACTURACION, empresa);

@@ -267,7 +267,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                     
                 //Crear la nueva licencia con los datos de esta maquina
                 crearLicencia();
-                DialogoCodefac.mensaje("Felicidades", "Su licencia fue actualizada correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                DialogoCodefac.mensaje("Felicidades", "Su licencia fue actualizada correctamente \n-Porfavor ingrese nuevamente en el sistema para reflejar los nuevos cambios ", DialogoCodefac.MENSAJE_CORRECTO);
                 licenciaCreada=true;//Variable para indicar que la licencia se actualizo correctamente
                 dispose();
                 //ec.com.codesoft.codefaclite.main.init.Main.iniciarComponentes();

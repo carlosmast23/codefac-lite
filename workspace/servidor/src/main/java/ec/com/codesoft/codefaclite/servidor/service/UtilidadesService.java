@@ -34,6 +34,7 @@ import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -130,6 +131,16 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     @Override
     public SessionCodefac getSessionPreConstruido(Empresa empresa) throws RemoteException {
         SessionCodefac session = new SessionCodefac();
+        
+        if(empresa==null) //Si no tiene seleccionado construyo una session en blanco , esto es util para ingresar por primera vez al sistema
+        {
+            session.setTipoLicenciaEnum(TipoLicenciaEnum.GRATIS);
+            List<ModuloCodefacEnum> modulosCodefacPorDefecto=new ArrayList<ModuloCodefacEnum>();
+            modulosCodefacPorDefecto.add(ModuloCodefacEnum.SISTEMA);
+            session.setModulos(modulosCodefacPorDefecto);
+            
+            return session;
+        }
         //if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
         //    session.setTipoLicenciaEnum(UtilidadesServidor.tipoLicenciaEnum);
         //} else {

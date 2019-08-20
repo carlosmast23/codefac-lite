@@ -92,6 +92,14 @@ public class Perfil implements Serializable{
     public void setEstado(String estado) {
         this.estado = estado;
     }
+    
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
+    }
+
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
+    }
 
     public List<PermisoVentana> getVentanasPermisos() {
         return ventanasPermisos;
@@ -149,12 +157,6 @@ public class Perfil implements Serializable{
         
     }
     
-    //Metodos personalizados
-    public GeneralEnumEstado getEstadoEnum()
-    {
-        return GeneralEnumEstado.getEnum(estado);
-    }
-    
-    
+
     
 }

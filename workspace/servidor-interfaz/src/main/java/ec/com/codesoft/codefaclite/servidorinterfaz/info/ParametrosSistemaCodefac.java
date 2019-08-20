@@ -84,5 +84,7 @@ public abstract class ParametrosSistemaCodefac {
     public static final String SRI_WS_RECEPCION_PRUEBA="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
     public static final String SRI_WS_AUTORIZACION="https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";
     public static final String SRI_WS_AUTORIZACION_PRUEBA="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";
+        
+    public static final String CREDENCIALES_USUARIO_CONFIGURACION="admin";
     
 }

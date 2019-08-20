@@ -255,7 +255,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
         if (tipoPaginaEnum.equals(tipoPaginaEnum.PROFORMA)) {
-            return new ProformaBusqueda();
+            return new ProformaBusqueda(sessionMb.getSession().getEmpresa());
         } else if (tipoPaginaEnum.equals(tipoPaginaEnum.FACTURA)) {
             return new FacturaBusqueda(sessionMb.getSession().getEmpresa());
         }
