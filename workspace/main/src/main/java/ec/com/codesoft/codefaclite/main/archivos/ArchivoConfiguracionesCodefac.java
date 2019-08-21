@@ -30,7 +30,15 @@ public class ArchivoConfiguracionesCodefac {
 
     public static final String CAMPO_MODO_APLICATIVO = "modo";
     
+    /***
+     * Este campo es para los clientes para que tengan grabado la ip del servidor
+     */
     public static final String CAMPO_IP_ULTIMO_ACCESO_SERVIDOR="servidorip";
+    
+    /**
+     * Este campo es paro el servidor para que inicie el aplicativo en la direccion de red ingresada
+     */
+    public static final String CAMPO_IP_SERVIDOR="ip";
     
     public static final String CAMPO_VERSION="version";
     

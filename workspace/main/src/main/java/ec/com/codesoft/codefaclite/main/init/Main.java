@@ -523,7 +523,21 @@ public class Main {
                  */
                 componentesBaseDatos(false);
                 
-                ipServidor=UtilidadVarios.obtenerIpServidor();
+                /**
+                 * Buscar si tiene configurado una ip en el archivo de configuracion para iniciar el servidor con ese numero de ip
+                 */
+                Properties propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+                String ipServidorDefecto=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_SERVIDOR);
+                
+                if(ipServidorDefecto==null || ipServidorDefecto.isEmpty())
+                {
+                    ipServidor=UtilidadVarios.obtenerIpServidor();
+                }
+                else
+                {
+                    ipServidor=ipServidorDefecto;
+                }
+                
                 //ipServidor="192.168.100.13";
                 //TODO: Esta linea se debe descomentar para funcionar con una ip publica pero generaba erro con la libreria healthmarketscience
                 //System.setProperty("java.rmi.server.hostname","186.4.212.15"); 
