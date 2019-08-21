@@ -1,2 +1,3 @@
 Validar que no se pueda reutilizar la misma licencia de multiempresa en la misma maquina
 Revisar que cuando se queda en formato de error al grabar en cliente , cuando al final se graba existe varios registro de lo mismo
+añadir el estado del usuario para solo funcionar con usuario activos

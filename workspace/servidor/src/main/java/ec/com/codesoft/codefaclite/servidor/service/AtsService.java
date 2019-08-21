@@ -354,7 +354,15 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 
                 String codigoSri=getCodigoSri(factura);                        
                 ventaAts.setTpIdCliente(codigoSri);//Consultar el tipo de cliente
-                ventaAts.setIdCliente(factura.getIdentificacion());
+                
+                ///Agrego esta validacion para tener retrocompatibilidad porque antes no se grababan la identificacion en la factura y si ese es el caso genero con la referencia guardada
+                String identificacion=factura.getIdentificacion();
+                if(identificacion==null || identificacion.isEmpty())
+                {
+                    identificacion=factura.getCliente().getIdentificacion();
+                }
+                
+                ventaAts.setIdCliente(identificacion);
                 
                 //Este campo solo se incluye cuando el cliente es diferente del cliente final
                 if(!ventaAts.getTpIdCliente().equals(Persona.TipoIdentificacionEnum.CLIENTE_FINAL.getCodigoSriVenta()))
