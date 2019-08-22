@@ -156,6 +156,7 @@ import org.apache.commons.collections4.map.HashedMap;
 import org.jdesktop.swingx.prompt.PromptSupport;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
+import ec.com.codesoft.codefaclite.facturacion.nocallback.FacturaRespuestaNoCallBack;
 
 /**
  *
@@ -1072,6 +1073,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         }
                             
                         comprobanteServiceIf.procesarComprobante(comprobanteData, facturaProcesando, session.getUsuario(), cic);
+                        
+                        if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
+                        {
+                            FacturaRespuestaNoCallBack respuestaNoCallBack=new  FacturaRespuestaNoCallBack(this,factura);
+                            respuestaNoCallBack.iniciar();
+                        }
+                        
 
                     } else {
                         //Solo genera el pdf pero no envia al SRI
