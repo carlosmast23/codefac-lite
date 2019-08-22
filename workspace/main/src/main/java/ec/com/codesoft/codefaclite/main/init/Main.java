@@ -539,13 +539,15 @@ public class Main {
                     ipServidor=ipServidorDefecto;
                 }
                 
+                
                 String ipPublica=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_PUBLICA_SERVIDOR);
                 //TODO: Esta linea se debe descomentar para funcionar con una ip publica pero generaba erro con la libreria healthmarketscience , literalmente esto sirve para decir que se procesen todas las peticiones que viene desde la ip publica
                 if(ipPublica!=null && !ipPublica.isEmpty())
                 {
                     System.setProperty("java.rmi.server.hostname",ipPublica); 
+                    System.setProperty("com.healthmarketscience.rmiio.exporter.port", "1099");
                 }
-                //System.setProperty("com.healthmarketscience.rmiio.exporter.port", "1099");
+                
                 cargarRecursosServidor(ipServidor); 
                                 
                 cargarRecursosCliente(ipServidor);
