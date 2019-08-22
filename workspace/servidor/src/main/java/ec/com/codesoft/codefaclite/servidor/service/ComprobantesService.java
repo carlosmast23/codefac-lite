@@ -1119,7 +1119,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             @Override
             public void iniciado(ComprobanteElectronico comprobante) {
                 try {
-                    callbackClientObject.iniciado();
+                    if(callbackClientObject!=null)
+                    {
+                        callbackClientObject.iniciado();                        
+                    }else
+                    {
+                        existeConexionRemota=false;
+                    }
                     
                 } catch (RemoteException ex) {
                     existeConexionRemota=false;

@@ -36,6 +36,11 @@ public class ArchivoConfiguracionesCodefac {
     public static final String CAMPO_IP_ULTIMO_ACCESO_SERVIDOR="servidorip";
     
     /**
+     * Este campo es para saber el ultimo tipo de acceso del cliente si fue remoto o local
+     */
+    public static final String CAMPO_TIPO_CLIENTE="tipo_cliente";
+    
+    /**
      * Este campo es paro el servidor para que inicie el aplicativo en la direccion de red ingresada
      */
     public static final String CAMPO_IP_SERVIDOR="ip";

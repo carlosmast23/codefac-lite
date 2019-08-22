@@ -155,6 +155,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.collections4.map.HashedMap;
 import org.jdesktop.swingx.prompt.PromptSupport;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 
 /**
  *
@@ -1064,7 +1065,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     //Si quiere que se procese en ese momento le ejecuto el proceso normal
                     if (repuestaFacturaElectronica) {
                         //Verificar que existe comunicacion con el Sri
-                        cic = new ClienteFacturaImplComprobante(this, facturaProcesando, false);
+                        cic = new ClienteFacturaImplComprobante(this, facturaProcesando, false);                        
+                        if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
+                        {
+                            cic=null;
+                        }
+                            
                         comprobanteServiceIf.procesarComprobante(comprobanteData, facturaProcesando, session.getUsuario(), cic);
 
                     } else {

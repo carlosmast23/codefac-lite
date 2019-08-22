@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.AyudaCodef
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
 import ec.com.codesoft.codefaclite.controlador.logs.LogControlador;
+import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.main.actualizacion.ActualizacionSistemaUtil;
 import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
@@ -32,6 +33,7 @@ import ec.com.codesoft.codefaclite.main.model.ConfiguracionesInicalesModel;
 import ec.com.codesoft.codefaclite.main.model.DescargaModel;
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.model.HiloPublicidadCodefac;
+import ec.com.codesoft.codefaclite.main.model.IngresarDatosClienteModel;
 import ec.com.codesoft.codefaclite.main.model.LoginModel;
 import ec.com.codesoft.codefaclite.main.model.ModoAplicativoModel;
 import ec.com.codesoft.codefaclite.main.model.ServidorMonitorModel;
@@ -505,14 +507,19 @@ public class Main {
                     //Consultar si existe grabado la ip del servidor para cargar por defecto la ultima
                     Properties propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
                     String ipServidorDefecto=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR);
-                    
+                    String tipoCliente=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE);
                     //Cargar los recursos para funcionar en modo cliente
-                    ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ",(ipServidorDefecto==null)?"":ipServidorDefecto);
-                    cargarRecursosCliente(ipServidor);
+                    //ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ",(ipServidorDefecto==null)?"":ipServidorDefecto);
+                    IngresarDatosClienteModel dialogDatosCliente= new IngresarDatosClienteModel(ipServidorDefecto,ParametrosClienteEscritorio.TipoClienteSwingEnum.buscarPorNombre(tipoCliente));
+                    dialogDatosCliente.setVisible(true);
+                    IngresarDatosClienteModel.Respuesta respuesta= dialogDatosCliente.obtenerDatosIngresados();
+                    cargarRecursosCliente(respuesta.ipPublica);
+                    ParametrosClienteEscritorio.tipoClienteEnum=respuesta.tipoClienteEnum;
                     //verificarConexionesPermitidas();
                     
                     //Grabar la ip del ultimo servidor accedido para no ingresar nuevamente el dato
-                    propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR, ipServidor + "");
+                    propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR, respuesta.ipPublica + "");
+                    propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE, respuesta.tipoClienteEnum.getNombre() + "");
                     ArchivoConfiguracionesCodefac.getInstance().guardar();
                     
                     LOG.log(Level.INFO, "Modo Cliente Activado");
