@@ -40,6 +40,11 @@ public class ArchivoConfiguracionesCodefac {
      */
     public static final String CAMPO_IP_SERVIDOR="ip";
     
+    /**
+     * Este campo sirve para especificar cuando un servidor acepta conexiones desde una ip publica 
+     */
+    public static final String CAMPO_IP_PUBLICA_SERVIDOR="ip_publica";
+    
     public static final String CAMPO_VERSION="version";
     
     public static final String CAMPO_TEMA="tema";

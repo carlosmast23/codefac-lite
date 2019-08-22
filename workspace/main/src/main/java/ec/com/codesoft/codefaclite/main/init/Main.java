@@ -501,6 +501,7 @@ public class Main {
             String ipServidor ="";
             
             if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) {
+                    //System.setProperty("java.rmi.server.hostname","192.168.100.2"); 
                     //Consultar si existe grabado la ip del servidor para cargar por defecto la ultima
                     Properties propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
                     String ipServidorDefecto=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR);
@@ -538,9 +539,12 @@ public class Main {
                     ipServidor=ipServidorDefecto;
                 }
                 
-                //ipServidor="192.168.100.13";
-                //TODO: Esta linea se debe descomentar para funcionar con una ip publica pero generaba erro con la libreria healthmarketscience
-                //System.setProperty("java.rmi.server.hostname","186.4.212.15"); 
+                String ipPublica=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_PUBLICA_SERVIDOR);
+                //TODO: Esta linea se debe descomentar para funcionar con una ip publica pero generaba erro con la libreria healthmarketscience , literalmente esto sirve para decir que se procesen todas las peticiones que viene desde la ip publica
+                if(ipPublica!=null && !ipPublica.isEmpty())
+                {
+                    System.setProperty("java.rmi.server.hostname",ipPublica); 
+                }
                 //System.setProperty("com.healthmarketscience.rmiio.exporter.port", "1099");
                 cargarRecursosServidor(ipServidor); 
                                 
