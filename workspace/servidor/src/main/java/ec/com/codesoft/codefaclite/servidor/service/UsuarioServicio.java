@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
@@ -257,7 +258,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                 //EntityTransaction transaccion = getTransaccion();
                 //transaccion.begin();
 
-                Usuario usuarioOriginal = getFacade().find(entity.getNick());
+                Usuario usuarioOriginal = getFacade().find(entity.getId());
 
                 //Verificar que no sea el usuario root el quieren editar
                 if (usuarioOriginal.getNick().equals(Usuario.SUPER_USUARIO)) {
@@ -286,6 +287,35 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                         if (!usuarioOriginal.getPerfilesUsuario().contains(perfilUsuario)) {
                             //Elimino de la persistencia
                             entityManager.persist(perfilUsuario);
+                        }
+
+                    }
+                }
+                
+                /**
+                 * =========METODOS PARA AGREGAR Y QUITAR PUNTOS DE EMISION
+                 */
+                ///Funcionalidad que permite eliminar perfiles que fueron eliminados
+                if (usuarioOriginal.getPuntosEmisionUsuario()!= null) {
+                    for (PuntoEmisionUsuario puntoEmisionUsuario : usuarioOriginal.getPuntosEmisionUsuario()) {
+
+                        //Si en el nuevo objeto que mando a editar no contiene el perfil usuario lo elimino
+                        if (!entity.getPuntosEmisionUsuario().contains(puntoEmisionUsuario)) {
+                            //Elimino de la persistencia
+                            entityManager.remove(puntoEmisionUsuario);
+                        }
+
+                    }
+                }
+
+                //Funcionalidad que permite agregar nuevos perfiles agregados
+                if (entity.getPuntosEmisionUsuario() != null) {
+                    for (PuntoEmisionUsuario puntoEmisionUsuario : entity.getPuntosEmisionUsuario()) {
+
+                        //Si en el objeto origina no tiene el perfil lo agrego
+                        if (!usuarioOriginal.getPuntosEmisionUsuario().contains(puntoEmisionUsuario)) {
+                            //Elimino de la persistencia
+                            entityManager.persist(puntoEmisionUsuario);
                         }
 
                     }
@@ -320,6 +350,15 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
 
                 entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave())); //Cifrar la clave para que no puede ser legible 
                 entityManager.persist(entity);
+                
+                //Grabar los puntos de emision asigandos al usuario
+                for (PuntoEmisionUsuario puntoEmisionUsuario : entity.getPuntosEmisionUsuario()) {
+                    if(puntoEmisionUsuario.getId()==null)
+                    {
+                        entityManager.persist(puntoEmisionUsuario);
+                    }
+                }
+                
 
             }
         });

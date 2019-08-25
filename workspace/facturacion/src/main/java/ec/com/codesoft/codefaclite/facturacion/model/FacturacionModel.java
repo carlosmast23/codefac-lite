@@ -635,7 +635,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     public void cargarSecuencial()
     {        
-        ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.FACTURA,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+        ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(), ComprobanteEnum.FACTURA,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
     }
     
     public void cargarSecuencialConsulta()

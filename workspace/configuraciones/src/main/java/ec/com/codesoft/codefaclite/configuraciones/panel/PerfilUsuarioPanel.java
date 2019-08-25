@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.configuraciones.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,7 +26,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     /**
      * Creates new form PerfilUsuarioPanel
      */
-    public PerfilUsuarioPanel() {
+    public PerfilUsuarioPanel() {        
         initComponents();
     }
 
@@ -40,6 +41,8 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel7 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -62,6 +65,13 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         btnBuscarEmpleado = new javax.swing.JButton();
         lblEspacioBlanco1 = new javax.swing.JLabel();
         lblEspacioBlanco2 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        btnAgregarPuntoEmision = new javax.swing.JButton();
+        btnQuitarPuntoEmision = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jListPuntoEmision = new javax.swing.JList<>();
+        lblEspacio3 = new javax.swing.JLabel();
 
         jLabel7.setText("jLabel7");
 
@@ -70,7 +80,8 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         setMaximizable(true);
         setResizable(true);
         setTitle("Usuario y Perfiles");
-        getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Usuario:");
@@ -79,7 +90,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel1, gridBagConstraints);
+        jPanel1.add(jLabel1, gridBagConstraints);
 
         txtUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -89,7 +100,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(txtUsuario, gridBagConstraints);
+        jPanel1.add(txtUsuario, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Estado:");
@@ -98,7 +109,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel2, gridBagConstraints);
+        jPanel1.add(jLabel2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -107,7 +118,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(cmbEstado, gridBagConstraints);
+        jPanel1.add(cmbEstado, gridBagConstraints);
 
         jScrollPane1.setViewportView(jListPerfiles);
 
@@ -120,7 +131,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jScrollPane1, gridBagConstraints);
+        jPanel1.add(jScrollPane1, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Perfiles:");
@@ -129,7 +140,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel3, gridBagConstraints);
+        jPanel1.add(jLabel3, gridBagConstraints);
 
         btnAgregarPerfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
         btnAgregarPerfil.setToolTipText("Agregar un perfil al usuario");
@@ -138,7 +149,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(btnAgregarPerfil, gridBagConstraints);
+        jPanel1.add(btnAgregarPerfil, gridBagConstraints);
 
         btnQuitarPerfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
         btnQuitarPerfil.setToolTipText("Quitar el peril");
@@ -147,7 +158,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(btnQuitarPerfil, gridBagConstraints);
+        jPanel1.add(btnQuitarPerfil, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Clave:");
@@ -156,7 +167,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel4, gridBagConstraints);
+        jPanel1.add(jLabel4, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Clave Repetir:");
@@ -165,7 +176,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel5, gridBagConstraints);
+        jPanel1.add(jLabel5, gridBagConstraints);
 
         txtClave.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -175,7 +186,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(txtClave, gridBagConstraints);
+        jPanel1.add(txtClave, gridBagConstraints);
 
         txtClaveRepetir.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -185,17 +196,17 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(txtClaveRepetir, gridBagConstraints);
+        jPanel1.add(txtClaveRepetir, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.4;
-        getContentPane().add(jLabel6, gridBagConstraints);
+        jPanel1.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
-        getContentPane().add(lblBlanco, gridBagConstraints);
+        jPanel1.add(lblBlanco, gridBagConstraints);
 
         lblClaveAnterior.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblClaveAnterior.setText("Clave Anterior:");
@@ -204,7 +215,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(lblClaveAnterior, gridBagConstraints);
+        jPanel1.add(lblClaveAnterior, gridBagConstraints);
 
         txtClaveAnterior.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -214,7 +225,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(txtClaveAnterior, gridBagConstraints);
+        jPanel1.add(txtClaveAnterior, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("Empleado:");
@@ -222,7 +233,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel8, gridBagConstraints);
+        jPanel1.add(jLabel8, gridBagConstraints);
 
         txtEmpleado.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -232,26 +243,81 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(txtEmpleado, gridBagConstraints);
+        jPanel1.add(txtEmpleado, gridBagConstraints);
 
         btnBuscarEmpleado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add_user.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(btnBuscarEmpleado, gridBagConstraints);
+        jPanel1.add(btnBuscarEmpleado, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 2.0;
-        getContentPane().add(lblEspacioBlanco1, gridBagConstraints);
+        jPanel1.add(lblEspacioBlanco1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
-        getContentPane().add(lblEspacioBlanco2, gridBagConstraints);
+        jPanel1.add(lblEspacioBlanco2, gridBagConstraints);
+
+        jTabbedPane1.addTab("Usuario", jPanel1);
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel9.setText("Puntos Emisión:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel9, gridBagConstraints);
+
+        btnAgregarPuntoEmision.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarPuntoEmision.setToolTipText("Agregar un perfil al usuario");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(btnAgregarPuntoEmision, gridBagConstraints);
+
+        btnQuitarPuntoEmision.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
+        btnQuitarPuntoEmision.setToolTipText("Quitar el peril");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(btnQuitarPuntoEmision, gridBagConstraints);
+
+        jScrollPane2.setViewportView(jListPuntoEmision);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jScrollPane2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.3;
+        gridBagConstraints.weighty = 0.1;
+        jPanel2.add(lblEspacio3, gridBagConstraints);
+
+        jTabbedPane1.addTab("Puntos de Emisión Permisos", jPanel2);
+
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -259,8 +325,10 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarPerfil;
+    private javax.swing.JButton btnAgregarPuntoEmision;
     private javax.swing.JButton btnBuscarEmpleado;
     private javax.swing.JButton btnQuitarPerfil;
+    private javax.swing.JButton btnQuitarPuntoEmision;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -270,10 +338,17 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JList<String> jListPerfiles;
+    private javax.swing.JList<PuntoEmisionUsuario> jListPuntoEmision;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblBlanco;
     private javax.swing.JLabel lblClaveAnterior;
+    private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacioBlanco1;
     private javax.swing.JLabel lblEspacioBlanco2;
     private javax.swing.JPasswordField txtClave;
@@ -382,6 +457,32 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     public void setBtnBuscarEmpleado(JButton btnBuscarEmpleado) {
         this.btnBuscarEmpleado = btnBuscarEmpleado;
     }
+
+    public JButton getBtnAgregarPuntoEmision() {
+        return btnAgregarPuntoEmision;
+    }
+
+    public void setBtnAgregarPuntoEmision(JButton btnAgregarPuntoEmision) {
+        this.btnAgregarPuntoEmision = btnAgregarPuntoEmision;
+    }
+
+    public JButton getBtnQuitarPuntoEmision() {
+        return btnQuitarPuntoEmision;
+    }
+
+    public void setBtnQuitarPuntoEmision(JButton btnQuitarPuntoEmision) {
+        this.btnQuitarPuntoEmision = btnQuitarPuntoEmision;
+    }
+
+    public JList<PuntoEmisionUsuario> getjListPuntoEmision() {
+        return jListPuntoEmision;
+    }
+
+    public void setjListPuntoEmision(JList<PuntoEmisionUsuario> jListPuntoEmision) {
+        this.jListPuntoEmision = jListPuntoEmision;
+    }
+
+    
     
     
 

@@ -12,8 +12,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
@@ -143,9 +146,30 @@ public class ActualizacionSistemaUtil {
         } catch (RemoteException ex) {
             Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
+    }
+    
+    /**
+     * Metodo que me permite establecer la relacion para actualizar de todos los usuarios con los puntos de emision
+     */
+    public static void actualizarPuntoEmisionUsuario()
+    {
+        try {
+            List<Usuario> usuarios=ServiceFactory.getFactory().getUsuarioServicioIf().obtenerTodos();
+            List<PuntoEmision> puntosEmision=ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerTodos();
+            for (Usuario usuario : usuarios) {                
+                for (PuntoEmision puntoEmision : puntosEmision) {
+                    PuntoEmisionUsuario puntoUsuario=new PuntoEmisionUsuario();
+                    puntoUsuario.setUsuario(usuario);
+                    puntoUsuario.setPuntoEmision(puntoEmision);
+                    ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().grabar(puntoUsuario);
+                }
+            }
+           
+        } catch (RemoteException ex) {
+            Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

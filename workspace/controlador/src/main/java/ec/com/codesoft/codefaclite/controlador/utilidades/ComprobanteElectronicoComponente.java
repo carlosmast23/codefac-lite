@@ -14,8 +14,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
@@ -160,19 +162,20 @@ public class ComprobanteElectronicoComponente {
     }
     
     
-    public static void cargarSecuencial(ComprobanteEnum tipoComprobante, Sucursal sucursal,JComboBox<PuntoEmision> cmbPuntoEmision,JLabel lblEstablecimiento,JLabel lblSecuencial)
+    public static void cargarSecuencial(Usuario usuario,ComprobanteEnum tipoComprobante, Sucursal sucursal,JComboBox<PuntoEmision> cmbPuntoEmision,JLabel lblEstablecimiento,JLabel lblSecuencial)
     {
         int indiceSeleccionado=cmbPuntoEmision.getSelectedIndex();
         //Cargar Puntos de Venta disponibles para la sucursal
 
         try {
-            List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sucursal);
+            List<PuntoEmisionUsuario> puntosEmisionUsuario=ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(usuario);
+            //List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sucursal);
             cmbPuntoEmision.removeAllItems();
             //Canfigurar un cell render para las sucursales
             //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
 
-            for (PuntoEmision puntoVenta : puntosVenta) {
-                cmbPuntoEmision.addItem(puntoVenta);
+            for (PuntoEmisionUsuario puntoUsuario : puntosEmisionUsuario) {
+                cmbPuntoEmision.addItem(puntoUsuario.getPuntoEmision());
             }
 
         } catch (ServicioCodefacException ex) {

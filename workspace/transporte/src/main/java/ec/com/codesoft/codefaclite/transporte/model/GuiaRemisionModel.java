@@ -229,7 +229,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         //getLblDireccion().setText(session.getSucursal().getDirecccion());
         getLblCantidadProductos().setText("0");
-        ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+        ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
         
         ///Limpiar Variables
         //guiaRemision=new GuiaRemision();
@@ -730,7 +730,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
     }

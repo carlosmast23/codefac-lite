@@ -100,7 +100,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
 
     @Override
     public void limpiar() {
-        ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+        ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
     }
 
 //    @Override
@@ -150,7 +150,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
         
@@ -166,7 +166,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
                 Boolean confirmacion = DialogoCodefac.dialogoPregunta("Alerta", "Está seguro que desea realizar la retención?", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if (confirmacion) {
                     enviar();
-                    ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+                    ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
                 }
             
             }

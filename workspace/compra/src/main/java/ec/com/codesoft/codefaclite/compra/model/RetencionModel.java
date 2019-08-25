@@ -733,7 +733,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getLblTelefonos().setText(session.getMatriz().getTelefono());                
 
         //getLblSecuencial().setText(obtenerSecuencial());
-        ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+        ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
         
     }
     
@@ -939,7 +939,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
         

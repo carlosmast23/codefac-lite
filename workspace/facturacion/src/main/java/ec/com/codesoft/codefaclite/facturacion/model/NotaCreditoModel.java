@@ -353,7 +353,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             //Cargar el secuncial correspondiente
             //NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
             //getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
-            ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.NOTA_CREDITO,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+            ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.NOTA_CREDITO,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             
             getCmbTipoDocumento().setSelectedItem(TipoDocumentoEnum.VENTA);
             
@@ -1365,7 +1365,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ComprobanteElectronicoComponente.cargarSecuencial(ComprobanteEnum.NOTA_CREDITO,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.NOTA_CREDITO,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
         

@@ -71,6 +71,9 @@ public class Usuario implements Serializable{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
     private List<PerfilUsuario> perfilesUsuario;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
+    private List<PuntoEmisionUsuario> puntosEmisionUsuario;
+    
 
     public Usuario(String nick, String clave) {
         this.nick = nick;
@@ -151,6 +154,16 @@ public class Usuario implements Serializable{
         this.perfilesUsuario = perfilesUsuario;
     }
 
+    public List<PuntoEmisionUsuario> getPuntosEmisionUsuario() {
+        return puntosEmisionUsuario;
+    }
+
+    public void setPuntosEmisionUsuario(List<PuntoEmisionUsuario> puntosEmisionUsuario) {
+        this.puntosEmisionUsuario = puntosEmisionUsuario;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -198,6 +211,18 @@ public class Usuario implements Serializable{
         perfilUsuario.setUsuario(this);
         
         this.perfilesUsuario.add(perfilUsuario);
+        
+    }
+    
+    public void addPuntoEmisionUsuario(PuntoEmisionUsuario puntoEmision)
+    {
+        if(this.puntosEmisionUsuario==null)
+        {
+            this.puntosEmisionUsuario=new ArrayList<PuntoEmisionUsuario>();
+        }
+        puntoEmision.setUsuario(this);
+        
+        this.puntosEmisionUsuario.add(puntoEmision);
         
     }
     

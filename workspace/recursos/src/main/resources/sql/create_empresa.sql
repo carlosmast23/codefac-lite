@@ -60,3 +60,13 @@ create table PUNTO_EMISION
     
     primary key (ID)
 );
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.7.9.8)*/
+create table PUNTO_EMISION_USUARIO
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
+    USUARIO_ID BIGINT,
+    PUNTO_EMISION_ID BIGINT,
+    ESTADO varchar(1),   
+    primary key (ID)
+);

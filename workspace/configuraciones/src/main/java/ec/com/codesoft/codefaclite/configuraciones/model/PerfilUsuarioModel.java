@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.busqueda.PerfilBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.busqueda.PerfilUsuarioBusquedaDialogo;
+import ec.com.codesoft.codefaclite.configuraciones.busqueda.PuntoEmisionBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.panel.PerfilUsuarioPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -17,6 +18,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -229,6 +232,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getTxtEmpleado().setText((usuario.getEmpleado()!=null)?usuario.getEmpleado().toString():"");
         getCmbEstado().setSelectedItem(usuario.getEstadoEnum());
         cargarListaPerfilesUsuario();
+        cargarListaPuntosEmision();
     }
 
     @Override
@@ -239,6 +243,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getTxtUsuario().setText("");
         getTxtEmpleado().setText("");
         cargarListaPerfilesUsuario();
+        cargarListaPuntosEmision();
         getCmbEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
         
     }
@@ -286,6 +291,29 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             }
         });
         
+        getBtnAgregarPuntoEmision().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PuntoEmisionBusquedaDialogo puntoEmisionDialog=new PuntoEmisionBusquedaDialogo(session.getEmpresa());
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(puntoEmisionDialog);
+                buscarDialogoModel.setVisible(true);
+                PuntoEmision puntoEmisionTemp = (PuntoEmision) buscarDialogoModel.getResultado();
+                if(puntoEmisionTemp!=null)
+                {
+                    //Si existe un usuario cargado agrega los detalles
+                    if(usuario!=null)
+                    {
+                        PuntoEmisionUsuario puntoEmisionUsuario=new PuntoEmisionUsuario();
+                        puntoEmisionUsuario.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                        puntoEmisionUsuario.setUsuario(usuario);
+                        puntoEmisionUsuario.setPuntoEmision(puntoEmisionTemp);
+                        usuario.addPuntoEmisionUsuario(puntoEmisionUsuario);
+                        cargarListaPuntosEmision();
+                    }
+                }
+            }
+        });
+        
         
         getBtnAgregarPerfil().addActionListener(new ActionListener() {
             @Override
@@ -325,6 +353,35 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                 
             }
         });
+        
+        getBtnQuitarPuntoEmision().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PuntoEmisionUsuario puntoEmision=getjListPuntoEmision().getSelectedValue();
+                
+                if(puntoEmision!=null)
+                {
+                    usuario.getPuntosEmisionUsuario().remove(puntoEmision);
+                    cargarListaPuntosEmision();
+                }
+                
+            }
+        });
+    }
+            
+    private void cargarListaPuntosEmision()
+    {
+        DefaultListModel listaModel=new DefaultListModel();
+        
+        if(usuario!=null && usuario.getPuntosEmisionUsuario()!=null)
+        {
+            for (PuntoEmisionUsuario puntoEmisionUsuario : usuario.getPuntosEmisionUsuario()) 
+            {
+                listaModel.addElement(puntoEmisionUsuario);
+            }
+        }
+        
+        getjListPuntoEmision().setModel(listaModel);
     }
     
     private void cargarListaPerfilesUsuario()
@@ -341,6 +398,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         
         getjListPerfiles().setModel(listaModel);
     }
+    
 
     private void setearValoresPantalla() {
         usuario.setEmpresa(session.getEmpresa());
