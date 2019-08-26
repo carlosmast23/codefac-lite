@@ -175,7 +175,11 @@ public class ComprobanteElectronicoComponente {
             //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
 
             for (PuntoEmisionUsuario puntoUsuario : puntosEmisionUsuario) {
-                cmbPuntoEmision.addItem(puntoUsuario.getPuntoEmision());
+                //Cargar solo los puntos de emision que estan relacionados con la sucursal
+                if(puntoUsuario.getPuntoEmision().getSucursal().equals(sucursal))
+                {
+                    cmbPuntoEmision.addItem(puntoUsuario.getPuntoEmision());
+                }
             }
 
         } catch (ServicioCodefacException ex) {

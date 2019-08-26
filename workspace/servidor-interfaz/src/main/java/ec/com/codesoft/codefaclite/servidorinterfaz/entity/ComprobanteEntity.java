@@ -43,8 +43,10 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     //@Column(name = "EMPRESA_ID")
     //protected Long empresaId;
     
-    @Column(name = "USUARIO_ID")
-    protected Long usuarioId;
+    //@Column(name = "USUARIO_ID")
+    @JoinColumn(name = "USUARIO_ID")
+    protected Usuario usuario;
+    //protected Long usuarioId;
     
     @Column(name = "FECHA_CREACION")
     protected Date fechaCreacion;
@@ -146,13 +148,22 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         this.empresaId = empresaId;
     }*/
 
-    public Long getUsuarioId() {
+    /*public Long getUsuarioId() {
         return usuarioId;
     }
 
     public void setUsuarioId(Long usuarioId) {
         this.usuarioId = usuarioId;
+    }*/
+
+    public Usuario getUsuario() {
+        return usuario;
     }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
 
     public Date getFechaCreacion() {
         return fechaCreacion;

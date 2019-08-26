@@ -707,6 +707,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         
         guiaRemision.setDireccionEstablecimiento(session.getSucursal().getDirecccion());
         guiaRemision.setDireccionMatriz(session.getMatriz().getDirecccion());
+        guiaRemision.setUsuario(session.getUsuario());
         
         /**
          * Agregar los correos de los destinatarios

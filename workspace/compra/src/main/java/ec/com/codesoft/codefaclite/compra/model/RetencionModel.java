@@ -826,6 +826,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         
         retencion.setDireccionEstablecimiento(session.getSucursal().getDirecccion());
         retencion.setDireccionMatriz(session.getMatriz().getDirecccion());
+        retencion.setUsuario(session.getUsuario());
         
         if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
         {

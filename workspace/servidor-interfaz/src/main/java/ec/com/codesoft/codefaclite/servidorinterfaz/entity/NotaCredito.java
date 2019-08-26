@@ -255,13 +255,6 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
         this.total = total;
     }
 
-    public Long getUsuarioId() {
-        return usuarioId;
-    }
-
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
-    }
 
     public String getEstado() {
         return estado;
