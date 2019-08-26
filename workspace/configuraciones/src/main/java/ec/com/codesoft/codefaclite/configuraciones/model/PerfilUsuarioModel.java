@@ -405,7 +405,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         usuario.setNick(getTxtUsuario().getText());
         //usuario.setClave(new String(getTxtClave().getPassword()));
         GeneralEnumEstado estadoEnum=(GeneralEnumEstado) getCmbEstado().getSelectedItem();
-        usuario.setEstado(estadoEnum.getEstado());
+        usuario.setEstadoEnum(estadoEnum);
 
         
         if (estadoFormulario == ESTADO_GRABAR) 

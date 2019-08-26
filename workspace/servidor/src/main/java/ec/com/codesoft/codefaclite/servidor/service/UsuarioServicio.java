@@ -183,9 +183,16 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                 Usuario usuario=verificarCredencialesUsuario(nick, clave,empresa);
                 if(usuario!=null)
                 {
-                    LOG.log(Level.INFO, "Ingresando con el usuario: "+nick);
                     loginRespuesta.usuario=usuario;
-                    loginRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.CORRECTO_USUARIO;
+                    if(usuario.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                    {
+                        LOG.log(Level.INFO, "Ingresando con el usuario: "+nick);
+                        loginRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.CORRECTO_USUARIO;
+                    }else if(usuario.getEstadoEnum().equals(GeneralEnumEstado.INACTIVO))
+                    {
+                        LOG.log(Level.INFO, "Error Usuario inactivo: "+nick);                        
+                        loginRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.INACTIVO_USUARIO;
+                    }
                 }
                 else
                 {
