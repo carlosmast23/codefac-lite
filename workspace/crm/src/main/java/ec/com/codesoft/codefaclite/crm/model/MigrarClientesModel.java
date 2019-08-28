@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarEstudi
 import ec.com.codesoft.codefaclite.controlador.model.MigrarModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
@@ -20,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.io.InputStream;
@@ -52,10 +54,10 @@ public class MigrarClientesModel extends MigrarModel {
             public void procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel {
                 try {
                     Persona cliente = new Persona();
-                    cliente.setIdentificacion((String) fila.getByEnum(ExcelMigrarClientes.Enum.IDENTIFICACION).valor);
+                    cliente.setIdentificacion(((String) fila.getByEnum(ExcelMigrarClientes.Enum.IDENTIFICACION).valor).trim());
                     cliente.setNombres((String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRES).valor);
                     cliente.setApellidos((String) fila.getByEnum(ExcelMigrarClientes.Enum.APELLIDOS).valor);
-                    cliente.setRazonSocial((String) fila.getByEnum(ExcelMigrarClientes.Enum.RAZON_SOCIAL).valor);
+                    cliente.setRazonSocial(((String) fila.getByEnum(ExcelMigrarClientes.Enum.RAZON_SOCIAL).valor).trim());
                     //cliente.setNombreLegal((String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRE_COMERCIAL).valor);
                     
                     String telefono=(String) fila.getByEnum(ExcelMigrarClientes.Enum.TELEFONO).valor;
@@ -66,6 +68,7 @@ public class MigrarClientesModel extends MigrarModel {
                     //cliente.setDireccion((String) fila.getByEnum(ExcelMigrarClientes.Enum.DIRECCION).valor);
                     
                     cliente.setCorreoElectronico((String) fila.getByEnum(ExcelMigrarClientes.Enum.CORREO).valor);
+                    String nombreComercial=(String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRE_COMERCIAL).valor;
                     
                     
                     cliente.setTipoEnum(OperadorNegocioEnum.CLIENTE);
@@ -93,14 +96,16 @@ public class MigrarClientesModel extends MigrarModel {
                     personaEstablecimiento.setCodigoSucursal("1");
                     personaEstablecimiento.setCorreoElectronico((String) fila.getByEnum(ExcelMigrarClientes.Enum.CORREO).valor);
                     personaEstablecimiento.setDireccion((String) fila.getByEnum(ExcelMigrarClientes.Enum.DIRECCION).valor);
-                    personaEstablecimiento.setTelefonoConvencional(telefono);
-                    personaEstablecimiento.setTelefonoCelular(celular);
+                    personaEstablecimiento.setTelefonoConvencional((telefono!=null)?telefono.trim():"");
+                    personaEstablecimiento.setTelefonoCelular((celular!=null)?celular.trim():"");
                     personaEstablecimiento.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
-                    personaEstablecimiento.setNombreComercial("matriz");
+                    personaEstablecimiento.setNombreComercial((nombreComercial!=null)?nombreComercial.trim():"matriz");
+                    personaEstablecimiento.setPersona(cliente);
                     
                     //List<PersonaEstablecimiento> establecimientos=new ArrayList<PersonaEstablecimiento>();
                     //establecimientos.add(personaEstablecimiento);
                     cliente.setEstablecimientos(Arrays.asList(personaEstablecimiento));
+                    cliente.setEmpresa(session.getEmpresa());
                     ServiceFactory.getFactory().getPersonaServiceIf().grabar(cliente);
                     
                     
@@ -190,7 +195,7 @@ public class MigrarClientesModel extends MigrarModel {
 
     @Override
     public InputStream getInputStreamExcel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return RecursoCodefac.PLANTILLAS_EXCEL.getResourceInputStream("clientes_migrar.xlsx");
     }
     
 }
