@@ -86,10 +86,21 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
     }
 
-    public List<Object[]> consultarStockMinimoFacade() throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockMinimoFacade(Bodega bodega) throws java.rmi.RemoteException {
 
-        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k group by k.producto having max(k.stock)<=k.producto.cantidadMinima  ";
+        String whereBodega="";
+        if(bodega!=null)
+        {
+            whereBodega=" and k.bodega=?1 ";
+        }
+        
+        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 "+whereBodega+" group by k.producto having max(k.stock)<=k.producto.cantidadMinima  ";
         Query query = getEntityManager().createQuery(queryString);
+        
+        if(bodega!=null)
+        {
+            query.setParameter(1,bodega);
+        }
         //query.setParameter(1,producto);
         return query.getResultList();
 

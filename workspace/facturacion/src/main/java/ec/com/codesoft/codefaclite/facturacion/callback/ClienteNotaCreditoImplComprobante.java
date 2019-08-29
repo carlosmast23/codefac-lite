@@ -110,7 +110,7 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
         
         if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
             monitorData.getBarraProgreso().setValue(65);
-            notaCreditoProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+            //notaCreditoProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
             
             monitorData.getBtnAbrir().setEnabled(true);
             monitorData.getBtnAbrir().addActionListener(new ActionListener() {
@@ -125,7 +125,7 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
 
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
             monitorData.getBarraProgreso().setValue(80);
-            notaCreditoProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+            //notaCreditoProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
@@ -134,7 +134,7 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
 
         if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
             monitorData.getBarraProgreso().setValue(100);
-            notaCreditoProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+            //notaCreditoProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         }
 
     }

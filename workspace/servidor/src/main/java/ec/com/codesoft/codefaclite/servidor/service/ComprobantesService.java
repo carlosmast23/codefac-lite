@@ -1903,6 +1903,12 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
          * Agregado datos adicionales de configuracion general
          */
         agregarParametrosGenerales(comprobante);
+        
+        /**
+         * Por el momento a todas las facturas no procesadas grabo con no facturar
+         * TODO: Analizar este metodo cuando sea fisica porque en ese caso deberia grabar directamente como autorizado
+         */
+        comprobante.setEstadoEnum(ComprobanteEnumEstado.SIN_AUTORIZAR);
 
         //parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
         //parametroService.editar(parametro);
