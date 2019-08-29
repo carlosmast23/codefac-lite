@@ -13,7 +13,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -62,6 +66,14 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         bodega.setDescripcion(getTxtDescripcion().getText());
         bodega.setEncargado(getTxtEncargado().getText());
         bodega.setImagenPath(getTxtFoto().getText());
+        
+        //Guardar a la sucursal que pertenece la empresa
+        Sucursal sucursal=(Sucursal) getCmbSucursal().getSelectedItem();
+        bodega.setSucursal(sucursal);
+        
+        //Guardar el tipo de bodega
+        Bodega.TipoBodegaEnum tipoBodegaEnum=(Bodega.TipoBodegaEnum) getCmbTipoBodega().getSelectedItem();
+        bodega.setTipoBodegaEnum(tipoBodegaEnum);
 
         moverArchivo();
     }
@@ -74,6 +86,7 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         jFileChooser.setDialogTitle("Elegir archivo");
         jFileChooser.setFileFilter(new FileNameExtensionFilter("Foto", "png", "jpg", "bmp"));
         agregarListenerBotones();
+        cargarCombosBox();
     }
 
     @Override
@@ -128,15 +141,24 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         if (bodega == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar bodega vacio");
         }
-
+        cargarDatosVista();
+        
+    }
+    
+    private void cargarDatosVista()
+    {
         getTxtNombre().setText(bodega.getNombre());
         getTxtDescripcion().setText(bodega.getDescripcion());
         getTxtEncargado().setText(bodega.getEncargado());
+        getCmbSucursal().setSelectedItem(bodega.getSucursal());
+        getCmbTipoBodega().setSelectedItem(bodega.getTipoBodegaEnum());
     }
 
     @Override
     public void limpiar() {
         bodega = new Bodega();
+        getCmbTipoBodega().setSelectedIndex(0);
+        getCmbSucursal().setSelectedIndex(0);        
     }
 
 //    @Override
@@ -243,6 +265,20 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void cargarCombosBox() {
+        try {
+            List<Sucursal> sucursales =ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(session.getEmpresa());
+            UtilidadesComboBox.llenarComboBox(getCmbSucursal(), sucursales);
+            
+            UtilidadesComboBox.llenarComboBox(getCmbTipoBodega(),Bodega.TipoBodegaEnum.values());
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

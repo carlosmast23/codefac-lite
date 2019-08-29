@@ -48,6 +48,18 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
     }
 */
 
+    @Override
+    public Bodega grabar(Bodega entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.persist(entity);
+            }
+        });
+        return entity;
+    }
+    
+
     public void editar(Bodega b) {
         bodegaFacade.edit(b);
     }

@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -41,6 +42,12 @@ public class Bodega implements Serializable {
     private String imagenPath;
     @Column(name = "ESTADO")
     private String estado;
+    
+    @Column(name = "TIPO_BODEGA")
+    private String tipoBodega;
+    
+    @JoinColumn(name = "SUCURSAL_ID")
+    private Sucursal sucursal;
 
     public Long getIdBodega() {
         return idBodega;
@@ -98,11 +105,76 @@ public class Bodega implements Serializable {
         this.estado = estadoEnum.getEstado();
     }
 
+    public String getTipoBodega() {
+        return tipoBodega;
+    }
+
+    public void setTipoBodega(String tipoBodega) {
+        this.tipoBodega = tipoBodega;
+    }
+    
+    public TipoBodegaEnum getTipoBodegaEnum() {
+        return TipoBodegaEnum.getByLetra(tipoBodega);
+    }
+
+    public void setTipoBodegaEnum(TipoBodegaEnum tipoBodegaEnum) {
+        this.tipoBodega = tipoBodegaEnum.getLetra();
+    }
+
+    public Sucursal getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(Sucursal sucursal) {
+        this.sucursal = sucursal;
+    }
+    
+
     @Override
     public String toString() {
         return nombre;
     }
     
-    
+    public enum TipoBodegaEnum
+    {
+        VENTA("v","Venta"),
+        ALMACEN("a","Almacen"),
+        PRODUCCION("p","Producción");
+
+        private TipoBodegaEnum(String letra, String nombre) {
+            this.letra = letra;
+            this.nombre = nombre;
+        }
+        
+        private String letra;
+        private String nombre;
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        public static TipoBodegaEnum getByLetra(String letra)
+        {
+            for (TipoBodegaEnum tipoSucursalEnum : TipoBodegaEnum.values()) {
+                if(tipoSucursalEnum.getLetra().equals(letra))
+                {
+                    return tipoSucursalEnum;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+        
+       
+    }
     
 }
