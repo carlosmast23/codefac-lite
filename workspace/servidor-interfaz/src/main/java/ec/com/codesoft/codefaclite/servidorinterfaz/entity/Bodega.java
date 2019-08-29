@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -87,6 +88,14 @@ public class Bodega implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+    
+    public String getEstadoEnum() {
+        return estado;
+    }
+
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
     }
 
     @Override

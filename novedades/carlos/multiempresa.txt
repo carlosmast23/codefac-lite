@@ -4,3 +4,4 @@ añadir el estado del usuario para solo funcionar con usuario activos
 Hacer que se pueda establecer la relacion de usuarios con puntos de venta para poder facturar
 Hacer que se graben el codigo del usuario que hace la factura
 Agregar un reporte de facturas o filtro para que puedan saber la cantidad de ventas por usuario.
+Falta hacer por empresa las categorias

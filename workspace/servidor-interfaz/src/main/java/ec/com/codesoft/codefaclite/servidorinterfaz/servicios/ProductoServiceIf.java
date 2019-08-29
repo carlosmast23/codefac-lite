@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -36,5 +37,7 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     public List<Producto> obtenerTodosActivos(Empresa empresa) throws java.rmi.RemoteException;
     
     public Producto buscarGenerarCodigoBarras(EnumSiNo enumSiNo ) throws ServicioCodefacException,RemoteException;
+    
+    public void grabarConInventario(Producto p,KardexDetalle kardexDetalle) throws ServicioCodefacException,java.rmi.RemoteException;
     
 }

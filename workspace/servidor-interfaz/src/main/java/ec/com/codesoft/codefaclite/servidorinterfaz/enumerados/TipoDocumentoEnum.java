@@ -98,6 +98,11 @@ public enum TipoDocumentoEnum {
             "Ingreso Manual",
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
     
+    STOCK_INICIAL(ModuloCodefacEnum.INVENTARIO,
+            "STI",
+            "Ingreso Stock inicial",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+    
     SALDO_ANTERIOR(ModuloCodefacEnum.INVENTARIO,
             "SAA",
             "Saldo Anterior",

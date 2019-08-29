@@ -440,7 +440,14 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             
             List<ImpuestoDetalle> impuestoDetalleList = impuestoDetalleService.obtenerIvaVigente();
             ImpuestoDetalle impuestoDefault = null;
-            String ivaDefecto = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
+            
+            String ivaDefecto =ParametrosSistemaCodefac.IVA_DEFECTO; //TODO: Analizar que configuracion vamos a usar por defecto agrego esto para poder usas cuando aun no se ha configurado un iva
+            ParametroCodefac parametroIva = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO);
+            if(parametroIva!=null)
+            {
+                ivaDefecto=parametroIva.valor;
+            }
+            
             for (ImpuestoDetalle impuesto : impuestoDetalleList) {
                 if (impuesto.getTarifa().toString().equals(ivaDefecto)) {
                     impuestoDefault = impuesto;

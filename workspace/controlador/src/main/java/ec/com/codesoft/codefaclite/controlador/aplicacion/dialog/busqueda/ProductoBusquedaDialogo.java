@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 
 /**
  *
@@ -27,6 +28,8 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
      * Variable para hacer ese filtro cuando lo requiera
      */
     private EnumSiNo generarCodigoBarrasEnum; 
+    
+    private TipoProductoEnum tipoProductoEnum;
 
     public ProductoBusquedaDialogo(Empresa empresa) 
     {
@@ -71,12 +74,20 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     public QueryDialog getConsulta(String filter) {
         //Producto p;
         //p.getGenerarCodigoBarras()
-        String queryString = "SELECT u FROM Producto u WHERE u.empresa=?4 and (u.estado=?1) ";
+        String queryExtra="";
+        if(tipoProductoEnum!=null)
+        {
+            queryExtra=" and u.tipoProductoCodigo=?99 ";
+        }
+        
+        String queryString = "SELECT u FROM Producto u WHERE  u.empresa=?4 and (u.estado=?1) "+queryExtra;
+        
         
         if (generarCodigoBarrasEnum != null) {
             queryString+=" and  u.generarCodigoBarras=?3 ";
         }
         
+                
         queryString+=" and ( LOWER(u.nombre) like ?2 OR u.codigoPersonalizado like ?2 ) ORDER BY u.codigoPersonalizado";
 
         QueryDialog queryDialog=new QueryDialog(queryString);
@@ -87,6 +98,12 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         {
             queryDialog.agregarParametro(3,generarCodigoBarrasEnum.getLetra());
         }
+        
+        if(tipoProductoEnum!=null)
+        {
+            queryDialog.agregarParametro(99,tipoProductoEnum.getLetra());
+        }
+        
         queryDialog.agregarParametro(4,empresa);
         //queryDialog.agregarParametro(2,ProductoEnumEstado.INACTIVO.getEstado());
         return queryDialog;
@@ -100,7 +117,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         this.generarCodigoBarrasEnum = generarCodigoBarrasEnum;
     }
 
-        @Override
+    @Override
     public Vector<String> getNamePropertysObject() {
         Vector<String> propiedades = new Vector<String>();
         propiedades.add("codigoPersonalizado");
@@ -110,6 +127,15 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         propiedades.add("catalogoProducto.ice");
         return propiedades;
     }
+
+    public TipoProductoEnum getTipoProductoEnum() {
+        return tipoProductoEnum;
+    }
+
+    public void setTipoProductoEnum(TipoProductoEnum tipoProductoEnum) {
+        this.tipoProductoEnum = tipoProductoEnum;
+    }
+    
     
     
     

@@ -11,7 +11,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -19,14 +21,13 @@ import javax.persistence.Query;
  *
  * @author Carlos
  */
-public class KardexFacade extends AbstractFacade<Kardex>{
-    
+public class KardexFacade extends AbstractFacade<Kardex> {
+
     public KardexFacade() {
         super(Kardex.class);
     }
-    
-    public List<Object[]> obtenerConsultaSaldoAnterior(Date fechaCorte,Producto producto,Bodega bodega)
-    {
+
+    public List<Object[]> obtenerConsultaSaldoAnterior(Date fechaCorte, Producto producto, Bodega bodega) {
         //KardexDetalle kd;
         //kd.getKardex().getBodega();
         //kd.getKardex().getProducto();
@@ -35,84 +36,82 @@ public class KardexFacade extends AbstractFacade<Kardex>{
                 + "FROM KardexDetalle kd "
                 + "WHERE kd.fechaIngreso<?1 and kd.kardex.bodega=?2 and kd.kardex.producto=?3 "
                 + "group by kd.codigoTipoDocumento ";
-        
+
         Query query = getEntityManager().createQuery(queryString);
-        query.setParameter(1,fechaCorte);
-        query.setParameter(2,bodega);
-        query.setParameter(3,producto);
-        
+        query.setParameter(1, fechaCorte);
+        query.setParameter(2, bodega);
+        query.setParameter(3, producto);
+
         return query.getResultList();
-        
+
     }
-    
-    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Integer cantidadMovimientos)
-    {
-        try
-        {
+
+    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega, Integer cantidadMovimientos) {
+        try {
             //KardexDetalle kd;
-            
+
             //kd.getFechaIngreso();
             String queryString = "SELECT kd FROM KardexDetalle kd WHERE kd.kardex.bodega=?3 and kd.kardex.producto=?4 ";
-            
-            if(fechaInicial!=null)
-            {
-                queryString+=" and kd.fechaIngreso>=?1 ";
+
+            if (fechaInicial != null) {
+                queryString += " and kd.fechaIngreso>=?1 ";
             }
-            
-            if(fechaFinal!=null)
-            {
-                queryString+=" and kd.fechaIngreso<=?2 ";
+
+            if (fechaFinal != null) {
+                queryString += " and kd.fechaIngreso<=?2 ";
             }
-            
+
             //Agregar orden y un limite de la consulta
             //queryString+=" order by kd.id desc ";
-            
-            
             System.out.println(queryString);
             Query query = getEntityManager().createQuery(queryString);
-            
+
             //if (cantidadMovimientos != null) {
             //    query.setMaxResults(cantidadMovimientos);
             //}
-            
-            query.setParameter(3,bodega);
-            query.setParameter(4,producto);
-            
-            if(fechaInicial!=null)
-            {
-                query.setParameter(1,fechaInicial);
+            query.setParameter(3, bodega);
+            query.setParameter(4, producto);
+
+            if (fechaInicial != null) {
+                query.setParameter(1, fechaInicial);
             }
-            
-            if(fechaFinal!=null)
-            {
-                query.setParameter(2,fechaFinal);
+
+            if (fechaFinal != null) {
+                query.setParameter(2, fechaFinal);
             }
-            
+
             return query.getResultList();
-        }
-        catch(NoResultException e)
-        {
+        } catch (NoResultException e) {
             return null;
         }
     }
-    
-    public List<Object[]> consultarStockMinimoFacade() throws java.rmi.RemoteException
-    {
+
+    public List<Object[]> consultarStockMinimoFacade() throws java.rmi.RemoteException {
 
         String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k group by k.producto having max(k.stock)<=k.producto.cantidadMinima  ";
         Query query = getEntityManager().createQuery(queryString);
         //query.setParameter(1,producto);
         return query.getResultList();
-        
-    }
-    
-    public List<Object[]> consultarStockFacade() throws java.rmi.RemoteException {
 
-        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k group by k.producto ";
+    }
+
+    public List<Object[]> consultarStockFacade(Bodega bodega) throws java.rmi.RemoteException {
+        
+        String whereBodega="";
+        if(bodega!=null)
+        {
+            whereBodega="and k.bodega=?1";
+        }
+        
+        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 "+whereBodega+" group by k.producto ";
         Query query = getEntityManager().createQuery(queryString);
-        //query.setParameter(1,producto);
+        
+        if(bodega!=null)
+        {
+            query.setParameter(1,bodega);
+        }        
         return query.getResultList();
 
     }
-    
+
 }

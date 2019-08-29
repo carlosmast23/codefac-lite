@@ -84,7 +84,16 @@ public abstract class ParametrosSistemaCodefac {
     public static final String SRI_WS_RECEPCION_PRUEBA="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
     public static final String SRI_WS_AUTORIZACION="https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";
     public static final String SRI_WS_AUTORIZACION_PRUEBA="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";
-        
+    
+    /**
+     * Nombre de usuario por defecto para poder configurar los datos de la empresa por primera vez
+     */
     public static final String CREDENCIALES_USUARIO_CONFIGURACION="admin";
+    
+    /**
+     * Variable que establece el iva actual que esta manejando el sistema
+     * TODO: Analizar este tema porque actualmente lo controla como parametro en la base de datos pero parece ser una variable del sistema mas que de l base
+     */
+    public static final String IVA_DEFECTO="12";
     
 }

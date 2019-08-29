@@ -71,7 +71,7 @@ public class MigrarClientesModel extends MigrarModel {
                     String nombreComercial=(String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRE_COMERCIAL).valor;
                     
                     
-                    cliente.setTipoEnum(OperadorNegocioEnum.CLIENTE);
+                    cliente.setTipoEnum(getOperadoNegocio());
                     cliente.setObligadoLlevarContabilidadEnum(EnumSiNo.NO);
 
                     cliente.setContactoClienteEnum(EnumSiNo.NO);
@@ -124,6 +124,11 @@ public class MigrarClientesModel extends MigrarModel {
             
 
         };
+    }
+    
+    public OperadorNegocioEnum getOperadoNegocio()
+    {
+        return OperadorNegocioEnum.CLIENTE;
     }
     
     

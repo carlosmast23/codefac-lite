@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.BodegaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
 /**
@@ -32,7 +32,7 @@ public class BodegaBusquedaDialogo implements InterfaceModelFind<Bodega> {
         String queryString = "SELECT u FROM Bodega u WHERE (u.estado=?1) and";
         queryString += " ( LOWER(u.nombre) LIKE ?2 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1, BodegaEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2,filter);
         return queryDialog;
     }

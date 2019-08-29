@@ -22,4 +22,6 @@ public interface CategoriaProductoServiceIf extends ServiceAbstractIf<CategoriaP
     public void eliminar(CategoriaProducto c) throws java.rmi.RemoteException;
     
     public List<CategoriaProducto> obtenerTodosPorEmpresa(Empresa empresa) throws java.rmi.RemoteException;
+    public CategoriaProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException;
+    
 }

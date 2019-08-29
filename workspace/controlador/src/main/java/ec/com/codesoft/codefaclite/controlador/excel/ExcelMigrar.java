@@ -91,7 +91,10 @@ public abstract class ExcelMigrar {
          * Validar que los tipos de datos ingresados sean los correctos con los formatos del excel
          */
         Row primeraFila = sheet.getRow(1);        
-        for (int i = 0; i < primeraFila.getLastCellNum(); i++) {
+        List<Class> tiposDatosCabecera= getTipoDatos();
+                       
+        //for (int i = 0; i < primeraFila.getLastCellNum(); i++) {
+        for (int i = 0; i < tiposDatosCabecera.size(); i++) {
             Cell celda = primeraFila.getCell(i);
             //System.out.println(celda.getCellTypeEnum().name());
             if(celda==null)
@@ -99,7 +102,7 @@ public abstract class ExcelMigrar {
                 continue;
             }
             
-            List<Class> tiposDatosCabecera= getTipoDatos();
+            
             System.out.println(celda.getCellTypeEnum().toString());
             switch (celda.getCellTypeEnum()) {
                 case STRING:

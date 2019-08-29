@@ -11,7 +11,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -46,24 +48,32 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                //Si el catalogo producto no esta creado primero crea la entidad
-                CatalogoProducto catalogoProducto = p.getCatalogoProducto();
-                if (catalogoProducto.getId() == null) {
-                    entityManager.persist(catalogoProducto);
-                }
-
-                //Si no son ensables remover datos para no tener incoherencias
-                if (!TipoProductoEnum.EMSAMBLE.getLetra().equals(p.getTipoProductoCodigo())) 
-                {
-                    if (p.getDetallesEnsamble() != null) 
-                    {
-                        p.getDetallesEnsamble().clear();
-                    }
-                }
-                entityManager.persist(p);
+                grabarSinTransaccion(p);
             }
         });        
         return p;
+    }
+    
+    private void grabarSinTransaccion(Producto p) {
+        //Si el catalogo producto no esta creado primero crea la entidad
+        CatalogoProducto catalogoProducto = p.getCatalogoProducto();
+        if (catalogoProducto.getId() == null) {
+            CategoriaProducto categoriaProducto = catalogoProducto.getCategoriaProducto();
+            if (categoriaProducto.getIdCatProducto() == null)//Si no existe la categoria tambien se los crea
+            {
+                entityManager.persist(categoriaProducto);
+            }
+
+            entityManager.persist(catalogoProducto);
+        }
+
+        //Si no son ensables remover datos para no tener incoherencias
+        if (!TipoProductoEnum.EMSAMBLE.getLetra().equals(p.getTipoProductoCodigo())) {
+            if (p.getDetallesEnsamble() != null) {
+                p.getDetallesEnsamble().clear();
+            }
+        }
+        entityManager.persist(p);
     }
     
     public void editarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException
@@ -168,6 +178,24 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             return resultado.get(0);
         }
         return null;
+    }
+    
+    public void grabarConInventario(Producto p,KardexDetalle kardexDetalle) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                grabarSinTransaccion(p); //graba el producto
+                KardexService kardexService=new KardexService();
+                
+                //Solo grabar cuando existen datos diferente de null
+                if(kardexDetalle!=null)
+                {
+                    kardexService.grabarKardexDetallSinTransaccion(kardexDetalle);
+                }
+                
+            }
+        });
     }
     
 

@@ -19,3 +19,4 @@ Ver como solucionar el problema que cuando no se actualizan los cambios el siste
 - En los proveedores ver si se vincula un numero de cuenta y los datos para poder emitir los cheques de pago (me imagino)
 - Al momento de editar un cliente si esta una razon social distinta de la genera no la edito
 - Hacer un nuevo web service para recibir estadisticas de cada cliente por ejemplo la cantidad de facturas , notas de credito, guias de remision , retenciones y comprobantes pendientes de enviar para llevar un contro interno
+- Revisar que a largo plazo las relaciones de los productos con categoria deberian ser directas porque no dependen de nada de los impuestos (categoria_producto)

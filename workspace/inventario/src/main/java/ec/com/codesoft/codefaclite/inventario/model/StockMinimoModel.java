@@ -18,7 +18,9 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
@@ -138,16 +140,18 @@ public class StockMinimoModel extends StockMinimoPanel{
     }
 
     private void valoresIniciales() {
-        try {
-                       
+        try {                       
             getCmbBodega().removeAllItems();
             BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
-            List<Bodega> bodegas = servicioBodega.obtenerTodos();
-            for (Bodega bodega : bodegas) {
-                getCmbBodega().addItem(bodega);                
-            }
+            List<Bodega> bodegas = servicioBodega.obtenerActivosPorEmpresa(session.getEmpresa());
+            UtilidadesComboBox.llenarComboBox(getCmbBodega(), bodegas);
+            //for (Bodega bodega : bodegas) {
+            //    getCmbBodega().addItem(bodega);                
+            //}
         } catch (RemoteException ex) {
             Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(StockMinimoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

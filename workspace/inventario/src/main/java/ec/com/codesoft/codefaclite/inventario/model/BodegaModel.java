@@ -10,10 +10,10 @@ import ec.com.codesoft.codefaclite.inventario.busqueda.BodegaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.BodegaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.BodegaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -57,7 +57,7 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     }
 
     private void setearValoresBodega(Bodega bodega) {
-        bodega.setEstado(BodegaEnumEstado.ACTIVO.getEstado());
+        bodega.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         bodega.setNombre(getTxtNombre().getText());
         bodega.setDescripcion(getTxtDescripcion().getText());
         bodega.setEncargado(getTxtEncargado().getText());

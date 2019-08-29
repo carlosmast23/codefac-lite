@@ -189,7 +189,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     }
     
     
-    private void grabarKardexDetallSinTransaccion(KardexDetalle detalle) throws RemoteException, RemoteException
+    public void grabarKardexDetallSinTransaccion(KardexDetalle detalle) throws RemoteException, RemoteException
     {
         //Buscar si ya existe el kardex o si no existe los creamos
         Map<String, Object> map = new HashMap<String, Object>();
@@ -450,9 +450,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return getFacade().consultarStockMinimoFacade();
     }
     
-    public List<Object[]> consultarStock() throws java.rmi.RemoteException
+    public List<Object[]> consultarStock(Bodega bodega) throws java.rmi.RemoteException
     {
-        return getFacade().consultarStockFacade();
+        return getFacade().consultarStockFacade(bodega);
     }
 
     public List<Kardex> buscarPorProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException

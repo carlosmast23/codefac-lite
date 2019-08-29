@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import java.io.Serializable;
@@ -97,6 +98,15 @@ public class CatalogoProducto implements Serializable{
     public void setModuloCod(String moduloCod) {
         this.moduloCod = moduloCod;
     }
+    
+    public ModuloCodefacEnum getModuloCodEnum() {
+        return ModuloCodefacEnum.getModuloCodefacEnumByCodigo(moduloCod);
+    }
+
+    public void setModuloCodEnum(ModuloCodefacEnum moduloCodEnum) {
+        this.moduloCod = moduloCodEnum.getCodigo();
+    }
+    
 
     public String getTipoCod() {
         return tipoCod;
@@ -105,6 +115,14 @@ public class CatalogoProducto implements Serializable{
     public void setTipoCod(String tipoCod) {
         this.tipoCod = tipoCod;
     }
+    
+    public TipoEnum getTipoCodEnum() {
+        return TipoEnum.obtenerPorCodigo(tipoCod);
+    }
+
+    public void setTipoCodEnum(TipoEnum tipoCodEnum) {
+        this.tipoCod = tipoCodEnum.codigo;
+    }
 
     public String getEstado() {
         return estado;
@@ -112,6 +130,14 @@ public class CatalogoProducto implements Serializable{
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+    
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
+    }
+
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
     }
 
     
@@ -159,12 +185,6 @@ public class CatalogoProducto implements Serializable{
     
     
     
-    // Metodos adicionales
-    
-    public TipoEnum getTipoCodEnum()
-    {
-        return TipoEnum.obtenerPorCodigo(tipoCod);
-    }
 
     @Override
     public int hashCode() {

@@ -48,7 +48,7 @@ public enum EnumSiNo {
 
         for (EnumSiNo enumerador : EnumSiNo.values())
         {
-            if(enumerador.getLetra().equals(letra))
+            if(enumerador.getLetra().toLowerCase().equals(letra.toLowerCase()))
             {
                 return enumerador;
             }

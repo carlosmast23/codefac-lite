@@ -5,13 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.inventario.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CatalogoProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CategoriaProductoBusquedaDialogo;
-import ec.com.codesoft.codefaclite.inventario.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.ReporteInventarioStockPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -127,7 +127,7 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
         switch(opcionReporte)
         {
             case "Producto":
-                ProductoBusquedaDialogo busquedaDialogo = new ProductoBusquedaDialogo();
+                ProductoBusquedaDialogo busquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
                 buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
             break;
             case "Proveedor":
@@ -187,7 +187,7 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
             public void actionPerformed(ActionEvent ae) {
                 if(getCmbTipoReporte().getSelectedItem().equals("Producto"))
                 {
-                    ProductoBusquedaDialogo busquedaDialogo = new ProductoBusquedaDialogo();
+                    ProductoBusquedaDialogo busquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
                     BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
                     buscarDialogoModel.setVisible(true);
                     Producto productoTemp = (Producto) buscarDialogoModel.getResultado();

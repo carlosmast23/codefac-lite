@@ -25,12 +25,15 @@ public class ExcelMigrarProductos extends ExcelMigrar{
     
     public enum Enum implements CampoMigrarInterface
     {
-        CODIGO("Identificación",0,String.class),
+        CODIGO("Código",0,String.class),
         NOMBRE("Nombres",1,String.class),
         PRECIO_VENTA_PUBLICO("Precio 1",2,Double.class),
-        CATALOGO_PRODUCTO("Catalogo producto",3,String.class),
-        
-        ESTADO("Estado",4,String.class);
+        CATEGORIA("Categoria",3,String.class),
+        IVA_PORCENTAJE("IVA Porcentaje",4,Double.class),
+        MANEJA_INVENTARIO("Maneja Inventario",5,String.class),
+        BODEGA("Bodega",6,String.class),
+        STOCK("Stock",7,Double.class),
+        ESTADO("Estado",8,String.class);
 
         private Enum(String nombre,Integer posicion,Class tipoDato) {
             this.nombre = nombre;
