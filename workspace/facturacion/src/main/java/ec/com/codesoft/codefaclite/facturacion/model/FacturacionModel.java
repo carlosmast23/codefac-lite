@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Client
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
@@ -32,7 +33,6 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
-import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
@@ -1424,7 +1424,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getCmbPreciosVenta().removeAllItems();
         getCmbConsumidorFinal().setSelected(false); //Ver si esta dato esta parametrizado en configuraciones
+        
+        habilitarPermisosEdicionFactura();
 
+    }
+    
+    private void habilitarPermisosEdicionFactura()
+    {
+        ParametroCodefac parametroPermiso=session.getParametrosCodefac().get(ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA);
+        if(parametroPermiso!=null && parametroPermiso.getValor()!=null && EnumSiNo.getEnumByLetra(parametroPermiso.valor).equals(EnumSiNo.NO))
+        {
+            getTxtValorUnitario().setEnabled(false);
+        }
+        
+        parametroPermiso=session.getParametrosCodefac().get(ParametroCodefac.EDITAR_DESCUENTO_FACTURA);
+        if(parametroPermiso!=null && parametroPermiso.getValor()!=null && EnumSiNo.getEnumByLetra(parametroPermiso.valor).equals(EnumSiNo.NO))
+        {
+            getTxtDescuento().setEnabled(false);
+        }
+        
+        parametroPermiso=session.getParametrosCodefac().get(ParametroCodefac.EDITAR_DESCRIPCION_FACTURA);
+        if(parametroPermiso!=null && parametroPermiso.getValor()!=null && EnumSiNo.getEnumByLetra(parametroPermiso.valor).equals(EnumSiNo.NO))
+        {
+            getTxtDescripcion().setEnabled(false);
+        }
+        
     }
     
     private void limpiarVistaDatosCliente()
@@ -2243,7 +2267,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
 
-        if (verificarCamposValidados()) {
+        //if (verificarCamposValidados()) {
             
             //Validacion dependiendo de la logica de cada tipo de documento
             if (!validacionPersonalizadaPorModulos()) {
@@ -2369,11 +2393,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         
             return true; //si pasa todas las validaciones asumo que se edito correctamente
 
-        }
+        /*}
         else
         {
             return false;
-        }
+        }*/
         
     }
     

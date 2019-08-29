@@ -31,6 +31,11 @@ public class ParametroCodefac implements Serializable {
     public static final String MODO_FACTURACION= "modo_facturacion";
     public static final String IVA_DEFECTO= "iva_defecto";
     
+    public static final String EDITAR_DESCRIPCION_FACTURA= "edit_descripcion_factura";
+    public static final String EDITAR_DESCUENTO_FACTURA= "edit_descuento_factura";
+    public static final String EDITAR_PRECIO_UNIT_FACTURA= "edit_precio_unit_factura";
+    
+    
     //public static final String SRI_WS_RECEPCION= "sri_ws_recepcion";
     //public static final String SRI_WS_AUTORIZACION= "sri_ws_autorizacion";
     //public static final String SRI_WS_RECEPCION_PRUEBA= "sri_ws_recepcion_prueba";

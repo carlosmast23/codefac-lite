@@ -150,11 +150,13 @@ public class GestionInventarioModel extends GestionInventarioPanel{
                        
             getCmbBodega().removeAllItems();
             BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
-            List<Bodega> bodegas = servicioBodega.obtenerTodos();
+            List<Bodega> bodegas = servicioBodega.obtenerActivosPorEmpresa(session.getEmpresa());
             for (Bodega bodega : bodegas) {
                 getCmbBodega().addItem(bodega);                
             }
         } catch (RemoteException ex) {
+            Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 

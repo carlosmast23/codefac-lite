@@ -170,12 +170,14 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
     private void iniciarValores() {
         try {
             BodegaServiceIf bodegaServiceIf = ServiceFactory.getFactory().getBodegaServiceIf();
-            List<Bodega> bodegas = bodegaServiceIf.obtenerTodos();
+            List<Bodega> bodegas = bodegaServiceIf.obtenerActivosPorEmpresa(session.getEmpresa());
             getCmbBodega().removeAllItems();
             for (Bodega bodega : bodegas) {
                 getCmbBodega().addItem(bodega);
             }
         } catch (RemoteException ex) {
+            Logger.getLogger(ReporteInventarioStockModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReporteInventarioStockModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

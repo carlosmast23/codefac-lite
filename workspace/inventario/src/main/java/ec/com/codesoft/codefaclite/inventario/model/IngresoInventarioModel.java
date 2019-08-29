@@ -588,7 +588,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
 
             getCmbBodega().removeAllItems();
             BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
-            List<Bodega> bodegas = servicioBodega.obtenerTodos();
+            List<Bodega> bodegas = servicioBodega.obtenerActivosPorEmpresa(session.getEmpresa());
             for (Bodega bodega : bodegas) {
                 getCmbBodega().addItem(bodega);
                 cmbBodegaSeleccion.addItem(bodega); //Combo para la seleccion de la tabla
@@ -598,6 +598,8 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             crearCabeceraComboBox();
 
         } catch (RemoteException ex) {
+            Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         

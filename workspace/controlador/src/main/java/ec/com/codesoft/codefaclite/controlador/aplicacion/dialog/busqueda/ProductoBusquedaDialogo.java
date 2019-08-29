@@ -30,14 +30,20 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     private EnumSiNo generarCodigoBarrasEnum; 
     
     private TipoProductoEnum tipoProductoEnum;
+    
+    private EnumSiNo isManejoInvetario;
 
     public ProductoBusquedaDialogo(Empresa empresa) 
     {
         this.generarCodigoBarrasEnum = null; //Le pongo en null para que filtre todo
         this.empresa=empresa;
+        this.isManejoInvetario=EnumSiNo.NO;
     }
     
-    
+    public ProductoBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa) {
+        this.isManejoInvetario = isManejoInvetario;
+        this.empresa = empresa;
+    }
 
     @Override
     public Vector<ColumnaDialogo> getColumnas() 
@@ -80,8 +86,13 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
             queryExtra=" and u.tipoProductoCodigo=?99 ";
         }
         
-        String queryString = "SELECT u FROM Producto u WHERE  u.empresa=?4 and (u.estado=?1) "+queryExtra;
+        String whereManejaInventario="";
+        if(isManejoInvetario!=null)
+        {
+            whereManejaInventario=" and u.manejarInventario=?98 ";
+        }
         
+        String queryString = "SELECT u FROM Producto u WHERE  u.empresa=?4 and (u.estado=?1) "+queryExtra+whereManejaInventario;        
         
         if (generarCodigoBarrasEnum != null) {
             queryString+=" and  u.generarCodigoBarras=?3 ";
@@ -103,6 +114,12 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         {
             queryDialog.agregarParametro(99,tipoProductoEnum.getLetra());
         }
+        
+        if(isManejoInvetario!=null)
+        {
+            queryDialog.agregarParametro(98,isManejoInvetario.getLetra());
+        }
+        
         
         queryDialog.agregarParametro(4,empresa);
         //queryDialog.agregarParametro(2,ProductoEnumEstado.INACTIVO.getEstado());

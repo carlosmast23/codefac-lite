@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.rmi.RemoteException;
@@ -169,6 +170,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         getCmbCargarProductoIvaFactura().removeAllItems();
         getCmbCargarProductoIvaFactura().addItem(EnumSiNo.NO);
         getCmbCargarProductoIvaFactura().addItem(EnumSiNo.SI);
+        
+        //Cargar las opciones en las configuraciones
+        UtilidadesComboBox.llenarComboBox(getCmbEditarDescripcionFactura(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbEditarDescuentoFactura(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbEditarPrecioUnitFactura(),EnumSiNo.values());
 
         //Cargar los valores de las retenciones de la renta       
         try {
@@ -299,6 +305,18 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             getTxtCodigoHtml().setText((parametro != null) ? parametro.getValor() : "");    
             getjEditorPanelVistaPrevia().setText(getTxtCodigoHtml().getText());
             
+            ParametroCodefac parametroEditarDescripcionFactura = parametrosTodos.get(ParametroCodefac.EDITAR_DESCRIPCION_FACTURA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroEditarDescripcionFactura != null) ? parametroEditarDescripcionFactura.getValor() : null);
+            getCmbEditarDescripcionFactura().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
+            ParametroCodefac parametroEditarPrecioFactura = parametrosTodos.get(ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroEditarPrecioFactura != null) ? parametroEditarPrecioFactura.getValor() : null);
+            getCmbEditarPrecioUnitFactura().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
+            ParametroCodefac parametroEditarDescuentoFactura = parametrosTodos.get(ParametroCodefac.EDITAR_DESCUENTO_FACTURA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroEditarDescuentoFactura != null) ? parametroEditarDescuentoFactura.getValor() : null);
+            getCmbEditarDescuentoFactura().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             
 
         } catch (RemoteException ex) {
@@ -336,6 +354,19 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbCargarProductoIvaFactura().getSelectedItem();
         agregarParametro(ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA);
+        
+        enumSiNo = (EnumSiNo) getCmbEditarDescripcionFactura().getSelectedItem();
+        agregarParametro(ParametroCodefac.EDITAR_DESCRIPCION_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.EDITAR_DESCRIPCION_FACTURA);
+        
+        enumSiNo = (EnumSiNo) getCmbEditarDescuentoFactura().getSelectedItem();
+        agregarParametro(ParametroCodefac.EDITAR_DESCUENTO_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.EDITAR_DESCUENTO_FACTURA);
+        
+        enumSiNo = (EnumSiNo) getCmbEditarPrecioUnitFactura().getSelectedItem();
+        agregarParametro(ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA);
+        
         /*ParametroCodefac parametroCodefac=parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)
         {

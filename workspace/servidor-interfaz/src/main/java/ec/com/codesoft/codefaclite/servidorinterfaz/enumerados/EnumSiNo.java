@@ -45,6 +45,11 @@ public enum EnumSiNo {
     
     public static EnumSiNo getEnumByLetra(String letra)
     {
+        //Si la letra es nulo no hace nadasss
+        if(letra==null)
+        {
+            return null;
+        }
 
         for (EnumSiNo enumerador : EnumSiNo.values())
         {
