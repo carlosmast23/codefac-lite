@@ -3365,8 +3365,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public void setearEtiquetasPantallaPrincipal()
     {
         try {
-            String nombreUsuario=(sessionCodefac.getUsuario()!=null)?sessionCodefac.getUsuario().getNick():"sin usuario";
-            getLblNombreEmpresa().setText(" Empresa: " + ((sessionCodefac.getEmpresa() != null) ? sessionCodefac.getEmpresa().getNombreLegal() : "Sin asignar") + " | Usuario: " + nombreUsuario);
+            String nombreUsuario=(sessionCodefac.getUsuario()!=null)?sessionCodefac.getUsuario().getNick():"Sin usuario";
+            String sucursal=(sessionCodefac.getSucursal()!=null)?sessionCodefac.getSucursal().getNombre():"Sin sucursal";
+            getLblNombreEmpresa().setText(" Empresa: " + ((sessionCodefac.getEmpresa() != null) ? sessionCodefac.getEmpresa().getNombreLegal() : "Sin asignar") + " | "+sucursal+" | Usuario: " + nombreUsuario);
             
             //Obtener el tipo de licencia para imprimir en la pantalla inicio
             UtilidadesServiceIf utilidadesService = ServiceFactory.getFactory().getUtilidadesServiceIf();

@@ -849,7 +849,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     @CampoBuscarAnotacion
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100, expresionRegular ="[^\\n]*", nombre = "Nombre Social", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
+    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100, expresionRegular ="[^\\n]*", nombre = "Nombre Social", expresionRegularMensaje = "No se permite la letra ñ, ni tildes" )
     public JTextField getjTextNombreSocial() {
         return jTextNombreSocial;
     }

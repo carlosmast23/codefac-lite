@@ -199,11 +199,12 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         return resultadoObjetos;
     }
     
-    public List<EstudianteInscrito> buscarPorNivelAcademico(NivelAcademico nivel) throws ServicioCodefacException, java.rmi.RemoteException {
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
+    public List<EstudianteInscrito> buscarPorNivelAcademico(Periodo periodo,NivelAcademico nivel) throws ServicioCodefacException, java.rmi.RemoteException {
+        /*Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("nivelAcademico", nivel);
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        return getFacade().findByMap(mapParametros);
+        return getFacade().findByMap(mapParametros);*/
+        return getFacade().buscarPorNivelAcademicoFacade(periodo, nivel);
     }
 
    

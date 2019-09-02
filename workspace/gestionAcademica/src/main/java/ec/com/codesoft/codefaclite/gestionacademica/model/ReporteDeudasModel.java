@@ -188,7 +188,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                 nivelBuscar=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
             }
             EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
-            List<EstudianteInscrito> dataEstudiante = na.buscarPorNivelAcademico(nivelBuscar);
+            List<EstudianteInscrito> dataEstudiante = na.buscarPorNivelAcademico(periodo,nivelBuscar);
 
             List<ReporteDeudasData> data = new ArrayList<ReporteDeudasData>();
             for (EstudianteInscrito estudiante : dataEstudiante) {
@@ -402,7 +402,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                         nivelBuscar=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
                     }
                     EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
-                    List<EstudianteInscrito> dataEstudiante = na.buscarPorNivelAcademico(nivelBuscar);
+                    List<EstudianteInscrito> dataEstudiante = na.buscarPorNivelAcademico(periodo,nivelBuscar);
                     for (EstudianteInscrito estudiante : dataEstudiante) {
                         Vector<String> fila = new Vector<String>();
                         RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();

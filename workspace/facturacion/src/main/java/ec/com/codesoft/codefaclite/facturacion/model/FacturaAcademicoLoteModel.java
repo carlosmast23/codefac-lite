@@ -234,13 +234,14 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
         mapEstudianteRubros = new HashMap<EstudianteInscrito, List<RubroEstudiante>>();
 
         NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+        Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();
         //RubrosNivel rubroNivel = (RubrosNivel) getCmbRubrosNivel().getSelectedItem();
 
         if (nivelAcademico != null) {
             try {
                 //Map<String, Object> mapParametros = new HashMap<String, Object>();
                 //mapParametros.put("nivelAcademico", nivelAcademico);
-                List<EstudianteInscrito> estudiantesInscritos = ServiceFactory.getFactory().getEstudianteInscritoServiceIf().buscarPorNivelAcademico(nivelAcademico);
+                List<EstudianteInscrito> estudiantesInscritos = ServiceFactory.getFactory().getEstudianteInscritoServiceIf().buscarPorNivelAcademico(periodo,nivelAcademico);
 
                 for (EstudianteInscrito estudiantesInscrito : estudiantesInscritos) {
                     mapEstudianteRubros.put(estudiantesInscrito, new ArrayList<RubroEstudiante>());

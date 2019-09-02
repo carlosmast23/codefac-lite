@@ -37,7 +37,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     {
         this.generarCodigoBarrasEnum = null; //Le pongo en null para que filtre todo
         this.empresa=empresa;
-        this.isManejoInvetario=EnumSiNo.NO;
+        this.isManejoInvetario=null;
     }
     
     public ProductoBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa) {

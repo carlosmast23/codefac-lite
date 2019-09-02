@@ -244,12 +244,13 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
         try {            
             NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
             RubrosNivel rubroNivel = (RubrosNivel) getCmbRubrosNivel().getSelectedItem();
+            Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();
 
             if (nivelAcademico != null && rubroNivel != null) {
                 //Map<String, Object> mapParametros = new HashMap<String, Object>();
                 //mapParametros.put("nivelAcademico", nivelAcademico);
                 //mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-                List<EstudianteInscrito> estudiantesInscritos = ServiceFactory.getFactory().getEstudianteInscritoServiceIf().buscarPorNivelAcademico(nivelAcademico);
+                List<EstudianteInscrito> estudiantesInscritos = ServiceFactory.getFactory().getEstudianteInscritoServiceIf().buscarPorNivelAcademico(periodo,nivelAcademico);
                
                 for (EstudianteInscrito estudiantesInscrito : estudiantesInscritos) {
                     //Map<String, Object> mapParametroNivelAcademico = new HashMap<String, Object>();

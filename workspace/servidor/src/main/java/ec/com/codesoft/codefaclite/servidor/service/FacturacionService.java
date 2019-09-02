@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
@@ -44,6 +45,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 import org.eclipse.persistence.exceptions.DatabaseException;
+import org.eclipse.persistence.internal.sessions.factories.SessionsFactory;
 
 /**
  *
@@ -76,7 +78,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() {
+                public void transaccion() throws ServicioCodefacException {
                     try
                     {
                         proforma.setSecuencial(obtenerSecuencialProformas(proforma.getEmpresa()).intValue());
@@ -90,6 +92,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     catch (RemoteException ex)
                     {
                         Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (PersistenceException ex) {
+                        Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+                        throw ex; //Relanzar la excepcion si sucede algun problema interno
                     }
                 }
             });
@@ -151,7 +158,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     }
     
     
-    private void grabarDetallesFactura(Factura factura) throws RemoteException,PersistenceException
+    private void grabarDetallesFactura(Factura factura) throws RemoteException,PersistenceException,ServicioCodefacException
     {
         try
         {
@@ -171,7 +178,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         afectarAcademico(detalle);
                         break;
                     case INVENTARIO:
-                        afectarInventario(detalle);
+                        BodegaService bodegaService=new BodegaService();
+                        Bodega bodegaVenta=bodegaService.obtenerBodegaVenta(factura.getSucursalEmpresa());
+                        if(bodegaVenta==null)
+                        {
+                            throw new ServicioCodefacException("No existe un tipo de Bodega de Venta Configurado");
+                        }
+                        afectarInventario(detalle,bodegaVenta);
                         break;
                     case LIBRE:
                         //NO DEBE AFECTAR A NADA;
@@ -248,41 +261,55 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }
     
-    private void afectarInventario(FacturaDetalle detalle)
+    private void afectarInventario(FacturaDetalle detalle,Bodega bodega)
     {
         try {
             Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());            
             //Map<String,Object> mapParametros=new HashMap<String,Object>();
             //mapParametros.put("producto", producto);
             KardexService kardexService=new KardexService();
-            List<Kardex> kardexs= kardexService.buscarPorProducto(producto);
-            //TODO: Definir especificamente cual es la bodega principal
-            if(kardexs!=null && kardexs.size()>0)
+            List<Kardex> kardexs= kardexService.buscarPorProductoYBodega(producto,null);
+            
+            Kardex kardex=null;
+            if(kardexs==null || kardexs.size()==0)
             {
-                //TODO: Analizar caso cuando se resta un producto especifico
-                Kardex kardex= kardexs.get(0);
-                KardexDetalle kardexDetalle=new KardexDetalle();
-                kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-                kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
-                kardexDetalle.setCantidad(detalle.getCantidad().intValue());
-                kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.VENTA_INVENTARIO.getCodigo());
-                kardexDetalle.setPrecioTotal(detalle.getTotal());
-                kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
-                kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
-                kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision());
-                kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento());
-                kardexDetalle.setSecuencial(detalle.getFactura().getSecuencial());
-                
-                kardex.addDetalleKardex(kardexDetalle);
-                
-                //Actualizar los valores del kardex
-                kardex.setStock(kardex.getStock() - kardexDetalle.getCantidad());
-                //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
-                kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(kardexDetalle.getPrecioTotal()));
-                //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
-                
-                entityManager.merge(kardex);
+                kardex=kardexService.crearObjeto(bodega, producto);
+                entityManager.persist(kardex);
+            }else
+            {
+                kardex = kardexs.get(0);
             }
+            
+            //TODO: Definir especificamente cual es la bodega principal
+            //if(kardexs!=null && kardexs.size()>0)
+            //{
+            //TODO: Analizar caso cuando se resta un producto especifico
+            //Kardex kardex = kardexs.get(0);
+            KardexDetalle kardexDetalle = new KardexDetalle();
+            kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+            kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
+            kardexDetalle.setCantidad(detalle.getCantidad().intValue());
+            kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.VENTA_INVENTARIO.getCodigo());
+            kardexDetalle.setPrecioTotal(detalle.getTotal());
+            kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
+            kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
+            kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision());
+            kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento());
+            kardexDetalle.setSecuencial(detalle.getFactura().getSecuencial());
+
+            //Actualizar los valores del kardex
+            kardex.setStock(kardex.getStock() - kardexDetalle.getCantidad());
+            //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
+            //kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(kardexDetalle.getPrecioTotal()));
+            //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+            entityManager.persist(kardexDetalle); //Grabo el kardex detalle
+            kardex.addDetalleKardex(kardexDetalle);
+            entityManager.merge(kardex); //Actualizo el kardex con la nueva referencia
+            //}else// Casi cuando no existe registro de kardex en esa bodega el sistema crea automaticamente
+            //{
+            //    Kardex kardex=kardexService.crearObjeto(bodega, producto);
+            //    entityManager.persist(kardex);
+            //}
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
@@ -290,6 +317,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
     
     }
+    
     
     public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo)
     {

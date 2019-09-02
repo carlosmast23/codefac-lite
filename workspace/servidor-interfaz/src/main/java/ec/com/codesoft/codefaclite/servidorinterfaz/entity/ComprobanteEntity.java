@@ -104,6 +104,12 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     @Column(name = "TIPO_AMBIENTE")
     protected String tipoAmbiente;
     
+    /**
+     * 
+     */
+    @JoinColumn(name = "SUCURSAL_EMPRESA_ID")
+    protected Sucursal sucursalEmpresa;
+    
 
     public ComprobanteEntity() {
     }
@@ -289,6 +295,16 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     public void setTipoAmbiente(String tipoAmbiente) {
         this.tipoAmbiente = tipoAmbiente;
     }
+
+    public Sucursal getSucursalEmpresa() {
+        return sucursalEmpresa;
+    }
+
+    public void setSucursalEmpresa(Sucursal sucursalEmpresa) {
+        this.sucursalEmpresa = sucursalEmpresa;
+    }
+    
+    
     
     
     public void addDatoAdicional(T comprobante)

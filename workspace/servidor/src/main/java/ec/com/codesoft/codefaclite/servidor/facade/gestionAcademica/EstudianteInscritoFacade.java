@@ -12,9 +12,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -142,6 +145,37 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         
         return (List<Object[]>) query.getResultList();
         
+    }
+    
+    public List<EstudianteInscrito> buscarPorNivelAcademicoFacade(Periodo periodo, NivelAcademico nivel) throws ServicioCodefacException, java.rmi.RemoteException {
+        //EstudianteInscrito ei;
+        //ei.getNivelAcademico().getPeriodo();
+        
+        String wherePeriodo="";
+        if(nivel!=null)
+        {
+            wherePeriodo=" AND u.nivelAcademico=?2 ";
+        }else
+        {
+            wherePeriodo=" AND u.nivelAcademico.periodo=?2 ";
+        }
+        
+        String queryString = "SELECT u FROM EstudianteInscrito u WHERE u.estado=?1  " + wherePeriodo;
+        //Map<String, Object> mapParametros = new HashMap<String, Object>();
+        //mapParametros.put("nivelAcademico", nivel);
+        //mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
+         
+        if(nivel!=null)
+        {
+           query.setParameter(2,nivel);
+        }else
+        {
+            query.setParameter(2,periodo);
+        }
+        
+        return query.getResultList();
     }
 
 }

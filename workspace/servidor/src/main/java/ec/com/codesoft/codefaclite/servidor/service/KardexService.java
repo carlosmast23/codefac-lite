@@ -463,6 +463,32 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return getFacade().findByMap(mapParametros);
     }
     
+    public List<Kardex> buscarPorProductoYBodega(Producto producto,Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("producto", producto);
+        mapParametros.put("bodega",bodega);
+        
+        //KardexService kardexService = new KardexService();
+        return getFacade().findByMap(mapParametros);
+    }
+    
+    
+    public Kardex crearObjeto(Bodega bodega,Producto producto)
+    {
+        Kardex kardex=new Kardex();
+        kardex.setBodega(bodega);
+        kardex.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
+        kardex.setPrecioPromedio(BigDecimal.ZERO);
+        kardex.setPrecioTotal(BigDecimal.ZERO);
+        kardex.setPrecioUltimo(BigDecimal.ZERO);
+        kardex.setProducto(producto);
+        kardex.setReserva(0);
+        kardex.setStock(0);
+        return kardex;
+        
+    }
     
 }
 
