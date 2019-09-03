@@ -52,3 +52,4 @@ Hacer alguna funcionalidad adicional para que se puedan trasladar los rubros del
 Cuando se crea un proveedor en la compra no se esta cargando directo
 
 Hacer que cuando actualice la licencia ver alguna manera de actualizar la licencia ese momento porque ahorita esta programado para actualizar cada dia
+En los detalles de las notas de credito toca ampliar el espacio en la base de datos porque en las facturas deja grabar mas y cuando traspaso a las notas de credito generar error

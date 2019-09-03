@@ -106,6 +106,12 @@ public class KardexFacade extends AbstractFacade<Kardex> {
 
     }
 
+    /**
+     * TODO: Falta filtrar por empresa cuando sea vacia la bodega
+     * @param bodega
+     * @return
+     * @throws java.rmi.RemoteException 
+     */
     public List<Object[]> consultarStockFacade(Bodega bodega) throws java.rmi.RemoteException {
         
         String whereBodega="";
@@ -114,7 +120,8 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             whereBodega="and k.bodega=?1";
         }
         
-        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 "+whereBodega+" group by k.producto ";
+        //Talvez agregar condicion para buscar solo por kardex activos
+        String queryString = "SELECT k.producto,k.stock FROM Kardex k WHERE 1=1 "+whereBodega+" ";
         Query query = getEntityManager().createQuery(queryString);
         
         if(bodega!=null)

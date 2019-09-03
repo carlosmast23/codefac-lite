@@ -268,7 +268,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             //Map<String,Object> mapParametros=new HashMap<String,Object>();
             //mapParametros.put("producto", producto);
             KardexService kardexService=new KardexService();
-            List<Kardex> kardexs= kardexService.buscarPorProductoYBodega(producto,null);
+            List<Kardex> kardexs= kardexService.buscarPorProductoYBodega(producto,bodega);
             
             Kardex kardex=null;
             if(kardexs==null || kardexs.size()==0)

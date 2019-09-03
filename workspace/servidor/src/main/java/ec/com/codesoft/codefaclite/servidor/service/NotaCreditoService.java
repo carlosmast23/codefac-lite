@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -130,7 +131,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
      * @param total
      * @throws RemoteException 
      */
-    public void anularProcesoFactura(FacturaDetalle facturaDetalle) throws RemoteException
+    public void anularProcesoFactura(FacturaDetalle facturaDetalle) throws RemoteException, ServicioCodefacException
     {
         //TipoDocumentoEnum tipoDocumento,Long referenciaId,BigDecimal total
         switch (facturaDetalle.getTipoDocumentoEnum()) {
@@ -143,7 +144,9 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 break;
                 
             case INVENTARIO:
+                Bodega bodega=obtenerBodegaAfecta(facturaDetalle.getFactura());
                 afectarInventario(
+                        bodega,
                         facturaDetalle.getCantidad().intValue(), 
                         facturaDetalle.getPrecioUnitario(),
                         facturaDetalle.getTotal(), 
@@ -158,7 +161,24 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         }
     }
     
-    public void anularProcesoNotCredito(NotaCreditoDetalle notaDetalle) throws RemoteException
+    /**
+     * TODO:Unir este metodo con Factura Service porque utilizo 2 veces
+     * @param comprobante
+     * @return
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
+    private Bodega obtenerBodegaAfecta(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
+    {
+        BodegaService bodegaService = new BodegaService();
+        Bodega bodegaVenta = bodegaService.obtenerBodegaVenta(comprobante.getSucursalEmpresa());
+        if (bodegaVenta == null) {
+            throw new ServicioCodefacException("No existe un tipo de Bodega de Venta Configurado");
+        }
+        return bodegaVenta;
+    }
+    
+    public void anularProcesoNotCredito(NotaCreditoDetalle notaDetalle) throws RemoteException, ServicioCodefacException
     {
         switch (notaDetalle.getTipoDocumentoEnum()) {
             case ACADEMICO:
@@ -170,7 +190,9 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 break;
                 
             case INVENTARIO:
+                Bodega bodega=obtenerBodegaAfecta(notaDetalle.getNotaCredito());
                 afectarInventario(
+                        bodega,
                         notaDetalle.getCantidad().intValue(), 
                         notaDetalle.getPrecioUnitario(),
                         notaDetalle.getTotal(), 
@@ -190,20 +212,21 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
      * TODO: Unificar este metodo con la de factura que existe un metodo similar
      * @param detalle 
      */
-    private void afectarInventario(int cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial)
+    private void afectarInventario(Bodega bodega,int cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial)
     {
         try {
             Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(referenciaProductoId);
             
-            Map<String,Object> mapParametros=new HashMap<String,Object>();
-            mapParametros.put("producto", producto);
+            //Map<String,Object> mapParametros=new HashMap<String,Object>();
+            //mapParametros.put("producto", producto);
             KardexService kardexService=new KardexService();
-            List<Kardex> kardexs= kardexService.getFacade().findByMap(mapParametros);
+            Kardex kardexProducto=kardexService.buscarKardexPorProductoyBodega(bodega, producto);
+            //List<Kardex> kardexs= kardexService.getFacade().findByMap(mapParametros);
             //TODO: Definir especificamente cual es la bodega principal
-            if(kardexs!=null && kardexs.size()>0)
-            {
+            //if(kardexProducto!=null && kardexProducto.size()>0)
+            //{
                 //TODO: Analizar caso cuando se resta un producto especifico
-                Kardex kardex= kardexs.get(0);
+                Kardex kardex= kardexProducto;
                 KardexDetalle kardexDetalle=new KardexDetalle();
                 kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoy());
                 kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
@@ -225,7 +248,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
                 
                 entityManager.merge(kardex);
-            }
+            //}
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }

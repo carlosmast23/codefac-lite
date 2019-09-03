@@ -154,6 +154,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         notaCredito.setDireccionEstablecimiento(session.getSucursal().getDirecccion());
         notaCredito.setDireccionMatriz(session.getMatriz().getDirecccion());
         notaCredito.setUsuario(session.getUsuario());
+        notaCredito.setSucursalEmpresa(session.getSucursal());
         
         switch(tipoDocumentoEnum)
         {
