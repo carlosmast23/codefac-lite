@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 
 /**
  *
@@ -69,10 +70,10 @@ public class ProveedorBusquedaDialogo implements InterfaceModelFind<PersonaEstab
     @Override
     public QueryDialog getConsulta(String filter) {
         //PersonaEstablecimiento p;
-        //p.getPersona().getEmpresa();
+        //p.getPersona().getEstadoEnum();
         //p.getTipo();
         String queryString = "SELECT u FROM PersonaEstablecimiento u WHERE ";
-        queryString += " u.persona.empresa=?6 and ( (LOWER(u.nombreComercial) like ?3 or u.persona.identificacion like ?5 or  LOWER(u.persona.razonSocial) like ?2 ) and (u.persona.tipo = ?1 or u.persona.tipo = ?4 ) )";
+        queryString += " u.persona.estado=?7 and u.persona.empresa=?6 and ( (LOWER(u.nombreComercial) like ?3 or u.persona.identificacion like ?5 or  LOWER(u.persona.razonSocial) like ?2 ) and (u.persona.tipo = ?1 or u.persona.tipo = ?4 ) )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, OperadorNegocioEnum.PROVEEDOR.getLetra());
         queryDialog.agregarParametro(4, OperadorNegocioEnum.AMBOS.getLetra());
@@ -80,6 +81,7 @@ public class ProveedorBusquedaDialogo implements InterfaceModelFind<PersonaEstab
         queryDialog.agregarParametro(3, filter);
         queryDialog.agregarParametro(5, filter);
         queryDialog.agregarParametro(6, empresa);
+        queryDialog.agregarParametro(7,GeneralEnumEstado.ACTIVO.getEstado());
         
 
         return queryDialog;

@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 
 /**
  * TODO: Ver como unificar el dialogo con la factura y otras que usan similares
@@ -60,10 +61,11 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
         //pe.getPersona();
         
         String queryString = "SELECT u FROM PersonaEstablecimiento u WHERE ";
-        queryString+=" u.persona.empresa=?2 AND ( LOWER(u.persona.razonSocial) like ?1 or u.persona.identificacion like ?1 or LOWER(u.nombreComercial) like ?1 )";
+        queryString+=" u.persona.estado=?3 AND  u.persona.empresa=?2 AND ( LOWER(u.persona.razonSocial) like ?1 or u.persona.identificacion like ?1 or LOWER(u.nombreComercial) like ?1 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter.toLowerCase());
         queryDialog.agregarParametro(2,empresa);
+        queryDialog.agregarParametro(3,GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 
