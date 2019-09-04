@@ -45,12 +45,23 @@ public class Kardex implements Serializable,Cloneable {
     @Column(name = "PRECIO_PROMEDIO")
     private BigDecimal precioPromedio;
     
+    /**
+     * Almacena el ultimo valor de costo utilizado 
+     */
     @Column(name = "PRECIO_ULTIMO")
     private BigDecimal precioUltimo;
     
+    /**
+     * TODO: Esta de revisar esta variable porque no tengo clara la utilidad,
+     * Talvez al restar entre precios de ingresos y comprar me puede estar dando
+     * la utilidad pero toca analizar
+     */
     @Column(name = "PRECIO_TOTAL")
     private BigDecimal precioTotal;
     
+    /**
+     * Cantidad disponible del producto en esa bodega
+     */
     @Column(name = "STOCK")
     private Integer stock;
     
@@ -179,6 +190,15 @@ public class Kardex implements Serializable,Cloneable {
         
     }
     
+    public void calcularPrecioTotal()
+    {
+        this.precioTotal=precioPromedio.multiply(new BigDecimal(stock));
+    }
+    
+    /**
+     * @deprecated 
+     * @return 
+     */
     public BigDecimal calcularPrecioPromedio()
     {
         return this.precioTotal.divide(new BigDecimal(this.stock),2,BigDecimal.ROUND_HALF_UP);

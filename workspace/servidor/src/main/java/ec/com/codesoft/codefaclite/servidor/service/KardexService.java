@@ -77,91 +77,78 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
 
     public void IngresoEgresoInventarioEnsamble(Bodega bodega, Producto productoEnsamble,Integer cantidad,List<Kardex> componentesKardex, boolean ingreso) throws java.rmi.RemoteException,ServicioCodefacException
     {
-        EntityTransaction et= entityManager.getTransaction();
-        try
-        {
-            et.begin();
-            //Buscar el Kardex del ensamble o crear
-            Map<String,Object> parametrosMap=new HashMap<String,Object>();
-            parametrosMap.put("bodega",bodega);
-            parametrosMap.put("producto",productoEnsamble);
-            List<Kardex> kardexList=obtenerPorMap(parametrosMap);
-            
-            //Obtener o crear el kardex si no existe
-            Kardex kardex=null;
-            if(kardexList!=null && kardexList.size()>0)
-            {
-                kardex=kardex=kardexList.get(0);                
-            }
-            else
-            {
-                kardex=new Kardex();
-                kardex.setBodega(bodega);
-                kardex.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-                kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
-                kardex.setPrecioPromedio(BigDecimal.ZERO);
-                kardex.setPrecioTotal(BigDecimal.ZERO);
-                kardex.setPrecioUltimo(BigDecimal.ZERO);
-                kardex.setProducto(productoEnsamble);
-                kardex.setStock(0);
-                kardex.setReserva(0);
-                entityManager.persist(kardex);
-            }
-            
-            //Actualizar los detalles de los componentes del kardex                        
-            for (Kardex kardexComponente : componentesKardex) {
-                entityManager.merge(kardexComponente);  
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 
-            }
-            
-            //Calcular el valor del ensamble
-            BigDecimal costoIndividualEnsamble=BigDecimal.ZERO;
-            List<ProductoEnsamble> listaComponentes=kardex.getProducto().getDetallesEnsamble();
-            for (ProductoEnsamble componenteEmsamble : listaComponentes) {
-                parametrosMap = new HashMap<String, Object>();
+                /**
+                 * ===============> Buscar el Ensamble de producto o crear <============//
+                 */
+                Map<String, Object> parametrosMap = new HashMap<String, Object>();
                 parametrosMap.put("bodega", bodega);
-                parametrosMap.put("producto", componenteEmsamble.getComponenteEnsamble());
-                kardexList = obtenerPorMap(parametrosMap);
-                
-                costoIndividualEnsamble=costoIndividualEnsamble.add(new BigDecimal(componenteEmsamble.getCantidad().toString()).multiply(kardexList.get(0).getPrecioUltimo()));
+                parametrosMap.put("producto", productoEnsamble);
+                List<Kardex> kardexList = obtenerPorMap(parametrosMap);
+
+                //Obtener o crear el kardex si no existe
+                Kardex kardex = null;
+                if (kardexList != null && kardexList.size() > 0) {
+                    kardex = kardex = kardexList.get(0);
+                } else {
+                    kardex=crearObjeto(bodega, productoEnsamble);                    
+                    entityManager.persist(kardex);
+                }
+
+                //Actualizar los detalles de los componentes del kardex                        
+                for (Kardex kardexComponente : componentesKardex) {
+                    entityManager.merge(kardexComponente);
+
+                }
+
+                //Calcular el valor del ensamble
+                BigDecimal costoIndividualEnsamble = BigDecimal.ZERO;
+                List<ProductoEnsamble> listaComponentes = kardex.getProducto().getDetallesEnsamble();
+                for (ProductoEnsamble componenteEmsamble : listaComponentes) {
+                    parametrosMap = new HashMap<String, Object>();
+                    parametrosMap.put("bodega", bodega);
+                    parametrosMap.put("producto", componenteEmsamble.getComponenteEnsamble());
+                    kardexList = obtenerPorMap(parametrosMap);
+
+                    costoIndividualEnsamble = costoIndividualEnsamble.add(new BigDecimal(componenteEmsamble.getCantidad().toString()).multiply(kardexList.get(0).getPrecioUltimo()));
+                }
+
+                ///Actualizar los totales del emsamble
+                kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(costoIndividualEnsamble).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
+                kardex.setPrecioTotal(kardex.getPrecioTotal().add(costoIndividualEnsamble));
+                kardex.setPrecioUltimo(costoIndividualEnsamble);
+
+                //Agregar o descontar el stock cuando se ingrese o salga mercaderia
+                if (ingreso) {
+                    kardex.setStock(kardex.getStock() + cantidad);
+                } else {
+                    kardex.setStock(kardex.getStock() - cantidad);
+                }
+
+                //Crear el registro del kardex detalle 
+                KardexDetalle kardexDetalle = new KardexDetalle();
+
+                //Agregar o descontar el stock cuando se ingrese o salga mercaderia
+                if (ingreso) {
+                    kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.ENSAMBLE_INGRESO.getCodigo());
+                } else {
+                    kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.ENSAMBLE_EGRESO.getCodigo());
+                }
+
+                kardexDetalle.setCantidad(cantidad);
+                kardexDetalle.setPrecioTotal(costoIndividualEnsamble.multiply(new BigDecimal(cantidad.toString())));
+                kardexDetalle.setPrecioUnitario(costoIndividualEnsamble);
+                kardexDetalle.setReferenciaDocumentoId(null);
+
+                kardex.addDetalleKardex(kardexDetalle);
+                entityManager.merge(kardex);
             }
-            
-            ///Actualizar los totales del emsamble
-            kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(costoIndividualEnsamble).divide(new BigDecimal("2"),2,RoundingMode.HALF_UP));
-            kardex.setPrecioTotal(kardex.getPrecioTotal().add(costoIndividualEnsamble));
-            kardex.setPrecioUltimo(costoIndividualEnsamble);
-            
-            //Agregar o descontar el stock cuando se ingrese o salga mercaderia
-            if(ingreso)
-                kardex.setStock(kardex.getStock()+cantidad );
-            else
-                kardex.setStock(kardex.getStock()-cantidad );
-            
-            //Crear el registro del kardex detalle 
-            KardexDetalle kardexDetalle=new KardexDetalle();
-            
-            //Agregar o descontar el stock cuando se ingrese o salga mercaderia
-            if(ingreso)
-                kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.ENSAMBLE_INGRESO.getCodigo());
-            else
-                kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.ENSAMBLE_EGRESO.getCodigo());
-                
-            kardexDetalle.setCantidad(cantidad);
-            kardexDetalle.setPrecioTotal(costoIndividualEnsamble.multiply(new BigDecimal(cantidad.toString())));
-            kardexDetalle.setPrecioUnitario(costoIndividualEnsamble);
-            kardexDetalle.setReferenciaDocumentoId(null);
-            
-            kardex.addDetalleKardex(kardexDetalle);
-            entityManager.merge(kardex);
-            
-            et.commit();
-        }catch(Exception e)
-        {
-            e.printStackTrace();
-            et.rollback();
-            throw  new ServicioCodefacException("Error al grabar el inventario");     
-            
-        }
+        });
+        
+        
     }
     
     public void ingresarInventario(KardexDetalle detalle) throws java.rmi.RemoteException,ServicioCodefacException
@@ -245,8 +232,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 
                 
                 //===========> Recalcular los totales de los nuevos kardex <=============//
-                recalcularKardex(kardexOrigen, kardexDetalleOrigen);
-                recalcularKardex(kardexDestino, kardexDetalleDestino);
+                recalcularValoresKardex(kardexOrigen, kardexDetalleOrigen);
+                recalcularValoresKardex(kardexDestino, kardexDetalleDestino);
                 entityManager.merge(kardexOrigen);
                 entityManager.merge(kardexDestino);
                 
@@ -263,12 +250,71 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         });
     }
     
-    private void recalcularKardex(Kardex kardex,KardexDetalle kardexDetalle)
+    /**
+     * Metodo que mer permite calcular el stock , los precios promedios y demas valores 
+     * @param kardex
+     * @param kardexDetalle 
+     */
+    private void recalcularValoresKardex(Kardex kardex,KardexDetalle kardexDetalle)
     {
-        Integer signo=kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero();
-        kardex.setStock(kardex.getStock()+(signo*kardexDetalle.getCantidad()));
-        //Todo: No calculo los costos porque se supone que para estos documentos no debe variar el costo del producto 
+
+        BigDecimal costoPonderado=kardex.getPrecioPromedio(); 
         
+        //Si el movimiento del kardex detalle esta clasificado como que afecta a el inventario entonces hago el resto de calculos
+        if(kardexDetalle.getCodigoTipoDocumentoEnum().getAfectaCostoInventario())
+        {
+            //Almacena el ultimo valor del costo del producto
+            kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+            
+            //Calcular el precio promedio con respecto al nuevo valor
+            costoPonderado=calcularPrecioPonderado(kardex,kardexDetalle);
+            kardex.setPrecioPromedio(costoPonderado);            
+            
+            
+        }
+        
+        
+        kardex.setPrecioUltimo(kardex.getPrecioPromedio());
+        //CALCULAR EL PRECIO
+        kardex.calcularPrecioTotal();
+        
+    }
+    
+    /**
+     * Formula general para calcular el precio ponderado del producto
+     * @param kardex
+     * @param kardexDetalle
+     * @return 
+     */
+    private BigDecimal calcularPrecioPonderado(Kardex kardex,KardexDetalle kardexDetalle)
+    {
+        /**
+         * =================> VALIDACIONES PARA EVITAR ERROES <===============
+         */
+        //S no existe stock no se hace el calculo del precio promedio porque eso solo va a generar errores
+         if(kardex.getStock()<=0)
+         {
+             return kardex.getPrecioPromedio(); 
+         }
+        
+        /**
+         * =================> PROCESOS DE CALCULO DEL STOCK <=================
+         * Para calculoar el stock se utiliza la siguiente formular
+         * costo=(stock*costoActual)*(cantidad*precioUnit)/(stock+cantidad)
+         */
+        Integer stock=kardex.getStock();
+        BigDecimal costoPonderado=kardex.getPrecioPromedio();
+        
+        Integer cantidadUnitaria=kardexDetalle.getCantidad();
+        BigDecimal precioUnitario=kardexDetalle.getPrecioUnitario();
+        
+        //Primero calculo el numerador 
+        BigDecimal resultadoCosto= costoPonderado.multiply(new BigDecimal(stock)).add(precioUnitario.multiply(new BigDecimal(cantidadUnitaria)));
+        BigDecimal cantidadTotal=new BigDecimal(stock+cantidadUnitaria);
+        //Calculo el denominador que es dividir para el total de productos
+        resultadoCosto=resultadoCosto.divide(cantidadTotal,4,RoundingMode.HALF_UP); //Por defecto dejo 4 decimales porque puede ser que para productos de centavos el calculo sea muy impresiso
+        
+        return resultadoCosto;
     }
     
     private  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,Integer cantidad)
@@ -366,6 +412,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
 
         }
     }
+    
     
     /**
      * TODO: Ver si no voy a usar este metodo borrar
