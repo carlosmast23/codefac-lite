@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.nocallback;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.comprobantes.ComprobanteRespuestaNoCallBack;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -13,6 +15,7 @@ import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -30,137 +33,28 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class FacturaRespuestaNoCallBack implements Runnable{
-
-    private static final Logger LOG = Logger.getLogger(FacturaRespuestaNoCallBack.class.getName());
-    
-    
-    //Esta variable identifica cuanto tiempo esperar la autorizacion del documento expresado en segundos
-    private static final Integer TIEMPO_ESPERA=10;
-    
+public class FacturaRespuestaNoCallBack extends ComprobanteRespuestaNoCallBack
+{
     private FacturacionModel facturacionModel;
-    private Factura factura;
-    private MonitorComprobanteData monitorData;
 
-    public FacturaRespuestaNoCallBack(FacturacionModel facturacionModel, Factura factura) {
-        this.facturacionModel = facturacionModel;
-        this.factura = factura;
-    }
-
-    /**
-     * Metodo prinicipal que se encarga de revisar 
-     */
-    public void iniciar()
-    {
-        new Thread(this).start();
+    public FacturaRespuestaNoCallBack(Factura factura, FacturacionModel panel) {
+        super(factura, panel);
+        this.facturacionModel=panel;
     }
     
+
     @Override
-    public void run() {
-        
-        LOG.log(Level.INFO,"Iniciado nocallback :"+factura.getPreimpreso());
-        iniciado(); //Estado inicial que esta procesando la factura
-        for (int i = 0; i < TIEMPO_ESPERA; i++) 
-        {            
-            try {
-                Thread.sleep(2000);
-                this.factura = ServiceFactory.getFactory().getFacturacionServiceIf().buscarPorId(factura.getId());
-
-                if (factura.getFechaAutorizacionSri() != null) {
-                    terminado();
-                    LOG.log(Level.INFO,"Factura Autorizada :"+factura.getPreimpreso());
-                    return;
-                } else if (factura.getClaveAcceso() != null) {
-                    generadoRide();
-                    LOG.log(Level.INFO,"Factura generado Ride :"+factura.getPreimpreso());
-                }
-
-            } catch (InterruptedException ex) {
-                Logger.getLogger(FacturaRespuestaNoCallBack.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (RemoteException ex) {
-                Logger.getLogger(FacturaRespuestaNoCallBack.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        LOG.log(Level.INFO,"Tiempo de espera superado para factura :"+factura.getPreimpreso());
-        
-        
+    public void imprimirComprobante() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    private void iniciado() {
-        monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
-        monitorData.getLblPreimpreso().setText(factura.getPreimpreso() + " ");
-        monitorData.getBtnAbrir().setEnabled(false);
-        monitorData.getBtnReporte().setEnabled(false);
-        monitorData.getBtnCerrar().setEnabled(false);
-        monitorData.getBarraProgreso().setString(factura.getPreimpreso());
-        monitorData.getBarraProgreso().setStringPainted(true);
-        MonitorComprobanteModel.getInstance().mostrar();
-    }
-    
-    private void generadoRide()
-    {
-        monitorData.getBarraProgreso().setForeground(Color.YELLOW);
-        monitorData.getBarraProgreso().setValue(75);
         
-        monitorData.getBtnAbrir().setEnabled(true);
-            monitorData.getBtnAbrir().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if(verificarImprimirComprobanteVenta())
-                    {
-                        facturacionModel.imprimirComprobanteVenta(factura);
-                        //imprimirComprobanteVenta();
-                    }
-                    else
-                    {
-                        ClaveAcceso claveAcceso=new ClaveAcceso(factura.getClaveAcceso());
-                        generarReportePdf(claveAcceso.clave);
-                    }
-                }
-            });
-        
-    }
-    
-    private void terminado()
-    {
-        try {
-            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura.getClaveAcceso());
-            JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
-            monitorData.getBarraProgreso().setForeground(Color.GREEN);            
-            monitorData.getBarraProgreso().setValue(100);
-            monitorData.getBtnCerrar().setEnabled(true);
-            
-            monitorData.getBtnAbrir().setEnabled(true);
-            monitorData.getBtnAbrir().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if(verificarImprimirComprobanteVenta())
-                    {
-                        facturacionModel.imprimirComprobanteVenta(factura);
-                        //imprimirComprobanteVenta();
-                    }
-                    else
-                    {
-                        ClaveAcceso claveAcceso=new ClaveAcceso(factura.getClaveAcceso());
-                        generarReportePdf(claveAcceso.clave);
-                    }
-                }
-            });
-                       
-            
-        } catch (IOException ex) {
-            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-    }
-    
     private void generarReportePdf(String clave) {
         try {
             
             if(verificarImprimirComprobanteVenta())
             {
-                facturacionModel.imprimirComprobanteVenta(factura); //TODO:Verificar si este metodo no funciona
+                facturacionModel.imprimirComprobanteVenta((Factura) comprobante); //TODO:Verificar si este metodo no funciona
             }
             else
             {            
@@ -193,6 +87,5 @@ public class FacturaRespuestaNoCallBack implements Runnable{
         }
         return true;
     }
-    
-    
+
 }

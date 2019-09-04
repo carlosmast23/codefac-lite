@@ -200,9 +200,9 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jPanel1.add(btnBuscarProducto, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         jPanel1.add(cmbTipoDocumento, gridBagConstraints);
 

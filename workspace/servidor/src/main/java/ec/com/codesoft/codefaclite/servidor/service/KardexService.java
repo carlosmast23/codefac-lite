@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.KardexFacade;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.ObtenerFecha;
@@ -171,6 +172,120 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 grabarKardexDetallSinTransaccion(detalle);
             }
         });
+    }
+    
+    public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,Integer cantidad,BigDecimal precio,Date fechaTransaccion) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                ///========> Validaciones basicas de los datos ingresados <=========================//
+                if(cantidad<=0)
+                {
+                    throw new ServicioCodefacException("Solo se puede hacer transferencias de cantidades positivas");
+                }
+                
+                if(bodegaOrigen.equals(bodegaDestino))
+                {
+                    throw new ServicioCodefacException("No se puede hacer una transferencia a la misma bodega");
+                }
+                
+                
+                
+                Empresa empresa=producto.getEmpresa();
+                //==========> Buscar Primero para ver si existe el kardex del producto y la bodega <==========//
+                List<Kardex> kardexResultado=buscarPorProductoYBodega(producto, bodegaOrigen);
+                if(kardexResultado==null || kardexResultado.size()==0)
+                {
+                    throw new ServicioCodefacException("No existe un kardex para el producto en la bodega");
+                }
+                
+                //==============> Verificar si tiene la cantidad disponible para transferir <============//
+                Kardex kardexOrigen=kardexResultado.get(0);
+                if(cantidad>kardexOrigen.getStock())
+                {
+                    throw new ServicioCodefacException("Cantidad insuficiente para hacer la transferencia");
+                }
+                
+                
+                //=============> Obtener el Kardex del producto de destino o crearlo <==================//
+                kardexResultado=buscarPorProductoYBodega(producto, bodegaDestino);
+                Kardex kardexDestino=null; //Referencia para guardar el kardex de destino
+                if(kardexResultado==null || kardexResultado.size()==0)
+                {
+                    //Si no existe el kardex de destino creo uno similar con los datos del otro Kardex
+                    kardexDestino=crearObjeto(bodegaDestino,producto);
+                    entityManager.persist(kardexDestino);
+                    
+                }
+                else//Si existe el kardex solo lo cargo
+                {
+                    kardexDestino=kardexResultado.get(0);
+                }
+                
+                
+                //===========> Crear los detalles de los kardex para hacer los movimientos <===============//
+                KardexDetalle kardexDetalleOrigen=crearKardexDetalleSinPersistencia(
+                        kardexOrigen, 
+                        TipoDocumentoEnum.TRANSFERENCIA_MERCADERIA_ORIGEN, 
+                        precio, 
+                        cantidad);
+                
+                KardexDetalle kardexDetalleDestino=crearKardexDetalleSinPersistencia(
+                        kardexDestino, 
+                        TipoDocumentoEnum.TRANSFERENCIA_MERCADERIA_DESTINO, 
+                        precio, 
+                        cantidad);
+                
+                entityManager.persist(kardexDetalleOrigen);
+                entityManager.persist(kardexDetalleDestino);
+                
+                kardexOrigen.addDetalleKardex(kardexDetalleOrigen);
+                kardexDestino.addDetalleKardex(kardexDetalleDestino);                
+                
+                
+                //===========> Recalcular los totales de los nuevos kardex <=============//
+                recalcularKardex(kardexOrigen, kardexDetalleOrigen);
+                recalcularKardex(kardexDestino, kardexDetalleDestino);
+                entityManager.merge(kardexOrigen);
+                entityManager.merge(kardexDestino);
+                
+
+                
+                //===========> Guardar las referencias de los otros kardex detalle para algun reporte <=========//
+                kardexDetalleDestino.setReferenciaDocumentoId(kardexDetalleOrigen.getId());
+                kardexDetalleOrigen.setReferenciaDocumentoId(kardexDetalleDestino.getId());
+                entityManager.merge(kardexDetalleDestino);
+                entityManager.merge(kardexDetalleOrigen);
+                
+                
+            }
+        });
+    }
+    
+    private void recalcularKardex(Kardex kardex,KardexDetalle kardexDetalle)
+    {
+        Integer signo=kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero();
+        kardex.setStock(kardex.getStock()+(signo*kardexDetalle.getCantidad()));
+        //Todo: No calculo los costos porque se supone que para estos documentos no debe variar el costo del producto 
+        
+    }
+    
+    private  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,Integer cantidad)
+    {
+        KardexDetalle movimientoOrigen = new KardexDetalle();
+        BigDecimal total=precioUnitario.multiply(new BigDecimal(cantidad.toString()));
+        movimientoOrigen.setCantidad(cantidad);
+        movimientoOrigen.setCodigoTipoDocumentoEnum(tipoDocumentoEnum);
+        movimientoOrigen.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        movimientoOrigen.setFechaIngreso(UtilidadesFecha.getFechaHoy());
+        movimientoOrigen.setKardex(kardex);
+        //movimientoOrigen.setNombreLegal("");
+        movimientoOrigen.setPrecioTotal(total);
+        movimientoOrigen.setPrecioUnitario(precioUnitario);
+        //movimientoOrigen.setPuntoEmision("");
+        movimientoOrigen.setReferenciaDocumentoId(null);
+        return movimientoOrigen;
     }
     
     public void ingresarInventario(List<KardexDetalle> detalles) throws java.rmi.RemoteException,ServicioCodefacException

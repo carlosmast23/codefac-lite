@@ -165,11 +165,13 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     }
     
     @Override
-    public Persona buscarPorRazonSocial(String nombre,Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
+    public Persona buscarConsumidorFinal(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
     {
         PersonaServiceIf cliente = ServiceFactory.getFactory().getPersonaServiceIf();
         Map<String, Object> clienteMap = new HashMap<String, Object>();
-        clienteMap.put("razonSocial", "Consumidor Final");
+        //Persona p;
+        //p.getIdentificacion();
+        clienteMap.put("identificacion",Persona.IDENTIFICACION_CONSUMIDOR_FINAL);
         clienteMap.put("empresa",empresa);
         clienteMap.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
         List<Persona> resultados= getFacade().findByMap(clienteMap);

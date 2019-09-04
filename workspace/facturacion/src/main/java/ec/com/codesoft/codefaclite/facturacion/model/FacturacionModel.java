@@ -1076,7 +1076,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         
                         if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
                         {
-                            FacturaRespuestaNoCallBack respuestaNoCallBack=new  FacturaRespuestaNoCallBack(this,factura);
+                            FacturaRespuestaNoCallBack respuestaNoCallBack=new  FacturaRespuestaNoCallBack(factura,this);
                             respuestaNoCallBack.iniciar();
                         }
                         

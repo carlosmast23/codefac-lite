@@ -98,6 +98,11 @@ public enum TipoDocumentoEnum {
             "Ingreso Manual",
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
     
+    TRANSFERENCIA_MERCADERIA_DESTINO(ModuloCodefacEnum.INVENTARIO,
+            "TMD",
+            "Transferencia mercaderia destino",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+    
     STOCK_INICIAL(ModuloCodefacEnum.INVENTARIO,
             "STI",
             "Ingreso Stock inicial",
@@ -126,6 +131,11 @@ public enum TipoDocumentoEnum {
     QUITAR_MERCADERIA_MANUAL(ModuloCodefacEnum.INVENTARIO,
             "QMM",
             "Eliminar Manual",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO),
+    
+    TRANSFERENCIA_MERCADERIA_ORIGEN(ModuloCodefacEnum.INVENTARIO,
+            "TMO",
+            "Transferencia mercaderia origen",
             TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO),
     
     
@@ -203,7 +213,10 @@ public enum TipoDocumentoEnum {
         return signoInventario;
     }
     
-    
+    public Integer getSignoInventarioNumero()
+    {
+        return (signoInventario.equals("+"))?1:-1;
+    }
     
     
     

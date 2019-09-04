@@ -20,11 +20,14 @@ import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosCompro
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaNotaCredito;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.NotaCreditoBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteNotaCreditoImplComprobante;
+import ec.com.codesoft.codefaclite.facturacion.nocallback.FacturaRespuestaNoCallBack;
+import ec.com.codesoft.codefaclite.facturacion.nocallback.NotaCreditoNoCallBack;
 import ec.com.codesoft.codefaclite.facturacion.panel.NotaCreditoPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -249,10 +252,22 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             ComprobanteDataNotaCredito comprobanteData=new ComprobanteDataNotaCredito(notaCredito);
 
             comprobanteData.setMapInfoAdicional(getMapAdicional(notaCredito));
-             
+            
+                        
             ClienteInterfaceComprobante cic=new ClienteNotaCreditoImplComprobante(this, notaCreditoGrabada);
+            
+            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+                cic = null;
+            }
+            
             ComprobanteServiceIf comprobanteServiceIf=ServiceFactory.getFactory().getComprobanteServiceIf();
-            comprobanteServiceIf.procesarComprobante(comprobanteData,notaCredito,session.getUsuario(),cic);        
+            comprobanteServiceIf.procesarComprobante(comprobanteData,notaCredito,session.getUsuario(),cic);    
+            
+            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) 
+            {
+                NotaCreditoNoCallBack respuestaNoCallBack = new NotaCreditoNoCallBack(notaCredito,this);
+                respuestaNoCallBack.iniciar();
+            }
             
 
         } catch (ServicioCodefacException ex) {

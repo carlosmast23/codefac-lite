@@ -20,3 +20,5 @@ Ver como solucionar el problema que cuando no se actualizan los cambios el siste
 - Al momento de editar un cliente si esta una razon social distinta de la genera no la edito
 - Hacer un nuevo web service para recibir estadisticas de cada cliente por ejemplo la cantidad de facturas , notas de credito, guias de remision , retenciones y comprobantes pendientes de enviar para llevar un contro interno
 - Revisar que a largo plazo las relaciones de los productos con categoria deberian ser directas porque no dependen de nada de los impuestos (categoria_producto)
+- En los metodos de callback y no callback buscar una forma de unicar la logica de generar los reportes
+- En las clases de callback ver como unir la logica porque para todos las pantallas es muy similar

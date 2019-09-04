@@ -1,0 +1,3 @@
+Terminar de programar esa pantalla
+ - Al final de facturar que se limpie las factuas
+ - Probar con inventario

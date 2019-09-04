@@ -292,6 +292,15 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setManejarInventario(String manejarInventario) {
         this.manejarInventario = manejarInventario;
     }
+    
+    public EnumSiNo getManejarInventarioEnum() {
+        return EnumSiNo.getEnumByLetra(manejarInventario);
+    }
+
+    public void setManejarInventarioEnum(EnumSiNo manejarInventarioEnum) {
+        this.manejarInventario = manejarInventarioEnum.getLetra();
+    }
+    
 
     public String getGenerarCodigoBarras() {
         return generarCodigoBarras;
@@ -378,10 +387,10 @@ public class Producto implements Serializable, Comparable<Producto> {
         return EnumSiNo.getEnumByLetra(garantia);
     }
     
-    public EnumSiNo getManejarInventarioEnum()
+    /*public EnumSiNo getManejarInventarioEnum()
     {
         return EnumSiNo.getEnumByLetra(manejarInventario);
-    }
+    }*/
 
     /**
      * Agregar producto al ensamble

@@ -119,6 +119,15 @@ public class KardexDetalle implements Serializable ,Cloneable {
     public void setCodigoTipoDocumento(String codigoTipoDocumento) {
         this.codigoTipoDocumento = codigoTipoDocumento;
     }
+    
+    
+    public TipoDocumentoEnum getCodigoTipoDocumentoEnum() {
+        return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(codigoTipoDocumento);
+    }
+
+    public void setCodigoTipoDocumentoEnum(TipoDocumentoEnum codigoTipoDocumentoEnum) {
+        this.codigoTipoDocumento = codigoTipoDocumentoEnum.getCodigo();
+    }
 
     public Integer getCantidad() {
         return cantidad;
@@ -260,10 +269,6 @@ public class KardexDetalle implements Serializable ,Cloneable {
     }
     
     
-    public TipoDocumentoEnum getCodigoTipoDocumentoEnum()
-    {
-        return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(codigoTipoDocumento);
-    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {

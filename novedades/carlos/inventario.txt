@@ -3,3 +3,5 @@ que te salga el ultimo precio de compra en la misma pantalla
 ver que pasa cuando anulo una compra con el inventario
 ver que pasa cuando edito una compra si ya esta ingresado en inventario debe generar problemas
 ver esos valores de los totales del kardex no tiene sentido llevar esa sumatorio porque no aporta nada
+para el traspaso de mercaderia crear una entidad en la base de datos que agrupe los datos involucrados para llevar un mejor control
+en la transferencia de bodega toca agregar el destino para saber de donde viene

@@ -78,26 +78,58 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         return panel;
     }
     
+    /**
+     * TODO: Ver si se une esta funcion con la logica de la factura
+     * @param manejaInventario 
+     */
+    private void agregarProducto(EnumSiNo manejaInventario)
+    {
+        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,empresa);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
+        productoSeleccionado.setManejarInventarioEnum(manejaInventario);
+        banderaProducto = true;
+
+        if (productoSeleccionado == null) {
+            return;
+        }
+
+        setearValoresProducto();
+    }
+    
     private void agregarListenerBotones() {
         
         getBtnBuscarProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(empresa);
-                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
-                buscarDialogoModel.setVisible(true);
-                productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
-                banderaProducto = true;
                 
-                if (productoSeleccionado == null) {
-                    return;
-                }
+                TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
                 
-                setearValoresProducto();
+                switch(tipoDocumentoEnum)
+                {
+                    case ACADEMICO:
+                        //TODO: Falta implementar
+                        break;
+                    case PRESUPUESTOS:
+                        //TODO: Falta implementar
+                        break;
+                    case INVENTARIO: 
+                        agregarProducto(EnumSiNo.SI);
+                        break;
+                    case LIBRE:
+                        agregarProducto(EnumSiNo.NO);
+                        break;
+                
+                } 
+                
+               
             }
         });
         
         getBtnAgregarProducto().addActionListener(new ActionListener() {
+            
+            
             @Override
             public void actionPerformed(ActionEvent e) {
                     if(banderaProducto){
@@ -239,6 +271,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             switch (tipoDocumentoEnum) 
             {
                 case INVENTARIO: 
+                    
                 case LIBRE:
                     facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
                     catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
@@ -261,7 +294,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             //Calular el total despues del descuento porque necesito ese valor para grabar
             BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
             facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
-            
+            facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
             if (catalogoProducto.getIva().getTarifa().equals(0)) {
                     facturaDetalle.setIva(BigDecimal.ZERO);
                 } else {
@@ -321,7 +354,16 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             PersonaServiceIf cliente = ServiceFactory.getFactory().getPersonaServiceIf();
             //Map<String,Object> clienteMap = new HashMap<String, Object>();
             //clienteMap.put("razonSocial", "Consumidor Final");
-            this.factura.setCliente(cliente.buscarPorRazonSocial("Consumidor Final",empresa));
+            //this.factura.setCliente(cliente.buscarPorRazonSocial("Consumidor Final",empresa));
+            Persona persona=cliente.buscarConsumidorFinal(empresa);
+            if(persona==null)
+            {
+                DialogoCodefac.mensaje("Advertencia","No existe creado un consumidor final para facturar",DialogoCodefac.MENSAJE_INCORRECTO);
+            }
+            
+            this.factura.setCliente(persona);
+            this.factura.setSucursal(persona.getEstablecimientos().get(0));//Se refiere a la sucursal del cliente
+            
         } catch (RemoteException ex) {
             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {

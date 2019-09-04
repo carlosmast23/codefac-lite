@@ -351,7 +351,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         facturaDetalle.setDescripcion(productoSeleccionado.getNombre());
         facturaDetalle.setPrecioUnitario(productoSeleccionado.getValorUnitario());   
         facturaDetalle.setDescuento(BigDecimal.ZERO); 
-        facturaDetalle.setIvaPorcentaje(sessionMb.getSession().obtenerIvaActual().intValue());     
+        facturaDetalle.setIvaPorcentaje(sessionMb.getSession().obtenerIvaActual().intValue()); //TODO: Revisar este valor porque parece que esta mal seteado y se refiere al iva del producto      
 
         facturaDetalle.setTipoDocumentoEnum(TipoDocumentoEnum.LIBRE);//TODO: Por el momento solo dejo como documento por defecto libre
         facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());

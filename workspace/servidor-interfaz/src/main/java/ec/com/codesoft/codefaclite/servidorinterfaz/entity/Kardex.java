@@ -29,7 +29,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "KARDEX")
-public class Kardex implements Serializable {
+public class Kardex implements Serializable,Cloneable {
     
     @Id
     @Column(name = "ID")
@@ -182,6 +182,11 @@ public class Kardex implements Serializable {
     public BigDecimal calcularPrecioPromedio()
     {
         return this.precioTotal.divide(new BigDecimal(this.stock),2,BigDecimal.ROUND_HALF_UP);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
 
     
