@@ -68,15 +68,15 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
                             
             case NOTA_CREDITO:
                 NotaCredito notaCredito=(NotaCredito) comprobante;
-                return ServiceFactory.getFactory().getNotaCreditoServiceIf().buscarPorId(notaCredito);
+                return ServiceFactory.getFactory().getNotaCreditoServiceIf().buscarPorId(notaCredito.getId());
             
             case GUIA_REMISION:
                 GuiaRemision guiaRemision=(GuiaRemision)comprobante;
-                return ServiceFactory.getFactory().getGuiaRemisionServiceIf().buscarPorId(guiaRemision);
+                return ServiceFactory.getFactory().getGuiaRemisionServiceIf().buscarPorId(guiaRemision.getId());
             
             case RETENCIONES:
                 Retencion retencion=(Retencion) comprobante;
-                return ServiceFactory.getFactory().getRetencionServiceIf().buscarPorId(retencion);            
+                return ServiceFactory.getFactory().getRetencionServiceIf().buscarPorId(retencion.getId());            
              
         }
         return null;

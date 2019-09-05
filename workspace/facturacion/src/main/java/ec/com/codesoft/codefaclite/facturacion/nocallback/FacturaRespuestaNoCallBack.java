@@ -45,7 +45,7 @@ public class FacturaRespuestaNoCallBack extends ComprobanteRespuestaNoCallBack
 
     @Override
     public void imprimirComprobante() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        generarReportePdf(comprobante.getClaveAcceso());
     }
     
         
