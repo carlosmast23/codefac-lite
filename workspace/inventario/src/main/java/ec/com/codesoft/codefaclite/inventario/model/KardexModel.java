@@ -319,7 +319,7 @@ public class KardexModel extends KardexPanel {
 
     }
     
-    private KardexData calcularSaldoFila(KardexDetalle kardexDetalle,TotalesAcumulado totalesAcumulado)
+    /*private KardexData calcularSaldoFila(KardexDetalle kardexDetalle,TotalesAcumulado totalesAcumulado)
     {
         Integer cantidadAcumulada = totalesAcumulado.cantidadAcumulada;
         BigDecimal precioUnitarioPromedio = totalesAcumulado.precioUnitarioPromedio;
@@ -383,7 +383,7 @@ public class KardexModel extends KardexPanel {
 
         
         return kardexData;
-    }
+    }*/
 
     private void construirModeloTabla() {
         String[] titulo = {"#", "Fecha", "Documento", "Preimpreso", "Proveedor", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total"};
