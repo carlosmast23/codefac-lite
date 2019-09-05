@@ -127,7 +127,7 @@ public enum TipoDocumentoEnum {
             "STI",
             "Ingreso Stock inicial",
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO,
-            false),
+            true),
     
     SALDO_ANTERIOR(ModuloCodefacEnum.INVENTARIO,
             "SAA",

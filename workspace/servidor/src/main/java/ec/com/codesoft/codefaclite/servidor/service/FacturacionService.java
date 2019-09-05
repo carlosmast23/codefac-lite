@@ -285,20 +285,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             //{
             //TODO: Analizar caso cuando se resta un producto especifico
             //Kardex kardex = kardexs.get(0);
-            KardexDetalle kardexDetalle = new KardexDetalle();
-            kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-            kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
-            kardexDetalle.setCantidad(detalle.getCantidad().intValue());
-            kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.VENTA_INVENTARIO.getCodigo());
-            kardexDetalle.setPrecioTotal(detalle.getTotal());
-            kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
+
+            KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO,detalle.getPrecioUnitario(),detalle.getCantidad().intValue());;
+            //Agregando datos adicionales del movimiento en la factura
             kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
             kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision());
             kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento());
             kardexDetalle.setSecuencial(detalle.getFactura().getSecuencial());
 
             //Actualizar los valores del kardex
-            kardex.setStock(kardex.getStock() - kardexDetalle.getCantidad());
+            kardexService.recalcularValoresKardex(kardex, kardexDetalle);
+            //kardex.setStock(kardex.getStock() - kardexDetalle.getCantidad());
             //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
             //kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(kardexDetalle.getPrecioTotal()));
             //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());

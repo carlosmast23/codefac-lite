@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.sql.Date;
@@ -36,5 +37,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public List<Object[]> consultarStock(Bodega bodega) throws java.rmi.RemoteException;
     public List<Kardex> buscarPorProductoYBodega(Producto producto,Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException;
     public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,Integer cantidad,BigDecimal precio,Date fechaTransaccion) throws java.rmi.RemoteException,ServicioCodefacException;
+    public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,Integer cantidad) throws java.rmi.RemoteException,ServicioCodefacException;
+    public void recalcularValoresKardex(Kardex kardex,KardexDetalle kardexDetalle) throws java.rmi.RemoteException,ServicioCodefacException;
     
 }

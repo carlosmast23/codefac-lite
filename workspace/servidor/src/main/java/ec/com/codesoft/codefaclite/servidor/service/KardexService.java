@@ -255,7 +255,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * @param kardex
      * @param kardexDetalle 
      */
-    private void recalcularValoresKardex(Kardex kardex,KardexDetalle kardexDetalle)
+    public void recalcularValoresKardex(Kardex kardex,KardexDetalle kardexDetalle) throws java.rmi.RemoteException,ServicioCodefacException
     {
 
         BigDecimal costoPonderado=kardex.getPrecioPromedio(); 
@@ -263,20 +263,22 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         //Si el movimiento del kardex detalle esta clasificado como que afecta a el inventario entonces hago el resto de calculos
         if(kardexDetalle.getCodigoTipoDocumentoEnum().getAfectaCostoInventario())
         {
-            //Almacena el ultimo valor del costo del producto
+            //ALMACENA EL ULTIMO VALOR INGRESADO SIEMPRE QUE SEA UNA COMPRA
             kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
-            
             //Calcular el precio promedio con respecto al nuevo valor
             costoPonderado=calcularPrecioPonderado(kardex,kardexDetalle);
             kardex.setPrecioPromedio(costoPonderado);            
             
             
         }
+         
+        Integer signo=kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero();
+        Integer stockFinal=kardex.getStock()+signo*kardexDetalle.getCantidad();
+        kardex.setStock(stockFinal);
         
-        
-        kardex.setPrecioUltimo(kardex.getPrecioPromedio());
-        //CALCULAR EL PRECIO
+        //CALCULAR EL PRECIO CON EL STOCK FINAL
         kardex.calcularPrecioTotal();
+        
         
     }
     
@@ -317,7 +319,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return resultadoCosto;
     }
     
-    private  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,Integer cantidad)
+    public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,Integer cantidad) throws java.rmi.RemoteException,ServicioCodefacException
     {
         KardexDetalle movimientoOrigen = new KardexDetalle();
         BigDecimal total=precioUnitario.multiply(new BigDecimal(cantidad.toString()));
@@ -350,7 +352,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     }
     
     
-    public void grabarKardexDetallSinTransaccion(KardexDetalle detalle) throws RemoteException, RemoteException
+    public void grabarKardexDetallSinTransaccion(KardexDetalle detalle) throws RemoteException, ServicioCodefacException
     {
         //Buscar si ya existe el kardex o si no existe los creamos
         Map<String, Object> map = new HashMap<String, Object>();
@@ -385,7 +387,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
 
         //Esto va a depender del tipo de flujo del inventario es decir para saber si la suma o resta pero por defecto
         // el metodo es solo de ingreso asi que no considero el otro caso
-        if(detalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO))
+        /*if(detalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO))
         {
             kardex.setStock(kardex.getStock() + detalle.getCantidad());
             kardex.setPrecioTotal(kardex.getPrecioTotal().add(detalle.getPrecioTotal()));
@@ -396,7 +398,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(detalle.getPrecioTotal()));
         }
         kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(detalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));        
-        kardex.setPrecioUltimo(detalle.getPrecioUnitario()); //Ver si grabar siempre el ultimo valor 
+        kardex.setPrecioUltimo(detalle.getPrecioUnitario()); //Ver si grabar siempre el ultimo valor */
+        recalcularValoresKardex(kardex, detalle); //Actualiza los valores desde un mismo lugar
         kardex = em.merge(kardex);
 
         //Actualizar la compra de referencia para saber que ya fue ingresada
@@ -446,6 +449,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 {
                     //Creando el kardex cuando no existe en la base de datos
                     kardex=new Kardex();
+                    crearObjeto(bodega, value.getProductoProveedor().getProducto());/*
                     kardex.setBodega(bodega);
                     kardex.setFechaCreacion(UtilidadesFecha.getFechaHoy());
                     kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
@@ -454,7 +458,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     kardex.setPrecioUltimo(BigDecimal.ZERO);
                     kardex.setProducto(value.getProductoProveedor().getProducto());
                     kardex.setStock(0);
-                    kardex.setReserva(0);
+                    kardex.setReserva(0);*/
                     em.persist(kardex); //grabando la persistencia
                 }            
                 else
@@ -472,10 +476,11 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
 
                 //Esto va a depender del tipo de flujo del inventario es decir para saber si la suma o resta pero por defecto
                 // el metodo es solo de ingreso asi que no considero el otro caso
-                kardex.setStock(kardex.getStock()+kardexDetalle.getCantidad());
-                kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"),2,RoundingMode.HALF_UP));
-                kardex.setPrecioTotal(kardex.getPrecioTotal().add(kardexDetalle.getPrecioTotal()));
-                kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+                //kardex.setStock(kardex.getStock()+kardexDetalle.getCantidad());
+                //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"),2,RoundingMode.HALF_UP));
+                //kardex.setPrecioTotal(kardex.getPrecioTotal().add(kardexDetalle.getPrecioTotal()));
+                //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+                recalcularValoresKardex(kardex,kardexDetalle);
                 kardex=em.merge(kardex);
             }
             

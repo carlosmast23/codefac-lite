@@ -82,6 +82,9 @@ public class KardexModel extends KardexPanel {
      */
     private List<KardexData> listaKardex;
 
+    
+    private TotalesAcumulado totalesAcumulado;
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         agregarListernerBotones();
@@ -315,6 +318,72 @@ public class KardexModel extends KardexPanel {
         construirModeloTabla();
 
     }
+    
+    private KardexData calcularSaldoFila(KardexDetalle kardexDetalle,TotalesAcumulado totalesAcumulado)
+    {
+        Integer cantidadAcumulada = totalesAcumulado.cantidadAcumulada;
+        BigDecimal precioUnitarioPromedio = totalesAcumulado.precioUnitarioPromedio;
+        BigDecimal precioTotalAcumulado = totalesAcumulado.precioTotalAcumulado;
+        
+        KardexData kardexData = new KardexData();
+        
+         //fila.add(i+""); //numeracion
+            kardexData.setDocumento(kardexDetalle.getCodigoTipoDocumentoEnum().getNombre());
+            //fila.add(kardexDetalle.getCodigoTipoDocumentoEnum().getNombre()); //tipo del documento
+            TipoDocumentoEnum tipoDocumentoEnum = kardexDetalle.getCodigoTipoDocumentoEnum();
+
+            //llenar los datos adionales
+            kardexData.setPreimpreso(kardexDetalle.getPreimpreso());
+
+            kardexData.setProveedor(kardexDetalle.getRazonSocial());
+
+            //Restar o sumar la cantidad segun omo afecte el detalle en los kardex
+            if (!kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.NO_AFECTA_INVETARIO)) {
+                //Cuando el inventario afecta de forma positiva
+                Integer signoAfectaInventario=kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero();
+                
+                
+                if (kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO)) {
+
+                    cantidadAcumulada += kardexDetalle.getCantidad();
+                    precioTotalAcumulado = precioTotalAcumulado.add(kardexDetalle.getPrecioTotal());
+
+                    if (i == 0) //Si es el primer registro el precio es el mismo
+                    {
+                        precioUnitarioPromedio = kardexDetalle.getPrecioUnitario();
+                    } else //Cuando es el segundo registro empiezo a calcular el promedio
+                    {
+                        if(cantidadAcumulada>0)
+                        {
+                            precioUnitarioPromedio = precioTotalAcumulado.divide(new BigDecimal(cantidadAcumulada),2,BigDecimal.ROUND_HALF_UP);
+                        }
+                    }
+
+                    completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado, true);
+                } else //Cuando afecta de forma negativa
+                {
+
+                    cantidadAcumulada -= kardexDetalle.getCantidad();
+                    precioTotalAcumulado = precioTotalAcumulado.subtract(kardexDetalle.getPrecioTotal());
+                    
+                    if (i == 0) //Si es el primer registro el precio es el mismo
+                    {
+                        precioUnitarioPromedio = kardexDetalle.getPrecioUnitario();
+                    } else //Cuando es el segundo registro empiezo a calcular el promedio
+                    {
+                        if(cantidadAcumulada>0)
+                        {
+                            precioUnitarioPromedio = precioTotalAcumulado.divide(new BigDecimal(cantidadAcumulada),2,BigDecimal.ROUND_HALF_UP);
+                        }
+                    }
+                    
+                    completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado, false);
+                }
+            }
+
+        
+        return kardexData;
+    }
 
     private void construirModeloTabla() {
         String[] titulo = {"#", "Fecha", "Documento", "Preimpreso", "Proveedor", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total"};
@@ -462,6 +531,13 @@ public class KardexModel extends KardexPanel {
                 }
             }
         });
+    }
+    
+    public class TotalesAcumulado
+    {
+        public Integer cantidadAcumulada = 0;
+        public BigDecimal precioUnitarioPromedio = BigDecimal.ZERO;
+        public BigDecimal precioTotalAcumulado = BigDecimal.ZERO;
     }
 
 }
