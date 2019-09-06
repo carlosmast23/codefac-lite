@@ -195,7 +195,13 @@ public class ComprobanteElectronicoComponente {
         }
         else
         {
-            cmbPuntoEmision.setSelectedIndex(indiceSeleccionado);
+            System.out.println("Cantidad Items: "+cmbPuntoEmision.getModel().getSize());
+            System.out.println("Item a seleccionar: "+indiceSeleccionado);
+            
+            if(cmbPuntoEmision.getModel().getSize()>0) //Solo seleccionar un indice cuanto tiene contenido
+            {
+                cmbPuntoEmision.setSelectedIndex(indiceSeleccionado);
+            }
         }
         
         

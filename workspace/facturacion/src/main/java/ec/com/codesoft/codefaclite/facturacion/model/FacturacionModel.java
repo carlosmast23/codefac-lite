@@ -976,6 +976,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (!verificarSumaFormaPago()) {
             throw new ExcepcionCodefacLite("Formas de pago erroneas");
         }
+        
+        if(getCmbPuntoEmision().getSelectedItem()==null)
+        {
+            DialogoCodefac.mensaje("Alerta", "No se puede facturar sin un punto de venta configurado", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("No se puede facturar sin un punto de venta configurado");
+        }
 
         if (factura.getCliente() == null) {
             DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -2591,6 +2597,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
        
+    }
+    
+    private void crearClienteFinal()
+    {
+        
     }
 
     private void addListenerCombos() {
