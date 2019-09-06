@@ -359,10 +359,13 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                 entityManager.persist(entity);
                 
                 //Grabar los puntos de emision asigandos al usuario
-                for (PuntoEmisionUsuario puntoEmisionUsuario : entity.getPuntosEmisionUsuario()) {
-                    if(puntoEmisionUsuario.getId()==null)
-                    {
-                        entityManager.persist(puntoEmisionUsuario);
+                if(entity.getPuntosEmisionUsuario()!=null)
+                {
+                    for (PuntoEmisionUsuario puntoEmisionUsuario : entity.getPuntosEmisionUsuario()) {
+                        if(puntoEmisionUsuario.getId()==null)
+                        {
+                            entityManager.persist(puntoEmisionUsuario);
+                        }
                     }
                 }
                 
