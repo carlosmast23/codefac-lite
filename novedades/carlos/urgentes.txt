@@ -54,3 +54,4 @@ Cuando se crea un proveedor en la compra no se esta cargando directo
 Hacer que cuando actualice la licencia ver alguna manera de actualizar la licencia ese momento porque ahorita esta programado para actualizar cada dia
 En los detalles de las notas de credito toca ampliar el espacio en la base de datos porque en las facturas deja grabar mas y cuando traspaso a las notas de credito generar error
 Probar la funcionalidad de cliente final en la factura que no encuentra a pesar que ya esta creado
+Al momento de crear la licencia cuando ya existe una licencia y solo descarga no esta funcionando
