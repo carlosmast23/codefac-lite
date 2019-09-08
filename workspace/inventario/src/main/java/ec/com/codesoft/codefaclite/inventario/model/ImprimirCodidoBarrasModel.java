@@ -156,7 +156,7 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
                     mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
                     mapParametros.put("generarCodigoBarras",EnumSiNo.SI.getLetra());*/
                     
-                    Producto productoBuscar=ServiceFactory.getFactory().getProductoServiceIf().buscarGenerarCodigoBarras(EnumSiNo.SI);
+                    Producto productoBuscar=ServiceFactory.getFactory().getProductoServiceIf().buscarGenerarCodigoBarras(EnumSiNo.SI,session.getEmpresa());
                     if (productoBuscar!=null) {
                         agregarProductoMap(productoBuscar);
                     }

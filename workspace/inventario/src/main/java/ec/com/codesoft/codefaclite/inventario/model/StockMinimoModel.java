@@ -12,17 +12,21 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.inventario.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.data.StockMinimoData;
 import ec.com.codesoft.codefaclite.inventario.panel.StockMinimoPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -37,16 +41,18 @@ import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Carlos
+ * TODO: Analizar la posibilidad de unir con la pantalla de Reporte Stcok porque son demasiadas similar
  */
 public class StockMinimoModel extends StockMinimoPanel{
     
     private List<Object[]> listaStock;
     private List<StockMinimoData> listaData;
-    //private 
-
+    protected CategoriaProducto categoriaProducto;
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         valoresIniciales();
+        listenerCheckBox();
         listenerBotones();
     }
 
@@ -80,7 +86,7 @@ public class StockMinimoModel extends StockMinimoPanel{
                 public void excel() {
                     try{
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Código", "Producto", "Stock", "Cantidad Min"};
+                        String nombreCabeceras[] = {"Código", "Producto","Categoria", "Stock", "Cantidad Min"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras,listaData);
                         excel.abrirDocumento();
                     }
@@ -148,6 +154,9 @@ public class StockMinimoModel extends StockMinimoPanel{
             //for (Bodega bodega : bodegas) {
             //    getCmbBodega().addItem(bodega);                
             //}
+            
+            getChkTodasCategoria().setSelected(true);
+            getBtnBuscarCategoria().setEnabled(false);
         } catch (RemoteException ex) {
             Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
@@ -156,12 +165,23 @@ public class StockMinimoModel extends StockMinimoPanel{
     }
 
     private void listenerBotones() {
+         getBtnBuscarCategoria().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CategoriaProductoBusquedaDialogo catProdBusquedaDialogo = new CategoriaProductoBusquedaDialogo(session.getEmpresa());
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(catProdBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                categoriaProducto = (CategoriaProducto) buscarDialogoModel.getResultado();
+                cargarCategoriaPantalla();
+            }
+        });
+        
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     Bodega bodegaSeleccionada=(Bodega) getCmbBodega().getSelectedItem();
-                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStockMinimo(bodegaSeleccionada);
+                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStockMinimo(bodegaSeleccionada,categoriaProducto);
                     listaData=new ArrayList<StockMinimoData>();
                     
                      for (Object[] objeto : listaStock) 
@@ -174,6 +194,7 @@ public class StockMinimoModel extends StockMinimoPanel{
                         data.setCodigo(producto.getCodigoPersonalizado().toString());
                         data.setProducto(producto.getNombre());
                         data.setStock(cantidad.toString());
+                        data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto()!=null)?producto.getCatalogoProducto().getCategoriaProducto().getNombre():"");
                         data.setCantidadMinima(producto.getCantidadMinima().toString());
                         
                         listaData.add(data);
@@ -190,11 +211,40 @@ public class StockMinimoModel extends StockMinimoPanel{
         });
     }
     
+    private void listenerCheckBox() {
+        getChkTodasCategoria().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//accion cuando se selecciona todos
+                    categoriaProducto = null;
+                    cargarCategoriaPantalla();
+                    getBtnBuscarCategoria().setEnabled(false);
+                } else {
+                    getBtnBuscarCategoria().setEnabled(true);
+                }
+            }
+        });
+    
+    }
+    
+    private void cargarCategoriaPantalla()
+    {
+        if(categoriaProducto!=null)
+        {
+            getTxtCategoria().setText(categoriaProducto.getDescripcion());
+        }
+        else
+        {
+            getTxtCategoria().setText("");
+        }
+    }
+    
     private void construirTabla()
     {
         String[] titulo={
             "Código",
             "Producto",
+            "Categoria",
             "Stock",
             "Cantidad Minima"
         };
@@ -206,6 +256,7 @@ public class StockMinimoModel extends StockMinimoPanel{
             {
                 stockMinimo.getCodigo(),
                 stockMinimo.getProducto(),
+                stockMinimo.getCategoria(),
                 stockMinimo.getStock(),
                 stockMinimo.getCantidadMinima(),
                 

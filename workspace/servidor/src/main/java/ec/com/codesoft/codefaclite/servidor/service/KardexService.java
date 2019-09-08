@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.KardexFacade;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
@@ -612,14 +613,14 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return datosConsulta;
     }
     
-    public List<Object[]> consultarStockMinimo(Bodega bodega) throws java.rmi.RemoteException
+    public List<Object[]> consultarStockMinimo(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException
     {
-        return getFacade().consultarStockMinimoFacade(bodega);
+        return getFacade().consultarStockMinimoFacade(bodega,categoria);
     }
     
-    public List<Object[]> consultarStock(Bodega bodega) throws java.rmi.RemoteException
+    public List<Object[]> consultarStock(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException
     {
-        return getFacade().consultarStockFacade(bodega);
+        return getFacade().consultarStockFacade(bodega,categoria);
     }
 
     public List<Kardex> buscarPorProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException
@@ -655,6 +656,20 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         kardex.setStock(0);
         return kardex;
         
+    }
+
+    @Override
+    public List<Kardex> buscarPorBodega(Bodega bodega) throws RemoteException, ServicioCodefacException {
+        return (List<Kardex>)ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                //Kardex k;
+                //        k.get
+                Map<String,Object> mapParametros=new HashMap<String,Object>();
+                mapParametros.put("bodega",bodega);
+                return getFacade().findByMap(mapParametros);
+            }
+        });
     }
     
 }

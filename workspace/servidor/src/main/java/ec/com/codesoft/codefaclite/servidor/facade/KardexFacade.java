@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
@@ -86,7 +87,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
     }
 
-    public List<Object[]> consultarStockMinimoFacade(Bodega bodega) throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockMinimoFacade(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException {
 
         String whereBodega="";
         if(bodega!=null)
@@ -94,12 +95,23 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             whereBodega=" and k.bodega=?1 ";
         }
         
-        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 "+whereBodega+" group by k.producto having max(k.stock)<=k.producto.cantidadMinima  ";
+        String whereCategoria="";
+        if(categoria!=null)
+        {
+            whereCategoria=" and k.producto.catalogoProducto.categoriaProducto=?2 ";
+        }
+        
+        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 "+whereBodega+whereCategoria+" group by k.producto having max(k.stock)<=k.producto.cantidadMinima  ";
         Query query = getEntityManager().createQuery(queryString);
         
         if(bodega!=null)
         {
             query.setParameter(1,bodega);
+        }
+        
+        if(categoria!=null)
+        {
+            query.setParameter(2,categoria);
         }
         //query.setParameter(1,producto);
         return query.getResultList();
@@ -112,22 +124,36 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @return
      * @throws java.rmi.RemoteException 
      */
-    public List<Object[]> consultarStockFacade(Bodega bodega) throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockFacade(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException {
         
+        //Kardex k;
+        //k.getProducto().getCatalogoProducto().getCategoriaProducto();
         String whereBodega="";
         if(bodega!=null)
         {
-            whereBodega="and k.bodega=?1";
+            whereBodega=" and k.bodega=?1 ";
+        }
+        
+        String whereCategoria="";
+        if(categoria!=null)
+        {
+            whereCategoria=" and k.producto.catalogoProducto.categoriaProducto=?2 ";
         }
         
         //Talvez agregar condicion para buscar solo por kardex activos
-        String queryString = "SELECT k.producto,k.stock FROM Kardex k WHERE 1=1 "+whereBodega+" ";
+        String queryString = "SELECT k.producto,k.stock FROM Kardex k WHERE 1=1 "+whereBodega+whereCategoria;
         Query query = getEntityManager().createQuery(queryString);
         
         if(bodega!=null)
         {
             query.setParameter(1,bodega);
         }        
+        
+        if(categoria!=null)
+        {
+            query.setParameter(2,categoria);
+        }
+        
         return query.getResultList();
 
     }

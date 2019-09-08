@@ -130,6 +130,8 @@ public class EmpresaModel extends EmpresaForm
                 DialogoCodefac.mensaje("Exito","Empresa grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                throw  new ExcepcionCodefacLite(ex.getMessage());
             } catch (RemoteException ex) {
                 Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
             }

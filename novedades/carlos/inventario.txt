@@ -8,3 +8,4 @@ en la transferencia de bodega toca agregar el destino para saber de donde viene
 ver que el reporte de stock cuando seleccione todo salgan unificados los stock de todas las bodegas por producto
 ver si crear una variable el el stock para saber el total de stock en compras y ventas que me ayuda para reportes
 Falta actualizar el calculo de los emsambles para utiizar un unico metodo
+Implementar funcion de poder eliminar bodegas

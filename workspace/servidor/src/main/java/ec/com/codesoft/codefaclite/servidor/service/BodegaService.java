@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.BodegaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -54,6 +55,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                entity.setEstadoEnum(GeneralEnumEstado.ACTIVO); //Por Defecto grabo con estado activo
                 entityManager.persist(entity);
             }
         });
@@ -65,9 +67,22 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
         bodegaFacade.edit(b);
     }
 
-    public void eliminar(Bodega b) {
-        b.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        bodegaFacade.edit(b);
+    public void eliminar(Bodega b) throws ServicioCodefacException,RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                KardexService kardexService=new KardexService();
+                List<Kardex> kardexResultado=kardexService.buscarPorBodega(b);
+                if(kardexResultado.size()>0)
+                {
+                    throw new ServicioCodefacException("No se puede eliminar porque tiene kardex relacionados");
+                }
+                
+                b.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                entityManager.merge(b);
+            }
+        });
+                
     }
     
     public Bodega buscarPorNombre(String nombre) throws ServicioCodefacException,RemoteException
@@ -99,6 +114,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                
                 mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("empresa", empresa);
                 return getFacade().findByMap(mapParametros);
             }
         });

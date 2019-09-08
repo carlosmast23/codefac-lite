@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -22,7 +23,13 @@ import java.util.Vector;
  */
 public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
 {
+    private Empresa empresa;
 
+    public CompraBusquedaDialogo(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
     @Override
     public Vector<ColumnaDialogo> getColumnas() 
     {
@@ -56,17 +63,13 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
     @Override
     public QueryDialog getConsulta(String filter) {
         
-        /*Compra compra;
-        compra.getSecuencial();
-        compra.setInventarioIngreso();
-        compra.getCodigoTipoDocumento();*/
-                
-        String queryString = "SELECT u FROM Compra u WHERE (u.codigoTipoDocumento=?1) and u.inventarioIngreso=?2 and ";
+        String queryString = "SELECT u FROM Compra u WHERE u.empresa=?4 and (u.codigoTipoDocumento=?1) and u.inventarioIngreso=?2 and ";
         queryString+=" ( LOWER(u.secuencial) like ?3 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,TipoDocumentoEnum.COMPRA_INVENTARIO.getCodigo());
         queryDialog.agregarParametro(2,EnumSiNo.NO.getLetra());
         queryDialog.agregarParametro(3,filter);
+        queryDialog.agregarParametro(4,empresa);
         
         return queryDialog;
     }

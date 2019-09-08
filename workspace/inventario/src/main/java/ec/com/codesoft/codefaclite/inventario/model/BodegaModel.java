@@ -74,6 +74,8 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         //Guardar el tipo de bodega
         Bodega.TipoBodegaEnum tipoBodegaEnum=(Bodega.TipoBodegaEnum) getCmbTipoBodega().getSelectedItem();
         bodega.setTipoBodegaEnum(tipoBodegaEnum);
+        
+        bodega.setEmpresa(session.getEmpresa());
 
         moverArchivo();
     }
@@ -117,6 +119,9 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
                 DialogoCodefac.mensaje("Datos correctos", "La bodega se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             } catch (RemoteException ex) {
                 Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -133,14 +138,16 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        BodegaBusquedaDialogo bodegaBusquedaDialogo = new BodegaBusquedaDialogo();
+        BodegaBusquedaDialogo bodegaBusquedaDialogo = new BodegaBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(bodegaBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
-        bodega = (Bodega) buscarDialogoModel.getResultado();
+        Bodega bodegaTmp = (Bodega) buscarDialogoModel.getResultado();
 
-        if (bodega == null) {
+        if (bodegaTmp == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar bodega vacio");
         }
+        
+        bodega=bodegaTmp;
         cargarDatosVista();
         
     }

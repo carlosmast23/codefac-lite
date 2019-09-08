@@ -59,9 +59,12 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         CatalogoProducto catalogoProducto = p.getCatalogoProducto();
         if (catalogoProducto.getId() == null) {
             CategoriaProducto categoriaProducto = catalogoProducto.getCategoriaProducto();
-            if (categoriaProducto.getIdCatProducto() == null)//Si no existe la categoria tambien se los crea
+            if(categoriaProducto!=null)
             {
-                entityManager.persist(categoriaProducto);
+                if (categoriaProducto.getIdCatProducto() == null)//Si no existe la categoria tambien se los crea
+                {
+                    entityManager.persist(categoriaProducto);
+                }
             }
 
             entityManager.persist(catalogoProducto);
@@ -166,11 +169,15 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return resultados;
     }
     
-    public Producto buscarGenerarCodigoBarras(EnumSiNo enumSiNo ) throws ServicioCodefacException,RemoteException
+    public Producto buscarGenerarCodigoBarras(EnumSiNo enumSiNo,Empresa empresa ) throws ServicioCodefacException,RemoteException
     {
+        //Producto p;
+        //p.getEmpresa();
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
         mapParametros.put("generarCodigoBarras", EnumSiNo.SI.getLetra());
+        mapParametros.put("empresa",empresa);
+        
 
         List<Producto> resultado=getFacade().findByMap(mapParametros);
         if(resultado.size()>0)

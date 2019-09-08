@@ -48,6 +48,9 @@ public class Bodega implements Serializable {
     
     @JoinColumn(name = "SUCURSAL_ID")
     private Sucursal sucursal;
+    
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
 
     public Long getIdBodega() {
         return idBodega;
@@ -128,6 +131,15 @@ public class Bodega implements Serializable {
     public void setSucursal(Sucursal sucursal) {
         this.sucursal = sucursal;
     }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
     
 
     @Override
