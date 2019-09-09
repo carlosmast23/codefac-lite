@@ -57,3 +57,5 @@ Probar la funcionalidad de cliente final en la factura que no encuentra a pesar 
 Al momento de crear la licencia cuando ya existe una licencia y solo descarga no esta funcionando
 Ver la posibilidad para en los dialogos buscar para filtrar por otros datos como por ejemplo por estado , para buscar datos eliminados que se requieren revisar
 revisar que cuando edita el secuencial de un punto de emisión al salir de la session sigue funcionando con el mismo, solo cambio cuando se abre y cierra el programa
+Al momento de editar por primera vez el usuario para asignar un punto de venta estaba generando error
+ver como hacer para que se demore menos los datos cuando se trabaja de forma remota en espeacial con el tema de los jasperReport
