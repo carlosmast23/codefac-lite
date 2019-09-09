@@ -56,3 +56,4 @@ En los detalles de las notas de credito toca ampliar el espacio en la base de da
 Probar la funcionalidad de cliente final en la factura que no encuentra a pesar que ya esta creado
 Al momento de crear la licencia cuando ya existe una licencia y solo descarga no esta funcionando
 Ver la posibilidad para en los dialogos buscar para filtrar por otros datos como por ejemplo por estado , para buscar datos eliminados que se requieren revisar
+revisar que cuando edita el secuencial de un punto de emisión al salir de la session sigue funcionando con el mismo, solo cambio cuando se abre y cierra el programa

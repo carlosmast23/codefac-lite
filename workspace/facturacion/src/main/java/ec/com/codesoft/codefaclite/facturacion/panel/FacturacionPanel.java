@@ -805,6 +805,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridheight = 2;
         PanelValores.add(jPanel1, gridBagConstraints);
 
+        txtValorTotal.setEditable(false);
         txtValorTotal.setColumns(5);
         txtValorTotal.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         txtValorTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
