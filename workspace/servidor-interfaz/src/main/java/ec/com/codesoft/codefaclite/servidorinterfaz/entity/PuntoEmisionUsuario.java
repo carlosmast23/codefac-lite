@@ -86,7 +86,10 @@ public class PuntoEmisionUsuario implements Serializable{
 
     @Override
     public String toString() {
-        return usuario.getNick()+" (" + puntoEmision.getSucursal().getCodigoSucursalFormatoTexto()+"-"+puntoEmision.puntoEmisionFormatoTexto()+" )";
+        String codigoSucursal=(puntoEmision.getSucursal()!=null)?puntoEmision.getSucursal().getCodigoSucursalFormatoTexto():"Sin Asignar";
+       
+        //return usuario.getNick()+" (" + puntoEmision.getSucursal().getCodigoSucursalFormatoTexto()+"-"+puntoEmision.puntoEmisionFormatoTexto()+" )";
+        return usuario.getNick()+" (" + codigoSucursal+"-"+puntoEmision.puntoEmisionFormatoTexto()+" )";
     }
     
     
