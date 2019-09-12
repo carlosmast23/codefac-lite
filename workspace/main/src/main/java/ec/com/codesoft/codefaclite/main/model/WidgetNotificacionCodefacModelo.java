@@ -52,7 +52,6 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
             String[] tituloTabla={"Tipo","Problema","Solución"};
             DefaultTableModel modeloTabla=new DefaultTableModel(tituloTabla,0);
             
-            
             ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
             List<ComprobanteElectronico> comprobantesFirmadoSinEnviar = comprobanteServiceIf.getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR,empresa);
             List<ComprobanteElectronico> comprobantesEnviadosSinRespuesta = comprobanteServiceIf.getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA,empresa);

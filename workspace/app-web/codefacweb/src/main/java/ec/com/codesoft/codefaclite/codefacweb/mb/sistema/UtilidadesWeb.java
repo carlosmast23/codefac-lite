@@ -90,7 +90,16 @@ public class UtilidadesWeb {
      */
     public static Map<String,String> obtenerParametrosPeticion()
     {
-        return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        Map<String,String> mapParametros=FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        
+        for (Map.Entry<String, String> entry : mapParametros.entrySet()) {
+            String key = entry.getKey();
+            String val = entry.getValue();
+            System.out.println("Key="+key+",Val="+val);
+            
+        }
+        
+        return mapParametros;
     }
     
     public static String buscarParametroPeticion(String clave)

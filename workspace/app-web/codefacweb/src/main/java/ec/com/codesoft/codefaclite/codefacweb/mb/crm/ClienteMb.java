@@ -66,20 +66,33 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
 
     private Boolean identificacionPasaporte;
     private PersonaEstablecimiento establecimientoDefecto;
+    
+    /**
+     * Variable por el momento para poder almacenar la referencia del objeto a retornar cuando es dialogo para ver como se
+     * puede programar de forma mas elegante de forma predeterminada;
+     */
+    private Persona personaReturnDialog=null;
 
     @PostConstruct
     private void init() {
         
         if(tituloPagina==null)
         {
-            UtilidadesWeb.buscarParametroPeticion("tipo");        
+            //UtilidadesWeb.buscarParametroPeticion("tipo");        
             String titulo=UtilidadesWeb.buscarParametroPeticion("tipo");
-            if(titulo.equals("cliente"))
+            if(titulo==null)
             {
-                tituloPagina=TITULO_CLIENTE;
-            }else if(titulo.equals("proveedor"))
+                tituloPagina="Error Sin Definir Cliente o Proveedor";
+            }
+            else
             {
-                tituloPagina=TITULO_PROVEEDOR;
+                if(titulo.equals("cliente"))
+                {
+                    tituloPagina=TITULO_CLIENTE;
+                }else if(titulo.equals("proveedor"))
+                {
+                    tituloPagina=TITULO_PROVEEDOR;
+                }
             }
         }
         
@@ -100,6 +113,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         if (validarDatosVista()) {
             try {
                 cliente=ServiceFactory.getFactory().getPersonaServiceIf().grabar(cliente);
+                personaReturnDialog=cliente;
                 //mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 nuevo();
@@ -366,7 +380,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
     }
 
     public Persona getResultDialogo() {
-        return cliente;
+        return personaReturnDialog;
     }
 
     public String getTituloPagina() {

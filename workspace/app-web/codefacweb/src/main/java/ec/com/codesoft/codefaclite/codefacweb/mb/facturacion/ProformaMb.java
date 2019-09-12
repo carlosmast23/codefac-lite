@@ -288,6 +288,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
         Map<String, List<String>> params = new HashMap<String, List<String>>();
         params.put("isDialog", Arrays.asList("true")); //TODO: Parametrizar esta variable
+        params.put("tipo", Arrays.asList("cliente"));
 
         PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, params);
 

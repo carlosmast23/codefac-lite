@@ -223,6 +223,7 @@ public class ControllerCodefacMb implements Serializable {
         try {
             generalAbstractMb = vista; 
             System.out.println("Agregando Vista"+vista.titulo());
+            System.out.println("Estó agregando oficial "+estadoEnum.getLetra()+" "+estadoEnum.getLetra());
             PrimeFaces.current().ajax().update("formulario:txtTituloPagina"); //Actualizar un componente desde la vista
             //System.out.println("actualizando el titulo en la pagina:"+titulo);
         } catch (ExcepcionCodefacLite ex) {
