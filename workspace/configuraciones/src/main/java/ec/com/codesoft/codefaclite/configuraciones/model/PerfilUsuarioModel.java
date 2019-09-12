@@ -361,7 +361,8 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                 
                 if(puntoEmision!=null)
                 {
-                    usuario.getPuntosEmisionUsuario().remove(puntoEmision);
+                    //usuario.getPuntosEmisionUsuario().remove(puntoEmision);
+                    puntoEmision.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                     cargarListaPuntosEmision();
                 }
                 
@@ -377,7 +378,10 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         {
             for (PuntoEmisionUsuario puntoEmisionUsuario : usuario.getPuntosEmisionUsuario()) 
             {
-                listaModel.addElement(puntoEmisionUsuario);
+                if(puntoEmisionUsuario.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                {
+                    listaModel.addElement(puntoEmisionUsuario);
+                }
             }
         }
         

@@ -303,17 +303,19 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                  * =========METODOS PARA AGREGAR Y QUITAR PUNTOS DE EMISION
                  */
                 ///Funcionalidad que permite eliminar perfiles que fueron eliminados
-                if (usuarioOriginal.getPuntosEmisionUsuario()!= null) {
+                /*if (usuarioOriginal.getPuntosEmisionUsuario()!= null) {
                     for (PuntoEmisionUsuario puntoEmisionUsuario : usuarioOriginal.getPuntosEmisionUsuario()) {
 
                         //Si en el nuevo objeto que mando a editar no contiene el perfil usuario lo elimino
                         if (!entity.getPuntosEmisionUsuario().contains(puntoEmisionUsuario)) {
                             //Elimino de la persistencia
-                            entityManager.remove(puntoEmisionUsuario);
+                            puntoEmisionUsuario.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                            entityManager.merge(puntoEmisionUsuario);
+                            //entityManager.remove(puntoEmisionUsuario);
                         }
 
                     }
-                }
+                }*/
 
                 //Funcionalidad que permite agregar nuevos perfiles agregados
                 if (entity.getPuntosEmisionUsuario() != null) {
@@ -323,6 +325,10 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                         if (!usuarioOriginal.getPuntosEmisionUsuario().contains(puntoEmisionUsuario)) {
                             //Elimino de la persistencia
                             entityManager.persist(puntoEmisionUsuario);
+                        }
+                        else //Si existe el dato lo actualizo porciacaso se haya cambiado el estado por ejemplo eliminado
+                        {
+                            entityManager.merge(puntoEmisionUsuario);
                         }
 
                     }
