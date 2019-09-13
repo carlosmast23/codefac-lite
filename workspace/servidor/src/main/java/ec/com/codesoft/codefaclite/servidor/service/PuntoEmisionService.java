@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.PuntoEmisionFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -80,6 +81,28 @@ public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisi
             return resultados.get(0);
        }
        return null;
+    }
+    
+    @Override
+    public List<PuntoEmision> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException
+    {
+        /*PuntoEmision p;
+        p.getSucursal().getEmpresa();*/
+        return (List<PuntoEmision>)ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("sucursal.empresa", empresa);
+                List<PuntoEmision> resultados = getFacade().findByMap(mapParametros);
+                //if (resultados.size() > 0) {
+                //    return resultados.get(0);
+                //}
+                return resultados;
+            }
+        });
+        
     }
     
     

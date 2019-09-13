@@ -31,9 +31,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoService
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.*;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -82,8 +88,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
 
 
-    public FacturaReporteModel() {
-        valoresIniciales();
+    public FacturaReporteModel() {        
         initListener();
         super.validacionDatosIngresados=false;
     }
@@ -133,6 +138,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
             controladorReporte.setReporteAgrupado(getChkReporteAgrupadoReferido().isSelected());
             controladorReporte.setAfectarNotaCredito(getChkAfectaNotaCredito().isSelected());
             controladorReporte.setDocumentoConsultaEnum(documentoConsultaEnum);
+            PuntoEmision puntoEmisionReporte=((getChkPuntoEmisionTodos().isSelected())?null:(PuntoEmision)getCmbPuntoEmision().getSelectedItem());
+            
+            controladorReporte.setPuntoEmision(puntoEmisionReporte);
             
             /*controladorReporte = new ControladorReporteFactura(
                     persona,
@@ -356,7 +364,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     @Override
     public void iniciar() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        valoresIniciales();
     }
 
     @Override
@@ -389,11 +397,20 @@ public class FacturaReporteModel extends FacturaReportePanel {
         for (ComprobanteEntity.ComprobanteEnumEstado comprobanteEstado : ComprobanteEntity.ComprobanteEnumEstado.values()) {
             getCmbEstado().addItem(comprobanteEstado);
         }
-        //getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
-        //getCmbEstado().addItem(FacturaEnumEstado.ANULADO_PARCIAL);
-        //getCmbEstado().addItem(FacturaEnumEstado.ANULADO_TOTAL);
-        //getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
-        //getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO);
+
+        
+        //////////////CARGAR LOS PUNTOS DE EMISION ///////////////////        
+        try {
+            getCmbPuntoEmision().removeAllItems();
+            List<PuntoEmision> puntosEmisionList=ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorEmpresa(session.getEmpresa()); //TODO: Analizar si los puntos de venta deberia filtrar por sucursales
+            UtilidadesComboBox.llenarComboBox(getCmbPuntoEmision(),puntosEmisionList);
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
 
         getChkTodos().setSelected(true);
         if (getChkTodos().isSelected()) {
@@ -412,6 +429,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getChkTodosReferidos().setSelected(true);
         getBtnBuscarReferido().setEnabled(false);
         referido=null;
+        
+        getChkPuntoEmisionTodos().setSelected(true);
+        getCmbPuntoEmision().setEnabled(false);
         
         ///Para el reporte de facturacion no me importa que sean visibles estos campos del referido
         getLblReferido().setVisible(false);
@@ -495,6 +515,17 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     getBtnBuscarCliente().setEnabled(false);
                 } else {
                     getBtnBuscarCliente().setEnabled(true);
+                }
+            }
+        });
+        
+        getChkPuntoEmisionTodos().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    getCmbPuntoEmision().setEnabled(false);
+                } else {
+                    getCmbPuntoEmision().setEnabled(true);
                 }
             }
         });

@@ -366,12 +366,12 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
 
     @Override
     public String getPuntoEmision() {
-        return this.factura.getPuntoEmision();
+        return this.factura.getPuntoEmision().toString();
     }
 
     @Override
     public String getEstablecimiento() {
-        return this.factura.getPuntoEstablecimiento();
+        return this.factura.getPuntoEstablecimiento().toString();
     }
 
     @Override

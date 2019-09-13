@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -63,6 +64,7 @@ public class ControladorReporteFactura {
     private TotalSumatoria total;    //en este campo se van a calcular el valor total de todos los comprobantes     
     private TotalSumatoria totalAnulados; //en esta variable se van a calcular los totales de los anulados
     private TotalSumatoria totalNotasCredito; //en este campo se van a guardar los valores solo de las notas de credito
+    private PuntoEmision puntoEmision; //en este campo me permite filtrar por el punto de emision
     protected Empresa empresa;
 
     public ControladorReporteFactura(Empresa empresa) {
@@ -100,7 +102,7 @@ public class ControladorReporteFactura {
         try {
             buildMapTotales();
             FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
-            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,empresa);
+            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa);
             
             //DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
             NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();
@@ -672,6 +674,14 @@ public class ControladorReporteFactura {
 
     public void setTotalNotasCredito(TotalSumatoria totalNotasCredito) {
         this.totalNotasCredito = totalNotasCredito;
+    }
+
+    public PuntoEmision getPuntoEmision() {
+        return puntoEmision;
+    }
+
+    public void setPuntoEmision(PuntoEmision puntoEmision) {
+        this.puntoEmision = puntoEmision;
     }
     
     

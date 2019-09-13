@@ -70,6 +70,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -700,8 +701,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         guiaRemision.setFechaEmision(new java.sql.Date(getCmbFechaInicio().getDate().getTime())); //Esto esta variable porque necesito para volver a generar la clave de acceso
         guiaRemision.setFechaFinTransporte(new java.sql.Date(getCmbFechaFin().getDate().getTime()));
         PuntoEmision puntoEmisionSeleccionado= obtenerPuntoEmisionSeleccionado();
-        guiaRemision.setPuntoEstablecimiento(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString());
-        guiaRemision.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision().toString());
+        guiaRemision.setPuntoEstablecimiento(new BigDecimal(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString()));
+        guiaRemision.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision());
         guiaRemision.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
         guiaRemision.setEmpresa(session.getEmpresa());
         

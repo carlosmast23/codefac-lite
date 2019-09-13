@@ -167,21 +167,21 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
         this.secuencial = secuencial;
     }
 
-    public String getPuntoEstablecimiento() {
-        return puntoEstablecimiento;
+    /*public String getPuntoEstablecimiento() {
+        return puntoEstablecimiento.;
     }
 
     public void setPuntoEstablecimiento(String puntoEstablecimiento) {
         this.puntoEstablecimiento = puntoEstablecimiento;
-    }
+    }*/
 
-    public String getPuntoEmision() {
+    /*public String getPuntoEmision() {
         return puntoEmision;
     }
 
     public void setPuntoEmision(String puntoEmision) {
         this.puntoEmision = puntoEmision;
-    }
+    }*/
 
     /*public Date getFechaNotaCredito() {
         return fechaNotaCredito;

@@ -147,8 +147,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         cartera.setCodigoDocumento(comprobante.getCodigoDocumento());
         cartera.setFechaCreacion(comprobante.getFechaCreacion());
         cartera.setFechaEmision(new java.sql.Date(comprobante.getFechaEmision().getTime()));
-        cartera.setPuntoEmision(comprobante.getPuntoEmision());
-        cartera.setPuntoEstablecimiento(comprobante.getPuntoEstablecimiento());
+        cartera.setPuntoEmision(comprobante.getPuntoEmision().toString());
+        cartera.setPuntoEstablecimiento(comprobante.getPuntoEstablecimiento().toString());
         cartera.setSecuencial(comprobante.getSecuencial());
         cartera.setTipoCartera(tipo.getLetra());
         cartera.setEstado(GeneralEnumEstado.ACTIVO.getEstado());

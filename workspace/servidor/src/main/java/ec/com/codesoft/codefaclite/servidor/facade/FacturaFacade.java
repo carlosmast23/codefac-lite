@@ -9,9 +9,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -29,8 +31,9 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    public List<Factura> lista(Persona persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,Empresa empresa) {
+    public List<Factura> lista(Persona persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa) {
         //Factura factura;
+        //factura.getPuntoEmision();
         //factura.getCodigoDocumentoEnum();
         String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="";
         if (persona != null) {
@@ -38,6 +41,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         } else {
             cliente = "1=1";
         }
+        
         if (fi == null && ff != null) {
             fecha = " AND u.fechaEmision <= ?3";
         } else if (fi != null && ff == null) {
@@ -47,6 +51,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         } else {
             fecha = " AND (u.fechaEmision BETWEEN ?2 AND ?3)";
         }
+        
         if (estadoEnum!= null) {
             //Si la peticion es por todos sri entonces tengo que setear 2 valores
             if(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum))
@@ -72,9 +77,17 @@ public class FacturaFacade extends AbstractFacade<Factura> {
                 filtrarReferidos+=" AND u.referido=?5 ";
             }
         }
+        
+        String filtroPuntoEmision="";
+        if(puntoEmision!=null)
+        {
+            filtroPuntoEmision=" AND u.puntoEmision =?12 ";
+        }
+        //Factura f;
+        //f.getPuntoEmision()
 
         try {
-            String queryString = "SELECT u FROM Factura u WHERE u.empresa=?7 and u.codigoDocumento=?6 and  " + cliente + fecha + estadoFactura +filtrarReferidos+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
+            String queryString = "SELECT u FROM Factura u WHERE u.empresa=?7 and u.codigoDocumento=?6 and  " + cliente + fecha + estadoFactura +filtrarReferidos+filtroPuntoEmision+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
             Query query = getEntityManager().createQuery(queryString);
             //System.err.println("QUERY--->"+query.toString());
             if (persona != null) {
@@ -107,6 +120,11 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             
             query.setParameter(6,DocumentoEnum.FACTURA.getCodigo());
             query.setParameter(7,empresa);
+            
+            if (puntoEmision != null) {
+                query.setParameter(12,puntoEmision.getPuntoEmision()); //TODO: Grabo este valor porque de esta manera se esta grababndo en la factura
+            }
+            
             
             return query.getResultList();
         } catch (NoResultException e) {

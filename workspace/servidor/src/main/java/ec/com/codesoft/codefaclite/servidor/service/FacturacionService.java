@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle.EstadoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -289,8 +290,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO,detalle.getPrecioUnitario(),detalle.getCantidad().intValue());;
             //Agregando datos adicionales del movimiento en la factura
             kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
-            kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision());
-            kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento());
+            kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision().toString());
+            kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento().toString());
             kardexDetalle.setSecuencial(detalle.getFactura().getSecuencial());
 
             //Actualizar los valores del kardex
@@ -329,8 +330,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return facturaFacade.findAll();
     }
 
-    public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,Empresa empresa) throws java.rmi.RemoteException {
-        return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,empresa);
+    public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa) throws java.rmi.RemoteException {
+        return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa);
     }
 
     public List<Factura> obtenerFacturasActivas()

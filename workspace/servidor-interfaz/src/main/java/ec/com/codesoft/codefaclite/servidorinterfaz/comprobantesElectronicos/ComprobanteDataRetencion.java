@@ -167,12 +167,12 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
 
     @Override
     public String getPuntoEmision() {
-        return retencion.getPuntoEmision();
+        return retencion.getPuntoEmision().toString();
     }
 
     @Override
     public String getEstablecimiento() {
-        return retencion.getPuntoEstablecimiento();
+        return retencion.getPuntoEstablecimiento().toString();
     }
 
     @Override

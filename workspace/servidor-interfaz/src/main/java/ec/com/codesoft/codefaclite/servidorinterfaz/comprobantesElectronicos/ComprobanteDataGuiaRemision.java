@@ -191,12 +191,12 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
 
     @Override
     public String getPuntoEmision() {
-        return this.guiaRemision.getPuntoEmision();
+        return this.guiaRemision.getPuntoEmision().toString();
     }
 
     @Override
     public String getEstablecimiento() {
-        return this.guiaRemision.getPuntoEstablecimiento();
+        return this.guiaRemision.getPuntoEstablecimiento().toString();
     }
 
     @Override

@@ -84,6 +84,9 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         btnBuscarReferido = new javax.swing.JButton();
         chkTodosReferidos = new javax.swing.JCheckBox();
         chkReporteAgrupadoReferido = new javax.swing.JCheckBox();
+        jLabel13 = new javax.swing.JLabel();
+        cmbPuntoEmision = new javax.swing.JComboBox<>();
+        chkPuntoEmisionTodos = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -179,9 +182,9 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Consultar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
 
@@ -376,10 +379,10 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         getContentPane().add(PanelValores, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel8.setText("Estado:");
+        jLabel8.setText("Punto Emisión:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel8, gridBagConstraints);
@@ -482,6 +485,31 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 4;
         getContentPane().add(chkReporteAgrupadoReferido, gridBagConstraints);
 
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel13.setText("Estado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel13, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbPuntoEmision, gridBagConstraints);
+
+        chkPuntoEmisionTodos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkPuntoEmisionTodos.setText("Todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 3;
+        getContentPane().add(chkPuntoEmisionTodos, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -506,17 +534,20 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnLimpiarFechaInicio;
     private javax.swing.JCheckBox chkAfectaNotaCredito;
     private javax.swing.JCheckBox chkAfectaNotaDebito;
+    private javax.swing.JCheckBox chkPuntoEmisionTodos;
     private javax.swing.JCheckBox chkReporteAgrupadoReferido;
     private javax.swing.JCheckBox chkTodos;
     private javax.swing.JCheckBox chkTodosReferidos;
     private javax.swing.JComboBox<DocumentosConsultarEnum> cmbDocumento;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbPuntoEmision;
     private com.toedter.calendar.JDateChooser dateFechaFin;
     private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
@@ -708,6 +739,18 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
 
     public JCheckBox getChkReporteAgrupadoReferido() {
         return chkReporteAgrupadoReferido;
+    }
+
+    public JComboBox<ComprobanteEntity.ComprobanteEnumEstado> getCmbPuntoEmision() {
+        return cmbPuntoEmision;
+    }
+
+    public JCheckBox getChkPuntoEmisionTodos() {
+        return chkPuntoEmisionTodos;
+    }
+
+    public void setChkPuntoEmisionTodos(JCheckBox chkPuntoEmisionTodos) {
+        this.chkPuntoEmisionTodos = chkPuntoEmisionTodos;
     }
 
     

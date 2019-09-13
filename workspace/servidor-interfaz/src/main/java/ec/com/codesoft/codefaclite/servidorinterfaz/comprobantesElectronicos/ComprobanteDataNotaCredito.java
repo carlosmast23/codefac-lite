@@ -300,12 +300,12 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
 
     @Override
     public String getPuntoEmision() {
-        return notaCredito.getPuntoEmision();
+        return notaCredito.getPuntoEmision().toString();
     }
 
     @Override
     public String getEstablecimiento() {
-        return notaCredito.getPuntoEstablecimiento();
+        return notaCredito.getPuntoEstablecimiento().toString();
     }
 
     @Override

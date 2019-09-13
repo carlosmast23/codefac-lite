@@ -818,8 +818,8 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         //retencion.setIdentificacion(retencion.getProveedor().getIdentificacion());
         
         PuntoEmision puntoEmisionSeleccionado= obtenerPuntoEmisionSeleccionado();
-        retencion.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision().toString());
-        retencion.setPuntoEstablecimiento(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString());
+        retencion.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision());
+        retencion.setPuntoEstablecimiento(new BigDecimal(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString()));
         retencion.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
         TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         retencion.setTipoDocumento(tipoDocumentoEnum.getCodigo());

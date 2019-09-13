@@ -124,7 +124,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -1998,8 +1997,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         factura.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));
         //factura.setIvaSriId(iva);
-        factura.setPuntoEmision(getPuntoEmisionSeleccionado().getPuntoEmision().toString());
-        factura.setPuntoEstablecimiento(session.getSucursal().getCodigoSucursal().toString());
+        factura.setPuntoEmision(getPuntoEmisionSeleccionado().getPuntoEmision());
+        factura.setPuntoEstablecimiento(new BigDecimal(session.getSucursal().getCodigoSucursal().toString()));
         
         //Cuando la facturacion es electronica
         PuntoEmision puntoEmisionSeleccionada=getPuntoEmisionSeleccionado();

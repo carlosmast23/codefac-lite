@@ -81,7 +81,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -142,8 +141,8 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         PuntoEmision puntoEmisionSeleccionado= obtenerPuntoEmisionSeleccionado();
         //notaCredito.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         //notaCredito.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
-        notaCredito.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision().toString());
-        notaCredito.setPuntoEstablecimiento(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString());
+        notaCredito.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision());
+        notaCredito.setPuntoEstablecimiento(new BigDecimal(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString()));
         
         //notaCredito.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor));
         notaCredito.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());

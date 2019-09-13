@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +36,10 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     protected Integer secuencial;
     
     @Column(name = "PUNTO_ESTABLECIMIENTO")
-    protected String puntoEstablecimiento;
+    protected BigDecimal puntoEstablecimiento;
     
     @Column(name = "PUNTO_EMISION")
-    protected String puntoEmision;
+    protected Integer puntoEmision;
     
     //@Column(name = "EMPRESA_ID")
     //protected Long empresaId;
@@ -130,19 +131,19 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         this.secuencial = secuencial;
     }
 
-    public String getPuntoEstablecimiento() {
+    public BigDecimal getPuntoEstablecimiento() {
         return puntoEstablecimiento;
     }
 
-    public void setPuntoEstablecimiento(String puntoEstablecimiento) {
+    public void setPuntoEstablecimiento(BigDecimal puntoEstablecimiento) {
         this.puntoEstablecimiento = puntoEstablecimiento;
     }
 
-    public String getPuntoEmision() {
+    public Integer getPuntoEmision() {
         return puntoEmision;
     }
 
-    public void setPuntoEmision(String puntoEmision) {
+    public void setPuntoEmision(Integer puntoEmision) {
         this.puntoEmision = puntoEmision;
     }
 
@@ -390,7 +391,7 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     
     public String getPreimpreso()
     {
-       return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
+       return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento.toString(),3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.toString(),3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
     }
     
     public DocumentoEnum getCodigoDocumentoEnum() {

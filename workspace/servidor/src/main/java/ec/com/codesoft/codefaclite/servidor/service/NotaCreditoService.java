@@ -153,8 +153,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                         facturaDetalle.getId(),
                         facturaDetalle.getReferenciaId(), 
                         TipoDocumentoEnum.ELIMINADO_FACTURA, 
-                        facturaDetalle.getFactura().getPuntoEmision(),
-                        facturaDetalle.getFactura().getPuntoEstablecimiento(),
+                        facturaDetalle.getFactura().getPuntoEmision().toString(),
+                        facturaDetalle.getFactura().getPuntoEstablecimiento().toString(),
                         facturaDetalle.getFactura().getSecuencial());
                 
                 break;
@@ -199,8 +199,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                         notaDetalle.getId(),
                         notaDetalle.getReferenciaId(), 
                         TipoDocumentoEnum.NOTA_CREDITO_INVENTARIO, 
-                        notaDetalle.getNotaCredito().getPuntoEmision(),
-                        notaDetalle.getNotaCredito().getPuntoEstablecimiento(),
+                        notaDetalle.getNotaCredito().getPuntoEmision().toString(),
+                        notaDetalle.getNotaCredito().getPuntoEstablecimiento().toString(),
                         notaDetalle.getNotaCredito().getSecuencial());
                 
                 break;

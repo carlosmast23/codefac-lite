@@ -427,8 +427,8 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         factura.setObligadoLlevarContabilidad(sessionMb.getSession().getEmpresa().getObligadoLlevarContabilidad());
         factura.setDireccionEstablecimiento(sessionMb.getSession().getSucursal().getDirecccion());
         factura.setDireccionMatriz(sessionMb.getSession().getMatriz().getDirecccion());
-        factura.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision().toString());
-        factura.setPuntoEstablecimiento(sessionMb.getSession().getSucursal().getCodigoSucursal().toString());
+        factura.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision());
+        factura.setPuntoEstablecimiento(new BigDecimal(sessionMb.getSession().getSucursal().getCodigoSucursal().toString()));
         factura.setUsuario(sessionMb.getSession().getUsuario());
         factura.setSucursalEmpresa(sessionMb.getSession().getSucursal());
 
