@@ -923,7 +923,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Personalizado", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = true,max = 25,min=1, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Personalizado", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtCodigoPersonalizado() {
         return txtCodigoPersonalizado;
     }
