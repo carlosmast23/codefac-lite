@@ -9,6 +9,7 @@ import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.DocumentosConsultarEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -87,6 +88,8 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         jLabel13 = new javax.swing.JLabel();
         cmbPuntoEmision = new javax.swing.JComboBox<>();
         chkPuntoEmisionTodos = new javax.swing.JCheckBox();
+        lblCliente2 = new javax.swing.JLabel();
+        cmbTipoReporte = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -96,11 +99,11 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         lblCliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblCliente.setText("Cliente:");
+        lblCliente.setText("Tipo de Reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblCliente, gridBagConstraints);
 
@@ -510,6 +513,23 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 3;
         getContentPane().add(chkPuntoEmisionTodos, gridBagConstraints);
 
+        lblCliente2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblCliente2.setText("Cliente:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(lblCliente2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbTipoReporte, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -541,6 +561,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<DocumentosConsultarEnum> cmbDocumento;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstado;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbPuntoEmision;
+    private javax.swing.JComboBox<TipoReporteEnum> cmbTipoReporte;
     private com.toedter.calendar.JDateChooser dateFechaFin;
     private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JLabel jLabel1;
@@ -558,6 +579,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblCliente1;
+    private javax.swing.JLabel lblCliente2;
     private javax.swing.JLabel lblFechaFin;
     private javax.swing.JLabel lblFechaInicio;
     private javax.swing.JLabel lblIva12;
@@ -753,6 +775,12 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         this.chkPuntoEmisionTodos = chkPuntoEmisionTodos;
     }
 
+    public JComboBox<TipoReporteEnum> getCmbTipoReporte() {
+        return cmbTipoReporte;
+    }
+
+    
+    
     
     
     

@@ -220,7 +220,8 @@ public class ControladorReporteFactura {
                                 (factura.getReferido() != null) ? factura.getReferido().getIdentificacion() : "",
                                 (factura.getReferido() != null) ? factura.getReferido().getContactoClientePorcentaje().toString() : "0",
                                 valorComision.toString(),
-                                factura.getClaveAcceso()
+                                factura.getClaveAcceso(),
+                                factura.getPuntoEmision().toString()
                         );
                         
                         //UtilidadesFecha.formatoDiaMesAño(fechaFin);
@@ -261,7 +262,8 @@ public class ControladorReporteFactura {
                                 (nota.getIdentificacion() != null) ? nota.getIdentificacion() : "",
                                 "0",
                                 "0",//TODO: Revisar porque en esta parte me late que no necesito calcular el iva
-                                nota.getClaveAcceso()
+                                nota.getClaveAcceso(),
+                                nota.getPuntoEmision().toString()
                         );
                         
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
@@ -416,9 +418,27 @@ public class ControladorReporteFactura {
         
     }
     
+    public void obtenerReportePdfAgrupadoPorPuntosEstablecimiento(InterfazComunicacionPanel panelPadre)
+    {
+        String titulo = "Reporte Ventas Agrupado por Punto de Emisión";
+        InputStream path=getReportePuntosEmision();
+        //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Documentos ", OrientacionReporteEnum.HORIZONTAL);
+        //String nombreArchivo=UtilidadesArchivos.generarNombreArchivoUnico("reporte","pdf");
+        //String pathGrabar="\\tmp\\"+nombreArchivo; //TODO: Camabiar por algun nombre en funcion de la fecha para que se unico y no genere problemas
+        
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+        
+        
+    }
+    
     protected InputStream getReporte()
     {
         return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
+    }
+    
+    protected InputStream getReportePuntosEmision()
+    {
+        return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_ventas_punto_emision.jrxml");
     }
    
 

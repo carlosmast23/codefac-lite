@@ -39,6 +39,9 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     protected String totalFinal;
     protected String claveAcceso;
     
+    ///campo adicional para filrar por el punto de venta
+    protected String puntoEmision;
+    
     //============> Campos adicionales para los referidos <===================//
     protected String referido;
     protected String referidoIdentificacion;
@@ -54,7 +57,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     
     
 
-    public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal,String referido,String referidoIdentificacion,String referidoPorcentaje,String valorComision,String claveAcceso) {
+    public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal,String referido,String referidoIdentificacion,String referidoPorcentaje,String valorComision,String claveAcceso,String puntoEmision) {
         this.numeroFactura = numeroFactura;
         this.fechaFactura = fechaFactura;
         this.identificacionCliente = identificacionCliente;
@@ -76,6 +79,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
         this.referidoPorcentaje=referidoPorcentaje;
         this.valorComision=valorComision;
         this.claveAcceso=claveAcceso;
+        this.puntoEmision=puntoEmision;
     }
 
         
@@ -262,9 +266,14 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     public void setVendedor(String vendedor) {
         this.vendedor = vendedor;
     }
-    
-    
-    
+
+    public String getPuntoEmision() {
+        return puntoEmision;
+    }
+
+    public void setPuntoEmision(String puntoEmision) {
+        this.puntoEmision = puntoEmision;
+    }
     
 
     @Override

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.6105100000000157"/>
-	<property name="ireport.x" value="238"/>
-	<property name="ireport.y" value="696"/>
+	<property name="ireport.zoom" value="1.771561000000019"/>
+	<property name="ireport.x" value="85"/>
+	<property name="ireport.y" value="604"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -340,7 +340,7 @@
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="71" height="20" uuid="96aacd30-59f9-4ce5-9542-5691ac80b57c"/>
 				<box>
 					<topPen lineWidth="1.0"/>
@@ -355,7 +355,7 @@
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="71" y="0" width="216" height="20" uuid="677d9c87-3285-432c-9a45-934987635c8e"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="71" y="0" width="216" height="20" uuid="677d9c87-3285-432c-9a45-934987635c8e"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>

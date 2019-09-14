@@ -191,7 +191,18 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
             @Override
             public void pdf() {
-                controladorReporte.obtenerReportePdf(panelPadre);
+                TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
+                switch(tipoReporteEnum)
+                {
+                    case AGRUPADO_POR_CATEGORIA:
+                        controladorReporte.obtenerReportePdfAgrupadoPorPuntosEstablecimiento(panelPadre);
+                        break;  
+                    
+                    case NORMAL:
+                        controladorReporte.obtenerReportePdf(panelPadre);
+                        break;
+                }
+                
                 //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, titulo, OrientacionReporteEnum.HORIZONTAL);
             }
         });
@@ -433,6 +444,12 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getChkPuntoEmisionTodos().setSelected(true);
         getCmbPuntoEmision().setEnabled(false);
         
+        /***
+         * Cargar los tipos de reporte
+         */
+        UtilidadesComboBox.llenarComboBox(getCmbTipoReporte(),TipoReporteEnum.values());
+        //getCmbTipoReporte().
+        
         ///Para el reporte de facturacion no me importa que sean visibles estos campos del referido
         getLblReferido().setVisible(false);
         getTxtReferido().setVisible(false);
@@ -562,6 +579,26 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getTblDocumentos().setComponentPopupMenu(jpopMenuItem);
     }
     
-    
+    public enum TipoReporteEnum
+    {
+        NORMAL("Normal"),
+        AGRUPADO_POR_CATEGORIA("Agrupado por punto de emisión");
+
+        private TipoReporteEnum(String nombre) {
+            this.nombre = nombre;
+        }
+        
+        private String nombre;
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+    }
     
 }
