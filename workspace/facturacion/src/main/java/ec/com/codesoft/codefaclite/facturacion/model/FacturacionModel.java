@@ -1079,6 +1079,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             
                         comprobanteServiceIf.procesarComprobante(comprobanteData, facturaProcesando, session.getUsuario(), cic);
                         
+                        //TODO: Ver si se une esta parte con la parte superior porque se repite
+                        if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
+                        {
+                            FacturaRespuestaNoCallBack respuestaNoCallBack=new  FacturaRespuestaNoCallBack(factura,this);
+                            respuestaNoCallBack.iniciar();
+                        }
                                                 
 
                     } else {

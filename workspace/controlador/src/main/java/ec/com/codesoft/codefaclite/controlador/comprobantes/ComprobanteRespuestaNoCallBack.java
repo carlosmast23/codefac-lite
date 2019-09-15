@@ -45,6 +45,11 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
     protected MonitorComprobanteData monitorData;
     
     protected ControladorCodefacInterface panel;
+    
+    /**
+     * Variable de control que me permite saber si ya se genero el evento de imprimir el Ride
+     */
+    private Boolean verificarEventGeneradoRide=false;
 
     public ComprobanteRespuestaNoCallBack(ComprobanteEntity comprobante, ControladorCodefacInterface panel) {
         this.comprobante = comprobante;
@@ -109,8 +114,6 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
             }
         }
         LOG.log(Level.INFO,"Tiempo de espera superado para factura :"+comprobante.getPreimpreso());
-        
-        
     }
     
     private void iniciado() {
@@ -126,6 +129,12 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
     
     private void generadoRide()
     {
+        //Si ya esta generando este evento no lo vuelvo a generar
+        if(verificarEventGeneradoRide)
+        {
+            return ;
+        }
+        
         monitorData.getBarraProgreso().setForeground(Color.YELLOW);
         monitorData.getBarraProgreso().setValue(75);
         
@@ -133,9 +142,10 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
             monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    imprimirComprobante();
+                    imprimirComprobante();                    
                 }
             });
+        verificarEventGeneradoRide=true; //Esto sirve para identificar que ya agregue un actionListener
         
     }
     
@@ -147,6 +157,11 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
             monitorData.getBarraProgreso().setForeground(Color.GREEN);            
             monitorData.getBarraProgreso().setValue(100);
             monitorData.getBtnCerrar().setEnabled(true);
+            
+            //Solo activar si aun no se a activa el evento de imprimir
+            if (verificarEventGeneradoRide) {
+                return;
+            }
             
             monitorData.getBtnAbrir().setEnabled(true);
             monitorData.getBtnAbrir().addActionListener(new ActionListener() {

@@ -353,6 +353,11 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                 }
                 
                 ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, session.getEmpresa().getIdentificacion(),cic,getChkEnvioCorreo().isSelected());
+                if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
+                {
+                    estadoNormal();
+                    getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Vuelve a cargar los comprobantes
+                }
                 //estadoNormal();
             }
             else
