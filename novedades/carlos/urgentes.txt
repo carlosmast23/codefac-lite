@@ -60,3 +60,4 @@ Ver la posibilidad para en los dialogos buscar para filtrar por otros datos como
 revisar que cuando edita el secuencial de un punto de emisión al salir de la session sigue funcionando con el mismo, solo cambio cuando se abre y cierra el programa
 Al momento de editar por primera vez el usuario para asignar un punto de venta estaba generando error
 ver como hacer para que se demore menos los datos cuando se trabaja de forma remota en espeacial con el tema de los jasperReport
+en la pantalla de sucursal no tener la opcion de seleccionar la empresa porque despues de crear la empresa ya se puede ingresar con un usuario y seguir creando los datos

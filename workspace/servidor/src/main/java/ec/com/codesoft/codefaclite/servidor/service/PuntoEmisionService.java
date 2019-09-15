@@ -70,11 +70,15 @@ public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisi
 
 
     @Override
-    public PuntoEmision obtenerPorCodigo(Integer codigo) throws ServicioCodefacException, RemoteException {
+    public PuntoEmision obtenerPorCodigo(Integer codigo,Sucursal sucursal) throws ServicioCodefacException, RemoteException {
        Map<String,Object> mapParametros=new HashMap<String,Object>();
-      
+       //PuntoEmision p;
+       //p.getSucursal()
+       
        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
        mapParametros.put("puntoEmision",codigo);
+       mapParametros.put("sucursal",sucursal);
+       
        List<PuntoEmision> resultados=getFacade().findByMap(mapParametros);
        if(resultados.size()>0)
        {

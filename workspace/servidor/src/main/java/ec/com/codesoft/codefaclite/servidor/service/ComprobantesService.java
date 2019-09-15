@@ -1860,7 +1860,16 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         
         PuntoEmisionService puntoEmisionService=new PuntoEmisionService();
-        PuntoEmision puntoEmision=puntoEmisionService.obtenerPorCodigo(comprobante.getPuntoEmision());
+        /**
+         * TODO: Ver si esta parte se puede mejorar guardando la referencia del secuencial
+         */
+        PuntoEmision puntoEmision=puntoEmisionService.obtenerPorCodigo(comprobante.getPuntoEmision(),comprobante.getSucursalEmpresa());
+        
+        if(puntoEmision==null)
+        {
+            throw new ServicioCodefacException("No existe definido un punto de emisión");
+        }
+        
         comprobante.setTipoFacturacion(puntoEmision.getTipoFacturacion());
         
         //Obtiene los secuenciales eletronicos
