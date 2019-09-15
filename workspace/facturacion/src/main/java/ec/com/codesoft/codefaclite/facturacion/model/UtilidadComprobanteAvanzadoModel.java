@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaLoteImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteUtilidadImplComprobante;
@@ -345,6 +346,11 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                         getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Vuelve a cargar los comprobantes
                     }
                 });
+                
+                if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
+                {
+                    cic=null; //Si es un cliente remoto el que ejecuta la accion no puede hacer callback para veriicar
+                }
                 
                 ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, session.getEmpresa().getIdentificacion(),cic,getChkEnvioCorreo().isSelected());
                 //estadoNormal();

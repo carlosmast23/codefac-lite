@@ -233,7 +233,14 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             @Override
             public void iniciado() {
                 try {
-                    callbackClientObject.iniciado();
+                    if(callbackClientObject==null)// Si se envia nulo el objeto que tampoco ejecute el callback con el cliente
+                    {
+                        existeConexionRemota=false;
+                    }
+                    else
+                    {
+                        callbackClientObject.iniciado();
+                    }
                 } catch (RemoteException ex) {
                     existeConexionRemota=false;
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -298,73 +305,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         comprobanteElectronico.procesar(true);
         return true;
     }
-    /*
-    private void cambiarEstadoLoteAutorizaciones(List<Autorizacion> autorizaciones,ComprobanteEntity.ComprobanteEnumEstado enumEstado)
-    {
-
-        try {
-            //Grabar el estado del comprobante consultado
-            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                @Override
-                public void transaccion() {
-                    try {
-                        
-                        for (Autorizacion autorizacion : autorizaciones) {
-                            if (autorizacion.getEstado().equals("AUTORIZADO")) {
-                                String numeroAutorizacion = autorizacion.getNumeroAutorizacion();
-                                ClaveAcceso claveAcceso = new ClaveAcceso(numeroAutorizacion);
-                                ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobante = null; //comprobante
-                                
-                                Map<String, Object> mapParametro = new HashMap<>();
-                                mapParametro.put("claveAcceso", numeroAutorizacion);
-                                
-                                switch (claveAcceso.getTipoComprobante()) {
-                                    case FACTURA:
-                                        FacturacionService serviceFactura = new FacturacionService();
-                                        comprobante = serviceFactura.obtenerPorMap(mapParametro).get(0);
-                                        break;
-                                        
-                                    case NOTA_CREDITO:
-                                        NotaCreditoService serviceNotaCredito = new NotaCreditoService();
-                                        comprobante = serviceNotaCredito.obtenerPorMap(mapParametro).get(0);
-                                        break;
-                                        
-                                    case COMPROBANTE_RETENCION:
-                                        RetencionService serviceRetencion = new RetencionService();
-                                        comprobante = serviceRetencion.obtenerPorMap(mapParametro).get(0);
-                                        break;
-                                    case GUIA_REMISION:
-                                        GuiaRemisionService guiaRemisionServicio = new GuiaRemisionService();
-                                        comprobante = guiaRemisionServicio.obtenerPorMap(mapParametro).get(0);
-                                        break;
-                                }
-                                
-                                //Esta validacion la hago si por algun caso consulta datos que no existen en el sistema
-                                if(comprobante!=null)
-                                {
-                                    comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-                                    entityManager.merge(comprobante);
-                                }
-                                else
-                                {
-                                    LOG.log(Level.SEVERE,"El comprobante "+claveAcceso.getTipoComprobante().getNombre()+" con clave de acceso "+claveAcceso+"No existe para cambiar el estado a Autorizados");
-                                }
-                                
-                            }
-
-                        }
-
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                }
-            });
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }*/
+    
     
     private Empresa obtenerEmpresaPorClaveAcceso(String claveAcceso) throws RemoteException
     {
