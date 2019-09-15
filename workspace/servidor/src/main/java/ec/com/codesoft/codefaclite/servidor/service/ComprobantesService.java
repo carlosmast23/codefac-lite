@@ -955,7 +955,15 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             @Override
             public void iniciado(ComprobanteElectronico comprobante) {
                 try {
-                    callbackClientObject.iniciado();
+                    //Si no existe un objeto callback tampoco ejecuto el reto de proceso callback
+                    if(callbackClientObject==null)
+                    {
+                        existeConexionRemota=false;
+                    }
+                    else
+                    {                        
+                        callbackClientObject.iniciado();
+                    }
                 } catch (RemoteException ex) {
                     existeConexionRemota=false;
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);

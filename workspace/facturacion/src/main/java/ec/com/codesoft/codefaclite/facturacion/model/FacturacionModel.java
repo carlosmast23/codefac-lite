@@ -1079,17 +1079,26 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             
                         comprobanteServiceIf.procesarComprobante(comprobanteData, facturaProcesando, session.getUsuario(), cic);
                         
+                                                
+
+                    } else {
+                        //TODO: Ver si se une esta parte con la parte superior porque se repite
+                        if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
+                        {
+                            cic=null;
+                        }
+                        
+                        //Solo genera el pdf pero no envia al SRI
+                        comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(), cic);
+                        DialogoCodefac.mensaje("Correcto", "El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_CORRECTO);
+
+                        //TODO: Ver si se une esta parte con la parte superior porque se repite
                         if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
                         {
                             FacturaRespuestaNoCallBack respuestaNoCallBack=new  FacturaRespuestaNoCallBack(factura,this);
                             respuestaNoCallBack.iniciar();
                         }
-                        
 
-                    } else {
-                        //Solo genera el pdf pero no envia al SRI
-                        comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(), cic);
-                        DialogoCodefac.mensaje("Correcto", "El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_CORRECTO);
                     }
 
                 } else { //Si el servidor del sri no esta disponible solo existe un camino
