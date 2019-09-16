@@ -105,7 +105,7 @@
 
 
                             <p:panel style="border: 0px;margin: 0px;padding: 0px" >
-                                <p:commandButton style="width: 30%" process="@this,txtValorUnitario,txtCantidad,txtDescuento" update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,:formulario:tblProductoDetalles,:formulario:messages" icon="fa fa-plus"   styleClass="white-button" action="#{proformaMb.agregarProducto()}" />
+                                <p:commandButton style="width: 30%" process="@this,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion" update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,:formulario:tblProductoDetalles,:formulario:messages" icon="fa fa-plus"   styleClass="white-button" action="#{proformaMb.agregarProducto()}" />
                                 <p:commandButton style="width: 30%" process="@this" icon="fa fa-pencil"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}"/>
                                 <p:commandButton style="width: 30%" process="@this" icon="fa fa-close"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}"/>
                             </p:panel>

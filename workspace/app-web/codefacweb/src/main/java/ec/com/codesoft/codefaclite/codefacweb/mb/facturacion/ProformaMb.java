@@ -81,6 +81,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import java.math.RoundingMode;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 
@@ -431,6 +432,14 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         factura.setPuntoEstablecimiento(new BigDecimal(sessionMb.getSession().getSucursal().getCodigoSucursal().toString()));
         factura.setUsuario(sessionMb.getSession().getUsuario());
         factura.setSucursalEmpresa(sessionMb.getSession().getSucursal());
+        
+        /**
+         * Redondeo los valores de los precios unitario de los detalles de la factura
+         * Nota: este proceso lo hago al final porque para los totales necesitaba tener los valores exactos de los precios unitarios, pero como ya va a generar la factura puedo redondeal los valores unitario
+         */
+        for (FacturaDetalle facturaDetalle : factura.getDetalles()) {
+            facturaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2,RoundingMode.HALF_UP));
+        }
 
     }
 
