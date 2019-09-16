@@ -1127,15 +1127,24 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
             @Override
             public void autorizado(Autorizacion documentoAutorizado) {
-                               
+                
                 try {
                     ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                         @Override
                         public void transaccion() {
                             //Setear el campo de seteado a factura solo si pasa la etapa de autorizar
-                            comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-                            setearDatosAutorizacionComprobante(comprobanteOriginal,documentoAutorizado);               
-                            entityManager.merge(comprobanteOriginal);
+                            //ComprobanteEntity comprobanteOriginal=buscarPorId(comprobanteOriginal.getId)                            
+                            ComprobanteEntity comprobanteEditar=entityManager.merge(comprobanteOriginal); 
+                            LOG.log(Level.INFO,"Actualizando la informacion del comprobante ");
+                            //comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                            //setearDatosAutorizacionComprobante(comprobanteOriginal,documentoAutorizado);               
+                            //entityManager.merge(comprobanteOriginal);
+                            comprobanteEditar.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                            LOG.log(Level.INFO,"Cambiando el estado Autorizado del comprobante ");
+                            setearDatosAutorizacionComprobante(comprobanteEditar,documentoAutorizado);               
+                            LOG.log(Level.INFO,"Cambiando el resto de datos del comprobante autorizado");
+                            entityManager.merge(comprobanteEditar);
+                            LOG.log(Level.INFO,"Guardando cambios del comprobante autorizado");
                         }
                     });
 
