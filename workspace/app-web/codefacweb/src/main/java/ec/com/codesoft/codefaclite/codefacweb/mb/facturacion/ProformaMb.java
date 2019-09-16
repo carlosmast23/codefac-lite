@@ -111,6 +111,11 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     private SriFormaPago sriFormaPagoSeleccionado;
     
     private TipoPaginaEnum tipoPaginaEnum;
+    
+    /**
+     * Variable para saber si se tiene que mostrar o no el boton de cargar desde factura
+     */
+    private Boolean visualizarCargarProforma;
     //private String tipoPagina;
     //private String tituloPagina;
     /**
@@ -131,6 +136,13 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public void init() {
         String tipoPagina = UtilidadesWeb.buscarParametroPeticion(parametrosWeb.getCampoTipoFacturaOProforma());
         tipoPaginaEnum = TipoPaginaEnum.getByNombreParametro(tipoPagina);
+        
+        visualizarCargarProforma=true;
+        if(tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA))
+        {
+            visualizarCargarProforma=false;
+        }
+        
         limpiar();
 
     }
@@ -969,6 +981,15 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public void setSessionMb(SessionMb sessionMb) {
         this.sessionMb = sessionMb;
     }
+
+    public Boolean getVisualizarCargarProforma() {
+        return visualizarCargarProforma;
+    }
+
+    public void setVisualizarCargarProforma(Boolean visualizarCargarProforma) {
+        this.visualizarCargarProforma = visualizarCargarProforma;
+    }
+    
     
 
 }

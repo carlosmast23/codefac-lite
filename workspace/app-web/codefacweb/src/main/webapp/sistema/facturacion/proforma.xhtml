@@ -14,7 +14,7 @@
                 <f:event type="preRenderView" listener="#{proformaMb.verificarPagina()}"/>
             </f:metadata>
             
-            <p:commandButton value="Cargar desde proforma" action="#{proformaMb.abrirDialogoBuscarProforma()}" >
+            <p:commandButton value="Cargar desde proforma" action="#{proformaMb.abrirDialogoBuscarProforma()}" rendered="#{proformaMb.visualizarCargarProforma}" >
                 <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProforma}" update="panelContenido"  />
             </p:commandButton>
 
