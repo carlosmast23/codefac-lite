@@ -13,6 +13,10 @@
                 <!--<f:viewParam name="tipo" value="#{proformaMb.tipoPagina}"/>-->
                 <f:event type="preRenderView" listener="#{proformaMb.verificarPagina()}"/>
             </f:metadata>
+            
+            <p:commandButton value="Cargar desde proforma" action="#{proformaMb.abrirDialogoBuscarProforma()}" >
+                <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProforma}" update="panelContenido"  />
+            </p:commandButton>
 
             <p:accordionPanel multiple="true">
                 <p:tab title="Datos Cabecera">

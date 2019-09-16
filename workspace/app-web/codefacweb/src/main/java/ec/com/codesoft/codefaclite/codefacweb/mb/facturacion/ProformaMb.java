@@ -263,6 +263,23 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         }
         return null;
     }
+    
+    public void abrirDialogoBuscarProforma()
+    {
+        System.out.println("Abriendo dialogo proforma init");
+        ProformaBusqueda proformaBusqueda = new ProformaBusqueda(sessionMb.getSession().getEmpresa());
+        abrirDialogoBusqueda(proformaBusqueda);
+        System.out.println("Abriendo dialogo proforma fin");
+    }
+    
+    public void seleccionarProforma(SelectEvent event) {
+        Factura proforma = (Factura) event.getObject();
+        proforma.setId(null); 
+        //cargarDatosCliente(clienteOficina);
+        //cargarDatosAdicionalesCliente();
+        cargarBusqueda(proforma);
+        
+    }
 
     public void saludo() {
         System.out.println("Hola todos");
