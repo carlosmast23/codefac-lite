@@ -43,7 +43,7 @@ public class NotaCreditoNoCallBack extends ComprobanteRespuestaNoCallBack{
     private void generarReportePdf(String clave) {
         try {
 
-            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
+            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave,comprobante.getEmpresa());
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
             notaCreditoModel.panelPadre.crearReportePantalla(jasperPrint, clave);
         } catch (RemoteException ex) {

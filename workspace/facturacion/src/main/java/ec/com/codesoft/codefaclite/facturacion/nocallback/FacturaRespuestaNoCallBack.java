@@ -58,7 +58,7 @@ public class FacturaRespuestaNoCallBack extends ComprobanteRespuestaNoCallBack
             }
             else
             {            
-                byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
+                byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave,comprobante.getEmpresa());
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
                 facturacionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
             }

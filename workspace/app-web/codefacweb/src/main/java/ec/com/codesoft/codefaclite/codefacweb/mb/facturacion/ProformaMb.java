@@ -492,7 +492,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         if (factura != null) {
             try {
                 String claveAcceso = factura.getClaveAcceso();
-                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura.getClaveAcceso());
+                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura.getClaveAcceso(),factura.getEmpresa());
                 JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();

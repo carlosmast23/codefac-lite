@@ -61,3 +61,5 @@ revisar que cuando edita el secuencial de un punto de emisión al salir de la ses
 Al momento de editar por primera vez el usuario para asignar un punto de venta estaba generando error
 ver como hacer para que se demore menos los datos cuando se trabaja de forma remota en espeacial con el tema de los jasperReport
 en la pantalla de sucursal no tener la opcion de seleccionar la empresa porque despues de crear la empresa ya se puede ingresar con un usuario y seguir creando los datos
+En todos los lugares que son de grabar imagenes o algo de forma remota desahabilitar esa opción cuando sea un cliente remoto
+porque eso no esta funcionando todavia

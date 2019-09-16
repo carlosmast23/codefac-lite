@@ -152,7 +152,7 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
     private void terminado()
     {
         try {
-            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(comprobante.getClaveAcceso());
+            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(comprobante.getClaveAcceso(),comprobante.getEmpresa());
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
             monitorData.getBarraProgreso().setForeground(Color.GREEN);            
             monitorData.getBarraProgreso().setValue(100);

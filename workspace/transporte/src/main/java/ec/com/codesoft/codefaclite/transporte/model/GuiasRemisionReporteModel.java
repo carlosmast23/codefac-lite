@@ -435,7 +435,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
                     
                     try {
                         String claveAcceso=controladorReporte.getListReporte().get(filaSeleccionada).getClaveAcceso();//                    String claveAcceso = this.factura.getClaveAcceso();
-                        byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso);
+                        byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,session.getEmpresa());
                         JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                         panelPadre.crearReportePantalla(jasperPrint,controladorReporte.getListReporte().get(filaSeleccionada).getPreimpreso());
                     } catch (RemoteException ex) {

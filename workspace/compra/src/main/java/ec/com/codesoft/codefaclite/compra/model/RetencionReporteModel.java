@@ -528,7 +528,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     
                     try {
                         String claveAcceso=controladorReporte.getDataReporte().get(filaSeleccionada).getClaveAcceso();//                    String claveAcceso = this.factura.getClaveAcceso();
-                        byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso);
+                        byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,session.getEmpresa());
                         JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                         panelPadre.crearReportePantalla(jasperPrint,controladorReporte.getDataReporte().get(filaSeleccionada).getPreimpresoRetencion());
                     } catch (RemoteException ex) {

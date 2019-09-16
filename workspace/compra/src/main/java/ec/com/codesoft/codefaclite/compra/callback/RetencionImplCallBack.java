@@ -166,7 +166,7 @@ public class RetencionImplCallBack extends UnicastRemoteObject implements Client
     
     private void generarReportePdf(String clave) {
         try {
-            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
+            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave,retencion.getEmpresa());
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
             formulario.panelPadre.crearReportePantalla(jasperPrint, clave);
             //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());

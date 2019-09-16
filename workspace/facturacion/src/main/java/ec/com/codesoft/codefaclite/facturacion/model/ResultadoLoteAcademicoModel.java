@@ -146,7 +146,7 @@ public class ResultadoLoteAcademicoModel extends ResultadoLoteAcademicoPanel{
 
         if (fila >= 0) {
             try {
-                byte[] reporteByte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso);
+                byte[] reporteByte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,session.getEmpresa());
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(reporteByte);
                 panelPadre.crearReportePantalla(jasperPrint, claveAcceso);
 

@@ -559,8 +559,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 {
                     panelPadre.cambiarCursorEspera();
                     try {
+                        //controladorReporte.getData().get
                         String claveAcceso=controladorReporte.getData().get(filaSeleccionada).getClaveAcceso();//                    String claveAcceso = this.factura.getClaveAcceso();
-                        byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso);
+                        byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,session.getEmpresa()); //TODO: Revisar si es correcto buscar con el nombre de la empresa
                         JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                         panelPadre.crearReportePantalla(jasperPrint,controladorReporte.getData().get(filaSeleccionada).getNumeroFactura());
                     } catch (RemoteException ex) {

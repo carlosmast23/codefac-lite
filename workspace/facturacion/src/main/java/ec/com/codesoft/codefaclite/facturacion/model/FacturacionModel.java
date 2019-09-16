@@ -1253,7 +1253,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (this.factura != null && estadoFormulario.equals(ESTADO_EDITAR)) {
             try {
                 String claveAceeso = this.factura.getClaveAcceso();
-                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso);
+                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso,factura.getEmpresa());
                 JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                 panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
             } catch (RemoteException ex) {

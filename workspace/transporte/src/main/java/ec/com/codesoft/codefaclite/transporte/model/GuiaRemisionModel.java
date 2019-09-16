@@ -205,7 +205,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         if (this.guiaRemision != null && estadoFormulario.equals(ESTADO_EDITAR)) {
             try {
                 String claveAcceso = this.guiaRemision.getClaveAcceso();
-                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso);
+                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,guiaRemision.getEmpresa());
                 JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                 panelPadre.crearReportePantalla(jasperPrint, guiaRemision.getPreimpreso());
             } catch (RemoteException ex) {

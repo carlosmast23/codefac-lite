@@ -183,7 +183,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         {
             try {
                 String claveAceeso = this.retencion.getClaveAcceso();
-                byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso);
+                byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso,retencion.getEmpresa());
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                 panelPadre.crearReportePantalla(jasperPrint,retencion.getPreimpreso());
             } catch (RemoteException ex) {

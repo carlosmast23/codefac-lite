@@ -46,7 +46,7 @@ public class GuiaRemisionNoCallBack extends ComprobanteRespuestaNoCallBack {
             if (verificarImprimirComprobante()) {
                 guiaRemisionModel.imprimirComprobanteGuiaRemision((GuiaRemision) comprobante); //TODO:Verificar si este metodo no funciona
             } else {
-                byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
+                byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave,comprobante.getEmpresa());
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
                 guiaRemisionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
             }

@@ -39,7 +39,7 @@ public class RetencionNoCallBack extends ComprobanteRespuestaNoCallBack{
     
     private void generarReportePdf(String clave) {
         try {
-            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
+            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave,comprobante.getEmpresa());
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
             retencionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
             //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());

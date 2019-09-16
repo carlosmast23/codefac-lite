@@ -620,13 +620,14 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
      * @return
      * @throws RemoteException 
      */
-    public byte[] getReporteComprobante(String claveAcceso) throws RemoteException
+    public byte[] getReporteComprobante(String claveAcceso,Empresa empresa) throws RemoteException
     {
         try {
             //Metodos para obtener la empresa para hacer el pie de pagina con esos datos
             ClaveAcceso claveAccesoObj=new ClaveAcceso(claveAcceso);
             EmpresaService empresaService=new EmpresaService();
-            Empresa empresa=empresaService.buscarPorIdentificacion( claveAccesoObj.identificacion);
+            //Empresa empresa=empresaService.buscarPorIdentificacion( claveAccesoObj.identificacion);
+            //Empresa empresa=empresaService.buscarPorId(empresa.getId());
             
             ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
             //Cargar recursos para el reporte
@@ -939,7 +940,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                         Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
-                    byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());      
+                    byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso(),factura.getEmpresa()); //Todo: Revisar si esta procesando correctamente      
                     if(existeConexionRemota)
                     {
                         callbackClientObject.termino(serializedPrint,comprobanteElectronico.getAlertas());
@@ -1051,7 +1052,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             public void termino() {
                 try {
                     //Si la factura termina corectamente grabo el estado y numero de autorizacion
-                    byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());   
+                    byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso(),comprobanteOriginal.getEmpresa());   
                     
                     if(existeConexionRemota)
                     {

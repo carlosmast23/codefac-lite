@@ -44,12 +44,18 @@ public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisi
     @Override
     public List<PuntoEmision> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException, RemoteException {
        // ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-       PuntoEmision pv;
-       //pv.getS
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("sucursal",sucursal);
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        return getFacade().findByMap(mapParametros);
+       //PuntoEmision pv;
+       //pv.getS7
+        return (List<PuntoEmision>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+           @Override
+           public Object consulta() throws ServicioCodefacException, RemoteException {
+               Map<String, Object> mapParametros = new HashMap<String, Object>();
+               mapParametros.put("sucursal", sucursal);
+               mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+               return getFacade().findByMap(mapParametros);
+           }
+        });
+        
             
     }
 

@@ -132,7 +132,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
     @Override
     public void error(ComprobanteElectronicoException cee,String claveAcceso) throws RemoteException {
         try {
-            byte[] resporteSerializado = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso);
+            byte[] resporteSerializado = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,guiaRemision.getEmpresa());
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(resporteSerializado);
             monitorData.getBtnReporte().setEnabled(true);
             monitorData.getBtnCerrar().setEnabled(true);
@@ -192,7 +192,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
             }
             else
             {            
-                byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
+                byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave,guiaRemision.getEmpresa());
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
                 guiaRemisionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
             }

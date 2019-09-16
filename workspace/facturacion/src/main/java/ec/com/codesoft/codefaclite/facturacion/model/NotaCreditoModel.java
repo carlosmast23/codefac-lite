@@ -309,7 +309,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         {
             try {
                 String claveAceeso = this.notaCredito.getClaveAcceso();
-                byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso);
+                byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso,notaCredito.getEmpresa());
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                 panelPadre.crearReportePantalla(jasperPrint,notaCredito.getPreimpreso());
             } catch (RemoteException ex) {
