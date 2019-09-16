@@ -174,13 +174,16 @@ public class ComprobanteElectronicoComponente {
             //Canfigurar un cell render para las sucursales
             //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
 
-            for (PuntoEmisionUsuario puntoUsuario : puntosEmisionUsuario) {
-                //Cargar solo los puntos de emision que estan relacionados con la sucursal
-                if(puntoUsuario.getPuntoEmision().getSucursal()!=null)
-                {
-                    if(puntoUsuario.getPuntoEmision().getSucursal().equals(sucursal))
+            if(puntosEmisionUsuario!=null)
+            {
+                for (PuntoEmisionUsuario puntoUsuario : puntosEmisionUsuario) {
+                    //Cargar solo los puntos de emision que estan relacionados con la sucursal
+                    if(puntoUsuario.getPuntoEmision().getSucursal()!=null)
                     {
-                        cmbPuntoEmision.addItem(puntoUsuario.getPuntoEmision());
+                        if(puntoUsuario.getPuntoEmision().getSucursal().equals(sucursal))
+                        {
+                            cmbPuntoEmision.addItem(puntoUsuario.getPuntoEmision());
+                        }
                     }
                 }
             }
