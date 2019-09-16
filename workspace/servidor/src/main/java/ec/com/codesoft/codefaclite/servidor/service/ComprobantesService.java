@@ -206,9 +206,9 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         return false;
     }
     
-    public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,String ruc,ClienteInterfaceComprobanteLote callbackClientObject,Boolean enviarCorreo) throws RemoteException
+    public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,String ruc,ClienteInterfaceComprobanteLote callbackClientObject,Boolean enviarCorreo,Empresa empresa) throws RemoteException
     {
-        Empresa empresa=obtenerEmpresaPorClaveAcceso(clavesAcceso.get(0));
+        //Empresa empresa=obtenerEmpresaPorClaveAcceso(clavesAcceso.get(0));
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
         comprobanteElectronico.setEnviarCorreos(enviarCorreo);
         cargarConfiguraciones(comprobanteElectronico,empresa);

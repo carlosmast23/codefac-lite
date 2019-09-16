@@ -352,7 +352,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                     cic=null; //Si es un cliente remoto el que ejecuta la accion no puede hacer callback para veriicar
                 }
                 
-                ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, session.getEmpresa().getIdentificacion(),cic,getChkEnvioCorreo().isSelected());
+                ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, session.getEmpresa().getIdentificacion(),cic,getChkEnvioCorreo().isSelected(),session.getEmpresa());
                 if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
                 {
                     estadoNormal();
