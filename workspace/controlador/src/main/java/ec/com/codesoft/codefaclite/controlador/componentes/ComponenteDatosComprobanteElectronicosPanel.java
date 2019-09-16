@@ -252,7 +252,8 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                                 etapaEnviarCorreo,
                                 etapaEnviarCorreo,
                                 comprobante.getComprobante().getClaveAcceso(),
-                                obtenerCorreosFactura()); //TOdo:Verificar si puedo hacer alguna manera para solo enviar a los correos que esten escritos
+                                obtenerCorreosFactura(),
+                                comprobante.getEmpresa()); //TOdo:Verificar si puedo hacer alguna manera para solo enviar a los correos que esten escritos
                         
                         if(alertas.size()>0)
                         {

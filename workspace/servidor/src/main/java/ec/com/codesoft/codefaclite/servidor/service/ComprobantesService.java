@@ -307,17 +307,17 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     }
     
     
-    private Empresa obtenerEmpresaPorClaveAcceso(String claveAcceso) throws RemoteException
+    /*private Empresa obtenerEmpresaPorClaveAcceso(String claveAcceso) throws RemoteException
     {
         ClaveAcceso claveAccesoObj=new ClaveAcceso(claveAcceso);
         EmpresaService empresaService=new EmpresaService();
         Empresa empresa=empresaService.buscarPorIdentificacion(claveAccesoObj.identificacion);
         return empresa;
-    }
+    }*/
     
-    public List<AlertaComprobanteElectronico> procesarComprobantesPendienteSinCallBack(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos) throws RemoteException,ServicioCodefacException
+    public List<AlertaComprobanteElectronico> procesarComprobantesPendienteSinCallBack(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,Empresa empresa) throws RemoteException,ServicioCodefacException
     {
-        Empresa empresa=obtenerEmpresaPorClaveAcceso(claveAcceso);
+        //Empresa empresa=obtenerEmpresaPorClaveAcceso(claveAcceso);
         
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
         cargarConfiguraciones(comprobanteElectronico,empresa);
@@ -348,7 +348,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         return alertas;
     }
     
-    public List<String> procesarComprobantesPendienteLote(Integer etapaInicial,Integer etapaLimite,Map<String,List<String>> mapClaveAccesoYCorreos,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException 
+    public List<String> procesarComprobantesPendienteLote(Integer etapaInicial,Integer etapaLimite,Map<String,List<String>> mapClaveAccesoYCorreos,Boolean enviarCorreo,Empresa empresa) throws RemoteException,ServicioCodefacException 
     {
         List<String> errores=new ArrayList<String>();
         for (Map.Entry<String, List<String>> entry : mapClaveAccesoYCorreos.entrySet()) {
@@ -368,15 +368,15 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 public void error(ComprobanteElectronicoException cee, String claveAcceso) throws RemoteException {
                     errores.add("Clave Acceso:"+claveAcceso+"\nError:"+cee.getMessage());
                 }
-            }, enviarCorreo,false); //todo: ver si se hace parametrizable este valor de asincrono o no asincrono , por defecto esta no asincrono            
+            }, enviarCorreo,false,empresa); //todo: ver si se hace parametrizable este valor de asincrono o no asincrono , por defecto esta no asincrono            
         }
         return errores; //Esta opcion va a permitir que espera a que se termine el proceso y no funcione en segundo plano
     
     }          
     
-    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo,Boolean asincrono) throws RemoteException
+    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo,Boolean asincrono,Empresa empresa) throws RemoteException
     {
-        Empresa empresa=obtenerEmpresaPorClaveAcceso(claveAcceso);
+        //Empresa empresa=obtenerEmpresaPorClaveAcceso(claveAcceso);
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
         cargarConfiguraciones(comprobanteElectronico,empresa);
         
@@ -2057,7 +2057,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     ComprobanteElectronicoService.ETAPA_AUTORIZAR, 
                     99999, 
                     mapComprobante, 
-                    false);
+                    false,
+                    empresa);
             
             if(service.verificarExisteArchivo(claveAcceso, ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA))
             { 
@@ -2082,7 +2083,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     ComprobanteElectronicoService.ETAPA_ENVIAR, 
                     99999, 
                     mapComprobante, 
-                    false);            
+                    false,
+                    empresa);            
            
             service.eliminarComprobanteElectronico(claveAcceso, ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR);
             
