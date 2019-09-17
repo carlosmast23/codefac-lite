@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.Direct
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioListener;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
@@ -2889,14 +2890,23 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
             }
             
-            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReporteEncabezado));
-            JasperReport reportCabecera = JasperCompileManager.compileReport(inputStream);
+            JasperReport reportCabecera=ReporteProxy.buscar(RecursoCodefac.JASPER, nombreReporteEncabezado);
+            if(reportCabecera==null)
+            {
+                inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReporteEncabezado));
+                reportCabecera = JasperCompileManager.compileReport(inputStream);
+                ReporteProxy.agregar(RecursoCodefac.JASPER, nombreReporteEncabezado,reportCabecera);
+            }
             
             parametros.put("pl_url_cabecera",reportCabecera);
             
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReportePiePagina));
-            JasperReport reportPiePagina = JasperCompileManager.compileReport(inputStream);
-            
+            JasperReport reportPiePagina=ReporteProxy.buscar(RecursoCodefac.JASPER, nombreReportePiePagina);
+            if(reportPiePagina==null)
+            {
+                inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReportePiePagina));
+                reportPiePagina = JasperCompileManager.compileReport(inputStream);
+                ReporteProxy.agregar(RecursoCodefac.JASPER, nombreReportePiePagina,reportPiePagina);
+            }            
             parametros.put("pl_url_piepagina",reportPiePagina);
             //System.out.println(parametros.get("SUBREPORT_DIR"));            
         } catch (RemoteException ex) {

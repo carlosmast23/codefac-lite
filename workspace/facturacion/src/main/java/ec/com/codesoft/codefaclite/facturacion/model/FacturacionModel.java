@@ -3123,11 +3123,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
         List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);
         Map<String, Object> mapParametros = getMapParametrosReporte(facturaProcesando);
-        InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
+        //InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
+        String nombreReporte="comprobante_venta.jrxml";
+        
         
         //TODO: Ver si esta parte se puede mejorar para imprimir
         ParametroCodefac parametroCodefac = session.getParametrosCodefac().get(ParametroCodefac.IMPRESORA_TICKETS_VENTAS);
         FormatoHojaEnum formatoEnum=FormatoHojaEnum.A5;
+        
         if (parametroCodefac !=null) 
         {
             if(parametroCodefac.getValor()!=null)
@@ -3136,11 +3139,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(enumSiNo!=null && enumSiNo.getBool())
                 {
                     formatoEnum=FormatoHojaEnum.TICKET;
-                    path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
+                    //nombreReporte = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
+                    nombreReporte = "comprobante_venta_ticket.jrxml";
                 }
             }
         }
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
+        
+        //ReporteCodefac.generarReporteInternalFramePlantilla(parametro, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
+        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
 
     }
 

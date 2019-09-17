@@ -10,6 +10,7 @@ import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
@@ -128,8 +129,17 @@ public class ReporteCodefac {
         generarReporte(pathReporte,parametros,datos,panelPadre,tituloReporte,orientacionEnum,FormatoHojaEnum.A4);
     }
     
+    @Deprecated
     public static void generarReporteInternalFramePlantilla(InputStream pathReporte, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte) {
         generarReporte(pathReporte, parametros, datos, panelPadre, tituloReporte, orientacionEnum,formatoReporte);
+    }
+    
+    /**
+     * Metodo creado para ver si se compila el reporte y puedo tener un proxy de los reportes y acceder mas rapidos a los mismos
+     * @Date 17/09/2019     
+     */
+    public static void generarReporteInternalFramePlantilla(RecursoCodefac recursoCodefac,String nombre, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte) {
+        generarReporte(recursoCodefac,nombre, parametros, datos, panelPadre, tituloReporte, orientacionEnum,formatoReporte);
     }
     
     public static void generarReporteInternalFramePlantillaArchivo(InputStream pathReporte, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,String path) {
@@ -140,6 +150,16 @@ public class ReporteCodefac {
             Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    /**
+     * Metodo creado para ver si se compila el reporte y puedo tener un proxy de los reportes y acceder mas rapidos a los mismos
+     * @Date 17/09/2019     
+     */
+    private static void generarReporte(RecursoCodefac recursoCodefac,String nombre,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
+    {
+        JasperPrint jasperPrint=construirReporte(recursoCodefac,nombre, parametros, datos, panelPadre, tituloReporte, orientacionEnum, formatoReporte);
+        panelPadre.crearReportePantalla(jasperPrint,tituloReporte);
+    } 
         
     private static void generarReporte(InputStream pathReporte,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
     {
@@ -171,6 +191,49 @@ public class ReporteCodefac {
         return null;
     }
     
+    /**
+     * Metodo creado para ver si se compila el reporte y puedo tener un proxy de los reportes y acceder mas rapidos a los mismos
+     * @Date 17/09/2019     
+     */
+    private static JasperPrint construirReporte(RecursoCodefac recursoCodefac,String nombre,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
+    {
+        try {
+            Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla(orientacionEnum,formatoReporte));
+            
+            //Agregado parametros adicionales
+            for (Map.Entry<String, Object> entry : parametros.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                mapCompleto.put(key, value);
+            }
+            
+            mapCompleto.put("pl_titulo",tituloReporte);
+            
+            /**
+             * Agregado reporte para tener un proxy de objetos
+             */
+            JasperReport report=ReporteProxy.buscar(recursoCodefac, nombre);
+            if(report==null)
+            {
+                InputStream inputStream= recursoCodefac.getResourceInputStream(nombre);
+                report =JasperCompileManager.compileReport(inputStream);
+                ReporteProxy.agregar(recursoCodefac,nombre,report);
+                
+            }
+            
+            JRBeanCollectionDataSource dataReport= new JRBeanCollectionDataSource(datos);
+            JasperPrint print =JasperFillManager.fillReport(report, mapCompleto,dataReport);
+            return print;
+        } catch (JRException ex) {
+            Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    /**
+     * Metodo creado para ver si se compila el reporte y puedo tener un proxy de los reportes y acceder mas rapidos a los mismos
+     * @Date 17/09/2019     
+     */
     public static JasperPrint construirReporte(InputStream pathReporte,Map<String,Object> parametros,Collection datos,SessionCodefac session,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
     {
         try {
