@@ -1082,7 +1082,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         //TODO: Ver si se une esta parte con la parte superior porque se repite
                         if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
                         {
-                            FacturaRespuestaNoCallBack respuestaNoCallBack=new  FacturaRespuestaNoCallBack(factura,this);
+                            FacturaRespuestaNoCallBack respuestaNoCallBack=new  FacturaRespuestaNoCallBack(factura,this,true);
                             respuestaNoCallBack.iniciar();
                         }
                                                 
@@ -1101,7 +1101,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         //TODO: Ver si se une esta parte con la parte superior porque se repite
                         if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
                         {
-                            FacturaRespuestaNoCallBack respuestaNoCallBack=new  FacturaRespuestaNoCallBack(factura,this);
+                            FacturaRespuestaNoCallBack respuestaNoCallBack=new  FacturaRespuestaNoCallBack(factura,this,true);
                             respuestaNoCallBack.iniciar();
                         }
 
@@ -1109,7 +1109,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
                 } else { //Si el servidor del sri no esta disponible solo existe un camino
                     DialogoCodefac.mensaje("Advertencia", "El servidor del Sri no esta disponible\n El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    
+                    if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) 
+                    {
+                        cic = null;
+                    }
+                    
                     comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(), cic);
+                    
+                    //TODO: Ver si se une esta parte con la parte superior porque se repite
+                    if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+                        FacturaRespuestaNoCallBack respuestaNoCallBack = new FacturaRespuestaNoCallBack(factura, this,false);
+                        respuestaNoCallBack.iniciar();
+                    }
                 }
 
                 //=====================> Imprimir comprobante de venta <==============================//

@@ -50,12 +50,18 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
      * Variable de control que me permite saber si ya se genero el evento de imprimir el Ride
      */
     private Boolean verificarEventGeneradoRide=false;
+    
+    /**
+     * Variable para saber si el proceso debe esperar a que se autorize el documento o que solo se genere el Rid
+     * true=esperar hasta autorizar el documento
+     * false=esperar solo hasta que se genere el ride
+     */
+    protected Boolean procesoCompleto=true;
 
     public ComprobanteRespuestaNoCallBack(ComprobanteEntity comprobante, ControladorCodefacInterface panel) {
         this.comprobante = comprobante;
         this.panel = panel;
     }
-    
     
     
     public void iniciar()

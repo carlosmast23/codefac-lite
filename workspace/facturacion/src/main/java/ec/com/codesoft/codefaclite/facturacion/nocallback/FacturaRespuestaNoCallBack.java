@@ -37,9 +37,10 @@ public class FacturaRespuestaNoCallBack extends ComprobanteRespuestaNoCallBack
 {
     private FacturacionModel facturacionModel;
 
-    public FacturaRespuestaNoCallBack(Factura factura, FacturacionModel panel) {
+    public FacturaRespuestaNoCallBack(Factura factura, FacturacionModel panel,Boolean procesoCompleto) {
         super(factura, panel);
         this.facturacionModel=panel;
+        this.procesoCompleto=procesoCompleto;
     }
     
 
