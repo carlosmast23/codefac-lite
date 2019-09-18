@@ -159,6 +159,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             transaccion.begin();
             interfaz.transaccion();
             transaccion.commit();
+            entityManager.clear();
         }catch (RemoteException ex) { //Hacer un RoolBack cuando no exista comunicacion con el servidor
             if (transaccion.isActive()) {
                 transaccion.rollback();
