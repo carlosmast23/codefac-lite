@@ -231,6 +231,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getLblClaveAnterior().setEnabled(true);
         getTxtEmpleado().setText((usuario.getEmpleado()!=null)?usuario.getEmpleado().toString():"");
         getCmbEstado().setSelectedItem(usuario.getEstadoEnum());
+        getTxtParametrosComprobantesElectronicos().setText(usuario.getParametrosComprobatesElectronicos());
         cargarListaPerfilesUsuario();
         cargarListaPuntosEmision();
     }
@@ -242,6 +243,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getTxtClaveRepetir().setText("");
         getTxtUsuario().setText("");
         getTxtEmpleado().setText("");
+        getTxtParametrosComprobantesElectronicos().setText("");
         cargarListaPerfilesUsuario();
         cargarListaPuntosEmision();
         getCmbEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
@@ -410,6 +412,9 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         //usuario.setClave(new String(getTxtClave().getPassword()));
         GeneralEnumEstado estadoEnum=(GeneralEnumEstado) getCmbEstado().getSelectedItem();
         usuario.setEstadoEnum(estadoEnum);
+        
+        //Parametro Adicional para grabar
+        usuario.setParametrosComprobatesElectronicos(getTxtParametrosComprobantesElectronicos().getText());
 
         
         if (estadoFormulario == ESTADO_GRABAR) 

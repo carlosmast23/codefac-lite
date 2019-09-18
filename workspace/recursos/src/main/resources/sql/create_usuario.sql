@@ -18,4 +18,6 @@ create table
     NICK varchar(120) ,
     CLAVE varchar(120), 
     ESTADO varchar(1), 
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.0.1)*/
+    PARAMETROS_COMPROBANTES_ELECTRONICOS varchar(1024), 
     primary key (ID))

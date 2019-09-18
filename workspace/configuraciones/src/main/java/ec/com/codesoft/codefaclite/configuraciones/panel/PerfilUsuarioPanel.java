@@ -65,6 +65,10 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         btnBuscarEmpleado = new javax.swing.JButton();
         lblEspacioBlanco1 = new javax.swing.JLabel();
         lblEspacioBlanco2 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        txtParametrosComprobantesElectronicos = new javax.swing.JTextField();
+        lblEspacio1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         btnAgregarPuntoEmision = new javax.swing.JButton();
@@ -266,6 +270,31 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
 
         jTabbedPane1.addTab("Usuario", jPanel1);
 
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel10.setText("Parametros Comprobantes Electrónicos:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jLabel10, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(txtParametrosComprobantesElectronicos, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel3.add(lblEspacio1, gridBagConstraints);
+
+        jTabbedPane1.addTab("Datos Adicionales", jPanel3);
+
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -331,6 +360,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnQuitarPuntoEmision;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -343,11 +373,13 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JList<PuntoEmisionUsuario> jListPuntoEmision;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblBlanco;
     private javax.swing.JLabel lblClaveAnterior;
+    private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacioBlanco1;
     private javax.swing.JLabel lblEspacioBlanco2;
@@ -355,6 +387,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JPasswordField txtClaveAnterior;
     private javax.swing.JPasswordField txtClaveRepetir;
     private javax.swing.JTextField txtEmpleado;
+    private javax.swing.JTextField txtParametrosComprobantesElectronicos;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 
@@ -480,6 +513,14 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
 
     public void setjListPuntoEmision(JList<PuntoEmisionUsuario> jListPuntoEmision) {
         this.jListPuntoEmision = jListPuntoEmision;
+    }
+
+    public JTextField getTxtParametrosComprobantesElectronicos() {
+        return txtParametrosComprobantesElectronicos;
+    }
+
+    public void setTxtParametrosComprobantesElectronicos(JTextField txtParametrosComprobantesElectronicos) {
+        this.txtParametrosComprobantesElectronicos = txtParametrosComprobantesElectronicos;
     }
 
     

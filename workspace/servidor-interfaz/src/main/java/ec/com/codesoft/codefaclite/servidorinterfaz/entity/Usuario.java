@@ -49,6 +49,10 @@ public class Usuario implements Serializable{
     @Column (name = "ESTADO")
     private String estado;
     
+    //PARAMETROS_COMPROBANTES_ELECTRONICOS
+    @Column (name = "PARAMETROS_COMPROBANTES_ELECTRONICOS")
+    private String parametrosComprobatesElectronicos;
+    
     @JoinColumn(name = "EMPLEADO_ID")
     @ManyToOne 
     private Empleado empleado;
@@ -143,6 +147,15 @@ public class Usuario implements Serializable{
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
+
+    public String getParametrosComprobatesElectronicos() {
+        return parametrosComprobatesElectronicos;
+    }
+
+    public void setParametrosComprobatesElectronicos(String parametrosComprobatesElectronicos) {
+        this.parametrosComprobatesElectronicos = parametrosComprobatesElectronicos;
+    }
+    
     
     
 

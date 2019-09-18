@@ -1,0 +1,2 @@
+ver que al filtrar en el reporte de clientes salga por cliente oficina y no por cliente
+ver que en la pantalla de facturas al cargar esta saliendo mal los calculos

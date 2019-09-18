@@ -1756,83 +1756,91 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
     }
     
+    /**
+     * Metodo que me permite agregar parametros propios de cada usuario al comprobante electronico
+     * @param comprobante 
+     */
+    private void agregarParametrosPorUsuario(ComprobanteEntity comprobante)
+    {
+        Usuario usuario=comprobante.getUsuario();
+        String parametrosUsuario=usuario.getParametrosComprobatesElectronicos();
+        if(parametrosUsuario!=null && !parametrosUsuario.isEmpty())
+        {
+            agregarParametroComprobante(comprobante, parametrosUsuario);
+        }
+    }
+    
     private void agregarParametrosGenerales(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
     {
         ParametroCodefacService parametroService=new ParametroCodefacService();
         ParametroCodefac parametroCodefac=parametroService.getParametroByNombre(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS,comprobante.getEmpresa());
         if(parametroCodefac!=null && parametroCodefac.getValor()!=null && !parametroCodefac.getValor().isEmpty())
-        {
-            Gson json = new Gson();
-            Properties propiedades=json.fromJson(parametroCodefac.getValor(), Properties.class);
-            for (Enumeration e = propiedades.keys(); e.hasMoreElements() ; ) {
-                // Obtenemos el objeto
-                Object clave = e.nextElement();
-                String valor=propiedades.getProperty(clave.toString());
-                
-                
-                //if(comprobante.getDatosAdicionalesComprobante()!=null)
-                //{
-                    //ComprobanteAdicional comprobanteAdicional=new ComprobanteAdicional();
-                    //comprobanteAdicional.setCampo(clave.toString());
-                    //comprobanteAdicional.setValor(valor);
-                    //comprobanteAdicional.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
-                    //comprobante.getDatosAdicionalesComprobante().add(comprobanteAdicional);
-                    
-                    DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
-                    switch (documentoEnum) {
-                        case FACTURA:
-                            Factura factura=(Factura) comprobante;
-                            FacturaAdicional datoAdicional=new FacturaAdicional();
-                            datoAdicional.setCampo(clave.toString());
-                            datoAdicional.setValor(valor);
-                            datoAdicional.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
-                            datoAdicional.setFactura(factura);
-                            factura.addDatoAdicional(datoAdicional);
-                            break;
-
-                        case NOTA_VENTA:
-                            //Factura factura=(Factura) comprobante;
-                            //factura.addDatoAdicional((FacturaAdicional) comprobanteAdicional);
-                            break;
-
-                        case RETENCIONES:
-                            Retencion retencion=(Retencion) comprobante;
-                            RetencionAdicional datoAdicional2=new RetencionAdicional();
-                            datoAdicional2.setCampo(clave.toString());
-                            datoAdicional2.setValor(valor);
-                            datoAdicional2.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
-                            datoAdicional2.setRetencion(retencion);
-                            retencion.addDatoAdicional(datoAdicional2);
-                            
-                            break;
-
-                        case NOTA_CREDITO:
-                            NotaCredito notaCredito=(NotaCredito) comprobante;
-                            NotaCreditoAdicional datoAdicional3=new NotaCreditoAdicional();
-                            datoAdicional3.setCampo(clave.toString());
-                            datoAdicional3.setValor(valor);
-                            datoAdicional3.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
-                            datoAdicional3.setNotaCredito(notaCredito);
-                            notaCredito.addDatoAdicional(datoAdicional3);
-                            break;
-
-                        case GUIA_REMISION:
-                            GuiaRemision guiaRemision=(GuiaRemision) comprobante;
-                            GuiaRemisionAdicional datoAdicional4=new GuiaRemisionAdicional();
-                            datoAdicional4.setCampo(clave.toString());
-                            datoAdicional4.setValor(valor);
-                            datoAdicional4.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
-                            datoAdicional4.setGuiaRemision(guiaRemision);
-                            //guiaRemision.addDatoAdic(datoAdicional4); //Todo: Faclta setear valores para este caso
-                            break;
-                    }
-                    
-                //}
-                
-            }
-            
+        {            
+            agregarParametroComprobante(comprobante, parametroCodefac.getValor());
             
             parametroCodefac.getValor();
+        }
+    }
+    
+    private void agregarParametroComprobante(ComprobanteEntity comprobante,String txtJson)
+    {
+        Gson json = new Gson();
+        Properties propiedades = json.fromJson(txtJson, Properties.class);
+        for (Enumeration e = propiedades.keys(); e.hasMoreElements();) {
+            // Obtenemos el objeto
+            Object clave = e.nextElement();
+            String valor = propiedades.getProperty(clave.toString());
+
+            DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
+            switch (documentoEnum) {
+                case FACTURA:
+                    Factura factura = (Factura) comprobante;
+                    FacturaAdicional datoAdicional = new FacturaAdicional();
+                    datoAdicional.setCampo(clave.toString());
+                    datoAdicional.setValor(valor);
+                    datoAdicional.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    datoAdicional.setFactura(factura);
+                    factura.addDatoAdicional(datoAdicional);
+                    break;
+
+                case NOTA_VENTA:
+                    //Factura factura=(Factura) comprobante;
+                    //factura.addDatoAdicional((FacturaAdicional) comprobanteAdicional);
+                    break;
+
+                case RETENCIONES:
+                    Retencion retencion = (Retencion) comprobante;
+                    RetencionAdicional datoAdicional2 = new RetencionAdicional();
+                    datoAdicional2.setCampo(clave.toString());
+                    datoAdicional2.setValor(valor);
+                    datoAdicional2.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    datoAdicional2.setRetencion(retencion);
+                    retencion.addDatoAdicional(datoAdicional2);
+
+                    break;
+
+                case NOTA_CREDITO:
+                    NotaCredito notaCredito = (NotaCredito) comprobante;
+                    NotaCreditoAdicional datoAdicional3 = new NotaCreditoAdicional();
+                    datoAdicional3.setCampo(clave.toString());
+                    datoAdicional3.setValor(valor);
+                    datoAdicional3.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    datoAdicional3.setNotaCredito(notaCredito);
+                    notaCredito.addDatoAdicional(datoAdicional3);
+                    break;
+
+                case GUIA_REMISION:
+                    GuiaRemision guiaRemision = (GuiaRemision) comprobante;
+                    GuiaRemisionAdicional datoAdicional4 = new GuiaRemisionAdicional();
+                    datoAdicional4.setCampo(clave.toString());
+                    datoAdicional4.setValor(valor);
+                    datoAdicional4.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    datoAdicional4.setGuiaRemision(guiaRemision);
+                    //guiaRemision.addDatoAdic(datoAdicional4); //Todo: Faclta setear valores para este caso
+                    break;
+            }
+
+            //}
         }
     }
 
@@ -1893,6 +1901,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
          * Agregado datos adicionales de configuracion general
          */
         agregarParametrosGenerales(comprobante);
+        
+        /**
+         * Agregado datos adicionales de cada usuario
+         */
+        agregarParametrosPorUsuario(comprobante);
         
         /**
          * Por el momento a todas las facturas no procesadas grabo con no facturar
