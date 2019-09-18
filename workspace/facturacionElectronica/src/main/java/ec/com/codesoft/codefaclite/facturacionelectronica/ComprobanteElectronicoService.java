@@ -1720,29 +1720,29 @@ public class ComprobanteElectronicoService implements Runnable {
         return null;
     }
 
-    public InputStream getPathJasper(ComprobanteElectronico comprobanteElectronico)
+    public URL getPathJasper(ComprobanteElectronico comprobanteElectronico)
     {
-        InputStream path = null;
-        try {
-            ClaveAcceso clave = new ClaveAcceso(claveAcceso);
-            if (ComprobanteEnum.FACTURA.getCodigo().equals(clave.tipoComprobante)) {
-                path = pathFacturaJasper.openStream();
-
-            } else if (ComprobanteEnum.NOTA_CREDITO.getCodigo().equals(clave.tipoComprobante)) {
-                path = pathNotaCreditoJasper.openStream();
-            } else if (ComprobanteEnum.COMPROBANTE_RETENCION.getCodigo().equals(clave.tipoComprobante))
-            {
-                path=pathRetencionJasper.openStream();
-            }
-            else if (ComprobanteEnum.GUIA_REMISION.getCodigo().equals(clave.tipoComprobante))
-            {
-                path=pathGuiaRemisionJasper.openStream();
-            }
-            //comprobante.getTipoDocumento();
-            //return path + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";
-        } catch (IOException ex) {
-            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        URL path = null;
+        ClaveAcceso clave = new ClaveAcceso(claveAcceso);
+        if (ComprobanteEnum.FACTURA.getCodigo().equals(clave.tipoComprobante)) {
+            //path = pathFacturaJasper.openStream();
+            path = pathFacturaJasper;
+            
+        } else if (ComprobanteEnum.NOTA_CREDITO.getCodigo().equals(clave.tipoComprobante)) {
+            //path = pathNotaCreditoJasper.openStream();
+            path = pathNotaCreditoJasper;
+        } else if (ComprobanteEnum.COMPROBANTE_RETENCION.getCodigo().equals(clave.tipoComprobante))
+        {
+            //path=pathRetencionJasper.openStream();
+            path=pathRetencionJasper;
         }
+        else if (ComprobanteEnum.GUIA_REMISION.getCodigo().equals(clave.tipoComprobante))
+        {
+            //path=pathGuiaRemisionJasper.openStream();
+            path=pathGuiaRemisionJasper;
+        }
+        //comprobante.getTipoDocumento();
+        //return path + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";
         return path;
     }
     

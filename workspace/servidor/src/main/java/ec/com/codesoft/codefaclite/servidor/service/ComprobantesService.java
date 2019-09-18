@@ -72,6 +72,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
@@ -1471,8 +1472,14 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //TODO:Optimizar esta parte para que sola cargue cuando necesite cargar las guias de remision
         InputStream inputStreamGuiaRemision;
         try {
-            inputStreamGuiaRemision = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "guiaRemisionDetalle.jrxml"));
-            JasperReport reporteDetalleGuiaRemision = JasperCompileManager.compileReport(inputStreamGuiaRemision);
+            JasperReport reporteDetalleGuiaRemision=ReporteProxy.buscar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "guiaRemisionDetalle.jrxml");
+            if(reporteDetalleGuiaRemision==null)
+            {
+                inputStreamGuiaRemision = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "guiaRemisionDetalle.jrxml"));
+                reporteDetalleGuiaRemision = JasperCompileManager.compileReport(inputStreamGuiaRemision);
+                ReporteProxy.agregar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"guiaRemisionDetalle.jrxml",reporteDetalleGuiaRemision);
+            }
+            
             servicio.setJasperSubReporteGuiaRemision(reporteDetalleGuiaRemision);
         } catch (IOException ex) {
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -1490,8 +1497,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         InputStream inputStreamJasper=null;    
         JasperReport reportFormaPago=null;
         try {
-            inputStreamJasper = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "forma_pago.jrxml"));
-            reportFormaPago = JasperCompileManager.compileReport(inputStreamJasper);
+            reportFormaPago=ReporteProxy.buscar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "forma_pago.jrxml");
+            if(reportFormaPago==null)
+            {
+                inputStreamJasper = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "forma_pago.jrxml"));
+                reportFormaPago = JasperCompileManager.compileReport(inputStreamJasper);
+                ReporteProxy.agregar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "forma_pago.jrxml", reportFormaPago);
+            }
         } catch (IOException ex) {
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
@@ -1502,8 +1514,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         JasperReport reportDatosAdicionales=null;
         try {
-            inputStreamJasper = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionales.jrxml"));
-            reportDatosAdicionales = JasperCompileManager.compileReport(inputStreamJasper);
+            reportDatosAdicionales=ReporteProxy.buscar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionales.jrxml");
+            if(reportDatosAdicionales==null)
+            {
+                inputStreamJasper = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionales.jrxml"));
+                reportDatosAdicionales = JasperCompileManager.compileReport(inputStreamJasper);
+                ReporteProxy.agregar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionales.jrxml", reportDatosAdicionales);
+            }
         } catch (IOException ex) {
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
@@ -1641,8 +1658,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         InputStream inputStream=null;
         JasperReport reportPiePagina=null;
         try {
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "pie_pagina.jrxml"));
-            reportPiePagina = JasperCompileManager.compileReport(inputStream);
+            reportPiePagina=ReporteProxy.buscar(RecursoCodefac.JASPER, "pie_pagina.jrxml");
+            if(reportPiePagina==null)
+            {
+                inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "pie_pagina.jrxml"));
+                reportPiePagina = JasperCompileManager.compileReport(inputStream);
+                ReporteProxy.agregar(RecursoCodefac.JASPER, "pie_pagina.jrxml", reportPiePagina);
+            }
             
         } catch (IOException ex) {
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);

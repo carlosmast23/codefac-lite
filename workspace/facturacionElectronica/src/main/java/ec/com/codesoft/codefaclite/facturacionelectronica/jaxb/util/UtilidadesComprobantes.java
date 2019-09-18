@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.HashMap;
@@ -193,9 +194,16 @@ public abstract class UtilidadesComprobantes {
     }
 */
 
-    public static void generarReporteJasper(InputStream pathReporte, Map parametros, Collection datos, String pathGrabar) {
+    public static void generarReporteJasper(URL pathReporte, Map parametros, Collection datos, String pathGrabar) {
         try {
-            JasperReport report = JasperCompileManager.compileReport(pathReporte);
+            JasperReport report=ReporteComprobantesElectronicosProxy.obtenerReporte(pathReporte);
+            if(report==null)
+            {
+                InputStream inputSream=pathReporte.openStream();
+                report = JasperCompileManager.compileReport(inputSream);
+                ReporteComprobantesElectronicosProxy.agregar(pathReporte, report);
+            
+            }
             JRBeanCollectionDataSource dataReport = new JRBeanCollectionDataSource(datos);
             JasperPrint print = JasperFillManager.fillReport(report, parametros, dataReport);
             
@@ -210,18 +218,29 @@ public abstract class UtilidadesComprobantes {
             //JasperViewer.viewReport(print,false);
         } catch (JRException ex) {
             Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-   public static JasperPrint generarReporteJasperPrint(InputStream pathReporte, Map parametros, Collection datos) {
+   public static JasperPrint generarReporteJasperPrint(URL pathReporte, Map parametros, Collection datos) {
         try {
-            JasperReport report = JasperCompileManager.compileReport(pathReporte);
+            JasperReport report = ReporteComprobantesElectronicosProxy.obtenerReporte(pathReporte);
+            if(report==null)
+            {
+                InputStream inputStream=pathReporte.openStream();
+                report = JasperCompileManager.compileReport(inputStream);
+                ReporteComprobantesElectronicosProxy.agregar(pathReporte, report);
+            }
+            
             JRBeanCollectionDataSource dataReport = new JRBeanCollectionDataSource(datos);
             JasperPrint print = JasperFillManager.fillReport(report, parametros, dataReport);
             return print;
             //JasperViewer.viewReport(print,false);
         } catch (JRException ex) {
             ex.printStackTrace();
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

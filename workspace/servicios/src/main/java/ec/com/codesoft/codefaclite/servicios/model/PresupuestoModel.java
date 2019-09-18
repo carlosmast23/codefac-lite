@@ -70,6 +70,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -1424,7 +1425,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 dataReportes.add(dataReporte);
                 
             }
-            InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("orden_compra.jrxml");
+            //InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("orden_compra.jrxml");
+            URL path = RecursoCodefac.JASPER_COMPRA.getResourceURL("orden_compra.jrxml");
             //ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, dataReportes, panelPadre, "Orden de Compra");
             UtilidadesComprobantes.generarReporteJasper(path, parametros, dataReportes, PATH_REPORTE_TMP);
         }

@@ -51,6 +51,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -745,8 +746,9 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
     private void generarReporte(EstudianteInscrito estudianteInscrito, List<RubroEstudiante> detalles, Periodo periodo) { 
         
-        InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_estudiante_deuda.jrxml");
-
+        //InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_estudiante_deuda.jrxml");
+        URL path= RecursoCodefac.JASPER_ACADEMICO.getResourceURL("reporte_estudiante_deuda.jrxml");
+        
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("periodo", periodo.getNombre());
         mapParametros.put("curso", estudianteInscrito.getNivelAcademico().getNombre());
