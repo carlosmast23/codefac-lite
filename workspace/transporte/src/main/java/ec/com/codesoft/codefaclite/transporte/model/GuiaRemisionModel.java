@@ -45,6 +45,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.Destinatar
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
@@ -230,7 +231,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         //getLblDireccion().setText(session.getSucursal().getDirecccion());
         getLblCantidadProductos().setText("0");
-        ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+        ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
         
         ///Limpiar Variables
         //guiaRemision=new GuiaRemision();
@@ -733,7 +734,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
     }

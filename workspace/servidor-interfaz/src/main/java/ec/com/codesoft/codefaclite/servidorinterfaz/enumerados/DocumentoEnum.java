@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +16,13 @@ import java.util.List;
 public enum DocumentoEnum {
     /**
      * Documento de la factura que puede ser electronica o fisica
+     * TODO:Crear otro documento para facturacion fisica y poder tener clasificado
      */
     FACTURA("Factura",
             "FAC",
             DocumentoCategoriaEnum.COMPROBANTES_VENTA,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION,ModuloCodefacEnum.COMPRA},
-            true,
+            false,
             true,
             "01"),
     
@@ -34,7 +36,8 @@ public enum DocumentoEnum {
             false,
             false),
     /**
-     * Nota de Venta para los contribuyentes que estan en modalidad RIDE
+     * Nota de Venta para los contribuyentes que estan en modalidad RIDE 
+     * TODO: Analizar si este documento tiene o no validez tributarioa o ver si creo otro documento
      */
     NOTA_VENTA("Nota de venta",
             "NVT",
@@ -43,6 +46,15 @@ public enum DocumentoEnum {
             true,
             false,
             "02"),
+    
+    NOTA_VENTA_INTERNA("Nota de venta interna",
+            "NVI",
+            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION,ModuloCodefacEnum.COMPRA},
+            true,
+            false,
+            "999",
+            false),
     
     BOLETOS_ESPETACULOS_PUBLICOS("Boletos espectáculos públicos",
             "BEP",
@@ -141,10 +153,22 @@ public enum DocumentoEnum {
         this.nombre = nombre;
         this.codigo = codigo;
         this.categoria = categoria;
+        this.comprobanteFisico = comprobanteFisico;
+        this.comprobanteElectronico = comprobanteElectronico;        
+        this.moduloEnum = moduloEnum;
+        this.codigoSri=codigoSri;
+        this.documentoLegal=true;
+    }
+    
+    private DocumentoEnum(String nombre, String codigo, DocumentoCategoriaEnum categoria, ModuloCodefacEnum[] moduloEnum, Boolean comprobanteFisico, Boolean comprobanteElectronico,String codigoSri,Boolean documentoLegal) {
+        this.nombre = nombre;
+        this.codigo = codigo;
+        this.categoria = categoria;
         this.comprobanteElectronico = comprobanteElectronico;
         this.comprobanteFisico = comprobanteFisico;
         this.moduloEnum = moduloEnum;
         this.codigoSri=codigoSri;
+        this.documentoLegal=documentoLegal;
     }
     
     private String nombre;
@@ -154,6 +178,10 @@ public enum DocumentoEnum {
     private Boolean comprobanteFisico;
     private ModuloCodefacEnum[] moduloEnum;
     private String codigoSri;
+    /**
+     * Este parametro me va a servir para clasificar si es un documento legal del Sri o en un documento para control interno
+     */
+    private Boolean documentoLegal;
 
     public Boolean getComprobanteElectronico() {
         return comprobanteElectronico;
@@ -177,6 +205,10 @@ public enum DocumentoEnum {
 
     public String getCodigoSri() {
         return codigoSri;
+    }
+
+    public Boolean getDocumentoLegal() {
+        return documentoLegal;
     }
     
     
@@ -229,6 +261,33 @@ public enum DocumentoEnum {
                 if(modulo.equals(moduloEnum) && documento.comprobanteElectronico)
                 {
                     documentosEnum.add(documento);
+                }
+            }   
+
+        }
+        return documentosEnum;
+    }
+    
+    public  static List<DocumentoEnum> obtenerPorDocumentosElectronicos(ModuloCodefacEnum moduloEnum,ComprobanteEntity.TipoEmisionEnum tipoEmision)
+    {
+        List<DocumentoEnum> documentosEnum=new ArrayList<DocumentoEnum>();
+        DocumentoEnum[] documentos=DocumentoEnum.values();
+        for (DocumentoEnum documento : documentos) {
+            for(ModuloCodefacEnum modulo:documento.getModuloEnum())
+            {
+                if(modulo.equals(moduloEnum))
+                {
+                    if(tipoEmision.equals(tipoEmision.ELECTRONICA) && documento.comprobanteElectronico)//Si me esta solicitando solo documentos electronicos verifico que el documento sea electronic
+                    {
+                        documentosEnum.add(documento);
+                    }
+                    else
+                    {
+                        if(tipoEmision.equals(tipoEmision.NORMAL) && documento.getComprobanteFisico()) //Si no me pido electronicos por defecto asumo que me esta pidiendo un comprobante fisico
+                        {
+                            documentosEnum.add(documento);
+                        }
+                    }
                 }
             }   
 
@@ -294,5 +353,14 @@ public enum DocumentoEnum {
             }
         }
         return null;
+    }
+    
+    /**
+     *TODO: Reutilizar o Utilizar este Enum en todas partes para referirme a facturacion electronica o fisica
+     */    
+    public enum TipoEmisionDocumento
+    {
+        FISICA,
+        ELECTRONICA,
     }
 }

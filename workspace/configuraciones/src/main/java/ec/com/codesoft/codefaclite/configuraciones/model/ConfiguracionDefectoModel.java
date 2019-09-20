@@ -155,6 +155,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         getCmbActivarModuloCartera().removeAllItems();
         getCmbActivarModuloCartera().addItem(EnumSiNo.NO);
         getCmbActivarModuloCartera().addItem(EnumSiNo.SI);
+        
+        //Agregar las opcion para esocger si o no en activar los comprobantes de venta
+        getCmbActivarNotaVenta().removeAllItems();
+        getCmbActivarNotaVenta().addItem(EnumSiNo.NO);
+        getCmbActivarNotaVenta().addItem(EnumSiNo.SI);
 
         //Agregar las opcion para esocger si o no en activar los comprobantes de venta
         getCmbActivarComprobanteVenta().removeAllItems();
@@ -367,6 +372,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA);
         
+        enumSiNo = (EnumSiNo) getCmbActivarNotaVenta().getSelectedItem();
+        agregarParametro(ParametroCodefac.ACTIVAR_NOTA_VENTA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.ACTIVAR_NOTA_VENTA);
+        
         /*ParametroCodefac parametroCodefac=parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)
         {
@@ -402,9 +411,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.VALOR_DEFECTO_RETENCION_RENTA, (sriRetencionRenta != null) ? sriRetencionRenta.getId().toString(): "");
         agregarParametroEditar(ParametroCodefac.VALOR_DEFECTO_RETENCION_RENTA);
         
+        
         enumSiNo = (EnumSiNo) EnumSiNo.getEnumByBoolean(getChkImpresoraTickets().isSelected());
         agregarParametro(ParametroCodefac.IMPRESORA_TICKETS_VENTAS, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.IMPRESORA_TICKETS_VENTAS);
+        
         
         agregarParametro(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS, getTxtVariableGeneralComprobantes().getText());
         agregarParametroEditar(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS);

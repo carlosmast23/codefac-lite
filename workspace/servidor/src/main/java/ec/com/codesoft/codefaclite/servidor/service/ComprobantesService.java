@@ -1875,6 +1875,12 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 secuencial = puntoEmision.getSecuencialNotaVenta();
                 puntoEmision.setSecuencialNotaVenta(secuencial+1);
                 break;
+                
+            case NOTA_VENTA_INTERNA:
+                secuencial = puntoEmision.getSecuencialNotaVentaInterna();
+                puntoEmision.setSecuencialNotaVentaInterna(secuencial+1);
+                break;
+
 
             case RETENCIONES:
                 secuencial = puntoEmision.getSecuencialRetenciones();
@@ -1911,7 +1917,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
          * Por el momento a todas las facturas no procesadas grabo con no facturar
          * TODO: Analizar este metodo cuando sea fisica porque en ese caso deberia grabar directamente como autorizado
          */
-        comprobante.setEstadoEnum(ComprobanteEnumEstado.SIN_AUTORIZAR);
+        if(comprobante.getCodigoDocumentoEnum().getComprobanteElectronico())
+        {
+            comprobante.setEstadoEnum(ComprobanteEnumEstado.SIN_AUTORIZAR);
+        }else if(comprobante.getCodigoDocumentoEnum().getComprobanteFisico())
+        {
+            comprobante.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
+        }
 
         //parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
         //parametroService.editar(parametro);

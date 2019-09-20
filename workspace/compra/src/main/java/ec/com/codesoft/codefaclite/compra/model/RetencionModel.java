@@ -40,6 +40,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
@@ -733,7 +734,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getLblTelefonos().setText(session.getMatriz().getTelefono());                
 
         //getLblSecuencial().setText(obtenerSecuencial());
-        ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+        ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.RETENCIONES,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
         
     }
     
@@ -941,7 +942,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.RETENCIONES,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
         

@@ -127,7 +127,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 
-                factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
+                //TODO:Este codigo de doucmento ya no debo setear porque desde la factura ya mando el documento
+                //factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
                 factura.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.NO);
                 
                 //Setear los datos del cliente en la factura para tener un historico y vovler a consultar

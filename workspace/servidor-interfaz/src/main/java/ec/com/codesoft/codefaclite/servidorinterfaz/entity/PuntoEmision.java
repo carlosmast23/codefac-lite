@@ -62,6 +62,9 @@ public class PuntoEmision implements Serializable{
     @Column(name = "SECUENCIAL_NOTA_VENTA")
     private Integer secuencialNotaVenta;
     
+    @Column(name = "SECUENCIAL_NOTA_VENTA_INTERNA")
+    private Integer secuencialNotaVentaInterna;
+    
     @JoinColumn(name = "SUCURSAL_ID")
     private Sucursal sucursal;
 
@@ -155,6 +158,17 @@ public class PuntoEmision implements Serializable{
     public void setSecuencialNotaVenta(Integer secuencialNotaVenta) {
         this.secuencialNotaVenta = secuencialNotaVenta;
     }
+
+    public Integer getSecuencialNotaVentaInterna() {
+        return secuencialNotaVentaInterna;
+    }
+
+    public void setSecuencialNotaVentaInterna(Integer secuencialNotaVentaInterna) {
+        this.secuencialNotaVentaInterna = secuencialNotaVentaInterna;
+    }
+    
+    
+    
 
     @Override
     public String toString() {

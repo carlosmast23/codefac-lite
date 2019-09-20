@@ -37,6 +37,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cmbSucursal = new javax.swing.JComboBox<>();
@@ -62,6 +63,10 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         lblEspacio3 = new javax.swing.JLabel();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio4 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        txtNotaVentaInterna = new javax.swing.JSpinner();
+        lblEspacio5 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -251,7 +256,35 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(lblEspacio4, gridBagConstraints);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        jTabbedPane1.addTab("Documentos Legales", jPanel1);
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel11.setText("Secuencial Nota Venta Interna:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(30, 5, 5, 5);
+        jPanel2.add(jLabel11, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.insets = new java.awt.Insets(30, 5, 5, 5);
+        jPanel2.add(txtNotaVentaInterna, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel2.add(lblEspacio5, gridBagConstraints);
+
+        jTabbedPane1.addTab("Documentos Internos", jPanel2);
+
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -262,6 +295,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<ComprobanteEntity.TipoEmisionEnum> cmbTipoFacturacion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -271,16 +305,20 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio4;
+    private javax.swing.JLabel lblEspacio5;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JSpinner txtFactura;
     private javax.swing.JSpinner txtGuiaRemision;
     private javax.swing.JSpinner txtNotaCredito;
     private javax.swing.JSpinner txtNotaDebito;
     private javax.swing.JSpinner txtNotaVenta;
+    private javax.swing.JSpinner txtNotaVentaInterna;
     private javax.swing.JSpinner txtPuntoEmision;
     private javax.swing.JSpinner txtRetenciones;
     // End of variables declaration//GEN-END:variables
@@ -325,6 +363,14 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
 
     public JSpinner getTxtRetenciones() {
         return txtRetenciones;
+    }
+
+    public JSpinner getTxtNotaVentaInterna() {
+        return txtNotaVentaInterna;
+    }
+
+    public void setTxtNotaVentaInterna(JSpinner txtNotaVentaInterna) {
+        this.txtNotaVentaInterna = txtNotaVentaInterna;
     }
 
     

@@ -156,6 +156,7 @@ import org.jdesktop.swingx.prompt.PromptSupport;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.facturacion.nocallback.FacturaRespuestaNoCallBack;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
 
 /**
  *
@@ -163,6 +164,8 @@ import ec.com.codesoft.codefaclite.facturacion.nocallback.FacturaRespuestaNoCall
  */
 public class FacturacionModel extends FacturacionPanel implements InterfazPostConstructPanel,ComponenteDatosComprobanteElectronicosInterface{
 
+    public static final String NOMBRE_REPORTE_FACTURA_ELECTRONICA="Comprobante de Venta";
+    public static final String NOMBRE_REPORTE_FACTURA_INTERNA="Comprobante de Venta Interna";
     //private Persona persona;
     protected Factura factura;
     private Estudiante estudiante;
@@ -186,6 +189,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      */
     //private Map<String, String> datosAdicionales;
 
+    
 
     public FacturacionModel() {
         setearFechas();        
@@ -633,8 +637,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     public void cargarSecuencial()
-    {        
-        ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(), ComprobanteEnum.FACTURA,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+    {
+        DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+        ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),documentoEnum,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
     }
     
     public void cargarSecuencialConsulta()
@@ -1051,11 +1056,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             //Si la factura en manual no continua el proceso de facturacion electronica
             //TODO: Ver si esta logica va incluida en el servidor
-            if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
+            //if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
+            //TODO: Ver como hacer las facturas fisicas
+            DocumentoEnum documentoEnum=factura.getCodigoDocumentoEnum();
+            if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
             {
-                DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-                facturaManual();
-                
+                DialogoCodefac.mensaje("Correcto", "La nota de venta interna se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                //facturaManual(factura.getCodigoDocumentoEnum());
+                imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA);
             }
             else
             {
@@ -1142,21 +1150,33 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
     }
     
+    /*private void generarNotaVentaInterna()
+    {
+        as
+    }*/
     
     
-    private void facturaManual() throws ServicioCodefacException
+    private void facturaManual(DocumentoEnum documentoEnum) throws ServicioCodefacException
     {
     
         try {
-            DocumentoEnum documentoEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
+            //DocumentoEnum documentoEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
+            
             
             InputStream reporteOriginal = null;
-            if (documentoEnum.NOTA_VENTA.equals(documentoEnum)) {
+            if(documentoEnum.NOTA_VENTA_INTERNA.equals(documentoEnum))
+            {
+                                
+                
+            }else if (documentoEnum.NOTA_VENTA.equals(documentoEnum)) {
                 reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("nota_venta.jrxml");
             } else {
                 reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
             }
             
+            /**
+             * =========> ESTE RESTO DE CODIGO SIRVE PARA CONSULTAR LAS PLANTILLAS DE LAS FACTURAS Y NOTAS DE VENTAS <=============
+             */
             ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(reporteOriginal);
             ComprobanteFisicoDisenioServiceIf servicioComprobanteDisenio = ServiceFactory.getFactory().getComprobanteFisicoDisenioServiceIf();;
             //Map<String, Object> parametroComprobanteMap = new HashMap<String, Object>();
@@ -2550,9 +2570,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         //cuando la factura es electronica
-        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
+        String letraTipoEmision=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor;
+        if(letraTipoEmision.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
         {
-            tiposDocumento=DocumentoEnum.obtenerPorDocumentosElectronicos(ModuloCodefacEnum.FACTURACION);
+            ComprobanteEntity.TipoEmisionEnum tipoEmisionEnum=TipoEmisionEnum.getEnumByLetra(letraTipoEmision);
+            
+            tiposDocumento=DocumentoEnum.obtenerPorDocumentosElectronicos(ModuloCodefacEnum.FACTURACION,tipoEmisionEnum);
+            
+            ParametroCodefac paramCodefacNotaVenta=session.getParametrosCodefac().get(ParametroCodefac.ACTIVAR_NOTA_VENTA);
+                    
+            if(paramCodefacNotaVenta!=null)
+            {
+                EnumSiNo enumSino=EnumSiNo.getEnumByLetra(paramCodefacNotaVenta.getValor());
+                if(enumSino.equals(EnumSiNo.SI))
+                {
+                    tiposDocumento.add(DocumentoEnum.NOTA_VENTA_INTERNA); //Todo ver si utilizar este documento para grabar o crearme otros 
+                }
+            }
         }
         else //Cuando la factura es fisica
         {
@@ -3130,7 +3164,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
     }
     
-    public  void imprimirComprobanteVenta(Factura facturaProcesando)
+    public  void imprimirComprobanteVenta(Factura facturaProcesando,String nombre)
     {
 
         List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);
@@ -3158,7 +3192,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         //ReporteCodefac.generarReporteInternalFramePlantilla(parametro, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
-        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
+        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, this.panelPadre, nombre, OrientacionReporteEnum.VERTICAL,formatoEnum);
 
     }
 

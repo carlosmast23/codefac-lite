@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="405" pageHeight="595" columnWidth="365" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="1.6076916075000776"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="165"/>
+	<property name="ireport.y" value="175"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -366,14 +366,18 @@
 				<text><![CDATA[SUBTOTAL:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="43" width="364" height="22" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a"/>
+				<reportElement x="1" y="43" width="364" height="22" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a">
+					<printWhenExpression><![CDATA[$P{autorizacion}!=null]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Este documento es informativo y no tiene validez legal, para descargar el comprobante electrónico puede acceder desde su correo electrónico registrado o desde el portal del Sri.]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="1" y="28" width="364" height="15" uuid="e8fafbc1-02a6-442d-9b9d-c4b0ed1d9003"/>
+			<textField isBlankWhenNull="false">
+				<reportElement x="1" y="28" width="364" height="15" uuid="e8fafbc1-02a6-442d-9b9d-c4b0ed1d9003">
+					<printWhenExpression><![CDATA[$P{autorizacion}!=null]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Dotted"/>
 					<bottomPen lineWidth="1.0" lineStyle="Dotted"/>

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
+import static ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel.NOMBRE_REPORTE_FACTURA_ELECTRONICA;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
@@ -166,7 +167,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
                 public void actionPerformed(ActionEvent e) {
                     if(verificarImprimirComprobanteVenta())
                     {
-                        facturacionModel.imprimirComprobanteVenta(facturaProcesando);
+                        facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA);
                         //imprimirComprobanteVenta();
                     }
                     else
@@ -210,7 +211,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
                         public void actionPerformed(ActionEvent e) {
                             if(verificarImprimirComprobanteVenta())
                             {
-                                facturacionModel.imprimirComprobanteVenta(facturaProcesando); //TODO:Verificar si este metodo no funciona
+                                facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA); //TODO:Verificar si este metodo no funciona
                             }
                             else
                             {
@@ -245,7 +246,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             
             if(verificarImprimirComprobanteVenta())
             {
-                facturacionModel.imprimirComprobanteVenta(facturaProcesando); //TODO:Verificar si este metodo no funciona
+                facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA); //TODO:Verificar si este metodo no funciona
             }
             else
             {            

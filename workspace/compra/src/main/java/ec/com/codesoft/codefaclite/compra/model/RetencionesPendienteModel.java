@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
@@ -100,7 +101,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
 
     @Override
     public void limpiar() {
-        ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+        ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.RETENCIONES,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
     }
 
 //    @Override
@@ -150,7 +151,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.RETENCIONES,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
         
@@ -166,7 +167,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
                 Boolean confirmacion = DialogoCodefac.dialogoPregunta("Alerta", "Está seguro que desea realizar la retención?", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if (confirmacion) {
                     enviar();
-                    ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.COMPROBANTE_RETENCION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+                    ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.RETENCIONES,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
                 }
             
             }

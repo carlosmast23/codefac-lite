@@ -100,6 +100,11 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS="variables_generales_comprobantes_electronicos";
     
+    /**
+     * Variable que me sirve para activar la nota de venta cuando estoy realizando facturacion electronica
+     */
+    public static final String ACTIVAR_NOTA_VENTA="activar_nota_venta";
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -61,6 +61,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -369,7 +370,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             //Cargar el secuncial correspondiente
             //NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
             //getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
-            ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.NOTA_CREDITO,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+            ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.NOTA_CREDITO,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             
             getCmbTipoDocumento().setSelectedItem(TipoDocumentoEnum.VENTA);
             
@@ -1381,7 +1382,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),ComprobanteEnum.NOTA_CREDITO,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.NOTA_CREDITO,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
         

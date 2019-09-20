@@ -156,6 +156,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
         //TODO: Mandar una alerta o una excepcion cuando no este configurado para algun documento
         switch (documentoEnum) {
+            case NOTA_VENTA_INTERNA:
             case NOTA_VENTA:
             case FACTURA:
                 Factura factura = (Factura) comprobante;

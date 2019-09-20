@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
@@ -162,7 +163,7 @@ public class ComprobanteElectronicoComponente {
     }
     
     
-    public static void cargarSecuencial(Usuario usuario,ComprobanteEnum tipoComprobante, Sucursal sucursal,JComboBox<PuntoEmision> cmbPuntoEmision,JLabel lblEstablecimiento,JLabel lblSecuencial)
+    public static void cargarSecuencial(Usuario usuario,DocumentoEnum documentoEnum, Sucursal sucursal,JComboBox<PuntoEmision> cmbPuntoEmision,JLabel lblEstablecimiento,JLabel lblSecuencial)
     {
         int indiceSeleccionado=cmbPuntoEmision.getSelectedIndex();
         //Cargar Puntos de Venta disponibles para la sucursal
@@ -216,15 +217,20 @@ public class ComprobanteElectronicoComponente {
         if(puntoEmision!=null)
         {
             Integer secuencial=-1; 
-            switch(tipoComprobante)
+            switch(documentoEnum)
             {
-                case COMPROBANTE_RETENCION:
+                case RETENCIONES:
                     secuencial=puntoEmision.getSecuencialRetenciones();
                     break;
                     
                 case FACTURA:
                     secuencial=puntoEmision.getSecuencialFactura();
                     break;
+                    
+                case NOTA_VENTA_INTERNA:
+                    secuencial=puntoEmision.getSecuencialNotaVentaInterna();
+                    break;
+                
                     
                 case GUIA_REMISION:
                     secuencial=puntoEmision.getSecuencialGuiaRemision();
@@ -234,9 +240,9 @@ public class ComprobanteElectronicoComponente {
                     secuencial=puntoEmision.getSecuencialNotaCredito();
                     break;                    
                     
-                case NOTA_DEBITO:
+                /*case NOTA_DEBITO:
                     secuencial=puntoEmision.getSecuencialNotaDebito();
-                    break;
+                    break;*/
             }
             lblSecuencial.setText("-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(), 8, "0"));
         }

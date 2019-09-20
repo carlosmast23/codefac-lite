@@ -528,6 +528,16 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
             }
             return null;
         }
+        
+        public static TipoEmisionEnum getEnumByLetra(String letra) {
+
+            for (TipoEmisionEnum enumerador : TipoEmisionEnum.values()) {
+                if (enumerador.letra.equals(letra)) {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
 
         @Override
         public String toString() {

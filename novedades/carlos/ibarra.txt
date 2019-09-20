@@ -1,2 +1,6 @@
 que algunas facturas le deje seleccionar que no hacen retenciones
 habiliatar en las compras cantidad con decimales
+Verificar que no estaba editando los campos de retenciones en las compras
+verificar que en las retenciones no se esta seteando los valores de las retenciones cuando se cargar desde una compra
+Analizar que cuando selecciono una compra para editar no se esta cargando el valor editado de precio unitario ni la descripcion ingresada 
+Agrupar todas las retenciones cuando son desde compra para agrupar por codigos y no tener varios items
