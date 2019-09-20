@@ -11,7 +11,6 @@ import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorRe
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteGuiaRemision;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteRetencion;
-import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.DocumentosConsultarEnum;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
@@ -181,21 +180,21 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
 
                 if (getChkVentas().isSelected()) {
                     if (formatoPdf) {
-                        generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.VENTAS, FormatoReporteEnum.PDF, archivosAdjuntos);
+                        generarReporteFacturasYNotaCredito(DocumentoEnum.FACTURA, FormatoReporteEnum.PDF, archivosAdjuntos);
                     }
 
                     if (formatoExcel) {
-                        generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.VENTAS, FormatoReporteEnum.EXCEL, archivosAdjuntos);
+                        generarReporteFacturasYNotaCredito(DocumentoEnum.FACTURA, FormatoReporteEnum.EXCEL, archivosAdjuntos);
                     }
                 }
 
                 if (getChkNotaCredito().isSelected()) {
                     if (formatoPdf) {
-                        generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.NOTA_CREDITO, FormatoReporteEnum.PDF, archivosAdjuntos);
+                        generarReporteFacturasYNotaCredito(DocumentoEnum.NOTA_CREDITO, FormatoReporteEnum.PDF, archivosAdjuntos);
                     }
 
                     if (formatoExcel) {
-                        generarReporteFacturasYNotaCredito(DocumentosConsultarEnum.NOTA_CREDITO, FormatoReporteEnum.EXCEL, archivosAdjuntos);
+                        generarReporteFacturasYNotaCredito(DocumentoEnum.NOTA_CREDITO, FormatoReporteEnum.EXCEL, archivosAdjuntos);
                     }
                 }
 
@@ -417,14 +416,14 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
 
     }
 
-    private void generarReporteFacturasYNotaCredito(DocumentosConsultarEnum documentoEnum, FormatoReporteEnum formatoReporteEnum, Map<String, String> archivosAdjuntos) {
+    private void generarReporteFacturasYNotaCredito(DocumentoEnum documentoEnum, FormatoReporteEnum formatoReporteEnum, Map<String, String> archivosAdjuntos) {
         //DocumentosConsultarEnum documentoEnum = null;
         String tituloReporte = "";
 
-        if (documentoEnum.equals(DocumentosConsultarEnum.VENTAS)) {
+        if (documentoEnum.equals(DocumentoEnum.FACTURA)) {
             //documentoEnum = DocumentosConsultarEnum.VENTAS;
             tituloReporte = "FacturasReporte";
-        } else if (documentoEnum.equals(DocumentosConsultarEnum.NOTA_CREDITO)) {
+        } else if (documentoEnum.equals(DocumentoEnum.NOTA_CREDITO)) {
             //documentoEnum = DocumentosConsultarEnum.NOTA_CREDITO;
             tituloReporte = "NotaCreditoReporte";
         }

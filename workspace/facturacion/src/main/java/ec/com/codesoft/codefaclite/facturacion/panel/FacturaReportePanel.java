@@ -7,10 +7,10 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
-import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.DocumentosConsultarEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -558,7 +558,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkReporteAgrupadoReferido;
     private javax.swing.JCheckBox chkTodos;
     private javax.swing.JCheckBox chkTodosReferidos;
-    private javax.swing.JComboBox<DocumentosConsultarEnum> cmbDocumento;
+    private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstado;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbPuntoEmision;
     private javax.swing.JComboBox<TipoReporteEnum> cmbTipoReporte;
@@ -719,13 +719,15 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         this.cmbEstado = cmbEstado;
     }
 
-    public JComboBox<DocumentosConsultarEnum> getCmbDocumento() {
+    public JComboBox<DocumentoEnum> getCmbDocumento() {
         return cmbDocumento;
     }
 
-    public void setCmbDocumento(JComboBox<DocumentosConsultarEnum> cmbDocumento) {
+    public void setCmbDocumento(JComboBox<DocumentoEnum> cmbDocumento) {
         this.cmbDocumento = cmbDocumento;
     }
+
+    
 
     public JPanel getPanelOpciones() {
         return panelOpciones;

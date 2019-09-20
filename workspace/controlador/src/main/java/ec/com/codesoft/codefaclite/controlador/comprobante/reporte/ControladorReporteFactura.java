@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -54,7 +55,7 @@ public class ControladorReporteFactura {
     private Persona referido;
     protected Boolean reporteAgrupado;
     private Boolean afectarNotaCredito;
-    private DocumentosConsultarEnum documentoConsultaEnum;
+    private DocumentoEnum documentoConsultaEnum;
     
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     //private Map<String,BigDecimal> mapTotales;
@@ -74,7 +75,7 @@ public class ControladorReporteFactura {
     
     
     
-    public ControladorReporteFactura(Persona persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentosConsultarEnum documentoConsultaEnum,Empresa empresa) {
+    public ControladorReporteFactura(Persona persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentoEnum documentoConsultaEnum,Empresa empresa) {
         this.persona = persona;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -102,13 +103,13 @@ public class ControladorReporteFactura {
         try {
             buildMapTotales();
             FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
-            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa);
+            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum);
             
             //DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
             NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();
             List<NotaCredito> dataNotCre = null;
             
-            if (documentoConsultaEnum.equals(DocumentosConsultarEnum.VENTAS)) {
+            if (documentoConsultaEnum.equals(DocumentoEnum.FACTURA) || documentoConsultaEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA)) {
                 dataNotCre = nc.obtenerNotasReporte(persona, null, null, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,empresa);
             } else {
                 dataNotCre = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin, estadoFactura,empresa);
@@ -117,7 +118,8 @@ public class ControladorReporteFactura {
             data = new ArrayList<ReporteFacturaData>();
             
             switch (documentoConsultaEnum) {
-                case VENTAS:
+                case NOTA_VENTA_INTERNA:
+                case FACTURA:
                     for (Factura factura : datafact) {
                         
                         BigDecimal totalMenosNotaCredito = BigDecimal.ZERO;
@@ -379,12 +381,15 @@ public class ControladorReporteFactura {
     private String obtenerTituloReportePdf()
     {
         String titulo = "Reporte ";
-        if (documentoConsultaEnum.equals(DocumentosConsultarEnum.VENTAS)) {
+        return titulo+documentoConsultaEnum.getNombre();
+        /*if (documentoConsultaEnum.equals(DocumentoEnum.FACTURA)) {
             titulo += "Facturas";
-        } else if (documentoConsultaEnum.equals(DocumentosConsultarEnum.NOTA_CREDITO)) {
+        } else if (documentoConsultaEnum.equals(DocumentoEnum.NOTA_CREDITO)) {
             titulo += "Notas de Crédito";
-        }
-        return titulo;
+        }else if (documentoConsultaEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA)) {
+            titulo += "Notas de Venta Interna";
+        }*/
+        //return titulo;
     }
     
     public File obtenerArchivoReportePdf(InterfazComunicacionPanel panelPadre)
@@ -466,7 +471,7 @@ public class ControladorReporteFactura {
             parameters.putAll(totalAnulados.buildMap(EtiquetaReporteEnum.ANULADOS));
         }
         
-       if(documentoConsultaEnum.equals(documentoConsultaEnum.VENTAS))
+       if(documentoConsultaEnum.equals(documentoConsultaEnum.FACTURA) || documentoConsultaEnum.equals(documentoConsultaEnum.NOTA_VENTA_INTERNA))
        {
            TotalSumatoria totalSinNotasCredito=total.subtract(totalNotasCredito);
            TotalSumatoria totalSinNotasCreditoYAnulados=totalSinNotasCredito.subtract(totalAnulados);
@@ -672,7 +677,7 @@ public class ControladorReporteFactura {
         this.afectarNotaCredito = afectarNotaCredito;
     }
 
-    public void setDocumentoConsultaEnum(DocumentosConsultarEnum documentoConsultaEnum) {
+    public void setDocumentoConsultaEnum(DocumentoEnum documentoConsultaEnum) {
         this.documentoConsultaEnum = documentoConsultaEnum;
     }
 

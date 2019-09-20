@@ -31,7 +31,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    public List<Factura> lista(Persona persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa) {
+    public List<Factura> lista(Persona persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum) {
         //Factura factura;
         //factura.getPuntoEmision();
         //factura.getCodigoDocumentoEnum();
@@ -118,7 +118,8 @@ public class FacturaFacade extends AbstractFacade<Factura> {
                 }
             }
             
-            query.setParameter(6,DocumentoEnum.FACTURA.getCodigo());
+            //query.setParameter(6,DocumentoEnum.FACTURA.getCodigo());
+            query.setParameter(6,documentoEnum.getCodigo());
             query.setParameter(7,empresa);
             
             if (puntoEmision != null) {

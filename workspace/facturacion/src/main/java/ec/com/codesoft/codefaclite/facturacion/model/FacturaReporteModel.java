@@ -16,7 +16,6 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura;
-import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.DocumentosConsultarEnum;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaReportePanel;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DataEjemploReporte;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ReporteFacturaData;
@@ -126,7 +125,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 fechaFin = new Date(getDateFechaFin().getDate().getTime());
             }
 
-            DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
+            DocumentoEnum documentoConsultaEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
             //Seteando datos para el controlador         
             controladorReporte =crearControlador();
             controladorReporte.setPersona(persona);
@@ -433,9 +432,12 @@ public class FacturaReporteModel extends FacturaReportePanel {
         
         //Agregar la lista de los elementos disponibles para buscar
         getCmbDocumento().removeAllItems();
-        for (DocumentosConsultarEnum documentoEnum : DocumentosConsultarEnum.values()) {
-            getCmbDocumento().addItem(documentoEnum);
-        }
+        getCmbDocumento().addItem(DocumentoEnum.FACTURA);
+        getCmbDocumento().addItem(DocumentoEnum.NOTA_VENTA_INTERNA);
+        getCmbDocumento().addItem(DocumentoEnum.NOTA_CREDITO);
+        //for (DocumentosConsultarEnum documentoEnum : DocumentosConsultarEnum.values()) {
+        //    getCmbDocumento().addItem(documentoEnum);
+        //}
         
         getChkTodosReferidos().setSelected(true);
         getBtnBuscarReferido().setEnabled(false);
@@ -499,10 +501,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getCmbDocumento().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DocumentosConsultarEnum documentoEnum=(DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
+                DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                 
                 //Si el documento es nota de credito desabilito el panel de control
-                if(documentoEnum.equals(DocumentosConsultarEnum.NOTA_CREDITO))
+                if(documentoEnum.equals(DocumentoEnum.NOTA_CREDITO))
                 {
                     getPanelOpciones().setEnabled(false);
                     getChkAfectaNotaCredito().setEnabled(false);
