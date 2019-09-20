@@ -32,7 +32,7 @@ public class CompraDetalle implements Serializable {
     //@Column(name = "PRODUCTO_ID")
     //private Long productoId;
     @Column(name = "CANTIDAD")
-    private Integer cantidad;
+    private BigDecimal cantidad;
     @Column(name = "PRECIO_UNITARIO")
     private BigDecimal precioUnitario;
     @Column(name = "DESCUENTO")
@@ -83,7 +83,7 @@ public class CompraDetalle implements Serializable {
 
 
 
-    public Integer getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
@@ -105,7 +105,7 @@ public class CompraDetalle implements Serializable {
 
 
 
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 

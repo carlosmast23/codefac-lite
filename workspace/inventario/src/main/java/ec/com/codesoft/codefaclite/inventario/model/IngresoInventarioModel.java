@@ -244,7 +244,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             kardexDetalle.setPuntoEmision(compraInventario.getPuntoEmision());
             kardexDetalle.setSecuencial(compraInventario.getSecuencial());
             
-            kardexDetalle.setCantidad(detalle.getCantidad());
+            kardexDetalle.setCantidad(detalle.getCantidad().intValue()); //TODO: ESTA PARTE SE DEBE MEJORAR PARA QUE EL KARDEX TERMINE CON VALORES DECIMALES
             kardexDetalle.setCodigoTipoDocumento(compraInventario.getCodigoTipoDocumento());
             kardexDetalle.setReferenciaDocumentoId(compraInventario.getId());
             kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
@@ -253,7 +253,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             kardexDetalle.seleccion=true;
                                     
             if (detalle.getProductoProveedor().getProducto().getGarantiaEnum().equals(EnumSiNo.SI)) {
-                for (int i = 0; i < detalle.getCantidad(); i++) {
+                for (int i = 0; i < detalle.getCantidad().intValue(); i++) {
                     KardexItemEspecificoTemp item=new KardexItemEspecificoTemp();
                     item.setCodigoEspecifico("");
                     item.setEstado(GeneralEnumEstado.ACTIVO.getEstado());

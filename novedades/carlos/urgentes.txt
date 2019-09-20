@@ -63,3 +63,4 @@ ver como hacer para que se demore menos los datos cuando se trabaja de forma rem
 en la pantalla de sucursal no tener la opcion de seleccionar la empresa porque despues de crear la empresa ya se puede ingresar con un usuario y seguir creando los datos
 En todos los lugares que son de grabar imagenes o algo de forma remota desahabilitar esa opción cuando sea un cliente remoto
 porque eso no esta funcionando todavia
+Ver que como las compras pueden ser cantidad decimales todo el resto de entidades que se relacionan deben se decimales ejemplo "Ordenes de compra, kardex"

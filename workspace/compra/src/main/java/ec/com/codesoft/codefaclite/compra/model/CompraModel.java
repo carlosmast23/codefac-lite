@@ -562,7 +562,7 @@ public class CompraModel extends CompraPanel{
         //Cargar los detalles
         for (OrdenCompraDetalle detalleOrden : ordenCompra.getDetalles()) {
             CompraDetalle compraDetalle=new CompraDetalle();
-            compraDetalle.setCantidad(detalleOrden.getCantidad());
+            compraDetalle.setCantidad(new BigDecimal(detalleOrden.getCantidad())); //TODO: Verificar que este campo 
             compraDetalle.setDescripcion(detalleOrden.getDescripcion());
             compraDetalle.setDescuento(detalleOrden.getDescuento());
             compraDetalle.setIva(detalleOrden.getIva());
@@ -986,7 +986,7 @@ public class CompraModel extends CompraPanel{
             //productoProveedor.setConIva(enumSiNo.getLetra());
             
             //Seteo los valores de los detalles e la compra
-            compraDetalle.setCantidad(Integer.parseInt(getTxtCantidadItem().getText()));
+            compraDetalle.setCantidad(new BigDecimal(getTxtCantidadItem().getText()));
             BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText()); 
             //compraDetalle.setPrecioUnitario(precioUnitario.setScale(2,BigDecimal.ROUND_HALF_UP));
             compraDetalle.setPrecioUnitario(precioUnitario ); //TODO: Ver si es necesario escalar los valores o este proceso lo debe hacer el usuario

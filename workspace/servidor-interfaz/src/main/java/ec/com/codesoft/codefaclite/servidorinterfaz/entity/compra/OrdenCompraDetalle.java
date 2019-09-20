@@ -33,6 +33,9 @@ public class OrdenCompraDetalle implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * TODO: Este valor de la cantidad se debe poner como BigDecimal
+     */
     @Column(name = "CANTIDAD")
     private Integer cantidad;
 

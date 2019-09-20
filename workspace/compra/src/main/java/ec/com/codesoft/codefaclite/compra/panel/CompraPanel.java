@@ -1025,7 +1025,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Cantidad",grupo = "detalles")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = ExpresionRegular.NUMEROS_DECIMALES,nombre = "Cantidad",grupo = "detalles")
     public JTextField getTxtCantidadItem() {
         return txtCantidadItem;
     }

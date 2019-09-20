@@ -377,7 +377,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         
         //CompraDetalle compraDetalle = new CompraDetalle();
         //compraDetalle.setDescripcion(getTxtDescripcion().getText());
-        compraDetalle.setCantidad(1);
+        compraDetalle.setCantidad(BigDecimal.ONE);
 
         //TODO: Revisar si solo una base imponible o debo usar 2 para mas precion con productos que no distintas base de retencion                
         

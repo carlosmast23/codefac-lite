@@ -47,6 +47,11 @@ public final class ExpresionRegular
     public static final String soloNumeros = "^[0-9]*$";
     
     /**
+     * Validacion para numeros con decimales
+     */
+    public static final String NUMEROS_DECIMALES="^[0-9]+([.][0-9]+)?$";
+    
+    /**
      * Número de teléfono convencional anteponiendo el código provincial
      * Ejm: 022625072 
     */
