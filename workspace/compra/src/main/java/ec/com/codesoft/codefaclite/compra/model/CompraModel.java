@@ -425,13 +425,35 @@ public class CompraModel extends CompraPanel{
         this.compra.setDetalles(new ArrayList<CompraDetalle>());
         bloquearIngresoDetalleProducto();   
         
-        getCmbRetencionIva().setSelectedIndex(0);
-        getCmbRetencionRenta().setSelectedIndex(0);
-        
-        getCmbSustentoComprobante().setSelectedIndex(0);
-        getCmbDocumento().setSelectedIndex(0);
+       
+        //getCmbSustentoComprobante().setSelectedIndex(0);
+        //getCmbDocumento().setSelectedIndex(0);
+        cargarCatalogoRetencionesDefecto();
         
         getRdbEmisionFisica().setSelected(true);
+    }
+    
+    private void cargarCatalogoRetencionesDefecto()
+    {
+        try {
+            ParametroCodefac parametroIva= ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.VALOR_DEFECTO_RETENCION_IVA,session.getEmpresa());
+            if(parametroIva!=null && parametroIva.getValor()!=null && !parametroIva.getValor().isEmpty())
+            {
+                SriRetencionIva sriRetencionIva= ServiceFactory.getFactory().getSriRetencionIvaServiceIf().buscarPorId(Long.parseLong(parametroIva.getValor()));
+                getCmbRetencionIva().setSelectedItem(sriRetencionIva);
+            }
+            
+            ParametroCodefac parametroRenta= ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.VALOR_DEFECTO_RETENCION_RENTA,session.getEmpresa());
+            if(parametroRenta!=null && parametroRenta.getValor()!=null && !parametroRenta.getValor().isEmpty())
+            {
+                SriRetencionRenta sriRetencionRenta= ServiceFactory.getFactory().getSriRetencionRentaServiceIf().buscarPorId(Long.parseLong(parametroRenta.getValor()));
+                getCmbRetencionRenta().setSelectedItem(sriRetencionRenta);
+            }
+            
+
+        } catch (RemoteException ex) {
+            Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 //    @Override
@@ -696,7 +718,8 @@ public class CompraModel extends CompraPanel{
                 if(filaDP>=0)
                 {
                     CompraDetalle compraDetalle = (CompraDetalle) compra.getDetalles().get(filaDP); //TODO: Revisar si esta forma es la mas optima
-                    getTxtProductoItem().setText(compraDetalle.getDescripcion());
+                    getTxtProductoItem().setText(compraDetalle.getProductoProveedor().getProducto().getCodigoPersonalizado());
+                    verificarExistenciadeProductoProveedor();
                     getTxtDescripcionItem().setText(compraDetalle.getDescripcion());
                     getTxtCantidadItem().setText(compraDetalle.getCantidad()+"");
                     getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
@@ -707,7 +730,7 @@ public class CompraModel extends CompraPanel{
                     bloquearDesbloquearBotones(false);
                     //----------------------------------------------------------------------
                     productoSeleccionado = compraDetalle.getProductoProveedor().getProducto();
-                    verificarExistenciadeProductoProveedor();
+                    
                     
                     getCmbSustentoComprobante().setSelectedItem(compraDetalle.getCodigoSustentoSriEnum());
                 }

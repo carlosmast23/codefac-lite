@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
@@ -590,7 +591,9 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         this.txtDiasCredito = txtDiasCredito;
     }
 
+    
     @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true)
     public JTextField getTxtNombre() {
         return txtNombre;
     }
