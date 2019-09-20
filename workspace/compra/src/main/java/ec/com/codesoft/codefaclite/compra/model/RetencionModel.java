@@ -508,8 +508,8 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
                     //Cargar dato por defecto del correo
                     cargarCorreoPorDefecto(compraTmp);
                     cargarTablaDatosAdicionales(retencion);
-                    
-                    
+                    getTblDetalleRetenciones().setRowSelectionInterval(0,0); //Seleccionar la primera fila
+                    cargarDatosEditar();
                 }
             }
             
@@ -896,21 +896,24 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         }
                 
     }
+    private void cargarDatosEditar()
+    {
+        int filaSeleccionada = getTblDetalleRetenciones().getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            DefaultTableModel modeloTabla = (DefaultTableModel) getTblDetalleRetenciones().getModel();
+            CompraDetalle compraDetalle = (CompraDetalle) modeloTabla.getValueAt(filaSeleccionada, 0); //Obtiene el valor de la fila seleccioanda
+            getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
+            getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
+            getTxtBaseImponible().setText(compraDetalle.getBaseImponibleRenta().toString());
+
+        }
+    }
 
     private void listenerTabla() {
         getTblDetalleRetenciones().addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int filaSeleccionada=getTblDetalleRetenciones().getSelectedRow();
-                if(filaSeleccionada>=0)
-                {
-                    DefaultTableModel modeloTabla=(DefaultTableModel) getTblDetalleRetenciones().getModel();
-                    CompraDetalle compraDetalle=(CompraDetalle) modeloTabla.getValueAt(filaSeleccionada,0); //Obtiene el valor de la fila seleccioanda
-                    getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
-                    getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
-                    getTxtBaseImponible().setText(compraDetalle.getBaseImponibleRenta().toString());
-
-                }
+                cargarDatosEditar();
             }
 
             @Override
