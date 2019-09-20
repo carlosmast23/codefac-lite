@@ -1283,17 +1283,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public void imprimir() {
         if (this.factura != null && estadoFormulario.equals(ESTADO_EDITAR)) {
-            try {
-                String claveAceeso = this.factura.getClaveAcceso();
-                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso,factura.getEmpresa());
-                JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
-                panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
-            } catch (RemoteException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            
+            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+            {
+                try {
+                    String claveAceeso = this.factura.getClaveAcceso();
+                    byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso,factura.getEmpresa());
+                    JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                    panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+            {
+                imprimirComprobanteVenta(factura, FacturacionModel.NOMBRE_REPORTE_FACTURA_INTERNA);;
             }
         }
     }

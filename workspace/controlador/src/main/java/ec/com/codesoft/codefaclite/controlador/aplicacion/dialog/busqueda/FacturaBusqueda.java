@@ -98,7 +98,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         queryDialog.agregarParametro(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(2,filter);
         queryDialog.agregarParametro(3,DocumentoEnum.FACTURA.getCodigo());
-        queryDialog.agregarParametro(4,DocumentoEnum.NOTA_VENTA.getCodigo());
+        queryDialog.agregarParametro(4,DocumentoEnum.NOTA_VENTA_INTERNA.getCodigo());
         
         
         if (empresa != null) {
