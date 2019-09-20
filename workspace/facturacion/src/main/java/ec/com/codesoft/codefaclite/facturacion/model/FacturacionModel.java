@@ -1267,13 +1267,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Eliminar solo si esta en modo editar
         if (estadoFormulario.equals(ESTADO_EDITAR)) {
 
-            //Verificar que la factura no tenga notas de credito aplicando porque no podria eliminar si se da esta condicion
-            if (!factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.SIN_ANULAR)) {
-                DialogoCodefac.mensaje(MensajeCodefacSistema.FacturasMensajes.ERROR_ELIMINAR_AFECTA_NOTA_CREDITO);
-                throw new ExcepcionCodefacLite("error");
+            //TODO: Para los documentos legales toca separar para electronicas y fisicas
+            if(factura.getCodigoDocumentoEnum().getDocumentoLegal())
+            {
+                //Verificar que la factura no tenga notas de credito aplicando porque no podria eliminar si se da esta condicion
+                if (!factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.SIN_ANULAR)) {
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.FacturasMensajes.ERROR_ELIMINAR_AFECTA_NOTA_CREDITO);
+                    throw new ExcepcionCodefacLite("error");
+                }
+
+                ComprobanteElectronicoComponente.eliminarComprobante(this, factura, getLblEstadoFactura());
+            }else //Cuando no es un documento legal elimino directamente
+            {
+                //todo:verificar si tengo que poner el estado o eso se lo hace automaticamente
+                if(DialogoCodefac.dialogoPregunta("Advertencia","Está seguro que quiere eliminar el registro ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                {
+                    factura.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO);
+                    ServiceFactory.getFactory().getFacturacionServiceIf().eliminarFactura(factura);
+                }
+                else
+                {
+                    throw new ExcepcionCodefacLite("Cancelar evento eliminar porque no esta en modo editar");
+                }
             }
             
-            ComprobanteElectronicoComponente.eliminarComprobante(this, factura, getLblEstadoFactura());
+            
             
         }else{
             throw new ExcepcionCodefacLite("Cancelar evento eliminar porque no esta en modo editar");
