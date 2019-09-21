@@ -1,3 +1,1 @@
 que algunas facturas le deje seleccionar que no hacen retenciones
-verificar que en las retenciones no se esta seteando los valores de las retenciones cuando se cargar desde una compra
-Agrupar todas las retenciones cuando son desde compra para agrupar por codigos y no tener varios items

@@ -1796,9 +1796,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 this.subTotalDescuentoSinImpuesto = this.subTotalDescuentoSinImpuesto.add(facturaDetalle.getDescuento());
             }
         });
-        //this.descuento = this.descuento.setScale(2, BigDecimal.ROUND_HALF_UP);
-        this.subTotalDescuentoConImpuesto = this.subTotalDescuentoConImpuesto.setScale(2, BigDecimal.ROUND_HALF_UP);
-        this.subTotalDescuentoSinImpuesto = this.subTotalDescuentoSinImpuesto.setScale(2, BigDecimal.ROUND_HALF_UP);*/
+        //this.descuento = this.descuento.setcale(2, BigDecimal.ROUND_HALF_UP);
+        this.subTotalDescuentoConImpuesto = this.subTotalDescuentoConImpuesto.setcale(2, BigDecimal.ROUND_HALF_UP);
+        this.subTotalDescuentoSinImpuesto = this.subTotalDescuentoSinImpuesto.setcale(2, BigDecimal.ROUND_HALF_UP);*/
     }
 
     
@@ -2100,9 +2100,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
          * Redondeo los valores de los precios unitario de los detalles de la factura
          * Nota: este proceso lo hago al final porque para los totales necesitaba tener los valores exactos de los precios unitarios, pero como ya va a generar la factura puedo redondeal los valores unitario
          */
-        for (FacturaDetalle facturaDetalle : factura.getDetalles()) {
-            facturaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2,RoundingMode.HALF_UP));
-        }
+        //for (FacturaDetalle facturaDetalle : factura.getDetalles()) {
+        //    facturaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2,RoundingMode.HALF_UP));
+        //}
 
     }
     
@@ -2427,7 +2427,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 //Calular el total despues del descuento porque necesito esa valor para grabar
                 //BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
-                //facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+                //facturaDetalle.setTotal(setTotal.setcale(2, BigDecimal.ROUND_HALF_UP));
                 facturaDetalle.calcularTotalDetalle();
                 /**
                  * Revisar este calculo del iva para no calcular 2 veces al mostrar
@@ -2445,7 +2445,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 /*if (catalogoProducto.getIva().getTarifa().equals(0)) {
                     facturaDetalle.setIva(BigDecimal.ZERO);
                 } else {
-                    BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                    BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setcale(2, BigDecimal.ROUND_HALF_UP);
                     facturaDetalle.setIva(iva);
                 }*/
                 
@@ -2536,7 +2536,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 //Calular el total despues del descuento porque necesito esa valor para grabar
                 //BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
-                //facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));a
+                //facturaDetalle.setTotal(setTotal.setcale(2, BigDecimal.ROUND_HALF_UP));a
                 facturaDetalle.calcularTotalDetalle();
                 facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
                 /**

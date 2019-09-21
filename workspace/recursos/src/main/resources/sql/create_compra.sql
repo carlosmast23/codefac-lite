@@ -64,7 +64,7 @@ create table COMPRA_DETALLE
     SRI_RETENCION_IVA_ID BIGINT,
     SRI_RETENCION_RENTA_IVA_ID BIGINT,
     COMPRA_ID BIGINT,
-    CANTIDAD integer ,
+    CANTIDAD decimal(13,3),
     PRECIO_UNITARIO decimal(13,3),
     DESCUENTO decimal(13,2),
     VALOR_ICE decimal,
