@@ -1,2 +1,3 @@
-ver que al filtrar en el reporte de clientes salga por cliente oficina y no por cliente
-ver que en la pantalla de facturas al cargar esta saliendo mal los calculos
+Esta pendiente revisar como se puede hacer el tema que guarde todos los decimales porque luego al cargar la factura calcula datos erroneos porque el precio unitario no estan grabando todos los decimales
+NOTA: No se puede solo enviar sin redondear porque resulta que el Sri no me permite que el precio unitario tenga mas de 2 decimales 
+Solucion: Que internamente se grabe con todo los decimales pero finalmente antes de mandar a genarar el comprobante se redonde el prcio unitario

@@ -1,3 +1,2 @@
-ver como hacer para poder grabar un codigo de transporte y que imprima al final de cada factura
 migrar listado de productos
 moigrar listado de los clientes

@@ -1,7 +1,1 @@
-ver que si creo una nota de venta tengo que agregar secueciales para cada una
-ver si mejor no mesclo nota de venta y creo una nota de venta interna
-reutilizar los mismo formatos de impresion para notas de venta interna (Utilizar los 3 formatos de impresion de las ventas)
-en el reporte de facturas agregar el filtro por notas de venta y notas de venta internas y que por defecto este seleccionado solo el de facturas electronicas o los oficinas
-ver como puedo eliminar o anular los comprobantes internos (creo que directamente estos se puedan eliminar)
-ver si en la clasificacion de los documentos esta la clasificacion de que si son legales o internos
 ver si posteriormente se agregar un documento de factura manual para tener clasificado y separado de la factura fisica
