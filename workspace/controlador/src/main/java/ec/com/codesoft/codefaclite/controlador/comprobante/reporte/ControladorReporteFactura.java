@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
@@ -47,7 +48,7 @@ public class ControladorReporteFactura {
     
     //TODO: Falta hacer 2 notas de credito para los calculos de los anulados    
     
-    private Persona persona;
+    private PersonaEstablecimiento persona;
     private Date fechaInicio;
     private Date fechaFin;
     private ComprobanteEntity.ComprobanteEnumEstado estadoFactura;
@@ -75,7 +76,7 @@ public class ControladorReporteFactura {
     
     
     
-    public ControladorReporteFactura(Persona persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentoEnum documentoConsultaEnum,Empresa empresa) {
+    public ControladorReporteFactura(PersonaEstablecimiento persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentoEnum documentoConsultaEnum,Empresa empresa) {
         this.persona = persona;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -109,10 +110,13 @@ public class ControladorReporteFactura {
             NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();
             List<NotaCredito> dataNotCre = null;
             
+            /**
+             * Todo: Analizar si las notas de credito se deben obtener por cada sucursal de la persona
+             */
             if (documentoConsultaEnum.equals(DocumentoEnum.FACTURA) || documentoConsultaEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA)) {
-                dataNotCre = nc.obtenerNotasReporte(persona, null, null, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,empresa);
+                dataNotCre = nc.obtenerNotasReporte((persona!=null)?persona.getPersona():null, null, null, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,empresa);
             } else {
-                dataNotCre = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin, estadoFactura,empresa);
+                dataNotCre = nc.obtenerNotasReporte((persona!=null)?persona.getPersona():null, fechaInicio, fechaFin, estadoFactura,empresa);
             }
             
             data = new ArrayList<ReporteFacturaData>();
@@ -645,7 +649,7 @@ public class ControladorReporteFactura {
 
     };
 
-    public void setPersona(Persona persona) {
+    public void setPersona(PersonaEstablecimiento persona) {
         this.persona = persona;
     }
 

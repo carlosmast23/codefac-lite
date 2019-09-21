@@ -76,7 +76,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     protected Boolean filtrarReferidos;
     //protected Persona referido;
     
-    private Persona persona;
+    private PersonaEstablecimiento persona;
     protected Persona referido;
     //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
@@ -361,7 +361,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     private void setearValoresCliente() {
 
-        getTxtCliente().setText(persona.getIdentificacion());
+        getTxtCliente().setText(persona.getPersona().getIdentificacion());
         //getLblNombreCliente().setText(persona.getRazonSocial());
 
         //getLblDireccionCliente().setText(persona.getDireccion());
@@ -469,7 +469,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
-                persona = ((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();
+                persona = ((PersonaEstablecimiento) buscarDialogoModel.getResultado());
                 if (persona != null) {
                     setearValoresCliente();
                 }

@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
@@ -31,13 +32,14 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    public List<Factura> lista(Persona persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum) {
+    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum) {
         //Factura factura;
-        //factura.getPuntoEmision();
+        //factura.getSucursal();
         //factura.getCodigoDocumentoEnum();
         String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="";
         if (persona != null) {
-            cliente = "u.cliente=?1";
+            //cliente = "u.cliente=?1";
+            cliente = "u.sucursal=?1";
         } else {
             cliente = "1=1";
         }
