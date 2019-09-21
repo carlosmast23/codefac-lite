@@ -639,7 +639,7 @@ public class Compra implements Serializable {
          */
         NO_EMITIDO("N", "No emitido"), 
         /**
-         * Estado que 
+         * Estado que me permite identificar que esta compra no se tiene que hacer retencion
          */
         SIN_CONTABILIDAD("S","Sin contabilidad");
         

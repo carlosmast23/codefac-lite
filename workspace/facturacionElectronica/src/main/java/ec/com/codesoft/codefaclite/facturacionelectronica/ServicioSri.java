@@ -44,6 +44,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.ws.WebServiceException;
+import org.jfree.util.Log;
 
 /**
  *
@@ -169,7 +170,7 @@ public class ServicioSri {
      * Todo : Ver si en un futuro puedo usar el mismo metodo que enviar por lote
      * @return 
      */
-    public Boolean enviar()
+    public Boolean enviar() throws ComprobanteElectronicoException
     {
         try {
             //File archivoXMLFirmado = new File("C:\\CodefacRecursos\\comprobantes\\pruebas\\firmados\\0103201801172421895100110010010000000010000000011.xml");
@@ -189,12 +190,17 @@ public class ServicioSri {
             
         } catch (IOException ex) {
             Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+        }  catch(Exception ex)
+        {
+            ex.printStackTrace();
+            Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);            
+            throw new ComprobanteElectronicoException(ex.getMessage(),"Enviando Sri",ComprobanteElectronicoException.ERROR_COMPROBANTE);
         }
         return false;
     } 
     
     
-    public void enviarLote()
+    public void enviarLote() throws ComprobanteElectronicoException
     {
         try {
             comprobantesNoRecibidos=new ArrayList<Comprobante>();
@@ -216,6 +222,11 @@ public class ServicioSri {
             
         } catch (IOException ex) {
             Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(Exception ex)
+        {
+            ex.printStackTrace();
+            Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);            
+            throw new ComprobanteElectronicoException(ex.getMessage(),"Enviando Sri",ComprobanteElectronicoException.ERROR_COMPROBANTE);
         }
        //comprobantesNoRecibidos return new ArrayList<Comprobante>();
     }    

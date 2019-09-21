@@ -288,12 +288,28 @@ public class Retencion extends ComprobanteEntity implements Serializable {
     /**
      * Formas de pago adicional
      */
-    public void addDetalle(RetencionDetalle DetalleRetencion) {
+    public void addDetalle(RetencionDetalle detalleRetencion) {
         if (this.detalles == null) {
             this.detalles = new ArrayList<RetencionDetalle>();
         }
-        DetalleRetencion.setRetencion(this);
-        this.detalles.add(DetalleRetencion);
+        
+        //Agregupar las retenciones que tiene el mismo codigo
+        for(RetencionDetalle detalle : detalles)
+        {
+            if(detalle.getCodigoRetencionSri().equals(detalleRetencion.getCodigoRetencionSri()) &&
+                    detalle.getCodigoSri().equals(detalle.getCodigoSri()) &&
+                    detalle.getPorcentajeRetener().compareTo(detalleRetencion.getPorcentajeRetener())==0)
+            {
+                
+                detalle.setValorRetenido(detalle.getValorRetenido().add(detalleRetencion.getValorRetenido()));
+                detalle.setBaseImponible(detalle.getBaseImponible().add(detalleRetencion.getBaseImponible()));
+                return;
+            }
+            
+        }
+        detalleRetencion.setRetencion(this);
+        this.detalles.add(detalleRetencion);
+        
 
     }
     

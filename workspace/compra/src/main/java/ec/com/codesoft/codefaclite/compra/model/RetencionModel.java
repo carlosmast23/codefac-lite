@@ -627,15 +627,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         if(estadoFormulario.equals(ESTADO_EDITAR))
         {
             cargarTablaSinReferencias();
-            /*
-            if(retencion.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
-            {
-                cargarTablaSinReferencias();
-            }
-            else
-            {
-                cargarTablayTotalesRetenciones();
-            }*/
+            
         }
         else
         {
@@ -896,6 +888,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         }
                 
     }
+    
     private void cargarDatosEditar()
     {
         int filaSeleccionada = getTblDetalleRetenciones().getSelectedRow();

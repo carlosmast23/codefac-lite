@@ -59,6 +59,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -108,6 +110,7 @@ public class CompraModel extends CompraPanel{
     public void iniciar() throws ExcepcionCodefacLite {
         inicarComponentesGraficos();
         iniciarCombos();
+        agregarListerCombos();
         agregarListenerBotones();
         agregarListenerTextoBox();
         crearVariables();
@@ -181,7 +184,7 @@ public class CompraModel extends CompraPanel{
         compra.setClaveAcceso("");
         DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
         compra.setEmpresa(session.getEmpresa());
-        compra.setCodigoDocumento(documentoEnum.getCodigo());        
+        compra.setCodigoDocumento(documentoEnum.getCodigo());      
         compra.setEstado(GeneralEnumEstado.ACTIVO.getEstado()); //TODO: cambiar el estado de las ordenes de compra
         compra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         compra.setFechaFactura(new Date(getCmbFechaCompra().getDate().getTime()));
@@ -211,10 +214,17 @@ public class CompraModel extends CompraPanel{
         TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         compra.setCodigoTipoDocumento(tipoDocumentoEnum.getCodigo());
         
-        if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)){
+        /*if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)){
             estadoRetencion = Compra.RetencionEnumCompras.NO_EMITIDO;
         }else{
             estadoRetencion = Compra.RetencionEnumCompras.SIN_CONTABILIDAD;
+        }*/
+        if(((EnumSiNo)getCmbEmitirRetencion().getSelectedItem()).equals(EnumSiNo.SI))
+        {
+            estadoRetencion=Compra.RetencionEnumCompras.NO_EMITIDO;
+        }else
+        {
+            estadoRetencion=Compra.RetencionEnumCompras.SIN_CONTABILIDAD;
         }
         
         
@@ -365,6 +375,15 @@ public class CompraModel extends CompraPanel{
             getRdbEmisionFisica().setSelected(true); //Cuando no tiene seleccionado ningun dato asumo que es fisica
         }
         
+        if(compra.getEstadoRetencionEnum().equals(estadoRetencion.SIN_CONTABILIDAD))
+        {
+            getCmbEmitirRetencion().setSelectedItem(EnumSiNo.NO);
+        }
+        else
+        {
+            getCmbEmitirRetencion().setSelectedItem(EnumSiNo.SI);
+        }
+        
         mostrarDatosTotales();
         desbloquearIngresoDetalleProducto();
         
@@ -431,6 +450,16 @@ public class CompraModel extends CompraPanel{
         cargarCatalogoRetencionesDefecto();
         
         getRdbEmisionFisica().setSelected(true);
+        
+        //Seleccionar la opcion de enviar o no retenciones
+        if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
+        {
+            getCmbEmitirRetencion().setSelectedItem(EnumSiNo.SI);
+        }
+        else
+        {
+            getCmbEmitirRetencion().setSelectedItem(EnumSiNo.NO);
+        }
     }
     
     private void cargarCatalogoRetencionesDefecto()
@@ -503,11 +532,11 @@ public class CompraModel extends CompraPanel{
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA);
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA_INVENTARIO);
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA_SERVICIOS);
-        //getCmbTipoDocumento().addItem(TipoDocumentoEnum.INVENTARIO);
-        //List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
-        //for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
-        //    getCmbTipoDocumento().addItem(tipoDocumento);
-        //}
+        
+        //Iniciar componentes de generar o no retencion
+        getCmbEmitirRetencion().removeAllItems();
+        getCmbEmitirRetencion().addItem(EnumSiNo.SI);
+        getCmbEmitirRetencion().addItem(EnumSiNo.NO);
         
         
         //Agregar los tipos de retencion Iva
@@ -1312,6 +1341,24 @@ public class CompraModel extends CompraPanel{
 
             @Override
             public void keyReleased(KeyEvent e) {}
+        });
+    }
+
+    private void agregarListerCombos() {
+        getCmbEmitirRetencion().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EnumSiNo enumSiNo=(EnumSiNo) getCmbEmitirRetencion().getSelectedItem();
+                if(enumSiNo.equals(EnumSiNo.SI))
+                {
+                    getCmbRetencionIva().setEnabled(true);
+                    getCmbRetencionRenta().setEnabled(true);
+                }else if(enumSiNo.equals(EnumSiNo.NO))
+                {
+                    getCmbRetencionIva().setEnabled(false);
+                    getCmbRetencionRenta().setEnabled(false);
+                }
+            }
         });
     }
 }

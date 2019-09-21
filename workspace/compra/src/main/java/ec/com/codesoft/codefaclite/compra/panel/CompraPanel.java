@@ -170,6 +170,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         cmbRetencionRenta = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        cmbEmitirRetencion = new javax.swing.JComboBox<>();
         btnAgregarProveedor = new javax.swing.JButton();
         lblEspacio2 = new javax.swing.JLabel();
         txtSecuencialCompra = new javax.swing.JTextField();
@@ -721,7 +723,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         cmbRetencionIva.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
@@ -731,7 +733,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         cmbRetencionRenta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -739,7 +741,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
         jLabel18.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel18.setText("IVA:");
+        jLabel18.setText("Emitir Retención:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -752,10 +754,27 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jLabel22.setText("Renta: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelRetencion.add(jLabel22, gridBagConstraints);
+
+        jLabel26.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel26.setText("IVA:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelRetencion.add(jLabel26, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelRetencion.add(cmbEmitirRetencion, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
@@ -864,6 +883,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnOrdenCompraBuscar;
     private javax.swing.JButton btnProveedorBuscar;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
+    private javax.swing.JComboBox<EnumSiNo> cmbEmitirRetencion;
     private com.toedter.calendar.JDateChooser cmbFechaCompra;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
@@ -888,6 +908,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1232,6 +1253,10 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
     public void setTxtIce(JTextField txtIce) {
         this.txtIce = txtIce;
+    }
+
+    public JComboBox<EnumSiNo> getCmbEmitirRetencion() {
+        return cmbEmitirRetencion;
     }
 
     
