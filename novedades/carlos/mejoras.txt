@@ -26,3 +26,4 @@ Ver como solucionar el problema que cuando no se actualizan los cambios el siste
 - Agregar fecha de inicio 
 - En la pantalla de factura hacer que facture con decimales que es completamente posible
 - Investigar por que en el precio unitario de las facturas aunque en el xsd dice que puede tener 6 decimales el Sri solo me valida 2
+hacer que las pantallas de migracion esten diponibles para cualquier version de pago
