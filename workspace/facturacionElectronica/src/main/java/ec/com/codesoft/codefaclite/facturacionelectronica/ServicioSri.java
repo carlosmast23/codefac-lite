@@ -174,7 +174,7 @@ public class ServicioSri {
     {
         //TODO: Solucion temporal que aveces sale un error de conexion con el web service para intentar unas 3 veces antes de terminar
         final int INTENTO_MAXIMO=3;
-        for (int i = 0; ; i++) {
+        for (int i = 0; ;) {
             try {
                 //File archivoXMLFirmado = new File("C:\\CodefacRecursos\\comprobantes\\pruebas\\firmados\\0103201801172421895100110010010000000010000000011.xml");
                 File archivoXMLFirmado = new File(urlFile);
@@ -210,31 +210,43 @@ public class ServicioSri {
     
     public void enviarLote() throws ComprobanteElectronicoException
     {
-        try {
-            comprobantesNoRecibidos=new ArrayList<Comprobante>();
-            //File archivoXMLFirmado = new File("C:\\CodefacRecursos\\comprobantes\\pruebas\\firmados\\0103201801172421895100110010010000000010000000011.xml");
-            File archivoXMLFirmado = new File(urlFile);
-            RecepcionComprobantesOffline port= servicio.getRecepcionComprobantesOfflinePort();
-            RespuestaSolicitud respuestaSolicitud = port.validarComprobante(archivoToByte(archivoXMLFirmado));
-            //System.out.println(respuestaSolicitud.getEstado()); //RECIBIDA DEVUELTA         
-            comprobantesNoRecibidos=respuestaSolicitud.getComprobantes().getComprobante();
-            /*if(respuestaSolicitud.getComprobantes().getComprobante().size()==0)
+        final int INTENTO_MAXIMO=3;
+        for (int i = 0; ; ) {
+            try {
+                comprobantesNoRecibidos=new ArrayList<Comprobante>();
+                //File archivoXMLFirmado = new File("C:\\CodefacRecursos\\comprobantes\\pruebas\\firmados\\0103201801172421895100110010010000000010000000011.xml");
+                File archivoXMLFirmado = new File(urlFile);
+                RecepcionComprobantesOffline port= servicio.getRecepcionComprobantesOfflinePort();
+                RespuestaSolicitud respuestaSolicitud = port.validarComprobante(archivoToByte(archivoXMLFirmado));
+                //System.out.println(respuestaSolicitud.getEstado()); //RECIBIDA DEVUELTA         
+                comprobantesNoRecibidos=respuestaSolicitud.getComprobantes().getComprobante();
+                break; //Si termina el proceso normal sale del ciclo repetitivo
+                /*if(respuestaSolicitud.getComprobantes().getComprobante().size()==0)
+                {
+                    return true;
+                }
+                else
+                {
+                    mensajes=respuestaSolicitud.getComprobantes().getComprobante().get(0).getMensajes().getMensaje();
+                    return false;
+                }*/
+
+            } catch (IOException ex) {
+                Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+            } catch(Exception ex)
             {
-                return true;
+                ex.printStackTrace();
+                Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);            
+                if(i==INTENTO_MAXIMO)
+                {
+                    throw new ComprobanteElectronicoException(ex.getMessage(), "Enviando Sri", ComprobanteElectronicoException.ERROR_COMPROBANTE);
+                }
+                else
+                {
+                    i++;
+                }
+                //throw new ComprobanteElectronicoException(ex.getMessage(),"Enviando Sri",ComprobanteElectronicoException.ERROR_COMPROBANTE);
             }
-            else
-            {
-                mensajes=respuestaSolicitud.getComprobantes().getComprobante().get(0).getMensajes().getMensaje();
-                return false;
-            }*/
-            
-        } catch (IOException ex) {
-            Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
-        } catch(Exception ex)
-        {
-            ex.printStackTrace();
-            Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);            
-            throw new ComprobanteElectronicoException(ex.getMessage(),"Enviando Sri",ComprobanteElectronicoException.ERROR_COMPROBANTE);
         }
        //comprobantesNoRecibidos return new ArrayList<Comprobante>();
     }    

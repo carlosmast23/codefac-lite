@@ -80,10 +80,11 @@ public class ResultadoLoteAcademicoModel extends ResultadoLoteAcademicoPanel{
     }
     
     private String buscarInfoAdicionalPorTitulo(List<InformacionAdicional> detalles, String titulo) {
-        for (InformacionAdicional infoAdicional : detalles) {
-            if(infoAdicional.getNombre().equals(titulo))
-            {
-                return infoAdicional.getValor();
+        if (detalles != null) {
+            for (InformacionAdicional infoAdicional : detalles) {
+                if (infoAdicional.getNombre().equals(titulo)) {
+                    return infoAdicional.getValor();
+                }
             }
         }
         return "";
