@@ -98,7 +98,7 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
             List<PermisoVentana> ventanas=new ArrayList<PermisoVentana>();
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.CATEGORIA_PRODUCTO.getCodigo()));
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.CATALOGO_PRODUCTO.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.CONFIGURACION_DEFECTO.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.COMPROBANTE_CONFIGURACION.getCodigo()));
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.FACTURA_DISENIO.getCodigo()));
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.NOTA_CREDITO.getCodigo()));
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.FACTURA_REPORTE.getCodigo()));

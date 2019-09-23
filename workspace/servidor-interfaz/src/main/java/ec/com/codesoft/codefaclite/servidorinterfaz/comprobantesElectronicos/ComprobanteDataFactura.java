@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -186,7 +187,9 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
                 //Establecer el descuento en el aplicativo
                 detalle.setDescuento(facturaDetalle.getDescuento());
                 detalle.setPrecioTotalSinImpuesto(facturaDetalle.getTotal());
-                detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario());
+                
+                //Todo: redondear valor porque en los comprobantes electronicos no me permite enviar con mas de 2 decimales aunque en los archivos xsd si permite
+                detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2, RoundingMode.HALF_UP));
 
                 //facturaDetalle.getProducto().get
                 /**

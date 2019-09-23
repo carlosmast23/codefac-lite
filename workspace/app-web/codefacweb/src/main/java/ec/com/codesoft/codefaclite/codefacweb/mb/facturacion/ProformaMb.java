@@ -462,6 +462,14 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         factura.setUsuario(sessionMb.getSession().getUsuario());
         factura.setSucursalEmpresa(sessionMb.getSession().getSucursal());
         
+        if(tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA))
+        {
+            factura.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
+        }else
+        {
+            factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
+        }
+        
         /**
          * Redondeo los valores de los precios unitario de los detalles de la factura
          * Nota: este proceso lo hago al final porque para los totales necesitaba tener los valores exactos de los precios unitarios, pero como ya va a generar la factura puedo redondeal los valores unitario

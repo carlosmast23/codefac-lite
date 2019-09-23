@@ -286,6 +286,8 @@ public class LoginModel extends LoginFormDialog{
             public void windowClosing(WindowEvent e) {
                 salirAplicacion=true;
                 setVisible(false);
+                dispose();
+                System.exit(0);
             }
 
             @Override

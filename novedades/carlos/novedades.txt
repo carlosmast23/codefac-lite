@@ -1,0 +1,1 @@
+verificar si las proformas estana afectando al inventario no deberia pasar
