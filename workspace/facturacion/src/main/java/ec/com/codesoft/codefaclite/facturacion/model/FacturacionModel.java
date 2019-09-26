@@ -1305,8 +1305,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
             {
                 try {
-                    String claveAceeso = this.factura.getClaveAcceso();
-                    byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso,factura.getEmpresa());
+                    String claveAcceso = this.factura.getClaveAcceso();
+                    if(claveAcceso==null)
+                    {
+                        DialogoCodefac.mensaje("Advertencia","No se puede generar el reporte porque no tiene clave de acceso",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        return;
+                    }
+                    
+                    byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,factura.getEmpresa());
                     JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                     panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
                 } catch (RemoteException ex) {

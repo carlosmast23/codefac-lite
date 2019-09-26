@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.FacturaElectronicaReporte;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -33,6 +34,9 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -435,9 +439,26 @@ public class ControladorReporteFactura {
         //String nombreArchivo=UtilidadesArchivos.generarNombreArchivoUnico("reporte","pdf");
         //String pathGrabar="\\tmp\\"+nombreArchivo; //TODO: Camabiar por algun nombre en funcion de la fecha para que se unico y no genere problemas
         
+        ordenarListaPorPuntoEmision(data);
         ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
         
         
+    }
+    
+    /**
+     * Metodo que me permite organizar la lista por 
+     * @param reporteData 
+     */
+    private void ordenarListaPorPuntoEmision(List<ReporteFacturaData> reporteData)
+    {
+        Collections.sort(reporteData,new Comparator<ReporteFacturaData>(){
+            public int compare(ReporteFacturaData obj1,ReporteFacturaData  obj2)
+                {
+                    return obj1.getPuntoEmision().compareTo(obj2.getPuntoEmision());
+                }
+        });
+        
+        //Collections.sort(new Comparator<>);
     }
     
     protected InputStream getReporte()
