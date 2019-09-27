@@ -73,10 +73,14 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 KardexService kardexService=new KardexService();
                 List<Kardex> kardexResultado=kardexService.buscarPorBodega(b);
-                if(kardexResultado.size()>0)
-                {
-                    throw new ServicioCodefacException("No se puede eliminar porque tiene kardex relacionados");
+                
+                for (Kardex kardex : kardexResultado) {
+                    if(kardex.getStock()>0)
+                    {
+                        throw new ServicioCodefacException("No se puede eliminar porque el kardex "+kardex.getProducto().getNombre()+" tiene stock positivo");
+                    }
                 }
+                
                 
                 b.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                 entityManager.merge(b);
