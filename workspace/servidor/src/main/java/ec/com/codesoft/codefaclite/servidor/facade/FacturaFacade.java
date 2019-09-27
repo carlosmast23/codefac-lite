@@ -232,7 +232,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
       }
       
       
-      public Factura buscarPorPremimpresoYEstadoFacade(Integer secuencial,String puntoEstablecimiento,String puntoEmision,ComprobanteEntity.ComprobanteEnumEstado estadoEnum)
+      public Factura buscarPorPremimpresoYEstadoFacade(Integer secuencial,BigDecimal puntoEstablecimiento,Integer puntoEmision,ComprobanteEntity.ComprobanteEnumEstado estadoEnum)
       {
           /*Factura f;
           f.getSecuencial();

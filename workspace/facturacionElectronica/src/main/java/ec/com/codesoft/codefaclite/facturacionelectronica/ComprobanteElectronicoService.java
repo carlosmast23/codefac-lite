@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
 import java.awt.Image;
@@ -426,7 +427,13 @@ public class ComprobanteElectronicoService implements Runnable {
                 List<String> comprobantesFirmados = new ArrayList<String>();
                 for (String claveAcceso : clavesAccesoLote) {
                     String path = getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, claveAcceso);
-                    String firmaStr = UtilidadesXml.convertirDocumentToString(path);
+                    String firmaStr;
+                    try {
+                        firmaStr = UtilidadesXml.convertirDocumentToString(path);
+                    } catch (IOException ex) {                        
+                        Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new ComprobanteElectronicoException(ex.getMessage(), "Error con el archivo", ComprobanteElectronicoException.ERROR_COMPROBANTE);
+                    }
                     //System.out.println(firmaStr);
                     firmaStr="<![CDATA["+firmaStr+"]]>";
                     comprobantesFirmados.add(firmaStr);
@@ -1146,6 +1153,19 @@ public class ComprobanteElectronicoService implements Runnable {
                 System.out.println("Existe conexion");
                 servicioSri.enviarLote();
                 List<Comprobante> comprobantesConProblemas=servicioSri.getComprobantesNoRecibidos();
+                
+                //Si la cantidad de comprobantes con problemas es igual al total procesado genero un error
+                if(comprobantesConProblemas.size()==clavesAccesoLote.size())
+                {
+                    List<String> mensajes=new ArrayList<String>();
+                    for (Comprobante comprobantesConProblema : comprobantesConProblemas) {                        
+                        for (Mensaje mensaje : comprobantesConProblema.getMensajes().getMensaje()) 
+                        {
+                            mensajes.add(UtilidadesComprobantes.castMensajeToString(mensaje));
+                        }
+                    }
+                    throw new ComprobanteElectronicoException(UtilidadesLista.castListToString(mensajes,"\n"), "Mensaje enviando Lote", ComprobanteElectronicoException.ERROR_COMPROBANTE);
+                }
                 
                 //if (servicioSri.enviar()) {
                     System.out.println("Documento enviados");

@@ -43,6 +43,14 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
     }
 
     public GuiaRemision grabar(GuiaRemision entity) throws ServicioCodefacException, RemoteException {
+        //Validaciones previas antes de grabar
+        for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {
+            if(destinatario.getAutorizacionNumero()==null || destinatario.getAutorizacionNumero().isEmpty())
+            {
+                throw new ServicioCodefacException("No se puede grabar una guia de remisión sin autorización de la factura");
+            }
+        }
+        
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() {

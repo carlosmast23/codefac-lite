@@ -173,7 +173,7 @@ public class ServicioSri {
     public Boolean enviar() throws ComprobanteElectronicoException
     {
         //TODO: Solucion temporal que aveces sale un error de conexion con el web service para intentar unas 3 veces antes de terminar
-        final int INTENTO_MAXIMO=3;
+        final int INTENTO_MAXIMO=10;
         for (int i = 0; ;) {
             try {
                 //File archivoXMLFirmado = new File("C:\\CodefacRecursos\\comprobantes\\pruebas\\firmados\\0103201801172421895100110010010000000010000000011.xml");
@@ -210,7 +210,7 @@ public class ServicioSri {
     
     public void enviarLote() throws ComprobanteElectronicoException
     {
-        final int INTENTO_MAXIMO=3;
+        final int INTENTO_MAXIMO=10;
         for (int i = 0; ; ) {
             try {
                 comprobantesNoRecibidos=new ArrayList<Comprobante>();
@@ -220,6 +220,23 @@ public class ServicioSri {
                 RespuestaSolicitud respuestaSolicitud = port.validarComprobante(archivoToByte(archivoXMLFirmado));
                 //System.out.println(respuestaSolicitud.getEstado()); //RECIBIDA DEVUELTA         
                 comprobantesNoRecibidos=respuestaSolicitud.getComprobantes().getComprobante();
+                for (Comprobante comprobantesNoRecibido : comprobantesNoRecibidos) {
+                    
+                    //Si en los comprobantes no recibidos viene el signo n/a significa que es un error global no del comprobante
+                    if(comprobantesNoRecibido.getClaveAcceso().equals("N/A"))
+                    {                        
+                        for (Mensaje mensaje : comprobantesNoRecibido.getMensajes().getMensaje()) {
+                            /*String mensajeError=
+                                    "Identificador:"+mensaje.getIdentificador()+"\n"+
+                                    "Info Adicional:"+mensaje.getInformacionAdicional()+"\n"+
+                                    "Mensaje:"+mensaje.getMensaje()+"\n"+
+                                    "Tipo:"+mensaje.getTipo();                            */
+                            String mensajeError=UtilidadesComprobantes.castMensajeToString(mensaje);
+                            throw new ComprobanteElectronicoException(mensajeError, "Enviando Sri Lote", ComprobanteElectronicoException.ERROR_COMPROBANTE);
+                        }
+                    }
+                }
+                
                 break; //Si termina el proceso normal sale del ciclo repetitivo
                 /*if(respuestaSolicitud.getComprobantes().getComprobante().size()==0)
                 {
@@ -233,6 +250,7 @@ public class ServicioSri {
 
             } catch (IOException ex) {
                 Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+                
             } catch(Exception ex)
             {
                 ex.printStackTrace();
@@ -292,13 +310,22 @@ public class ServicioSri {
                    }
                } catch (InterruptedException ex) {
                    Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+                   throw new ComprobanteElectronicoException(ex.getMessage()," Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+               } catch (Exception ex)
+               {
+                   ex.printStackTrace();
+                   throw new ComprobanteElectronicoException(ex.getMessage()," Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
                }
            }
            
            //Si sale del bucle sin retornar asumo que excedio el tiempo de espera
            throw new ComprobanteElectronicoException("Se excedio el tiempo de espera para autorizar el documento , porfavor inténtelo mas tarde","Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
        }
-       return false;
+       else
+       {
+           throw new ComprobanteElectronicoException("El servicio para autorizar el comprobante no esta disponible","Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+       }
+       //return false;
        
     }
     

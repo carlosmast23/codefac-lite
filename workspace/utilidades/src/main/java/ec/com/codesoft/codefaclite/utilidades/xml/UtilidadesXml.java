@@ -25,10 +25,10 @@ import javax.xml.bind.Marshaller;
  */
 public abstract class UtilidadesXml {
     
-    public static String convertirDocumentToString(String path)
+    public static String convertirDocumentToString(String path) throws IOException
     {
         
-        try {
+        //try {
             //XMLOutputter xmlOutput = new XMLOutputter();
             //xmlOutput.setFormat(Format.getPrettyFormat());
             //xmlOutput.output(document, new FileWriter("factura_fisica.jrxml"));
@@ -49,12 +49,12 @@ public abstract class UtilidadesXml {
         /*} catch (JDOMException ex) {
             ex.printStackTrace();
             Logger.getLogger(UtilidadesXml.class.getName()).log(Level.SEVERE, null, ex);            */
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(UtilidadesXml.class.getName()).log(Level.SEVERE, null, ex);
+        //} catch (IOException ex) {
+        //    ex.printStackTrace();
+        //    Logger.getLogger(UtilidadesXml.class.getName()).log(Level.SEVERE, null, ex);
             
-        }
-        return "";
+        //}
+        //return "";
     }
     
     /**

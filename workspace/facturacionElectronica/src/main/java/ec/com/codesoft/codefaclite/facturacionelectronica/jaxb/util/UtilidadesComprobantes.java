@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util;
 import com.sun.org.apache.xerces.internal.impl.io.MalformedByteSequenceException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
+import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -297,6 +298,16 @@ public abstract class UtilidadesComprobantes {
     }
     
     //public static Map<String,Object> obtener
+    
+    public static String castMensajeToString(Mensaje mensaje)
+    {
+        String mensajeError
+                = "Identificador:" + mensaje.getIdentificador() + "\n"
+                + "Info Adicional:" + mensaje.getInformacionAdicional() + "\n"
+                + "Mensaje:" + mensaje.getMensaje() + "\n"
+                + "Tipo:" + mensaje.getTipo();
+        return mensajeError;
+    }
     
 
 }

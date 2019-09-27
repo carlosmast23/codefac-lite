@@ -172,7 +172,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             
             DialogoCodefac.mensaje("Correcto","Los datos de la guia de remisión fueron grabados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
-            DialogoCodefac.mensaje("Error","Error al grabar los datos",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite(ex.getMessage());
         }
@@ -446,6 +446,13 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     
     private DestinatarioGuiaRemision crearDestinatario()
     {
+        //Validaciones previas para agregar el destinatario
+        if(getTxtAutorizacion().getText().isEmpty())
+        {
+            DialogoCodefac.mensaje("Advertencia","No se puede agregar facturas sin autorización",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return null;
+        }
+        
         DestinatarioGuiaRemision destinatario=new DestinatarioGuiaRemision();
         destinatario.setAutorizacionNumero(getTxtAutorizacion().getText());
         destinatario.setCodDucumentoSustento(""); //TODO: falta ver si solo pongo el codigo de la factura o pueden haber otros documentos que se pueden transportar
@@ -513,8 +520,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                     
                     Factura factura=ServiceFactory.getFactory().getFacturacionServiceIf().buscarPorPremimpresoYEstado(
                             Integer.parseInt(getLblSecuencial().getText().replace("-","")),
-                            puntoEmision.getSucursal().getCodigoSucursal()+"",
-                            puntoEmision.getPuntoEmision()+"",
+                            new BigDecimal(puntoEmision.getSucursal().getCodigoSucursal()),
+                            puntoEmision.getPuntoEmision(),
                             ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
                     
                     if(factura==null)
@@ -606,10 +613,13 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     private void agregarDetalleGuiaRemision()
     {
         DestinatarioGuiaRemision destinatarioGuiaRemision = crearDestinatario();
-        if (validarDestinarioGuiaRemision(destinatarioGuiaRemision)) {
-            guiaRemision.addDestinario(destinatarioGuiaRemision);
-            cargarDestinatariosAgregados();
-            imprimirTabla();
+        if(destinatarioGuiaRemision!=null)
+        {
+            if (validarDestinarioGuiaRemision(destinatarioGuiaRemision)) {
+                guiaRemision.addDestinario(destinatarioGuiaRemision);
+                cargarDestinatariosAgregados();
+                imprimirTabla();
+            }
         }
     }
     
