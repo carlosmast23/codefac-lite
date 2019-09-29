@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util;
 
+import autorizacion.ws.sri.gob.ec.Autorizacion;
 import com.sun.org.apache.xerces.internal.impl.io.MalformedByteSequenceException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
@@ -306,6 +307,21 @@ public abstract class UtilidadesComprobantes {
                 + "Info Adicional:" + mensaje.getInformacionAdicional() + "\n"
                 + "Mensaje:" + mensaje.getMensaje() + "\n"
                 + "Tipo:" + mensaje.getTipo();
+        return mensajeError;
+    }
+    
+    public static String castMensajeAutorizadoToString(Autorizacion.Mensajes mensaje)
+    {
+        String mensajeError="";
+        for (autorizacion.ws.sri.gob.ec.Mensaje mensajeTmp : mensaje.getMensaje()) {
+            mensajeError+= 
+                    "Identificador:" + mensajeTmp.getIdentificador() + "\n"
+                + "Info Adicional:" + mensajeTmp.getInformacionAdicional() + "\n"
+                + "Mensaje:" + mensajeTmp.getMensaje() + "\n"
+                + "Tipo:" + mensajeTmp.getTipo()+"\n\n";
+            
+        }
+        
         return mensajeError;
     }
     

@@ -348,9 +348,17 @@ public class ServicioSri {
                    {
                        Boolean esperarAutorizacion=false;
                        for (Autorizacion autorizacion : autorizaciones) {
-                           if (autorizacion.getEstado().equals("AUTORIZADO")) {                               
+                           if (autorizacion.getEstado().equals("AUTORIZADO") || autorizacion.getEstado().equals("NO AUTORIZADO")) 
+                           {
+                               //Si solo existe un unico registro y no se autoriza lanzo el error
+                               if(autorizacion.getEstado().equals("NO AUTORIZADO") && autorizaciones.size()==1)
+                               {
+                                   String mensajeError=UtilidadesComprobantes.castMensajeAutorizadoToString(autorizacion.getMensajes());
+                                   throw new ComprobanteElectronicoException(mensajeError,"Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+                               }
                                break;
-                           }else if(autorizacion.getEstado().equals("EN PROCESO"))
+                           }
+                           else if(autorizacion.getEstado().equals("EN PROCESO"))
                            {
                                esperarAutorizacion=true;
                            }
@@ -448,6 +456,11 @@ public class ServicioSri {
         //Si no existe nada grabado en el campo de autorizacion entonces devuelvo nulo
         if(autorizacion.getComprobante()==null)
             return null;
+        
+        if(autorizacion.getNumeroAutorizacion()==null || autorizacion.getNumeroAutorizacion().isEmpty())
+        {
+            return null;
+        }
         
         try {
             ClaveAcceso claveAcceso=new ClaveAcceso(autorizacion.getNumeroAutorizacion());

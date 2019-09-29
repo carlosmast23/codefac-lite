@@ -16,9 +16,11 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronicoLote;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteData;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteMensaje;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -143,12 +145,62 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
                     //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
                 }
             });
+            
+            ////=========> VERIFICAR SI TENGO QUE INFORMAR DE ALGÚN MENSAJE EN PANTALLA <=============== /////
+            Boolean mostrarMensaje=false;
+            String mensaje="";
+            for (ComprobanteData comprobante : comprobantes) {
+                if(comprobante.getMensajes().size()>0)
+                {
+                    mostrarMensaje=true;
+                }
+                
+                mensaje+=castMensajeAutorizadoToString(comprobante.getMensajes());
+            }
+            ///=========> MOSTRAR LOS MENSAJE SI EXISTE MENSAJE <=====================//
+            if(mostrarMensaje)
+            {
+                final String mensajeMostrar=mensaje;
+                monitorData.getBtnReporte().setEnabled(true);
+                monitorData.getBtnReporte().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        DialogoCodefac.mensaje("Mensajes",mensajeMostrar,DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        //JOptionPane.showMessageDialog(null, mensaje);
+                    }
+                });
+            }
+            
+            
+            
+            
+            //Actualiza la pantalla principal cuando se termina de procesar los comprobantes
             controlador.panelPadre.actualizarNotificacionesCodefac();
     }
     
     public void addListener(InterfaceCallbakClient listener)
     {
         this.listener=listener;
+    }
+    
+    /**
+     *TODO: Ver si este metodo se lo puede hacer mas general para tener acceso desde otras pantallas 
+     * Posible Solución: Que el formato del mensaje ya venga listo desde el servidor solo para mostrar en el cliente.
+     * @param mensajes
+     * @return 
+     */
+    public static String castMensajeAutorizadoToString(List<ComprobanteMensaje> mensajes)
+    {
+        String mensajeError="";
+        for (ComprobanteMensaje mensajeTmp : mensajes) {
+            mensajeError+= 
+                    "Identificador:" + mensajeTmp.getIdentificador() + "\n"
+                + "Info Adicional:" + mensajeTmp.getInformacionAdicional() + "\n"
+                + "Mensaje:" + mensajeTmp.getMensaje() + "\n"
+                + "Tipo:" + mensajeTmp.getTipo()+"\n\n";
+        }
+        
+        return mensajeError;
     }
 
 

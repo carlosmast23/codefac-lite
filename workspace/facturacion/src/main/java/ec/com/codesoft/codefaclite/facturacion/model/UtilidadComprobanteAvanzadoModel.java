@@ -244,6 +244,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                             procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE, etapaLimite);
                         else
                             procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE + 1, etapaLimite);
+                        //procesarComprobante(ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE + 1, etapaLimite);
                         break;
 
                     case ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA: 

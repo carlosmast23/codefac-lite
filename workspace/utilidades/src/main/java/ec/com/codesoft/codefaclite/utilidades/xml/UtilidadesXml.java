@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
@@ -35,7 +36,7 @@ public abstract class UtilidadesXml {
             //SAXBuilder builder = new SAXBuilder();
             //File xmlFile = new File(path);
             //InputStream inputStream=new FileInputStream(xmlFile);
-            String content = new String ( Files.readAllBytes( Paths.get(path) ) );
+            String content = new String ( Files.readAllBytes( Paths.get(path) ),"UTF-8");
             return content;
             //return UtilidadesTextos.getStringFromInputStream(inputStream);
             

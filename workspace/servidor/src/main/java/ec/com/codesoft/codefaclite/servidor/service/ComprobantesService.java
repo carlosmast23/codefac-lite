@@ -511,6 +511,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     private void setearDatosComprobanteAutorizado(Autorizacion documentoAutorizado )
     {
+        if(documentoAutorizado.getNumeroAutorizacion()==null || documentoAutorizado.getNumeroAutorizacion().isEmpty())
+        {
+            return;
+        }
+        
         try {
             ClaveAcceso clave = new ClaveAcceso(documentoAutorizado.getNumeroAutorizacion());
             ComprobanteEntity comprobante = obtenerComprobantePorClaveAcceso(clave);
@@ -882,12 +887,15 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             }
             else
             {
-                comprobanteData.setNumeroAutorizacion(autorizacion.getNumeroAutorizacion());
-                ClaveAcceso claveAcceso= new ClaveAcceso(autorizacion.getNumeroAutorizacion());                
-                comprobanteData.setPreimpreso(claveAcceso.getPreimpreso());
+                if(autorizacion.getNumeroAutorizacion()!=null)
+                {
+                    comprobanteData.setNumeroAutorizacion(autorizacion.getNumeroAutorizacion());
+                    ClaveAcceso claveAcceso= new ClaveAcceso(autorizacion.getNumeroAutorizacion());                
+                    comprobanteData.setPreimpreso(claveAcceso.getPreimpreso());
+                }
                 
                 System.out.println("No se puede transformar el comprobante");
-                System.out.println(autorizacion.getComprobante());
+                //System.out.println(autorizacion.getComprobante());
             }
             
             //Compiar los mensajes
