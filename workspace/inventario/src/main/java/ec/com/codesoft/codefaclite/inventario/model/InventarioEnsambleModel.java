@@ -60,11 +60,13 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
+        validarDatos();
+        
         List<Producto> productosProblemas=verificarEnsamble();
         if (productosProblemas.size() > 0) {
             String errores = "\n";
@@ -105,7 +107,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, cFhoose Tools | Templates.
     }
 
     @Override
@@ -363,6 +365,12 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
     }
 
     private void limpiarVariables() {
+        getTxtEnsamble().setText("");
+        getLblStockActual().setText("0");
+        getTxtCantidad().setText("0");
+        getTblDatos().setModel(new DefaultTableModel());
+        
+        productoEnsamble=null;
         
     }
 
@@ -374,6 +382,15 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void validarDatos() throws ExcepcionCodefacLite {
+        if(productoEnsamble==null)
+        {
+            String mensaje="No existe un producto ingresado para grabar";
+            DialogoCodefac.mensaje("Error Validación",mensaje,DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("");
+        }
     }
     
         

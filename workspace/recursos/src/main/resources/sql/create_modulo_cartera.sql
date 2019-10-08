@@ -37,7 +37,7 @@ create table CARTERA_DETALLE(
     TIPO_REFERENCIA varchar(5),  
     REFERENCIA_ID BIGINT,  
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.6)*/
-    DESCRIPCION varchar(150),
+    DESCRIPCION varchar(300),
     TOTAL decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.6)*/
     SALDO decimal(13,2),  

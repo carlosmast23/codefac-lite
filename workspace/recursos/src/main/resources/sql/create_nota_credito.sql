@@ -78,7 +78,7 @@ create table NOTA_CREDITO_DETALLE
     VALOR_ICE decimal,
     IVA decimal(13,2),
     TOTAL decimal(13,2),
-    DESCRIPCION varchar(150),
+    DESCRIPCION varchar(300),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.9.3)*/
     IVA_PORCENTAJE INT,
     primary key (ID)
