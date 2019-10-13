@@ -308,7 +308,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                         //Validacion para evitar que cambien fechas del sistema o que corrompan la fecha poniendo una fecha superior
                         if (dias < 0) {
                             //throw new ServicioCodefacException("No se puede validar su licencia ,inconsistencia con las fechas");
-                            validacionRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.LICENCIA_ERROR_FECHAS;
+                            validacionRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.LICENCIA_ERROR_FECHA_INCONSISTENTE;
                             return validacionRespuesta;
                         }
 

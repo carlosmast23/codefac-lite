@@ -82,7 +82,7 @@ public class LoginRespuesta implements Serializable{
         /**
          * Estado que me permite informar que la licencia tiene un error con las fechas puede ser orque cambiaron en el sistema
          */
-        LICENCIA_ERROR_FECHAS("Error al comprobar la licencia , revise que la fecha del sistema son correctas"),
+        LICENCIA_ERROR_FECHAS("Error al comprobar la licencia , Se supero la fecha máxima para poder validar su licencia"),
         
         /**
          * Estado que me permite informar que la licencia no se puede validar porque no tiene internet
@@ -102,7 +102,12 @@ public class LoginRespuesta implements Serializable{
         /**
          * Estado cuando sucede algun problema pero no esta clasificado
          */
-        ERROR_DESCONOCIDO("Error desconocido");
+        ERROR_DESCONOCIDO("Error desconocido"),
+        
+        /**
+         * Error de fechas en la licencia cuando la ultima fecha de revisión es superior a la fecha actual
+         */
+        LICENCIA_ERROR_FECHA_INCONSISTENTE("Error al comprobar la licencia , La fecha de la última verificación de la licencia es inconsistente ");
         
         private String mensaje;
 
