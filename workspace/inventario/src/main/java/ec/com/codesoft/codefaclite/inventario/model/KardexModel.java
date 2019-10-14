@@ -122,7 +122,7 @@ public class KardexModel extends KardexPanel {
             public void excel() {
                 try {
                     Excel excel = new Excel();
-                    String[] titulo = {"#", "Fecha", "Documento", "Preimpreso", "Proveedor", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total"};
+                    String[] titulo = {"Fecha Kardex","Documento", "Preimpreso","Fecha Doc", "Proveedor", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total"};
                     excel.gestionarIngresoInformacionExcel(titulo, listaKardex);
                     excel.abrirDocumento();
                 } catch (IOException ex) {
@@ -269,6 +269,8 @@ public class KardexModel extends KardexPanel {
             kardexData.setPreimpreso(kardexDetalle.getPreimpreso());
 
             kardexData.setProveedor(kardexDetalle.getRazonSocial());
+            
+            kardexData.setFechaDocumento((kardexDetalle.getFechaDocumento()!=null)?kardexDetalle.getFechaDocumento().toString():"");
 
             //Restar o sumar la cantidad segun omo afecte el detalle en los kardex
             if (!kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.NO_AFECTA_INVETARIO)) {

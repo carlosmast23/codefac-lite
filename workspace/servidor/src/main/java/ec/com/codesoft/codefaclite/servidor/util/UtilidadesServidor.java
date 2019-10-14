@@ -187,7 +187,7 @@ public class UtilidadesServidor {
     /*
     Actualiza los campos de una version anterior a los campos en las nuevas versiones
      */
-    public static void actualizarBaseDatos(String versionPropiedades) {
+    public static boolean actualizarBaseDatos(String versionPropiedades) {
         //Map donde almacenar todos los querys que se encuentre para actualiazar
         //Implemento un ordenador para que se ordene de la version mas antigua a la moderna
         TreeMap<String, List<ScriptCodefac>> mapQuerysVersion = new TreeMap<String, List<ScriptCodefac>>(new Comparator<String>() {
@@ -358,11 +358,15 @@ public class UtilidadesServidor {
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         } catch (SQLException ex) {
             Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
+        return true;
     }
 
     public static String obtenerNombreTabla(String query) {

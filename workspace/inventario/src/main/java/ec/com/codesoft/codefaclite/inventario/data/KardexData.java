@@ -32,6 +32,8 @@ public class KardexData implements ExcelDatosInterface{
     private String saldo_cantidad;
     private String saldo_precio;
     private String saldo_total;
+    
+    private String fechaDocumento;
 
     public KardexData() {
     }
@@ -139,15 +141,27 @@ public class KardexData implements ExcelDatosInterface{
     public void setSaldo_total(String saldo_total) {
         this.saldo_total = saldo_total;
     }
+
+    public String getFechaDocumento() {
+        return fechaDocumento;
+    }
+
+    public void setFechaDocumento(String fechaDocumento) {
+        this.fechaDocumento = fechaDocumento;
+    }
+    
+    
     
 
     @Override
     public List<TipoDato> getDatos() {
         List<TipoDato> tiposDatos = new ArrayList<TipoDato>();        
+        tiposDatos.add(new TipoDato(this.fecha, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.documento,Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.preimpreso, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.fechaDocumento, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.proveedor,Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.fecha, Excel.TipoDataEnum.TEXTO));
+        
         tiposDatos.add(new TipoDato(this.ingreso_cantidad, Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.ingreso_precio,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.ingreso_total,Excel.TipoDataEnum.TEXTO));        

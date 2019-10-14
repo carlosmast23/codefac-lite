@@ -79,7 +79,8 @@ public class KardexDetalle implements Serializable ,Cloneable {
     @Column(name = "PUNTO_EMISION")
     protected String puntoEmision;
     
-    
+    @Column(name = "FECHA_DOCUMENTO")
+    private Date fechaDocumento;
     
 
     @JoinColumn(name = "KARDEX_ID")
@@ -223,6 +224,14 @@ public class KardexDetalle implements Serializable ,Cloneable {
 
     public void setPuntoEmision(String puntoEmision) {
         this.puntoEmision = puntoEmision;
+    }
+
+    public Date getFechaDocumento() {
+        return fechaDocumento;
+    }
+
+    public void setFechaDocumento(Date fechaDocumento) {
+        this.fechaDocumento = fechaDocumento;
     }
     
     

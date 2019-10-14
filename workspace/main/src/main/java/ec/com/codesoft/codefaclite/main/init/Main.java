@@ -450,11 +450,14 @@ public class Main {
                             }
 
                             //TODO: Metodo que ejecuta los scripts para actualizar el sistema
-                            UtilidadesServidor.actualizarBaseDatos(versionGrabada);
+                            if(UtilidadesServidor.actualizarBaseDatos(versionGrabada))
+                            {
+                                //Solo actualizo el archivo de la versión si efectivamente se realizo las modificaciones en la base de datos
+                                propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
+                                ArchivoConfiguracionesCodefac.getInstance().guardar();
+                            }
                         }                        
-                        //Actualizo el archivo de propiedades del sistema con la ultima version
-                        propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
-                        ArchivoConfiguracionesCodefac.getInstance().guardar();
+                        
                     } catch (IOException ex) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (Exception ex) {

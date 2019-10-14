@@ -155,7 +155,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                         TipoDocumentoEnum.ELIMINADO_FACTURA, 
                         facturaDetalle.getFactura().getPuntoEmision().toString(),
                         facturaDetalle.getFactura().getPuntoEstablecimiento().toString(),
-                        facturaDetalle.getFactura().getSecuencial());
+                        facturaDetalle.getFactura().getSecuencial(),
+                        facturaDetalle.getFactura().getFechaEmision());
                 
                 break;
         }
@@ -201,7 +202,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                         TipoDocumentoEnum.NOTA_CREDITO_INVENTARIO, 
                         notaDetalle.getNotaCredito().getPuntoEmision().toString(),
                         notaDetalle.getNotaCredito().getPuntoEstablecimiento().toString(),
-                        notaDetalle.getNotaCredito().getSecuencial());
+                        notaDetalle.getNotaCredito().getSecuencial(),
+                        notaDetalle.getNotaCredito().getFechaEmision());
                 
                 break;
         }
@@ -212,7 +214,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
      * TODO: Unificar este metodo con la de factura que existe un metodo similar
      * @param detalle 
      */
-    private void afectarInventario(Bodega bodega,int cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial)
+    private void afectarInventario(Bodega bodega,int cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento)
     {
         try {
             Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(referenciaProductoId);
@@ -238,6 +240,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 kardexDetalle.setPuntoEmision(puntoEmision);
                 kardexDetalle.setPuntoEstablecimiento(puntoEstablecimiento);
                 kardexDetalle.setSecuencial(secuencial);
+                kardexDetalle.setFechaDocumento(fechaDocumento);
                 
                 kardex.addDetalleKardex(kardexDetalle);
                 
