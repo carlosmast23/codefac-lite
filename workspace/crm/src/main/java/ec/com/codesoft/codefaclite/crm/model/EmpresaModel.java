@@ -339,6 +339,9 @@ public class EmpresaModel extends EmpresaForm
             Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
             Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Advertecia",ex.getMessage(),DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
     }
 

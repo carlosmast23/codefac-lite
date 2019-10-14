@@ -12,8 +12,10 @@ import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesZip;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
@@ -120,9 +122,16 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
     /**
      * Agregar recursos al servidor
      */
-    public void uploadFileServer(DirectorioCodefac directorio,RemoteInputStream recurso,String nombre,Empresa empresa) throws RemoteException
+    public void uploadFileServer(DirectorioCodefac directorio,RemoteInputStream recurso,String nombre,Empresa empresa) throws RemoteException,ServicioCodefacException
     {
         //uploadFileServer(UtilidadesServidor.pathRecursos,directorio,recurso,nombre);
+        EmpresaLicencia empresaLicencia=UtilidadesServidor.mapEmpresasLicencias.get(empresa);
+        if(empresaLicencia==null || empresaLicencia.pathEmpresa==null || empresaLicencia.pathEmpresa.isEmpty())
+        {
+            throw new ServicioCodefacException("No existe un directorio definido para guardar el logo");
+            //return;
+        }
+                
         uploadFileServer(UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa,directorio,recurso,nombre);
           
     }
