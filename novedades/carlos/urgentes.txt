@@ -64,3 +64,4 @@ en la pantalla de sucursal no tener la opcion de seleccionar la empresa porque d
 En todos los lugares que son de grabar imagenes o algo de forma remota desahabilitar esa opción cuando sea un cliente remoto
 porque eso no esta funcionando todavia
 Ver que como las compras pueden ser cantidad decimales todo el resto de entidades que se relacionan deben se decimales ejemplo "Ordenes de compra, kardex"
+Revisar porque la pantalla de actualizar no esta funcionando 

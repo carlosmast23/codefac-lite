@@ -1,44 +1,19 @@
-
-Pensar en hacer una ventana en configuracion para poder cambiar la plantilla de los correos que llegan con las facturas
-En la pantalla de utilidades verificar que no se envia al correo por el problema del map supongo y verificar cambios de estado en las facturas
-
-Revisar que cuando mando a abrir la pantalla desde la matricula no funciona la facturacion parcial
-
-agregar una opcion para configurar correos con dominios personalizados
-
-Al momento de cargar la ip del servidor existen problemas con interfaces virtuales , mejorar esta parte para que solo obtenga un direccion de una red ethernet o wifi
-
-En las compras agregar un campo para saber si son electronicas o manuales
-
 Analizar el codigo private boolean validacionPersonalizadaPorModulos() en facturacion para validar correctamente con descuentos para los distintos modulos
 
 Ver si en una variable global del sistema se establece un metodo general de redondeo
 
 Ver la opcion de hacer una especie de servidor proxy y que el servidor de codefac se encargue de proporcionar el archivo actual de las actualizaciones
 
-En la pantalla de factura, al momento de escribir la cedula del cliente esta  buscando todos clientes y proveedores, crear un metodo en el servicio que obtenga filtrado clientes
-
 Ver como hacer un descuento global en la factura
-
 
 Analizar una opcion para hacer un casting entre las unidades de un producto y otras medias de venta (por ejemplo cuando voy a clavos por libras) 
 
 Al momento de cargar las formas de pago  con el cliente , despues de tener ingresado los detalles que cargue con el monto actual del total en modo libre
 
-hacer acuerdo a Robert de la etiqueta de agregar columna , me parece en el campo de numero de orden en el sql para que se genere el campo para la nueva version
-
 
 Hacer un dll en c++ por jni para tener quemado las claves y no me puedan hacer ingenieria inversa
 
-Analizar si agregado un campo de los datos del servidor para grabar la ultima fecha de verificacion de la licencia para tener mas control sobre las estafas
-
 Pensar en como hacer un manejo de logs en una tabla para cosas importantes
-
-Cambiar el tipo de clave primaria de la tabla de usuario para grabar un id y poder reutilizar usuarios
-
-En el usuario da problemas cuando cambian el nick porque busco el dato anterior para comparar, lo que se resuelve creandole un id autogenerado a la tabla usuario-
-
-Analizar el tema de los vendedores
 
 Programar los menuItems del menu principal para dar funcinalidades como agregar accesos directos
 

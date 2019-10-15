@@ -10,3 +10,4 @@ ver si crear una variable el el stock para saber el total de stock en compras y 
 Falta actualizar el calculo de los emsambles para utiizar un unico metodo
 Implementar funcion de poder eliminar bodegas
 Hacer que en al momento de transferir bodegas si no ingresa ningun precio que se grabe con el costo ponderado
+Ver que al momento de facturar pueda ver el resto de informacion del producto como por ejemplo ubicación que es bastante util para algunos tipos de negocio

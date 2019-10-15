@@ -1,4 +1,2 @@
-migrar listado de productos
-moigrar listado de los clientes
 ver como hacer que despues de grabar items al imprimir los que tiene un codigo id nuevo no se
 estan imprimiendo
