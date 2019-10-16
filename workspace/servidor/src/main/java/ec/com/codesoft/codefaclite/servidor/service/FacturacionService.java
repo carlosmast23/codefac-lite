@@ -89,18 +89,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         
                         proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
                         setearDatosCliente(proforma);
-                        grabarDetallesFactura(proforma);
+                        //grabarDetallesFactura(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
                     }
                     catch (RemoteException ex)
                     {
                         Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (PersistenceException ex) {
+                    }catch (PersistenceException ex) {
                         Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
-                        Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-                        throw ex; //Relanzar la excepcion si sucede algun problema interno
                     }
+                    //Relanzar la excepcion si sucede algun problema interno
+                    
                 }
             });
         } catch (ServicioCodefacException ex) {
