@@ -106,7 +106,7 @@ public class Producto implements Serializable, Comparable<Producto> {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoEnsamble",fetch = FetchType.EAGER)
     private List<ProductoEnsamble> detallesEnsamble;
-
+    
     public Producto() {
     }
 

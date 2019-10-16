@@ -10,26 +10,35 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Carlos
  */
-public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Object[]> , InterfacesPropertisFindWeb {
+public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Producto> , InterfacesPropertisFindWeb {
     
     private Empresa empresa;
     private EnumSiNo isManejoInvetario;
+    private Bodega bodega;
     
-    public ProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa) 
+    public ProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega) 
     {
         this.isManejoInvetario = isManejoInvetario;
         this.empresa = empresa;
+        this.bodega = bodega;
     }
 
     @Override
@@ -52,7 +61,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
             whereManejaInventario=" and u.manejarInventario=?98 ";
         }
         
-        String queryString = "SELECT u,k FROM Producto u,Kardex k WHERE  u.empresa=?4 and (u.estado=?1) "+whereManejaInventario;      
+        String queryString = "SELECT u FROM Producto u where u.empresa=?4 and (u.estado=?1)"+whereManejaInventario;      
         
         queryString+=" and ( LOWER(u.nombre) like ?2 OR u.codigoPersonalizado like ?2 ) ORDER BY u.codigoPersonalizado";
         
@@ -60,21 +69,32 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2,filter);
         queryDialog.agregarParametro(4,empresa);
+        
+        if(isManejoInvetario!=null)
+        {
+            queryDialog.agregarParametro(98,isManejoInvetario.getLetra());
+        }
+       
         return queryDialog;
     }
-
+    
+    
     @Override
-    public void agregarObjeto(Object[] objeto, Vector vector) {
-        Producto producto=(Producto) objeto[0];
-        Kardex kardex=(Kardex) objeto[1];
-        
-        vector.add(producto.getCodigoPersonalizado());
-        vector.add(producto.getNombre());
-        vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
-        vector.add(producto.getValorUnitario());
-        vector.add(producto.getCatalogoProducto().getIva().toString());
-        
-        vector.add((kardex!=null)?kardex.getStock():"");
+    public void agregarObjeto(Producto producto, Vector vector) {
+        try {
+            //Producto producto=(Producto) objeto[0];
+            //Kardex kardex=(Kardex) objeto[1];
+            KardexServiceIf servicio = ServiceFactory.getFactory().getKardexServiceIf();
+            Kardex kardex = servicio.buscarKardexPorProductoyBodega(this.bodega, producto);
+            vector.add(producto.getCodigoPersonalizado());
+            vector.add(producto.getNombre());
+            vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
+            vector.add(producto.getValorUnitario());
+            vector.add(producto.getCatalogoProducto().getIva().toString());
+            vector.add((kardex!=null)?kardex.getStock():"");
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoInventarioBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

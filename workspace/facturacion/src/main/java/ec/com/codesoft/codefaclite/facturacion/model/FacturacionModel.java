@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Emplea
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
@@ -156,7 +157,9 @@ import org.jdesktop.swingx.prompt.PromptSupport;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.facturacion.nocallback.FacturaRespuestaNoCallBack;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 
 /**
  *
@@ -490,8 +493,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     case PRESUPUESTOS:
                         agregarPresupuesto();
                         break;
-                    case INVENTARIO: 
-                        agregarProducto(EnumSiNo.SI);
+                    case INVENTARIO:
+                        try {
+                            agregarProductoInventario(EnumSiNo.SI);
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ServicioCodefacException ex) {
+                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         break;
                     case LIBRE:
                         agregarProducto(EnumSiNo.NO);
@@ -945,12 +954,30 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     private void agregarProducto(EnumSiNo manejaInventario) {
-        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa());
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+            ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa());
+            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+            buscarDialogoModel.setVisible(true);
+            productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
+            getCmbIva().setSelectedItem(EnumSiNo.NO);    
+            agregarProductoVista(productoSeleccionado);
+    }
+    
+    private void agregarProductoInventario(EnumSiNo manejaInventario) throws RemoteException, ServicioCodefacException
+    {
+        //Bodega activa de venta
+        BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
+        Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
+        
+        if(bodegaVenta==null)
+        {
+            throw new ServicioCodefacException("No existe un tipo de Bodega de Venta Configurado");
+        }
+        ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(),bodegaVenta);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
+        //productoSeleccionado = (Producto)resultados[0];
         getCmbIva().setSelectedItem(EnumSiNo.NO);
-                
         agregarProductoVista(productoSeleccionado);
     }
     
