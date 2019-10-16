@@ -63,7 +63,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("bodega",bodega);
-        mapParametros.put("producto",producto);
+        mapParametros.put("producto",producto);   
         List<Kardex> listaKardex=getFacade().findByMap(mapParametros);
         //List<Kardex> listaKardex=obtenerPorMap(mapParametros);
         
