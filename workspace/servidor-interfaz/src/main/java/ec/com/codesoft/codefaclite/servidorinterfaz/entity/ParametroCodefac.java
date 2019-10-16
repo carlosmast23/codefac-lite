@@ -105,6 +105,11 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String ACTIVAR_NOTA_VENTA="activar_nota_venta";
     
+    /**
+     * Variable que me permite saber si se puede realizar una facturacion cuando no existe el suficiente stock requerido 
+     */
+    public static final String FACTURAR_INVENTARIO_NEGATIVO="facturar_inventario_negativo";
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
