@@ -264,58 +264,72 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }
     
-    private void afectarInventario(FacturaDetalle detalle,Bodega bodega)
+    private void afectarInventario(FacturaDetalle detalle,Bodega bodega) throws RemoteException, ServicioCodefacException
     {
-        try {
-            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());            
-            //Map<String,Object> mapParametros=new HashMap<String,Object>();
-            //mapParametros.put("producto", producto);
-            KardexService kardexService=new KardexService();
-            List<Kardex> kardexs= kardexService.buscarPorProductoYBodega(producto,bodega);
-            
-            Kardex kardex=null;
-            if(kardexs==null || kardexs.size()==0)
-            {
-                kardex=kardexService.crearObjeto(bodega, producto);
-                entityManager.persist(kardex);
-            }else
-            {
-                kardex = kardexs.get(0);
-            }
-            
-            //TODO: Definir especificamente cual es la bodega principal
-            //if(kardexs!=null && kardexs.size()>0)
-            //{
-            //TODO: Analizar caso cuando se resta un producto especifico
-            //Kardex kardex = kardexs.get(0);
 
-            KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO,detalle.getPrecioUnitario(),detalle.getCantidad().intValue());;
-            //Agregando datos adicionales del movimiento en la factura
-            kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
-            kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision().toString());
-            kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento().toString());
-            kardexDetalle.setSecuencial(detalle.getFactura().getSecuencial());
-            kardexDetalle.setFechaDocumento(detalle.getFactura().getFechaEmision());
+        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+        //Map<String,Object> mapParametros=new HashMap<String,Object>();
+        //mapParametros.put("producto", producto);
+        KardexService kardexService = new KardexService();
+        List<Kardex> kardexs = kardexService.buscarPorProductoYBodega(producto, bodega);
 
-            //Actualizar los valores del kardex
-            kardexService.recalcularValoresKardex(kardex, kardexDetalle);
-            //kardex.setStock(kardex.getStock() - kardexDetalle.getCantidad());
-            //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
-            //kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(kardexDetalle.getPrecioTotal()));
-            //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
-            entityManager.persist(kardexDetalle); //Grabo el kardex detalle
-            kardex.addDetalleKardex(kardexDetalle);
-            entityManager.merge(kardex); //Actualizo el kardex con la nueva referencia
-            //}else// Casi cuando no existe registro de kardex en esa bodega el sistema crea automaticamente
-            //{
-            //    Kardex kardex=kardexService.crearObjeto(bodega, producto);
-            //    entityManager.persist(kardex);
-            //}
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        Kardex kardex = null;
+        if (kardexs == null || kardexs.size() == 0) {
+            kardex = kardexService.crearObjeto(bodega, producto);
+            entityManager.persist(kardex);
+        } else {
+            kardex = kardexs.get(0);
         }
+
+        /**
+         * Validacion pára verificar que exista un stock superior o igual en el
+         * kardex segun lo que quieran facturar
+         */
+        ParametroCodefacService parametroService = new ParametroCodefacService();
+        ParametroCodefac parametroFacturarStockNegativo = parametroService.getParametroByNombre(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, detalle.getFactura().getEmpresa());
+        if (parametroFacturarStockNegativo != null) {
+            EnumSiNo enumFacturarStockNegativo = EnumSiNo.getEnumByLetra(parametroFacturarStockNegativo.valor);
+            if (enumFacturarStockNegativo.equals(EnumSiNo.SI)) {
+                //Si el stock que queremos facturar es mayor del existe lanzo una excepcion                
+                if (detalle.getCantidad().compareTo(new BigDecimal(kardex.getStock())) > 0) {
+                    int cantidadFaltante=detalle.getCantidad().intValue()-kardex.getStock();
+                    throw new ServicioCodefacException("No existe el stock sufiente para facturar el producto "+kardex.getProducto().getNombre()+", faltan "+cantidadFaltante+" productos");
+                }
+            }
+        }
+
+        /**
+         * ============================== FIN VALIDACION DE FACTURAR CON STOCK
+         * NEGATIVO ======================
+         */
+        //TODO: Definir especificamente cual es la bodega principal
+        //if(kardexs!=null && kardexs.size()>0)
+        //{
+        //TODO: Analizar caso cuando se resta un producto especifico
+        //Kardex kardex = kardexs.get(0);
+        KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO, detalle.getPrecioUnitario(), detalle.getCantidad().intValue());;
+        //Agregando datos adicionales del movimiento en la factura
+        kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
+        kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision().toString());
+        kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento().toString());
+        kardexDetalle.setSecuencial(detalle.getFactura().getSecuencial());
+        kardexDetalle.setFechaDocumento(detalle.getFactura().getFechaEmision());
+
+        //Actualizar los valores del kardex
+        kardexService.recalcularValoresKardex(kardex, kardexDetalle);
+        //kardex.setStock(kardex.getStock() - kardexDetalle.getCantidad());
+        //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
+        //kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(kardexDetalle.getPrecioTotal()));
+        //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+        entityManager.persist(kardexDetalle); //Grabo el kardex detalle
+        kardex.addDetalleKardex(kardexDetalle);
+        entityManager.merge(kardex); //Actualizo el kardex con la nueva referencia
+        //}else// Casi cuando no existe registro de kardex en esa bodega el sistema crea automaticamente
+        //{
+        //    Kardex kardex=kardexService.crearObjeto(bodega, producto);
+        //    entityManager.persist(kardex);
+        //}
+
     
     }
     
