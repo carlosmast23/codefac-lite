@@ -110,6 +110,11 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String FACTURAR_INVENTARIO_NEGATIVO="facturar_inventario_negativo";
     
+    /**
+     * Esta opcion me permite generar ensambles si no existe al momento de facturar
+     */
+    public static final String CONSTRUIR_ENSAMBLES_FACTURAR="construir_ensamble_facturar";
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

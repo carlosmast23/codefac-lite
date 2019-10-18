@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -289,7 +290,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ParametroCodefac parametroFacturarStockNegativo = parametroService.getParametroByNombre(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, detalle.getFactura().getEmpresa());
         if (parametroFacturarStockNegativo != null) {
             EnumSiNo enumFacturarStockNegativo = EnumSiNo.getEnumByLetra(parametroFacturarStockNegativo.valor);
-            if (enumFacturarStockNegativo.equals(EnumSiNo.SI)) {
+            
+            //Cuando no quieren facturar con stock negativo verifico que exista la cantidad necesaria para facturar
+            if (enumFacturarStockNegativo!=null && enumFacturarStockNegativo.equals(EnumSiNo.NO)) {
                 //Si el stock que queremos facturar es mayor del existe lanzo una excepcion                
                 if (detalle.getCantidad().compareTo(new BigDecimal(kardex.getStock())) > 0) {
                     int cantidadFaltante=detalle.getCantidad().intValue()-kardex.getStock();
@@ -303,10 +306,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
          * NEGATIVO ======================
          */
         //TODO: Definir especificamente cual es la bodega principal
-        //if(kardexs!=null && kardexs.size()>0)
-        //{
         //TODO: Analizar caso cuando se resta un producto especifico
-        //Kardex kardex = kardexs.get(0);
         KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO, detalle.getPrecioUnitario(), detalle.getCantidad().intValue());;
         //Agregando datos adicionales del movimiento en la factura
         kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
@@ -324,13 +324,28 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         entityManager.persist(kardexDetalle); //Grabo el kardex detalle
         kardex.addDetalleKardex(kardexDetalle);
         entityManager.merge(kardex); //Actualizo el kardex con la nueva referencia
-        //}else// Casi cuando no existe registro de kardex en esa bodega el sistema crea automaticamente
-        //{
-        //    Kardex kardex=kardexService.crearObjeto(bodega, producto);
-        //    entityManager.persist(kardex);
-        //}
-
+       
+    }
     
+    /**
+     * Metodo para verificar si tiene la opcion activa de generar ensamble y ver si se puede construir en ese momento
+     */
+    private void verificarConstruirEnsamble(Kardex kardex,int cantidadFaltante) throws RemoteException
+    {
+        if(kardex.getProducto().getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE))
+        {            
+            ParametroCodefac parametroCodefac=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR,kardex.getBodega().getEmpresa());
+            if(parametroCodefac!=null)
+            {
+                //Solo si tiene parametro positivo intento construir el ensamble
+                if(EnumSiNo.getEnumByLetra(parametroCodefac.getValor()).equals(EnumSiNo.SI))
+                {
+                    //kardex.getProducto().getDetallesEnsamble()
+                    //ServiceFactory.getFactory().getKardexServiceIf().IngresoEgresoInventarioEnsamble(kardex.getBodega(), kardex.getProducto(), cantidadFaltante, componentesKardex, true);
+                }
+            }
+        } 
+        
     }
     
     

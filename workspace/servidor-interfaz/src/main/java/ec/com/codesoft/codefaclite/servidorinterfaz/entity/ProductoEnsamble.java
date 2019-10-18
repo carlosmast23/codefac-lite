@@ -80,7 +80,9 @@ public class ProductoEnsamble implements Serializable{
         this.productoEnsamble = productoEnsamble;
     }
     
-    
-    
+    public enum EnsambleAccionEnum {
+        AGREGAR,
+        QUITAR
+    }
     
 }

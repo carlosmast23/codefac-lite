@@ -923,7 +923,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     private void cargarDatosLista() {
         
         try {
-            List<PuntoEmisionUsuario> puntosEmisionUsuario=ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(sessionMb.getSession().getUsuario());
+            List<PuntoEmisionUsuario> puntosEmisionUsuario=ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(sessionMb.getSession().getUsuario(),sessionMb.getSession().getSucursal());
             List<PuntoEmision> puntosEmision=new ArrayList<PuntoEmision>();
             for (PuntoEmisionUsuario puntoEmisionUsuario : puntosEmisionUsuario) {
                 puntosEmision.add(puntoEmisionUsuario.getPuntoEmision());

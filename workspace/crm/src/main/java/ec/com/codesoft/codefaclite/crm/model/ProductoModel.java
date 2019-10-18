@@ -79,7 +79,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         mapDatosIngresadosDefault.put(getTxtCantidadMinima(),"0");
         mapDatosIngresadosDefault.put(getTxtPrecioDistribuidor(),"0");
         mapDatosIngresadosDefault.put(getTxtPrecioTarjeta(),"0");
-        mapDatosIngresadosDefault.put(getTxtStockInicial(),"0");
+        //mapDatosIngresadosDefault.put(getTxtStockInicial(),"0");
         
     }
 
@@ -160,7 +160,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setCantidadMinima(Integer.parseInt(getTxtCantidadMinima().getText()));
         producto.setPrecioDistribuidor(new BigDecimal(getTxtPrecioDistribuidor().getText()));
         producto.setPrecioTarjeta(new BigDecimal(getTxtPrecioTarjeta().getText()));
-        producto.setStockInicial(Long.parseLong(getTxtStockInicial().getText()));
+        //producto.setStockInicial(Long.parseLong(getTxtStockInicial().getText()));
         producto.setMarca(getTxtMarca().getText());
         producto.setImagen(getTxtImagenProducto().getText());
 
@@ -281,7 +281,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtCantidadMinima().setText((producto.getCantidadMinima() != null) ? producto.getCantidadMinima() + "" : "");
         getTxtPrecioDistribuidor().setText((producto.getPrecioDistribuidor() != null) ? producto.getPrecioDistribuidor() + "" : "");
         getTxtPrecioTarjeta().setText((producto.getPrecioTarjeta() != null) ? producto.getPrecioTarjeta() + "" : "");
-        getTxtStockInicial().setText((producto.getStockInicial() != null) ? producto.getStockInicial() + "" : "");
+        //getTxtStockInicial().setText((producto.getStockInicial() != null) ? producto.getStockInicial() + "" : "");
         getTxtMarca().setText((producto.getMarca() != null) ? producto.getMarca() + "" : "");
         getTxtImagenProducto().setText((producto.getImagen() != null) ? producto.getImagen() + "" : "");
         //getCmbCategoriaProducto().setSelectedItem(producto.getCatalogoProducto().getCategoriaProducto());
@@ -569,7 +569,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtCantidadMinima().setText("0");
         getTxtPrecioDistribuidor().setText("0");
         getTxtPrecioTarjeta().setText("0");
-        getTxtStockInicial().setText("0");
+        //getTxtStockInicial().setText("0");
     }
     
     private void initModelTablaDatosEnsamble()

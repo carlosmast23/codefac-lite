@@ -83,10 +83,11 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                 Bodega bodega=(Bodega) getCmbBodega().getSelectedItem();
                 String accion=getCmbAccion().getSelectedItem().toString();
                 Integer cantidad=Integer.parseInt(getTxtCantidad().getText());
-                List<Kardex> kardexList=getKardexModificados();
+                //List<Kardex> kardexList=getKardexModificados();
                 Boolean ingreso=(accion.equals(InventarioEnsamblePanel.OPCION_AGREGAR)?true:false);
                 
-                kardexService.IngresoEgresoInventarioEnsamble(bodega, productoEnsamble, cantidad, kardexList, ingreso);
+                kardexService.ingresoEgresoInventarioEnsamble(bodega, productoEnsamble, cantidad, ProductoEnsamble.EnsambleAccionEnum.AGREGAR);
+                //kardexService.IngresoEgresoInventarioEnsamble(bodega, productoEnsamble, cantidad,, ingreso);
                 DialogoCodefac.mensaje("Correcto", "Sus datos fueron grabados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             //} catch (ServicioCodefacException ex) {
             //    DialogoCodefac.mensaje("Error", "Existe un error en los datos", DialogoCodefac.MENSAJE_INCORRECTO);
@@ -96,6 +97,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                 DialogoCodefac.mensaje("Error", "Existe un error en los datos", DialogoCodefac.MENSAJE_INCORRECTO);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             }
         }
     }
@@ -231,7 +233,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
      * Obtiene los valores modificos del stock y la reserva para grabar en el Kardex
      * @return 
      */
-    private List<Kardex> getKardexModificados()
+    /*private List<Kardex> getKardexModificados()
     {
         Integer cantidadEnsamble=Integer.parseInt(getTxtCantidad().getText());
         
@@ -294,7 +296,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         
         return kardeList;
         
-    }
+    }*/
     
     private List<Producto> verificarEnsamble()
     {

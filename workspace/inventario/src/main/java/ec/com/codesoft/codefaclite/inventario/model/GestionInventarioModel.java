@@ -114,7 +114,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
         permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
         permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
@@ -126,18 +126,18 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
+    /*@Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
         ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         return buscarDialogoModel;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void cargarDatosPantalla(Object entidad) {
         Producto producto=(Producto) entidad;
         
-    }
+    }*/
 
     private void valoresIniciales() 
     {
@@ -186,7 +186,9 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     {
         kardexDetalle=new KardexDetalle();
         kardexDetalle.setCantidad(Integer.parseInt(getTxtCantidad().getText()));
-        kardexDetalle.setPrecioUnitario(new BigDecimal(getTxtPrecio().getText()));
+        //Si no tiene ingresado un precio unitario grabo como null
+        String precioUnitarioTxt=(!getTxtPrecio().getText().isEmpty())?getTxtPrecio().getText():"0";
+        kardexDetalle.setPrecioUnitario(new BigDecimal(precioUnitarioTxt));
         kardexDetalle.recalcularTotalSinGarantia();
         
         //Setear el documento que esta usando el usuario 
@@ -208,7 +210,22 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         kardexDetalle.setKardex(kardex);
         
     }
+
+    @Override
+    public BuscarDialogoModel obtenerDialogoBusqueda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void buscar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
-   
+    
     
 }

@@ -177,7 +177,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         getCmbCargarProductoIvaFactura().addItem(EnumSiNo.NO);
         getCmbCargarProductoIvaFactura().addItem(EnumSiNo.SI);
         
+        
+        
         UtilidadesComboBox.llenarComboBox(getCmbFacturarInventarioNegativo(),EnumSiNo.values());
+        
+        UtilidadesComboBox.llenarComboBox(getCmbConstruirEnsamblesFacturar(),EnumSiNo.values());
         
         
         //Cargar las opciones en las configuraciones
@@ -330,6 +334,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroFacturarInventarioNegativo != null) ? parametroFacturarInventarioNegativo.getValor() : null);
             getCmbFacturarInventarioNegativo().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            ParametroCodefac parametroConstruirEnsambleFacturar= parametrosTodos.get(ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroConstruirEnsambleFacturar != null) ? parametroConstruirEnsambleFacturar.getValor() : null);
+            getCmbConstruirEnsamblesFacturar().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
+            
             
 
         } catch (RemoteException ex) {
@@ -387,6 +396,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbFacturarInventarioNegativo().getSelectedItem();
         agregarParametro(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO);
+        
+        enumSiNo = (EnumSiNo) getCmbConstruirEnsamblesFacturar().getSelectedItem();
+        agregarParametro(ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR);
         
         /*ParametroCodefac parametroCodefac=parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)
