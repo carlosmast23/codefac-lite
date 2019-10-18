@@ -730,6 +730,25 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return kardex;
         
     }
+    
+    public boolean obtenerSiNoExisteStockProducto(Bodega bodega, Producto producto, int cantidad)
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("bodega",bodega);
+        mapParametros.put("producto",producto);   
+        List<Kardex> listaKardex=getFacade().findByMap(mapParametros);
+        
+        if(listaKardex!=null && listaKardex.size()>0)
+        {
+            Kardex kardex = listaKardex.get(0);
+            if(kardex.getStock()>= cantidad){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return false;    
+    }
 
     @Override
     public List<Kardex> buscarPorBodega(Bodega bodega) throws RemoteException, ServicioCodefacException {

@@ -91,7 +91,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Pro
             vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
             vector.add(producto.getValorUnitario());
             vector.add(producto.getCatalogoProducto().getIva().toString());
-            vector.add((kardex!=null)?kardex.getStock():"");
+            vector.add((kardex!=null)?kardex.getStock():"0");
         } catch (RemoteException ex) {
             Logger.getLogger(ProductoInventarioBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
         }

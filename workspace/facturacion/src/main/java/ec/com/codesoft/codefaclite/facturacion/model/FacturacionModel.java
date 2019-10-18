@@ -160,6 +160,8 @@ import ec.com.codesoft.codefaclite.facturacion.nocallback.FacturaRespuestaNoCall
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 
 /**
  *
@@ -536,8 +538,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnAgregarDetalleFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.out.println(panelPadre.validarPorGrupo("detalles"));
-                agregarDetallesFactura(null);
+                try {
+                    //System.out.println(panelPadre.validarPorGrupo("detalles"));
+                    agregarDetallesFactura(null);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
             }
         });
@@ -546,8 +552,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(getBtnAgregarDetalleFactura().isEnabled())
-                {   //Si esta habilitado el boton de agregar funciona para agregar
+                {   try {
+                    //Si esta habilitado el boton de agregar funciona para agregar
                     agregarDetallesFactura(null);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 else //Si no esta habilitado el boton de editar funciona como para editar
                 {
@@ -688,6 +698,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     habilitarModoIngresoDatos();
                 }
             } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -2360,8 +2372,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      * @param facturaDetalle
      * @return 
      */
-    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle) {
+    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle) throws ServicioCodefacException {
         boolean agregar = true;
+        boolean verifadorStock = false;
+        EnumSiNo enumFacturarStockNegativo = null;
 
         //Verifica si manda un detalle existe solo se modifica
         if (facturaDetalle != null) {
@@ -2419,10 +2433,36 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     return false;
                 }
                 
-                //FacturaDetalle facturaDetalle = new FacturaDetalle();
-                facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
-                facturaDetalle.setDescripcion(getTxtDescripcion().getText());
-                
+                //Permite validar stock de producto
+                switch(tipoDocumentoEnum)
+                {
+                    case ACADEMICO: case PRESUPUESTOS: case LIBRE:
+                        facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+                        facturaDetalle.setDescripcion(getTxtDescripcion().getText());
+                        break;
+                    case INVENTARIO:
+                        ParametroCodefac parametroCodefac = session.getParametrosCodefac().get(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO);
+                        if(parametroCodefac != null)
+                        {
+                            enumFacturarStockNegativo = EnumSiNo.getEnumByLetra(parametroCodefac.valor);
+                            if(enumFacturarStockNegativo.equals(EnumSiNo.NO)){
+                                verifadorStock = verificarExistenciaStockProducto();
+                                if(!verifadorStock){
+                                    DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                                }else{    
+                                    facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+                                    facturaDetalle.setDescripcion(getTxtDescripcion().getText());
+                                }
+                            }else{
+                                facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+                                facturaDetalle.setDescripcion(getTxtDescripcion().getText());
+                            }
+                        }else{
+                            DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        }
+                    break;
+                }
+
                 
                 BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
                 
@@ -2486,7 +2526,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     
                     //Solo agregar si se enviar un dato vacio
                     if (agregar) {
-                        factura.addDetalle(facturaDetalle);
+                        switch(tipoDocumentoEnum)
+                        {
+                            case LIBRE: 
+                            case ACADEMICO:
+                            case PRESUPUESTOS:
+                                factura.addDetalle(facturaDetalle);
+                            break;
+                            case INVENTARIO:
+                                //enumFacturarStockNegativo.equals(enumSino.NO);
+                                if(enumFacturarStockNegativo.equals(EnumSiNo.NO)){
+                                    if(verifadorStock){
+                                        factura.addDetalle(facturaDetalle);
+                                    }
+                                }else{
+                                    factura.addDetalle(facturaDetalle);
+                                }
+                            break;
+                        }   
                     }
                     
                     cargarDatosDetalles();
@@ -3406,7 +3463,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getTxtCliente().setEnabled(true);
         }
     }
-
+    
+    private boolean verificarExistenciaStockProducto() throws RemoteException, ServicioCodefacException
+    {
+        boolean verificadorStock;
+        KardexServiceIf serviceKardex = ServiceFactory.getFactory().getKardexServiceIf();
+        //Bodega activa de venta
+        BodegaServiceIf serviceBodega = ServiceFactory.getFactory().getBodegaServiceIf();
+        Bodega bodegaVenta = serviceBodega.obtenerBodegaVenta(session.getSucursal());
+        //Verifica si existe stock para el producto seleccionado
+        verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta, productoSeleccionado, Integer.parseInt(getTxtCantidad().getText()));
+        return verificadorStock;
+    }
     
     
     
