@@ -183,7 +183,10 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
                 //detalle.setCodigoPrincipal(producto.getCodigoPersonalizado());
                 detalle.setCantidad(facturaDetalle.getCantidad());
                 //detalle.setDescripcion(UtilidadValidador.normalizarTexto(facturaDetalle.getDescripcion()));
-                detalle.setDescripcion(facturaDetalle.getDescripcion()); //Supuestamente ya no tengo que validar porque esta validad en el ingreso de los detalles
+                /*
+                *   UTF-8 Validad caracteres 
+                */
+                detalle.setDescripcion(UtilidadValidador.normalizarDescripcionDetalleFacura(facturaDetalle.getDescripcion())); //Supuestamente ya no tengo que validar porque esta validad en el ingreso de los detalles
                 //Establecer el descuento en el aplicativo
                 detalle.setDescuento(facturaDetalle.getDescuento());
                 detalle.setPrecioTotalSinImpuesto(facturaDetalle.getTotal());
