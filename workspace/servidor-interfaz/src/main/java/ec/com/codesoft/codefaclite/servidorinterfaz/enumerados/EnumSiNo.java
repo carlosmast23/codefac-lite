@@ -5,11 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+
 /**
  *
  * @author Carlos
  */
-public enum EnumSiNo {
+public enum EnumSiNo implements ParametroUtilidades.ComparadorInterface<EnumSiNo>{
     NO("no","n",false),
     SI("si","s",true);
 
@@ -81,6 +83,11 @@ public enum EnumSiNo {
             return EnumSiNo.SI;
         else
             return EnumSiNo.NO;
+    }
+
+    @Override
+    public EnumSiNo consultarParametro(String nombreParametro) {
+        return getEnumByLetra(nombreParametro);
     }
     
 }

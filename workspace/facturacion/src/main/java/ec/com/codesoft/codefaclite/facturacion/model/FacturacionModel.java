@@ -162,6 +162,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.Tip
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 
 /**
  *
@@ -1553,23 +1554,25 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void habilitarPermisosEdicionFactura()
     {
-        ParametroCodefac parametroPermiso=session.getParametrosCodefac().get(ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA);
-        if(parametroPermiso!=null && parametroPermiso.getValor()!=null && EnumSiNo.getEnumByLetra(parametroPermiso.valor).equals(EnumSiNo.NO))
-        {
-            getTxtValorUnitario().setEnabled(false);
+        try {
+            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA, EnumSiNo.NO))
+            {
+                getTxtValorUnitario().setEnabled(false);
+            }
+            
+            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.EDITAR_DESCUENTO_FACTURA, EnumSiNo.NO))
+            {
+                getTxtDescuento().setEnabled(false);
+            }
+            
+            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.EDITAR_DESCRIPCION_FACTURA, EnumSiNo.NO))
+            {
+                getTxtDescripcion().setEnabled(false);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        parametroPermiso=session.getParametrosCodefac().get(ParametroCodefac.EDITAR_DESCUENTO_FACTURA);
-        if(parametroPermiso!=null && parametroPermiso.getValor()!=null && EnumSiNo.getEnumByLetra(parametroPermiso.valor).equals(EnumSiNo.NO))
-        {
-            getTxtDescuento().setEnabled(false);
-        }
-        
-        parametroPermiso=session.getParametrosCodefac().get(ParametroCodefac.EDITAR_DESCRIPCION_FACTURA);
-        if(parametroPermiso!=null && parametroPermiso.getValor()!=null && EnumSiNo.getEnumByLetra(parametroPermiso.valor).equals(EnumSiNo.NO))
-        {
-            getTxtDescripcion().setEnabled(false);
-        }
         
     }
     
@@ -2374,8 +2377,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      */
     public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle) throws ServicioCodefacException {
         boolean agregar = true;
-        boolean verifadorStock = false;
-        EnumSiNo enumFacturarStockNegativo = null;
 
         //Verifica si manda un detalle existe solo se modifica
         if (facturaDetalle != null) {
@@ -2384,20 +2385,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             facturaDetalle = new FacturaDetalle();
         }
 
+        //Validacion de los datos ingresados para ver si puedo agregar al detalle
         if (!panelPadre.validarPorGrupo("detalles")) {
             int filaSeleccionada=getTblDetalleFactura().getSelectedRow();
             cargarDatosDetalles(); //Si no se pudo editar vuelvo a cargar los detalles si se modifico desde la tabla para que quede la forma original
             getTblDetalleFactura().setRowSelectionInterval(filaSeleccionada,filaSeleccionada);
             return false;
         }
-        
 
-        //if (verificarCamposValidados()) {
             
-            //Validacion dependiendo de la logica de cada tipo de documento
-            if (!validacionPersonalizadaPorModulos()) {
+        //Validacion personalizada dependiendo de la logica de cada tipo de documento
+        if (!validacionPersonalizadaPorModulos()) {
                 return false;
-            }
+        }
             
             
             try {
@@ -2408,6 +2408,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
                 facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
                 
+                //Obtengo el catalogo producto dependiendo el documento para poder saber las caracteristicas del producto
                 switch (tipoDocumentoEnum) 
                 {
                     case ACADEMICO:
@@ -2426,59 +2427,32 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                         break;
                 }
-                //Advertecia catalogo producto
+                
+                //Advertecia cuando el item a facturar no tiene asignando un catalogo producto que es importante porque es de donde obtiene los valore
                 if(catalogoProducto==null)
                 {
                     DialogoCodefac.mensaje("Advertencia","No esta definido el Catalogo Producto ,donde se especifica los impuestos para facturar ",DialogoCodefac.MENSAJE_INCORRECTO);
                     return false;
                 }
                 
-                //Permite validar stock de producto
-                switch(tipoDocumentoEnum)
-                {
-                    case ACADEMICO: case PRESUPUESTOS: case LIBRE:
-                        facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
-                        facturaDetalle.setDescripcion(getTxtDescripcion().getText());
-                        break;
-                    case INVENTARIO:
-                        ParametroCodefac parametroCodefac = session.getParametrosCodefac().get(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO);
-                        if(parametroCodefac != null)
-                        {
-                            enumFacturarStockNegativo = EnumSiNo.getEnumByLetra(parametroCodefac.valor);
-                            if(enumFacturarStockNegativo.equals(EnumSiNo.NO)){
-                                verifadorStock = verificarExistenciaStockProducto();
-                                if(!verifadorStock){
-                                    DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                                }else{    
-                                    facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
-                                    facturaDetalle.setDescripcion(getTxtDescripcion().getText());
-                                }
-                            }else{
-                                facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
-                                facturaDetalle.setDescripcion(getTxtDescripcion().getText());
-                            }
-                        }else{
-                            DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        }
-                    break;
-                }
-
-                
+                facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+                facturaDetalle.setDescripcion(getTxtDescripcion().getText());                
+                               
+                //Calcula los valores dependiendo del iva para tener el valor unitario
                 BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
-                
                 EnumSiNo enumSino=(EnumSiNo) getCmbIva().getSelectedItem();
                 if(enumSino.equals(EnumSiNo.SI))
                 {
                     BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
                     BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
                     valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,3,BigDecimal.ROUND_HALF_UP);
-                }
-                
-                
+                }                                
                 facturaDetalle.setPrecioUnitario(valorTotalUnitario);
                 
                 
-                                
+                /**
+                 * ===========> CALCULA LOS VALORES DEL DESCUENTO <=============
+                 */                
                 BigDecimal descuento;
                 if (!getCheckPorcentaje().isSelected()) { //Cuando no es porcentaje el valor se setea directo
                     if (!getTxtDescuento().getText().equals("")) {
@@ -2498,6 +2472,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     }
                 }
                 
+                
                 //Calular el total despues del descuento porque necesito esa valor para grabar
                 //BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
                 //facturaDetalle.setTotal(setTotal.setcale(2, BigDecimal.ROUND_HALF_UP));
@@ -2513,37 +2488,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 
                 facturaDetalle.calculaIva();
-                //facturaDetalle.calcularValorIce(catalogoProducto.getIce().getPorcentaje())
-                
-                /*if (catalogoProducto.getIva().getTarifa().equals(0)) {
-                    facturaDetalle.setIva(BigDecimal.ZERO);
-                } else {
-                    BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setcale(2, BigDecimal.ROUND_HALF_UP);
-                    facturaDetalle.setIva(iva);
-                }*/
-                
+               
+                /**
+                 * ========> VALIDACION QUE EL VALOR UNITARIO MENOS DESCUENTO NO SEA NEGATIVO <=============
+                 * TODO: Ver si este codigo es correcto poner al final o se debe agrupar todos las validaciones en un bloque
+                 * para tener mas organiado porque en la parte superior de este metodo existen mas validaciones
+                 */
                 if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) >= 0) {
                     
                     //Solo agregar si se enviar un dato vacio
                     if (agregar) {
-                        switch(tipoDocumentoEnum)
-                        {
-                            case LIBRE: 
-                            case ACADEMICO:
-                            case PRESUPUESTOS:
-                                factura.addDetalle(facturaDetalle);
-                            break;
-                            case INVENTARIO:
-                                //enumFacturarStockNegativo.equals(enumSino.NO);
-                                if(enumFacturarStockNegativo.equals(EnumSiNo.NO)){
-                                    if(verifadorStock){
-                                        factura.addDetalle(facturaDetalle);
-                                    }
-                                }else{
-                                    factura.addDetalle(facturaDetalle);
-                                }
-                            break;
-                        }   
+                        factura.addDetalle(facturaDetalle);
                     }
                     
                     cargarDatosDetalles();
@@ -2567,6 +2522,53 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             return false;
         }*/
         
+    }
+    
+    private boolean validarAgregarInventario()
+    {
+        try {
+            
+            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, EnumSiNo.NO))
+            {
+                try {                    
+                    //Verifico si el producto es inventario y esta activo la opción de construir ensamble en la venta porque en ese caso
+                    //tampoco debe validar el inventario en la vista para el ensamble
+                    if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
+                    {
+                         //Si tengo que construir el ensamble no valido en la vista porque puede tener stock insuficiente pero despues de construir si puede generar
+                        return true;
+                    }
+                    
+                    
+                    boolean verifadorStock = verificarExistenciaStockProducto();
+                    //Verificar si agrego los datos al fomurlaro cuando no existe inventario
+                    if (!verifadorStock) {
+                        
+                        DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        return false;
+                    } else {                        
+                        return true;
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //Por defecto si no tiene nada seleccionado si permito agregar el inventario
+        return true;
+        
+    }
+    
+    @Deprecated
+    //TODO: Parece que este metodo ya no voy a usar
+    private void setearFacturaDetalle(FacturaDetalle facturaDetalle) {
+        facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+        facturaDetalle.setDescripcion(getTxtDescripcion().getText());
     }
     
     //TODO: Para optimizar y mejorar el codigo analizar para utilizar una sola funcion con la anterior
@@ -2956,7 +2958,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     return false;
                 }*/
                 break;
-            
+                
+            case INVENTARIO:
+                return validarAgregarInventario(); //Metodo que se encarga de validar el inventario
+                
         }
         
         return true;
@@ -3464,6 +3469,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
     }
     
+    /**
+     * 
+     * @return
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     * @author Trebor
+     */
     private boolean verificarExistenciaStockProducto() throws RemoteException, ServicioCodefacException
     {
         boolean verificadorStock;
