@@ -56,3 +56,4 @@ En todos los lugares que son de grabar imagenes o algo de forma remota desahabil
 porque eso no esta funcionando todavia
 Ver que como las compras pueden ser cantidad decimales todo el resto de entidades que se relacionan deben se decimales ejemplo "Ordenes de compra, kardex"
 Revisar porque la pantalla de actualizar no esta funcionando 
+Hacer que se grabe automaticamente la fecha de la primera factura en el parametro de fecha de emision de la factura y que por defecto en tiempo se ponga 2 años
