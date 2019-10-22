@@ -118,6 +118,17 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String CONSTRUIR_ENSAMBLES_FACTURAR="construir_ensamble_facturar";
     
+    /**
+     * Fecha inicial cuando sacaron la firma para que el sistema pueda emitir una alerta cuando falte poco tiempo para renovar
+     */
+    public static final String FIRMA_FECHA_EMISION="firma_fecha_emision";
+    
+    /**
+     * Tiempo en años de vigencia de la firma electronica para qe el sistema pueda mandar alertas
+     */
+    public static final String FIRMA_TIEMPO_EXPIRACION_AÑOS="firma_tiempo_expiracion_años";
+    
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

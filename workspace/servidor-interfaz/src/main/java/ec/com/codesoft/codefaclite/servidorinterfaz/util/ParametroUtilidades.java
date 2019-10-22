@@ -38,22 +38,32 @@ public abstract class ParametroUtilidades {
     
     public static <T extends ComparadorInterface> Boolean comparar(Empresa empresa,String nombreParametro,T valorComparar) throws RemoteException
     {
-        ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(nombreParametro,empresa);
-        if (parametroCodefac != null) {
-            //Solo si tiene parametro positivo intento construir el ensamble
-            String valorParametro=parametroCodefac.getValor();
+        String valorParametro=obtenerValorParametro(empresa, nombreParametro);
+        if(valorParametro!=null)
+        {
             T resultadoValor=(T) valorComparar.
                     consultarParametro(valorParametro);
             
             if(resultadoValor!=null && resultadoValor.equals(valorComparar))
             {
                 return true;
-            }            
-            /*if (parametroCodefac.getValor() != null && EnumSiNo.getEnumByLetra(parametroCodefac.getValor()).equals(valorComparar)) {
-                return true;
-            }*/
+            }        
         }
-        return false;
+        return false; 
+    }
+    
+    public static String obtenerValorParametro(Empresa empresa , String nombreParametro) throws RemoteException
+    {
+        ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(nombreParametro,empresa);
+        if (parametroCodefac != null) {
+            //Solo si tiene parametro positivo intento construir el ensamble
+            if(parametroCodefac.getValor()!=null)
+            {
+                return parametroCodefac.getValor();
+            }
+            
+        }
+        return null;
     }
     
     public interface ComparadorInterface<T>

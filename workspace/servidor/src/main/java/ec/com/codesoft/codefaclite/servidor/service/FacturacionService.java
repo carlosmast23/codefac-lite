@@ -92,7 +92,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         
                         proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
                         setearDatosCliente(proforma);
-                        //grabarDetallesFactura(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
+                        grabarDetallesFactura(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
                     }
                     catch (RemoteException ex)
@@ -184,6 +184,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         afectarAcademico(detalle);
                         break;
                     case INVENTARIO:
+                        //Todo: Mejorar esta parte por el momento cuando es una proforma no proceso el tema del inventario
+                        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
+                        {
+                            break;
+                        }
+                        
                         BodegaService bodegaService=new BodegaService();
                         Bodega bodegaVenta=bodegaService.obtenerBodegaVenta(factura.getSucursalEmpresa());
                         if(bodegaVenta==null)
