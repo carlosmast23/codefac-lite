@@ -27,13 +27,16 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle.EstadoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
@@ -89,18 +92,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         
                         proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
                         setearDatosCliente(proforma);
-                        grabarDetallesFactura(proforma);
+                        grabarDetallesFactura(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
                     }
                     catch (RemoteException ex)
                     {
                         Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (PersistenceException ex) {
+                    }catch (PersistenceException ex) {
                         Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
-                        Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-                        throw ex; //Relanzar la excepcion si sucede algun problema interno
                     }
+                    //Relanzar la excepcion si sucede algun problema interno
+                    
                 }
             });
         } catch (ServicioCodefacException ex) {
@@ -182,6 +184,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         afectarAcademico(detalle);
                         break;
                     case INVENTARIO:
+                        //Todo: Mejorar esta parte por el momento cuando es una proforma no proceso el tema del inventario
+                        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
+                        {
+                            break;
+                        }
+                        
                         BodegaService bodegaService=new BodegaService();
                         Bodega bodegaVenta=bodegaService.obtenerBodegaVenta(factura.getSucursalEmpresa());
                         if(bodegaVenta==null)
@@ -265,59 +273,143 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }
     
-    private void afectarInventario(FacturaDetalle detalle,Bodega bodega)
+    private Kardex consultarOCrearStock(Producto producto, Bodega bodega) throws RemoteException, ServicioCodefacException
     {
-        try {
-            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());            
-            //Map<String,Object> mapParametros=new HashMap<String,Object>();
-            //mapParametros.put("producto", producto);
-            KardexService kardexService=new KardexService();
-            List<Kardex> kardexs= kardexService.buscarPorProductoYBodega(producto,bodega);
-            
-            Kardex kardex=null;
-            if(kardexs==null || kardexs.size()==0)
-            {
-                kardex=kardexService.crearObjeto(bodega, producto);
-                entityManager.persist(kardex);
-            }else
-            {
-                kardex = kardexs.get(0);
-            }
-            
-            //TODO: Definir especificamente cual es la bodega principal
-            //if(kardexs!=null && kardexs.size()>0)
-            //{
-            //TODO: Analizar caso cuando se resta un producto especifico
-            //Kardex kardex = kardexs.get(0);
+        
+        //Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+        //Map<String,Object> mapParametros=new HashMap<String,Object>();
+        //mapParametros.put("producto", producto);
+        KardexService kardexService = new KardexService();
+        List<Kardex> kardexs = kardexService.buscarPorProductoYBodega(producto, bodega);
 
-            KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO,detalle.getPrecioUnitario(),detalle.getCantidad().intValue());;
-            //Agregando datos adicionales del movimiento en la factura
-            kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
-            kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision().toString());
-            kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento().toString());
-            kardexDetalle.setSecuencial(detalle.getFactura().getSecuencial());
-            kardexDetalle.setFechaDocumento(detalle.getFactura().getFechaEmision());
-
-            //Actualizar los valores del kardex
-            kardexService.recalcularValoresKardex(kardex, kardexDetalle);
-            //kardex.setStock(kardex.getStock() - kardexDetalle.getCantidad());
-            //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
-            //kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(kardexDetalle.getPrecioTotal()));
-            //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
-            entityManager.persist(kardexDetalle); //Grabo el kardex detalle
-            kardex.addDetalleKardex(kardexDetalle);
-            entityManager.merge(kardex); //Actualizo el kardex con la nueva referencia
-            //}else// Casi cuando no existe registro de kardex en esa bodega el sistema crea automaticamente
-            //{
-            //    Kardex kardex=kardexService.crearObjeto(bodega, producto);
-            //    entityManager.persist(kardex);
-            //}
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        Kardex kardex = null;
+        if (kardexs == null || kardexs.size() == 0) {
+            kardex = kardexService.crearObjeto(bodega, producto);
+            entityManager.persist(kardex);
+        } else {
+            kardex = kardexs.get(0);
         }
+        return kardex;
+
+    }
     
+    private void afectarInventario(FacturaDetalle detalle,Bodega bodega) throws RemoteException, ServicioCodefacException
+    {
+
+        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+        //Map<String,Object> mapParametros=new HashMap<String,Object>();
+        //mapParametros.put("producto", producto);
+        /*KardexService kardexService = new KardexService();
+        List<Kardex> kardexs = kardexService.buscarPorProductoYBodega(producto, bodega);
+
+        Kardex kardex = null;
+        if (kardexs == null || kardexs.size() == 0) {
+            kardex = kardexService.crearObjeto(bodega, producto);
+            entityManager.persist(kardex);
+        } else {
+            kardex = kardexs.get(0);
+        }*/
+        Kardex kardex = consultarOCrearStock(producto, bodega);
+
+        /**
+         * Validacion pára verificar que exista un stock superior o igual en el
+         * kardex segun lo que quieran facturar
+         */
+        int cantidadFaltante = detalle.getCantidad().intValue() - kardex.getStock();
+        if(ParametroUtilidades.comparar(detalle.getFactura().getEmpresa(), ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO,EnumSiNo.NO))
+        {
+            //Si el stock que queremos facturar es mayor del existe lanzo una excepcion                
+            if (detalle.getCantidad().compareTo(new BigDecimal(kardex.getStock())) > 0) 
+            {
+                //Solo para ensambles rerifica si tiene que construir el ensamble no importaria si no tiene el stock suficiente y mando a construir
+                if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI)) 
+                {
+                    //No valida nada porque si este proceso falla automaticamente debe generar la excepcion interior, por ejemplo cuando no existe la cantidad necesaria de los componentes para construir el ensamble                    
+                    verificarConstruirEnsamble(kardex, cantidadFaltante,true);
+                } 
+                else 
+                {
+                    //Si es un producto normal sin ensamble mando la excepcion que no tiene stock
+                    throw new ServicioCodefacException("No existe el stock sufiente para facturar el producto " + kardex.getProducto().getNombre() + ", faltan " + cantidadFaltante + " productos");
+                }
+            }
+        }
+        else //Este caso se lanza cuando por defecto o esta activo que permita facturar negativo
+        {
+            //Solo para ensambles rerifica si tiene que construir el ensamble no importaria si no tiene el stock suficiente y mando a construir
+            if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI)) {
+                //En este caso si estaba activo construir el ensamble lo realizo pero sin validar el stock de los componentes
+                verificarConstruirEnsamble(kardex, cantidadFaltante,false);
+            }
+        }
+        
+        /*ParametroCodefacService parametroService = new ParametroCodefacService();
+        ParametroCodefac parametroFacturarStockNegativo = parametroService.getParametroByNombre(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, detalle.getFactura().getEmpresa());
+        if (parametroFacturarStockNegativo != null) {
+            EnumSiNo enumFacturarStockNegativo = EnumSiNo.getEnumByLetra(parametroFacturarStockNegativo.valor);
+            
+            //Cuando no quieren facturar con stock negativo verifico que exista la cantidad necesaria para facturar
+            if (enumFacturarStockNegativo!=null && enumFacturarStockNegativo.equals(EnumSiNo.NO)) {
+                //Si el stock que queremos facturar es mayor del existe lanzo una excepcion                
+                if (detalle.getCantidad().compareTo(new BigDecimal(kardex.getStock())) > 0) {
+                    
+                    int cantidadFaltante=detalle.getCantidad().intValue()-kardex.getStock();                    
+                    
+                    //Solo para ensambles rerifica si tiene que construir el ensamble no importaria si no tiene el stock suficiente y mando a construir
+                    if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(),ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
+                    {
+                        //No valida nada porque si este proceso falla automaticamente debe generar la excepcion interior, por ejemplo cuando no existe la cantidad necesaria de los componentes para construir el ensamble                    
+                        verificarConstruirEnsamble(kardex,cantidadFaltante);
+                    }
+                    else
+                    {
+                        //Si es un producto normal sin ensamble mando la excepcion que no tiene stock
+                        throw new ServicioCodefacException("No existe el stock sufiente para facturar el producto "+kardex.getProducto().getNombre()+", faltan "+cantidadFaltante+" productos");
+                    }
+                }
+            }
+        }
+        else
+        {
+            
+        }*/
+
+        /**
+         * ============================== FIN VALIDACION DE FACTURAR CON STOCK
+         * NEGATIVO ======================
+         */
+        //TODO: Definir especificamente cual es la bodega principal
+        //TODO: Analizar caso cuando se resta un producto especifico
+        KardexService kardexService = new KardexService();
+        KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO, detalle.getPrecioUnitario(), detalle.getCantidad().intValue());;
+        //Agregando datos adicionales del movimiento en la factura
+        kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
+        kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision().toString());
+        kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento().toString());
+        kardexDetalle.setSecuencial(detalle.getFactura().getSecuencial());
+        kardexDetalle.setFechaDocumento(detalle.getFactura().getFechaEmision());
+
+        //Actualizar los valores del kardex
+        kardexService.recalcularValoresKardex(kardex, kardexDetalle);
+        //kardex.setStock(kardex.getStock() - kardexDetalle.getCantidad());
+        //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
+        //kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(kardexDetalle.getPrecioTotal()));
+        //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+        entityManager.persist(kardexDetalle); //Grabo el kardex detalle
+        kardex.addDetalleKardex(kardexDetalle);
+        entityManager.merge(kardex); //Actualizo el kardex con la nueva referencia
+       
+    }
+    
+    /**
+     * Metodo para verificar si tiene la opcion activa de generar ensamble y ver si se puede construir en ese momento
+     */
+    public void verificarConstruirEnsamble(Kardex kardex,int cantidadFaltante,Boolean validarStockComponentes) throws RemoteException, ServicioCodefacException
+    {
+        if(ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(),ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
+        {
+            ServiceFactory.getFactory().getKardexServiceIf().ingresoEgresoInventarioEnsambleSinTransaccion(kardex.getBodega(), kardex.getProducto(), cantidadFaltante,ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA,validarStockComponentes);
+        }
     }
     
     

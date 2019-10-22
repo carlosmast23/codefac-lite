@@ -90,12 +90,25 @@ public class CorreoElectronico {
         
         Properties props = new Properties();
         
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host",propiedadCorreo.getHost());
-        props.put("mail.smtp.port",propiedadCorreo.getPort().toString());
-        props.put("mail.transport.protocol", "smtp");
+        
         //props.put("mail.smtp.from", bounceAddr);
+        if(propiedadCorreo.getPort().toString().equals("465"))
+        {            
+            props.put("mail.smtps.host", propiedadCorreo.getHost());
+            props.put("mail.smtps.auth", "true");
+            props.put("mail.transport.protocol", "smtps");
+        }
+        else
+        {
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.host",propiedadCorreo.getHost());
+            props.put("mail.smtp.port",propiedadCorreo.getPort().toString());
+            props.put("mail.transport.protocol", "smtp");
+        }
+        
+        System.out.println("====>PROPIEDADES EMAIL <===========");
+        System.out.println(props);
 
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
@@ -103,6 +116,7 @@ public class CorreoElectronico {
                 return new PasswordAuthentication(usuario, clave);
             }
         });
+        
         //session.setDebug(true);
 
         try {
@@ -187,7 +201,16 @@ public class CorreoElectronico {
         
         
         
-         Transport.send(message);
+        //Transport.send(message);
+         
+        Transport transport = session.getTransport();
+        
+        transport.connect
+          (propiedadCorreo.getHost(), propiedadCorreo.getPort(), usuario, clave);
+
+        transport.sendMessage(message,
+            message.getRecipients(Message.RecipientType.TO));
+        transport.close();
 
         } catch (AuthenticationFailedException  e) {
             throw e;

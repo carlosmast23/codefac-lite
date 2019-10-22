@@ -104,6 +104,12 @@ public enum TipoDocumentoEnum {
             "Ingreso Inventario Ensamble",
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO,
             false),    
+    
+    ENSAMBLE_CONSTRUIR_VENTA(ModuloCodefacEnum.INVENTARIO,
+            "ECV",
+            "Ingreso construir venta",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO,
+            false),    
 
     ENSAMBLE_EGRESO(ModuloCodefacEnum.INVENTARIO,
             "INE",

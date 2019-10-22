@@ -100,6 +100,12 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jEditorPanelVistaPrevia = new javax.swing.JEditorPane();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
+        cmbFacturarInventarioNegativo = new javax.swing.JComboBox<>();
+        lblEspacioBlanco12 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        cmbConstruirEnsamblesFacturar = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -507,6 +513,48 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jTabbedPane1.addTab("Comprobantes Electrónicos", jPanel7);
 
+        jPanel8.setLayout(new java.awt.GridBagLayout());
+
+        jLabel20.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel20.setText("Construir ensambles al facturar:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel20, gridBagConstraints);
+
+        cmbFacturarInventarioNegativo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(cmbFacturarInventarioNegativo, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel8.add(lblEspacioBlanco12, gridBagConstraints);
+
+        jLabel21.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel21.setText("Facturar con inventario negativo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel21, gridBagConstraints);
+
+        cmbConstruirEnsamblesFacturar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(cmbConstruirEnsamblesFacturar, gridBagConstraints);
+
+        jTabbedPane1.addTab("Inventario", jPanel8);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -520,9 +568,11 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbActivarNotaVenta;
     private javax.swing.JComboBox<EnumSiNo> cmbActivarReporteSimpleGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbCargarProductoIvaFactura;
+    private javax.swing.JComboBox<EnumSiNo> cmbConstruirEnsamblesFacturar;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarDescripcionFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarDescuentoFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarPrecioUnitFactura;
+    private javax.swing.JComboBox<EnumSiNo> cmbFacturarInventarioNegativo;
     private javax.swing.JComboBox<FormatoHojaEnum> cmbFormatoHojas;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
@@ -541,6 +591,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -555,6 +607,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -566,6 +619,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacio42;
     private javax.swing.JLabel lblEspacio6;
     private javax.swing.JLabel lblEspacioBlanco;
+    private javax.swing.JLabel lblEspacioBlanco12;
     private javax.swing.JLabel lblEspacioBlanco123;
     private javax.swing.JLabel lblEspacioBlanco2;
     private javax.swing.JLabel lblEspacioVertical;
@@ -691,8 +745,25 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbActivarNotaVenta(JComboBox<EnumSiNo> cmbActivarNotaVenta) {
         this.cmbActivarNotaVenta = cmbActivarNotaVenta;
     }
+
+    public JComboBox<EnumSiNo> getCmbFacturarInventarioNegativo() {
+        return cmbFacturarInventarioNegativo;
+    }
+
+    public void setCmbFacturarInventarioNegativo(JComboBox<EnumSiNo> cmbFacturarInventarioNegativo) {
+        this.cmbFacturarInventarioNegativo = cmbFacturarInventarioNegativo;
+    }
+
+    public JComboBox<EnumSiNo> getCmbConstruirEnsamblesFacturar() {
+        return cmbConstruirEnsamblesFacturar;
+    }
+
+    public void setCmbConstruirEnsamblesFacturar(JComboBox<EnumSiNo> cmbConstruirEnsamblesFacturar) {
+        this.cmbConstruirEnsamblesFacturar = cmbConstruirEnsamblesFacturar;
+    }
     
     
+     
     
     
     

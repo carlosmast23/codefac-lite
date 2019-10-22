@@ -14,22 +14,16 @@ Aregar funcionalidad para quitar o agregar el stock de forma recursiva
 En los productos revisar el valor unitario cambiar a precio venta publico normal
 En las ventas ver como se puede manejar un solo descuento global y no por producto
 Parece que para todos los casos se estan creando varios detalles en el kardex es decir se desglosa una cantidad , pero eso solo debe suceder en los productos con garantia
-Verificar el campo de sotock inicial en las creacion de producto porque como son varias bodegas no se podria establecer un valor unico
 El combo de la compra esta cargando todos los producto y no filtrando por proveedor
 Analisar en que modulos se debe mostrar el nombre legal en los modulos de inventario
 En los campos que usen text area verificar que no se ingresen saltos de linea porque generan problemas en la facturacion electronica
 Las bodegas y la perchera es lo mismo , y pueden haber varias bodegas en un mismo establecimiento?
-Crear una pantalla para traspaso de mercaderia entre bodegas
-Revisar que el cliente debe tener la opcion de grabar el nombre comercial
-
 ver la posibilidad de establecer el tamaño de los buscadores
 
 En el kardex tomar en cuenta crear un campo de reserva para cuando se usan para ensambles
 
 
 Revisar que cuando se hace muy pequeña la pantalla los widget se sale del rango visual
-
-al momento de eliminar la factura , ver la posibilidad de eliminar tambien el comprobante fisico
 
 Poner mensaje inicial para el usuario sepa que hacer la primera vez que entra al usuario
 
@@ -38,9 +32,6 @@ En la nota de credito cuando hay campo que tiene que validar no me deja interact
 revisar los valores en los totales estan mal seteados cuando cargan la nota de credito
 
 Verificar que los resultados por defecto se obtengan del mas actual al mas antiguo
-
-Cosas pendientes:
-	Instalar el servidor de git
 
 resolver el problema de los ensambles con el producto para el inventario porque necesita tener ese 
 campo para la logica 

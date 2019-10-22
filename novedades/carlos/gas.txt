@@ -2,7 +2,4 @@ Esta pendiente revisar como se puede hacer el tema que guarde todos los decimale
 NOTA: No se puede solo enviar sin redondear porque resulta que el Sri no me permite que el precio unitario tenga mas de 2 decimales 
 Solucion: Que internamente se grabe con todo los decimales pero finalmente antes de mandar a genarar el comprobante se redonde el prcio unitario
 
-Hacer una varaible global que me permita manejar el inventario con la fecha de emision y no por la fecha de creación de la factura
-Agregar el campo de fecha_emision en el reporte de guia de remision
-
 Analizar si puedo poner en cualquier orden el stock o si debe ir por fecha porque eso va a pasar si ingreso por fecha de emision que puede alterar una fecha pasada

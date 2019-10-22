@@ -24,14 +24,12 @@ Ver porque los correos que tiene punto despues en el sistema no verifican las cr
 revisar el reporte de kardex , en la columna de los totales no tiene sentido que se sumarice precion de venta de los inventarios porque no cuadra , o bien separo 2 saldos por los precios de compra y venta o bien solo muestro los precios de compra
 Hacer un modulo que utilice selenium para que puedan subir automaticamente los registros a la pagina del Gas 
 en la pantalla de factura , cuando cargao
-El señor del gas solicita que no se pueda seleccionar una fecha inferior de la guia de remision a la cual esta ligada la factura
 En la pantalla de factura unificar metodos por ejemplo de calcular iva y totales como en el modulo web para hacer mas escalable el sistema
 Revisar al momento de generar el reporte de las guias de remision para enviar , parece que genera el archivo y el pdf para mostrar en pantalla lo cual deberian estar separados para mostrar en el formulario o para enviar por archivo y eso vuelve mas lento el proceso de enviar los reportes por correo
 Revisar el tema de la escuela crecer:
    --->Verificar la factura de compra 179845 de 1704090891001
 	->tiene 3 items de retencion por alguna razon en el codigo 31
 Revisar para la escuela crecer
-	-> Cambiar la forma de clasificar el credito tributario ahora que se por cada detalle de la compra
 	-> Crear un reporte para visualizar los detalles por credito tributaria
 	-> Ver si se puede hacer alguna forma de en als notificaciones del modulo academico poder incrustar html
 		-> Ver si puedo configurar con footer general para todos los mensajes
@@ -43,24 +41,19 @@ Ver si en el ciclo de vida de la parte web , es necesario contralar el limpiar m
 	-Analizar si agregar una variable para controlar este ciclo de vida para los casos especiales cuando se necesite mostrar el dialogo de resultados
 	Nota: Ver si puedo agregar un parametro al iniciar la pagina jsf para indicarle al controlador como actuar
 
-REvisar el tema del Rise para el cliente de ibarra
-Corregir el reporte dle señor del gas
 que en la razon social revisar la ñ
-aumentar campo de descripcion en la factura que permita ingresar datos de hasta 300 caracteres
 en la pantalla de ingreso de mercaderia aparecen compras eliminadas
 Hacer alguna funcionalidad adicional para que se puedan trasladar los rubros del antiguo periodo al nuevo periodo
 Cuando se crea un proveedor en la compra no se esta cargando directo
 
 Hacer que cuando actualice la licencia ver alguna manera de actualizar la licencia ese momento porque ahorita esta programado para actualizar cada dia
-En los detalles de las notas de credito toca ampliar el espacio en la base de datos porque en las facturas deja grabar mas y cuando traspaso a las notas de credito generar error
-El campo de celular_virtual_mall se esta repitiendo muchas veces revisar porque 
 Probar la funcionalidad de cliente final en la factura que no encuentra a pesar que ya esta creado
 Al momento de crear la licencia cuando ya existe una licencia y solo descarga no esta funcionando
 Ver la posibilidad para en los dialogos buscar para filtrar por otros datos como por ejemplo por estado , para buscar datos eliminados que se requieren revisar
 revisar que cuando edita el secuencial de un punto de emisión al salir de la session sigue funcionando con el mismo, solo cambio cuando se abre y cierra el programa
-Al momento de editar por primera vez el usuario para asignar un punto de venta estaba generando error
-ver como hacer para que se demore menos los datos cuando se trabaja de forma remota en espeacial con el tema de los jasperReport
 en la pantalla de sucursal no tener la opcion de seleccionar la empresa porque despues de crear la empresa ya se puede ingresar con un usuario y seguir creando los datos
 En todos los lugares que son de grabar imagenes o algo de forma remota desahabilitar esa opción cuando sea un cliente remoto
 porque eso no esta funcionando todavia
 Ver que como las compras pueden ser cantidad decimales todo el resto de entidades que se relacionan deben se decimales ejemplo "Ordenes de compra, kardex"
+Revisar porque la pantalla de actualizar no esta funcionando 
+Hacer que se grabe automaticamente la fecha de la primera factura en el parametro de fecha de emision de la factura y que por defecto en tiempo se ponga 2 años

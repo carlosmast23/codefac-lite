@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac.Tipo
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.codefaclite.utilidades.email.PropiedadCorreo;
 import ec.com.codesoft.codefaclite.utilidades.email.SmtpNoExisteException;
@@ -48,12 +49,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +86,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private PersonaServiceIf clienteService;
     
     private DialogoCopiarArchivos dialogoCopiarFondoEscritorio;
+    
 
     public ComprobantesConfiguracionModel() {
         
@@ -197,6 +202,23 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         setearParametro(ParametroCodefac.SMTP_PORT,getTxtSmtpPuerto().getValue().toString());
         
         setearParametro(ParametroCodefac.DIRECTORIO_RECURSOS,getTxtDirectorioRecurso().getText());
+                
+        //Setear la fecha de emision para poder lanzar una alerta
+        String fechaFirmaEmisionStr="";//Cuando no exista firma solo graba vacio
+        if(getCmbFechaEmisionFirma().getDate()!=null)
+        {
+            fechaFirmaEmisionStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(getCmbFechaEmisionFirma().getDate());
+        }
+        setearParametro(ParametroCodefac.FIRMA_FECHA_EMISION,fechaFirmaEmisionStr);
+        
+        //Setear la duracion de la firma para poder lanzar una alerta
+        String aniosDuracionFirma="";
+        if(getTxtDuracionFirma().getValue()!=null)
+        {
+            aniosDuracionFirma=getTxtDuracionFirma().getValue().toString();
+        }
+        setearParametro(ParametroCodefac.FIRMA_TIEMPO_EXPIRACION_AÑOS,aniosDuracionFirma);
+        
         
         ParametroCodefac.TipoEnvioComprobanteEnum tipoEnvioEnum=(ParametroCodefac.TipoEnvioComprobanteEnum) getCmbTipoEnvioComprobante().getSelectedItem();
         setearParametro(ParametroCodefac.TIPO_ENVIO_COMPROBANTE,tipoEnvioEnum.getLetra());
@@ -259,6 +281,36 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             
             getTxtSmtpHost().setText(parametros.get(ParametroCodefac.SMTP_HOST).getValor());
             getTxtSmtpPuerto().setValue(new Integer(parametros.get(ParametroCodefac.SMTP_PORT).getValor()));
+            
+            /**
+             * Setear la fecha de la firma
+             */
+            
+            String firmaFechaEmisionStr=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.FIRMA_FECHA_EMISION);
+            if(firmaFechaEmisionStr!=null)
+            {
+                Date fechaEmisionFirma=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.parse(parametros.get(ParametroCodefac.FIRMA_FECHA_EMISION).getValor());
+                getCmbFechaEmisionFirma().setDate(fechaEmisionFirma);
+            }
+            else
+            {
+                getCmbFechaEmisionFirma().setDate(null);
+            }
+            
+            /**
+             * Setear la fecha de expiracion de la firma
+             */
+            String tiempoExpiracionFirmaStr=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.FIRMA_TIEMPO_EXPIRACION_AÑOS);
+            if(tiempoExpiracionFirmaStr!=null)
+            {
+                Integer tiempoAniosVigenciaFirma=Integer.parseInt(tiempoExpiracionFirmaStr);
+                getTxtDuracionFirma().setValue(tiempoAniosVigenciaFirma);
+            }
+            else
+            {
+                getTxtDuracionFirma().setValue(0);
+            }
+            
             
             ParametroCodefac parametroCodefac=parametros.get(ParametroCodefac.TIPO_ENVIO_COMPROBANTE);
             if(parametroCodefac!=null)

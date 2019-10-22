@@ -87,6 +87,7 @@ public class MigrarProductoModel extends MigrarModel {
                     catalogoProducto.setNombre(producto.getNombre());
                     catalogoProducto.setModuloCodEnum(ModuloCodefacEnum.INVENTARIO);
                     catalogoProducto.setCategoriaProducto(categoriaProducto);
+                    
                     //catalogoProducto.setTipoCodEnum(null); Este campo no me parece que sirve para cuando se crea para inventario
                     //Setear el catalogo del producto con el producto
                     producto.setCatalogoProducto(catalogoProducto);
@@ -146,6 +147,7 @@ public class MigrarProductoModel extends MigrarModel {
                     producto.setTipoProductoCodigo(TipoProductoEnum.PRODUCTO.getLetra());
                     producto.setManejarInventario(enumSiNo.getLetra()); //TODO:Cambiar para setear un enum
                     producto.setEmpresa(session.getEmpresa());
+                    producto.setUbicacion((String) fila.getByEnum(ExcelMigrarProductos.Enum.UBICACION).valor);
 
                     ServiceFactory.getFactory().getProductoServiceIf().grabarConInventario(producto,kardexDetalle);
                     LOG.log(Level.INFO,"Migrado producto "+producto.getNombre());

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -139,9 +140,29 @@ public class Bodega implements Serializable {
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
-    
-    
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.idBodega);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Bodega other = (Bodega) obj;
+        if (!Objects.equals(this.idBodega, other.idBodega)) {
+            return false;
+        }
+        return true;
+    }
+    
     @Override
     public String toString() {
         return nombre;
@@ -184,6 +205,7 @@ public class Bodega implements Serializable {
         public String toString() {
             return nombre;
         }
+        
         
         
        

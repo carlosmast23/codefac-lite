@@ -33,7 +33,8 @@ public class ExcelMigrarProductos extends ExcelMigrar{
         MANEJA_INVENTARIO("Maneja Inventario",5,String.class),
         BODEGA("Bodega",6,String.class),
         STOCK("Stock",7,Double.class),
-        ESTADO("Estado",8,String.class);
+        UBICACION("Ubicación",8,String.class),
+        ESTADO("Estado",9,String.class);
 
         private Enum(String nombre,Integer posicion,Class tipoDato) {
             this.nombre = nombre;

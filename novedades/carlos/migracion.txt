@@ -1,0 +1,2 @@
+Al momento de migrar los productos en los nombres transformar a formato sin tildes para no tener problemas problemas con caracteres especiales al momento de facturar 
+y adicional ver si se hace una prevalidacion en el servicio de grabar y en la pantalla del formulario

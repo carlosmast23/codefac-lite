@@ -1,1 +1,0 @@
-Al momento de facturar redondea a 2 cifras ver si eso afecta o debo redondear a 3 o algo por el estilo

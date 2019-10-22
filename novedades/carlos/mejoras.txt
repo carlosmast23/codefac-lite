@@ -1,19 +1,16 @@
 En los reportes ver la posibilidad de no mostrar las tablas y borrar de todos los reportes
 porque es inecesario y a la final todos terminan viendo el pdf
 Nota: Ver si en vez de la tabla se puede hacer que aparesca el reporte directamente abajo
-Agregar la forma para generar codigos de barra y poder imprimir
 Revisar que en la pantalla de compra funciona el evento de enter
 habilitar una opcion para enviar por correo cualquier reporte
-Ver la posibilidad de hacer una funcion que limite la cantidad de caracteres de ingreso directamente en los textfields
+Ver la posibilidad de hacer una funcion que limite la cantidad de caracteres de ingreso directamente en los textfields como evento
 hacer que se puedan editar los datos directamente de los correos y valores de la forma de pago directamente en la pantalla de hacer los comprobantes elctronicos 
 valiar que no se puedan editar las compras cuando ya estan emitidas las retenciones para evitar inconsistencias
-Hacer la prueba de que pasa cuando envio un comprobante que solo esta firma pero aun no ha sido recibido por el Sri a ver que me devuelve
 Ver como hacer para controlar automaticamente ese tema de los correo y no envien 2 veces o lo que es peor no se envien.
 hacer la pantalla para enviar notificaciones a los representantes de los estudiantes
 hacer pruebas para ver si en las notificaciones puede ingresar mas de 2 correos 
 Ver como hacer un metodo para buscar una palabra en distintos ordenes porque por ejemplo en la razon social solo busca si el orden es exacta
 Ver si en la pantalla de factura pueda hacer para que puedan seleccionar varios productos al mismo tiempo
-Ver como solucionar el problema que cuando no se actualizan los cambios el sistema cambia el archivo de propiedades apesar que no se ejcutaron ninguna actualizacion y eso puede generar erroes
 - Es recomedable agregar codigos en los productos por cada proveedor para poder hascer el ingreso de compras de forma automatica y relacionar el producto de venta con el de compra
 - En los proveedores seria bueno guardar los dias de credito para saber cuando ya se va a vencer la cartera de cada proveedor
 - En los proveedores ver si se vincula un numero de cuenta y los datos para poder emitir los cheques de pago (me imagino)
@@ -23,10 +20,10 @@ Ver como solucionar el problema que cuando no se actualizan los cambios el siste
 - En los metodos de callback y no callback buscar una forma de unicar la logica de generar los reportes
 - En las clases de callback ver como unir la logica porque para todos las pantallas es muy similar
 - Revisar porque motivo las pantallas se demoraran en abrir capaz que se puede implementar algo como proxi para ahorrar las cargas de las mismas
-- Agregar fecha de inicio 
 - En la pantalla de factura hacer que facture con decimales que es completamente posible
 - Investigar por que en el precio unitario de las facturas aunque en el xsd dice que puede tener 6 decimales el Sri solo me valida 2
 hacer que las pantallas de migracion esten diponibles para cualquier version de pago
 ver como hacer que el sistema tenga la posibilidad de iniciar como debug para poder ver errores 
 cuando envio por lote muchas veces en la etapa de enviado no puedo saber si algo esta mal y debe quedarse en esa etapa , lo que pasa es que recien me informa cuando autorizo y en esa otra etapa los comprobantes pueden quedar en una carpeta incorrecta de autorizado
 POSIBLE SOLUCION: Ver si mejor siempre se envia de forma individual porque el manejo por lotes tiene muchos casos que el Sri no trata de forma adecuada y requiere mucho manetenimiento
+
