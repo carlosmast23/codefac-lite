@@ -163,30 +163,30 @@ public class LoginModel extends LoginFormDialog{
                         panelPrincipal.setSessionCodefac(getDatosLogin());
                         break;
                     case INCORRECTO_USUARIO:
-                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
+                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
                         DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
                         break;
                     case NO_EXISTE_DIRECTORIO_LICENCIA:
-                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
+                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
                         DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.NO_EXISTE_DIRECTORIO_LICENCIA.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
                         Main.seleccionarDirectorioRecursos(empresaSeleccionada);
                         //validacionesEmpresa
                         break;
                     
                     case LICENCIA_DESACTUALIZADA:
-                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
+                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
                         DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.LICENCIA_DESACTUALIZADA.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
                         pantallaRegistrarLicencia();
                         //validacionesEmpresa
                         break;
                         
                     case PAGOS_PENDIENTES:
-                        LOG.log(Level.WARNING, "Error con las fechas de pago excedidas " + usuarioTxt);
+                        LOG.log(Level.WARNING, "Error con las fechas de pago excedidas " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
                         DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.PAGOS_PENDIENTES.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);                        
                         break;
 
                     default:
-                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
+                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
                         DialogoCodefac.mensaje("Error Login",loginRespuesta.estadoEnum.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
                         break;
                 }
