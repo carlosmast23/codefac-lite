@@ -22,6 +22,16 @@
                             <f:param name="limpiarFechaInicial"/>
                         </p:button>
                     </p:panelGrid>
+                    <p:panelGrid columns="5">
+                        <p:outputLabel for="txtCliente" value="Cliente:" />
+                        <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="" style="float: right;"/>                    
+                        <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" >
+                            <p:ajax event="dialogReturn" update="txtCliente"/>
+                        </p:commandButton>
+                        <p:selectBooleanCheckbox value="" />
+                        <h:outputLabel style="float: left;" value="Todos"/>
+                    </p:panelGrid>
+                    
                 </p:panel>
    
                 <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
@@ -31,6 +41,17 @@
                         <p:button value="" icon="ui-icon-trash" style="padding-top:5px;">
                             <f:param name="limpiarFechaFinal"/>
                         </p:button>
+                    </p:panelGrid>
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="console" style="float: right" value="Documento: "/>
+                        <p:selectOneMenu id="console" value="#{facturaReporteMb.documentoSeleccionado}"  style="width:125px" converter="documentoEnumConverter">
+                            <f:selectItems var="documento" value="#{facturaReporteMb.documentos}" itemValue="#{documento.nombre}"    />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="console2" style="float: right" value="Punto de Emisión: "/>
+                        <p:selectOneMenu id="console2" value="#{facturaReporteMb.puntosEmision}"  style="width:125px" converter="puntoEmisionConverter">
+                            <f:selectItems var="puntoEmision" value="#{facturaReporteMb.puntoEmisionSeleccionado}" itemValue="#{puntoEmision.id.toString()}"    />
+                        </p:selectOneMenu>
                     </p:panelGrid>
                 </p:panel>
                 
