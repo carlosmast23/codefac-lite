@@ -74,7 +74,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                 errores += " - " + productosProblema.getNombre() + "\n";
             }
             DialogoCodefac.mensaje("Advertencia", "No existe suficiente stock de los siguientes productos:" + errores + "\n Agregue stock para continuar", DialogoCodefac.MENSAJE_INCORRECTO);
-
+            throw new ExcepcionCodefacLite("No existe sufiente stock en los productos");
         } 
         else 
         {
@@ -86,7 +86,8 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                 //List<Kardex> kardexList=getKardexModificados();
                 Boolean ingreso=(accion.equals(InventarioEnsamblePanel.OPCION_AGREGAR)?true:false);
                 
-                kardexService.ingresoEgresoInventarioEnsamble(bodega, productoEnsamble, cantidad, ProductoEnsamble.EnsambleAccionEnum.AGREGAR);
+                //Por el momento cuando mando a grabar en el servidor siempre valida si existe el stock para construir
+                kardexService.ingresoEgresoInventarioEnsamble(bodega, productoEnsamble, cantidad, ProductoEnsamble.EnsambleAccionEnum.AGREGAR,true);
                 //kardexService.IngresoEgresoInventarioEnsamble(bodega, productoEnsamble, cantidad,, ingreso);
                 DialogoCodefac.mensaje("Correcto", "Sus datos fueron grabados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             //} catch (ServicioCodefacException ex) {
@@ -98,6 +99,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+                throw new ExcepcionCodefacLite(ex.getMessage());
             }
         }
     }
@@ -298,6 +300,11 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         
     }*/
     
+    /**
+     * TODO: Ver si esta forma de validar puedo unir con el metodo de KardexService que se llama validarEnsambleComponentes donde esta un metodo similar
+     * para comprobar la disponibilidad de los componentes
+     * @return 
+     */
     private List<Producto> verificarEnsamble()
     {
         List<Producto> productosProblemas=new ArrayList<Producto>();
@@ -387,6 +394,22 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
     }
 
     private void validarDatos() throws ExcepcionCodefacLite {
+        
+        if(getTxtCantidad().getText().isEmpty())
+        {
+            DialogoCodefac.mensaje("Error Validación","La cantidad no puede ser positiva",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("cantidad vacia");
+        }
+        else
+        {
+            Integer numeroIngresado=Integer.parseInt(getTxtCantidad().getText());
+            if(numeroIngresado<=0)
+            {
+                DialogoCodefac.mensaje("Error Validación","La cantidad no puede ser menor igual que cero",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ExcepcionCodefacLite("número incorrecto");
+            }
+        }
+        
         if(productoEnsamble==null)
         {
             String mensaje="No existe un producto ingresado para grabar";

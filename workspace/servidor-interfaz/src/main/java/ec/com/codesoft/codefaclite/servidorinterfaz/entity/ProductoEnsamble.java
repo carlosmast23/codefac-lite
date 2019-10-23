@@ -81,7 +81,17 @@ public class ProductoEnsamble implements Serializable{
     }
     
     public enum EnsambleAccionEnum {
+        /**
+         * Enumerador que identifica que fue creado por un usuario
+         */
         AGREGAR,
+        /**
+         * Enumerador que identifica que fue construido durante una venta
+         */
+        CONSTRUIR_FACTURA,
+        /**
+         * Enumardo que indica que se quito el ensamble por un usuario
+         */
         QUITAR
     }
     

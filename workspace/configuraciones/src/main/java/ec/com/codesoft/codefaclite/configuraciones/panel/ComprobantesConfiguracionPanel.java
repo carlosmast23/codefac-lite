@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -56,6 +57,10 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         jLabel22 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
         cmbTipoEnvioComprobante = new javax.swing.JComboBox<>();
+        jLabel27 = new javax.swing.JLabel();
+        cmbFechaEmisionFirma = new org.jdesktop.swingx.JXDatePicker();
+        jLabel30 = new javax.swing.JLabel();
+        txtDuracionFirma = new javax.swing.JSpinner();
         panelConfiguracionesGenerales = new javax.swing.JPanel();
         cmbIvaDefault = new javax.swing.JComboBox<>();
         txtDirectorioRecurso = new javax.swing.JTextField();
@@ -111,6 +116,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelFacturacionElectronica.add(cmbModoFacturacion, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -123,10 +129,10 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         panelFacturacionElectronica.add(jLabel8, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel9.setText("Contraseña Firma:");
+        jLabel9.setText("Duración Firma (Años):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelFacturacionElectronica.add(jLabel9, gridBagConstraints);
@@ -139,6 +145,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 101;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelFacturacionElectronica.add(txtNombreFirma, gridBagConstraints);
 
         txtClaveFirma.setMaximumSize(new java.awt.Dimension(100, 100));
@@ -148,6 +155,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelFacturacionElectronica.add(txtClaveFirma, gridBagConstraints);
 
         btnFirmaElectronica.setText("Cargar Firma");
@@ -188,7 +196,39 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelFacturacionElectronica.add(cmbTipoEnvioComprobante, gridBagConstraints);
+
+        jLabel27.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel27.setText("Contraseña Firma:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelFacturacionElectronica.add(jLabel27, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelFacturacionElectronica.add(cmbFechaEmisionFirma, gridBagConstraints);
+
+        jLabel30.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel30.setText("Fecha de Emisión de la Firma:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelFacturacionElectronica.add(jLabel30, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelFacturacionElectronica.add(txtDuracionFirma, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -414,6 +454,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JButton btnBuscarDirectorio;
     private javax.swing.JButton btnBuscarImagen;
     private javax.swing.JButton btnFirmaElectronica;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaEmisionFirma;
     private javax.swing.JComboBox<ImpuestoDetalle> cmbIvaDefault;
     private javax.swing.JComboBox<String> cmbModoFacturacion;
     private javax.swing.JComboBox<TipoEnvioComprobanteEnum> cmbTipoEnvioComprobante;
@@ -435,8 +476,10 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -446,6 +489,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JPasswordField txtClaveFirma;
     private javax.swing.JTextField txtCorreoElectronico;
     private javax.swing.JTextField txtDirectorioRecurso;
+    private javax.swing.JSpinner txtDuracionFirma;
     private javax.swing.JTextField txtFondoEscritorio;
     private javax.swing.JTextField txtNombreFirma;
     private javax.swing.JPasswordField txtPasswordCorreo;
@@ -574,7 +618,21 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     public void setBtnBuscarDirectorio(JButton btnBuscarDirectorio) {
         this.btnBuscarDirectorio = btnBuscarDirectorio;
     }
-    
-    
 
+    public JXDatePicker getCmbFechaEmisionFirma() {
+        return cmbFechaEmisionFirma;
+    }
+
+    public void setCmbFechaEmisionFirma(JXDatePicker cmbFechaEmisionFirma) {
+        this.cmbFechaEmisionFirma = cmbFechaEmisionFirma;
+    }
+
+    public JSpinner getTxtDuracionFirma() {
+        return txtDuracionFirma;
+    }
+
+    public void setTxtDuracionFirma(JSpinner txtDuracionFirma) {
+        this.txtDuracionFirma = txtDuracionFirma;
+    }
+    
 }

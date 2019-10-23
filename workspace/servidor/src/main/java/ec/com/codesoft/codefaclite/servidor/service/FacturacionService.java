@@ -92,7 +92,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         
                         proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
                         setearDatosCliente(proforma);
-                        //grabarDetallesFactura(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
+                        grabarDetallesFactura(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
                     }
                     catch (RemoteException ex)
@@ -184,6 +184,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         afectarAcademico(detalle);
                         break;
                     case INVENTARIO:
+                        //Todo: Mejorar esta parte por el momento cuando es una proforma no proceso el tema del inventario
+                        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
+                        {
+                            break;
+                        }
+                        
                         BodegaService bodegaService=new BodegaService();
                         Bodega bodegaVenta=bodegaService.obtenerBodegaVenta(factura.getSucursalEmpresa());
                         if(bodegaVenta==null)
@@ -309,7 +315,35 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
          * Validacion pára verificar que exista un stock superior o igual en el
          * kardex segun lo que quieran facturar
          */
-        ParametroCodefacService parametroService = new ParametroCodefacService();
+        int cantidadFaltante = detalle.getCantidad().intValue() - kardex.getStock();
+        if(ParametroUtilidades.comparar(detalle.getFactura().getEmpresa(), ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO,EnumSiNo.NO))
+        {
+            //Si el stock que queremos facturar es mayor del existe lanzo una excepcion                
+            if (detalle.getCantidad().compareTo(new BigDecimal(kardex.getStock())) > 0) 
+            {
+                //Solo para ensambles rerifica si tiene que construir el ensamble no importaria si no tiene el stock suficiente y mando a construir
+                if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI)) 
+                {
+                    //No valida nada porque si este proceso falla automaticamente debe generar la excepcion interior, por ejemplo cuando no existe la cantidad necesaria de los componentes para construir el ensamble                    
+                    verificarConstruirEnsamble(kardex, cantidadFaltante,true);
+                } 
+                else 
+                {
+                    //Si es un producto normal sin ensamble mando la excepcion que no tiene stock
+                    throw new ServicioCodefacException("No existe el stock sufiente para facturar el producto " + kardex.getProducto().getNombre() + ", faltan " + cantidadFaltante + " productos");
+                }
+            }
+        }
+        else //Este caso se lanza cuando por defecto o esta activo que permita facturar negativo
+        {
+            //Solo para ensambles rerifica si tiene que construir el ensamble no importaria si no tiene el stock suficiente y mando a construir
+            if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI)) {
+                //En este caso si estaba activo construir el ensamble lo realizo pero sin validar el stock de los componentes
+                verificarConstruirEnsamble(kardex, cantidadFaltante,false);
+            }
+        }
+        
+        /*ParametroCodefacService parametroService = new ParametroCodefacService();
         ParametroCodefac parametroFacturarStockNegativo = parametroService.getParametroByNombre(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, detalle.getFactura().getEmpresa());
         if (parametroFacturarStockNegativo != null) {
             EnumSiNo enumFacturarStockNegativo = EnumSiNo.getEnumByLetra(parametroFacturarStockNegativo.valor);
@@ -325,7 +359,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(),ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
                     {
                         //No valida nada porque si este proceso falla automaticamente debe generar la excepcion interior, por ejemplo cuando no existe la cantidad necesaria de los componentes para construir el ensamble                    
-                        verificarConstruirEnsamble(kardex,detalle.getCantidad().intValue());
+                        verificarConstruirEnsamble(kardex,cantidadFaltante);
                     }
                     else
                     {
@@ -335,6 +369,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
             }
         }
+        else
+        {
+            
+        }*/
 
         /**
          * ============================== FIN VALIDACION DE FACTURAR CON STOCK
@@ -366,11 +404,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     /**
      * Metodo para verificar si tiene la opcion activa de generar ensamble y ver si se puede construir en ese momento
      */
-    public void verificarConstruirEnsamble(Kardex kardex,int cantidadFaltante) throws RemoteException, ServicioCodefacException
+    public void verificarConstruirEnsamble(Kardex kardex,int cantidadFaltante,Boolean validarStockComponentes) throws RemoteException, ServicioCodefacException
     {
         if(ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(),ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
         {
-            ServiceFactory.getFactory().getKardexServiceIf().ingresoEgresoInventarioEnsambleSinTransaccion(kardex.getBodega(), kardex.getProducto(), cantidadFaltante,ProductoEnsamble.EnsambleAccionEnum.AGREGAR);
+            ServiceFactory.getFactory().getKardexServiceIf().ingresoEgresoInventarioEnsambleSinTransaccion(kardex.getBodega(), kardex.getProducto(), cantidadFaltante,ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA,validarStockComponentes);
         }
     }
     

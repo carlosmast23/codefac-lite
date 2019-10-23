@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -237,11 +238,19 @@ public class KardexModel extends KardexPanel {
                         kardex = detalleKardex.get(detalleKardex.size()-1).getKardex();
                         cargarTablaKardex();
                         UtilidadesTablas.ubicarFinalTabla(getTblKardexDetalle());
-
+                    }
+                    else
+                    {
+                        //Cuando no encuentra nada seteo un kardex vacio
+                        //kardexService.getKardexModificados(productoSeleccionado, cantidadMovimientos, bodega, ProductoEnsamble.EnsambleAccionEnum.AGREGAR)
+                        kardex=kardexService.construirKardexVacioSinPersistencia();
+                        cargarTablaKardex();
                     }
                 } catch (RemoteException ex) {
                     Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
                     DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
