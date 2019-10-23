@@ -23,8 +23,19 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.PrimeFaces;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -35,11 +46,26 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<Factura>, Serializable {
 
     private String texto;
+    private List<DocumentoEnum> documentos;
+    private ComprobanteEntity.ComprobanteEnumEstado[] comprobanteEstados;
+    private List<PuntoEmision> puntosEmision;
     
+    private DocumentoEnum documentoSeleccionado;
+    private ComprobanteEntity.ComprobanteEnumEstado comprobanteSeleccionado;
+    private PuntoEmision puntoEmisionSeleccionado;
+            
     @PostConstruct
     public void init()
     {
-        System.out.println("Iniciando la aplicacion por primera vez");
+       
+        try {
+            cargarCombos();
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaReporteMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturaReporteMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
     }
     
     @Override
@@ -95,5 +121,75 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    public void cargarCombos() throws RemoteException, ServicioCodefacException
+    {
+        //Estado de comprobantes
+        this.comprobanteEstados = ComprobanteEntity.ComprobanteEnumEstado.values();
+        //Tipos de documentos
+        this.documentos = new ArrayList<DocumentoEnum>();
+        this.documentos.add(DocumentoEnum.FACTURA);
+        this.documentos.add(DocumentoEnum.NOTA_VENTA_INTERNA);
+        this.documentos.add(DocumentoEnum.NOTA_CREDITO);
+        //Punto de emision
+        List<PuntoEmisionUsuario> puntosEmisionUsuario=ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(sessionMb.getSession().getUsuario(),sessionMb.getSession().getSucursal());
+        this.puntosEmision = new ArrayList<PuntoEmision>();
+        for (PuntoEmisionUsuario puntoEmisionUsuario : puntosEmisionUsuario) {
+            this.puntosEmision.add(puntoEmisionUsuario.getPuntoEmision());
+        }
+    }
+
+   
+    /**
+     * Getters and Setters 
+     * @return 
+     */
+    
+    public ComprobanteEntity.ComprobanteEnumEstado[] getComprobanteEstados() {
+        return comprobanteEstados;
+    }
+
+    public void setComprobanteEnumEstados(ComprobanteEntity.ComprobanteEnumEstado[] comprobanteEstados) {
+        this.comprobanteEstados = comprobanteEstados;
+    }
+
+    public List<DocumentoEnum> getDocumentos() {
+        return documentos;
+    }
+
+    public void setDocumentos(List<DocumentoEnum> documentos) {
+        this.documentos = documentos;
+    }
+
+    public List<PuntoEmision> getPuntosEmision() {
+        return puntosEmision;
+    }
+
+    public void setPuntosEmision(List<PuntoEmision> puntosEmision) {
+        this.puntosEmision = puntosEmision;
+    }
+
+    public ComprobanteEntity.ComprobanteEnumEstado getComprobanteSeleccionado() {
+        return comprobanteSeleccionado;
+    }
+
+    public void setComprobanteSeleccionado(ComprobanteEntity.ComprobanteEnumEstado comprobanteSeleccionado) {
+        this.comprobanteSeleccionado = comprobanteSeleccionado;
+    }
+
+    public DocumentoEnum getDocumentoSeleccionado() {
+        return documentoSeleccionado;
+    }
+
+    public void setDocumentoSeleccionado(DocumentoEnum documentoSeleccionado) {
+        this.documentoSeleccionado = documentoSeleccionado;
+    }
+
+    public PuntoEmision getPuntoEmisionSeleccionado() {
+        return puntoEmisionSeleccionado;
+    }
+
+    public void setPuntoEmisionSeleccionado(PuntoEmision puntoEmisionSeleccionado) {
+        this.puntoEmisionSeleccionado = puntoEmisionSeleccionado;
+    }
     
 }
