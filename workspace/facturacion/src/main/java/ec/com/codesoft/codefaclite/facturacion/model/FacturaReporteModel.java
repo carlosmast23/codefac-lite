@@ -597,9 +597,23 @@ public class FacturaReporteModel extends FacturaReportePanel {
             return nombre;
         }
 
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+       
         @Override
         public String toString() {
             return nombre;
+        }
+        
+        public static FacturaReporteModel.TipoReporteEnum getEnum(String nombre) {
+
+            for (FacturaReporteModel.TipoReporteEnum enumerador : FacturaReporteModel.TipoReporteEnum.values()) {
+                if(enumerador.nombre.equals(nombre)){
+                    return enumerador;
+                }
+            }
+            return null;
         }
         
     }

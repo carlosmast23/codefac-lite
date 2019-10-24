@@ -23,6 +23,7 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.PrimeFaces;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
+import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -49,10 +50,12 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     private List<DocumentoEnum> documentos;
     private ComprobanteEntity.ComprobanteEnumEstado[] comprobanteEstados;
     private List<PuntoEmision> puntosEmision;
+    private FacturaReporteModel.TipoReporteEnum[] tiposReporte;
     
     private DocumentoEnum documentoSeleccionado;
-    private ComprobanteEntity.ComprobanteEnumEstado comprobanteSeleccionado;
+    private ComprobanteEntity.ComprobanteEnumEstado comprobanteEstadoSeleccionado;
     private PuntoEmision puntoEmisionSeleccionado;
+    private FacturaReporteModel.TipoReporteEnum tipoReporteSeleccionado;
             
     @PostConstruct
     public void init()
@@ -125,17 +128,23 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     {
         //Estado de comprobantes
         this.comprobanteEstados = ComprobanteEntity.ComprobanteEnumEstado.values();
+        
         //Tipos de documentos
         this.documentos = new ArrayList<DocumentoEnum>();
         this.documentos.add(DocumentoEnum.FACTURA);
         this.documentos.add(DocumentoEnum.NOTA_VENTA_INTERNA);
         this.documentos.add(DocumentoEnum.NOTA_CREDITO);
+ 
         //Punto de emision
         List<PuntoEmisionUsuario> puntosEmisionUsuario=ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(sessionMb.getSession().getUsuario(),sessionMb.getSession().getSucursal());
-        this.puntosEmision = new ArrayList<PuntoEmision>();
+        List<PuntoEmision> puntosEmision=new ArrayList<PuntoEmision>();
         for (PuntoEmisionUsuario puntoEmisionUsuario : puntosEmisionUsuario) {
-            this.puntosEmision.add(puntoEmisionUsuario.getPuntoEmision());
+            puntosEmision.add(puntoEmisionUsuario.getPuntoEmision());
         }
+        this.puntosEmision=puntosEmision;
+        
+        //Tipo Reporte
+        this.tiposReporte = FacturaReporteModel.TipoReporteEnum.values();
     }
 
    
@@ -168,12 +177,12 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         this.puntosEmision = puntosEmision;
     }
 
-    public ComprobanteEntity.ComprobanteEnumEstado getComprobanteSeleccionado() {
-        return comprobanteSeleccionado;
+    public ComprobanteEntity.ComprobanteEnumEstado getComprobanteEstadoSeleccionado() {
+        return comprobanteEstadoSeleccionado;
     }
 
     public void setComprobanteSeleccionado(ComprobanteEntity.ComprobanteEnumEstado comprobanteSeleccionado) {
-        this.comprobanteSeleccionado = comprobanteSeleccionado;
+        this.comprobanteEstadoSeleccionado = comprobanteSeleccionado;
     }
 
     public DocumentoEnum getDocumentoSeleccionado() {
@@ -191,5 +200,22 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     public void setPuntoEmisionSeleccionado(PuntoEmision puntoEmisionSeleccionado) {
         this.puntoEmisionSeleccionado = puntoEmisionSeleccionado;
     }
+
+    public FacturaReporteModel.TipoReporteEnum[] getTiposReporte() {
+        return tiposReporte;
+    }
+
+    public void setTiposReporte(FacturaReporteModel.TipoReporteEnum[] tiposReporte) {
+        this.tiposReporte = tiposReporte;
+    }
+
+    public FacturaReporteModel.TipoReporteEnum getTipoReporteSeleccionado() {
+        return tipoReporteSeleccionado;
+    }
+
+    public void setTipoReporteSeleccionado(FacturaReporteModel.TipoReporteEnum tipoReporteSeleccionado) {
+        this.tipoReporteSeleccionado = tipoReporteSeleccionado;
+    }
+    
     
 }
