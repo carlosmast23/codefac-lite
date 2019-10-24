@@ -166,12 +166,13 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         getBtnVerificar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(WebServiceCodefac.verificarCredenciales(getTxtUsuarioVerificar().getText(),new String(getTxtClaveVerificar().getPassword())))
+                String usuarioTexto=getTxtUsuarioVerificar().getText().trim();
+                if(WebServiceCodefac.verificarCredenciales(usuarioTexto,new String(getTxtClaveVerificar().getPassword())))
                 { 
                     //Verificar si existe la licencia para solo descargar
                     String licencia=null;
                     try {
-                        licencia = WebServiceCodefac.getLicencia(getTxtUsuarioVerificar().getText());
+                        licencia = WebServiceCodefac.getLicencia(usuarioTexto);
                     } catch (Exception ex) {
                         Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -181,7 +182,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
 
                     Licencia licenciaInternet=new Licencia();
                     try {
-                        licenciaInternet.cargarLicenciaOnline(getTxtUsuarioVerificar().getText());
+                        licenciaInternet.cargarLicenciaOnline(usuarioTexto);
                     } catch (Exception ex) {
                         Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -215,7 +216,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                     {             
                         //Si existe en el servidor la licencia solo vuelve a descargar
                         Licencia licenciaDescargada=new Licencia();
-                        licenciaDescargada.setUsuario(getTxtUsuarioVerificar().getText());
+                        licenciaDescargada.setUsuario(usuarioTexto);
                         licenciaDescargada.setLicencia(licencia);
                         licenciaDescargada.setTipoLicenciaEnum(licenciaInternet.getTipoLicenciaEnum());
                         licenciaDescargada.setCantidadClientes(licenciaInternet.getCantidadClientes());
@@ -249,7 +250,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                         getLblNumeroUsuarioRegistro().setText(licenciaEnum.getNumeroUsuarios());
 
                         //Setear las variables del usuario y la clave del la pagina web
-                        getTxtUsuarioRegistrar().setText(getTxtUsuarioVerificar().getText());
+                        getTxtUsuarioRegistrar().setText(usuarioTexto);
                         getTxtClaveRegistrar().setText(new String(getTxtClaveVerificar().getPassword()));
                     }           
                     
