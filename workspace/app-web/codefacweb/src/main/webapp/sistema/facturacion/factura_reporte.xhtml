@@ -18,18 +18,18 @@
                 <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
                     <p:panelGrid columns="4" styleClass="ui-noborder">
                         <p:outputLabel for="fechaInicial" value="Fecha Inicial:" style="display: block; width: 100px; text-align:right;"/>
-                        <p:datePicker id="fechaInicial" value="#{calendarView.date7}" showIcon="true" />
+                        <p:datePicker id="fechaInicial" value="#{facturaReporteMb.fechaInicial}" showIcon="true" />
                         <p:button value="" icon="ui-icon-trash" style="padding-top:5px;">
                             <f:param name="limpiarFechaInicial"/>
                         </p:button>
                     </p:panelGrid>
                     <p:panelGrid columns="5" styleClass="ui-noborder">
                         <p:outputLabel for="txtCliente" value="Cliente:" style="display: block; width: 100px; text-align:right;"/>
-                        <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="" style="float:right;"/>                    
-                        <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" >
-                            <p:ajax event="dialogReturn" update="txtCliente"/>
+                        <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{facturaReporteMb.cliente.identificacion}" style="float:right;"/>                    
+                        <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" action="#{facturaReporteMb.abrirDialogoBuscarCliente}">
+                            <p:ajax event="dialogReturn" listener="#{facturaReporteMb.seleccionarCliente}" update="txtCliente"/>
                         </p:commandButton>
-                        <p:selectBooleanCheckbox value="" />
+                        <p:selectBooleanCheckbox value="#{facturaReporteMb.clienteCheckTodos}" />
                         <h:outputLabel style="float: left;" value="Todos"/>
                     </p:panelGrid>
                     
@@ -38,7 +38,7 @@
                 <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
                     <p:panelGrid columns="4" styleClass="ui-noborder">
                         <p:outputLabel for="fechaFinal" value="Fecha Final:" style="display: block; width: 100px; text-align:right;"/>
-                        <p:datePicker id="fechaFinal" value="#{calendarView.date7}" showIcon="true" />
+                        <p:datePicker id="fechaFinal" value="#{facturaReporteMb.fechaFinal}" showIcon="true" />
                         <p:button value="" icon="ui-icon-trash" style="padding-top:10px;">
                             <f:param name="limpiarFechaFinal"/>
                         </p:button>
@@ -60,16 +60,16 @@
                         <p:selectOneMenu id="console2" value="#{facturaReporteMb.puntoEmisionSeleccionado}" converter="puntoEmisionConverter" style="width:150px">
                             <f:selectItems var="puntoEmision" value="#{facturaReporteMb.puntosEmision}" itemValue="#{puntoEmision.id.toString()}"/>
                         </p:selectOneMenu>
-                        <p:selectBooleanCheckbox value="" />
+                        <p:selectBooleanCheckbox value="#{facturaReporteMb.puntoEmisionCheckTodos}" />
                         <h:outputLabel style="float: left;" value="Todos"/>
                     </p:panelGrid>
                 </p:panel>
                 <p:panel style="border: 0px;margin: 0px;padding: 0px">
                     <p:panelGrid columns="2" styleClass="ui-noborder">
                         <h:outputLabel value="Opciones ventas:"/><h:outputLabel value=""/>
-                        <p:selectBooleanCheckbox value="" />
+                        <p:selectBooleanCheckbox value="#{facturaReporteMb.notaCreditoCheck}" />
                         <h:outputLabel style="float: right;" value="Afectar Notas de Crédito"/>
-                        <p:selectBooleanCheckbox value="" />
+                        <p:selectBooleanCheckbox value="#{facturaReporteMb.notaDebitoCheck}" />
                         <h:outputLabel style="float: right;" value="Afectar Notas de Débito"/>
                     </p:panelGrid>
                 </p:panel>
@@ -79,6 +79,11 @@
                         <p:selectOneMenu id="console3" value="#{facturaReporteMb.tipoReporteSeleccionado}" converter="tipoReporteEnumConverter" style="width:150px">
                             <f:selectItems var="tipoReporte" value="#{facturaReporteMb.tiposReporte}" itemValue="#{tipoReporte.nombre}"/>
                         </p:selectOneMenu>
+                    </p:panelGrid>
+                </p:panel>
+                <p:panel style="border: 0px;margin: 0px;padding: 0px">
+                    <p:panelGrid columns="1" styleClass="ui-noborder">
+                        <p:commandButton value="Consultar" action="#{facturaReporteMb.consultar}" styleClass="ui-priority-primary" />
                     </p:panelGrid>
                 </p:panel>
             </p:panelGrid>
