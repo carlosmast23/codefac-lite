@@ -119,6 +119,25 @@
             </redirect>
         </navigation-case>
         
+        <!---  
+            FACTURACION
+                ->REPORTES
+                    ->FACTURA REPORTE        
+        -->
+         <navigation-case>
+            <from-outcome>factura_reporte</from-outcome>
+            <to-view-id>sistema/facturacion/factura_reporte.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+                <view-param>
+                    <name>tipo</name>
+                    <value>factura_reporte</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
         
     </navigation-rule>
 </faces-config>

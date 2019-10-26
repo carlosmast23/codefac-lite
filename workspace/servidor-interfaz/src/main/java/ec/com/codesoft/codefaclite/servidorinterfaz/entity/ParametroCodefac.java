@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -107,8 +108,26 @@ public class ParametroCodefac implements Serializable {
     
     /**
      * Variable que me permite saber si se puede realizar una facturacion cuando no existe el suficiente stock requerido 
+     * @result EnumSiNO
      */
     public static final String FACTURAR_INVENTARIO_NEGATIVO="facturar_inventario_negativo";
+    
+    /**
+     * Esta opcion me permite generar ensambles si no existe al momento de facturar
+     * @result EnumSiNO
+     */
+    public static final String CONSTRUIR_ENSAMBLES_FACTURAR="construir_ensamble_facturar";
+    
+    /**
+     * Fecha inicial cuando sacaron la firma para que el sistema pueda emitir una alerta cuando falte poco tiempo para renovar
+     */
+    public static final String FIRMA_FECHA_EMISION="firma_fecha_emision";
+    
+    /**
+     * Tiempo en años de vigencia de la firma electronica para qe el sistema pueda mandar alertas
+     */
+    public static final String FIRMA_TIEMPO_EXPIRACION_AÑOS="firma_tiempo_expiracion_años";
+    
     
     @Id
     @Column(name = "ID")
@@ -231,6 +250,22 @@ public class ParametroCodefac implements Serializable {
             return null;
         }
         
+    }
+    
+    /**
+     * Metodo experimental para ver si no tengo que validar 
+     * @param valorComporar
+     * @return 
+     */
+    public Boolean compararEnumSiNo( EnumSiNo valorComporar)
+    {
+        if (this != null) {
+            //Solo si tiene parametro positivo intento construir el ensamble
+            if (getValor() != null && EnumSiNo.getEnumByLetra(getValor()).equals(valorComporar)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     

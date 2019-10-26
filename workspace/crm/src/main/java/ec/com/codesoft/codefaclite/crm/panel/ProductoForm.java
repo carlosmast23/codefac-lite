@@ -142,8 +142,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         cmbGarantia = new javax.swing.JComboBox<>();
         jLabel20 = new javax.swing.JLabel();
         txtCantidadMinima = new javax.swing.JTextField();
-        jLabel21 = new javax.swing.JLabel();
-        txtStockInicial = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
         txtUbicacion = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
@@ -733,24 +731,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(txtCantidadMinima, gridBagConstraints);
 
-        jLabel21.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel21.setText("Stock Inicial:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(jLabel21, gridBagConstraints);
-
-        txtStockInicial.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(txtStockInicial, gridBagConstraints);
-
         jLabel23.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel23.setText("Ubicacion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -855,7 +835,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
@@ -908,7 +887,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JTextField txtPrecioDistribuidor;
     private javax.swing.JTextField txtPrecioTarjeta;
     private javax.swing.JTextField txtProductoEnsamble;
-    private javax.swing.JTextField txtStockInicial;
     private javax.swing.JTextField txtUbicacion;
     // End of variables declaration//GEN-END:variables
     
@@ -1036,7 +1014,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.txtProductoEnsamble = txtProducto;
     }
 
-    @LimpiarAnotacion
+    /*@LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+$", nombre = "Stock Inicial", expresionRegularMensaje = "Solo numeros enteros")
     public JTextField getTxtStockInicial() {
         return txtStockInicial;
@@ -1044,7 +1022,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public void setTxtStockInicial(JTextField txtStockInicial) {
         this.txtStockInicial = txtStockInicial;
-    }
+    }*/
 
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Ubicacion", expresionRegularMensaje = "No se permiten caracteres especiales")

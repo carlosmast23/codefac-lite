@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.PuntoEmisionUsuarioFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -39,7 +40,7 @@ public class PuntoEmisionUsuarioService extends ServiceAbstract<PuntoEmisionUsua
     }
     
     @Override   
-    public List<PuntoEmisionUsuario> obtenerActivoPorUsuario(Usuario usuario) throws ServicioCodefacException, RemoteException
+    public List<PuntoEmisionUsuario> obtenerActivoPorUsuario(Usuario usuario,Sucursal sucursal) throws ServicioCodefacException, RemoteException
     {
         return (List<PuntoEmisionUsuario>)ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
@@ -47,9 +48,28 @@ public class PuntoEmisionUsuarioService extends ServiceAbstract<PuntoEmisionUsua
                 Map<String,Object> mapParametros=new  HashMap<String,Object>();
                 mapParametros.put("usuario",usuario);
                 mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("puntoEmision.sucursal",sucursal);
                 return getFacade().findByMap(mapParametros);
             }
         });
+    }
+    
+    @Override   
+    public List<PuntoEmisionUsuario> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException, RemoteException
+    {
+        //PuntoEmisionUsuario pe;
+        //pe.getPuntoEmision().getSucursal().
+        return (List<PuntoEmisionUsuario>)ejecutarConsulta(new MetodoInterfaceConsulta() 
+        {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                Map<String,Object> mapParametros=new  HashMap<String,Object>();
+                mapParametros.put("puntoEmision.sucursal",sucursal);
+                mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+                return getFacade().findByMap(mapParametros);
+            }
+        });
+        
     }
     
 }

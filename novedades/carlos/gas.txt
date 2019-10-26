@@ -2,5 +2,4 @@ Esta pendiente revisar como se puede hacer el tema que guarde todos los decimale
 NOTA: No se puede solo enviar sin redondear porque resulta que el Sri no me permite que el precio unitario tenga mas de 2 decimales 
 Solucion: Que internamente se grabe con todo los decimales pero finalmente antes de mandar a genarar el comprobante se redonde el prcio unitario
 
-
 Analizar si puedo poner en cualquier orden el stock o si debe ir por fecha porque eso va a pasar si ingreso por fecha de emision que puede alterar una fecha pasada

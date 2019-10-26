@@ -104,6 +104,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel20 = new javax.swing.JLabel();
         cmbFacturarInventarioNegativo = new javax.swing.JComboBox<>();
         lblEspacioBlanco12 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        cmbConstruirEnsamblesFacturar = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -514,10 +516,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
         jLabel20.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel20.setText("Facturar con inventario negativo");
+        jLabel20.setText("Construir ensambles al facturar:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(jLabel20, gridBagConstraints);
@@ -530,10 +532,26 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel8.add(cmbFacturarInventarioNegativo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel8.add(lblEspacioBlanco12, gridBagConstraints);
+
+        jLabel21.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel21.setText("Facturar con inventario negativo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel21, gridBagConstraints);
+
+        cmbConstruirEnsamblesFacturar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(cmbConstruirEnsamblesFacturar, gridBagConstraints);
 
         jTabbedPane1.addTab("Inventario", jPanel8);
 
@@ -550,6 +568,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbActivarNotaVenta;
     private javax.swing.JComboBox<EnumSiNo> cmbActivarReporteSimpleGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbCargarProductoIvaFactura;
+    private javax.swing.JComboBox<EnumSiNo> cmbConstruirEnsamblesFacturar;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarDescripcionFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarDescuentoFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarPrecioUnitFactura;
@@ -573,6 +592,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -733,6 +753,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbFacturarInventarioNegativo(JComboBox<EnumSiNo> cmbFacturarInventarioNegativo) {
         this.cmbFacturarInventarioNegativo = cmbFacturarInventarioNegativo;
     }
+
+    public JComboBox<EnumSiNo> getCmbConstruirEnsamblesFacturar() {
+        return cmbConstruirEnsamblesFacturar;
+    }
+
+    public void setCmbConstruirEnsamblesFacturar(JComboBox<EnumSiNo> cmbConstruirEnsamblesFacturar) {
+        this.cmbConstruirEnsamblesFacturar = cmbConstruirEnsamblesFacturar;
+    }
+    
     
      
     

@@ -294,7 +294,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         jmenuItemOrdenarDefecto.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                widgetVentasDiarias.setLocation(120,120);
+                widgetVentasDiarias.setLocation(120,200);
+                
                 if(listaIconos!=null)
                 {
                     for (IconoPanel iconoPanel : listaIconos) {
@@ -2293,7 +2294,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
             
             int xVd=100;
-            int yVd=100;
+            int yVd=200;
             
             widgetVentasDiarias = new VentasDiariasModel(getjDesktopPane1(),sessionCodefac.getEmpresa());
             widgetVentasDiarias.panelPadre=this;
@@ -2336,8 +2337,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
              */
                 widgetNotificacionCodefac=new WidgetNotificacionCodefacModelo(getjDesktopPane1(),sessionCodefac.getEmpresa());
                 widgetNotificacionCodefac.panelPadre=this;
-                widgetNotificacionCodefac.setPreferredSize(new Dimension(500,100));
-                widgetNotificacionCodefac.setBounds(100,0,400,90);
+                widgetNotificacionCodefac.setPreferredSize(new Dimension(500,200));
+                widgetNotificacionCodefac.setBounds(100,0,400,100);
                 //widgetVentasDiarias.addListenerIcono();/
                 getjDesktopPane1().add(widgetNotificacionCodefac);
                 //widgetNotificacionCodefac.setVisible(true);

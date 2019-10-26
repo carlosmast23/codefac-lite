@@ -169,7 +169,7 @@ public class ComprobanteElectronicoComponente {
         //Cargar Puntos de Venta disponibles para la sucursal
 
         try {
-            List<PuntoEmisionUsuario> puntosEmisionUsuario=ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(usuario);
+            List<PuntoEmisionUsuario> puntosEmisionUsuario=ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(usuario,sucursal);
             //List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sucursal);
             cmbPuntoEmision.removeAllItems();
             //Canfigurar un cell render para las sucursales

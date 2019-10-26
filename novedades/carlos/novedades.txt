@@ -1,4 +1,3 @@
 verificar si las proformas estana afectando al inventario no deberia pasar
-ampliar el campo en la nostas de credito porque esta generando error cuando es inferior a 150 caractares
 en el emsamble verificar si es correcto que al momento de grabar se graba en costo el precio de venta lo cual puede generar confusiones
 verificar que al momento de ingresar una nota de credito no afecte sobre el precio de costodel inventario
