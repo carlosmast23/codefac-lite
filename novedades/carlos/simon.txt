@@ -1,0 +1,1 @@
+ver como hacer para que al momento de facturar si selecciono un combo en el mismo proceso se generen los combos y no hacer en 2 partes
