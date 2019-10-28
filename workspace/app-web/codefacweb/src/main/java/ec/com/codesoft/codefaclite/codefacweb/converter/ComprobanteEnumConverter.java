@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.codefacweb.converter;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.rmi.RemoteException;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -17,10 +19,17 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter("comprobanteEnumConverter")
 public class ComprobanteEnumConverter  extends AbstractConverter implements Converter {
-
+    
     @Override
     public Object buscarObjetoPorId(String valor) throws RemoteException {
         return ComprobanteEntity.ComprobanteEnumEstado.getEnum(valor);
+    }
+    
+     public String getAsString(FacesContext context, UIComponent component, Object value) {
+        if(value==null)
+            return "";
+        else
+            return value.toString();
     }
     
 }

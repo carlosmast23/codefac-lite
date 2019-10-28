@@ -25,7 +25,7 @@
                     </p:panelGrid>
                     <p:panelGrid columns="5" styleClass="ui-noborder">
                         <p:outputLabel for="txtCliente" value="Cliente:" style="display: block; width: 100px; text-align:right;"/>
-                        <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{facturaReporteMb.cliente.identificacion}" style="float:right;"/>                    
+                        <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{facturaReporteMb.cliente}" style="float:right;"/>                    
                         <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" action="#{facturaReporteMb.abrirDialogoBuscarCliente}">
                             <p:ajax event="dialogReturn" listener="#{facturaReporteMb.seleccionarCliente}" update="txtCliente"/>
                         </p:commandButton>
@@ -71,6 +71,8 @@
                         <h:outputLabel style="float: right;" value="Afectar Notas de Crédito"/>
                         <p:selectBooleanCheckbox value="#{facturaReporteMb.notaDebitoCheck}" />
                         <h:outputLabel style="float: right;" value="Afectar Notas de Débito"/>
+                        <p:selectBooleanCheckbox value="#{facturaReporteMb.notaDebitoCheck}" />
+                        <h:outputLabel style="float: right;" value="Reporte Agrupado Referido"/>
                     </p:panelGrid>
                 </p:panel>
                 <p:panel style="border: 0px;margin: 0px;padding: 0px">
