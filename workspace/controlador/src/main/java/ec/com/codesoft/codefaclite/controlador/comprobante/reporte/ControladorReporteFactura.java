@@ -487,7 +487,7 @@ public class ControladorReporteFactura {
         parameters.put("fechainicio", (fechaInicio != null) ? dateFormat.format(fechaInicio) : "");
         parameters.put("fechafin", (fechaFin != null) ? dateFormat.format(fechaFin) : "");
         parameters.put("tipodocumento", documentoConsultaEnum.toString());
-        parameters.put("cliente", persona);
+        parameters.put("cliente", persona.getPersona().getRazonSocial());
         parameters.put("estadofactura", estadoFactura.getNombre());
         parameters.put("afectaNotaCredito",(documentoConsultaEnum.equals(documentoConsultaEnum.NOTA_CREDITO))?false:afectarNotaCredito);//Si el documento es nota de credito siempre mando descativado
         
