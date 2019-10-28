@@ -224,7 +224,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
                 //fechaFin = new java.sql.Date(getDateFechaFin().getDate().getTime());
             }
 
-            DocumentoEnum documentoConsultaEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
+            //DocumentoEnum documentoConsultaEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
             
             //Seteando datos para el controlador         
             controladorReporte =crearControlador();
