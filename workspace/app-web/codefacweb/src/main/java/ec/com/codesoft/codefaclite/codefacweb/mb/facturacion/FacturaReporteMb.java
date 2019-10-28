@@ -248,8 +248,8 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         java.sql.Date fechaInicio=null;
         java.sql.Date fechaFin =null;
 
-            ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado)getComprobanteEstadoSeleccionado();
-            String estadoStr = estadoFactura.getEstado();
+            //ComprobanteEntity.ComprobanteEnumEstado estadoFactura =;
+            //String estadoStr = comprobanteEstadoSeleccionado.getNombre();
             
             if (fechaInicial != null) {
                 fechaInicio = new java.sql.Date(fechaInicial.getTime());
@@ -266,12 +266,12 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
             controladorReporte.setPersona(persona);
             controladorReporte.setFechaInicio(fechaInicio);
             controladorReporte.setFechaFin(fechaFin);
-            controladorReporte.setEstadoFactura(estadoFactura);
+            controladorReporte.setEstadoFactura(comprobanteEstadoSeleccionado);
             controladorReporte.setFiltrarReferidos(filtrarReferidos);
             controladorReporte.setReferido(referido);
-            controladorReporte.setReporteAgrupado(reporteAgrupadoReferidoCheck);
+            controladorReporte.setReporteAgrupado(false);
             controladorReporte.setAfectarNotaCredito(notaCreditoCheck);
-            controladorReporte.setDocumentoConsultaEnum(documentoConsultaEnum);
+            controladorReporte.setDocumentoConsultaEnum(DocumentoEnum.FACTURA);
             PuntoEmision puntoEmisionReporte = ((puntoEmisionCheckTodos)?null:puntoEmisionSeleccionado);
             controladorReporte.setPuntoEmision(puntoEmisionReporte);
             
@@ -347,7 +347,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         }    
     }
     /**
-     * Getters and Setters 
+     * Getters and Setters  
      * @return 
      */
     
@@ -375,13 +375,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         this.puntosEmision = puntosEmision;
     }
 
-    public ComprobanteEntity.ComprobanteEnumEstado getComprobanteEstadoSeleccionado() {
-        return comprobanteEstadoSeleccionado;
-    }
-
-    public void setComprobanteSeleccionado(ComprobanteEntity.ComprobanteEnumEstado comprobanteSeleccionado) {
-        this.comprobanteEstadoSeleccionado = comprobanteSeleccionado;
-    }
+    
 
     public DocumentoEnum getDocumentoSeleccionado() {
         return documentoSeleccionado;
@@ -477,6 +471,14 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
 
     public void setReporteAgrupadoReferidoCheck(Boolean reporteAgrupadoReferidoCheck) {
         this.reporteAgrupadoReferidoCheck = reporteAgrupadoReferidoCheck;
+    }
+
+    public ComprobanteEntity.ComprobanteEnumEstado getComprobanteEstadoSeleccionado() {
+        return comprobanteEstadoSeleccionado;
+    }
+
+    public void setComprobanteEstadoSeleccionado(ComprobanteEntity.ComprobanteEnumEstado comprobanteEstadoSeleccionado) {
+        this.comprobanteEstadoSeleccionado = comprobanteEstadoSeleccionado;
     }
     
     
