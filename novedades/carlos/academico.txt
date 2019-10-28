@@ -1,0 +1,1 @@
+Verificar que eliminar estudiante funcione solo por el periodo activo

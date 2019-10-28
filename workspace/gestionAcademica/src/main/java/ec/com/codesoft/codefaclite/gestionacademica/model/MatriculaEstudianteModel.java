@@ -154,7 +154,19 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
             if (rubros.size() == 0) {
                 return true;
             } else {
-                return false;
+                if(rubros.get(0).getValor().compareTo(rubros.get(0).getSaldo()) == 0)
+                {
+                    //Boolean opcion=DialogoCodefac.dialogoPregunta("Aviso","Desea facturar ahora?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    Boolean opcion = DialogoCodefac.dialogoPregunta("Aviso", "Desea eliminar alumno con matricula sin cancelar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    if(opcion){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }else{
+                    return false;
+                }
+                //return false;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
