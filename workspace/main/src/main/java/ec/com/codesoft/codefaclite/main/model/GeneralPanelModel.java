@@ -88,6 +88,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.MenuContainer;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -638,36 +639,44 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             menuControlador.getJmenuItem().addActionListener(new ActionListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
-                        cambiarCursorEspera();
-                        ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
-                        if(!verificarPantallaCargada(ventana))
-                        {
-                            //Este artificio se realiza porque cuando se reutilizaba un referencia de la pantalla generaba problemas con los dialogos7
-                            ventana= (ControladorCodefacInterface) menuControlador.createNewInstance();
-                            ventana.reconstruirPantalla(); //Metodo adicional que construye las pantallas laterales
-                            agregarListenerMenu(ventana,menuControlador.isMaximizado(),null,null);                    
-                        }                        
-                        else
-                        {
-                            try {
-                                if (ventana.isIcon()) {
-                                    ventana.setIcon(false);
-                                } else {
-                                    ventana.setSelected(true);
-                                }
-                                
-                            } catch (PropertyVetoException ex) {
-                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                        cambiarCursorNormal();                        
-                        
+                public void actionPerformed(ActionEvent e) {                                           
+                        abrirVentanaCodefac((ControladorCodefacInterface)menuControlador.getInstance(),menuControlador);
                 }
             });
         }
         
 
+    }
+    
+    /**
+     * Todo: Revisar si no existe alguna mejora en este metodo
+     * @param ventana
+     * @param menuControlador
+     * @return 
+     */
+    private ControladorCodefacInterface abrirVentanaCodefac(ControladorCodefacInterface ventana,VentanaEnum menuControlador )
+    {
+        cambiarCursorEspera();
+        //ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
+        if (!verificarPantallaCargada(ventana)) {
+            //Este artificio se realiza porque cuando se reutilizaba un referencia de la pantalla generaba problemas con los dialogos7
+            ventana = (ControladorCodefacInterface) menuControlador.createNewInstance();
+            ventana.reconstruirPantalla(); //Metodo adicional que construye las pantallas laterales
+            agregarListenerMenu(ventana, menuControlador.isMaximizado(), null, null);
+        } else {
+            try {
+                if (ventana.isIcon()) {
+                    ventana.setIcon(false);
+                } else {
+                    ventana.setSelected(true);
+                }
+
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        cambiarCursorNormal();
+        return ventana;
     }
     
     /**
@@ -1310,7 +1319,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.addInternalFrameListener(listenerFrame);
             String tituloOriginal=getTituloOriginal(panel.getTitle());
             panel.setTitle(tituloOriginal+" [Nuevo]");
-            getjDesktopPane1().add(panel);
+            try
+            {
+                getjDesktopPane1().add(panel);
+            }
+            catch(java.lang.IllegalArgumentException ex)
+            {
+                System.out.println("Error al agregar el panel a la vista");
+                ex.printStackTrace();
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
             panel.setMaximum(maximisado);
             panel.show();
@@ -2000,6 +2018,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                         @Override
                         public void internalFrameClosing(InternalFrameEvent e) {
+                            //JInternalFrame todo[]= getjDesktopPane1().getAllFrames();
                             Boolean respuesta=true;
                             GeneralPanelInterface panelCerrando=(GeneralPanelInterface) e.getInternalFrame();                            
                             if(!panelCerrando.salirSinGrabar())
@@ -2018,12 +2037,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 cargarAyuda();
                                 mostrarPanelSecundario(false);
                                 e.getInternalFrame().dispose();
+                                getjDesktopPane1().remove(panel);
                                 //quitarVentanaAbierta(panelCerrando); //
                             }                                                        
                         }
 
                         @Override
                         public void internalFrameClosed(InternalFrameEvent e) {
+                            //JInternalFrame todo[]= getjDesktopPane1().getAllFrames();
                             GeneralPanelInterface panelCerrando=(GeneralPanelInterface)e.getInternalFrame();
                             quitarVentanaAbierta(panelCerrando); //
                             //if (verificarTodasPantallasMinimizadas(e.getInternalFrame())) {
@@ -2033,8 +2054,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             JInternalFrame[] ventanas=getjDesktopPane1().getAllFrames();
                             for (JInternalFrame ventana : ventanas) {
                                     try {
-                                        if(!ventana.isIcon())
+                                        //Seleccionar la ventana si no esta como icono y no es la misma que se esta eliminando
+                                        if(!ventana.isIcon() && !panelCerrando.equals(ventana))
+                                        {
                                             ventana.setSelected(true);
+                                        }
                                     } catch (PropertyVetoException ex) {
                                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                                     }
@@ -2972,9 +2996,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     public void crearVentanaCodefac(VentanaEnum ventanEnum,boolean maximizado,Object[] parametrosPostConstructor)
     {
-        ControladorCodefacInterface ventana=(ControladorCodefacInterface) ventanEnum.getInstance();
-        agregarListenerMenu(ventana,maximizado,null,null);
-        
+        //TODO: Mejorar esta parte porque no tiene sentido mandar una ventana nueva siempre creo yo
+        ControladorCodefacInterface ventana= abrirVentanaCodefac((ControladorCodefacInterface) ventanEnum.getInstance(), ventanEnum);
+      
         //Validacion para verificar si implementa la interfaz del postcostructod
         if (ventana instanceof InterfazPostConstructPanel) {
             ((InterfazPostConstructPanel) ventana).postConstructorExterno(parametrosPostConstructor);

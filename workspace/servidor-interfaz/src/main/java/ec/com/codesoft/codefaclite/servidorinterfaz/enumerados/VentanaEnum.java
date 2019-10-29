@@ -297,7 +297,11 @@ public enum VentanaEnum {
         }
         return null;
     }
-
+    
+    /**
+     * @deprecated
+     * @return 
+     */    
     public Object getInstance() {
         try {
 

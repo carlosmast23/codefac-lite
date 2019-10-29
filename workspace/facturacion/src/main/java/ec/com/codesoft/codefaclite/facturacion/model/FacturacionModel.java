@@ -2969,6 +2969,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void postConstructorExterno(Object[] parametros) {
+        
+        //Antes de crear un nueva factura limpio todas las facturas
+        //TODO: Ver si esta accion de limpiar  debe ser por defecto o se debe mejor implementar en el controlador
+        limpiar();
+        
+        
         DocumentoEnum documentoEnum=(DocumentoEnum) parametros[0];
         TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) parametros[1];
         
