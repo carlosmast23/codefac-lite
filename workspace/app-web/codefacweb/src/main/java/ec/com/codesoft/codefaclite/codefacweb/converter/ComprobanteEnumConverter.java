@@ -22,14 +22,7 @@ public class ComprobanteEnumConverter  extends AbstractConverter implements Conv
     
     @Override
     public Object buscarObjetoPorId(String valor) throws RemoteException {
-        return ComprobanteEntity.ComprobanteEnumEstado.getEnum(valor);
-    }
-    
-     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if(value==null)
-            return "";
-        else
-            return value.toString();
+        return ComprobanteEntity.ComprobanteEnumEstado.getEnum(valor); 
     }
     
 }
