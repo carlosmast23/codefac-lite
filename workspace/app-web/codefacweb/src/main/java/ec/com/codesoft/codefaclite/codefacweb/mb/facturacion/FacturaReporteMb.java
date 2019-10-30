@@ -70,7 +70,7 @@ import org.primefaces.event.SelectEvent;
 @ManagedBean
 @ViewScoped
 public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<Factura>, Serializable {
-
+ 
     private String texto;
     private List<DocumentoEnum> documentos;
     private ComprobanteEntity.ComprobanteEnumEstado[] comprobanteEstados;
@@ -91,10 +91,11 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     private Boolean filtrarReferidos;
     private PersonaEstablecimiento persona;
     private Persona cliente;
+    private String clienteDatos;
     private Persona referido;
     private ControladorReporteFactura controladorReporte;
     private List<ReporteFacturaData> data;
-            
+
     @PostConstruct
     public void init()
     {
@@ -166,6 +167,17 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     /**
      * Funciones
      */
+    public void valoresIniciales()
+    {
+        filtrarReferidos = false;
+        reporteAgrupadoReferidoCheck = false;
+        persona = null;
+        referido = null;
+        cliente = null;
+        notaCreditoCheck = true;
+        puntoEmisionCheckTodos = true;
+    }
+    
     public void cargarCombos() throws RemoteException, ServicioCodefacException
     {
         //Estado de comprobantes
@@ -189,26 +201,14 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         this.tiposReporte = FacturaReporteModel.TipoReporteEnum.values();
     }
     
-    public void valoresIniciales(){
-        filtrarReferidos = false;      
-        persona = null;
-        referido = null;
-        cliente = null;
-        //TODO: preguntar al Master si es conveniente mostrar estos campos
-        ///Para el reporte de facturacion no me importa que sean visibles estos campos del referido
-        //getLblReferido().setVisible(false);
-        //getTxtReferido().setVisible(false);
-        //getBtnBuscarReferido().setVisible(false);
-        //getChkTodosReferidos().setVisible(false);
-        //getChkReporteAgrupadoReferido().setVisible(false);
-    }
-    
+    // Abrir Dialogo Busqueda Cliente
     public void abrirDialogoBuscarCliente()
     {
         ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(sessionMb.getSession().getEmpresa());   
         abrirDialogoBusqueda(clienteBusquedaDialogo);
     }
     
+    //Estandar para abrir los dialogos solo debo cambiar el tipo de Interfaces
     public void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) 
     {
         //find();
@@ -230,21 +230,31 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, null);           
     }
     
+    //Obtener el dato seleccionado de la ventana de dialogo
     public void seleccionarCliente(SelectEvent event)
     {
         PersonaEstablecimiento clienteOficina = (PersonaEstablecimiento) event.getObject();
         cargarDatosCliente(clienteOficina);
-        //cargarDatosAdicionalesCliente();
     }
     
-    public void cargarDatosCliente(PersonaEstablecimiento establecimiento) {
+    public void cargarDatosCliente(PersonaEstablecimiento establecimiento) 
+    {
         if (establecimiento != null) {
             persona = establecimiento;
             cliente = persona.getPersona();
         }
     }
     
-    public void consultar(){
+    public void seleccionarClienteTodos()
+    {
+        String datos = "";
+        datos = (cliente!=null)?cliente.getIdentificacion()+ "-" + cliente.getRazonSocial():"Todos los clientes";
+        this.clienteDatos = datos;
+        this.persona = null;
+    }
+    
+    public void consultar()
+    {
         java.sql.Date fechaInicio=null;
         java.sql.Date fechaFin =null;
 
@@ -257,10 +267,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
             if (fechaFinal != null) {
                 fechaFin = new java.sql.Date(fechaFinal.getTime());
             }
-
-
-            DocumentoEnum documentoConsultaEnum = (DocumentoEnum) documentoSeleccionado;
-            
+ 
             //Seteando datos para el controlador         
             controladorReporte =crearControlador();
             controladorReporte.setPersona(persona);
@@ -269,15 +276,15 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
             controladorReporte.setEstadoFactura(comprobanteEstadoSeleccionado);
             controladorReporte.setFiltrarReferidos(filtrarReferidos);
             controladorReporte.setReferido(referido);
-            controladorReporte.setReporteAgrupado(false);
+            controladorReporte.setReporteAgrupado(reporteAgrupadoReferidoCheck);
             controladorReporte.setAfectarNotaCredito(notaCreditoCheck);
-            controladorReporte.setDocumentoConsultaEnum(DocumentoEnum.FACTURA);
+            controladorReporte.setDocumentoConsultaEnum(documentoSeleccionado);
+            
             PuntoEmision puntoEmisionReporte = ((puntoEmisionCheckTodos)?null:puntoEmisionSeleccionado);
             controladorReporte.setPuntoEmision(puntoEmisionReporte);
             
             controladorReporte.generarReporte();
             data=controladorReporte.getData();
-            //imprimirTabla();      
                 
     }
     
@@ -480,7 +487,21 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     public void setComprobanteEstadoSeleccionado(ComprobanteEntity.ComprobanteEnumEstado comprobanteEstadoSeleccionado) {
         this.comprobanteEstadoSeleccionado = comprobanteEstadoSeleccionado;
     }
+
+    public PersonaEstablecimiento getPersona() {
+        return persona;
+    }
+
+    public void setPersona(PersonaEstablecimiento persona) {
+        this.persona = persona;
+    }
+
+    public String getClienteDatos() {
+        return clienteDatos;
+    }
+
+    public void setClienteDatos(String clienteDatos) {
+        this.clienteDatos = clienteDatos;
+    }
     
-    
-       
 }
