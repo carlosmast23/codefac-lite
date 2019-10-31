@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.codefacweb.core.DialogoWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.test.*;
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.TablaNombreColumna;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EjemploDialogo;
@@ -95,7 +96,17 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     private Persona referido;
     private ControladorReporteFactura controladorReporte;
     private List<ReporteFacturaData> data;
+    private List<TablaNombreColumna> titulos;
 
+    //Datos para imprimir los totales del reporte
+    private String subtotal;
+    private String subtotal12;
+    private String subtotal0;
+    private String totalDescuento;
+    private String iva12;
+    private String valorTotal;
+    
+    
     @PostConstruct
     public void init()
     {
@@ -103,6 +114,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         try {
             valoresIniciales();
             cargarCombos();
+            crearCabezeraTabla();
         } catch (RemoteException ex) {
             Logger.getLogger(FacturaReporteMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
@@ -176,6 +188,14 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         cliente = null;
         notaCreditoCheck = true;
         puntoEmisionCheckTodos = true;
+        
+        //Valores iniciales de sumatoria reporte en cero
+        subtotal = "0.00";
+        subtotal12 = "0.00";
+        subtotal0 = "0.00";
+        totalDescuento = "0.00";
+        iva12 = "0.00";
+        valorTotal = "0.00";
     }
     
     public void cargarCombos() throws RemoteException, ServicioCodefacException
@@ -242,6 +262,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         if (establecimiento != null) {
             persona = establecimiento;
             cliente = persona.getPersona();
+            clienteDatos = (cliente!=null)?cliente.getIdentificacion()+ "-" + cliente.getRazonSocial():"Todos los clientes";
         }
     }
     
@@ -284,7 +305,17 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
             controladorReporte.setPuntoEmision(puntoEmisionReporte);
             
             controladorReporte.generarReporte();
-            data=controladorReporte.getData();
+            data = controladorReporte.getData();
+            
+            ////
+            ControladorReporteFactura.TotalSumatoria total=controladorReporte.totalSinNotaCredito();
+            subtotal = total.getSubtotalSinImpuestoMenosDescuento().toString();
+            subtotal12 = total.getSubtotalSinImpuestoMenosDescuento().toString();
+            subtotal0 = total.obtenerSubtotal().toString();
+            totalDescuento = total.obtenerTotalDescuentos().toString();
+            iva12 = total.getValorImpuesto().toString();
+            valorTotal = total.obtenerTotal().toString();
+            //imprimirTabla();     
                 
     }
     
@@ -352,6 +383,31 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
             ex.printStackTrace();
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         }    
+    }
+
+    public void crearCabezeraTabla()
+    {
+        titulos = new ArrayList<TablaNombreColumna>();
+        titulos.add(new TablaNombreColumna("Preimpreso", "numeroFactura"));
+        titulos.add(new TablaNombreColumna("Referencia", "referencia"));
+        titulos.add(new TablaNombreColumna("Fecha", "fechaFactura"));
+        titulos.add(new TablaNombreColumna("Identificacion", "identificacionCliente"));
+        titulos.add(new TablaNombreColumna("Razon Social", "razonSocialCliente"));
+        
+        if(filtrarReferidos)
+            titulos.add(new TablaNombreColumna("Referido", "referido"));
+        else
+            titulos.add(new TablaNombreColumna("Nombre Legal", "nombreLegalCliente"));
+        
+        titulos.add(new TablaNombreColumna("Documento", "documento"));
+        titulos.add(new TablaNombreColumna("Estado", "estadoFactura"));
+        titulos.add(new TablaNombreColumna("Tipo", "tipoEmision"));
+        titulos.add(new TablaNombreColumna("Subtotal 12%", "subtotalDoceFactura"));
+        titulos.add(new TablaNombreColumna("Subtotal 0%", "subtotalCeroFactura"));
+        titulos.add(new TablaNombreColumna("Descuentos", "descFactura"));
+        titulos.add(new TablaNombreColumna("Iva 12%", "ivaDoceFactura"));
+        titulos.add(new TablaNombreColumna("Valor Afecta", "valorAfecta"));
+        titulos.add(new TablaNombreColumna("Total", "totalFinal"));
     }
     /**
      * Getters and Setters  
@@ -503,5 +559,71 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     public void setClienteDatos(String clienteDatos) {
         this.clienteDatos = clienteDatos;
     }
+
+    public List<TablaNombreColumna> getTitulos() {
+        return titulos;
+    }
+
+    public void setTitulos(List<TablaNombreColumna> titulos) {
+        this.titulos = titulos;
+    }
     
+    public List<ReporteFacturaData> getData() {
+        return data;
+    }
+
+    public void setData(List<ReporteFacturaData> data) {
+        this.data = data;
+    }
+
+    public String getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(String subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public String getSubtotal12() {
+        return subtotal12;
+    }
+
+    public void setSubtotal12(String subtotal12) {
+        this.subtotal12 = subtotal12;
+    }
+
+    public String getSubtotal0() {
+        return subtotal0;
+    }
+
+    public void setSubtotal0(String subtotal0) {
+        this.subtotal0 = subtotal0;
+    }
+
+    public String getTotalDescuento() {
+        return totalDescuento;
+    }
+
+    public void setTotalDescuento(String totalDescuento) {
+        this.totalDescuento = totalDescuento;
+    }
+
+    public String getIva12() {
+        return iva12;
+    }
+
+    public void setIva12(String iva12) {
+        this.iva12 = iva12;
+    }
+
+    public String getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(String valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+    
+    
+      
 }

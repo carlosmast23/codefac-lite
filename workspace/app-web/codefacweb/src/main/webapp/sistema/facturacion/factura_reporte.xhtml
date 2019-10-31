@@ -85,10 +85,47 @@
                 </p:panel>
                 <p:panel style="border: 0px;margin: 0px;padding: 0px">
                     <p:panelGrid columns="1" styleClass="ui-noborder">
-                        <p:commandButton value="Consultar " process="@form" action="#{facturaReporteMb.consultar}" styleClass="ui-priority-primary" />
+                        <p:commandButton value="Consultar " process="@form" update="tabla, subtotal, subtotal12, subtotal0, totalDescuento, iva12, valorTotal" action="#{facturaReporteMb.consultar}" styleClass="ui-priority-primary" />
                     </p:panelGrid>
                 </p:panel>
             </p:panelGrid>
+            
+            <p:dataTable id="tabla" value="#{facturaReporteMb.data}" var="clientes"  rows="5" paginator="true" resizableColumns="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                         rowsPerPageTemplate="5,10,15">
+                <p:columns value="#{facturaReporteMb.titulos}" var="columns">
+                    <f:facet name="header">
+                        <h:outputText value="#{columns.cabecera}" />
+                    </f:facet>
+                    <h:outputText value="#{clientes[columns.propiedad]}" />				       
+                </p:columns>
+            </p:dataTable>
+            
+            <p:panelGrid id="panelDatosSumatoria" columns="3" layout="grid">
+                <p:panel style="border: 0px;margin: 0px;padding: 0px">
+                    
+                </p:panel>
+                <p:panel style="border: 0px;margin: 0px;padding: 0px">
+                    
+                </p:panel>
+                <p:panel style="border: 0px;margin: 0px;padding: 0px">
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="SUBTOTAL"/>
+                        <p:outputLabel id ="subtotal" value="#{facturaReporteMb.subtotal}" style="display: block; text-align:right;"/>
+                        <p:outputLabel value="SUBTOTAL 12%"/>
+                        <p:outputLabel id ="subtotal12" value="#{facturaReporteMb.subtotal12}" style="display: block; text-align:right;"/>
+                        <p:outputLabel value="SUBTOTAL 0%"/>
+                        <p:outputLabel id ="subtotal0" value="#{facturaReporteMb.subtotal0}" style="display: block; text-align:right;"/>
+                        <p:outputLabel value="TOTAL DESCUENTO"/>
+                        <p:outputLabel id ="totalDescuento" value="#{facturaReporteMb.totalDescuento}" style="display: block; text-align:right;"/>
+                        <p:outputLabel value="IVA 12%"/>
+                        <p:outputLabel id ="iva12" value="#{facturaReporteMb.iva12}" style="display: block; text-align:right;"/>
+                        <p:outputLabel value="VALOR TOTAL"/>
+                        <p:inputText id="valorTotal" value="#{facturaReporteMb.valorTotal}" style="text-align:right;"/>
+                    </p:panelGrid>
+                </p:panel>
+            </p:panelGrid>
+            
 
 
 
