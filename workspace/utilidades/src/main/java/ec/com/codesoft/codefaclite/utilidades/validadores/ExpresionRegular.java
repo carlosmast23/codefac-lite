@@ -11,6 +11,7 @@ package ec.com.codesoft.codefaclite.utilidades.validadores;
  */
 public final class ExpresionRegular 
 {
+    public static final String textoSinSaltosLinea="[^\\n]*";
     /**
      * Texto simple 
      * Ejm: Texto simple que tiene caracteres como - guion, . punto, _línea baja y , coma

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -32,7 +33,7 @@ import javax.swing.JTextField;
 public abstract class ProductoForm extends ControladorCodefacInterface {
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(min = 1,max = 300,requerido = true, expresionRegular = ExpresionRegular.textoSinSaltosLinea, nombre = "Nombre", expresionRegularMensaje = "No se permiten saltos de linea")
     public JTextField getTextNombre() {
         return textNombre;
     }
