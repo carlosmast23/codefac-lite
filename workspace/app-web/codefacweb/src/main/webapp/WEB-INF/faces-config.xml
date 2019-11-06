@@ -78,6 +78,23 @@
             </redirect>
         </navigation-case>
         
+        <!---  
+            FACTURACION
+                ->NOTA DE CREDITO
+        -->
+        
+        <navigation-case>
+            <from-outcome>nota_credito</from-outcome>
+            <to-view-id>sistema/facturacion/nota_credito.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <!--- FIN FACTURACION -->
+        
         <navigation-case>
             <from-outcome>cliente</from-outcome>
             <to-view-id>sistema/crm/cliente.xhtml</to-view-id>
@@ -138,6 +155,8 @@
                 </view-param>
             </redirect>
         </navigation-case>
+        
+        <!--- -->
         
     </navigation-rule>
 </faces-config>
