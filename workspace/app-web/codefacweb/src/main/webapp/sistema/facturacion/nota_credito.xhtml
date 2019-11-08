@@ -14,28 +14,84 @@
             
             <!---DATOS GENERALES -->
             <p:fieldset legend="Datos Generales" toggleable="true" toggleSpeed="500">
-                <h:panelGrid columns="3" cellpadding="5">
+                <h:panelGrid columns="3">
                     <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
                         <h:panelGrid columns="4">
-                            <p:outputLabel value="Secuencial: "/>
-                            <p:outputLabel id ="primero" value="#{ notaCreditoMb.primerNumerosSecuencial }" style="display: block; text-align:right;"/>
-                            <p:selectOneMenu id="segundo" value="#{ notaCreditoMb.puntoEmisionSeleccionado }" converter="puntoEmisionConverter" style="width:150px">
+                            <!--- Secuencial -->
+                            <p:outputLabel value="Secuencial: " style="display: block; text-align: right; font-weight:bold"/>
+                            <p:outputLabel id ="primerNumSecuencial" value="#{ notaCreditoMb.establecimiento }" style="display: block; text-align: right;"/>
+                            
+                            <p:selectOneMenu id="segundoNumSecuencial" value="#{ notaCreditoMb.puntoEmisionSeleccionado }" converter="puntoEmisionConverter">
                                 <f:selectItems var="puntoEmision" value="#{notaCreditoMb.puntosEmision}" itemValue="#{puntoEmision.id.toString()}"/>
                             </p:selectOneMenu>
-                            <p:outputLabel id="tercero" value="#{ notaCreditoMb.primerNumerosSecuencial }" style="display: block; text-align:right;"/>
+                            
+                            <p:outputLabel id="terceroNumSecuencial" value="#{ notaCreditoMb.secuencial }"/>
+                            <!--- Fin Secuencial -->
+                            <!-- Ruc -->
+                            <p:outputLabel value="RUC: " style="display: block; text-align: right; font-weight:bold"/>
+                            <p:outputLabel id="ruc" value="#{notaCreditoMb.ruc}" style="display: block; text-align: right;"/>
+                            <p:outputLabel value=""/><p:outputLabel value="" />
+                            <!-- Fin Ruc -->
+                            <!-- Nombre Comercial -->
+                            <p:outputLabel value="Nombre Comercial: " style="display: block; text-align: right; font-weight:bold"/>
+                            <p:outputLabel id="nombreComercial" value="#{notaCreditoMb.razonSocial}" style="display: block; text-align: right;"/>
+                            <p:outputLabel value=""/><p:outputLabel value=""/>
+                            <!-- Fin Nombre Comercial -->
                         </h:panelGrid>
                     </p:panel>
-                    <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px"> 
-                        <p:outputLabel value="Secuencial: "/>
-                        <h:outputText value="stature grows."></h:outputText>
+                    <p:panel class="ui-inputgroup"  style="border: 0px;margin: 0px;padding: 0px"> 
+                        <p:panelGrid columns="4">
+                            <!-- Fecha Emision -->
+                            <p:outputLabel for="fechaEmision" value="Fecha Emisión: " style="display: block; text-align: right; font-weight:bold"/>
+                            <p:datePicker id="fechaEmision" value="#{notaCreditoMb.fechaEmision}" showIcon="true"/> 
+                            <p:outputLabel value=""/><p:outputLabel value="" />
+                            <!-- Fin Fecha Emision-->
+                            <!-- Direccion -->
+                            <p:outputLabel value="Dirección: " style="display: block; text-align: right; font-weight:bold"/>
+                            <p:outputLabel id="direccion" value="#{notaCreditoMb.ruc}" style="display: block; text-align: right;"/>
+                            <p:outputLabel value=""/><p:outputLabel value="" />
+                            <!-- Fin Direccion-->
+                            <!-- Telefonos -->
+                            <p:outputLabel value="Telefonos: " style="display: block; text-align: right; font-weight:bold"/>
+                            <p:outputLabel id="telefonos" value="#{notaCreditoMb.telefonos}" style="display: block; text-align: right;"/>
+                            <p:outputLabel value=""/><p:outputLabel value="" />
+                            <!-- Fin Telefonos -->
+                        </p:panelGrid>
                     </p:panel>
                     <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px"> 
-                        <p:outputLabel value="Secuencial: "/>
-                        <h:outputText value="0000001"></h:outputText>
+                        <h:outputLabel for="combo1" value="Tipo de documento:" style="display: block; width: 100px; text-align:right;"/>
+                        <p:selectOneMenu id="combo1" value="" converter="tipoReporteEnumConverter" style="width:150px">
+                            <f:selectItems var="tipoDocumento" value="" itemValue=""/>
+                        </p:selectOneMenu>
                     </p:panel>
                 </h:panelGrid>
+                    <h3 style="margin-top:0">Basic</h3>
             </p:fieldset>
             <!-- FIN DATOS GENEREALES -->
+            <p:tabView>
+                <p:tab title="Venta">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <h:outputLabel value="Factura: "/>
+                        <h:inputText id="txtfactura" value="" style="float:right;" />
+                        <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" action="#{notaCreditoMb.abrirDialogoBuscarFactura}">
+                            <p:ajax event="dialogReturn" listener="#{notaCreditoMb.seleccionarFactura}" update="txtfactura"/>
+                        </p:commandButton>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Libre">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <p:graphicImage name="demo/images/godfather/godfather2.jpg" />
+                        <h:outputText value="" />
+                    </h:panelGrid>
+                </p:tab>
+            </p:tabView>
+            <h:panelGrid columns="1">
+                <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
+                    <h:panelGrid columns="1">
+                        <:ou
+                    </h:panelGrid>
+                </p:panel>
+            </h:panelgrid>
         </ui:define>
     </ui:composition>
 

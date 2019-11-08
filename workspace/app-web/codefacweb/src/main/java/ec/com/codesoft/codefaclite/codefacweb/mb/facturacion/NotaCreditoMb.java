@@ -26,8 +26,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,15 +42,25 @@ import java.util.logging.Logger;
 @ViewScoped
 public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable {
 
-    private String primerNumerosSecuencial;
+    private String establecimiento;
     private PuntoEmision puntoEmisionSeleccionado;
+    private String secuencial;
+    
+    private String ruc;
+    private String direccion;
+    private String telefonos;
+    private String razonSocial;
+    
+     private java.util.Date fechaEmision;
+    
     private List<PuntoEmision> puntosEmision;  
     
     @PostConstruct
     public void init()
     {
         cargarDatosCombos();
-        primerNumerosSecuencial = "001";
+        cargarPuntoEmisionSecuencial();
+        cargarDatosEmpresa();
     }
     
     @Override
@@ -102,10 +114,17 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable {
     //Funciones
     private void cargarDatosCombos()
     {
+        boolean bandera = true;
         try {
             List<PuntoEmisionUsuario> puntosEmisionUsuario = ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(sessionMb.getSession().getUsuario(), sessionMb.getSession().getSucursal());
             List<PuntoEmision> puntosEmision = new ArrayList<PuntoEmision>();
-            for (PuntoEmisionUsuario puntoEmisionUsuario : puntosEmisionUsuario) {
+            for (PuntoEmisionUsuario puntoEmisionUsuario : puntosEmisionUsuario) 
+            {
+                //Cargar por defecto el primer punto de Emision para cargar en vista la informacion
+                if(bandera){
+                    this.puntoEmisionSeleccionado = puntoEmisionUsuario.getPuntoEmision();
+                    bandera = false;
+                }
                 puntosEmision.add(puntoEmisionUsuario.getPuntoEmision());
             }
             this.puntosEmision = puntosEmision;
@@ -116,20 +135,77 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable {
         }
     }
     
+    private void cargarPuntoEmisionSecuencial()
+    {
+        if(puntoEmisionSeleccionado != null)
+        {
+            secuencial = " - " + UtilidadesTextos.llenarCarateresIzquierda(puntoEmisionSeleccionado.getSecuencialNotaCredito().toString(), 8, "0");
+            establecimiento = puntoEmisionSeleccionado.getSucursal().getCodigoSucursalFormatoTexto() + " -" ;
+        }
+    }
+    
+    private void cargarDatosEmpresa()
+    {
+        ruc = sessionMb.getSession().getEmpresa().getIdentificacion();
+        telefonos = ((sessionMb.getSession().getMatriz().getTelefono() != null) ? sessionMb.getSession().getMatriz().getTelefono():"");
+        direccion = ((sessionMb.getSession().getMatriz().getDirecccion() != null) ? sessionMb.getSession().getMatriz().getDirecccion():"");
+        razonSocial = ((sessionMb.getSession().getEmpresa().getRazonSocial() != null) ? sessionMb.getSession().getEmpresa().getRazonSocial():"");
+    }
+    
     //Getters and setters
 
-    public String getPrimerNumerosSecuencial() {
-        return primerNumerosSecuencial;
+    public String getSecuencial() {
+        return secuencial;
     }
 
-    public void setPrimerNumerosSecuencial(String primerNumerosSecuencial) {
-        this.primerNumerosSecuencial = primerNumerosSecuencial;
+    public void setSecuencial(String secuencial) {
+        this.secuencial = secuencial;
     }
 
+    public String getEstablecimiento() {
+        return establecimiento;
+    }
+
+    public void setEstablecimiento(String establecimiento) {
+        this.establecimiento = establecimiento;
+    }
+
+    public String getRuc() {
+        return ruc;
+    }
+
+    public void setRuc(String ruc) {
+        this.ruc = ruc;
+    }
+    
     public List<PuntoEmision> getPuntosEmision() {
         return puntosEmision;
     }
 
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefonos() {
+        return telefonos;
+    }
+
+    public void setTelefonos(String telefonos) {
+        this.telefonos = telefonos;
+    }
+
+    public String getRazonSocial() {
+        return razonSocial; 
+    }
+
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
+    
     public void setPuntosEmision(List<PuntoEmision> puntosEmision) {
         this.puntosEmision = puntosEmision;
     }
@@ -140,6 +216,14 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable {
 
     public void setPuntoEmisionSeleccionado(PuntoEmision puntoEmisionSeleccionado) {
         this.puntoEmisionSeleccionado = puntoEmisionSeleccionado;
+    }
+
+    public Date getFechaEmision() {
+        return fechaEmision;
+    }
+
+    public void setFechaEmision(Date fechaEmision) {
+        this.fechaEmision = fechaEmision;
     }
     
 }
