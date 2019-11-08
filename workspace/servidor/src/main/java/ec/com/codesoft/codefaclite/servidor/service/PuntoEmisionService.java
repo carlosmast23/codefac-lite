@@ -30,15 +30,54 @@ public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisi
     }
 
     @Override
+    public void editar(PuntoEmision entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                validarPuntoEmisionSinTransaccion(entity);
+                entityManager.merge(entity);
+            }
+        });
+    }
+    
+    
+
+    @Override
     public PuntoEmision grabar(PuntoEmision entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                validarPuntoEmisionSinTransaccion(entity);
                 entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                 entityManager.persist(entity);
             }
         });
         return entity;
+    }
+    
+    /**
+     * Valida si existe un punto de emision similar ya ingresado para no ingresar valores duplicados que puedan generar inconsistencias al momento de facturar
+     * @param puntoEmision
+     * @return
+     * @throws ServicioCodefacException
+     * @throws RemoteException 
+     */
+    private void validarPuntoEmisionSinTransaccion(PuntoEmision puntoEmision)throws ServicioCodefacException, RemoteException
+    {
+        puntoEmision.getSucursal();
+        puntoEmision.getPuntoEmision();
+        //PuntoEmisionService puntoEmisionService=new PuntoEmisionService();
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("sucursal",puntoEmision.getSucursal());
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("puntoEmision",puntoEmision.getPuntoEmision());
+        List<PuntoEmision> resultadoPuntoEmision=getFacade().findByMap(mapParametros);
+        resultadoPuntoEmision.remove(puntoEmision);
+        if(resultadoPuntoEmision.size()>0)
+        {
+            throw new ServicioCodefacException("Ya existe ingresado un punto de emisión con los mismos datos");
+        }
+        
     }
     
     @Override
