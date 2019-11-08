@@ -1907,7 +1907,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
         
         /**
-         * Aumentar el codigo de la numeracion en los parametros
+         * Aumentar el código de la numeración en los parametros
          */
         comprobante.setSecuencial(secuencial);
         

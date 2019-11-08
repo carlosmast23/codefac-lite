@@ -51,6 +51,7 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(SucursalModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         }
     }
 

@@ -20,4 +20,5 @@ public interface PuntoEmisionServiceIf extends ServiceAbstractIf<PuntoEmision>{
     public abstract List<PuntoEmision> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException;
     public abstract List<PuntoEmision> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException, RemoteException;
     public abstract PuntoEmision obtenerPorCodigo(Integer codigo,Sucursal sucursal) throws ServicioCodefacException, RemoteException;
+    //public abstract Boolean validarPuntoEmisionSinTransaccion(PuntoEmision puntoEmision) throws ServicioCodefacException, RemoteException;
 }
