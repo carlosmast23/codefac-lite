@@ -1,0 +1,3 @@
+Acabar nota de credito 
+Cargar los datos guardados en configuraciones por defecto(revisar)
+Realizar el documento de compra, semejante a la nota de venta libre
