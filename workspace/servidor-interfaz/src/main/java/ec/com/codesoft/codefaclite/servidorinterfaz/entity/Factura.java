@@ -17,6 +17,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -564,7 +565,7 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> implements Seri
      * Metodo que devuelve los datos adicionales de la factura en tipo de dato Map
      */
     public Map<String, String> getMapAdicional() {
-       Map<String,String> parametroMap=new HashMap<String ,String>();
+       Map<String,String> parametroMap=new LinkedHashMap<String ,String>();
         if(getDatosAdicionales()!=null)
         {
             for (FacturaAdicional datoAdicional : getDatosAdicionales()) 
