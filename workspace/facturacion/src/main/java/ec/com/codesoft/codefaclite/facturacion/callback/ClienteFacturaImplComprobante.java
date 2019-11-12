@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -157,7 +158,14 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         }
         
         if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
-            monitorData.getBarraProgreso().setValue(65);
+            
+            //solo cuando este en el proceso normal seteo el 65 % porque para el proceso autorizado se supone que ya esta con el 100%
+            //TODO: Ver un forma estar con las demas pantallas que hacen lo mismo
+            if(ParametroUtilidades.comparar(facturacionModel.getEmpresa(),ParametroCodefac.TIPO_ENVIO_COMPROBANTE, ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_FIRMADO))
+            {
+                monitorData.getBarraProgreso().setValue(65);
+            }
+            
             //facturaProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
                         
             //En esta etapa ya se habilita la opcion de imprimir el ride porque ya esta generado

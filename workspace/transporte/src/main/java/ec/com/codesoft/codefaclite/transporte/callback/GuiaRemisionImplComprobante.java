@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.transporte.model.GuiaRemisionModel;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
@@ -101,7 +102,13 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
         }
         
         if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
-            monitorData.getBarraProgreso().setValue(65);
+            //solo cuando este en el proceso normal seteo el 65 % porque para el proceso autorizado se supone que ya esta con el 100%
+            //TODO: Ver un forma estar con las demas pantallas que hacen lo mismo
+            if(ParametroUtilidades.comparar(guiaRemisionModel.getEmpresa(),ParametroCodefac.TIPO_ENVIO_COMPROBANTE, ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_FIRMADO))
+            {
+                monitorData.getBarraProgreso().setValue(65);
+            }
+            
             guiaRemision.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
             
             monitorData.getBtnAbrir().setEnabled(true);

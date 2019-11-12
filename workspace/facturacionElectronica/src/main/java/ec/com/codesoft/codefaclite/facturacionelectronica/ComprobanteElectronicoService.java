@@ -290,12 +290,16 @@ public class ComprobanteElectronicoService implements Runnable {
             }
             
             if (etapaActual.equals(ETAPA_RIDE)) {
-                generarRide();
-                if (escucha != null) {
-                    escucha.procesando(etapaActual, new ClaveAcceso(claveAcceso));
+                if(enviarCorreoComprobanteAutorizado==false)//Valida si tengo que generar en esta etapa o despues de autorizar el ride
+                {
+                    generarRide(CARPETA_FIRMADOS);
+                    if (escucha != null) {
+                        escucha.procesando(etapaActual, new ClaveAcceso(claveAcceso));
+                    }
+                    //generarRide();
+                    System.out.println("generarRide()");
                 }
-                //generarRide();
-                System.out.println("generarRide()");
+                
                 if (etapaLimiteProcesar <= ETAPA_RIDE) {
                     if (escucha != null) {
                         escucha.termino();
@@ -350,8 +354,21 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
             
-            if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE_AUTORIZADO)) {
-                if (enviarCorreoComprobanteAutorizado == true && enviarCorreos == true) {
+            /**
+             * Nueva etapa cuando se utiliza el esquema online para enviar el comprobante del Ride Autorizado
+             */
+            if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE_AUTORIZADO)) 
+            {
+                if(enviarCorreoComprobanteAutorizado)
+                {
+                    generarRide(CARPETA_AUTORIZADOS); //Todo: Como el ride recien se genera en esta etapa aviso de esta forma
+                    if (escucha != null) {
+                        escucha.procesando(ETAPA_RIDE, new ClaveAcceso(claveAcceso));
+                    }
+                }
+                
+                if (enviarCorreoComprobanteAutorizado == true && enviarCorreos == true) 
+                {                    
                     enviarComprobante(CARPETA_AUTORIZADOS);
                     System.out.println("enviarCorreoAutorizado() y SMS()");
                 }
@@ -447,12 +464,16 @@ public class ComprobanteElectronicoService implements Runnable {
             
             
             if (etapaActual.equals(ETAPA_RIDE)) {
-                generarRideLote();
-                if (escuchaLote != null) {
-                    escuchaLote.procesando(etapaActual);
+                if (enviarCorreoComprobanteAutorizado == false)
+                {
+                    generarRideLote(CARPETA_FIRMADOS);
+                    if (escuchaLote != null) {
+                        escuchaLote.procesando(etapaActual);
+                    }
+                    //generarRide();
+                    System.out.println("generarRide()");
                 }
-                //generarRide();
-                System.out.println("generarRide()");
+                
                 if (etapaLimiteProcesar <= ETAPA_RIDE) {
                     if (escuchaLote != null) {
                         escuchaLote.termino(servicioSri.getAutorizacion());
@@ -510,6 +531,14 @@ public class ComprobanteElectronicoService implements Runnable {
             
             if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE_AUTORIZADO)) {
 
+                if(enviarCorreoComprobanteAutorizado)
+                {
+                    generarRideLote(CARPETA_AUTORIZADOS);
+                    if (escuchaLote != null) { //TODO: Aviso que estamos en la etapa lote generando el ride
+                        escuchaLote.procesando(ETAPA_RIDE);
+                    }
+                }
+                
                 if (enviarCorreoComprobanteAutorizado == true && enviarCorreos == true) {
                     enviarComprobanteLoteCorreo(CARPETA_AUTORIZADOS);
                     //generarRide();                    
@@ -786,18 +815,18 @@ public class ComprobanteElectronicoService implements Runnable {
         
     }
 
-    private void generarRide() throws ComprobanteElectronicoException {
-        generarRideIndividual(this.claveAcceso);
+    private void generarRide(String carpetaOrigenXml) throws ComprobanteElectronicoException {
+        generarRideIndividual(this.claveAcceso,carpetaOrigenXml);
 
     }
     
-    private void generarRideLote() throws ComprobanteElectronicoException {
+    private void generarRideLote(String carpetaOrigenXml) throws ComprobanteElectronicoException {
         for (String claveAccesoComprobante : clavesAccesoLote) {
-            generarRideIndividual(claveAccesoComprobante);
+            generarRideIndividual(claveAccesoComprobante,carpetaOrigenXml);
         }
     }
     
-    private void generarRideIndividual(String claveAccesoTemp) throws ComprobanteElectronicoException
+    private void generarRideIndividual(String claveAccesoTemp,String carpetaOrigenXml) throws ComprobanteElectronicoException
     {
         try {            
             //COPIAR RECURSOS//
@@ -818,17 +847,29 @@ public class ComprobanteElectronicoService implements Runnable {
             
             JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                        
             ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
 
             ComprobanteElectronicoReporte reporte =getComprobanteReporte(comprobante);
+            
+            String fechaHoraAutorizacion="";
+            String estado="";
+            //Si la carpeta que se quiere obtene es desde la autorizada consulto los otros datos que faltan
+            if(carpetaOrigenXml.equals(CARPETA_AUTORIZADOS))
+            {
+                ComprobanteElectronicoAutorizado comprobanteAutorizado=new ComprobanteElectronicoAutorizado();
+                comprobanteAutorizado.construirDesdeArchivo(getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS, claveAcceso.clave));
+                fechaHoraAutorizacion=comprobanteAutorizado.getFechaAutorizacion();
+                estado=comprobanteAutorizado.getEstado();
+            }
             
             List<Object> informacionAdiciona = reporte.getDetalles();
             Map<String, Object> datosMap = reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
             datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
             datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
-            datosMap.put("fecha_hora_autorizacion","");
-            datosMap.put("estado","");
+            datosMap.put("fecha_hora_autorizacion",fechaHoraAutorizacion);
+            datosMap.put("estado",estado);
             
             /**
              * Agregar datos adicionales como por ejemplo los datos del pide de
@@ -924,6 +965,10 @@ public class ComprobanteElectronicoService implements Runnable {
 
     }
 
+    /**
+     * TODO: Unir este codigo con el de generarRideIndividual que son similares
+     * @return 
+     */
     public JasperPrint getPrintJasper() {
         try {
             //Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
@@ -942,10 +987,23 @@ public class ComprobanteElectronicoService implements Runnable {
             //InputStream reporteInfoAdicional = this.reporteInfoAdicional.openStream();
             //InputStream reporteFormaPago = this.reporteFormaPago.openStream();
             //InputStream pathLogoImagen = this.pathLogoImagen.openStream();
+            
+            
+            String fechaHoraAutorizacion="";
+            String estado="";
+            //Si la carpeta que se quiere obtene es desde la autorizada consulto los otros datos que faltan
+            //if(carpetaOrigenXml.equals(CARPETA_AUTORIZADOS))
+            //{
+            //Intenta verificar si existe el dato de la fecha y hora de autorizacion
+                ComprobanteElectronicoAutorizado comprobanteAutorizado=new ComprobanteElectronicoAutorizado();
+                comprobanteAutorizado.construirDesdeArchivo(getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS, claveAcceso.clave));
+                fechaHoraAutorizacion=comprobanteAutorizado.getFechaAutorizacion();
+                estado=comprobanteAutorizado.getEstado();
+            //}
 
             Map<String, Object> datosMap = reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
-            datosMap.put("fecha_hora_autorizacion","");
+            datosMap.put("fecha_hora_autorizacion",fechaHoraAutorizacion);
             datosMap.put("estado","");
             
             datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
@@ -1081,16 +1139,25 @@ public class ComprobanteElectronicoService implements Runnable {
 
     }
     
-    public boolean disponibilidadServidorSri()
+    /**
+     * Agregado intentos porque muchas veces el Sri esta funcionando de manera iregular porque va y viene la conexion
+     * @author Carlos 
+     * @param intentos
+     * @return 
+     */
+    public boolean disponibilidadServidorSri(Integer intentos)
     {
         servicioSri = new ServicioSri();
         servicioSri.setUri_autorizacion(uriAutorizacion);
         servicioSri.setUri_recepcion(uriRecepcion);
         try {
-            if (!servicioSri.verificarConexionRecepcion() || !servicioSri.verificarConexionAutorizar())
-            {
-                return false;
+            for (int i = 0; i < intentos; i++) {
+                if (!servicioSri.verificarConexionRecepcion() || !servicioSri.verificarConexionAutorizar())
+                {
+                    return false;
+                }
             }
+            
         } catch (ComprobanteElectronicoException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
             return false;

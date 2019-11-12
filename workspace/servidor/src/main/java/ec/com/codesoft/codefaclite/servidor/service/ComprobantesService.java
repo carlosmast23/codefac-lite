@@ -1020,7 +1020,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     {
         ComprobanteElectronicoService comprobanteElectronico=new ComprobanteElectronicoService();
         cargarDirectoriosWebService(comprobanteElectronico,empresa);
-        return comprobanteElectronico.disponibilidadServidorSri();
+        return comprobanteElectronico.disponibilidadServidorSri(ParametrosSistemaCodefac.INTENTOS_MAXIMO_VERICAR_CONEXION_SRI);
     }
     
     /**
