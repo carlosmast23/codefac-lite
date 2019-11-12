@@ -136,12 +136,22 @@ public class ProformaModel extends FacturacionModel{
     @Override
     public void imprimir() 
     {
-        if(!estadoFormulario.equals(ESTADO_EDITAR))
-        {
-            DialogoCodefac.mensaje(MensajeCodefacSistema.Impresiones.IMPRESION_SECCION_INCORRECTA);
-            return;
+        try {
+            if(!estadoFormulario.equals(ESTADO_EDITAR))
+            {
+                DialogoCodefac.mensaje(MensajeCodefacSistema.Impresiones.IMPRESION_SECCION_INCORRECTA);
+                return;
+            }
+            //Obtener el valor original de proforma, ya se que modifico y no guardo los datos y desea imprimir.
+            FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
+            Factura facturaTemp = servicio.buscarPorId(factura.getId());
+            if(facturaTemp != null){
+                this.factura = facturaTemp;
+                imprimirProforma();
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        imprimirProforma();
                       
     }
     
