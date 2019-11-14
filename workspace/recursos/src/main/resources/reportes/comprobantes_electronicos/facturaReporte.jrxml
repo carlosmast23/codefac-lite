@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="0.9090909090909185"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="1.6105100000000174"/>
+	<property name="ireport.x" value="109"/>
+	<property name="ireport.y" value="137"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -96,14 +96,14 @@
 				<reportElement x="0" y="151" width="287" height="146" uuid="128a1725-5c7e-4bc8-b27b-142a8c3698f1"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="313" y="59" width="144" height="32" uuid="f80e499f-05b1-47f6-9d9d-2328839da831"/>
+				<reportElement x="313" y="54" width="144" height="32" uuid="f80e499f-05b1-47f6-9d9d-2328839da831"/>
 				<textElement>
 					<font size="24" isBold="true"/>
 				</textElement>
 				<text><![CDATA[FACTURA]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="313" y="127" width="221" height="20" uuid="8ce84796-bd04-40a2-b9d4-6aed40d2bb70"/>
+				<reportElement x="313" y="106" width="221" height="20" uuid="8ce84796-bd04-40a2-b9d4-6aed40d2bb70"/>
 				<textElement>
 					<font size="7" isItalic="true"/>
 				</textElement>
@@ -117,11 +117,11 @@
 				<text><![CDATA[Obligado a llevar Contabilidad]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="397" y="98" width="128" height="20" uuid="a0727ea6-6a62-4dcd-b4b0-a1e57d389239"/>
+				<reportElement x="397" y="86" width="128" height="20" uuid="a0727ea6-6a62-4dcd-b4b0-a1e57d389239"/>
 				<textFieldExpression><![CDATA[$P{secuencial}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="313" y="157" width="84" height="20" uuid="ccbf9fd5-f138-4ed6-8279-29ad77096b89"/>
+				<reportElement x="314" y="167" width="84" height="20" uuid="ccbf9fd5-f138-4ed6-8279-29ad77096b89"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -153,14 +153,14 @@
 				<text><![CDATA[Razón Social / Nombres y Apellidos:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="313" y="98" width="84" height="20" uuid="10e48216-48bb-4bce-9370-a0d54c0a304f"/>
+				<reportElement x="313" y="86" width="84" height="20" uuid="10e48216-48bb-4bce-9370-a0d54c0a304f"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[No:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="397" y="157" width="100" height="20" uuid="cb08c4ed-679d-45a1-9438-183a536efd79"/>
+				<reportElement x="397" y="167" width="100" height="20" uuid="cb08c4ed-679d-45a1-9438-183a536efd79"/>
 				<textFieldExpression><![CDATA[$P{ambiente}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -252,7 +252,7 @@
 				<textFieldExpression><![CDATA[$P{cliente_nombres}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="313" y="187" width="100" height="20" uuid="263628ba-5b1d-4ff9-9f5f-e3f8c0a754ab"/>
+				<reportElement x="313" y="192" width="100" height="20" uuid="263628ba-5b1d-4ff9-9f5f-e3f8c0a754ab"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -265,6 +265,19 @@
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{autorizacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="314" y="126" width="183" height="20" uuid="b96a7dcf-c938-4a5d-9225-9ff9b509f9e9">
+					<printWhenExpression><![CDATA[new Boolean($P{fecha_hora_autorizacion}!=null && !$P{fecha_hora_autorizacion}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha y Hora de Autorización:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="314" y="147" width="216" height="20" uuid="d19d3952-4232-4035-ad12-327170bdd525"/>
+				<textFieldExpression><![CDATA[$P{fecha_hora_autorizacion}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

@@ -99,5 +99,39 @@ public class ComprobanteElectronicoAutorizado {
         return ambiente;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getNumeroAutorizacion() {
+        return numeroAutorizacion;
+    }
+
+    public void setNumeroAutorizacion(String numeroAutorizacion) {
+        this.numeroAutorizacion = numeroAutorizacion;
+    }
+
+    public String getFechaAutorizacion() {
+        return fechaAutorizacion;
+    }
+
+    public void setFechaAutorizacion(String fechaAutorizacion) {
+        this.fechaAutorizacion = fechaAutorizacion;
+    }
+
+    public String getComprobante() {
+        return comprobante;
+    }
+
+    public void setComprobante(String comprobante) {
+        this.comprobante = comprobante;
+    }
+    
+    
+
     
 }

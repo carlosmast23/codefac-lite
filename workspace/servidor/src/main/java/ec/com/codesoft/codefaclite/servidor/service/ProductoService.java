@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +55,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return p;
     }
     
-    private void grabarSinTransaccion(Producto p) {
+    private void grabarSinTransaccion(Producto p) throws java.rmi.RemoteException,ServicioCodefacException{
+        validarGrabarProducto(p);
+        
         //Si el catalogo producto no esta creado primero crea la entidad
         CatalogoProducto catalogoProducto = p.getCatalogoProducto();
         if (catalogoProducto.getId() == null) {
@@ -77,6 +80,15 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             }
         }
         entityManager.persist(p);
+    }
+    
+    private void validarGrabarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException    
+    {
+        //TODO: Analizar porque el Sri supuestamente si deja mandar productos con valor 0 , por el momento solo pongo los menores que 0
+        if(p.getValorUnitario().compareTo(BigDecimal.ZERO)<0)
+        {
+            throw new ServicioCodefacException("El valor unitario del producto no puede ser menor que cero");
+        }
     }
     
     public void editarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException
