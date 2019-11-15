@@ -90,6 +90,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -1906,10 +1907,16 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 break;
         }
         
+             
         /**
          * Aumentar el código de la numeración en los parametros
          */
         comprobante.setSecuencial(secuencial);
+        
+          /**
+         * Validacion para evitar ingresar comprobantes repetidos
+         */
+        validarSecuencialRepetidoComprobante(comprobante);
         
         /**
          * Agregado datos adicionales de configuracion general
@@ -1937,6 +1944,35 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //parametroService.editar(parametro);
         entityManager.merge(puntoEmision);
     }
+    
+    /**
+     * 
+     * @param comprobante
+     * @return Boolean retorar true cuando existe un registro y false cuando no existe
+     */
+    private void validarSecuencialRepetidoComprobante(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
+    {
+        Empresa empresa=comprobante.getEmpresa();
+        DocumentoEnum documentoEnum=comprobante.getCodigoDocumentoEnum();
+        BigDecimal puntoEstablecimiento=comprobante.getPuntoEstablecimiento();
+        Integer puntoEmision=comprobante.getPuntoEmision();
+        Integer secuencial=comprobante.getSecuencial();
+        ComprobanteEntityFacade facadeEntity=new ComprobanteEntityFacade();
+        
+        List<ComprobanteEntity> resultado=facadeEntity.validarSecuencialRepetidoComprobanteFacade(
+                empresa,
+                documentoEnum, 
+                puntoEstablecimiento, 
+                puntoEmision,
+                secuencial);
+        
+        if(resultado.size()>0)
+        {
+            throw new ServicioCodefacException("Ya existe un comprobante con el preimpreso "+comprobante.getPreimpreso()+" ingresado");
+        }
+        //return false;
+    }
+    
     
     /**
      * Por defecto este metodo busca primero el xml autorizado , si no encuentra devuelve el firmado
