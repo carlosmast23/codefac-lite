@@ -105,6 +105,9 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
             
         } catch (RemoteException ex) {
             Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         }
         
     }

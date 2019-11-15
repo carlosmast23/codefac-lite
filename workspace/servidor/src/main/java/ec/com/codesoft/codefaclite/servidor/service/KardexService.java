@@ -511,6 +511,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
 
         List<Kardex> kardexList = getFacade().findByMap(map);
 
+        //TODO:Ver si se puede crear una sola funcion estandar de Kardex
         Kardex kardex = null;
         if (kardexList == null | kardexList.size() == 0) {
             //Si no existe completo los datos para crear el kardex
@@ -518,7 +519,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             //kardex.setBodega(bodega);
             kardex.setFechaCreacion(UtilidadesFecha.getFechaHoy());
             kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
-            kardex.setPrecioPromedio(BigDecimal.ZERO);
+            kardex.setPrecioPromedio((kardex.getPrecioPromedio()!=null)?kardex.getPrecioPromedio():BigDecimal.ZERO);
             kardex.setPrecioTotal(BigDecimal.ZERO);
             kardex.setPrecioUltimo(BigDecimal.ZERO);
             //kardex.setProducto(value.getProductoProveedor().getProducto());

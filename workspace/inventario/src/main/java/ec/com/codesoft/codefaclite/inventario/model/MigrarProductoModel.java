@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,8 @@ public class MigrarProductoModel extends MigrarModel {
                     producto.setNombre(((String) fila.getByEnum(ExcelMigrarProductos.Enum.NOMBRE).valor).trim());
 
                     Double precioVentaPublico = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PUBLICO).valor;
+                    Double precioVentaOferta = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_OFERTA).valor;
+                    Double precioVentaPromedio = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
                     
                     /**
                      * ==========> BUSCAR O CREAR LA CATEGORIA SI NO EXISTE PARA CREAR <=======
@@ -117,6 +120,7 @@ public class MigrarProductoModel extends MigrarModel {
 
                             Kardex kardex = new Kardex();
                             kardex.setBodega(bodega);
+                            kardex.setPrecioPromedio(new BigDecimal(precioVentaPromedio.toString()));
                             kardex.setProducto(producto);
                             kardexDetalle.setKardex(kardex);
                             
@@ -130,18 +134,20 @@ public class MigrarProductoModel extends MigrarModel {
                     
                    
                     producto.setValorUnitario(new BigDecimal(precioVentaPublico.toString()));
+                    producto.setPrecioDistribuidor(new BigDecimal(precioVentaOferta.toString()));
                     producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                     //producto.setCatalogoProducto(CatalogoPro);
 
-                    ///========================> VALIDAR QUE NO EXISTA UN PRODUCTO SIMILAR YA INGRESADO <======================//
-                    Producto productoTmp = ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), GeneralEnumEstado.ACTIVO, session.getEmpresa());
+                    ///========================> VALIDAR QUE NO EXISTA UN PRODUCTO SIMILAR YA INGRESADO POR CODIGO <======================//
+                    Producto productoTmp =ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(producto.getCodigoPersonalizado(),session.getEmpresa());
+                    //Producto productoTmp = ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), GeneralEnumEstado.ACTIVO, session.getEmpresa());
                     if (productoTmp != null) {
                         throw new ExcelMigrar.ExcepcionExcelRegistroDuplicado("El dato ya se encuentra registrado en el sistema");
                     }
 
                     producto.setCantidadMinima(0);
                     producto.setStockInicial(0l);
-                    producto.setPrecioDistribuidor(BigDecimal.ZERO);
+                    //producto.setPrecioDistribuidor(BigDecimal.ZERO);
                     producto.setPrecioTarjeta(BigDecimal.ZERO);
                     producto.setGarantia(EnumSiNo.NO.getLetra());
                     producto.setTipoProductoCodigo(TipoProductoEnum.PRODUCTO.getLetra());

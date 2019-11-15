@@ -1021,7 +1021,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     {
         ComprobanteElectronicoService comprobanteElectronico=new ComprobanteElectronicoService();
         cargarDirectoriosWebService(comprobanteElectronico,empresa);
-        return comprobanteElectronico.disponibilidadServidorSri();
+        return comprobanteElectronico.disponibilidadServidorSri(ParametrosSistemaCodefac.INTENTOS_MAXIMO_VERICAR_CONEXION_SRI);
     }
     
     /**
@@ -1877,32 +1877,38 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         switch (documentoEnum) {
             case FACTURA:
                 secuencial = puntoEmision.getSecuencialFactura();
+                validarSecuencial(secuencial);
                 puntoEmision.setSecuencialFactura(secuencial+1);
                 break;
 
             case NOTA_VENTA:
                 secuencial = puntoEmision.getSecuencialNotaVenta();
+                validarSecuencial(secuencial);
                 puntoEmision.setSecuencialNotaVenta(secuencial+1);
                 break;
                 
             case NOTA_VENTA_INTERNA:
                 secuencial = puntoEmision.getSecuencialNotaVentaInterna();
+                validarSecuencial(secuencial);
                 puntoEmision.setSecuencialNotaVentaInterna(secuencial+1);
                 break;
 
 
             case RETENCIONES:
                 secuencial = puntoEmision.getSecuencialRetenciones();
+                validarSecuencial(secuencial);
                 puntoEmision.setSecuencialRetenciones(secuencial+1);
                 break;
 
             case NOTA_CREDITO:
                 secuencial = puntoEmision.getSecuencialNotaCredito();
+                validarSecuencial(secuencial);
                 puntoEmision.setSecuencialNotaCredito(secuencial+1);
                 break;
 
             case GUIA_REMISION:
                 secuencial = puntoEmision.getSecuencialGuiaRemision();
+                validarSecuencial(secuencial);
                 puntoEmision.setSecuencialGuiaRemision(secuencial+1);
                 break;
         }
@@ -1943,6 +1949,20 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
         //parametroService.editar(parametro);
         entityManager.merge(puntoEmision);
+    }
+    
+    private void validarSecuencial(Integer secuencial) throws RemoteException, ServicioCodefacException
+    {
+        if(secuencial==null)
+        {
+            throw new ServicioCodefacException("Error,Secuencial sin valor Asignado");
+        }
+        
+        if(secuencial<0)
+        {
+            throw new ServicioCodefacException("Error,Secuencial negativo invaido");
+        }
+        
     }
     
     /**

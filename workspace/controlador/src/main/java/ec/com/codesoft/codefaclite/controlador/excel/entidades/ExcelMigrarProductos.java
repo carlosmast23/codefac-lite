@@ -27,14 +27,16 @@ public class ExcelMigrarProductos extends ExcelMigrar{
     {
         CODIGO("Código",0,String.class),
         NOMBRE("Nombres",1,String.class),
-        PRECIO_VENTA_PUBLICO("Precio 1",2,Double.class),
-        CATEGORIA("Categoria",3,String.class),
-        IVA_PORCENTAJE("IVA Porcentaje",4,Double.class),
-        MANEJA_INVENTARIO("Maneja Inventario",5,String.class),
-        BODEGA("Bodega",6,String.class),
-        STOCK("Stock",7,Double.class),
-        UBICACION("Ubicación",8,String.class),
-        ESTADO("Estado",9,String.class);
+        PRECIO_VENTA_PUBLICO("Precio PVP",2,Double.class),
+        PRECIO_VENTA_OFERTA("Precio DISTRIB",3,Double.class),
+        PRECIO_VENTA_PROMEDIO("Precio PROMEDIO",4,Double.class),
+        CATEGORIA("Categoria",5,String.class),
+        IVA_PORCENTAJE("IVA Porcentaje",6,Double.class),
+        MANEJA_INVENTARIO("Maneja Inventario",7,String.class),
+        BODEGA("Bodega",8,String.class),
+        STOCK("Stock",9,Double.class),
+        UBICACION("Ubicación",10,String.class),
+        ESTADO("Estado",11,String.class);
 
         private Enum(String nombre,Integer posicion,Class tipoDato) {
             this.nombre = nombre;

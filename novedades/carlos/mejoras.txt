@@ -27,4 +27,5 @@ ver como hacer que el sistema tenga la posibilidad de iniciar como debug para po
 cuando envio por lote muchas veces en la etapa de enviado no puedo saber si algo esta mal y debe quedarse en esa etapa , lo que pasa es que recien me informa cuando autorizo y en esa otra etapa los comprobantes pueden quedar en una carpeta incorrecta de autorizado
 POSIBLE SOLUCION: Ver si mejor siempre se envia de forma individual porque el manejo por lotes tiene muchos casos que el Sri no trata de forma adecuada y requiere mucho manetenimiento
 Mejoras: Hacer que en la pantalla de productos el nombre no valide excelto las Á y Í 
-
+HACER QUE SE PUEDA MANDAR A IMPRIMIR DIRECTAMENTE DESDE JAVA
+AL MOMENTO DE VERIFICAR LAS CONEXIONES EN FACTURACION ELECTRONICA QUE REALICE MAS DE UNA VEZ PORQUE EL SERVICIO DEL SRI SABE ESTAR INTERRUMPIDO DE VEZ EN CUANDO

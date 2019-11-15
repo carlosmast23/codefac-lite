@@ -20,7 +20,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.2.8.0.5";
+    public static final String VERSION="1.2.8.0.6";
     /**
      * El modo de configuracion del sistema
      */
@@ -100,6 +100,11 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Formato Estandar de las fechas , ver si este tema puede ser seleccionado si algun rato algun cliente tan personalizado que ese dato sea parametrizable
      */
-    public static SimpleDateFormat FORMATO_ESTANDAR_FECHA = new SimpleDateFormat("dd/MM/yyyy");  
+    public static final SimpleDateFormat FORMATO_ESTANDAR_FECHA = new SimpleDateFormat("dd/MM/yyyy");  
+    
+    /**
+     * Variable para configurar los intentos maximos para verificar conexion con el Sri
+     */
+    public static final Integer INTENTOS_MAXIMO_VERICAR_CONEXION_SRI=5;
     
 }

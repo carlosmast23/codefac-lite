@@ -1113,7 +1113,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this,facturaProcesando,true);
                 ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
                 
-                if (ServiceFactory.getFactory().getComprobanteServiceIf().verificarDisponibilidadSri(session.getEmpresa())) {
+                if (ServiceFactory.getFactory().getComprobanteServiceIf().verificarDisponibilidadSri(session.getEmpresa())) 
+                {
                     Boolean repuestaFacturaElectronica = DialogoCodefac.dialogoPregunta("Correcto", "La factura se grabo correctamente,Desea autorizar en el SRI ahora?", DialogoCodefac.MENSAJE_CORRECTO);
 
                     //Si quiere que se procese en ese momento le ejecuto el proceso normal

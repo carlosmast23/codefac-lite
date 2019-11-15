@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades.ComparadorInterface;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -204,7 +205,7 @@ public class ParametroCodefac implements Serializable {
         return true;
     }
     
-    public enum TipoEnvioComprobanteEnum
+    public enum TipoEnvioComprobanteEnum implements ComparadorInterface
     {
         ENVIAR_FIRMADO("Enviar firmados","f"),
         ENVIAR_AUTORIZADO("Enviar autorizados","a");
@@ -248,6 +249,11 @@ public class ParametroCodefac implements Serializable {
                 }
             }
             return null;
+        }
+
+        @Override
+        public Object consultarParametro(String nombreParametro) {
+            return buscarPorLetra(nombreParametro);
         }
         
     }
