@@ -312,5 +312,16 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
 
         return getFacade().findByMap(mapParametro);
     }
+    
+    public List<RubroEstudiante> buscarPorEstudianteInscritoYRubroNivelActivos(EstudianteInscrito estudianteInscrito, RubrosNivel rubroNivel) throws ServicioCodefacException, RemoteException {
+        //RubroEstudiante R;
+        //R.getEstadoEnum()
+        Map<String, Object> mapParametro = new HashMap<String, Object>();
+        mapParametro.put("estudianteInscrito", estudianteInscrito);
+        mapParametro.put("rubroNivel", rubroNivel);
+        mapParametro.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+
+        return getFacade().findByMap(mapParametro);
+    }
 
 }

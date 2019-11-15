@@ -174,7 +174,8 @@ public class RubroPlantilla implements Serializable{
         List<RubroPlantillaEstudiante> listaResultado=new ArrayList<RubroPlantillaEstudiante>();
         
         for (RubroPlantillaEstudiante detalle : detalles) {
-            if(detalle.getEstudianteInscrito().getEnumEstado().equals(GeneralEnumEstado.ACTIVO))
+            //Verifica que devuelva estudiantes que existan y que tengan estado activo
+            if(detalle.getEstudianteInscrito()!=null && detalle.getEstudianteInscrito().getEnumEstado().equals(GeneralEnumEstado.ACTIVO))
             {
                 listaResultado.add(detalle);
             }
