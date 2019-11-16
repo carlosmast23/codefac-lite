@@ -1938,10 +1938,10 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
          * Por el momento a todas las facturas no procesadas grabo con no facturar
          * TODO: Analizar este metodo cuando sea fisica porque en ese caso deberia grabar directamente como autorizado
          */
-        if(comprobante.getCodigoDocumentoEnum().getComprobanteElectronico())
+        if(comprobante.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
         {
             comprobante.setEstadoEnum(ComprobanteEnumEstado.SIN_AUTORIZAR);
-        }else if(comprobante.getCodigoDocumentoEnum().getComprobanteFisico())
+        }else if(comprobante.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))
         {
             comprobante.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
         }
