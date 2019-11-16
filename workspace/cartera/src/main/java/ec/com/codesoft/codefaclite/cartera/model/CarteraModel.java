@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.cartera.model;
 import ec.com.codesoft.codefaclite.cartera.busqueda.CarteraBusqueda;
 import ec.com.codesoft.codefaclite.cartera.panel.CarteraPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
@@ -16,6 +17,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
@@ -151,6 +153,8 @@ public class CarteraModel extends CarteraPanel{
         getTblDetallesCruzar().setModel(new DefaultTableModel());
         getTblDetallesCruzar().setModel(new DefaultTableModel());
         getTblCruceDetalles().setModel(new DefaultTableModel());
+        
+        getTblDocumentosCruzar().setModel(new DefaultTableModel());
         
         
         getTxtIdentificacion().setText("");
@@ -360,15 +364,17 @@ public class CarteraModel extends CarteraPanel{
     }
     
     private void btnListenerBuscarCliente() {
-        ClienteBusquedaDialogo clienteBusquedaDialogo = new ClienteBusquedaDialogo();
+        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo= new ClienteEstablecimientoBusquedaDialogo(session.getEmpresa());
+        //ClienteBusquedaDialogo clienteBusquedaDialogo = new ClienteBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         //factura.setCliente((Persona) buscarDialogoModel.getResultado());
-        Persona personaTemp=(Persona) buscarDialogoModel.getResultado();
+        PersonaEstablecimiento personaEstablecimientoTmp=(PersonaEstablecimiento) buscarDialogoModel.getResultado();
+        Persona personaTemp=personaEstablecimientoTmp.getPersona();
         if(personaTemp!=null)
         {
             cartera.setPersona(personaTemp);
-            cargarDatosCliente((Persona) buscarDialogoModel.getResultado());
+            cargarDatosCliente(personaTemp);
         }
        
     }

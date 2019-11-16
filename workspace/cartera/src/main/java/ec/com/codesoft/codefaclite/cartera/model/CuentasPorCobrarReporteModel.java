@@ -193,7 +193,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
         for (Cartera cartera : carteras) {
             Vector<String> fila=new Vector<String>();
             fila.add(cartera.getPreimpreso()+"");
-            fila.add(cartera.getPersona().getNombreSimple()+"");
+            fila.add(cartera.getPersona().getRazonSocial());
             fila.add(cartera.getSaldo()+"");
             saldos = saldos.add(cartera.getSaldo());
             defaultTableModel.addRow(fila);

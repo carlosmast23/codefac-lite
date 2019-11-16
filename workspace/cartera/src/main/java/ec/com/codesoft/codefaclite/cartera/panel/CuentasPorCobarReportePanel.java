@@ -133,7 +133,11 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setClosable(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
         setTitle("Cuentas por Cobrar");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
