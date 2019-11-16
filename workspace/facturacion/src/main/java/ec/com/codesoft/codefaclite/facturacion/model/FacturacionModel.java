@@ -1278,6 +1278,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         else
         {   //Datos cuando es una factura
+            parametros.put("subtotalAntesImpuestos", factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
             parametros.put("subtotalImpuesto", factura.getSubtotalImpuestos().toString());
             parametros.put("subtotalSinImpuesto", factura.getSubtotalSinImpuestos().toString());
             parametros.put("descuento", factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
@@ -1353,24 +1354,38 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
             {
-                try {
-                    String claveAcceso = this.factura.getClaveAcceso();
-                    if(claveAcceso==null)
-                    {
-                        DialogoCodefac.mensaje("Advertencia","No se puede generar el reporte porque no tiene clave de acceso",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        return;
+                if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
+                {
+                    try {
+                        String claveAcceso = this.factura.getClaveAcceso();
+                        if(claveAcceso==null)
+                        {
+                            DialogoCodefac.mensaje("Advertencia","No se puede generar el reporte porque no tiene clave de acceso",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                            return;
+                        }
+
+                        byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,factura.getEmpresa());
+                        JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                        panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
-                    byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,factura.getEmpresa());
-                    JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
-                    panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }else if (factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
+                {
+                    /**
+                     * Imprimir facturas manuales
+                     */
+                    try {
+                        facturaManual(factura.getCodigoDocumentoEnum());
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
+                
             }else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
             {
                 imprimirComprobanteVenta(factura, FacturacionModel.NOMBRE_REPORTE_FACTURA_INTERNA);;
