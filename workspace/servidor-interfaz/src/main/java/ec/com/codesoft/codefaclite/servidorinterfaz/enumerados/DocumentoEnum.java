@@ -22,9 +22,20 @@ public enum DocumentoEnum {
             "FAC",
             DocumentoCategoriaEnum.COMPROBANTES_VENTA,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION,ModuloCodefacEnum.COMPRA},
-            false,
             true,
-            "01"),
+            true,
+            "999"),
+    
+    /**
+     * TODO: Ver si utilizar factura manual
+     */
+    /*FACTURA_MANUAL("Factura Manual",
+            "FAM",
+            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},
+            true,
+            false,
+            "01"),*/
     
     /**
      * Documento no valido por el SRI //Ver si hago una clasificacion para diferencia este tipo de documentos
@@ -153,9 +164,9 @@ public enum DocumentoEnum {
         this.nombre = nombre;
         this.codigo = codigo;
         this.categoria = categoria;
-        this.comprobanteFisico = comprobanteFisico;
-        this.comprobanteElectronico = comprobanteElectronico;        
         this.moduloEnum = moduloEnum;
+        this.comprobanteFisico = comprobanteFisico;
+        this.comprobanteElectronico = comprobanteElectronico;                
         this.codigoSri=codigoSri;
         this.documentoLegal=true;
     }

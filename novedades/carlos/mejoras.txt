@@ -29,3 +29,4 @@ POSIBLE SOLUCION: Ver si mejor siempre se envia de forma individual porque el ma
 Mejoras: Hacer que en la pantalla de productos el nombre no valide excelto las Á y Í 
 HACER QUE SE PUEDA MANDAR A IMPRIMIR DIRECTAMENTE DESDE JAVA
 AL MOMENTO DE VERIFICAR LAS CONEXIONES EN FACTURACION ELECTRONICA QUE REALICE MAS DE UNA VEZ PORQUE EL SERVICIO DEL SRI SABE ESTAR INTERRUMPIDO DE VEZ EN CUANDO
+ver si en la facturaDetalle se agrega los campos de codigo principal y codigo secundario 
