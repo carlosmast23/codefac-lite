@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -78,7 +79,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     
     
     @LimpiarAnotacion
-    //@ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Nombre Comercial")
+    @ValidacionCodefacAnotacion(requerido=true , min=1 ,max = 300,expresionRegular = ExpresionRegular.textoSinSaltosLinea,nombre = "Nombre Comercial")
     public JTextField getjTextNombreComercial() {
         return jTextNombreComercial;
     }
@@ -88,7 +89,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Apellidos y Nombres | Razon Social")
+    @ValidacionCodefacAnotacion(requerido=true , min=1 ,max = 300,expresionRegular = ExpresionRegular.textoSinSaltosLinea,nombre = "Apellidos y Nombres | Razon Social")
     public JTextField getjTextNombreSocial() {
         return jTextNombreSocial;
     }

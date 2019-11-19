@@ -86,8 +86,8 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
         InformacionFactura informacionFactura = new InformacionFactura();
 
         informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(new java.sql.Date(factura.getFechaEmision().getTime())));
-
-        //if(factura.getDireccionEstablecimiento()!=null && !factura.getDireccionEstablecimiento().isEmpty())
+        
+                //if(factura.getDireccionEstablecimiento()!=null && !factura.getDireccionEstablecimiento().isEmpty())
         //{
         informacionFactura.setDirEstablecimiento(UtilidadValidador.normalizarTexto(factura.getDireccionEstablecimiento()));
         //}
@@ -105,6 +105,8 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
         } else {
             informacionFactura.setIdentificacionComprador(UtilidadesTextos.llenarCarateresDerecha(factura.getCliente().getIdentificacion(), 13, "0"));
         }
+        
+        informacionFactura.setDireccionComprador(factura.getSucursal().getDireccion());
 
         informacionFactura.setImporteTotal(factura.getTotal());
         //Falta manejar este campo al momento de guardar

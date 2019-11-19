@@ -65,6 +65,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.transporte.GuiaRemisionFacade
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
@@ -72,10 +73,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
@@ -1537,6 +1540,27 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
 
         servicio.setReporteInfoAdicional(reportDatosAdicionales);
+        
+        //Agregar el reporte para los otros datos adicionales
+        JasperReport reportDatoOtrosAdicionales=null;
+        try {
+            reportDatoOtrosAdicionales=ReporteProxy.buscar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionalesA4.jrxml");
+            if(reportDatoOtrosAdicionales==null)
+            {
+                inputStreamJasper = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionalesA4.jrxml"));
+                reportDatoOtrosAdicionales = JasperCompileManager.compileReport(inputStreamJasper);
+                ReporteProxy.agregar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionalesA4.jrxml", reportDatoOtrosAdicionales);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        servicio.setReporteInfoOtroAdicional(reportDatoOtrosAdicionales);
+        
+        
+        
         servicio.setMapAdicionalReporte(mapReportePlantilla(empresa)); //Todo: revisar si esto esta bien
         //servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg").getPath();
         //Segun el tipo de licencia cargar los recursos
@@ -1769,7 +1793,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
      * Metodo que me permite agregar parametros propios de cada usuario al comprobante electronico
      * @param comprobante 
      */
-    private void agregarParametrosPorUsuario(ComprobanteEntity comprobante)
+    private void agregarParametrosPorUsuario(ComprobanteEntity comprobante) throws RemoteException
     {
         Usuario usuario=comprobante.getUsuario();
         String parametrosUsuario=usuario.getParametrosComprobatesElectronicos();
@@ -1777,6 +1801,39 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         {
             agregarParametroComprobante(comprobante, parametrosUsuario);
         }
+        
+        Empleado empleado=comprobante.getUsuario().getEmpleado();
+        if(empleado!=null)
+        {
+            //TODO:parametrizar las etiquetas que estan quemadas
+            if(ParametroUtilidades.comparar(comprobante.getEmpresa(),ParametroCodefac.FACTURACION_RIDE_DIRECCION_EMPLEADO,EnumSiNo.SI))
+            {
+                ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Dirección",empleado.getDireccion());
+                comprobante.addDatoAdicional(comprobanteAdicional);
+            }
+            
+            if(ParametroUtilidades.comparar(comprobante.getEmpresa(),ParametroCodefac.FACTURACION_RIDE_RUC_EMPLEADO,EnumSiNo.SI))
+            {
+                ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*RUC",empleado.getIdentificacion());
+                comprobante.addDatoAdicional(comprobanteAdicional);
+            }
+            
+            if(ParametroUtilidades.comparar(comprobante.getEmpresa(),ParametroCodefac.FACTURACION_RIDE_RAZON_SOCIAL_EMPLEADO,EnumSiNo.SI))
+            {
+                ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Razón Social",empleado.getNombresCompletos());
+                comprobante.addDatoAdicional(comprobanteAdicional);
+            }
+            
+            if(ParametroUtilidades.comparar(comprobante.getEmpresa(),ParametroCodefac.FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO,EnumSiNo.SI))
+            {
+                
+                String puntosEmisionFormato=comprobante.getUsuario().formatoPuntoEmisionActivos();
+                ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Punto de Emisión",puntosEmisionFormato);
+                comprobante.addDatoAdicional(comprobanteAdicional);
+            }
+        
+        }
+        
     }
     
     private void agregarParametrosGenerales(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
@@ -2240,6 +2297,56 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
         return null;
         
+    }
+    
+    public ComprobanteAdicional construirDatoAdicionalSinTransaccion(ComprobanteEntity comprobante,String campo,String valor)
+    {
+        DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
+            switch (documentoEnum) {
+                case FACTURA:
+                    Factura factura = (Factura) comprobante;
+                    FacturaAdicional datoAdicional = new FacturaAdicional();
+                    datoAdicional.setCampo(campo);
+                    datoAdicional.setValor(valor);
+                    datoAdicional.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    datoAdicional.setFactura(factura);
+                    factura.addDatoAdicional(datoAdicional);
+                    return datoAdicional;
+
+               
+
+                case RETENCIONES:
+                    Retencion retencion = (Retencion) comprobante;
+                    RetencionAdicional datoAdicional2 = new RetencionAdicional();
+                    datoAdicional2.setCampo(campo);
+                    datoAdicional2.setValor(valor);
+                    datoAdicional2.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    datoAdicional2.setRetencion(retencion);
+                    retencion.addDatoAdicional(datoAdicional2);
+                    return datoAdicional2;
+
+                case NOTA_CREDITO:
+                    NotaCredito notaCredito = (NotaCredito) comprobante;
+                    NotaCreditoAdicional datoAdicional3 = new NotaCreditoAdicional();
+                    datoAdicional3.setCampo(campo);
+                    datoAdicional3.setValor(valor);
+                    datoAdicional3.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    datoAdicional3.setNotaCredito(notaCredito);
+                    notaCredito.addDatoAdicional(datoAdicional3);
+                    return datoAdicional3;
+
+                case GUIA_REMISION:
+                    GuiaRemision guiaRemision = (GuiaRemision) comprobante;
+                    GuiaRemisionAdicional datoAdicional4 = new GuiaRemisionAdicional();
+                    datoAdicional4.setCampo(campo);
+                    datoAdicional4.setValor(valor);
+                    datoAdicional4.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    datoAdicional4.setGuiaRemision(guiaRemision);
+                    //guiaRemision.addDatoAdic(datoAdicional4); //Todo: Faclta setear valores para este caso
+                    return datoAdicional4;
+            }
+            return null;
+
     }
 
 

@@ -92,7 +92,7 @@ public class ActualizacionSistemaUtil {
                     PersonaEstablecimiento establecimiento=new PersonaEstablecimiento();
                     establecimiento.setCodigoSucursal("1");
                     establecimiento.setCorreoElectronico(persona.getCorreoElectronico());
-                    establecimiento.setDireccion(persona.getDireccion());
+                    //establecimiento.setDireccion(persona.getDireccion());
                     establecimiento.setExtensionTelefono(persona.getExtensionTelefono());
                     establecimiento.setNombreComercial(persona.getNombreLegal());
                     establecimiento.setPersona(persona);

@@ -52,6 +52,13 @@ public abstract class ParametroUtilidades {
         return false; 
     }
     
+    /**
+     * 
+     * @param empresa
+     * @param nombreParametro
+     * @return Si no encuentra nada devuelve null
+     * @throws RemoteException 
+     */
     public static String obtenerValorParametro(Empresa empresa , String nombreParametro) throws RemoteException
     {
         ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(nombreParametro,empresa);

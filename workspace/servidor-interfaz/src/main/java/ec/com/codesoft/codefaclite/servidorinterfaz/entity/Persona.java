@@ -57,9 +57,9 @@ public class Persona implements Serializable, Comparable<Persona> {
     @Column(name = "NOMBRE_LEGAL")
     private String nombreLegal;
 
-    @Deprecated
-    @Column(name = "DIRECCION")
-    private String direccion;
+    //@Deprecated
+    //@Column(name = "DIRECCION")
+    //private String direccion;
     
     @Deprecated
     @Column(name = "TELEFONO_CONVENCIONAL")
@@ -174,13 +174,13 @@ public class Persona implements Serializable, Comparable<Persona> {
     }
 
     
-    public String getDireccion() {
-        return direccion;
-    }
+    //public String getDireccion() {
+    //    return direccion;
+    //}
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
+    //public void setDireccion(String direccion) {
+    //    this.direccion = direccion;
+    //}
 
     public String getTelefonoConvencional() {
         return telefonoConvencional;

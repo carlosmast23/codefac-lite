@@ -2173,7 +2173,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         PuntoEmision puntoEmisionSeleccionada=getPuntoEmisionSeleccionado();
 
         /**
-         * Seteado los valores temporales pero toca cambiar esta parte y setear
+         * TODO: Seteado los valores temporales pero toca cambiar esta parte y setear
          * los valores directamente en la factura
          */
         factura.setTotal(new BigDecimal(getTxtValorTotal().getText()));

@@ -120,7 +120,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
         venta.setRazonSocial(venta.getCliente().getRazonSocial());
         venta.setIdentificacion(venta.getCliente().getIdentificacion());
-        venta.setDireccion(venta.getCliente().getDireccion());
+        venta.setDireccion(venta.getSucursal().getDireccion());
         venta.setTelefono(venta.getCliente().getTelefonoCelular()); //todo: ver si hago un metodo para obtener los telefonos        
     }
     
