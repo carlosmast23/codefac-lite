@@ -15,6 +15,8 @@ public class DetalleFacturaFisicaData {
     private String descripcion;
     private String valorUnitario;
     private String valorTotal;
+    private String codigoPrincipal;
+    private String descuento;
 
     public DetalleFacturaFisicaData() {
     }
@@ -50,6 +52,23 @@ public class DetalleFacturaFisicaData {
     public void setValorTotal(String valorTotal) {
         this.valorTotal = valorTotal;
     }
+
+    public String getCodigoPrincipal() {
+        return codigoPrincipal;
+    }
+
+    public void setCodigoPrincipal(String codigoPrincipal) {
+        this.codigoPrincipal = codigoPrincipal;
+    }
+
+    public String getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(String descuento) {
+        this.descuento = descuento;
+    }
+    
     
     
     

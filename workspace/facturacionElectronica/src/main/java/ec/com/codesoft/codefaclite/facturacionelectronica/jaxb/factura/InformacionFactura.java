@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlType;
     "tipoIdentificacionComprador",
     "razonSocialComprador",
     "identificacionComprador",
+    "direccionComprador",    
     "totalSinImpuestos",
     "totalDescuento",
     "totalImpuestos",
@@ -35,6 +36,7 @@ public class InformacionFactura implements Serializable{
     private String tipoIdentificacionComprador;
     private String razonSocialComprador;
     private String identificacionComprador;
+    private String direccionComprador;
     
     /**
      * Esta variable se refiere al subtotal antes de impuesto y menos los descuentos
@@ -158,6 +160,17 @@ public class InformacionFactura implements Serializable{
     public void setObligadoContabilidad(String obligadoContabilidad) {
         this.obligadoContabilidad = obligadoContabilidad;
     }
+
+    @XmlElement(name = "direccionComprador")   
+    public String getDireccionComprador() {
+        return direccionComprador;
+    }
+
+    public void setDireccionComprador(String direccionComprador) {
+        this.direccionComprador = direccionComprador;
+    }
+    
+    
     
     
     

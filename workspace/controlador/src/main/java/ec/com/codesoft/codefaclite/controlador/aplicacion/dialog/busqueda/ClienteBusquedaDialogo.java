@@ -12,10 +12,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 
 /**
- *
+ *TODO:Parece una clase en desuso porque no tiene ni para filtrar por empresa
  * @author PC
+ * @deprecated 
  */
 public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>, InterfacesPropertisFindWeb {
 
@@ -37,9 +39,11 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>, Inte
     public void agregarObjeto(Persona t, Vector dato) {
         dato.add(t.getIdentificacion());
         dato.add(t.getRazonSocial());
-        dato.add(t.getEstablecimientos().get(0).getTelefonoConvencional());
-        dato.add(t.getEstablecimientos().get(0).getExtensionTelefono());
-        dato.add(t.getEstablecimientos().get(0).getTelefonoCelular());
+        System.out.println(t.getRazonSocial());
+        PersonaEstablecimiento establecimiento=t.getEstablecimientos().get(0);
+        dato.add((establecimiento!=null)?establecimiento.getTelefonoConvencional():"");
+        dato.add((establecimiento!=null)?establecimiento.getExtensionTelefono():"");
+        dato.add((establecimiento!=null)?establecimiento.getTelefonoCelular():"");
         dato.add(t.getCorreoElectronico());
 
     }

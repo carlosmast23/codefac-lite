@@ -299,7 +299,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         parametros.put("identificacion", presupuesto.getPersona().getIdentificacion());
         parametros.put("razonSocial", presupuesto.getPersona().getRazonSocial());
         parametros.put("telefonos",(presupuesto.getPersona().getTelefonoCelular()!=null )?presupuesto.getPersona().getTelefonoCelular():"");
-        parametros.put("direccion", (presupuesto.getPersona().getDireccion()!=null)?presupuesto.getPersona().getDireccion():"");
+        parametros.put("direccion", (presupuesto.getPersona().getEstablecimientos().get(0).getDireccion()!=null)?presupuesto.getPersona().getEstablecimientos().get(0).getDireccion():"");
         parametros.put("estado", presupuesto.getEstadoEnum().getNombre());
         parametros.put("fecha", presupuesto.getFechaPresupuesto().toString());
         parametros.put("correo", (presupuesto.getPersona().getCorreoElectronico()!=null)?presupuesto.getPersona().getCorreoElectronico():"");

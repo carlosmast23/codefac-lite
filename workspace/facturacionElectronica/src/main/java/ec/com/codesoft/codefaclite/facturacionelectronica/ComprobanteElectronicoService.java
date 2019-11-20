@@ -183,7 +183,7 @@ public class ComprobanteElectronicoService implements Runnable {
     private String footerMensajeCorreo;
     private Integer etapaLimiteProcesar;
     
-    
+    private JasperReport reporteInfoOtroAdicional;
     private JasperReport reporteInfoAdicional;
     private JasperReport reporteFormaPago;
     
@@ -867,6 +867,7 @@ public class ComprobanteElectronicoService implements Runnable {
             Map<String, Object> datosMap = reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
             datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
+            datosMap.put("SUBREPORT_INFO_OTRO", reporteInfoOtroAdicional);
             datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
             datosMap.put("fecha_hora_autorizacion",fechaHoraAutorizacion);
             datosMap.put("estado",estado);
@@ -1007,6 +1008,7 @@ public class ComprobanteElectronicoService implements Runnable {
             datosMap.put("estado","");
             
             datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
+            datosMap.put("SUBREPORT_INFO_OTRO", reporteInfoOtroAdicional);
             datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
             datosMap.put("imagen_logo", pathLogoImagen);
 
@@ -1916,6 +1918,15 @@ public class ComprobanteElectronicoService implements Runnable {
     public void setEnviarCorreos(Boolean enviarCorreos) {
         this.enviarCorreos = enviarCorreos;
     }
+
+    public JasperReport getReporteInfoOtroAdicional() {
+        return reporteInfoOtroAdicional;
+    }
+
+    public void setReporteInfoOtroAdicional(JasperReport reporteInfoOtroAdicional) {
+        this.reporteInfoOtroAdicional = reporteInfoOtroAdicional;
+    }
+    
     
     
     

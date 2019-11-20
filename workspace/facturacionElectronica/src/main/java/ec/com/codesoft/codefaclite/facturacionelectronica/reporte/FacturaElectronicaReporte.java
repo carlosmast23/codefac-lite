@@ -37,6 +37,7 @@ public class FacturaElectronicaReporte extends ComprobanteElectronicoReporte{
     {
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("cliente_nombres",facturaComprobante.getInformacionFactura().getRazonSocialComprador());
+        map.put("direccion_comprador",facturaComprobante.getInformacionFactura().getDireccionComprador());
         map.put("cliente_identificacion",facturaComprobante.getInformacionFactura().getIdentificacionComprador());
         map.put("fecha_emision", facturaComprobante.getInformacionFactura().getFechaEmision());
         map.put("obligado_contabilidad",facturaComprobante.getInformacionFactura().getObligadoContabilidad());

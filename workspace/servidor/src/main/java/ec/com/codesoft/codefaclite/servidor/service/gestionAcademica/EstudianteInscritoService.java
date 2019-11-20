@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.EstudianteInscritoFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -66,17 +68,49 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         return getFacade().obtenerTamanioEstudiatesInscritosPorCurso(nivelAcademico);
     }
     
-    public EstudianteInscrito matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException
+    public EstudianteInscrito matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException,ServicioCodefacException
     {
-        EntityTransaction transaccion = getTransaccion();
-        transaccion.begin();
-        entityManager.persist(estudianteInscrito);
-        estudianteInscrito=entityManager.merge(estudianteInscrito);
-        rubroMatricula.setEstudianteInscrito(estudianteInscrito);
-        rubroMatricula.setFechaGenerado(UtilidadesFecha.getFechaHoy());
-        entityManager.persist(rubroMatricula);
-        transaccion.commit();
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                matricularEstudianteValidar(estudianteInscrito,rubroMatricula);
+                entityManager.persist(estudianteInscrito);
+                EstudianteInscrito estudianteInscritoTmp=entityManager.merge(estudianteInscrito);
+                rubroMatricula.setEstudianteInscrito(estudianteInscritoTmp);
+                rubroMatricula.setFechaGenerado(UtilidadesFecha.getFechaHoy());
+                entityManager.persist(rubroMatricula);
+                setearEstudiante(estudianteInscrito, estudianteInscritoTmp);
+            }
+            
+            private void setearEstudiante(EstudianteInscrito estudianteInscrito,EstudianteInscrito estudianteTmp)
+            {
+                estudianteInscrito=estudianteTmp;
+            }
+        });
+        
         return estudianteInscrito;
+    }
+    
+    private void matricularEstudianteValidar(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException,ServicioCodefacException
+    {
+        //rubroMatricula.getEstadoEnum();
+        //rubroMatricula.getRubroNivel();
+        //rubroMatricula.getEstudianteInscrito();
+        
+        if(estudianteInscrito==null)
+        {
+            throw new ServicioCodefacException("Estudiante inscrito vacio");
+        }
+        
+        EstudianteInscritoService estudianteService=new EstudianteInscritoService();
+        EstudianteInscrito estudianteInscritoTmp=estudianteService.obtenerPorEstudianteYNivelYEstado(estudianteInscrito.getEstudiante(),estudianteInscrito.getNivelAcademico(),GeneralEnumEstado.ACTIVO);
+        //List<RubroEstudiante> resultadoRubros=rubroEstudianteService.buscarPorEstudianteInscritoYRubroNivelActivos(estudianteInscrito, rubroMatricula.getRubroNivel());
+        if(estudianteInscritoTmp!=null)
+        {
+            throw new ServicioCodefacException("El estudiante ya se encuentra matriculado");
+        }
+        
     }
     
     public void eliminarEstudiantesInscrito(List<EstudianteInscrito> estudiantesEliminar) throws RemoteException

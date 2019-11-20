@@ -81,6 +81,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbEditarDescuentoFactura = new javax.swing.JComboBox<>();
         jLabel19 = new javax.swing.JLabel();
         cmbActivarNotaVenta = new javax.swing.JComboBox<>();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        cmbDatoAdicionalRideRazoSocialEmpledo = new javax.swing.JComboBox<>();
+        cmbDatoAdicionalRideDireccionEmpledo = new javax.swing.JComboBox<>();
+        cmbDatoAdicionalRidePuntoEmisionEmpleado = new javax.swing.JComboBox<>();
+        cmbDatoAdicionalRideRucEmpledo = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         lblEspacioVertical1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -249,7 +258,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -287,10 +296,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbCargarProductoIvaFactura, gridBagConstraints);
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel11.setText("Editar Precio Unitario:");
+        jLabel11.setText("Razón Social Empleado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel11, gridBagConstraints);
@@ -383,6 +392,80 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbActivarNotaVenta, gridBagConstraints);
+
+        jLabel22.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel22.setText("Datos Adicionales Imprimir en el Ride");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel22, gridBagConstraints);
+
+        jLabel23.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel23.setText("Editar Precio Unitario:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel23, gridBagConstraints);
+
+        jLabel24.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel24.setText("Punto de Emisión Facturado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel24, gridBagConstraints);
+
+        jLabel25.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel25.setText("Ruc Empleado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel25, gridBagConstraints);
+
+        jLabel26.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel26.setText("Dirección Empleado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel26, gridBagConstraints);
+
+        cmbDatoAdicionalRideRazoSocialEmpledo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbDatoAdicionalRideRazoSocialEmpledo, gridBagConstraints);
+
+        cmbDatoAdicionalRideDireccionEmpledo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbDatoAdicionalRideDireccionEmpledo, gridBagConstraints);
+
+        cmbDatoAdicionalRidePuntoEmisionEmpleado.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbDatoAdicionalRidePuntoEmisionEmpleado, gridBagConstraints);
+
+        cmbDatoAdicionalRideRucEmpledo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbDatoAdicionalRideRucEmpledo, gridBagConstraints);
 
         jTabbedPane1.addTab("Facturas", jPanel4);
 
@@ -569,6 +652,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbActivarReporteSimpleGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbCargarProductoIvaFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbConstruirEnsamblesFacturar;
+    private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideDireccionEmpledo;
+    private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRidePuntoEmisionEmpleado;
+    private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideRazoSocialEmpledo;
+    private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideRucEmpledo;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarDescripcionFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarDescuentoFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarPrecioUnitFactura;
@@ -593,6 +680,11 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -760,6 +852,38 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbConstruirEnsamblesFacturar(JComboBox<EnumSiNo> cmbConstruirEnsamblesFacturar) {
         this.cmbConstruirEnsamblesFacturar = cmbConstruirEnsamblesFacturar;
+    }
+
+    public JComboBox<EnumSiNo> getCmbDatoAdicionalRideDireccionEmpledo() {
+        return cmbDatoAdicionalRideDireccionEmpledo;
+    }
+
+    public void setCmbDatoAdicionalRideDireccionEmpledo(JComboBox<EnumSiNo> cmbDatoAdicionalRideDireccionEmpledo) {
+        this.cmbDatoAdicionalRideDireccionEmpledo = cmbDatoAdicionalRideDireccionEmpledo;
+    }
+
+    public JComboBox<EnumSiNo> getCmbDatoAdicionalRidePuntoEmisionEmpleado() {
+        return cmbDatoAdicionalRidePuntoEmisionEmpleado;
+    }
+
+    public void setCmbDatoAdicionalRidePuntoEmisionEmpleado(JComboBox<EnumSiNo> cmbDatoAdicionalRidePuntoEmisionEmpleado) {
+        this.cmbDatoAdicionalRidePuntoEmisionEmpleado = cmbDatoAdicionalRidePuntoEmisionEmpleado;
+    }
+
+    public JComboBox<EnumSiNo> getCmbDatoAdicionalRideRazoSocialEmpledo() {
+        return cmbDatoAdicionalRideRazoSocialEmpledo;
+    }
+
+    public void setCmbDatoAdicionalRideRazoSocialEmpledo(JComboBox<EnumSiNo> cmbDatoAdicionalRideRazoSocialEmpledo) {
+        this.cmbDatoAdicionalRideRazoSocialEmpledo = cmbDatoAdicionalRideRazoSocialEmpledo;
+    }
+
+    public JComboBox<EnumSiNo> getCmbDatoAdicionalRideRucEmpledo() {
+        return cmbDatoAdicionalRideRucEmpledo;
+    }
+
+    public void setCmbDatoAdicionalRideRucEmpledo(JComboBox<EnumSiNo> cmbDatoAdicionalRideRucEmpledo) {
+        this.cmbDatoAdicionalRideRucEmpledo = cmbDatoAdicionalRideRucEmpledo;
     }
     
     

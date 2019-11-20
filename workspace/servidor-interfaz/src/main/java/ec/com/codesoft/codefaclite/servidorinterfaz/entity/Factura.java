@@ -40,7 +40,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "FACTURA")
-public class Factura extends ComprobanteEntity<FacturaAdicional> implements Serializable {
+public class Factura extends ComprobanteEntity<FacturaAdicional> {
 
     private static final long serialVersionUID = -1238278914412853684L;
     
@@ -542,7 +542,8 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> implements Seri
         this.descuentoImpuestos = descuentoConImpuestos.setScale(2,BigDecimal.ROUND_HALF_UP);
         
         //Calculo el subtotal ya restado el descuento diviendo para 1.12 por ejemplo
-        BigDecimal subtotalMenosImpuestos=totalConImpuestos.divide(ivaDecimalTmp,2,BigDecimal.ROUND_HALF_UP);
+        //TODO: Revisar este calculo porque esta medio confuso porque trata ya del valor total volver a calcular el subtotal antes de impuestos menos iva e ice
+        BigDecimal subtotalMenosImpuestos=totalConImpuestos.divide(ivaDecimalTmp,2,BigDecimal.ROUND_HALF_UP).subtract(this.ice);
         
         //Al subtotal menos impuesto le sumo el descuento y ya tengo el subtotal original
         this.subtotalImpuestos=subtotalMenosImpuestos.add(this.descuentoImpuestos);

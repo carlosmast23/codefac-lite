@@ -63,4 +63,6 @@ public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudia
     
     public List<RubroEstudiante> buscarPorEstudianteInscritoYRubroNivel(EstudianteInscrito estudianteInscrito,RubrosNivel rubroNivel) throws ServicioCodefacException, RemoteException;
     
+    public List<RubroEstudiante> buscarPorEstudianteInscritoYRubroNivelActivos(EstudianteInscrito estudianteInscrito, RubrosNivel rubroNivel) throws ServicioCodefacException, RemoteException;
+    
 }

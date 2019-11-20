@@ -168,7 +168,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
  *
  * @author Carlos
  */
-public class FacturacionModel extends FacturacionPanel implements InterfazPostConstructPanel,ComponenteDatosComprobanteElectronicosInterface{
+public class FacturacionModel extends FacturacionPanel implements InterfazPostConstructPanel,ComponenteDatosComprobanteElectronicosInterface,Serializable{
 
     public static final String NOMBRE_REPORTE_FACTURA_ELECTRONICA="Comprobante de Venta";
     public static final String NOMBRE_REPORTE_FACTURA_INTERNA="Comprobante de Venta Interna";
@@ -188,6 +188,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      * Variable que almacena la forma de pago por defecto cuando no se selecciona ninguna
      */
     private SriFormaPago formaPagoDefecto;
+    private Empleado vendedor;
 
     /**
      * Mapa de datos adicionales que se almacenan temporalmente y sirven para la
@@ -638,8 +639,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 buscarDialogoModel.setVisible(true);
                 Empleado empleadoTmp = (Empleado) buscarDialogoModel.getResultado();
                 if (empleadoTmp != null) {
-                    factura.setVendedor(empleadoTmp);
+                    vendedor=empleadoTmp;
+                    //factura.setVendedor(empleadoTmp);
                     getTxtVendedor().setText(empleadoTmp.getIdentificacion() + " - " + empleadoTmp.getNombresCompletos());
+                    //factura.setVendedor(null);
                     
                     factura.addDatoAdicional(new FacturaAdicional(
                             ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
@@ -1089,6 +1092,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
             setearValoresDefaultFactura();
+            
+            //factura.setVendedor(new Empleado());
+            //servicio.ejemplo(new Empleado(),factura);
+            
             factura=servicio.grabar(factura);
             
             facturaProcesando = factura;
@@ -1107,74 +1114,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
             else
             {
-
-                ComprobanteDataFactura comprobanteData = obtenerComprobanteDataFactura();
-                //comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
-                ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this,facturaProcesando,true);
-                ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
-                
-                if (ServiceFactory.getFactory().getComprobanteServiceIf().verificarDisponibilidadSri(session.getEmpresa())) 
+                PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
+                if(documentoEnum.equals(DocumentoEnum.FACTURA) && puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {
-                    Boolean repuestaFacturaElectronica = DialogoCodefac.dialogoPregunta("Correcto", "La factura se grabo correctamente,Desea autorizar en el SRI ahora?", DialogoCodefac.MENSAJE_CORRECTO);
-
-                    //Si quiere que se procese en ese momento le ejecuto el proceso normal
-                    if (repuestaFacturaElectronica) {
-                        //Verificar que existe comunicacion con el Sri
-                        cic = new ClienteFacturaImplComprobante(this, facturaProcesando, false);                        
-                        if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
-                        {
-                            cic=null;
-                        }
-                            
-                        comprobanteServiceIf.procesarComprobante(comprobanteData, facturaProcesando, session.getUsuario(), cic);
-                        
-                        //TODO: Ver si se une esta parte con la parte superior porque se repite
-                        if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
-                        {
-                            FacturaRespuestaNoCallBack respuestaNoCallBack=new  FacturaRespuestaNoCallBack(factura,this,true);
-                            respuestaNoCallBack.iniciar();
-                        }
-                                                
-
-                    } else {
-                        //TODO: Ver si se une esta parte con la parte superior porque se repite
-                        if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
-                        {
-                            cic=null;
-                        }
-                        
-                        //Solo genera el pdf pero no envia al SRI
-                        comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(), cic);
-                        DialogoCodefac.mensaje("Correcto", "El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_CORRECTO);
-
-                        //TODO: Ver si se une esta parte con la parte superior porque se repite
-                        if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
-                        {
-                            FacturaRespuestaNoCallBack respuestaNoCallBack=new  FacturaRespuestaNoCallBack(factura,this,true);
-                            respuestaNoCallBack.iniciar();
-                        }
-
-                    }
-
-                } else { //Si el servidor del sri no esta disponible solo existe un camino
-                    DialogoCodefac.mensaje("Advertencia", "El servidor del Sri no esta disponible\n El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    
-                    if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) 
-                    {
-                        cic = null;
-                    }
-                    
-                    comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(), cic);
-                    
-                    //TODO: Ver si se une esta parte con la parte superior porque se repite
-                    if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
-                        FacturaRespuestaNoCallBack respuestaNoCallBack = new FacturaRespuestaNoCallBack(factura, this,false);
-                        respuestaNoCallBack.iniciar();
-                    }
+                    facturarElectricamente(facturaProcesando);
+                }
+                else if(puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
+                {
+                    facturaManual(documentoEnum);
                 }
 
-                //=====================> Imprimir comprobante de venta <==============================//
-                //imprimirComprobanteVenta(factura);
+                
                 
             }
             
@@ -1186,6 +1136,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error ",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);            
+            throw new ExcepcionCodefacLite("Error al grabar: "+ex.getMessage());
         }
         
         actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
@@ -1196,14 +1148,77 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         as
     }*/
     
+    private void facturarElectricamente(Factura facturaProcesando) throws RemoteException
+    {
+        ComprobanteDataFactura comprobanteData = obtenerComprobanteDataFactura();
+        //comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
+        ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this, facturaProcesando, true);
+        ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+
+        if (ServiceFactory.getFactory().getComprobanteServiceIf().verificarDisponibilidadSri(session.getEmpresa())) {
+            Boolean repuestaFacturaElectronica = DialogoCodefac.dialogoPregunta("Correcto", "La factura se grabo correctamente,Desea autorizar en el SRI ahora?", DialogoCodefac.MENSAJE_CORRECTO);
+
+            //Si quiere que se procese en ese momento le ejecuto el proceso normal
+            if (repuestaFacturaElectronica) {
+                //Verificar que existe comunicacion con el Sri
+                cic = new ClienteFacturaImplComprobante(this, facturaProcesando, false);
+                if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+                    cic = null;
+                }
+
+                comprobanteServiceIf.procesarComprobante(comprobanteData, facturaProcesando, session.getUsuario(), cic);
+
+                //TODO: Ver si se une esta parte con la parte superior porque se repite
+                if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+                    FacturaRespuestaNoCallBack respuestaNoCallBack = new FacturaRespuestaNoCallBack(factura, this, true);
+                    respuestaNoCallBack.iniciar();
+                }
+
+            } else {
+                //TODO: Ver si se une esta parte con la parte superior porque se repite
+                if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+                    cic = null;
+                }
+
+                //Solo genera el pdf pero no envia al SRI
+                comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(), cic);
+                DialogoCodefac.mensaje("Correcto", "El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_CORRECTO);
+
+                //TODO: Ver si se une esta parte con la parte superior porque se repite
+                if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+                    FacturaRespuestaNoCallBack respuestaNoCallBack = new FacturaRespuestaNoCallBack(factura, this, true);
+                    respuestaNoCallBack.iniciar();
+                }
+
+            }
+
+        } else { //Si el servidor del sri no esta disponible solo existe un camino
+            DialogoCodefac.mensaje("Advertencia", "El servidor del Sri no esta disponible\n El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_ADVERTENCIA);
+
+            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+                cic = null;
+            }
+
+            comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(), cic);
+
+            //TODO: Ver si se une esta parte con la parte superior porque se repite
+            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+                FacturaRespuestaNoCallBack respuestaNoCallBack = new FacturaRespuestaNoCallBack(factura, this, false);
+                respuestaNoCallBack.iniciar();
+            }
+        }
+
+        //=====================> Imprimir comprobante de venta <==============================//
+        //imprimirComprobanteVenta(factura);
+    }
     
     private void facturaManual(DocumentoEnum documentoEnum) throws ServicioCodefacException
     {
-    
+            
         try {
             //DocumentoEnum documentoEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
             
-            
+            DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             InputStream reporteOriginal = null;
             if(documentoEnum.NOTA_VENTA_INTERNA.equals(documentoEnum))
             {
@@ -1211,7 +1226,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
             }else if (documentoEnum.NOTA_VENTA.equals(documentoEnum)) {
                 reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("nota_venta.jrxml");
-            } else {
+            } else if(documentoEnum.FACTURA.equals(documentoEnum)) {
                 reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
             }
             
@@ -1237,6 +1252,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 detalle.setDescripcion(detalleFactura.getDescripcion());
                 detalle.setValorTotal(detalleFactura.getTotal() + "");
                 detalle.setValorUnitario(detalleFactura.getPrecioUnitario() + "");
+                detalle.setCodigoPrincipal(obtenerCodigoProducto(detalleFactura));
+                detalle.setDescuento(detalleFactura.getDescuento().toString());                
                 detalles.add(detalle);
             }
             
@@ -1245,6 +1262,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             throw  ex; //Relanza el error al proceso principal
+            
         }
     
     }
@@ -1255,11 +1273,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("fechaEmision", factura.getFechaEmision().toString());
-        parametros.put("razonSocial", factura.getCliente().getRazonSocial());
-        parametros.put("direccion", factura.getSucursal().getDireccion());
-        parametros.put("telefono", factura.getSucursal().getTelefonoConvencional());
+        parametros.put("razonSocial", factura.getRazonSocial());
+        parametros.put("direccion", factura.getDireccion());
+        parametros.put("telefono", factura.getTelefono());
         parametros.put("correoElectronico", (factura.getCliente().getCorreoElectronico() != null) ? factura.getCliente().getCorreoElectronico() : "");
-        parametros.put("identificacion", factura.getCliente().getIdentificacion());
+        parametros.put("identificacion", factura.getIdentificacion());
 
         //Datos cuando es una nota de venta
         if(DocumentoEnum.NOTA_VENTA.equals(documento))
@@ -1270,6 +1288,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         else
         {   //Datos cuando es una factura
+            parametros.put("subtotalAntesImpuestos", factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
             parametros.put("subtotalImpuesto", factura.getSubtotalImpuestos().toString());
             parametros.put("subtotalSinImpuesto", factura.getSubtotalSinImpuestos().toString());
             parametros.put("descuento", factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
@@ -1345,24 +1364,38 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
             {
-                try {
-                    String claveAcceso = this.factura.getClaveAcceso();
-                    if(claveAcceso==null)
-                    {
-                        DialogoCodefac.mensaje("Advertencia","No se puede generar el reporte porque no tiene clave de acceso",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        return;
+                if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
+                {
+                    try {
+                        String claveAcceso = this.factura.getClaveAcceso();
+                        if(claveAcceso==null)
+                        {
+                            DialogoCodefac.mensaje("Advertencia","No se puede generar el reporte porque no tiene clave de acceso",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                            return;
+                        }
+
+                        byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,factura.getEmpresa());
+                        JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                        panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
-                    byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,factura.getEmpresa());
-                    JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
-                    panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }else if (factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
+                {
+                    /**
+                     * Imprimir facturas manuales
+                     */
+                    try {
+                        facturaManual(factura.getCodigoDocumentoEnum());
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
+                
             }else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
             {
                 imprimirComprobanteVenta(factura, FacturacionModel.NOMBRE_REPORTE_FACTURA_INTERNA);;
@@ -1723,7 +1756,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         fila.add(producto.getCodigoPersonalizado());
                         break;
 
-                        
                 }
                  
 
@@ -1779,6 +1811,32 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         });
         
         
+    }
+    
+    private String obtenerCodigoProducto(FacturaDetalle facturaDetalle)
+    {
+        try {
+            switch(facturaDetalle.getTipoDocumentoEnum())
+            {
+                case ACADEMICO:
+                    RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                    return rubroEstudiante.getId().toString();
+                    
+                    
+                case PRESUPUESTOS:
+                    //Presupuesto presupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(detalle.getReferenciaId());
+                    return facturaDetalle.getReferenciaId().toString();
+                    
+                    
+                case INVENTARIO:case LIBRE:
+                    Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                    return producto.getCodigoPersonalizado();
+                    
+            }            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "Sin Código";
     }
 
     private void agregarFechaEmision() {
@@ -2125,7 +2183,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         PuntoEmision puntoEmisionSeleccionada=getPuntoEmisionSeleccionado();
 
         /**
-         * Seteado los valores temporales pero toca cambiar esta parte y setear
+         * TODO: Seteado los valores temporales pero toca cambiar esta parte y setear
          * los valores directamente en la factura
          */
         factura.setTotal(new BigDecimal(getTxtValorTotal().getText()));
@@ -2142,6 +2200,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setEmpresa(session.getEmpresa());
         factura.setUsuario(session.getUsuario());
         factura.setSucursalEmpresa(session.getSucursal());
+        factura.setVendedor(vendedor);
         
         //factura.setIvaSriId(session.get;
         

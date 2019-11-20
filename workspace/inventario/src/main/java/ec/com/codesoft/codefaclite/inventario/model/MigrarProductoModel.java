@@ -138,8 +138,9 @@ public class MigrarProductoModel extends MigrarModel {
                     producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                     //producto.setCatalogoProducto(CatalogoPro);
 
-                    ///========================> VALIDAR QUE NO EXISTA UN PRODUCTO SIMILAR YA INGRESADO <======================//
-                    Producto productoTmp = ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), GeneralEnumEstado.ACTIVO, session.getEmpresa());
+                    ///========================> VALIDAR QUE NO EXISTA UN PRODUCTO SIMILAR YA INGRESADO POR CODIGO <======================//
+                    Producto productoTmp =ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(producto.getCodigoPersonalizado(),session.getEmpresa());
+                    //Producto productoTmp = ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), GeneralEnumEstado.ACTIVO, session.getEmpresa());
                     if (productoTmp != null) {
                         throw new ExcelMigrar.ExcepcionExcelRegistroDuplicado("El dato ya se encuentra registrado en el sistema");
                     }

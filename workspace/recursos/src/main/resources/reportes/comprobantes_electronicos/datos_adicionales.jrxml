@@ -3,8 +3,12 @@
 	<property name="ireport.zoom" value="5.054470284992946"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
 	<field name="nombre" class="java.lang.String"/>
 	<field name="valor" class="java.lang.String"/>
+	<filterExpression><![CDATA[new Boolean(!$F{nombre}.substring(0,1).equals("*"))]]></filterExpression>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

@@ -129,6 +129,14 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String FIRMA_TIEMPO_EXPIRACION_AÑOS="firma_tiempo_expiracion_años";
     
+    /**
+     * Datos adicionales para controlar que datos adicionales imprimir en el RIDE
+     */
+    public static final String FACTURACION_RIDE_RUC_EMPLEADO="facturacion_ride_ruc_empleado";
+    public static final String FACTURACION_RIDE_RAZON_SOCIAL_EMPLEADO="facturacion_ride_razon_social_empleado";
+    public static final String FACTURACION_RIDE_DIRECCION_EMPLEADO="facturacion_ride_direccion_empleado";
+    public static final String FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO="facturacion_ride_punto_emision_empleado";
+    
     
     @Id
     @Column(name = "ID")
@@ -273,6 +281,7 @@ public class ParametroCodefac implements Serializable {
         }
         return false;
     }
+    
     
     
 }

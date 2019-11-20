@@ -183,6 +183,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         UtilidadesComboBox.llenarComboBox(getCmbConstruirEnsamblesFacturar(),EnumSiNo.values());
         
+        UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideDireccionEmpledo(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRidePuntoEmisionEmpleado(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideRazoSocialEmpledo(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideRucEmpledo(),EnumSiNo.values());
+        
         
         //Cargar las opciones en las configuraciones
         UtilidadesComboBox.llenarComboBox(getCmbEditarDescripcionFactura(),EnumSiNo.values());
@@ -338,6 +343,23 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroConstruirEnsambleFacturar != null) ? parametroConstruirEnsambleFacturar.getValor() : null);
             getCmbConstruirEnsamblesFacturar().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            //Parametros para agregar el ride
+            ParametroCodefac parametroDatoAdicionalRide= parametrosTodos.get(ParametroCodefac.FACTURACION_RIDE_DIRECCION_EMPLEADO);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
+            getCmbDatoAdicionalRideDireccionEmpledo().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
+            parametroDatoAdicionalRide= parametrosTodos.get(ParametroCodefac.FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
+            getCmbDatoAdicionalRidePuntoEmisionEmpleado().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
+            parametroDatoAdicionalRide= parametrosTodos.get(ParametroCodefac.FACTURACION_RIDE_RAZON_SOCIAL_EMPLEADO);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
+            getCmbDatoAdicionalRideRazoSocialEmpledo().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
+            parametroDatoAdicionalRide= parametrosTodos.get(ParametroCodefac.FACTURACION_RIDE_RUC_EMPLEADO);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
+            getCmbDatoAdicionalRideRucEmpledo().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             
             
 
@@ -447,6 +469,26 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO,getTxtCodigoHtml().getText());
         agregarParametroEditar(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
+        
+
+        /**
+         * @author Carlos Sanchez
+         */        
+        enumSiNo = (EnumSiNo) getCmbDatoAdicionalRideDireccionEmpledo().getSelectedItem();
+        agregarParametro(ParametroCodefac.FACTURACION_RIDE_DIRECCION_EMPLEADO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.FACTURACION_RIDE_DIRECCION_EMPLEADO);
+        
+        enumSiNo = (EnumSiNo) getCmbDatoAdicionalRidePuntoEmisionEmpleado().getSelectedItem();
+        agregarParametro(ParametroCodefac.FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO);
+        
+        enumSiNo = (EnumSiNo) getCmbDatoAdicionalRideRazoSocialEmpledo().getSelectedItem();
+        agregarParametro(ParametroCodefac.FACTURACION_RIDE_RAZON_SOCIAL_EMPLEADO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.FACTURACION_RIDE_RAZON_SOCIAL_EMPLEADO);
+        
+        enumSiNo = (EnumSiNo) getCmbDatoAdicionalRideRucEmpledo().getSelectedItem();
+        agregarParametro(ParametroCodefac.FACTURACION_RIDE_RUC_EMPLEADO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.FACTURACION_RIDE_RUC_EMPLEADO);
 
     }
     

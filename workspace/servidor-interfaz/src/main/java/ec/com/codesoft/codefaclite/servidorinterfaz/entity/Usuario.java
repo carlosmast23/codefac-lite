@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -239,5 +240,21 @@ public class Usuario implements Serializable{
         
     }
     
+    public String formatoPuntoEmisionActivos()
+    {
+        List<String> puntosActivos=new  ArrayList<String>();
+        if(this.puntosEmisionUsuario!=null)
+        {
+            for (PuntoEmisionUsuario puntoTmp : this.puntosEmisionUsuario) {
+                if(puntoTmp.getEstadoEnum().equals(puntoTmp.getEstadoEnum().ACTIVO))
+                {
+                    puntosActivos.add(puntoTmp.getPuntoEmision().getPuntoEmision().toString());
+                }
+            }
+            return UtilidadesLista.castListToString(puntosActivos,",");
+            
+        }
+        return "";
+    }
     
 }
