@@ -40,7 +40,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "FACTURA")
-public class Factura extends ComprobanteEntity<FacturaAdicional> implements Serializable {
+public class Factura extends ComprobanteEntity<FacturaAdicional> {
 
     private static final long serialVersionUID = -1238278914412853684L;
     

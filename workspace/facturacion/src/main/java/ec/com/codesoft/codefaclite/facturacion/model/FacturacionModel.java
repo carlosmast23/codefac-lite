@@ -168,7 +168,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
  *
  * @author Carlos
  */
-public class FacturacionModel extends FacturacionPanel implements InterfazPostConstructPanel,ComponenteDatosComprobanteElectronicosInterface{
+public class FacturacionModel extends FacturacionPanel implements InterfazPostConstructPanel,ComponenteDatosComprobanteElectronicosInterface,Serializable{
 
     public static final String NOMBRE_REPORTE_FACTURA_ELECTRONICA="Comprobante de Venta";
     public static final String NOMBRE_REPORTE_FACTURA_INTERNA="Comprobante de Venta Interna";
@@ -188,6 +188,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      * Variable que almacena la forma de pago por defecto cuando no se selecciona ninguna
      */
     private SriFormaPago formaPagoDefecto;
+    private Empleado vendedor;
 
     /**
      * Mapa de datos adicionales que se almacenan temporalmente y sirven para la
@@ -638,8 +639,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 buscarDialogoModel.setVisible(true);
                 Empleado empleadoTmp = (Empleado) buscarDialogoModel.getResultado();
                 if (empleadoTmp != null) {
-                    factura.setVendedor(empleadoTmp);
+                    vendedor=empleadoTmp;
+                    //factura.setVendedor(empleadoTmp);
                     getTxtVendedor().setText(empleadoTmp.getIdentificacion() + " - " + empleadoTmp.getNombresCompletos());
+                    //factura.setVendedor(null);
                     
                     factura.addDatoAdicional(new FacturaAdicional(
                             ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
@@ -1089,6 +1092,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
             setearValoresDefaultFactura();
+            
+            //factura.setVendedor(new Empleado());
+            //servicio.ejemplo(new Empleado(),factura);
+            
             factura=servicio.grabar(factura);
             
             facturaProcesando = factura;
@@ -1129,6 +1136,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error ",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);            
+            throw new ExcepcionCodefacLite("Error al grabar: "+ex.getMessage());
         }
         
         actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
@@ -1205,11 +1214,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void facturaManual(DocumentoEnum documentoEnum) throws ServicioCodefacException
     {
-    
+            
         try {
             //DocumentoEnum documentoEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
             
-            
+            DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             InputStream reporteOriginal = null;
             if(documentoEnum.NOTA_VENTA_INTERNA.equals(documentoEnum))
             {
@@ -1253,6 +1262,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             throw  ex; //Relanza el error al proceso principal
+            
         }
     
     }
@@ -2190,6 +2200,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setEmpresa(session.getEmpresa());
         factura.setUsuario(session.getUsuario());
         factura.setSucursalEmpresa(session.getSucursal());
+        factura.setVendedor(vendedor);
         
         //factura.setIvaSriId(session.get;
         
