@@ -1,1 +1,0 @@
-ver si posteriormente se agregar un documento de factura manual para tener clasificado y separado de la factura fisica
