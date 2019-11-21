@@ -62,12 +62,13 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
         }
         
         /*Factura f;
+        f.getCodigoDocumento()
         //f.getEmpresa();
         f.getPuntoEstablecimiento();
         f.getPuntoEmision();
         f.getSecuencial();*/
         
-        String queryString = "SELECT f FROM "+nombreTabla+" f WHERE f.estado<>?1 AND f.empresa=?2 AND f.puntoEstablecimiento=?3 AND f.puntoEmision=?4 AND f.secuencial=?5";
+        String queryString = "SELECT f FROM "+nombreTabla+" f WHERE f.estado<>?1 AND f.empresa=?2 AND f.puntoEstablecimiento=?3 AND f.puntoEmision=?4 AND f.secuencial=?5 AND f.codigoDocumento=?6 ";
         Query query = getEntityManager().createQuery(queryString);
         
         query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //TODO: Buscar cualquier 
@@ -75,6 +76,7 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
         query.setParameter(3, puntoEstablecimiento);
         query.setParameter(4, puntoEmision);
         query.setParameter(5, Secuencial);
+        query.setParameter(6, documentoEnum.getCodigo());
         return query.getResultList();
         //return (Usuario) query.getSingleResult();
         
