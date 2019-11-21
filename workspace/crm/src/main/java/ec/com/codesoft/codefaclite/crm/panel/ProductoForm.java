@@ -151,6 +151,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jPanel2 = new javax.swing.JPanel();
         lblEspacio12 = new javax.swing.JLabel();
         chkTransportarGuiaRemision = new javax.swing.JCheckBox();
+        jPanel7 = new javax.swing.JPanel();
+        chkOcultarDetalleVenta = new javax.swing.JCheckBox();
+        lblEspacio23 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -787,6 +790,22 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         tabMenu.addTab("Transporte", jPanel2);
 
+        jPanel7.setLayout(new java.awt.GridBagLayout());
+
+        chkOcultarDetalleVenta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkOcultarDetalleVenta.setText("Ocultar detalle en la venta");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel7.add(chkOcultarDetalleVenta, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel7.add(lblEspacio23, gridBagConstraints);
+
+        tabMenu.addTab("Otros", jPanel7);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -813,6 +832,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarProductoEnsamble;
     private javax.swing.JButton btnEditarEnsamble;
     private javax.swing.JButton btnEliminarEnsamble;
+    private javax.swing.JCheckBox chkOcultarDetalleVenta;
     private javax.swing.JCheckBox chkTransportarGuiaRemision;
     private javax.swing.JComboBox<CategoriaProducto> cmbCategoriaProducto;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo> cmbGarantia;
@@ -858,6 +878,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -866,6 +887,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio12;
     private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JLabel lblEspacio23;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblEspacio5;
@@ -1170,6 +1192,15 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     public JCheckBox getChkTransportarGuiaRemision() {
         return chkTransportarGuiaRemision;
     }
+
+    public JCheckBox getChkOcultarDetalleVenta() {
+        return chkOcultarDetalleVenta;
+    }
+
+    public void setChkOcultarDetalleVenta(JCheckBox chkOcultarDetalleVenta) {
+        this.chkOcultarDetalleVenta = chkOcultarDetalleVenta;
+    }
+    
     
     
     

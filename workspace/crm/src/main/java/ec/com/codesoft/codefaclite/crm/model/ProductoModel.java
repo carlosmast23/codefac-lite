@@ -186,7 +186,12 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         enumSiNo=enumSiNo.getEnumByBoolean(getChkTransportarGuiaRemision().isSelected());        
         producto.setTransportarEnGuiaRemisionEnum(enumSiNo);
+        
+        enumSiNo=enumSiNo.getEnumByBoolean(getChkOcultarDetalleVenta().isSelected());        
+        producto.setOcultarDetalleVentaEnum(enumSiNo);
+        
         producto.setEmpresa(session.getEmpresa());
+        
 
     }
     
@@ -308,6 +313,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getCmbGenerarCodigoBarras().setSelectedItem(enumGenerarCodigoBarras);
         
         getChkTransportarGuiaRemision().setSelected(producto.getTransportarEnGuiaRemisionEnum().getBool());
+        getChkOcultarDetalleVenta().setSelected(producto.getOcultarDetalleVentaEnum().getBool());
         
         actualizarTablaEnsamble();
     
@@ -333,6 +339,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getCmbGenerarCodigoBarras().setSelectedItem(EnumSiNo.NO);
         
         getChkTransportarGuiaRemision().setEnabled(true);
+        getChkOcultarDetalleVenta().setEnabled(true);
 
 
     }

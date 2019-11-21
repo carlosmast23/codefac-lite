@@ -1,0 +1,3 @@
+al momento de facturar y grabar cuando tiene un vendedor seteado desde un action listener directo genera un error de no serializble el modelFactura
+y eso se soluciona cuando creo una variable global y el vendedor seteo al final , vero porque se genera este problema 
+Pista: parece que algo tiene que ver y se genera problemas con las clases internas

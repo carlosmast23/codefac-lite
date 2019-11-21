@@ -94,6 +94,9 @@ public class Producto implements Serializable, Comparable<Producto> {
     @Column(name = "GENERAR_CODIGO_BARRAS")
     private String generarCodigoBarras;
     
+    @Column(name = "OCULTAR_DETALLE_VENTA")
+    private String ocultarDetalleVenta;
+    
     @Column(name = "TRANSPORTAR_EN_GUIA_REMISION")
     private String transportarEnGuiaRemision;
     
@@ -340,6 +343,26 @@ public class Producto implements Serializable, Comparable<Producto> {
 
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
+    }
+
+    public String getOcultarDetalleVenta() {
+        return ocultarDetalleVenta;
+    }
+
+    public void setOcultarDetalleVenta(String ocultarDetalleVenta) {
+        this.ocultarDetalleVenta = ocultarDetalleVenta;
+    }
+    
+    public EnumSiNo getOcultarDetalleVentaEnum() {
+        if(ocultarDetalleVenta==null)
+        {
+            return EnumSiNo.NO; //Por defecto si no existe valor asumo que es NO
+        }
+        return EnumSiNo.getEnumByLetra(ocultarDetalleVenta);
+    }
+    
+    public void setOcultarDetalleVentaEnum(EnumSiNo enumSiNo) {
+        this.ocultarDetalleVenta=enumSiNo.getLetra();
     }
     
     

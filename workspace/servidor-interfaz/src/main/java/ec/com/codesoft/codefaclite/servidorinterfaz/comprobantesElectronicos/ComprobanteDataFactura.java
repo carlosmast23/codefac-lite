@@ -106,7 +106,10 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
             informacionFactura.setIdentificacionComprador(UtilidadesTextos.llenarCarateresDerecha(factura.getCliente().getIdentificacion(), 13, "0"));
         }
         
-        informacionFactura.setDireccionComprador(factura.getSucursal().getDireccion());
+        if(factura.getSucursal().getDireccion()!=null && !factura.getSucursal().getDireccion().equals(""))
+        {
+            informacionFactura.setDireccionComprador(factura.getSucursal().getDireccion());
+        }
 
         informacionFactura.setImporteTotal(factura.getTotal());
         //Falta manejar este campo al momento de guardar

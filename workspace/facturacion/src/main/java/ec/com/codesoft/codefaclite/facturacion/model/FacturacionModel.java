@@ -1122,6 +1122,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 else if(puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
                 {
                     facturaManual(documentoEnum);
+                    DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                 }
 
                 
@@ -1218,7 +1219,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         try {
             //DocumentoEnum documentoEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
             
-            DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            
             InputStream reporteOriginal = null;
             if(documentoEnum.NOTA_VENTA_INTERNA.equals(documentoEnum))
             {
@@ -1248,6 +1249,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             for (FacturaDetalle detalleFactura : factura.getDetalles()) {
                 DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
+                
+                //Todo: Ver alguna mejora
+                //Validacion para ver si existe algun item que no se debe imprimir en el reporte
+                if(detalleFactura.getTipoDocumentoEnum().equals(TipoDocumentoEnum.INVENTARIO) || detalleFactura.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
+                {
+                    Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalleFactura.getReferenciaId());
+                    if(producto.getOcultarDetalleVentaEnum().equals(EnumSiNo.SI))
+                    {
+                        continue; //Si el item es oculto no va a imprimir en los detalles
+                    }
+                    
+                }
+                
+                
                 detalle.setCantidad(detalleFactura.getCantidad() + "");
                 detalle.setDescripcion(detalleFactura.getDescripcion());
                 detalle.setValorTotal(detalleFactura.getTotal() + "");
