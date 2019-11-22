@@ -32,3 +32,4 @@ AL MOMENTO DE VERIFICAR LAS CONEXIONES EN FACTURACION ELECTRONICA QUE REALICE MA
 ver si en la facturaDetalle se agrega los campos de codigo principal y codigo secundario 
 
 Para el señor Rios toca hacer que no se imprimima algun item que este con el producto clasificado como oculto , ahorita solo funciona para la manual , yo creo que esta de poner algun texto en el detalle como [hidden] y que en los reportes se entienda que no deba imprimir
+validar que cuando se configura multiempresa no permita ingresa directorios repetidos

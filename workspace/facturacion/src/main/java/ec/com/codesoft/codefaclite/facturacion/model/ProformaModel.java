@@ -162,9 +162,9 @@ public class ProformaModel extends FacturacionModel{
         //map de los parametros faltantes
         Map<String, Object> mapParametros = getMapParametrosReporte(factura);
         
-        InputStream path = RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("proforma.jrxml");
+        //InputStream path = RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("proforma.jrxml");
 
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, dataReporte, this.panelPadre, "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
+        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"proforma.jrxml",mapParametros, dataReporte, this.panelPadre, "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
 
     }
     
@@ -195,6 +195,10 @@ public class ProformaModel extends FacturacionModel{
             RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
             InputStream inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionalesA4.jrxml"));
             JasperReport reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
+            mapParametros.put("SUBREPORT_INFO_OTRO",reportDatosAdicionales);
+            
+            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionales.jrxml"));
+            reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
             mapParametros.put("SUBREPORT_INFO_ADICIONAL",reportDatosAdicionales);
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
 	<property name="ireport.zoom" value="1.464100000000018"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="503"/>
+	<property name="ireport.y" value="556"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -514,7 +514,7 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="211">
+		<band height="218">
 			<rectangle radius="10">
 				<reportElement x="0" y="3" width="397" height="127" uuid="4c480e46-a4e3-400a-b74b-706a025f3078"/>
 			</rectangle>
@@ -653,7 +653,7 @@
 				<textFieldExpression><![CDATA[$P{ice}]]></textFieldExpression>
 			</textField>
 			<rectangle radius="10">
-				<reportElement x="0" y="134" width="555" height="76" uuid="fdaef8cf-2b3b-4edc-9344-a5292370148a"/>
+				<reportElement x="0" y="134" width="555" height="84" uuid="fdaef8cf-2b3b-4edc-9344-a5292370148a"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="10" y="134" width="120" height="13" uuid="90d5319e-cb06-41a8-a66d-f6c3cff8b655"/>
@@ -663,7 +663,7 @@
 				<text><![CDATA[Otros Datos]]></text>
 			</staticText>
 			<subreport>
-				<reportElement stretchType="RelativeToTallestObject" x="10" y="147" width="524" height="63" uuid="ac53fb98-5fc4-4f8c-89eb-00feb26dab47"/>
+				<reportElement stretchType="RelativeToTallestObject" x="10" y="147" width="524" height="71" uuid="ac53fb98-5fc4-4f8c-89eb-00feb26dab47"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{informacionAdicionalList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_INFO_OTRO}]]></subreportExpression>
 			</subreport>
