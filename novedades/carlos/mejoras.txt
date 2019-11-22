@@ -30,3 +30,5 @@ Mejoras: Hacer que en la pantalla de productos el nombre no valide excelto las Á
 HACER QUE SE PUEDA MANDAR A IMPRIMIR DIRECTAMENTE DESDE JAVA
 AL MOMENTO DE VERIFICAR LAS CONEXIONES EN FACTURACION ELECTRONICA QUE REALICE MAS DE UNA VEZ PORQUE EL SERVICIO DEL SRI SABE ESTAR INTERRUMPIDO DE VEZ EN CUANDO
 ver si en la facturaDetalle se agrega los campos de codigo principal y codigo secundario 
+
+Para el señor Rios toca hacer que no se imprimima algun item que este con el producto clasificado como oculto , ahorita solo funciona para la manual , yo creo que esta de poner algun texto en el detalle como [hidden] y que en los reportes se entienda que no deba imprimir

@@ -477,6 +477,17 @@ public class Persona implements Serializable, Comparable<Persona> {
         this.razonSocial=construirRazonSocial(nombres,apellidos);
     }
     
+    public String imprimirDireccionPorDefecto()
+    {
+        if(establecimientos!=null)
+        {
+            for (PersonaEstablecimiento establecimiento : establecimientos) {
+                return establecimiento.getDireccion();
+            }
+        }
+        return "";
+    }
+    
     
     public ValidacionCedulaEnum validarIdentificacion()
     {
