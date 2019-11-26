@@ -107,4 +107,10 @@ public abstract class ParametrosSistemaCodefac {
      */
     public static final Integer INTENTOS_MAXIMO_VERICAR_CONEXION_SRI=5;
     
+    /**
+     * Etiqueta oculta detalle factura
+     */
+    public static String ETIQUETA_OCULTAR_DETALLE_FACTURA="[Hidden]";
+    
+    
 }
