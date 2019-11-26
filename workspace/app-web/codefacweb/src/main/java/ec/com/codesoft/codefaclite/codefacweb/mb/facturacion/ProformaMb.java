@@ -643,10 +643,14 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         mapParametros.put("informacionAdicionalList", obtenerDatosAdicionales());
 
         try {
-            RecursosServiceIf service = ServiceFactory.getFactory().getRecursosServiceIf();
-            InputStream inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionalesA4.jrxml"));
+            RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+            InputStream inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionalesA4.jrxml"));
             JasperReport reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
-            mapParametros.put("SUBREPORT_INFO_ADICIONAL", reportDatosAdicionales);
+            mapParametros.put("SUBREPORT_INFO_OTRO",reportDatosAdicionales);
+            
+            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionales.jrxml"));
+            reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
+            mapParametros.put("SUBREPORT_INFO_ADICIONAL",reportDatosAdicionales);
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

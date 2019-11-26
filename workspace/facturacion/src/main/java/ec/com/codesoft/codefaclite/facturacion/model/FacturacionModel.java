@@ -1713,6 +1713,36 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTblDatosAdicionales().setModel(modeloTablaDatosAdicionales);
         
         UtilidadesTablas.ocultarColumna(getTblDatosAdicionales(),0); //Ocultar la fila del objeto para poder volver a modificar
+        
+        modeloTablaDatosAdicionales.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int columnaModificada=e.getColumn();
+                int filaModificada=e.getFirstRow();
+                
+                if(filaModificada<0 || columnaModificada<0) //Si no existe ninguna fila seleccionada no ejecuta ninguna accion 
+                    return;
+                
+                Object dato=modeloTablaDatosAdicionales.getValueAt(filaModificada, columnaModificada);
+                //TableModel modelo = ((TableModel) (e.getSource()));
+                //String datoOriginal=modelo.getValueAt(filaModificada,columnaModificada)
+                
+                ComprobanteAdicional comprobanteAdicional=factura.getDatosAdicionales().get(filaModificada);
+                switch(columnaModificada)
+                {
+                    //Caso cuando se edite el nombre del dato adicional
+                    case 1:
+                        comprobanteAdicional.setCampo(dato.toString());
+                        break;
+                        
+                    //Caso cuando se edite el valor del dato adicional
+                    case 2:
+                        comprobanteAdicional.setValor(dato.toString());
+                        break;
+                        
+                }
+            }
+        });
     }
 
     /**
@@ -3268,6 +3298,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void keyReleased(KeyEvent e) {}
         });
+       
     }
 
     private void setearValoresVista() {
