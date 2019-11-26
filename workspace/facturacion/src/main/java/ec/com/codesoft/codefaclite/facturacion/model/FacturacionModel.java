@@ -1252,7 +1252,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 //Todo: Ver alguna mejora
                 //Validacion para ver si existe algun item que no se debe imprimir en el reporte
-                if(detalleFactura.getTipoDocumentoEnum().equals(TipoDocumentoEnum.INVENTARIO) || detalleFactura.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
+                /*if(detalleFactura.getTipoDocumentoEnum().equals(TipoDocumentoEnum.INVENTARIO) || detalleFactura.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
                 {
                     Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalleFactura.getReferenciaId());
                     if(producto.getOcultarDetalleVentaEnum().equals(EnumSiNo.SI))
@@ -1260,8 +1260,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         continue; //Si el item es oculto no va a imprimir en los detalles
                     }
                     
-                }
-                
+                }*/
                 
                 detalle.setCantidad(detalleFactura.getCantidad() + "");
                 detalle.setDescripcion(detalleFactura.getDescripcion());

@@ -68,6 +68,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
@@ -1976,6 +1977,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
          */
         comprobante.setSecuencial(secuencial);
         
+        /**
+         * Agregar campos ocultos que no se deben mostrar en los detalles de las facturas electronicas
+         */
+        agregarEtiquetaDetallesCamposOcultos(comprobante);
+        
           /**
          * Validacion para evitar ingresar comprobantes repetidos
          */
@@ -2006,6 +2012,43 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
         //parametroService.editar(parametro);
         entityManager.merge(puntoEmision);
+    }
+   
+    /**
+     * TODO: Ver como se puede poner restriciones por ejemplo para no superar el limite de caracteres al agregar la etiqueta de Hidden
+     * @param comprobante
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
+    private void agregarEtiquetaDetallesCamposOcultos(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
+    {
+        DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
+        switch(documentoEnum)
+        {
+            case FACTURA:
+            case NOTA_VENTA_INTERNA:
+            case NOTA_VENTA:
+                Factura factura=(Factura) comprobante;
+                for (FacturaDetalle detalle : factura.getDetalles()) {
+                    ProductoService productoService=new ProductoService();
+                    
+                    switch(detalle.getTipoDocumentoEnum())
+                    {
+                        case LIBRE:
+                        case INVENTARIO:
+                            Producto producto=productoService.buscarPorId(detalle.getReferenciaId());
+                            if(producto.getOcultarDetalleVentaEnum().equals(EnumSiNo.SI))
+                            {
+                                detalle.setDescripcion(detalle.getDescripcion()+" "+ParametrosSistemaCodefac.ETIQUETA_OCULTAR_DETALLE_FACTURA);
+                                entityManager.merge(detalle);                                
+                            }
+                        break;
+                    }
+                    //productoService.
+                }
+ 
+                break;
+        }
     }
     
     private void validarSecuencial(Integer secuencial) throws RemoteException, ServicioCodefacException
