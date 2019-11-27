@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
 	<property name="ireport.zoom" value="1.464100000000018"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="556"/>
+	<property name="ireport.y" value="172"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -130,7 +130,7 @@
 				<text><![CDATA[Ambiente:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="100" y="240" width="187" height="20" uuid="f9902681-6a04-4d2b-9fa1-d968cd848025"/>
+				<reportElement x="100" y="251" width="187" height="20" uuid="f9902681-6a04-4d2b-9fa1-d968cd848025"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -176,7 +176,7 @@
 				<text><![CDATA[Dirección Sucursal:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="5" y="156" width="282" height="18" uuid="6e491e25-7c7e-4daf-ab1c-7340453eb3ed"/>
+				<reportElement x="5" y="153" width="282" height="18" uuid="6e491e25-7c7e-4daf-ab1c-7340453eb3ed"/>
 				<textElement textAlignment="Center">
 					<font size="11" isBold="true"/>
 				</textElement>
@@ -204,7 +204,7 @@
 				<text><![CDATA[Identificación:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="100" y="201" width="187" height="20" uuid="369ab1d6-f0d1-4c79-90e5-a828e3fe1cf9"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="100" y="190" width="187" height="29" uuid="369ab1d6-f0d1-4c79-90e5-a828e3fe1cf9"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -225,25 +225,26 @@
 				<reportElement x="5" y="241" width="95" height="30" uuid="fb1587ca-fa20-4e4d-83ee-31037db32eda"/>
 				<textElement>
 					<font size="9" isBold="true"/>
+					<paragraph tabStopWidth="40"/>
 				</textElement>
 				<text><![CDATA[Contribuyente Especial No]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="100" y="220" width="187" height="20" uuid="c6e18b02-c339-4ac2-a0ef-df874a62768c"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="100" y="221" width="187" height="30" uuid="c6e18b02-c339-4ac2-a0ef-df874a62768c"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{direccion_sucursal}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="201" width="95" height="20" uuid="c22337eb-1915-4f01-8262-ca7581251ac2"/>
+				<reportElement x="5" y="190" width="95" height="20" uuid="c22337eb-1915-4f01-8262-ca7581251ac2"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección Matriz:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="5" y="174" width="282" height="18" uuid="20edfeb2-f06d-4a3b-a278-010049807845"/>
+				<reportElement x="5" y="172" width="282" height="18" uuid="20edfeb2-f06d-4a3b-a278-010049807845"/>
 				<textElement textAlignment="Center">
 					<font size="11" isItalic="true"/>
 				</textElement>
