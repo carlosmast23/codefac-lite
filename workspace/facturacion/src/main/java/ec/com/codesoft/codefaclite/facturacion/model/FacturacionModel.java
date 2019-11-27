@@ -188,7 +188,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      * Variable que almacena la forma de pago por defecto cuando no se selecciona ninguna
      */
     private SriFormaPago formaPagoDefecto;
-    private Empleado vendedor;
+    //private Empleado vendedor;
 
     /**
      * Mapa de datos adicionales que se almacenan temporalmente y sirven para la
@@ -639,16 +639,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 buscarDialogoModel.setVisible(true);
                 Empleado empleadoTmp = (Empleado) buscarDialogoModel.getResultado();
                 if (empleadoTmp != null) {
-                    vendedor=empleadoTmp;
-                    //factura.setVendedor(empleadoTmp);
+                    //vendedor=empleadoTmp;
+                    factura.setVendedor(empleadoTmp);
                     getTxtVendedor().setText(empleadoTmp.getIdentificacion() + " - " + empleadoTmp.getNombresCompletos());
                     //factura.setVendedor(null);
                     
-                    factura.addDatoAdicional(new FacturaAdicional(
+                    /*factura.addDatoAdicional(new FacturaAdicional(
                             ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
                             factura.getVendedor().getNombresCompletos(), 
                             ComprobanteAdicional.Tipo.TIPO_OTRO) {
-                    });
+                    });*/
+                                   
+                    FacturaAdicional facturaAdicional=new FacturaAdicional(
+                            ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
+                            factura.getVendedor().getNombresCompletos(), 
+                            ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    
+                    factura.addDatoAdicional(facturaAdicional);
                     
                     //factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(),factura.getVendedor().getNombresCompletos());
                     cargarTablaDatosAdicionales();
@@ -1472,7 +1479,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 break;
 
         }
-
+        
         cargarDatosDetalles();
         limpiarDetalleFactura();
         cargarTotales();
@@ -1506,6 +1513,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
         
         if (facturaTmp != null) {
+            limpiar();
             this.factura = facturaTmp;
             cargarDatosBuscar();
             validacionesParaEditar();
@@ -1600,6 +1608,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getCmbPreciosVenta().removeAllItems();
         getCmbConsumidorFinal().setSelected(false); //Ver si esta dato esta parametrizado en configuraciones
+        
+        
         
         habilitarPermisosEdicionFactura();
 
@@ -2249,7 +2259,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setEmpresa(session.getEmpresa());
         factura.setUsuario(session.getUsuario());
         factura.setSucursalEmpresa(session.getSucursal());
-        factura.setVendedor(vendedor);
+        //factura.setVendedor(vendedor);
         
         //factura.setIvaSriId(session.get;
         
