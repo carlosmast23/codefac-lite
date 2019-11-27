@@ -1006,7 +1006,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         this.productoSeleccionado=productoSeleccionado;
         cargarPrecios(productoSeleccionado);
-        setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
+        String descripcion=productoSeleccionado.getNombre();
+        descripcion+=(productoSeleccionado.getCaracteristicas()!=null)?" "+productoSeleccionado.getCaracteristicas():"";
+        descripcion=descripcion.replace("\n"," ");
+        
+        setearValoresProducto(productoSeleccionado.getValorUnitario(),descripcion,productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
+        //setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre()+"",productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
     }
     
     private void cargarPrecios(Producto producto) {
