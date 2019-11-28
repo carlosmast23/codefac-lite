@@ -6,10 +6,16 @@
 package ec.com.codesoft.codefaclite.cartera.model;
 
 import ec.com.codesoft.codefaclite.cartera.panel.CuentasPorCobarReportePanel;
+import ec.com.codesoft.codefaclite.cartera.reportdata.CuentasPorCobrarData;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
@@ -21,10 +27,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +49,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
 {
     private Persona persona;
     private boolean banderaTodos;
+    private List<Cartera> carteraResultado;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -70,10 +79,57 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    private String[] obtenerCabecera()
+    {
+        String[] nombreCabeceras = {
+                            "Código", 
+                            "Documento",
+                            "Preimpreso",
+                            "Fecha",
+                            "Identificación",
+                            "Razón Social",
+                            "Nombre Comercial",
+                            "Total",
+                            "Saldo",
+                        };
+        return nombreCabeceras;
+    }
 
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        InputStream path=RecursoCodefac.JASPER_INVENTARIO.JASPER_CARTERA.getResourceInputStream("cuentas_por_cobrar.jrxml");
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        
+        
+        if(carteraResultado!=null)
+        {
+            List<CuentasPorCobrarData> resultadoReporte=CuentasPorCobrarData.castCuentasPorCobrar(carteraResultado);
+            
+            DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try{
+                        Excel excel = new Excel();
+                        String nombreCabeceras[] = obtenerCabecera();
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, resultadoReporte);
+                        excel.abrirDocumento();
+                    }
+                    catch(Exception exc)
+                    {
+                        exc.printStackTrace();
+                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }  
+                }
+
+                @Override
+                public void pdf() {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoReporte, panelPadre,"Cuentas Por Cobrar");
+                    //dispose();
+                    //setVisible(false);
+                }
+            });
+        }
     }
 
     @Override
@@ -93,7 +149,10 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -141,6 +200,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                         List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()));
                     }
                     List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()));
+                    carteraResultado=carteras;
                     mostrarDatosTabla(carteras);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(CuentasPorCobrarReporteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -187,18 +247,27 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
      private void mostrarDatosTabla(List<Cartera> carteras)
     {
         
-        String[] titulo={"Preimpreso","Persona","Saldo"};
+        String[] titulo=obtenerCabecera();
         DefaultTableModel defaultTableModel = new DefaultTableModel(titulo,0);
-        BigDecimal saldos = new BigDecimal(BigInteger.ZERO);
-        for (Cartera cartera : carteras) {
+        List<CuentasPorCobrarData> resultadoImprimir=CuentasPorCobrarData.castCuentasPorCobrar(carteras);
+        BigDecimal saldoPendiente=BigDecimal.ZERO;
+        for (CuentasPorCobrarData cuentaPorCobrarData : resultadoImprimir) {
             Vector<String> fila=new Vector<String>();
-            fila.add(cartera.getPreimpreso()+"");
-            fila.add(cartera.getPersona().getRazonSocial());
-            fila.add(cartera.getSaldo()+"");
-            saldos = saldos.add(cartera.getSaldo());
+            fila.add(cuentaPorCobrarData.getCodigo());
+            fila.add(cuentaPorCobrarData.getDocumento());
+            fila.add(cuentaPorCobrarData.getPreimpreso());
+            fila.add(cuentaPorCobrarData.getFechaEmision());
+            fila.add(cuentaPorCobrarData.getIdentificacion());
+            fila.add(cuentaPorCobrarData.getRazonSocial());
+            fila.add(cuentaPorCobrarData.getNombreComercial());            
+            fila.add(cuentaPorCobrarData.getTotal());
+            fila.add(cuentaPorCobrarData.getSaldo());
+            
+            saldoPendiente=saldoPendiente.add(new BigDecimal(cuentaPorCobrarData.getSaldo()));
             defaultTableModel.addRow(fila);
         }
-        getLblTotal().setText(""+saldos);
+        
+        getLblTotal().setText(""+saldoPendiente);
         getTableCuentasPorCobrar().setModel(defaultTableModel);
         
     }
