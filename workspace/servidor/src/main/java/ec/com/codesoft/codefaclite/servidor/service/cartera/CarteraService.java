@@ -221,8 +221,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
 
     }
     
-    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff) throws ServicioCodefacException, RemoteException {
-        return carteraFacade.getCarteraSaldoCero(persona, fi, ff);
+    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum) throws ServicioCodefacException, RemoteException {
+        return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum);
     }
             
 }
