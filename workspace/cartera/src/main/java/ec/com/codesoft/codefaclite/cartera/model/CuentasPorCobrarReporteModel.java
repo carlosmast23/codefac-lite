@@ -126,12 +126,17 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
 
                 @Override
                 public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoReporte, panelPadre,"Cuentas Por Cobrar");
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoReporte, panelPadre,obtenerTituloReporte());
                     //dispose();
                     //setVisible(false);
                 }
             });
         }
+    }
+    
+    public String obtenerTituloReporte()
+    {
+        return "Cuentas Por Cobrar";
     }
 
     @Override
@@ -201,7 +206,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                     }else{
                         List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()));
                     }*/
-                    List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()),DocumentoCategoriaEnum.COMPROBANTES_VENTA);
+                    List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()),DocumentoCategoriaEnum.COMPROBANTES_VENTA,getTipoCarteraEnum());
                     carteraResultado=carteras;
                     mostrarDatosTabla(carteras);
                 } catch (ServicioCodefacException ex) {
@@ -212,6 +217,11 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                
             }
         });
+    }
+    
+    public Cartera.TipoCarteraEnum getTipoCarteraEnum()
+    {
+        return Cartera.TipoCarteraEnum.CLIENTE;
     }
     
     public void addListenerCheck()

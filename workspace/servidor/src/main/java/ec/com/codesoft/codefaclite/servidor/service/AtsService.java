@@ -202,8 +202,8 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             //Fecha de registro contable del comprobante de venta
             //compraAts.setFechaRegistro(dateFormat.format(compra.getFechaCreacion())); //Todo: este dato por defecto voy a dejar como fecha de registro la fecha de la compra
             compraAts.setFechaRegistro(dateFormat.format(compra.getFechaFactura())); //Todo: este dato por defecto voy a dejar como fecha de registro la fecha de la compra
-            compraAts.setEstablecimiento(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEstablecimiento(),3,"0"));
-            compraAts.setPuntoEmision(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEmision(),3,"0"));
+            compraAts.setEstablecimiento(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEstablecimiento().toString(),3,"0"));
+            compraAts.setPuntoEmision(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEmision().toString(),3,"0"));
             compraAts.setSecuencial(compra.getSecuencial().toString());
             compraAts.setFechaEmision(dateFormat.format(compra.getFechaFactura()));
             

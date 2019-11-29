@@ -31,7 +31,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         super(Cartera.class);
     }
       
-    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum)
+    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera)
     {
         String cliente = "", fecha = "", saldo = "";
         if (persona != null) {
@@ -55,12 +55,12 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         
         saldo = " AND c.saldo>0";    
         Cartera cartera=new Cartera();
-        cartera.getCodigoDocumento();
+        cartera.getTipoCartera();
         
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(categoriaMenuEnum,"c.codigoDocumento");
         
         try {
-            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +" AND ("+whereDocumentos+")  ORDER BY c.secuencial asc";
+            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +" AND ("+whereDocumentos+") AND c.tipoCartera=?4  ORDER BY c.secuencial asc";
             Query query = getEntityManager().createQuery(queryString);
             if (persona != null) {
                 query.setParameter(1, persona);
@@ -72,7 +72,10 @@ public class CarteraFacade extends AbstractFacade<Cartera>
                 query.setParameter(3, ff);
             }
             
-           
+            if(tipoCartera!=null)
+            {
+                query.setParameter(4,tipoCartera.getLetra());
+            }
             
             return query.getResultList();
         } catch (NoResultException e) {

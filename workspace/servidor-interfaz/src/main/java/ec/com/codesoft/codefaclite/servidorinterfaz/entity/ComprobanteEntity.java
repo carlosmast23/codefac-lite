@@ -67,6 +67,9 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     @Column(name = "DIRECCION")
     protected String direccion;
     
+    /**
+     * Este campo se refiere a la direccion desde donde se esta facturando
+     */
     @Column(name = "DIRECCION_ESTABLECIMIENTO")
     protected String direccionEstablecimiento;
     

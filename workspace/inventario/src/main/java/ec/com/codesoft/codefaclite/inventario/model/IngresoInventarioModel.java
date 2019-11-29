@@ -240,8 +240,8 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         List<CompraDetalle> detalles=compraInventario.getDetalles();
         for (CompraDetalle detalle : detalles) {
             KardexDetalleTmp kardexDetalle = new KardexDetalleTmp();
-            kardexDetalle.setPuntoEstablecimiento(compraInventario.getPuntoEstablecimiento());
-            kardexDetalle.setPuntoEmision(compraInventario.getPuntoEmision());
+            kardexDetalle.setPuntoEstablecimiento(compraInventario.getPuntoEstablecimiento().toString());
+            kardexDetalle.setPuntoEmision(compraInventario.getPuntoEmision().toString());
             kardexDetalle.setSecuencial(compraInventario.getSecuencial());
             
             kardexDetalle.setCantidad(detalle.getCantidad().intValue()); //TODO: ESTA PARTE SE DEBE MEJORAR PARA QUE EL KARDEX TERMINE CON VALORES DECIMALES

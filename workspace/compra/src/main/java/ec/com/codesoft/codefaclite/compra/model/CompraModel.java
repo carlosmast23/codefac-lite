@@ -201,8 +201,8 @@ public class CompraModel extends CompraPanel{
         //compra.setPuntoEmision(getTxtFPreimpreso().getText().substring(0,3));
         //compra.setPuntoEstablecimiento(getTxtFPreimpreso().getText().substring(4,7));
         //compra.setSecuencial(Integer.parseInt(getTxtFPreimpreso().getText().substring(8, 17)));
-        compra.setPuntoEmision(getTxtPuntoEmisionCompra().getText());
-        compra.setPuntoEstablecimiento(getTxtEstablecimientoCompra().getText());
+        compra.setPuntoEmision(Integer.parseInt(getTxtPuntoEmisionCompra().getText()));
+        compra.setPuntoEstablecimiento(new BigDecimal(getTxtEstablecimientoCompra().getText()));
         compra.setSecuencial(Integer.parseInt(getTxtSecuencialCompra().getText()));
         
         compra.setTipoFacturacion(""); //TODO: Establecer el metodo de facturacion manual y electronica
@@ -586,7 +586,7 @@ public class CompraModel extends CompraPanel{
         compra.setSubtotalImpuestos(ordenCompra.getSubtotalImpuestos());
         compra.setSubtotalSinImpuestos(ordenCompra.getSubtotalSinImpuestos());
         compra.setTotal(ordenCompra.getTotal());
-        compra.setUsuarioId(ordenCompra.getUsuarioId());
+        compra.setUsuario(null);//Terminar de setar el usuario
         
         //Cargar los detalles
         for (OrdenCompraDetalle detalleOrden : ordenCompra.getDetalles()) {

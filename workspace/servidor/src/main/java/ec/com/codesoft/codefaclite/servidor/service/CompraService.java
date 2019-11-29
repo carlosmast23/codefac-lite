@@ -10,9 +10,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraFacade;
+import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -75,7 +78,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                             entityManager.merge(compraDetalle.getProductoProveedor());
                         }
                     }
-
+                    grabarCartera(compra);
                     entityManager.persist(compra);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -86,6 +89,13 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         });
         
         //TODO: Falta retornar el tipo de dato por ejemplo en los dialogos necesita obtener el nuevo dato modificado.
+    }
+    
+        private void grabarCartera(Compra compra) throws RemoteException
+    {
+        //Grabar en la cartera si todo el proceso anterior fue correcto
+        CarteraService carteraService = new CarteraService();
+        carteraService.grabarDocumentoCartera(compra, Cartera.TipoCarteraEnum.PROVEEDORES);
     }
 
     public void eliminarCompra(Compra compra) throws ServicioCodefacException,RemoteException

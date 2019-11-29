@@ -60,8 +60,8 @@ public class CompraMigrarModel extends MigrarModel{
         compra.setObservacion((String) fila.getByEnum(ExcelMigrarCompras.Enum.OBSERVACION).valor);    
         compra.setProveedor(buscarCliente((String) fila.getByEnum(ExcelMigrarCompras.Enum.IDENTICACION).valor));
         compra.setSecuencial((Integer) fila.getByEnum(ExcelMigrarCompras.Enum.SECUENCIAL).valor);    
-        compra.setPuntoEmision(((Integer) fila.getByEnum(ExcelMigrarCompras.Enum.PUNTO_EMISION).valor).toString());    
-        compra.setPuntoEstablecimiento(((Integer) fila.getByEnum(ExcelMigrarCompras.Enum.PUNTO_ESTABLECIMIENTO).valor).toString());    
+        compra.setPuntoEmision((Integer) fila.getByEnum(ExcelMigrarCompras.Enum.PUNTO_EMISION).valor);    
+        compra.setPuntoEstablecimiento(new BigDecimal(fila.getByEnum(ExcelMigrarCompras.Enum.PUNTO_ESTABLECIMIENTO).valor.toString()));    
         compra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         
         compra.setSubtotalImpuestos((BigDecimal) fila.getByEnum(ExcelMigrarCompras.Enum.SUBTOTAL_IVA).valor);    

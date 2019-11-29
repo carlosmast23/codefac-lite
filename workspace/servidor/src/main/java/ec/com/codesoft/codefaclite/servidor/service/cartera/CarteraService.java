@@ -9,6 +9,8 @@ import ec.com.codesoft.codefaclite.servidor.facade.cartera.CarteraFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -159,19 +161,39 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             case NOTA_VENTA_INTERNA:
             case NOTA_VENTA:
             case FACTURA:
-                Factura factura = (Factura) comprobante;
-                cartera.setPersona(factura.getCliente());
-                cartera.setReferenciaID(factura.getId());
-                cartera.setSaldo(factura.getTotal());
-                cartera.setTotal(factura.getTotal());
-                
-                for (FacturaDetalle detalle : factura.getDetalles()) {
-                    CarteraDetalle carteraDetalle=new CarteraDetalle();
-                    carteraDetalle.setDescripcion(detalle.getDescripcion());
-                    carteraDetalle.setSaldo(detalle.getTotal());
-                    carteraDetalle.setTotal(detalle.getTotal());
-                    cartera.addDetalle(carteraDetalle);
+                //TODO: Unir la misma logica tanto para facturas de venta como de compra
+                if(tipo.equals(tipo.CLIENTE))
+                {
+                    Factura factura = (Factura) comprobante;
+                    cartera.setPersona(factura.getCliente());
+                    cartera.setReferenciaID(factura.getId());
+                    cartera.setSaldo(factura.getTotal());
+                    cartera.setTotal(factura.getTotal());
+
+                    for (FacturaDetalle detalle : factura.getDetalles()) {
+                        CarteraDetalle carteraDetalle=new CarteraDetalle();
+                        carteraDetalle.setDescripcion(detalle.getDescripcion());
+                        carteraDetalle.setSaldo(detalle.getTotal());
+                        carteraDetalle.setTotal(detalle.getTotal());
+                        cartera.addDetalle(carteraDetalle);
+                    }
+                }else if(tipo.equals(tipo.PROVEEDORES))
+                {
+                    Compra compra = (Compra) comprobante;
+                    cartera.setPersona(compra.getProveedor());
+                    cartera.setReferenciaID(compra.getId());
+                    cartera.setSaldo(compra.getTotal());
+                    cartera.setTotal(compra.getTotal());
+
+                    for (CompraDetalle detalle : compra.getDetalles()) {
+                        CarteraDetalle carteraDetalle=new CarteraDetalle();
+                        carteraDetalle.setDescripcion(detalle.getDescripcion());
+                        carteraDetalle.setSaldo(detalle.getTotal());
+                        carteraDetalle.setTotal(detalle.getTotal());
+                        cartera.addDetalle(carteraDetalle);
+                    }
                 }
+                
                 break;
 
             case RETENCIONES:
@@ -221,8 +243,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
 
     }
     
-    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum) throws ServicioCodefacException, RemoteException {
-        return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum);
+    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera) throws ServicioCodefacException, RemoteException {
+        return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera);
     }
             
 }
