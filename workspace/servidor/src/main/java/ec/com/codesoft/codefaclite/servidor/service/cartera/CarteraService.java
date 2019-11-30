@@ -56,6 +56,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     
     public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
     {
+        validacionCartera(cartera,cruces);
+        
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() {
@@ -90,6 +92,20 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         });
         
         return cartera;
+    }
+    
+    private void validacionCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException 
+    {
+        if(cartera.getDetalles()==null || cartera.getDetalles().size()==0)
+        {
+            throw new ServicioCodefacException("No se puede grabar con detalles vacios"); 
+        }
+        
+        if(cartera.getPersona()==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar la cartera sin un cliente o proveedor asignado"); 
+        }
+            
     }
     
     private void actualizarSaldosCarteraSinTrasaccion(List<CarteraCruce> cruces)
@@ -246,5 +262,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera) throws ServicioCodefacException, RemoteException {
         return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera);
     }
+
+    
             
 }
