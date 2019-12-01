@@ -59,6 +59,9 @@ public class Empresa implements Serializable {
     @Column(name = "TEXTO1")
     private String adicional;
     
+    @Column(name = "CODIGO")
+    private String codigo;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa",fetch = FetchType.EAGER)
     private List<Sucursal> sucursales;
 
@@ -170,6 +173,14 @@ public class Empresa implements Serializable {
 
     public void setSucursales(List<Sucursal> sucursales) {
         this.sucursales = sucursales;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
     
     

@@ -9,10 +9,12 @@ import ec.com.codesoft.codefaclite.licence.NoExisteLicenciaException;
 import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaExcepcion;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidor.facade.UtilidadFacade;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
@@ -464,6 +466,33 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         } catch (Exception ex) {
             Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public String crearCodigoPorEmpresaYSucursalSinTransaccion(Sucursal sucursal,String codigo,String nombreTabla) throws RemoteException,ServicioCodefacException
+    {
+        final String SEPARADOR_CODIGO="-";
+        
+        String codigoEmpresa=sucursal.getEmpresa().getCodigo();
+        String codigoSucursal=sucursal.getCodigo();
+        
+        if(codigoEmpresa==null || codigoEmpresa.isEmpty())
+        {
+            throw new ServicioCodefacException("No tiene código de la empresa");
+        }
+        
+        if(codigoSucursal==null || codigoSucursal.isEmpty())
+        {
+            throw new ServicioCodefacException("No tiene código de la sucursal");
+        }
+        String prefijo=
+                codigoEmpresa+SEPARADOR_CODIGO+
+                codigoSucursal+SEPARADOR_CODIGO+
+                codigo;
+        
+        UtilidadFacade utilidadFacade=new UtilidadFacade();
+        Integer codigoNuevo=utilidadFacade.obtenerCodigoMaximo(prefijo, nombreTabla);
+        return "";
+        
     }
 
 

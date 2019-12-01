@@ -229,6 +229,7 @@ public class EmpresaModel extends EmpresaForm
         //empresa.setCelular(getTxtCelular().getText());
         empresa.setFacebook(getTxtFacebook().getText());
         empresa.setAdicional(getTxtAdicional().getText());
+        empresa.setCodigo(getjTextCodigoEmpresa().getText());
         
         if(getjCheckBLlevaContabilidad().isSelected())
         {
@@ -358,6 +359,7 @@ public class EmpresaModel extends EmpresaForm
         getjTextLogo().setText(empresa.getImagenLogoPath());
         getTxtFacebook().setText(empresa.getFacebook());
         getTxtAdicional().setText(empresa.getAdicional());
+        getjTextCodigoEmpresa().setText(empresa.getCodigo());
     }
 
     

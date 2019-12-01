@@ -86,6 +86,9 @@ public class Cartera implements Serializable{
     @Column(name = "ESTADO")
     private String estado;
     
+    @Column(name = "CODIGO")
+    private String codigo;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartera", fetch = FetchType.EAGER)
     private List<CarteraDetalle> detalles;
 
@@ -192,6 +195,16 @@ public class Cartera implements Serializable{
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+    
+    
 
     @Override
     public int hashCode() {
