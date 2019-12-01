@@ -31,7 +31,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         super(Cartera.class);
     }
       
-    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera)
+    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Boolean carteraConSaldo)
     {
         String cliente = "", fecha = "", saldo = "";
         if (persona != null) {
@@ -53,7 +53,9 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         DocumentoCategoriaEnum doc;
         cartera.getCarteraDocumentoEnum().getCategoria();*/
         
-        saldo = " AND c.saldo>0";    
+        if(carteraConSaldo)
+            saldo = " AND c.saldo>0";    
+        
         Cartera cartera=new Cartera();
         cartera.getTipoCartera();
         

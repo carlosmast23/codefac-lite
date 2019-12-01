@@ -54,6 +54,14 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         return getFacade().getMovimientoCartera(persona);
     }
     
+    /**
+     * TODO: Verificar que los cruces solo deben actualizar ahora directo en el detalle
+     * @param cartera
+     * @param cruces
+     * @return
+     * @throws ServicioCodefacException
+     * @throws java.rmi.RemoteException 
+     */
     public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -78,6 +86,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                     CarteraDetalle carteraDetalleGrabada=mapDetallesGrabados.get(carteraCruce.getCarteraDetalle().getId());
                     carteraCruce.setCarteraDetalle(carteraDetalleGrabada);
                     entityManager.persist(carteraCruce);
+                    
+                    //Actualizar en los detalles de la cartera
+                    carteraCruce.getCarteraAfectada().getCruces().add(carteraCruce);
                 }
                 
                 //grabar la cartera
@@ -243,8 +254,19 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
 
     }
     
-    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera) throws ServicioCodefacException, RemoteException {
-        return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera);
+    /**
+     * Obtiene la cartera que esta pendiente de cancelar
+     * @param persona
+     * @param fi
+     * @param ff
+     * @param categoriaMenuEnum
+     * @param tipoCartera
+     * @return
+     * @throws ServicioCodefacException
+     * @throws RemoteException 
+     */
+    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Boolean carteraConSaldo) throws ServicioCodefacException, RemoteException {
+        return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera,carteraConSaldo);
     }
             
 }
