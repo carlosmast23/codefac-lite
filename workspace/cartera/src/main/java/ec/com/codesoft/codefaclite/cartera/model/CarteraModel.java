@@ -104,12 +104,15 @@ public class CarteraModel extends CarteraPanel{
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
+            //validar();
             setearVariables();
             CarteraServiceIf carteraServiceIf=ServiceFactory.getFactory().getCarteraServiceIf();
             carteraServiceIf.grabarCartera(cartera, cruces);
             DialogoCodefac.mensaje("Cartera Grabado correctamente","El registro fue grabado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (RemoteException ex) {
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -261,6 +264,11 @@ public class CarteraModel extends CarteraPanel{
     }
 
     private void valoresIniciales() {
+        
+        getBtnAgregarDetalle().setToolTipText("Agregar Detalle");
+        getBtnEditarDetalle().setToolTipText("Editar Detalle");
+        getBtnEliminarDetalle().setToolTipText("Eliminar Detalle");
+        
         getCmbTipoCartera().removeAllItems();
         for (Cartera.TipoCarteraEnum carteraEnum : Cartera.TipoCarteraEnum.values()) {
             getCmbTipoCartera().addItem(carteraEnum);
@@ -541,12 +549,14 @@ public class CarteraModel extends CarteraPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 CarteraDetalle carteraDetalle=new CarteraDetalle();
-                setearDatosDetalle(carteraDetalle,false);
-                cartera.addDetalle(carteraDetalle);
-                
-                //Actualizar la vista
-                actualizaVistaTablaDetalles();
-                limpiarDetalleVista();
+                if( setearDatosDetalle(carteraDetalle,false))
+                {
+                    cartera.addDetalle(carteraDetalle);
+
+                    //Actualizar la vista
+                    actualizaVistaTablaDetalles();
+                    limpiarDetalleVista();
+                }
                 
             }
         });
@@ -579,10 +589,36 @@ public class CarteraModel extends CarteraPanel{
         });
     }
     
-    private void setearDatosDetalle(CarteraDetalle carteraDetalle,Boolean editar)
+    private boolean setearDatosDetalle(CarteraDetalle carteraDetalle,Boolean editar)
     {
-        BigDecimal total = new BigDecimal(getTxtValorDetalle().getText());
+        /**
+         * TODO: Analziar para seprar esto en otra funcion
+         * =====================> VALIDAR INGRESO DE LA INFORMACION <==========
+         */
+        BigDecimal total =null;
+        try
+        {
+            total = new BigDecimal(getTxtValorDetalle().getText());
+        }catch(NumberFormatException e)
+        {
+            DialogoCodefac.mensaje("Advertencia","Ingreso un formato correcto para el número",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+        
         String descripcion = getTxtDescripcionDetalle().getText();
+        
+        if(descripcion.isEmpty())
+        {
+            DialogoCodefac.mensaje("Advertencia","No se puede agregar descripciones vacias", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+        if(total.compareTo(BigDecimal.ZERO)<=0)
+        {
+            DialogoCodefac.mensaje("Advertencia","No se puede ingresar valores menores iguales que cero", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
 
         carteraDetalle.setTotal(total);
         carteraDetalle.setDescripcion(descripcion);
@@ -591,6 +627,7 @@ public class CarteraModel extends CarteraPanel{
         {
             carteraDetalle.setSaldo(total);
         }
+        return true;
     }
     
     private void limpiarDetalleVista()
@@ -841,6 +878,14 @@ public class CarteraModel extends CarteraPanel{
         cartera.setTipoCartera(tipoEnum.getLetra());
         cartera.setTotal(cartera.totalDetalles());
         
+    }
+
+    private void validar() throws ExcepcionCodefacLite {
+        if(cartera.getDetalles()==null || cartera.getDetalles().size()==0)
+        {
+            DialogoCodefac.mensaje("Error","No se pueden grabar con detalles vacios",DialogoCodefac.MENSAJE_INCORRECTO);
+           throw new ExcepcionCodefacLite("No se puede grabar una cartera con detalles vacios");
+        }
     }
     
     

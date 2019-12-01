@@ -237,37 +237,37 @@ public class UtilidadesServidor {
 
                                 }
 
-                            } else //Si no se crea la tabla en sus totalidad busco columnas para agregar , porque se supone que si crea la tabla no tiene sentido agregar columnas luego que van a generar error
-                            {
-                                //Buscar todas las etiquetas de agregar columnas
-                                String[] etiquetas = queryTabla.split(ETIQUETA_AGREGAR_COLUMNA);
+                            }// else //Si no se crea la tabla en sus totalidad busco columnas para agregar , porque se supone que si crea la tabla no tiene sentido agregar columnas luego que van a generar error
+                            //{
+                             //Buscar todas las etiquetas de agregar columnas
+                            String[] etiquetas = queryTabla.split(ETIQUETA_AGREGAR_COLUMNA);
 
-                                // solo ingresar si encuentra divisiones que inidiquen que contega esa etiqueta
-                                if (etiquetas.length > 1) {
-                                    for (int i = 1; i < etiquetas.length; i++) {
-                                        String etiqueta = etiquetas[i];
-                                        //Solo acceder a la parte donde tenga las etiquetas
+                            // solo ingresar si encuentra divisiones que inidiquen que contega esa etiqueta
+                            if (etiquetas.length > 1) {
+                                for (int i = 1; i < etiquetas.length; i++) {
+                                    String etiqueta = etiquetas[i];
+                                    //Solo acceder a la parte donde tenga las etiquetas
 
-                                        String version = obtenerPropiedad(etiqueta, ETIQUETA_VERSION);
-                                        String nombreTabla = obtenerNombreTabla(queryTabla);
-                                        String queryNuevo = obtenerQueryEdit(etiqueta, nombreTabla);
+                                    String version = obtenerPropiedad(etiqueta, ETIQUETA_VERSION);
+                                    String nombreTabla = obtenerNombreTabla(queryTabla);
+                                    String queryNuevo = obtenerQueryEdit(etiqueta, nombreTabla);
 
-                                        //Agregar al Map los querys si no existe ninguno con ese numero de version
-                                        if (mapQuerysVersion.get(version) == null) {
-                                            List<ScriptCodefac> listaQuerys = new ArrayList<ScriptCodefac>();
-                                            listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.INSERT_COLUMN));
-                                            mapQuerysVersion.put(version, listaQuerys);
-                                        } else //Obtiene la lista de los querys anteriormente agregados para ingresar el nuevo query
-                                        {
-                                            List<ScriptCodefac> listaQuerys = mapQuerysVersion.get(version);
-                                            listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.INSERT_COLUMN));
-                                            mapQuerysVersion.put(version, listaQuerys);
-                                        }
-
+                                    //Agregar al Map los querys si no existe ninguno con ese numero de version
+                                    if (mapQuerysVersion.get(version) == null) {
+                                        List<ScriptCodefac> listaQuerys = new ArrayList<ScriptCodefac>();
+                                        listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.INSERT_COLUMN));
+                                        mapQuerysVersion.put(version, listaQuerys);
+                                    } else //Obtiene la lista de los querys anteriormente agregados para ingresar el nuevo query
+                                    {
+                                        List<ScriptCodefac> listaQuerys = mapQuerysVersion.get(version);
+                                        listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.INSERT_COLUMN));
+                                        mapQuerysVersion.put(version, listaQuerys);
                                     }
-                                }
 
+                                }
                             }
+
+                            //}
 
                         }
                     } catch (NullPointerException cpe) {

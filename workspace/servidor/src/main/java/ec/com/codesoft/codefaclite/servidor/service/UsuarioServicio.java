@@ -268,7 +268,8 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                 Usuario usuarioOriginal = getFacade().find(entity.getId());
 
                 //Verificar que no sea el usuario root el quieren editar
-                if (usuarioOriginal.getNick().equals(Usuario.SUPER_USUARIO)) {
+                //usuariosActivos.size() > 0 && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)
+                if (usuarioOriginal.getNick().equals(Usuario.SUPER_USUARIO) && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION )) {
                     throw new ServicioCodefacException("El usuario root no se puede editar");
 
                 }
@@ -356,7 +357,8 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                     mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
                     mapParametros.put("empresa",entity.getEmpresa());
                     List<Usuario> usuariosActivos = obtenerPorMap(mapParametros);
-                    if (usuariosActivos.size() > 0) {
+                    if (usuariosActivos.size() > 0 && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) 
+                    {
                         throw new ServicioCodefacException("En la licencia gratuita solo puede crear 1 usuario \n Si desea mas usuarios necesita una licencia PREMIUN");
                     }
                 }

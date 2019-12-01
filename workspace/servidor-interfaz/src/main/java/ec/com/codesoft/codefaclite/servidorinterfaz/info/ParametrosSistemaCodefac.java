@@ -20,11 +20,11 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.2.8.1.0";
+    public static final String VERSION="1.2.8.1.1";
     /**
      * El modo de configuracion del sistema
      */
-    public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;
+    public static final ModoSistemaEnum MODO=ModoSistemaEnum.DESARROLLO;
 
     /**
      * Puerto por defecto para configurar las conexiones en red no es final porque puedo modificar al momento de leer el archivo de configuraciones

@@ -28,6 +28,8 @@ create table CARTERA(
     CODIGO_DOCUMENTO varchar(3),  
     TOTAL decimal(13,2),
     SALDO decimal(13,2),  
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.1.1)*/
+    CODIGO varchar(3),  
     primary key (ID)
 );
 
