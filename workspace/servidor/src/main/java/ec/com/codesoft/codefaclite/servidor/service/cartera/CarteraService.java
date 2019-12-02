@@ -9,17 +9,20 @@ import ec.com.codesoft.codefaclite.servidor.facade.cartera.CarteraFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NombresEntidadesJPA;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
@@ -65,12 +68,18 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
     {
         validacionCartera(cartera,cruces);
+        //TODO: Solucion para tener problemas con las referencias de datos similares
+        clonarCruces(cruces);
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() {
+            public void transaccion() throws RemoteException, ServicioCodefacException {
                 
                 Map<Long,CarteraDetalle> mapDetallesGrabados=new HashMap<Long,CarteraDetalle>();
+                
+                //ObtenerCodigoNuevoCartera
+                String codigoCartera=generarCodigoCartera(cartera.getSucursal(),cartera.getCodigoDocumento());
+                cartera.setCodigo(codigoCartera);
                 
                 //grabar los detalles de la cartera
                 for (CarteraDetalle detalle : cartera.getDetalles()) {
@@ -89,9 +98,13 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                     carteraCruce.setCarteraDetalle(carteraDetalleGrabada);
                     entityManager.persist(carteraCruce);
                     
-                    //Actualizar en los detalles de la cartera
-                    carteraCruce.getCarteraAfectada().getCruces().add(carteraCruce);
+                    ////Actualizar en los detalles de la cartera TODO: Revisar
+                    //carteraCruce.getCarteraAfectada().getCruces().add(carteraCruce);
+                    
                 }
+                
+                //Actualizar reerencias de los cruces
+                
                 
                 //grabar la cartera
                 entityManager.persist(cartera);
@@ -99,10 +112,50 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 //Actuaizar Saldo de las entidades de cartera afectada en los cruces
                 actualizarSaldosCarteraSinTrasaccion(cruces);
                 
+                //TODO:Metodo temporal para actualizar las referencias de los cruces
+                actualizarReferenciasCrucesSinTransaccion(cartera);
+                
             }
         });
         
         return cartera;
+    }
+    
+    private void  clonarCruces(List<CarteraCruce> cruces) throws RemoteException, ServicioCodefacException
+    {
+        for (CarteraCruce cruce : cruces) {
+            cruce.setCarteraDetalle(cruce.getCarteraDetalle().clone());
+        }
+    }
+    
+    private void actualizarReferenciasCrucesSinTransaccion(Cartera cartera) throws RemoteException, ServicioCodefacException
+    {
+        CarteraCruceService carteraCruceService=new CarteraCruceService();
+        
+        //Actualizar los detalles de las carteras
+        CarteraDetalleService carteraDetalleService=new CarteraDetalleService();
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("cartera",cartera);
+        List<CarteraDetalle> detallesCartera=carteraDetalleService.obtenerPorMap(mapParametros);
+        cartera.setDetalles(detallesCartera);
+        
+        //Actualizar cruces de las carteraas
+        List<CarteraCruce> crucesAfecta=carteraCruceService.buscarPorCarteraAfecta(cartera);
+        cartera.setCruces(crucesAfecta);
+        
+        //Actualizar los cruces de los detalles de los carteras
+        for (CarteraDetalle detalle : cartera.getDetalles()) {
+            List<CarteraCruce> cruces=carteraCruceService.buscarPorCarteraDetalle(detalle);
+            detalle.setCruces(cruces);
+        }
+        
+    }
+    
+    private String generarCodigoCartera(Sucursal sucursal,String codigoDocumento) throws RemoteException, ServicioCodefacException
+    {
+        UtilidadesService utilidadesService=new UtilidadesService();
+        String codigo=utilidadesService.crearCodigoPorEmpresaYSucursalSinTransaccion(sucursal,codigoDocumento,Cartera.class.getSimpleName());
+        return codigo;        
     }
     
     private void validacionCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException 
@@ -115,6 +168,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         if(cartera.getPersona()==null)
         {
             throw new ServicioCodefacException("No se puede grabar la cartera sin un cliente o proveedor asignado"); 
+        }
+        
+        if(cartera.getSucursal()==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar la cartera sin asignar una sucursal"); 
         }
             
     }

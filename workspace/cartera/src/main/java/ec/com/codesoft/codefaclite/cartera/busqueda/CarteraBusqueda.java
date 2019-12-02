@@ -49,6 +49,7 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<ColumnaDialogo>();
+        titulo.add(new ColumnaDialogo("Código", 0.15d));
         titulo.add(new ColumnaDialogo("Preimpreso", 0.15d));
         titulo.add(new ColumnaDialogo("Documento", 0.3d));
         titulo.add(new ColumnaDialogo("Identificacion", 0.15d));
@@ -156,6 +157,7 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
 
     @Override
     public void agregarObjeto(Cartera t, Vector dato) {
+        dato.add(t.getCodigo());
         dato.add(t.getPreimpreso());
         dato.add((t.getCarteraDocumentoEnum()!=null)?t.getCarteraDocumentoEnum().getNombre():"");
         dato.add(t.getPersona().getIdentificacion());

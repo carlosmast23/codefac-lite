@@ -112,5 +112,14 @@ public abstract class ParametrosSistemaCodefac {
      */
     public static String ETIQUETA_OCULTAR_DETALLE_FACTURA="[Hidden]";
     
+    /**
+     * Etiqueta que me permite controlar el tamanio maximo para generar los codigos de los documentos 
+     */
+    public static Integer TAMANIO_CODIGOS=8;
+    /**
+     * Caracter para realizar la separacion al generar los codigos
+     */
+    public static String CARACTER_SEPARACION_CODIGO="-";
+    
     
 }

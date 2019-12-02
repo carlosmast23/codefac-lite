@@ -5,7 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NombresEntidadesJPA;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -32,7 +35,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "cartera")
+@Table(name = NombresEntidadesJPA.CARTERA)
 public class Cartera implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,6 +91,12 @@ public class Cartera implements Serializable{
     
     @Column(name = "CODIGO")
     private String codigo;
+    
+    @JoinColumn(name = "SUCURSAL_ID")
+    private Sucursal sucursal;
+    
+    @JoinColumn(name = "USUARIO_ID")
+    private Usuario usuario;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartera", fetch = FetchType.EAGER)
     private List<CarteraDetalle> detalles;
@@ -216,6 +225,23 @@ public class Cartera implements Serializable{
     {
         return codigo;
     }
+
+    public Sucursal getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(Sucursal sucursal) {
+        this.sucursal = sucursal;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
     
     
 
@@ -339,6 +365,7 @@ public class Cartera implements Serializable{
         public String toString() {
             return nombre;
         }
+        
         
         public static TipoCarteraEnum buscarPorLetra(String letra)
         {
