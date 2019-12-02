@@ -278,6 +278,11 @@ public class Cartera implements Serializable{
         return GeneralEnumEstado.getEnum(estado);
     }
     
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum)
+    {
+        this.estado=estadoEnum.getEstado();
+    }
+    
 
     public void setDetalles(List<CarteraDetalle> detalles) {
         this.detalles = detalles;

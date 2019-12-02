@@ -52,6 +52,7 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
         titulo.add(new ColumnaDialogo("Código", 0.15d));
         titulo.add(new ColumnaDialogo("Preimpreso", 0.15d));
         titulo.add(new ColumnaDialogo("Documento", 0.3d));
+        titulo.add(new ColumnaDialogo("Estado", 0.1d));
         titulo.add(new ColumnaDialogo("Identificacion", 0.15d));
         titulo.add(new ColumnaDialogo("Nombre Completo", 0.15d));
         titulo.add(new ColumnaDialogo("Saldo", 0.1d));
@@ -160,6 +161,7 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
         dato.add(t.getCodigo());
         dato.add(t.getPreimpreso());
         dato.add((t.getCarteraDocumentoEnum()!=null)?t.getCarteraDocumentoEnum().getNombre():"");
+        dato.add(t.getEstadoEnum().getEstado());
         dato.add(t.getPersona().getIdentificacion());
         dato.add(t.getPersona().getNombresCompletos());
         dato.add(t.getSaldo());

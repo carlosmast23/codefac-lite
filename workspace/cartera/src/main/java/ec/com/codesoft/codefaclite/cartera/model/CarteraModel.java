@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Client
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
@@ -132,7 +133,32 @@ public class CarteraModel extends CarteraPanel{
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            try 
+            {
+               if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
+               {
+                    ServiceFactory.getFactory().getCarteraServiceIf().eliminar(cartera);
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+               }
+               else
+               {
+                   throw new ExcepcionCodefacLite("Cancelar eliminar registro");
+               }
+                
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                throw new ExcepcionCodefacLite(ex.getMessage());
+            } catch (RemoteException ex) {
+                Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ACCION_PERMITIDA_MODULO_EDITAR);
+        }
     }
 
     @Override

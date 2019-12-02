@@ -113,7 +113,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 actualizarSaldosCarteraSinTrasaccion(cruces);
                 
                 //TODO:Metodo temporal para actualizar las referencias de los cruces
-                actualizarReferenciasCrucesSinTransaccion(cartera);
+                actualizarReferenciasCartera(cartera);
                 
             }
         });
@@ -125,6 +125,17 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     {
         for (CarteraCruce cruce : cruces) {
             cruce.setCarteraDetalle(cruce.getCarteraDetalle().clone());
+        }
+    }
+    
+    private void actualizarReferenciasCartera(Cartera cartera) throws RemoteException, ServicioCodefacException
+    {
+        actualizarReferenciasCrucesSinTransaccion(cartera);
+        for (CarteraDetalle carteraDetalle : cartera.getDetalles()) 
+        {
+            for (CarteraCruce cruce : carteraDetalle.getCruces()) {
+                actualizarReferenciasCrucesSinTransaccion(cruce.getCarteraAfectada());
+            }
         }
     }
     
@@ -148,6 +159,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             List<CarteraCruce> cruces=carteraCruceService.buscarPorCarteraDetalle(detalle);
             detalle.setCruces(cruces);
         }
+        
+        entityManager.merge(cartera);
         
     }
     
@@ -203,6 +216,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 BigDecimal valorCruzadoDetalle=getFacade().obtenerValorCruceCarteraDetalle(cruce.getCarteraDetalle());
                 cruce.getCarteraDetalle().setSaldo(cruce.getCarteraDetalle().getTotal().subtract(valorCruzadoDetalle));
                 entityManager.merge(cruce.getCarteraDetalle());
+                
             }
         }
         
@@ -341,6 +355,17 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      */
     public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Boolean carteraConSaldo) throws ServicioCodefacException, RemoteException {
         return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera,carteraConSaldo);
+    }
+
+    @Override
+    public void eliminar(Cartera entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                entityManager.merge(entity);
+            }
+        });
     }
 
     
