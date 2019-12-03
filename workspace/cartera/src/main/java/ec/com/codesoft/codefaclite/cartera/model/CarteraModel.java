@@ -110,9 +110,9 @@ public class CarteraModel extends CarteraPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        try {
-            //validar();
+        try {            
             setearVariables();
+            validar();
             CarteraServiceIf carteraServiceIf=ServiceFactory.getFactory().getCarteraServiceIf();
             Cartera carteraTmp=carteraServiceIf.grabarCartera(cartera, cruces);
             DialogoCodefac.mensaje("Cartera Grabado correctamente","El registro fue grabado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
@@ -288,6 +288,12 @@ public class CarteraModel extends CarteraPanel{
         getCmbDocumentoCartera().setSelectedItem(this.cartera.getCarteraDocumentoEnum());
         getCmbFechaEmision().setDate(this.cartera.getFechaEmision());
         cargarDatosCliente(this.cartera.getPersona());
+        
+        //cargar datos adicionales
+        getTxtAutorizacion().setText(cartera.getAutorizacion());
+        getTxtCodigoAuxiliar().setText(cartera.getCodigoAuxiliar());
+        getTxtReferenciaManual().setText(cartera.getReferenciaManual());
+        getTxtPreimpreso().setText(cartera.getPreimpreso());
         
         cargarCruces();
         actualizaVistaTablaDetalles();
@@ -958,13 +964,26 @@ public class CarteraModel extends CarteraPanel{
         cartera.setSucursal(session.getSucursal());
         cartera.setUsuario(session.getUsuario());
         
+        cartera.setAutorizacion(getTxtAutorizacion().getText());
+        cartera.setCodigoAuxiliar(getTxtCodigoAuxiliar().getText());
+        
+        cartera.setReferenciaManual(getTxtReferenciaManual().getText());
+        
     }
 
     private void validar() throws ExcepcionCodefacLite {
         if(cartera.getDetalles()==null || cartera.getDetalles().size()==0)
         {
-            DialogoCodefac.mensaje("Error","No se pueden grabar con detalles vacios",DialogoCodefac.MENSAJE_INCORRECTO);
+           DialogoCodefac.mensaje("Error","No se pueden grabar con detalles vacios",DialogoCodefac.MENSAJE_INCORRECTO);
            throw new ExcepcionCodefacLite("No se puede grabar una cartera con detalles vacios");
+        }
+        
+        if(!cartera.getCarteraDocumentoEnum().getCategoria().getGenerarManualmente())
+        {
+            if(!DialogoCodefac.dialogoPregunta("Advertencia","Este tipo de documento no es recomedable crear por el usuario , desea continuar de todos modos? ",DialogoCodefac.MENSAJE_INCORRECTO))
+            {
+                throw new ExcepcionCodefacLite("Advertencia tipo de documento no es permitido");
+            }
         }
     }
     

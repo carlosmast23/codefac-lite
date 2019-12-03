@@ -426,8 +426,23 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                if(entity.getCruces()!=null && entity.getCruces().size()>0)
+                {
+                    throw new ServicioCodefacException("No se puede eliminar el documentos porque le afectan cruces");
+                }
+                
+                for (CarteraDetalle detalle : entity.getDetalles()) {
+                    if(detalle.getCruces()!=null && detalle.getCruces().size()>0)
+                    {
+                        throw new ServicioCodefacException("No se puede eliminar el documentos porque afecta cruces a otro documento");
+                    }
+                }
+                
+                
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);
+                
+                //TODO , Falta implementar para borrar los cruces
             }
         });
     }

@@ -98,6 +98,16 @@ public class Cartera implements Serializable{
     @JoinColumn(name = "USUARIO_ID")
     private Usuario usuario;
     
+    @Column(name = "AUTORIZACION")
+    private String autorizacion;
+
+    @Column(name = "REFERENCIA_MANUAL")
+    private String referenciaManual;
+
+    @Column(name = "CODIGO_AUXILIAR")
+    private String codigoAuxiliar;
+
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartera", fetch = FetchType.EAGER)
     private List<CarteraDetalle> detalles;
     
@@ -240,6 +250,32 @@ public class Cartera implements Serializable{
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public String getAutorizacion() {
+        return autorizacion;
+    }
+
+    public void setAutorizacion(String autorizacion) {
+        this.autorizacion = autorizacion;
+    }
+
+    public String getReferenciaManual() {
+        return referenciaManual;
+    }
+
+    public void setReferenciaManual(String referenciaManual) {
+        this.referenciaManual = referenciaManual;
+    }
+
+    
+
+    public String getCodigoAuxiliar() {
+        return codigoAuxiliar;
+    }
+
+    public void setCodigoAuxiliar(String codigoAuxiliar) {
+        this.codigoAuxiliar = codigoAuxiliar;
     }
     
     
