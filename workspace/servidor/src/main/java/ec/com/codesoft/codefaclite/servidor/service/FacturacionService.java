@@ -216,7 +216,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
     }
     
-    private void grabarCartera(Factura factura) throws RemoteException
+    private void grabarCartera(Factura factura) throws RemoteException, ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();

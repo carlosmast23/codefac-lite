@@ -35,6 +35,9 @@ public class UtilidadFacade extends AbstractFacade<Object>
         }catch(NoResultException nre)
         {
             nre.printStackTrace();
+        }catch(NullPointerException e)
+        {
+            e.printStackTrace();
         }
         
         Integer resultado=1;

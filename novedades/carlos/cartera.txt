@@ -1,0 +1,3 @@
+Validar que no se puedan eliminar carteras cruzadas , o los que tienen una referencia
+Agregar un campo para saber el tipo de docuento de la referencia para despues buscar en la cartera y se un proceso mas estandar
+cuando tiene abierto la pantalla de retencion y se graba un compra con la misma fecha y luego se quiere enviar sale un error de no se puede enviar porque la fecha de emision es superior de la compra

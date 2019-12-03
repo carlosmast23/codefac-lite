@@ -52,9 +52,9 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         Map<String,Object> map=new HashMap<String, Object>();
         map.put("nombre",nombre);
         map.put("empresa",empresa);
-        List<ParametroCodefac> parametroCodefacList=parametroCodefacFacade.findByMap(map);
+        List<ParametroCodefac> parametroCodefacList=getFacade().findByMap(map);
         if(parametroCodefacList!=null && parametroCodefacList.size()>0 )
-            return ((List<ParametroCodefac>) (parametroCodefacFacade.findByMap(map))).get(0);
+            return ((List<ParametroCodefac>) (getFacade().findByMap(map))).get(0);
         else
             return null;
     }

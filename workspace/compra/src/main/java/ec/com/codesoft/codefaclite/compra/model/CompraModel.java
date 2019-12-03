@@ -165,7 +165,7 @@ public class CompraModel extends CompraPanel{
             servicio.grabarCompra(compra);
             DialogoCodefac.mensaje("Correcto","La compra fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
-            DialogoCodefac.mensaje("Incorrecto","No se puede gurdar la compra",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error al grabar la compra",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (RemoteException ex) {
@@ -213,6 +213,7 @@ public class CompraModel extends CompraPanel{
         //Seteando el tipo de documento 
         TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         compra.setCodigoTipoDocumento(tipoDocumentoEnum.getCodigo());
+        compra.setSucursalEmpresa(session.getSucursal());
         
         /*if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)){
             estadoRetencion = Compra.RetencionEnumCompras.NO_EMITIDO;
