@@ -41,7 +41,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "COMPRA")
-public class Compra implements Serializable {    
+public class Compra extends ComprobanteEntity<FacturaAdicional> implements Serializable {    
     //public static final String ESTADO_FACTURADO="F";
     //public static final String ESTADO_ANULADO="A";
     //public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
@@ -59,10 +59,10 @@ public class Compra implements Serializable {
     private Long tipoClienteId;
     @Column(name = "SECUENCIAL")
     private Integer secuencial;
-    @Column(name = "PUNTO_ESTABLECIMIENTO")
-    private String puntoEstablecimiento;
-    @Column(name = "PUNTO_EMISION")
-    private String puntoEmision;
+    //@Column(name = "PUNTO_ESTABLECIMIENTO")
+    //private String puntoEstablecimiento;
+    //@Column(name = "PUNTO_EMISION")
+    //private String puntoEmision;
     @Column(name = "FECHA_FACTURA")
     private Date fechaFactura;
     @Column(name = "FECHA_CREACION")
@@ -97,8 +97,8 @@ public class Compra implements Serializable {
     private Long ivaSriId;
     @Column(name = "TOTAL")
     private BigDecimal total;
-    @Column(name = "USUARIO_ID")
-    private Long usuarioId;
+    //@Column(name = "USUARIO_ID")
+    //private Long usuarioId;
     @Column(name = "ESTADO")
     private String estado;
    
@@ -116,8 +116,8 @@ public class Compra implements Serializable {
      */
     @Column(name = "TIPO_FACTURACION")
     private String tipoFacturacion;
-    @Column(name = "CODIGO_DOCUMENTO")
-    private String codigoDocumento;
+    //@Column(name = "CODIGO_DOCUMENTO")
+    //private String codigoDocumento;
     @Column(name ="CODIGO_TIPO_DOCUMENTO")
     private String codigoTipoDocumento;
     
@@ -187,20 +187,20 @@ public class Compra implements Serializable {
         return UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(),9,"0");
     }
 
-    public String getPuntoEstablecimiento() {
+    /*public String getPuntoEstablecimiento() {
         return puntoEstablecimiento;
-    }
+    }*/
     
     public String getPuntoEstablecimientoFormat() {
-        return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0");
+        return UtilidadesTextos.llenarCarateresIzquierda(getPuntoEstablecimiento().toString(),3,"0");
     }
     
-    public String getPuntoEmision() {
+    /*public String getPuntoEmision() {
         return puntoEmision;
-    }
+    }*/
     
     public String getPuntoEmisionFormat() {
-        return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision, 3, "0");
+        return UtilidadesTextos.llenarCarateresIzquierda(super.getPuntoEmision().toString(), 3, "0");
     }
     
 
@@ -212,6 +212,16 @@ public class Compra implements Serializable {
         return fechaCreacion;
     }
 
+    /**
+     * TODO: Ver si se puede optimizar esta tarea
+     * @return 
+     */
+    @Override
+    public Date getFechaEmision() {
+        return getFechaFactura(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
     public Long getIvaSriId() {
         return ivaSriId;
@@ -221,9 +231,9 @@ public class Compra implements Serializable {
         return total;
     }
 
-    public Long getUsuarioId() {
+    /*public Long getUsuarioId() {
         return usuarioId;
-    }
+    }*/
 
     public String getEstado() {
         return estado;
@@ -269,13 +279,13 @@ public class Compra implements Serializable {
         this.secuencial = secuencial;
     }
 
-    public void setPuntoEstablecimiento(String puntoEstablecimiento) {
+    /*public void setPuntoEstablecimiento(String puntoEstablecimiento) {
         this.puntoEstablecimiento = puntoEstablecimiento;
-    }
+    }*/
 
-    public void setPuntoEmision(String puntoEmision) {
+    /*public void setPuntoEmision(String puntoEmision) {
         this.puntoEmision = puntoEmision;
-    }
+    }*/
 
     public void setFechaFactura(Date fechaFactura) {
         this.fechaFactura = fechaFactura;
@@ -294,9 +304,9 @@ public class Compra implements Serializable {
         this.total = total;
     }
 
-    public void setUsuarioId(Long usuarioId) {
+    /*public void setUsuarioId(Long usuarioId) {
         this.usuarioId = usuarioId;
-    }
+    }*/
 
     public void setEstado(String estado) {
         this.estado = estado;
@@ -399,13 +409,13 @@ public class Compra implements Serializable {
         this.tipoFacturacion = tipoFacturacionEnum.getCodigoSri();
     }
 
-    public String getCodigoDocumento() {
+    /*public String getCodigoDocumento() {
         return codigoDocumento;
     }
 
     public void setCodigoDocumento(String codigoDocumento) {
         this.codigoDocumento = codigoDocumento;
-    }
+    }*/
 
     public Persona getProveedor() {
         return proveedor;
@@ -514,10 +524,10 @@ public class Compra implements Serializable {
         return subtotalSinImpuestos.add(descuentoSinImpuestos);
     }
     
-    public GeneralEnumEstado getEstadoEnum()
+    /*public GeneralEnumEstado getEstadoEnum()
     {
         return GeneralEnumEstado.getEnum(estado);
-    }
+    }*/
 
     @Override
     public int hashCode() {
@@ -618,13 +628,23 @@ public class Compra implements Serializable {
        }
        else
        {
-        return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
+        return UtilidadesTextos.llenarCarateresIzquierda(getPuntoEstablecimiento().toString(),3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(getPuntoEmision().toString(),3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
        }
     }
     
     public RetencionEnumCompras getEstadoRetencionEnum()
     {
         return RetencionEnumCompras.getEnum(estadoRetencion);
+    }
+
+    @Override
+    public List<FacturaAdicional> getDatosAdicionalesComprobante() {
+        return null;//TODO: No tiene nada implementado en la factura adicional
+    }
+
+    @Override
+    public void addDatoAdicionalAbstract(FacturaAdicional comprobanteAdicional) {
+        //TODO: No tiene implementado nada en los datos adicionales
     }
     
         

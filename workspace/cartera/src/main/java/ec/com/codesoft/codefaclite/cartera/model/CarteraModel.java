@@ -7,13 +7,19 @@ package ec.com.codesoft.codefaclite.cartera.model;
 
 import ec.com.codesoft.codefaclite.cartera.busqueda.CarteraBusqueda;
 import ec.com.codesoft.codefaclite.cartera.panel.CarteraPanel;
+import ec.com.codesoft.codefaclite.cartera.reportdata.CarteraData;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -39,6 +45,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
@@ -103,13 +110,17 @@ public class CarteraModel extends CarteraPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        try {
+        try {            
             setearVariables();
+            validar();
             CarteraServiceIf carteraServiceIf=ServiceFactory.getFactory().getCarteraServiceIf();
-            carteraServiceIf.grabarCartera(cartera, cruces);
+            Cartera carteraTmp=carteraServiceIf.grabarCartera(cartera, cruces);
             DialogoCodefac.mensaje("Cartera Grabado correctamente","El registro fue grabado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            imprimirPdf(carteraTmp);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (RemoteException ex) {
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -122,12 +133,81 @@ public class CarteraModel extends CarteraPanel{
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            try 
+            {
+               if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
+               {
+                    ServiceFactory.getFactory().getCarteraServiceIf().eliminar(cartera);
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+               }
+               else
+               {
+                   throw new ExcepcionCodefacLite("Cancelar eliminar registro");
+               }
+                
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                throw new ExcepcionCodefacLite(ex.getMessage());
+            } catch (RemoteException ex) {
+                Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ACCION_PERMITIDA_MODULO_EDITAR);
+        }
     }
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            imprimirCartera(cartera);
+        }
+    }
+    
+    private void imprimirCartera(Cartera cartera)
+    {
+        //InputStream path = RecursoCodefac.JASPER_CARTERA.getResourceInputStream("comprobante_ingreso_egreso.jrxml");
+        //Map<String,Object> parameters=CarteraData.mapParametros(cartera);
+        List<CarteraData> data=CarteraData.castCarteraData(cartera);
+        
+        DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+            @Override
+            public void excel() {
+                try {
+                    Excel excel = new Excel();
+                    String nombreCabeceras[] = {"Identificación", "Nombres completos", "Nombre Legal", "Telefono", "Dirección", "Email"};
+                    excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                    excel.abrirDocumento();
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                    DialogoCodefac.mensaje("Error", "El archivo Excel se encuentra abierto", DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+            }
+
+            @Override
+            public void pdf() {
+                //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, getNombreReporte());
+                imprimirPdf(cartera);
+            }
+        });
+    }
+    
+    private void imprimirPdf(Cartera cartera)
+    {
+        InputStream path = RecursoCodefac.JASPER_CARTERA.getResourceInputStream("comprobante_ingreso_egreso.jrxml");
+        Map<String,Object> parameters=CarteraData.mapParametros(cartera);
+        List<CarteraData> data=CarteraData.castCarteraData(cartera);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, getNombreReporte());
+    }
+    
+    private String getNombreReporte()
+    {
+        return "Cartera ["+cartera.getCarteraDocumentoEnum().getNombre()+"]";
     }
 
     @Override
@@ -209,6 +289,12 @@ public class CarteraModel extends CarteraPanel{
         getCmbFechaEmision().setDate(this.cartera.getFechaEmision());
         cargarDatosCliente(this.cartera.getPersona());
         
+        //cargar datos adicionales
+        getTxtAutorizacion().setText(cartera.getAutorizacion());
+        getTxtCodigoAuxiliar().setText(cartera.getCodigoAuxiliar());
+        getTxtReferenciaManual().setText(cartera.getReferenciaManual());
+        getTxtPreimpreso().setText(cartera.getPreimpreso());
+        
         cargarCruces();
         actualizaVistaTablaDetalles();
         actualizarTablaCruces();
@@ -261,6 +347,11 @@ public class CarteraModel extends CarteraPanel{
     }
 
     private void valoresIniciales() {
+        
+        getBtnAgregarDetalle().setToolTipText("Agregar Detalle");
+        getBtnEditarDetalle().setToolTipText("Editar Detalle");
+        getBtnEliminarDetalle().setToolTipText("Eliminar Detalle");
+        
         getCmbTipoCartera().removeAllItems();
         for (Cartera.TipoCarteraEnum carteraEnum : Cartera.TipoCarteraEnum.values()) {
             getCmbTipoCartera().addItem(carteraEnum);
@@ -541,12 +632,14 @@ public class CarteraModel extends CarteraPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 CarteraDetalle carteraDetalle=new CarteraDetalle();
-                setearDatosDetalle(carteraDetalle,false);
-                cartera.addDetalle(carteraDetalle);
-                
-                //Actualizar la vista
-                actualizaVistaTablaDetalles();
-                limpiarDetalleVista();
+                if( setearDatosDetalle(carteraDetalle,false))
+                {
+                    cartera.addDetalle(carteraDetalle);
+
+                    //Actualizar la vista
+                    actualizaVistaTablaDetalles();
+                    limpiarDetalleVista();
+                }
                 
             }
         });
@@ -579,10 +672,36 @@ public class CarteraModel extends CarteraPanel{
         });
     }
     
-    private void setearDatosDetalle(CarteraDetalle carteraDetalle,Boolean editar)
+    private boolean setearDatosDetalle(CarteraDetalle carteraDetalle,Boolean editar)
     {
-        BigDecimal total = new BigDecimal(getTxtValorDetalle().getText());
+        /**
+         * TODO: Analziar para seprar esto en otra funcion
+         * =====================> VALIDAR INGRESO DE LA INFORMACION <==========
+         */
+        BigDecimal total =null;
+        try
+        {
+            total = new BigDecimal(getTxtValorDetalle().getText());
+        }catch(NumberFormatException e)
+        {
+            DialogoCodefac.mensaje("Advertencia","Ingreso un formato correcto para el número",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+        
         String descripcion = getTxtDescripcionDetalle().getText();
+        
+        if(descripcion.isEmpty())
+        {
+            DialogoCodefac.mensaje("Advertencia","No se puede agregar descripciones vacias", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+        if(total.compareTo(BigDecimal.ZERO)<=0)
+        {
+            DialogoCodefac.mensaje("Advertencia","No se puede ingresar valores menores iguales que cero", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
 
         carteraDetalle.setTotal(total);
         carteraDetalle.setDescripcion(descripcion);
@@ -590,7 +709,9 @@ public class CarteraModel extends CarteraPanel{
         if(!editar)
         {
             carteraDetalle.setSaldo(total);
+            carteraDetalle.setId(Long.parseLong(System.identityHashCode(carteraDetalle)*-1+"")); //Cuando creo un objeto por primera vez creo un hashCode para despues poder relacionar con los cruces
         }
+        return true;
     }
     
     private void limpiarDetalleVista()
@@ -840,7 +961,30 @@ public class CarteraModel extends CarteraPanel{
         Cartera.TipoCarteraEnum tipoEnum=(Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem();
         cartera.setTipoCartera(tipoEnum.getLetra());
         cartera.setTotal(cartera.totalDetalles());
+        cartera.setSucursal(session.getSucursal());
+        cartera.setUsuario(session.getUsuario());
         
+        cartera.setAutorizacion(getTxtAutorizacion().getText());
+        cartera.setCodigoAuxiliar(getTxtCodigoAuxiliar().getText());
+        
+        cartera.setReferenciaManual(getTxtReferenciaManual().getText());
+        
+    }
+
+    private void validar() throws ExcepcionCodefacLite {
+        if(cartera.getDetalles()==null || cartera.getDetalles().size()==0)
+        {
+           DialogoCodefac.mensaje("Error","No se pueden grabar con detalles vacios",DialogoCodefac.MENSAJE_INCORRECTO);
+           throw new ExcepcionCodefacLite("No se puede grabar una cartera con detalles vacios");
+        }
+        
+        if(!cartera.getCarteraDocumentoEnum().getCategoria().getGenerarManualmente())
+        {
+            if(!DialogoCodefac.dialogoPregunta("Advertencia","Este tipo de documento no es recomedable crear por el usuario , desea continuar de todos modos? ",DialogoCodefac.MENSAJE_INCORRECTO))
+            {
+                throw new ExcepcionCodefacLite("Advertencia tipo de documento no es permitido");
+            }
+        }
     }
     
     

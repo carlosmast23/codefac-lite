@@ -26,6 +26,9 @@ import javax.persistence.Table;
 @Table(name = "SRI_RETENCION_RENTA")
 public class SriRetencionRenta implements Serializable {
     
+    public static final String CODIGO_RETENCION_RENTA="1";
+    public static final String CODIGO_RETENCION_IVA="2";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")

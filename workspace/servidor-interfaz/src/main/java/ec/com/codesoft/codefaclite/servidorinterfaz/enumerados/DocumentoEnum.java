@@ -182,17 +182,41 @@ public enum DocumentoEnum {
         this.documentoLegal=documentoLegal;
     }
     
+    /**
+     * Nombre del documento
+     */
     private String nombre;
+    
+    /**
+     * Documento que me permite tener una clasificacion superior
+     */
     private DocumentoCategoriaEnum categoria;
+    /**
+     * Codigo del documento para poder grabar en la base de datos
+     */
     private String codigo;
+    /**
+     * Variable para saber si es un documento electronico
+     */
     private Boolean comprobanteElectronico;
+    /**
+     * Variable para saber si es documento fisico
+     */
     private Boolean comprobanteFisico;
+    /**
+     * Variable para saber en que modulos puede estar disponible
+     */
     private ModuloCodefacEnum[] moduloEnum;
+    /**
+     * Variable para identificar con un codigo pero del Sri
+     */
     private String codigoSri;
     /**
      * Este parametro me va a servir para clasificar si es un documento legal del Sri o en un documento para control interno
      */
     private Boolean documentoLegal;
+    
+    
 
     public Boolean getComprobanteElectronico() {
         return comprobanteElectronico;

@@ -165,7 +165,7 @@ public class CompraModel extends CompraPanel{
             servicio.grabarCompra(compra);
             DialogoCodefac.mensaje("Correcto","La compra fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
-            DialogoCodefac.mensaje("Incorrecto","No se puede gurdar la compra",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error al grabar la compra",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (RemoteException ex) {
@@ -201,8 +201,8 @@ public class CompraModel extends CompraPanel{
         //compra.setPuntoEmision(getTxtFPreimpreso().getText().substring(0,3));
         //compra.setPuntoEstablecimiento(getTxtFPreimpreso().getText().substring(4,7));
         //compra.setSecuencial(Integer.parseInt(getTxtFPreimpreso().getText().substring(8, 17)));
-        compra.setPuntoEmision(getTxtPuntoEmisionCompra().getText());
-        compra.setPuntoEstablecimiento(getTxtEstablecimientoCompra().getText());
+        compra.setPuntoEmision(Integer.parseInt(getTxtPuntoEmisionCompra().getText()));
+        compra.setPuntoEstablecimiento(new BigDecimal(getTxtEstablecimientoCompra().getText()));
         compra.setSecuencial(Integer.parseInt(getTxtSecuencialCompra().getText()));
         
         compra.setTipoFacturacion(""); //TODO: Establecer el metodo de facturacion manual y electronica
@@ -213,6 +213,7 @@ public class CompraModel extends CompraPanel{
         //Seteando el tipo de documento 
         TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         compra.setCodigoTipoDocumento(tipoDocumentoEnum.getCodigo());
+        compra.setSucursalEmpresa(session.getSucursal());
         
         /*if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)){
             estadoRetencion = Compra.RetencionEnumCompras.NO_EMITIDO;
@@ -586,7 +587,7 @@ public class CompraModel extends CompraPanel{
         compra.setSubtotalImpuestos(ordenCompra.getSubtotalImpuestos());
         compra.setSubtotalSinImpuestos(ordenCompra.getSubtotalSinImpuestos());
         compra.setTotal(ordenCompra.getTotal());
-        compra.setUsuarioId(ordenCompra.getUsuarioId());
+        compra.setUsuario(null);//Terminar de setar el usuario
         
         //Cargar los detalles
         for (OrdenCompraDetalle detalleOrden : ordenCompra.getDetalles()) {

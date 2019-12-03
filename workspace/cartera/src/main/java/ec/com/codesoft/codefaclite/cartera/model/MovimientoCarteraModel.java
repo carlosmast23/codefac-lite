@@ -6,21 +6,36 @@
 package ec.com.codesoft.codefaclite.cartera.model;
 
 import ec.com.codesoft.codefaclite.cartera.panel.MovimientoCarteraPanel;
+import ec.com.codesoft.codefaclite.cartera.reportdata.CruceCarteraData;
+import ec.com.codesoft.codefaclite.cartera.reportdata.CuentasPorCobrarData;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,12 +62,15 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
     /**
      * Map que agrupa la cartera por cliente y sus lista de cruces
      */
-    private Map<Cartera,List<CarteraCruce>> mapMovimientoCartera;
+    //private Map<Cartera,List<CarteraCruce>> mapMovimientoCartera;
+    private List<Cartera> carteraResultado;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        listenerCheckBox();
         listerBotones();
         valoresInicialesPantalla();
+        validacionDatosIngresados=false;
     }
 
     @Override
@@ -77,7 +95,37 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
 
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        InputStream path=RecursoCodefac.JASPER_INVENTARIO.JASPER_CARTERA.getResourceInputStream("movimiento_cartera.jrxml");
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        
+        List<CruceCarteraData> resultadoReporte=CruceCarteraData.castData(carteraResultado);
+        DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+            @Override
+            public void excel() {
+                try {
+                    Excel excel = new Excel();
+                    String nombreCabeceras[] = obtenerCabecera();
+                    //excel.gestionarIngresoInformacionExcel(nombreCabeceras, resultadoReporte);
+                    //excel.abrirDocumento();
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                    DialogoCodefac.mensaje("Error", "El archivo Excel se encuentra abierto", DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+            }
+
+            @Override
+            public void pdf() {
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoReporte, panelPadre,"Movimiento Cartera");
+                //dispose();
+                //setVisible(false);
+            }
+
+            
+        });
+    }
+    
+    private String[] obtenerCabecera() {
+        return new String[]{"","",""};
     }
 
     @Override
@@ -97,7 +145,10 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -120,6 +171,8 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
         for (Cartera.TipoCarteraEnum carteraEnum : Cartera.TipoCarteraEnum.values()) {
             getCmbTipoCartera().addItem(carteraEnum);
         }
+        
+        getChkTodos().setSelected(true);
     }
 
     private void listerBotones() {
@@ -142,11 +195,27 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
     private void listenerBotonConsultar()
     {
         try {
-            List<CarteraCruce> cruces=ServiceFactory.getFactory().getCarteraServiceIf().consultarMovimientoCartera(personaFiltro);
-            mapMovimientoCartera=convertirCrucesEnMap(cruces);
+            CarteraServiceIf carteraServiceIf = ServiceFactory.getFactory().getCarteraServiceIf();
+            Date fechaInicial=null;
+            if(getCmbFechaInicio().getDate()!=null)
+            {
+                fechaInicial=new Date(getCmbFechaInicio().getDate().getTime());
+            }
+                 
+            Date fechaFinal=null;
+            if(getCmbFechaFin().getDate()!=null)
+            {
+                fechaFinal=new Date(getCmbFechaFin().getDate().getTime());
+            }
+                        
+            //List<CarteraCruce> cruces=ServiceFactory.getFactory().getCarteraServiceIf().consultarMovimientoCartera(personaFiltro);
+            carteraResultado= carteraServiceIf.listaCarteraSaldoCero(personaFiltro,fechaInicial, fechaFinal,DocumentoCategoriaEnum.COMPROBANTES_VENTA, (Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem(),false);
+            //mapMovimientoCartera=convertirCrucesEnMap(cruces);
             construirTablaMovimientoCartera();
             
         } catch (RemoteException ex) {
+            Logger.getLogger(MovimientoCarteraModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(MovimientoCarteraModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -157,9 +226,8 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
         String[] titulo={"identificación","Nombres","Documento","Preimpreso","Debe","Haber"};
         DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
         
-        for (Map.Entry<Cartera, List<CarteraCruce>> entry : mapMovimientoCartera.entrySet()) {
-            Cartera cartera = entry.getKey();
-            List<CarteraCruce> cruces = entry.getValue();
+        for (Cartera cartera : carteraResultado) {
+            List<CarteraCruce> cruces = cartera.getCruces();
             
             String[] filaTitulo={cartera.getPersona().getIdentificacion(),cartera.getPersona().getRazonSocial(),"Factura",cartera.getPreimpreso(),cartera.getTotal().toString(),""};
             modeloTabla.addRow(filaTitulo);
@@ -178,8 +246,8 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
             //Espacio en blanco para manejar un formato bonito
             modeloTabla.addRow(new String[]{});
             modeloTabla.addRow(new String[]{});
-            
         }
+        
         
                 
         getTblDatos().setModel(modeloTabla);
@@ -223,6 +291,22 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
             getTxtPersonaFiltro().setText(personaFiltro.toString());
         }
        
+    }
+
+    private void listenerCheckBox() {
+        getChkTodos().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    personaFiltro = null;
+                    getTxtPersonaFiltro().setText("");
+                    //getLblNombreCliente().setText("..");
+                    getBtnBuscarPersona().setEnabled(false);
+                } else {
+                    getBtnBuscarPersona().setEnabled(true);
+                }
+            }
+        });
     }
     
     

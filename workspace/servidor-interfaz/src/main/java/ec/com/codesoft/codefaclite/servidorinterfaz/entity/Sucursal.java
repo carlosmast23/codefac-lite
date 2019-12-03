@@ -57,6 +57,9 @@ public class Sucursal implements Serializable{
     @Column(name = "COD_SUCURSAL")
     private Integer codigoSucursal; 
     
+    @Column(name = "CODIGO")
+    private String codigo;
+    
     @JoinColumn(name ="EMPRESA_ID")
     @ManyToOne(optional = false)
     private Empresa empresa;
@@ -140,6 +143,15 @@ public class Sucursal implements Serializable{
     public void setCelular(String celular) {
         this.celular = celular;
     }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+    
     
     
 

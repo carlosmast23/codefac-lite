@@ -120,7 +120,11 @@ public class MigrarProductoModel extends MigrarModel {
 
                             Kardex kardex = new Kardex();
                             kardex.setBodega(bodega);
-                            kardex.setPrecioPromedio(new BigDecimal(precioVentaPromedio.toString()));
+                            if(precioVentaPromedio>0)
+                            {
+                                kardex.setPrecioPromedio(new BigDecimal(precioVentaPromedio.toString()));
+                            }
+                            
                             kardex.setProducto(producto);
                             kardexDetalle.setKardex(kardex);
                             
@@ -134,7 +138,11 @@ public class MigrarProductoModel extends MigrarModel {
                     
                    
                     producto.setValorUnitario(new BigDecimal(precioVentaPublico.toString()));
-                    producto.setPrecioDistribuidor(new BigDecimal(precioVentaOferta.toString()));
+                    if(precioVentaOferta>0)
+                    {
+                        producto.setPrecioDistribuidor(new BigDecimal(precioVentaOferta.toString()));
+                    }
+                    
                     producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                     //producto.setCatalogoProducto(CatalogoPro);
 

@@ -150,6 +150,7 @@ public class SucursalModel extends SucursalPanel {
         getCmbTipo().setSelectedItem(tipoSucursal);
         
         getCmbEmpresa().setSelectedItem(sucursal.getEmpresa());
+        getTxtCodigo().setText(sucursal.getCodigo());
     }
     
     private void setearDatos()
@@ -159,6 +160,7 @@ public class SucursalModel extends SucursalPanel {
         sucursal.setCelular(getTxtCelular().getText());
         sucursal.setDirecccion(getTxtDireccion().getText());
         sucursal.setEmail(getTxtEmail().getText());
+        sucursal.setCodigo(getTxtCodigo().getText());
 
         sucursal.setCodigoSucursal((Integer) getTxtCodigoEstablecimiento().getValue());
         Sucursal.TipoSucursalEnum tipoSucursalEnum=(Sucursal.TipoSucursalEnum) getCmbTipo().getSelectedItem();
@@ -166,6 +168,7 @@ public class SucursalModel extends SucursalPanel {
         
         Empresa empresaSeleccionado=(Empresa) getCmbEmpresa().getSelectedItem();
         sucursal.setEmpresa(empresaSeleccionado);
+        sucursal.setCodigo(getTxtCodigo().getText());
         
         
     }

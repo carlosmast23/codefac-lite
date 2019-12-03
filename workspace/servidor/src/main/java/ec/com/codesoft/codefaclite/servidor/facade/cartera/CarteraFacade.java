@@ -13,6 +13,10 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Query;
@@ -28,7 +32,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         super(Cartera.class);
     }
       
-    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff)
+    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Boolean carteraConSaldo)
     {
         String cliente = "", fecha = "", saldo = "";
         if (persona != null) {
@@ -46,10 +50,20 @@ public class CarteraFacade extends AbstractFacade<Cartera>
             fecha = " AND (c.fechaEmision BETWEEN ?2 AND ?3)";
         }
         
-        saldo = " AND c.saldo>0";    
+        /*Cartera cartera;
+        DocumentoCategoriaEnum doc;
+        cartera.getCarteraDocumentoEnum().getCategoria();*/
+        
+        if(carteraConSaldo)
+            saldo = " AND c.saldo>0";    
+        
+        /*Cartera cartera=new Cartera();
+        cartera.getEstado();*/
+        
+        String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(categoriaMenuEnum,"c.codigoDocumento");
         
         try {
-            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +" ORDER BY c.secuencial asc";
+            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +" AND ("+whereDocumentos+") AND c.tipoCartera=?4 AND c.estado=?5  ORDER BY c.secuencial asc";
             Query query = getEntityManager().createQuery(queryString);
             if (persona != null) {
                 query.setParameter(1, persona);
@@ -60,10 +74,37 @@ public class CarteraFacade extends AbstractFacade<Cartera>
             if (ff != null) {
                 query.setParameter(3, ff);
             }
+            
+            if(tipoCartera!=null)
+            {
+                query.setParameter(4,tipoCartera.getLetra());
+            }
+            
+            query.setParameter(5,GeneralEnumEstado.ACTIVO.getEstado());
+            
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
         }
+    }
+    
+    private String obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum documentoCategoria,String alias)
+    {
+        List<DocumentoEnum> documentos=DocumentoEnum.obtenerPorCategoria(documentoCategoria);
+        String whereDocumento=" ";
+        Boolean primeraIteracion=true;
+        for (DocumentoEnum documento: documentos) {
+            if(primeraIteracion)
+            {                
+                primeraIteracion=false;
+            }else
+            {
+                whereDocumento+=" OR ";
+            }
+            whereDocumento+=alias+"='"+documento.getCodigo()+"' " ;
+        }
+        return whereDocumento;
+        //DocumentoCategoriaEnum documentoCategoria
     }
     
     public List<CarteraCruce> getMovimientoCartera(Persona persona)

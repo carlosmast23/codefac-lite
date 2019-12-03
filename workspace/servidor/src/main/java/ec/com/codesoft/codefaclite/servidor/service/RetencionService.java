@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.RetencionFacade;
+import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -17,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -66,10 +68,13 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                     compra.setEstadoRetencion(Compra.RetencionEnumCompras.EMITIDO.getEstado());
                     entityManager.merge(compra);
                 }
-                
+                                
                 entity.setCodigoDocumento(DocumentoEnum.RETENCIONES.getCodigo());
+                
+                
                 ComprobantesService servicioComprobante = new ComprobantesService();
                 servicioComprobante.setearSecuencialComprobanteSinTransaccion(entity);
+                grabarCartera(entity);
                /* 
                 ParametroCodefacService parametroService = new ParametroCodefacService();
                 ParametroCodefac parametro = null;
@@ -86,6 +91,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 for (RetencionDetalle retencionDetalle : entity.getDetalles()) {
                     entityManager.persist(retencionDetalle);
                 }
+                
 
                 entityManager.persist(entity);
 
@@ -102,6 +108,13 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         //transaction.begin();        
         //transaction.commit();
         return entity;
+    }
+    
+    private void grabarCartera(Retencion retencion) throws RemoteException, ServicioCodefacException
+    {
+        //Grabar en la cartera si todo el proceso anterior fue correcto
+        CarteraService carteraService = new CarteraService();
+        carteraService.grabarDocumentoCartera(retencion, Cartera.TipoCarteraEnum.PROVEEDORES);
     }
     
     private void validarRetencion(Retencion retencion) throws ServicioCodefacException, RemoteException

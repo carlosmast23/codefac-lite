@@ -26,10 +26,11 @@ hacer que las pantallas de migracion esten diponibles para cualquier version de 
 ver como hacer que el sistema tenga la posibilidad de iniciar como debug para poder ver errores 
 cuando envio por lote muchas veces en la etapa de enviado no puedo saber si algo esta mal y debe quedarse en esa etapa , lo que pasa es que recien me informa cuando autorizo y en esa otra etapa los comprobantes pueden quedar en una carpeta incorrecta de autorizado
 POSIBLE SOLUCION: Ver si mejor siempre se envia de forma individual porque el manejo por lotes tiene muchos casos que el Sri no trata de forma adecuada y requiere mucho manetenimiento
-Mejoras: Hacer que en la pantalla de productos el nombre no valide excelto las Á y Í 
 HACER QUE SE PUEDA MANDAR A IMPRIMIR DIRECTAMENTE DESDE JAVA
 AL MOMENTO DE VERIFICAR LAS CONEXIONES EN FACTURACION ELECTRONICA QUE REALICE MAS DE UNA VEZ PORQUE EL SERVICIO DEL SRI SABE ESTAR INTERRUMPIDO DE VEZ EN CUANDO
 ver si en la facturaDetalle se agrega los campos de codigo principal y codigo secundario 
 
-Para el señor Rios toca hacer que no se imprimima algun item que este con el producto clasificado como oculto , ahorita solo funciona para la manual , yo creo que esta de poner algun texto en el detalle como [hidden] y que en los reportes se entienda que no deba imprimir
 validar que cuando se configura multiempresa no permita ingresa directorios repetidos
+
+Al momento de aplicar un descuento si esta o no inluido iva, que eso afecte tambien al campo de descuento porque ahora siempre toma en cuenta que el descuento es sobre el subtotal antes de impuestos
+Aplicar un descuento global por toda la factura

@@ -188,7 +188,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      * Variable que almacena la forma de pago por defecto cuando no se selecciona ninguna
      */
     private SriFormaPago formaPagoDefecto;
-    private Empleado vendedor;
+    //private Empleado vendedor;
 
     /**
      * Mapa de datos adicionales que se almacenan temporalmente y sirven para la
@@ -639,16 +639,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 buscarDialogoModel.setVisible(true);
                 Empleado empleadoTmp = (Empleado) buscarDialogoModel.getResultado();
                 if (empleadoTmp != null) {
-                    vendedor=empleadoTmp;
-                    //factura.setVendedor(empleadoTmp);
+                    //vendedor=empleadoTmp;
+                    factura.setVendedor(empleadoTmp);
                     getTxtVendedor().setText(empleadoTmp.getIdentificacion() + " - " + empleadoTmp.getNombresCompletos());
                     //factura.setVendedor(null);
                     
-                    factura.addDatoAdicional(new FacturaAdicional(
+                    /*factura.addDatoAdicional(new FacturaAdicional(
                             ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
                             factura.getVendedor().getNombresCompletos(), 
                             ComprobanteAdicional.Tipo.TIPO_OTRO) {
-                    });
+                    });*/
+                                   
+                    FacturaAdicional facturaAdicional=new FacturaAdicional(
+                            ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
+                            factura.getVendedor().getNombresCompletos(), 
+                            ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    
+                    factura.addDatoAdicional(facturaAdicional);
                     
                     //factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(),factura.getVendedor().getNombresCompletos());
                     cargarTablaDatosAdicionales();
@@ -1006,7 +1013,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         this.productoSeleccionado=productoSeleccionado;
         cargarPrecios(productoSeleccionado);
-        setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
+        String descripcion=productoSeleccionado.getNombre();
+        descripcion+=(productoSeleccionado.getCaracteristicas()!=null)?" "+productoSeleccionado.getCaracteristicas():"";
+        descripcion=descripcion.replace("\n"," ");
+        
+        setearValoresProducto(productoSeleccionado.getValorUnitario(),descripcion,productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
+        //setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre()+"",productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
     }
     
     private void cargarPrecios(Producto producto) {
@@ -1252,7 +1264,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 //Todo: Ver alguna mejora
                 //Validacion para ver si existe algun item que no se debe imprimir en el reporte
-                if(detalleFactura.getTipoDocumentoEnum().equals(TipoDocumentoEnum.INVENTARIO) || detalleFactura.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
+                /*if(detalleFactura.getTipoDocumentoEnum().equals(TipoDocumentoEnum.INVENTARIO) || detalleFactura.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
                 {
                     Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalleFactura.getReferenciaId());
                     if(producto.getOcultarDetalleVentaEnum().equals(EnumSiNo.SI))
@@ -1260,8 +1272,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         continue; //Si el item es oculto no va a imprimir en los detalles
                     }
                     
-                }
-                
+                }*/
                 
                 detalle.setCantidad(detalleFactura.getCantidad() + "");
                 detalle.setDescripcion(detalleFactura.getDescripcion());
@@ -1468,7 +1479,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 break;
 
         }
-
+        
         cargarDatosDetalles();
         limpiarDetalleFactura();
         cargarTotales();
@@ -1502,6 +1513,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
         
         if (facturaTmp != null) {
+            limpiar();
             this.factura = facturaTmp;
             cargarDatosBuscar();
             validacionesParaEditar();
@@ -1596,6 +1608,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getCmbPreciosVenta().removeAllItems();
         getCmbConsumidorFinal().setSelected(false); //Ver si esta dato esta parametrizado en configuraciones
+        
+        
         
         habilitarPermisosEdicionFactura();
 
@@ -1713,6 +1727,36 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTblDatosAdicionales().setModel(modeloTablaDatosAdicionales);
         
         UtilidadesTablas.ocultarColumna(getTblDatosAdicionales(),0); //Ocultar la fila del objeto para poder volver a modificar
+        
+        modeloTablaDatosAdicionales.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int columnaModificada=e.getColumn();
+                int filaModificada=e.getFirstRow();
+                
+                if(filaModificada<0 || columnaModificada<0) //Si no existe ninguna fila seleccionada no ejecuta ninguna accion 
+                    return;
+                
+                Object dato=modeloTablaDatosAdicionales.getValueAt(filaModificada, columnaModificada);
+                //TableModel modelo = ((TableModel) (e.getSource()));
+                //String datoOriginal=modelo.getValueAt(filaModificada,columnaModificada)
+                
+                ComprobanteAdicional comprobanteAdicional=factura.getDatosAdicionales().get(filaModificada);
+                switch(columnaModificada)
+                {
+                    //Caso cuando se edite el nombre del dato adicional
+                    case 1:
+                        comprobanteAdicional.setCampo(dato.toString());
+                        break;
+                        
+                    //Caso cuando se edite el valor del dato adicional
+                    case 2:
+                        comprobanteAdicional.setValor(dato.toString());
+                        break;
+                        
+                }
+            }
+        });
     }
 
     /**
@@ -2215,7 +2259,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setEmpresa(session.getEmpresa());
         factura.setUsuario(session.getUsuario());
         factura.setSucursalEmpresa(session.getSucursal());
-        factura.setVendedor(vendedor);
+        //factura.setVendedor(vendedor);
         
         //factura.setIvaSriId(session.get;
         
@@ -3268,6 +3312,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void keyReleased(KeyEvent e) {}
         });
+       
     }
 
     private void setearValoresVista() {

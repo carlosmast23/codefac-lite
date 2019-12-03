@@ -147,6 +147,8 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         lblEspacio2 = new javax.swing.JLabel();
         btnCargarImagen = new javax.swing.JButton();
         lblEspacio3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jTextCodigoEmpresa = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         lblCelular = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -200,10 +202,10 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jPanelConfiguracionEmisor.add(jTextNombreSocial, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel3.setText("Nombre Comercial:");
+        jLabel3.setText("Código: (3 letras)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel3, gridBagConstraints);
@@ -285,6 +287,27 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.weighty = 0.1;
         jPanelConfiguracionEmisor.add(lblEspacio3, gridBagConstraints);
 
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText("Nombre Comercial:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanelConfiguracionEmisor.add(jLabel4, gridBagConstraints);
+
+        jTextCodigoEmpresa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextCodigoEmpresaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanelConfiguracionEmisor.add(jTextCodigoEmpresa, gridBagConstraints);
+
         jTabbedPane1.addTab("Datos generales", jPanelConfiguracionEmisor);
 
         lblCelular.setText("WhatsApp:");
@@ -349,6 +372,10 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCelularActionPerformed
 
+    private void jTextCodigoEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextCodigoEmpresaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextCodigoEmpresaActionPerformed
+
     public JTextField getjTextLogo() {
         return jTextLogo;
     }
@@ -390,6 +417,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -397,6 +425,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JPanel jPanelConfiguracionEmisor;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextCodigoEmpresa;
     private javax.swing.JTextField jTextLogo;
     private javax.swing.JTextField jTextNombreComercial;
     private javax.swing.JTextField jTextNombreSocial;
@@ -422,6 +451,18 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     public JLabel getLblCelular() {
         return lblCelular;
     }
+
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido= true, min=3, max=3,expresionRegularMensaje = "Ingrese 3 caracteres")
+    public JTextField getjTextCodigoEmpresa() {
+        return jTextCodigoEmpresa;
+    }
+
+    public void setjTextCodigoEmpresa(JTextField jTextCodigoEmpresa) {
+        this.jTextCodigoEmpresa = jTextCodigoEmpresa;
+    }
+    
+    
 
     
     

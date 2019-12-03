@@ -5,7 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NombresEntidadesJPA;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -32,7 +35,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "cartera")
+@Table(name = NombresEntidadesJPA.CARTERA)
 public class Cartera implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -86,8 +89,30 @@ public class Cartera implements Serializable{
     @Column(name = "ESTADO")
     private String estado;
     
+    @Column(name = "CODIGO")
+    private String codigo;
+    
+    @JoinColumn(name = "SUCURSAL_ID")
+    private Sucursal sucursal;
+    
+    @JoinColumn(name = "USUARIO_ID")
+    private Usuario usuario;
+    
+    @Column(name = "AUTORIZACION")
+    private String autorizacion;
+
+    @Column(name = "REFERENCIA_MANUAL")
+    private String referenciaManual;
+
+    @Column(name = "CODIGO_AUXILIAR")
+    private String codigoAuxiliar;
+
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartera", fetch = FetchType.EAGER)
     private List<CarteraDetalle> detalles;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "carteraAfectada", fetch = FetchType.EAGER)
+    private List<CarteraCruce> cruces;
 
     public Long getId() {
         return id;
@@ -193,6 +218,69 @@ public class Cartera implements Serializable{
         this.estado = estado;
     }
 
+
+    public List<CarteraCruce> getCruces() {
+        return cruces;
+    }
+
+    public void setCruces(List<CarteraCruce> cruces) {
+        this.cruces = cruces;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+    
+    public String getCodigo() 
+    {
+        return codigo;
+    }
+
+    public Sucursal getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(Sucursal sucursal) {
+        this.sucursal = sucursal;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getAutorizacion() {
+        return autorizacion;
+    }
+
+    public void setAutorizacion(String autorizacion) {
+        this.autorizacion = autorizacion;
+    }
+
+    public String getReferenciaManual() {
+        return referenciaManual;
+    }
+
+    public void setReferenciaManual(String referenciaManual) {
+        this.referenciaManual = referenciaManual;
+    }
+
+    
+
+    public String getCodigoAuxiliar() {
+        return codigoAuxiliar;
+    }
+
+    public void setCodigoAuxiliar(String codigoAuxiliar) {
+        this.codigoAuxiliar = codigoAuxiliar;
+    }
+    
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -224,6 +312,11 @@ public class Cartera implements Serializable{
     public GeneralEnumEstado getEstadoEnum()
     {
         return GeneralEnumEstado.getEnum(estado);
+    }
+    
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum)
+    {
+        this.estado=estadoEnum.getEstado();
     }
     
 
@@ -313,6 +406,7 @@ public class Cartera implements Serializable{
         public String toString() {
             return nombre;
         }
+        
         
         public static TipoCarteraEnum buscarPorLetra(String letra)
         {

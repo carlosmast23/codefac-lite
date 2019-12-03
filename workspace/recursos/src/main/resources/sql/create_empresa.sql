@@ -22,6 +22,8 @@ create table EMPRESA
     CELULAR varchar(10),
     FACEBOOK varchar(50),
     TEXTO1 varchar(100),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.1.1)*/
+    CODIGO varchar(3),
     primary key (ID)
 );
 
@@ -38,7 +40,8 @@ create table SUCURSAL
     DIRECCION varchar(100),
     EMAIL varchar(100),
     COD_SUCURSAL BIGINT,
-
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.1.1)*/
+    CODIGO varchar(3),
     primary key (ID)
 );
 

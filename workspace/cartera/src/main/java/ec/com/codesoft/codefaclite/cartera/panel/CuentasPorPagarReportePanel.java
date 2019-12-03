@@ -95,6 +95,7 @@ public abstract class CuentasPorPagarReportePanel extends ControladorCodefacInte
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jLabel1 = new javax.swing.JLabel();
         txtProveedor = new javax.swing.JTextField();
         btnBuscarProveedor = new javax.swing.JButton();
@@ -107,6 +108,7 @@ public abstract class CuentasPorPagarReportePanel extends ControladorCodefacInte
         tableCuentasPorPagar = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         btnBuscar = new javax.swing.JButton();
+        lblEspacio = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -131,6 +133,7 @@ public abstract class CuentasPorPagarReportePanel extends ControladorCodefacInte
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel1, gridBagConstraints);
 
+        txtProveedor.setEditable(false);
         txtProveedor.setText(" ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -140,7 +143,7 @@ public abstract class CuentasPorPagarReportePanel extends ControladorCodefacInte
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtProveedor, gridBagConstraints);
 
-        btnBuscarProveedor.setText("b");
+        btnBuscarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
@@ -148,6 +151,7 @@ public abstract class CuentasPorPagarReportePanel extends ControladorCodefacInte
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscarProveedor, gridBagConstraints);
 
+        checkTodos.setSelected(true);
         checkTodos.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -168,37 +172,31 @@ public abstract class CuentasPorPagarReportePanel extends ControladorCodefacInte
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(dateFechaInicio, gridBagConstraints);
 
         dateFechaFin.setDateFormatString("yyyy-MM-dd");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(dateFechaFin, gridBagConstraints);
 
         jLabel4.setText("Fecha Fin:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
 
-        tableCuentasPorPagar.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         jScrollPane2.setViewportView(tableCuentasPorPagar);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -206,6 +204,8 @@ public abstract class CuentasPorPagarReportePanel extends ControladorCodefacInte
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 5);
         getContentPane().add(jScrollPane2, gridBagConstraints);
 
@@ -215,11 +215,17 @@ public abstract class CuentasPorPagarReportePanel extends ControladorCodefacInte
         gridBagConstraints.gridy = 1;
         getContentPane().add(jLabel3, gridBagConstraints);
 
-        btnBuscar.setText("Buscar");
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscar.setText("Consultar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 1;
         getContentPane().add(btnBuscar, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 0.2;
+        getContentPane().add(lblEspacio, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -237,7 +243,9 @@ public abstract class CuentasPorPagarReportePanel extends ControladorCodefacInte
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblEspacio;
     private javax.swing.JTable tableCuentasPorPagar;
     private javax.swing.JTextField txtProveedor;
     // End of variables declaration//GEN-END:variables

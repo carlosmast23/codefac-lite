@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
@@ -34,171 +35,20 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author DesarrolloSoftware
  */
-public class CuentasPorPagarReporteModel extends CuentasPorPagarReportePanel
+public class CuentasPorPagarReporteModel extends CuentasPorCobrarReporteModel
 {
 
-    private Persona persona;
-    private boolean banderaTodos;
-    
-    @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        addListenerBotones();
-        addListenerCheck();
-        initDatosTabla();
-        getDateFechaInicio().setDate(new java.util.Date());
-        getDateFechaFin().setDate(new java.util.Date());
-    }
-
-    @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getURLAyuda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<String> getPerfilesPermisos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public CuentasPorPagarReporteModel() {
+        setTitle("Cuentas por pagar");
     }
     
-    public void addListenerBotones()
+    public Cartera.TipoCarteraEnum getTipoCarteraEnum()
     {
-        getBtnBuscarProveedor().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                ProveedorBusquedaDialogo buscarBusquedaDialogo = new ProveedorBusquedaDialogo(session.getEmpresa());
-                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
-                buscarDialogo.setVisible(true);
-                Persona personaTemp = ((PersonaEstablecimiento) buscarDialogo.getResultado()).getPersona();
-                if(personaTemp != null)
-                {
-                   persona = personaTemp;
-                   getTxtProveedor().setText(persona.getIdentificacion() + " - " + persona.getNombreSimple() );
-                }
-            }
-        });
-        
-        getBtnBuscar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                
-                try {
-                    CarteraServiceIf carteraServiceIf = ServiceFactory.getFactory().getCarteraServiceIf();
-                    if(banderaTodos)
-                    {
-                        List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()));
-                    }else{
-                        List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()));
-                    }
-                    List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()));
-                    mostrarDatosTabla(carteras);
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(CuentasPorCobrarReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(CuentasPorCobrarReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-               
-            }
-        });
+        return Cartera.TipoCarteraEnum.PROVEEDORES;
     }
     
-    public void addListenerCheck()
+    public String obtenerTituloReporte()
     {
-//        if (getChkTodosNiveles().isSelected()) {
-//            banderaNiveles = true;
-//            getCmbNivelAcademico().setEnabled(false);
-//        }
-
-        getCheckTodos().addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                    banderaTodos = true;
-                    getBtnBuscarProveedor().setEnabled(false);
-                    getTxtProveedor().setEnabled(false);
-                    persona = null;
-                    getTxtProveedor().setText("");
-                    
-                } else {
-                    banderaTodos = false;
-                    getBtnBuscarProveedor().setEnabled(true);
-                    getTxtProveedor().setEnabled(true);
-                }
-            }
-        });
+        return "Cuentas Por Pagar";
     }
-    
-    public void initDatosTabla()
-    {
-        DefaultTableModel modeloTablaDetallesPresupuesto = UtilidadesTablas.crearModeloTabla(new String[]{"Preimpreso","Persona","Saldo"}, new Class[]{String.class,String.class,String.class});
-        getTableCuentasPorPagar().setModel(modeloTablaDetallesPresupuesto);
-    }
-    
-     private void mostrarDatosTabla(List<Cartera> carteras)
-    {
-        
-        String[] titulo={"Preimpreso","Persona","Saldo"};
-        DefaultTableModel defaultTableModel = new DefaultTableModel(titulo,0);
-        for (Cartera cartera : carteras) {
-            Vector<String> fila=new Vector<String>();
-            fila.add(cartera.getPreimpreso()+"");
-            fila.add(cartera.getPersona().getNombreSimple()+"");
-            fila.add(cartera.getSaldo()+"");
-
-            defaultTableModel.addRow(fila);
-        }
-        
-        getTableCuentasPorPagar().setModel(defaultTableModel);
-        
-    }
-    
-    
 }
