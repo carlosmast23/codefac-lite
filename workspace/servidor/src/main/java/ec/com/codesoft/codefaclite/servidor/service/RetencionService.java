@@ -71,9 +71,10 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                                 
                 entity.setCodigoDocumento(DocumentoEnum.RETENCIONES.getCodigo());
                 
-                grabarCartera(entity);
+                
                 ComprobantesService servicioComprobante = new ComprobantesService();
                 servicioComprobante.setearSecuencialComprobanteSinTransaccion(entity);
+                grabarCartera(entity);
                /* 
                 ParametroCodefacService parametroService = new ParametroCodefacService();
                 ParametroCodefac parametro = null;
