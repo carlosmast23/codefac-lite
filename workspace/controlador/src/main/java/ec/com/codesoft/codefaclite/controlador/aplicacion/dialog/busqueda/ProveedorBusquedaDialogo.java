@@ -15,7 +15,13 @@ import java.util.List;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -73,14 +79,33 @@ public class ProveedorBusquedaDialogo implements InterfaceModelFind<PersonaEstab
         //p.getPersona().getEstadoEnum();
         //p.getTipo();
         String queryString = "SELECT u FROM PersonaEstablecimiento u WHERE ";
-        queryString += " u.persona.estado=?7 and u.persona.empresa=?6 and ( (LOWER(u.nombreComercial) like ?3 or u.persona.identificacion like ?5 or  LOWER(u.persona.razonSocial) like ?2 ) and (u.persona.tipo = ?1 or u.persona.tipo = ?4 ) )";
+        
+        String queryFiltroEmpresa=" and u.persona.empresa=?6 ";
+        Boolean datosCompartidosEmpresas=false;
+        try {
+            datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);           
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteEstablecimientoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (datosCompartidosEmpresas) 
+        {
+            //Si los datos son compratidos entre empresas entoces no hago ningun filtro
+            queryFiltroEmpresa = "";
+        }
+        
+        queryString += " u.persona.estado=?7 "+queryFiltroEmpresa+" and ( (LOWER(u.nombreComercial) like ?3 or u.persona.identificacion like ?5 or  LOWER(u.persona.razonSocial) like ?2 ) and (u.persona.tipo = ?1 or u.persona.tipo = ?4 ) )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, OperadorNegocioEnum.PROVEEDOR.getLetra());
         queryDialog.agregarParametro(4, OperadorNegocioEnum.AMBOS.getLetra());
         queryDialog.agregarParametro(2, filter);
         queryDialog.agregarParametro(3, filter);
         queryDialog.agregarParametro(5, filter);
-        queryDialog.agregarParametro(6, empresa);
+                
+        if(!datosCompartidosEmpresas)
+        {
+            queryDialog.agregarParametro(6, empresa);
+        }
         queryDialog.agregarParametro(7,GeneralEnumEstado.ACTIVO.getEstado());
         
 

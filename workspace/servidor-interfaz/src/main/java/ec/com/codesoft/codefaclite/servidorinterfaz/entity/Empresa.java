@@ -201,8 +201,8 @@ public class Empresa implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.id);
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -223,6 +223,8 @@ public class Empresa implements Serializable {
         }
         return true;
     }
+
+   
     
     
     

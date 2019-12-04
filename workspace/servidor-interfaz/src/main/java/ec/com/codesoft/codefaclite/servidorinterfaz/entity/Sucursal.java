@@ -160,7 +160,15 @@ public class Sucursal implements Serializable{
         return nombre;
     }
     
-    
+    public static Sucursal getSucursalPermitirTodos()
+    {
+        Sucursal sucursal=new Sucursal();
+        sucursal.setId(-99999999l);
+        sucursal.setNombre("Permitir Todos");
+        sucursal.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        //sucursal.set
+        return sucursal;
+    }
     
     //////////////////////////////////////////////////////////
     //------------------> METODOS PERSONALIZADOS 
@@ -173,6 +181,11 @@ public class Sucursal implements Serializable{
     public GeneralEnumEstado getEstadoEnum()
     {
         return GeneralEnumEstado.getEnum(estado);
+    }
+    
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum)
+    {
+        estado=estadoEnum.getEstado();
     }
     
     public String getCodigoSucursalFormatoTexto()

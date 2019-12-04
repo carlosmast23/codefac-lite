@@ -201,7 +201,14 @@ public class Kardex implements Serializable,Cloneable {
      */
     public BigDecimal calcularPrecioPromedio()
     {
-        return this.precioTotal.divide(new BigDecimal(this.stock),2,BigDecimal.ROUND_HALF_UP);
+        if(stock==0)
+        {
+            return BigDecimal.ZERO;
+        }
+        else
+        {
+            return this.precioTotal.divide(new BigDecimal(this.stock),2,BigDecimal.ROUND_HALF_UP);
+        }
     }
 
     @Override

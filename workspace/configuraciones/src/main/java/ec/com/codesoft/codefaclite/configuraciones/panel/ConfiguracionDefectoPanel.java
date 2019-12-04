@@ -115,6 +115,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         lblEspacioBlanco12 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         cmbConstruirEnsamblesFacturar = new javax.swing.JComboBox<>();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel27 = new javax.swing.JLabel();
+        cmbDatosCompartidosEmpresas = new javax.swing.JComboBox<>();
+        lblEspacio637 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -638,6 +642,32 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jTabbedPane1.addTab("Inventario", jPanel8);
 
+        jPanel9.setLayout(new java.awt.GridBagLayout());
+
+        jLabel27.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel27.setText("Datos Compartidos Entre Empresas:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jLabel27, gridBagConstraints);
+
+        cmbDatosCompartidosEmpresas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(cmbDatosCompartidosEmpresas, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel9.add(lblEspacio637, gridBagConstraints);
+
+        jTabbedPane1.addTab("General", jPanel9);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -656,6 +686,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRidePuntoEmisionEmpleado;
     private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideRazoSocialEmpledo;
     private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideRucEmpledo;
+    private javax.swing.JComboBox<EnumSiNo> cmbDatosCompartidosEmpresas;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarDescripcionFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarDescuentoFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarPrecioUnitFactura;
@@ -685,6 +716,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -700,6 +732,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -710,6 +743,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblEspacio42;
     private javax.swing.JLabel lblEspacio6;
+    private javax.swing.JLabel lblEspacio637;
     private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JLabel lblEspacioBlanco12;
     private javax.swing.JLabel lblEspacioBlanco123;
@@ -885,11 +919,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbDatoAdicionalRideRucEmpledo(JComboBox<EnumSiNo> cmbDatoAdicionalRideRucEmpledo) {
         this.cmbDatoAdicionalRideRucEmpledo = cmbDatoAdicionalRideRucEmpledo;
     }
-    
-    
-     
-    
-    
+
+    public JComboBox<EnumSiNo> getCmbDatosCompartidosEmpresas() {
+        return cmbDatosCompartidosEmpresas;
+    }
+
+    public void setCmbDatosCompartidosEmpresas(JComboBox<EnumSiNo> cmbDatosCompartidosEmpresas) {
+        this.cmbDatosCompartidosEmpresas = cmbDatosCompartidosEmpresas;
+    }
     
     
 }

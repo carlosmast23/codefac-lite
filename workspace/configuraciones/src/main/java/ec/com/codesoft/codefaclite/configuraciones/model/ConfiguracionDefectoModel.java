@@ -193,6 +193,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbEditarDescripcionFactura(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbEditarDescuentoFactura(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbEditarPrecioUnitFactura(),EnumSiNo.values());
+        
+        UtilidadesComboBox.llenarComboBox(getCmbDatosCompartidosEmpresas(),EnumSiNo.values());
 
         //Cargar los valores de las retenciones de la renta       
         try {
@@ -360,6 +362,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
             getCmbDatoAdicionalRideRucEmpledo().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            parametroDatoAdicionalRide= parametrosTodos.get(ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
+            getCmbDatosCompartidosEmpresas().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
             
 
@@ -489,6 +494,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbDatoAdicionalRideRucEmpledo().getSelectedItem();
         agregarParametro(ParametroCodefac.FACTURACION_RIDE_RUC_EMPLEADO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.FACTURACION_RIDE_RUC_EMPLEADO);
+        
+        enumSiNo = (EnumSiNo) getCmbDatosCompartidosEmpresas().getSelectedItem();
+        agregarParametro(ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA);
 
     }
     
