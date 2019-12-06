@@ -63,6 +63,11 @@ public class ArchivoConfiguracionesCodefac {
      */
     public static final String CAMPO_ACTIVAR_SERVICIO_WEB="activar_servicio_web";
     
+    /**
+     * Campo para especificar de que interfaz en particular esta generando la licencia por sis tiene varias y luego tiene problemas con la licencia
+     */
+    public static final String CAMPO_INTERFAZ_RED_LICENCIA="interfaz_red_licencia";
+    
     private Properties propiedadesIniciales;
     
     private static ArchivoConfiguracionesCodefac instance;

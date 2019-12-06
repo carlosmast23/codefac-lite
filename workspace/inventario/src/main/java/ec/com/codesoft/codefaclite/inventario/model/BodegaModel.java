@@ -104,6 +104,8 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
             DialogoCodefac.mensaje("Datos correctos", "La bodega se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

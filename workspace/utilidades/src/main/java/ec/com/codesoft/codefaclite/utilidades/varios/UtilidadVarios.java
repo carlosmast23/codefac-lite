@@ -16,16 +16,25 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ *TODO:Cambiar el nombre de esta clase y dale un solo objetico que es para temas de la tarjeta de Red
  * @author Carlos
  */
 public abstract class UtilidadVarios {
+    
+    private static String[] excepcionesMac={
+        "VirtualBox Host-Only Ethernet Adapter",
+        "Microsoft Wi-Fi Direct Virtual Adapter",
+        "Bluetooth Device (Personal Area Network)"};
+    
+    
     public static void abrirArchivo(String path)
     {
         try {
@@ -109,42 +118,98 @@ public abstract class UtilidadVarios {
         return "localhost";
     }
     
-    public static  String obtenerMacSinInternet()
+    public static  String obtenerMacSinInternet(String interfazRed)
     {
-        Vector<String> excepcionesMac=new Vector<String>();
-        excepcionesMac.add("VirtualBox Host-Only Ethernet Adapter");
-        excepcionesMac.add("Microsoft Wi-Fi Direct Virtual Adapter");
-        excepcionesMac.add("Bluetooth Device (Personal Area Network)");
-        
+                
         try {
-            final Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
-            while (e.hasMoreElements()) 
+            /**
+             * =================================================================================
+             * Como primera opcion trato de encontrar un mac previamente ingresada con el nombre
+             * =================================================================================
+             */
+            if(interfazRed!=null && !interfazRed.isEmpty())
             {
-                NetworkInterface networkInterface=e.nextElement();
-                final byte [] mac = networkInterface.getHardwareAddress();
-                if (mac != null) {
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < mac.length; i++)
-                        sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
-                    
-                    String nombreInterface=networkInterface.getName().toLowerCase();
-                    int indiceNet=nombreInterface.indexOf("eth");
-                    int indiceWlan=nombreInterface.indexOf("wlan");
-                    if((indiceNet>=0 || indiceWlan>=0) && !excepcionesMac.contains(networkInterface.getDisplayName()))
+                NetworkInterface interfazEncontrada=NetworkInterface.getByName(interfazRed);
+                if(interfazEncontrada!=null)
+                {
+                    InterfazRed resultado=buscarInterfazValida(interfazEncontrada);
+                    if(resultado!=null)
                     {
-                        System.out.println(networkInterface.getDisplayName());
-                        System.out.println(networkInterface.getName());
-                        System.out.println(sb.toString());
-                        return sb.toString();
+                        return resultado.mac;
                     }
                 }
-                //break;
+            }
+            
+            /**
+             * =====================================================================================
+             * Si no encuentra nunguna opcion por el nombre busca cualquier interfaz valida de red
+             * =====================================================================================
+             */
+             List<InterfazRed> interfacesValidas=obtenerInterfazValidas();
+             for (InterfazRed interfacesValida : interfacesValidas) {
+                return interfacesValida.mac;
             }
         } catch (SocketException ex) {
             Logger.getLogger(UtilidadVarios.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
         
+    }
+    
+    public static List<InterfazRed> obtenerInterfazValidas() throws SocketException
+    {
+        List<InterfazRed> interfacesRed=new ArrayList<InterfazRed>();
+        final Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
+        while (e.hasMoreElements()) {
+            //NetworkInterface networkInterface = e.nextElement();
+            InterfazRed resultado = buscarInterfazValida(e.nextElement());
+            if (resultado != null) {
+                interfacesRed.add(resultado);
+            }
+            //break;
+        }
+        return interfacesRed;
+    }
+    
+    private static InterfazRed buscarInterfazValida(NetworkInterface networkInterface) throws SocketException
+    {        
+        final byte[] mac = networkInterface.getHardwareAddress();
+        if (mac != null) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < mac.length; i++) {
+                sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+            }
+
+            String nombreInterface = networkInterface.getName().toLowerCase();
+            int indiceNet = nombreInterface.indexOf("eth");
+            int indiceWlan = nombreInterface.indexOf("wlan");
+            if ((indiceNet >= 0 || indiceWlan >= 0) && validarExcepcionesInterfazRed(networkInterface.getDisplayName(),excepcionesMac)) {
+                System.err.println("============= INTERFAZ VALIDA ===================");
+                System.out.println(networkInterface.getDisplayName());
+                System.out.println(networkInterface.getName());
+                System.out.println(sb.toString());
+                return new InterfazRed(sb.toString(),networkInterface.getName());
+                //return sb.toString();
+            }else
+            {
+                /*System.err.println("XXXXXXXXXXXXXX INTERFAZ NO VALIDA XXXXXXXXXXXXXXXXX");
+                System.out.println(networkInterface.getDisplayName());
+                System.out.println(networkInterface.getName());
+                System.out.println(sb.toString());*/
+            }
+        }
+        return null;
+    }
+    
+    private static Boolean validarExcepcionesInterfazRed(String nombre,String[] excepcionesMac)
+    {
+        for (String excepcion : excepcionesMac) {
+            if(nombre.indexOf(excepcion)>=0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
     
     

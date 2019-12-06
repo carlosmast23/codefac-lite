@@ -23,6 +23,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.varios.InterfazRed;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.Desktop;
@@ -32,6 +35,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
@@ -78,6 +82,8 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         Licencia licencia = new Licencia();
         try {
             licencia.cargarLicenciaOnline(usuarioTxt);
+            InterfazRed interfaRed=(InterfazRed) getCmbInterfacesRedRegistrar().getSelectedItem();
+            licencia.setNombreInterfazRed(interfaRed.nombre);
         } catch (Exception ex) {
             Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -316,6 +322,15 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         getjTabbedPane1().setEnabledAt(0, true);
         getjTabbedPane1().setEnabledAt(1, false);
         getjTabbedPane1().setEnabledAt(2, false);
+        
+        try {
+            //Cargar opciones en el Combo para las tarjetas de red
+            List<InterfazRed> interfacesRed=UtilidadVarios.obtenerInterfazValidas();
+            UtilidadesComboBox.llenarComboBox(getCmbInterfacesRedRegistrar(), interfacesRed);
+        } catch (SocketException ex) {
+            Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     

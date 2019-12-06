@@ -3,3 +3,6 @@ Agregar un campo para saber el tipo de docuento de la referencia para despues bu
 cuando tiene abierto la pantalla de retencion y se graba un compra con la misma fecha y luego se quiere enviar sale un error de no se puede enviar porque la fecha de emision es superior de la compra
 falta implementar que cuando se borre una cartera se borren los cruces
 ver que aunque pongo eliminado las facturas ya no me sabe dejar usar el secuencial en el sistema
+
+Realizar un script para cambiar el estado de la bodega llamada "Bodega por defecto" a estado eliminado para evitar confictos con un 
+nuevo cambio para manejar bodegas globales

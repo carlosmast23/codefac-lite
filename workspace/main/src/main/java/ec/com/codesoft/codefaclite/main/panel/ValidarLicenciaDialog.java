@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.main.panel;
 
 import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.utilidades.varios.InterfazRed;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -78,6 +80,8 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel10 = new javax.swing.JLabel();
+        cmbInterfacesRedRegistrar = new javax.swing.JComboBox<>();
         btnRegistrar = new javax.swing.JButton();
         btnSalirRegistro = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -279,10 +283,10 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel7, gridBagConstraints);
 
-        jLabel8.setText("Número Máquinas:");
+        jLabel8.setText("Vincular con interfaz de red:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -341,13 +345,13 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         jLabel12.setText("Usuario:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel12, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
@@ -357,7 +361,7 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         jLabel13.setText("Clave:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel13, gridBagConstraints);
@@ -365,7 +369,7 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         txtClaveRegistrar.setText("jPasswordField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
@@ -376,7 +380,7 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         jLabel14.setText("Nota:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(30, 5, 10, 0);
         jPanel3.add(jLabel14, gridBagConstraints);
@@ -384,19 +388,35 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         jLabel15.setText("Si no modifica sus credenciales, sus datos de acceso serán los mismos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(30, 5, 10, 0);
         jPanel3.add(jLabel15, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(20, 0, 20, 0);
         jPanel3.add(jSeparator1, gridBagConstraints);
+
+        jLabel10.setText("Número Máquinas:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jLabel10, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(cmbInterfacesRedRegistrar, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -611,11 +631,11 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
         );
 
         pack();
@@ -686,7 +706,9 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnSalirRegistro1;
     private javax.swing.JButton btnSalirVerificar;
     private javax.swing.JButton btnVerificar;
+    private javax.swing.JComboBox<InterfazRed> cmbInterfacesRedRegistrar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -893,9 +915,19 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         this.lblTipoLicenciaRegistro = lblTipoLicenciaRegistro;
     }
 
+    public JComboBox<InterfazRed> getCmbInterfacesRedRegistrar() {
+        return cmbInterfacesRedRegistrar;
+    }
+
+    public void setCmbInterfacesRedRegistrar(JComboBox<InterfazRed> cmbInterfacesRedRegistrar) {
+        this.cmbInterfacesRedRegistrar = cmbInterfacesRedRegistrar;
+    }
+
     public JList<ModuloCodefacEnum> getLstModulos() {
         return lstModulos;
     }
+
+    
     
     
     
