@@ -13,13 +13,16 @@ import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,20 +105,40 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
 
     }
     
-    public void eliminar(Producto p)
+    public void eliminarProducto(Producto p) throws ServicioCodefacException, RemoteException
     {
-        try {
-            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
-                    p.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
-                    entityManager.merge(p);
-                    //productoFacade.edit(p);
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+
+                //Si el producto no maneja inventario lo puede eliminar directamente
+                KardexService kardexService = new KardexService();
+                List<Kardex> resultadoKardex = kardexService.buscarPorProducto(p, GeneralEnumEstado.ACTIVO);
+                List<String> stockPositivoBodega = new ArrayList<String>();
+                for (Kardex kardex : resultadoKardex) {
+                    stockPositivoBodega.add(kardex.getBodega().getNombre());
+                    if (kardex.getStock() > 0) {
+                        //throw new ServicioCodefacException("No se puede eliminar el producto porque tiene stock en las bodegas: ");
+                        //stockPositivoBodega.add(kardex.getBodega().getNombre());
+                    } else {
+                        kardex.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                        entityManager.merge(kardex);
+                    }
                 }
-            });
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+                if (stockPositivoBodega.size() > 0) {
+                    throw new ServicioCodefacException("No se puede eliminar el producto porque tiene stock en las bodegas: " + UtilidadesLista.castListToString(stockPositivoBodega, ","));
+                }
+
+                //============================================//
+                // SI NO TIENEN NINGUNA RESTRICCION ENTONCES ELIMINO EL PRODUCTO Y EL KARDEX //
+                //============================================//
+                p.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                entityManager.merge(p);
+            }
+        });
+       
         
     }
     
@@ -204,7 +227,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(p); //graba el producto
+                
+                //Solo grabo el producto cuando no esta creado previamente
+                if(p.getIdProducto()==null)
+                {
+                    grabarSinTransaccion(p); //graba el producto                
+                }
+                                
                 KardexService kardexService=new KardexService();
                 
                 //Solo grabar cuando existen datos diferente de null

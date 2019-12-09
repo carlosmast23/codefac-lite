@@ -957,7 +957,7 @@ public class CarteraModel extends CarteraPanel{
         cartera.setPuntoEstablecimiento((puntoEstablecimiento.isEmpty())?"0":puntoEstablecimiento);
         cartera.setSecuencial((secuencial.isEmpty())?0:Integer.parseInt(secuencial));
         
-        cartera.setSaldo(BigDecimal.ZERO);
+        cartera.setSaldo(cartera.totalDetalles()); //TODO: Si no cruza con nada el saldo es el mismo del total
         Cartera.TipoCarteraEnum tipoEnum=(Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem();
         cartera.setTipoCartera(tipoEnum.getLetra());
         cartera.setTotal(cartera.totalDetalles());

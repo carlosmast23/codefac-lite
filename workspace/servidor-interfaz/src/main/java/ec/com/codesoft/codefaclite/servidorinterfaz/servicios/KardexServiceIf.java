@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.math.BigDecimal;
 import java.rmi.Remote;
@@ -48,5 +49,14 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public void ingresoEgresoInventarioEnsambleSinTransaccion(Bodega bodega, Producto productoEnsamble,Integer cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException;
     
     public Kardex construirKardexVacioSinPersistencia() throws java.rmi.RemoteException,ServicioCodefacException;
+    
+    public List<Kardex> buscarPorProducto(Producto producto,GeneralEnumEstado generalEnumEstado) throws java.rmi.RemoteException,ServicioCodefacException;
+    /**
+     * Este metodo permite crear un movimiento que permite dejar en 0 el Stock actual
+     * @param kardex
+     * @throws java.rmi.RemoteException
+     * @throws ServicioCodefacException 
+     */
+    public void anularInventario(Kardex kardex) throws java.rmi.RemoteException,ServicioCodefacException;
     
 }

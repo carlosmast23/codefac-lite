@@ -21,6 +21,7 @@ public class StockMinimoData implements ExcelDatosInterface{
     private String stock;
     private String cantidadMinima;
     private String categoria;
+    private String ubicacion;
 
     public StockMinimoData() {
     }
@@ -64,6 +65,14 @@ public class StockMinimoData implements ExcelDatosInterface{
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
     
     
 
@@ -74,8 +83,10 @@ public class StockMinimoData implements ExcelDatosInterface{
         tiposDatos.add(new TipoDato(this.codigo,Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.producto, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.categoria, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.ubicacion, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.stock,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.cantidadMinima, Excel.TipoDataEnum.NUMERO));
+        
         
         return tiposDatos;
     }

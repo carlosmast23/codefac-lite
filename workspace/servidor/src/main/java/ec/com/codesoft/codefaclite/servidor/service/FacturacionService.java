@@ -146,7 +146,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 ComprobantesService servicioComprobante = new ComprobantesService();
                 servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);            
                 grabarDetallesFactura(factura);
-                grabarCartera(factura);
+                grabarCarteraSinTransaccion(factura);
             }
         });
         return factura;
@@ -216,7 +216,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
     }
     
-    private void grabarCartera(Factura factura) throws RemoteException, ServicioCodefacException
+    public void grabarCartera(Factura factura) throws RemoteException, ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                grabarCarteraSinTransaccion(factura);
+            }
+        });
+    }
+    
+    private void grabarCarteraSinTransaccion(Factura factura) throws RemoteException, ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();

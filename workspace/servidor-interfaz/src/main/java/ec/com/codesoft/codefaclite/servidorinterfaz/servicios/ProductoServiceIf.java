@@ -26,7 +26,7 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     
     public void editarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException;
     
-    public void eliminar(Producto p) throws java.rmi.RemoteException;
+    //public void eliminar(Producto p) throws java.rmi.RemoteException;
     
     public List<Producto> buscar(Empresa empresa) throws java.rmi.RemoteException;
     
@@ -39,5 +39,7 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     public Producto buscarGenerarCodigoBarras(EnumSiNo enumSiNo,Empresa empresa ) throws ServicioCodefacException,RemoteException;
     
     public void grabarConInventario(Producto p,KardexDetalle kardexDetalle) throws ServicioCodefacException,java.rmi.RemoteException;
+    
+    public void eliminarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException;
     
 }

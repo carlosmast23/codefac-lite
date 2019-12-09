@@ -10,6 +10,8 @@ create table KARDEX(
     PRECIO_TOTAL decimal(13,2),
     STOCK BIGINT,
     RESERVA BIGINT,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.1.3)*/
+    ESTADO varchar(1), 
     primary key (ID)
 );
 

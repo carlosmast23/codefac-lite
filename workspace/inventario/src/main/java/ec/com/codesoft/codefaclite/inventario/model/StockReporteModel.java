@@ -212,6 +212,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         data.setProducto(producto.getNombre());
                         data.setStock(cantidad.toString());
                         data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto()!=null)?producto.getCatalogoProducto().getCategoriaProducto().getNombre():"");
+                        data.setUbicacion(producto.getUbicacion());
                         data.setCantidadMinima(producto.getCantidadMinima().toString());
                         
                         listaData.add(data);                        
@@ -236,6 +237,7 @@ public class StockReporteModel extends StockMinimoPanel{
             "Código",
             "Producto",
             "Categoria",
+            "Ubicación",
             "Stock",
             "Cantidad Minima"
         };
@@ -248,6 +250,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 stockMinimo.getCodigo(),
                 stockMinimo.getProducto(),
                 stockMinimo.getCategoria(),
+                stockMinimo.getUbicacion(),
                 stockMinimo.getStock(),
                 stockMinimo.getCantidadMinima(),
             };

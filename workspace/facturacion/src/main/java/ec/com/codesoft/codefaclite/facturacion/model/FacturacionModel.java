@@ -297,7 +297,34 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return correos;
     }
 
-    private void addListenerButtons() {    
+    private void addListenerButtons() { 
+        
+        getBtnGenerarCartera().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                if(!estadoFormulario.equals(ESTADO_EDITAR))
+                {
+                    DialogoCodefac.mensaje("Solo se puede generar la cartera de una factura generada",DialogoCodefac.MENSAJE_INCORRECTO);
+                    return ;
+                }
+                
+                if(!DialogoCodefac.dialogoPregunta("Está seguro que desea genera la cartera ? ",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                {
+                    return;
+                }
+                
+                try {
+                    ServiceFactory.getFactory().getFacturacionServiceIf().grabarCartera(factura);
+                    DialogoCodefac.mensaje("Cartera generada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         
                
         getBtnReProcesarComprobante().addActionListener(new ActionListener() {
@@ -1401,7 +1428,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         }
                         
                         String[] opciones = {"Ride", "Comprobante Venta", "Cancelar"};
-                        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Porfavor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
+                        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Porfavor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_CORRECTO, opciones);
                         switch (opcionSeleccionada) 
                         {
                             case 0: //opcion para RIDE

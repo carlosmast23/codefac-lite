@@ -95,11 +95,13 @@ public class MigrarProductoModel extends MigrarModel {
                     //Setear el catalogo del producto con el producto
                     producto.setCatalogoProducto(catalogoProducto);
                     /**
-                     * ===========> CREAR DATOS ADICIONALES DEL INVENTARIO <==============
+                     * ===================================================================
+                     *             CREA DATOS ADICIONALES EN EL INVENTARIO
+                     * ===================================================================
                      */
                     String manejaInventario=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MANEJA_INVENTARIO).valor;
-                    EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(manejaInventario.substring(0,1));
-                    if(enumSiNo!=null && enumSiNo.equals(EnumSiNo.SI)) // Si cumple esta condicion vamos a grabar el resto de datos para el inventario
+                    EnumSiNo manejaInventarioEnumSiNo=EnumSiNo.getEnumByLetra(manejaInventario.substring(0,1));
+                    if(manejaInventarioEnumSiNo!=null && manejaInventarioEnumSiNo.equals(EnumSiNo.SI)) // Si cumple esta condicion vamos a grabar el resto de datos para el inventario
                     {
                         String bodegaNombre=(String) fila.getByEnum(ExcelMigrarProductos.Enum.BODEGA).valor;
                         Bodega bodega=ServiceFactory.getFactory().getBodegaServiceIf().buscarPorNombre(bodegaNombre);
@@ -147,21 +149,40 @@ public class MigrarProductoModel extends MigrarModel {
                     //producto.setCatalogoProducto(CatalogoPro);
 
                     ///========================> VALIDAR QUE NO EXISTA UN PRODUCTO SIMILAR YA INGRESADO POR CODIGO <======================//
-                    Producto productoTmp =ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(producto.getCodigoPersonalizado(),session.getEmpresa());
-                    //Producto productoTmp = ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), GeneralEnumEstado.ACTIVO, session.getEmpresa());
-                    if (productoTmp != null) {
-                        throw new ExcelMigrar.ExcepcionExcelRegistroDuplicado("El dato ya se encuentra registrado en el sistema");
+                    //TODO: Esta parte esta de tener muy en cuenta porque aveces como se genera un codigo esta parte puede ser dificil de encontrar por el codigo y mas facil por el nombre
+                    //Producto productoTmp =ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(producto.getCodigoPersonalizado(),session.getEmpresa());
+                    Producto productoTmp = ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), GeneralEnumEstado.ACTIVO, session.getEmpresa());
+                    
+                    if(productoTmp != null) 
+                    {
+                        //Si maneja inventario y el producto existe entonces solo consulto el producto anterior
+                        if(manejaInventarioEnumSiNo.equals(EnumSiNo.SI))
+                        {
+                            producto=productoTmp;
+                            kardexDetalle.getKardex().setProducto(producto);
+                        }
+                        else
+                        {
+                            throw new ExcelMigrar.ExcepcionExcelRegistroDuplicado("El dato ya se encuentra registrado en el sistema");
+                        }
                     }
-
-                    producto.setCantidadMinima(0);
-                    producto.setStockInicial(0l);
-                    //producto.setPrecioDistribuidor(BigDecimal.ZERO);
-                    producto.setPrecioTarjeta(BigDecimal.ZERO);
-                    producto.setGarantia(EnumSiNo.NO.getLetra());
-                    producto.setTipoProductoCodigo(TipoProductoEnum.PRODUCTO.getLetra());
-                    producto.setManejarInventario(enumSiNo.getLetra()); //TODO:Cambiar para setear un enum
-                    producto.setEmpresa(session.getEmpresa());
-                    producto.setUbicacion((String) fila.getByEnum(ExcelMigrarProductos.Enum.UBICACION).valor);
+                    else
+                    {
+                        /**
+                         * =====================================================
+                         *          SI NO TIENE CREADO PREVIAMENTE EL PRODUCTO CREO LOS DATOS
+                         * =====================================================
+                         */
+                        producto.setCantidadMinima(0);
+                        producto.setStockInicial(0l);
+                        //producto.setPrecioDistribuidor(BigDecimal.ZERO);
+                        producto.setPrecioTarjeta(BigDecimal.ZERO);
+                        producto.setGarantia(EnumSiNo.NO.getLetra());
+                        producto.setTipoProductoCodigo(TipoProductoEnum.PRODUCTO.getLetra());
+                        producto.setManejarInventario(manejaInventarioEnumSiNo.getLetra()); //TODO:Cambiar para setear un enum
+                        producto.setEmpresa(session.getEmpresa());
+                        producto.setUbicacion((String) fila.getByEnum(ExcelMigrarProductos.Enum.UBICACION).valor);
+                    }
 
                     ServiceFactory.getFactory().getProductoServiceIf().grabarConInventario(producto,kardexDetalle);
                     LOG.log(Level.INFO,"Migrado producto "+producto.getNombre());

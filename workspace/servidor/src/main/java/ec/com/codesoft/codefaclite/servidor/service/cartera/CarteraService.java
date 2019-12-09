@@ -72,7 +72,6 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
     {
         
-        
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws RemoteException, ServicioCodefacException {

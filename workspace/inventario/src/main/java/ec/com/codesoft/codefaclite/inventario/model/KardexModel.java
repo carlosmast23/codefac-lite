@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.inventario.model;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -110,7 +111,29 @@ public class KardexModel extends KardexPanel {
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(kardex!=null)
+        {
+            if(DialogoCodefac.dialogoPregunta("Esta seguro que desea anular el Kardex ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
+            {
+                try {
+                    ServiceFactory.getFactory().getKardexServiceIf().anularInventario(kardex);
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new ExcepcionCodefacLite("Cancelar eliminar");
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                    throw new ExcepcionCodefacLite("Cancelar eliminar");
+                }
+            }
+            
+        }
+        else
+        {
+            DialogoCodefac.mensaje("Advertencia","Seleccione un kardex para eliminar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("cancelado eliminar");
+        }
     }
 
     @Override
@@ -174,7 +197,7 @@ public class KardexModel extends KardexPanel {
         permisos.put(GeneralPanelInterface.BOTON_NUEVO, false);
         permisos.put(GeneralPanelInterface.BOTON_GRABAR, false);
         permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
-        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
@@ -463,14 +486,6 @@ public class KardexModel extends KardexPanel {
             kardexData.setEgreso_precio("");
             kardexData.setEgreso_total("");
 
-            /*
-            fila.add(kardexDetalle.getCantidad() + "");
-            fila.add(kardexDetalle.getPrecioUnitario() + "");
-            fila.add(kardexDetalle.getPrecioTotal() + "");
-
-            fila.add("");
-            fila.add("");
-            fila.add("");*/
         } else {
             kardexData.setIngreso_cantidad("");
             kardexData.setIngreso_precio("");
@@ -479,15 +494,7 @@ public class KardexModel extends KardexPanel {
             kardexData.setEgreso_cantidad(kardexDetalle.getCantidad() + "");
             kardexData.setEgreso_precio(kardexDetalle.getPrecioUnitario() + "");
             kardexData.setEgreso_total(kardexDetalle.getPrecioTotal() + "");
-            /*
-            fila.add("");
-            fila.add("");
-            fila.add("");
-            
-            fila.add(kardexDetalle.getCantidad() + "");
-            fila.add(kardexDetalle.getPrecioUnitario() + "");
-            fila.add(kardexDetalle.getPrecioTotal() + "");
-             */
+          
 
         }
 
