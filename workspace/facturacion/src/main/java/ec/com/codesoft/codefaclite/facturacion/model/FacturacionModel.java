@@ -2608,7 +2608,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
                     BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
-                    valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,3,BigDecimal.ROUND_HALF_UP);
+                    valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP); //Redondeando con 4 decimales ya no genera problema con el centavo aveces
                 }                                
                 facturaDetalle.setPrecioUnitario(valorTotalUnitario);
                 

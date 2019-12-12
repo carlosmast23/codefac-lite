@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -205,10 +206,25 @@ public class StockReporteModel extends StockMinimoPanel{
                      {
                         Producto producto = (Producto) objeto[0];
                         Integer cantidad = (Integer) objeto[1];
+                        //Kardex kardexTemp = (Kardex) objeto[2];
+                        
+                        /*if(producto==null)
+                        {
+                            System.err.println("Error con un producto nulo en kardeId="+kardexTemp.getId());
+                            continue;
+                        }*/
                         
                         StockMinimoData data=new StockMinimoData();
                         
-                        data.setCodigo(producto.getCodigoPersonalizado().toString());
+                        
+                        
+                        String codigoPersonalizado="Sin Código";
+                        if(producto.getCodigoPersonalizado()!=null)
+                        {
+                            codigoPersonalizado=producto.getCodigoPersonalizado();
+                        }
+                        
+                        data.setCodigo(codigoPersonalizado);
                         data.setProducto(producto.getNombre());
                         data.setStock(cantidad.toString());
                         data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto()!=null)?producto.getCatalogoProducto().getCategoriaProducto().getNombre():"");
