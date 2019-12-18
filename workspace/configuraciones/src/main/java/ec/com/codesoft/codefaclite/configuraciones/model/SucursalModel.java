@@ -42,7 +42,7 @@ public class SucursalModel extends SucursalPanel {
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
-       
+       cargarValoresIniciales();
     }
 
     @Override
@@ -93,12 +93,12 @@ public class SucursalModel extends SucursalPanel {
 
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void actualizar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -106,7 +106,7 @@ public class SucursalModel extends SucursalPanel {
         sucursal = new Sucursal();
         getTxtCodigoEstablecimiento().setValue(new Integer(0));
         getCmbTipo().setSelectedIndex(0);
-        getCmbEmpresa().setSelectedIndex(0);        
+        //getCmbEmpresa().setSelectedIndex(0);        
     }
 
     @Override

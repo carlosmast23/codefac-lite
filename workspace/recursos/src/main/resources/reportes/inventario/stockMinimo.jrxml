@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.3286707500000026"/>
+	<property name="ireport.zoom" value="1.0980750000000037"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -30,6 +30,7 @@
 	<field name="stock" class="java.lang.String"/>
 	<field name="cantidadMinima" class="java.lang.String"/>
 	<field name="categoria" class="java.lang.String"/>
+	<field name="ubicacion" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -69,7 +70,7 @@
 	<columnHeader>
 		<band height="15" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="102" height="15" uuid="c62311d8-28e4-469e-992e-7248c6f60246"/>
+				<reportElement x="0" y="0" width="68" height="15" uuid="c62311d8-28e4-469e-992e-7248c6f60246"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -82,7 +83,7 @@
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="102" y="0" width="226" height="15" uuid="c4e63977-442f-4270-a25a-b9852f4bf0ff"/>
+				<reportElement x="68" y="0" width="192" height="15" uuid="c4e63977-442f-4270-a25a-b9852f4bf0ff"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -95,20 +96,7 @@
 				<text><![CDATA[Producto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="427" y="0" width="64" height="15" uuid="aa1cb3b4-be8f-4a75-80ee-cfafbb904caa"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Stock]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="491" y="0" width="64" height="15" uuid="63a47234-4037-46a1-8948-d62d8637d5fe"/>
+				<reportElement x="499" y="0" width="56" height="15" uuid="63a47234-4037-46a1-8948-d62d8637d5fe"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -121,7 +109,7 @@
 				<text><![CDATA[Cant Minima]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="328" y="0" width="99" height="15" uuid="d8ff0833-b1a1-437b-81b2-4abd21d5df59"/>
+				<reportElement x="260" y="0" width="89" height="15" uuid="d8ff0833-b1a1-437b-81b2-4abd21d5df59"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -133,12 +121,38 @@
 				</textElement>
 				<text><![CDATA[Categoria]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="444" y="0" width="55" height="15" uuid="aa1cb3b4-be8f-4a75-80ee-cfafbb904caa"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stock]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="349" y="0" width="95" height="15" uuid="a5dc25db-7399-426a-b621-d19275e4acd9"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ubicación]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="15" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="102" height="15" uuid="fbbacd57-c811-4907-881a-a6625dc3a2df"/>
+				<reportElement x="0" y="0" width="68" height="15" uuid="fbbacd57-c811-4907-881a-a6625dc3a2df"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -152,7 +166,7 @@
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="102" y="0" width="226" height="15" uuid="86505e3e-c386-4ba6-836c-4243f9571225"/>
+				<reportElement x="68" y="0" width="192" height="15" uuid="86505e3e-c386-4ba6-836c-4243f9571225"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -166,7 +180,7 @@
 				<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="491" y="0" width="64" height="15" uuid="987d00c0-794d-43d4-874c-ccc20a928534"/>
+				<reportElement x="499" y="0" width="56" height="15" uuid="987d00c0-794d-43d4-874c-ccc20a928534"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -180,7 +194,7 @@
 				<textFieldExpression><![CDATA[$F{cantidadMinima}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="427" y="0" width="64" height="15" uuid="086ce8d9-5df6-456d-a820-f05251accdf5"/>
+				<reportElement x="444" y="0" width="55" height="15" uuid="086ce8d9-5df6-456d-a820-f05251accdf5"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -194,7 +208,7 @@
 				<textFieldExpression><![CDATA[$F{stock}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="328" y="0" width="99" height="15" uuid="2e757c5f-ccf2-4523-af35-397ded2315ed"/>
+				<reportElement x="260" y="0" width="89" height="15" uuid="2e757c5f-ccf2-4523-af35-397ded2315ed"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -206,6 +220,20 @@
 					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="349" y="0" width="95" height="15" uuid="e3de61be-2943-4765-a88b-77a347eb80c7"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font size="9"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ubicacion}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

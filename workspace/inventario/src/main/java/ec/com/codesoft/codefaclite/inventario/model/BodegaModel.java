@@ -104,6 +104,8 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
             DialogoCodefac.mensaje("Datos correctos", "La bodega se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -156,9 +158,16 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     {
         getTxtNombre().setText(bodega.getNombre());
         getTxtDescripcion().setText(bodega.getDescripcion());
-        getTxtEncargado().setText(bodega.getEncargado());
-        getCmbSucursal().setSelectedItem(bodega.getSucursal());
+        getTxtEncargado().setText(bodega.getEncargado());        
         getCmbTipoBodega().setSelectedItem(bodega.getTipoBodegaEnum());
+        if(bodega.getSucursal()!=null)
+        {
+            getCmbSucursal().setSelectedItem(bodega.getSucursal());
+        }
+        else
+        {
+            getCmbSucursal().setSelectedItem(Sucursal.getSucursalPermitirTodos());
+        }
     }
 
     @Override
@@ -277,6 +286,8 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     private void cargarCombosBox() {
         try {
             List<Sucursal> sucursales =ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(session.getEmpresa());
+            sucursales.add(Sucursal.getSucursalPermitirTodos());
+            
             UtilidadesComboBox.llenarComboBox(getCmbSucursal(), sucursales);
             
             UtilidadesComboBox.llenarComboBox(getCmbTipoBodega(),Bodega.TipoBodegaEnum.values());

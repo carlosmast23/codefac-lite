@@ -20,7 +20,7 @@ import java.util.List;
 public interface BodegaServiceIf extends ServiceAbstractIf<Bodega>
 {
     public Bodega grabar(Bodega b) throws ServicioCodefacException,java.rmi.RemoteException;
-    public void editar(Bodega b) throws java.rmi.RemoteException;
+    public void editar(Bodega b) throws ServicioCodefacException,java.rmi.RemoteException;
     
     
     public Bodega buscarPorNombre(String nombre) throws ServicioCodefacException,RemoteException;

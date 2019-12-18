@@ -17,6 +17,12 @@ import java.util.List;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -59,7 +65,22 @@ public class ClienteFacturacionBusqueda implements InterfaceModelFind<PersonaEst
         //pe.getNombreComercial();
         //p.getRazonSocial();
         //Persona persona=new Persona();
-        String queryString = "SELECT u FROM PersonaEstablecimiento u WHERE u.persona.empresa=?5 AND (u.persona.estado<>?1) AND (u.persona.tipo=?2 OR u.persona.tipo=?3 ) AND ";
+        String queryFiltroEmpresa=" AND u.persona.empresa=?5";
+        Boolean datosCompartidosEmpresas=false;
+        try {
+            datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);           
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteEstablecimientoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (datosCompartidosEmpresas) 
+        {
+            //Si los datos son compratidos entre empresas entoces no hago ningun filtro
+            queryFiltroEmpresa = "";
+        }
+        
+        
+        String queryString = "SELECT u FROM PersonaEstablecimiento u WHERE 1=1 "+queryFiltroEmpresa+" AND (u.persona.estado<>?1) AND (u.persona.tipo=?2 OR u.persona.tipo=?3 ) AND ";
         queryString += " ( LOWER(u.persona.razonSocial) like ?4 or LOWER(u.nombreComercial) like ?4 or u.persona.identificacion like ?4 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, GeneralEnumEstado.ELIMINADO.getEstado());
@@ -67,7 +88,10 @@ public class ClienteFacturacionBusqueda implements InterfaceModelFind<PersonaEst
         queryDialog.agregarParametro(3, OperadorNegocioEnum.AMBOS.getLetra());
 
         queryDialog.agregarParametro(4, filter.toLowerCase());
-        queryDialog.agregarParametro(5, empresa);
+        if (!datosCompartidosEmpresas) 
+        {
+            queryDialog.agregarParametro(5, empresa);
+        }
         return queryDialog;
     }
 

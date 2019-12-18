@@ -77,9 +77,9 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                         } else {
                             entityManager.merge(compraDetalle.getProductoProveedor());
                         }
-                    }
-                    grabarCartera(compra);
+                    }                    
                     entityManager.persist(compra);
+                    grabarCartera(compra); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw new ServicioCodefacException("Error al grabar la compra");
@@ -91,7 +91,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         //TODO: Falta retornar el tipo de dato por ejemplo en los dialogos necesita obtener el nuevo dato modificado.
     }
     
-        private void grabarCartera(Compra compra) throws RemoteException
+    private void grabarCartera(Compra compra) throws RemoteException, ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();

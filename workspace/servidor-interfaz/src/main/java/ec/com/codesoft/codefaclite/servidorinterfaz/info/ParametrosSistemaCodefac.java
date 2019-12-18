@@ -20,11 +20,11 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.2.8.1.1";
+    public static final String VERSION="1.2.8.1.4";
     /**
      * El modo de configuracion del sistema
      */
-    public static final ModoSistemaEnum MODO=ModoSistemaEnum.DESARROLLO;
+    public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;
 
     /**
      * Puerto por defecto para configurar las conexiones en red no es final porque puedo modificar al momento de leer el archivo de configuraciones
@@ -111,6 +111,15 @@ public abstract class ParametrosSistemaCodefac {
      * Etiqueta oculta detalle factura
      */
     public static String ETIQUETA_OCULTAR_DETALLE_FACTURA="[Hidden]";
+    
+    /**
+     * Etiqueta que me permite controlar el tamanio maximo para generar los codigos de los documentos 
+     */
+    public static Integer TAMANIO_CODIGOS=8;
+    /**
+     * Caracter para realizar la separacion al generar los codigos
+     */
+    public static String CARACTER_SEPARACION_CODIGO="-";
     
     
 }

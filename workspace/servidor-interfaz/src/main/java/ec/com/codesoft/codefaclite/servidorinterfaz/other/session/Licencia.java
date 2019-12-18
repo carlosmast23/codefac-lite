@@ -39,6 +39,10 @@ public class Licencia implements Serializable{
     public static final String PROPIEDAD_LICENCIA="licencia";
     public static final String PROPIEDAD_TIPO_LICENCIA="tipo";
     public static final String PROPIEDAD_CANTIDAD_CLIENTES="clientes";
+    /**
+     * Metodo que permite guardar con que interfaz se guardo la licencia para que vuelva a generar
+     */
+    public static final String PROPIEDAD_INTERFAZ_RED="interfaz_red";
     
     private String mac;
     private Properties propiedades;
@@ -49,6 +53,10 @@ public class Licencia implements Serializable{
     private String licencia;
     //private EnumTipo tipoLicencia;
     private Integer cantidadClientes;
+    /**
+     * Todo: Ver si se puede usar el objeto InterfazRed
+     */
+    private String nombreInterfazRed;
     
     /**
      * Variable para almacenar los modulos activos
@@ -62,15 +70,15 @@ public class Licencia implements Serializable{
 
     public Licencia(Properties propiedades) {
         this.propiedades = propiedades;
-        this.mac=obtenerMac();
+        //this.mac=obtenerMac(interfazRed);
         this.tipoLicenciaEnum=TipoLicenciaEnum.getEnumByNombre(propiedades.getProperty(PROPIEDAD_TIPO_LICENCIA));        
     }
     
     
-    public String obtenerMac()
+    public String obtenerMac(String interfazRed)
     {
         //UtilidadVarios.obtenerMac();
-        return UtilidadVarios.obtenerMacSinInternet();
+        return UtilidadVarios.obtenerMacSinInternet(interfazRed);
     }
     
     public boolean validarLicencia()
@@ -147,9 +155,12 @@ public class Licencia implements Serializable{
         }
         
         this.usuario = propiedades.getProperty(Licencia.PROPIEDAD_USUARIO);
+        this.nombreInterfazRed = propiedades.getProperty(Licencia.PROPIEDAD_INTERFAZ_RED);
         this.licencia = propiedades.getProperty(Licencia.PROPIEDAD_LICENCIA);
         this.tipoLicenciaEnum = TipoLicenciaEnum.getEnumByNombre(propiedades.getProperty(Licencia.PROPIEDAD_TIPO_LICENCIA));
         this.cantidadClientes = Integer.parseInt(propiedades.getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
+        
+        this.mac=obtenerMac(nombreInterfazRed);
         
         //Cargar los modulos activos desde el archivo de propiedades
         this.modulosActivos=new ArrayList<ModuloCodefacEnum>();
@@ -296,6 +307,15 @@ public class Licencia implements Serializable{
     public void setModulosActivos(List<ModuloCodefacEnum> modulosActivos) {
         this.modulosActivos = modulosActivos;
     }
+
+    public String getNombreInterfazRed() {
+        return nombreInterfazRed;
+    }
+
+    public void setNombreInterfazRed(String nombreInterfazRed) {
+        this.nombreInterfazRed = nombreInterfazRed;
+    }
+    
     
     
 

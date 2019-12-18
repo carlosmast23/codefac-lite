@@ -15,7 +15,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -92,13 +97,29 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
             whereManejaInventario=" and u.manejarInventario=?98 ";
         }
         
-        String queryString = "SELECT u FROM Producto u WHERE  u.empresa=?4 and (u.estado=?1) "+queryExtra+whereManejaInventario;        
+        
+        String queryFiltroEmpresa=" and u.empresa=?4";
+        Boolean datosCompartidosEmpresas=false;
+        try {
+            datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);           
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteEstablecimientoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (datosCompartidosEmpresas) 
+        {
+            //Si los datos son compratidos entre empresas entoces no hago ningun filtro
+            queryFiltroEmpresa = "";
+        }
+        
+        
+        String queryString = "SELECT u FROM Producto u WHERE 1=1 "+queryFiltroEmpresa+" and (u.estado=?1) "+queryExtra+whereManejaInventario;        
         
         if (generarCodigoBarrasEnum != null) {
             queryString+=" and  u.generarCodigoBarras=?3 ";
         }
         
-                
+       
         queryString+=" and ( LOWER(u.nombre) like ?2 OR u.codigoPersonalizado like ?2 ) ORDER BY u.codigoPersonalizado";
 
         QueryDialog queryDialog=new QueryDialog(queryString);
@@ -120,8 +141,10 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
             queryDialog.agregarParametro(98,isManejoInvetario.getLetra());
         }
         
-        
-        queryDialog.agregarParametro(4,empresa);
+        if (!datosCompartidosEmpresas) 
+        {
+            queryDialog.agregarParametro(4,empresa);
+        }
         //queryDialog.agregarParametro(2,ProductoEnumEstado.INACTIVO.getEstado());
         return queryDialog;
     }

@@ -1,0 +1,41 @@
+generar dias de pago automaticos (que pasa cuando son feriados)
+
+En el estado de cuenta porque es diferente el Valor Total
+y el valor Financiado
+
+cuando era el porcentaje de la cuota inicial
+
+como se aplicaba el interes
+
+como se calculaba el tema de la entrada
+
+genera el documento del contrato
+
+ejemplo de la tabla de pagos con interes
+
+la multa si se asigna se cancela con en la cuota verdad
+
+
+------------------------------------------------------------------------
+los dias configurable para una situcacion laborales -> configurable 
+-------------------------------------------------------------------------
+poder editar el tema de la cuota pero por un supervisor
+tenian clasificado uan cartera incobrable
+
+---------------------------------------------------------------------
+pago con tarjeta de credito ---------------------------------------->
+---------------------------------------------------------------------
+
+
+entrada producto debe estar digitado (20%)
+puede editar el monto (debe ser personalizado)
+porcentaje de riesgo
+
+
+entrada -> 
+
+
+tabla amortizacion
+
+
+

@@ -488,6 +488,21 @@ public class Persona implements Serializable, Comparable<Persona> {
         return "";
     }
     
+    public String imprimirTelefonoPorDefecto()
+    {
+        if(establecimientos!=null)
+        {
+            for (PersonaEstablecimiento establecimiento : establecimientos) 
+            {
+                if(establecimiento.getTelefonoCelular()!=null)
+                {
+                    return establecimiento.getTelefonoCelular();
+                }
+            }
+        }
+        return "";
+    }
+    
     
     public ValidacionCedulaEnum validarIdentificacion()
     {

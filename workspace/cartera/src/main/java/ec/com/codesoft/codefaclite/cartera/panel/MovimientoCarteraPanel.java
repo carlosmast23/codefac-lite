@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.TipoC
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -55,6 +56,7 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
         btnBuscarPersona = new javax.swing.JButton();
+        chkTodos = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -110,6 +112,8 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
+
+        txtPersonaFiltro.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -128,17 +132,6 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnConsultar, gridBagConstraints);
 
-        tblDatos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         jScrollPane1.setViewportView(tblDatos);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -158,6 +151,7 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.3;
         jPanel1.add(lblEspacio2, gridBagConstraints);
 
@@ -168,6 +162,13 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnBuscarPersona, gridBagConstraints);
 
+        chkTodos.setText("todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(chkTodos, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -177,6 +178,7 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarPersona;
     private javax.swing.JButton btnConsultar;
+    private javax.swing.JCheckBox chkTodos;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFin;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicio;
     private javax.swing.JComboBox<TipoCarteraEnum> cmbTipoCartera;
@@ -249,5 +251,10 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
         this.tblDatos = tblDatos;
     }
 
+    public JCheckBox getChkTodos() {
+        return chkTodos;
+    }
+
+    
     
 }

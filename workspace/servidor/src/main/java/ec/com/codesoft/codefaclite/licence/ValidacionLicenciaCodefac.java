@@ -63,7 +63,7 @@ public class ValidacionLicenciaCodefac{
     public boolean validar() throws ValidacionLicenciaExcepcion,NoExisteLicenciaException{
 
         if (verificarExisteLicencia()) {
-            Properties p = obtenerLicencia();
+            Properties p = obtenerLicencia();//Obtiene todas las propiedades del archivo de licencia
             licencia = new Licencia(p);
 
             if (licencia.validarLicencia()) {
@@ -191,13 +191,14 @@ public class ValidacionLicenciaCodefac{
 
             //String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;            
             String modulosStr=licencia.getModulosStr();
-            String licenciaStr=licencia.getUsuario()+":"+UtilidadVarios.obtenerMacSinInternet()+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;            
+            String licenciaStr=licencia.getUsuario()+":"+UtilidadVarios.obtenerMacSinInternet(licencia.getNombreInterfazRed())+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;            
             LOG.log(Level.INFO,"creando="+licenciaStr);
             licenciaStr=UtilidadesHash.generarHashBcrypt(licenciaStr);
             Properties prop = new Properties();
             prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());
             prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licenciaStr);
             prop.setProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES,licencia.getCantidadClientes().toString());
+            prop.setProperty(Licencia.PROPIEDAD_INTERFAZ_RED,licencia.getNombreInterfazRed());
                         
             //setearPropiedadesModulos(prop,licen); //Setea los modulos activos
             

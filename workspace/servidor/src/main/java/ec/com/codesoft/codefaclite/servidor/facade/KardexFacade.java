@@ -141,7 +141,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
         
         //Talvez agregar condicion para buscar solo por kardex activos
-        String queryString = "SELECT k.producto,k.stock FROM Kardex k WHERE 1=1 "+whereBodega+whereCategoria;
+        String queryString = "SELECT k.producto,k.stock,k FROM Kardex k WHERE 1=1 AND k.producto IS NOT NULL "+whereBodega+whereCategoria;
         Query query = getEntityManager().createQuery(queryString);
         
         if(bodega!=null)

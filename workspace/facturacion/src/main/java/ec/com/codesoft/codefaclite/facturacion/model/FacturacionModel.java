@@ -297,7 +297,34 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return correos;
     }
 
-    private void addListenerButtons() {    
+    private void addListenerButtons() { 
+        
+        getBtnGenerarCartera().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                if(!estadoFormulario.equals(ESTADO_EDITAR))
+                {
+                    DialogoCodefac.mensaje("Solo se puede generar la cartera de una factura generada",DialogoCodefac.MENSAJE_INCORRECTO);
+                    return ;
+                }
+                
+                if(!DialogoCodefac.dialogoPregunta("Está seguro que desea genera la cartera ? ",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                {
+                    return;
+                }
+                
+                try {
+                    ServiceFactory.getFactory().getFacturacionServiceIf().grabarCartera(factura);
+                    DialogoCodefac.mensaje("Cartera generada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         
                
         getBtnReProcesarComprobante().addActionListener(new ActionListener() {
@@ -1399,10 +1426,27 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             DialogoCodefac.mensaje("Advertencia","No se puede generar el reporte porque no tiene clave de acceso",DialogoCodefac.MENSAJE_ADVERTENCIA);
                             return;
                         }
+                        
+                        String[] opciones = {"Ride", "Comprobante Venta", "Cancelar"};
+                        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Porfavor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_CORRECTO, opciones);
+                        switch (opcionSeleccionada) 
+                        {
+                            case 0: //opcion para RIDE
+                                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,factura.getEmpresa());
+                                JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                                panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
+                                break;
 
-                        byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,factura.getEmpresa());
-                        JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
-                        panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
+                            case 1: //opcion para comprobantes Venta
+                                imprimirComprobanteVenta(factura, NOMBRE_REPORTE_FACTURA_ELECTRONICA);
+                                break;
+
+                            case 2: //Cancelar
+                                break;
+                        }
+                        
+                        //int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Porfavor seleccione una opción?", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
+
                     } catch (RemoteException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
@@ -2564,7 +2608,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
                     BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
-                    valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,3,BigDecimal.ROUND_HALF_UP);
+                    valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP); //Redondeando con 4 decimales ya no genera problema con el centavo aveces
                 }                                
                 facturaDetalle.setPrecioUnitario(valorTotalUnitario);
                 

@@ -1,5 +1,6 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -79,6 +80,9 @@ public class Kardex implements Serializable,Cloneable {
     @JoinColumn(name = "PRODUCTO_ID")
     @ManyToOne     
     private Producto producto;
+    
+    @Column(name = "ESTADO")
+    private String estado;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "kardex" ,fetch = FetchType.EAGER )
     private List<KardexDetalle> detallesKardex;
@@ -173,6 +177,22 @@ public class Kardex implements Serializable,Cloneable {
     public void setReserva(Integer reserva) {
         this.reserva = reserva;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    public String getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado).getEstado();
+    }
+
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
+    }
     
     
     
@@ -201,7 +221,14 @@ public class Kardex implements Serializable,Cloneable {
      */
     public BigDecimal calcularPrecioPromedio()
     {
-        return this.precioTotal.divide(new BigDecimal(this.stock),2,BigDecimal.ROUND_HALF_UP);
+        if(stock==0)
+        {
+            return BigDecimal.ZERO;
+        }
+        else
+        {
+            return this.precioTotal.divide(new BigDecimal(this.stock),2,BigDecimal.ROUND_HALF_UP);
+        }
     }
 
     @Override

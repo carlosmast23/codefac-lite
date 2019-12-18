@@ -206,7 +206,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                     }else{
                         List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()));
                     }*/
-                    List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()),DocumentoCategoriaEnum.COMPROBANTES_VENTA,getTipoCarteraEnum());
+                    List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()),DocumentoCategoriaEnum.COMPROBANTES_VENTA,getTipoCarteraEnum(),true);
                     carteraResultado=carteras;
                     mostrarDatosTabla(carteras);
                 } catch (ServicioCodefacException ex) {

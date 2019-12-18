@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetall
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Query;
@@ -31,7 +32,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         super(Cartera.class);
     }
       
-    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera)
+    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Boolean carteraConSaldo)
     {
         String cliente = "", fecha = "", saldo = "";
         if (persona != null) {
@@ -53,14 +54,16 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         DocumentoCategoriaEnum doc;
         cartera.getCarteraDocumentoEnum().getCategoria();*/
         
-        saldo = " AND c.saldo>0";    
-        Cartera cartera=new Cartera();
-        cartera.getTipoCartera();
+        if(carteraConSaldo)
+            saldo = " AND c.saldo>0";    
+        
+        /*Cartera cartera=new Cartera();
+        cartera.getEstado();*/
         
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(categoriaMenuEnum,"c.codigoDocumento");
         
         try {
-            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +" AND ("+whereDocumentos+") AND c.tipoCartera=?4  ORDER BY c.secuencial asc";
+            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +" AND ("+whereDocumentos+") AND c.tipoCartera=?4 AND c.estado=?5  ORDER BY c.secuencial asc";
             Query query = getEntityManager().createQuery(queryString);
             if (persona != null) {
                 query.setParameter(1, persona);
@@ -76,6 +79,8 @@ public class CarteraFacade extends AbstractFacade<Cartera>
             {
                 query.setParameter(4,tipoCartera.getLetra());
             }
+            
+            query.setParameter(5,GeneralEnumEstado.ACTIVO.getEstado());
             
             return query.getResultList();
         } catch (NoResultException e) {

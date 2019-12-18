@@ -123,6 +123,18 @@ public enum TipoDocumentoEnum {
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO,
             false),
     
+    ANULAR_MERCADERIA_POSITIVO(ModuloCodefacEnum.INVENTARIO,
+            "AMP",
+            "Anulado Stock Positivo",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO,
+            false),
+    
+    ANULAR_MERCADERIA_NEGATIVO(ModuloCodefacEnum.INVENTARIO,
+            "AMN",
+            "Anulado Stock Negativo",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO,
+            false),
+    
     TRANSFERENCIA_MERCADERIA_DESTINO(ModuloCodefacEnum.INVENTARIO,
             "TMD",
             "Transferencia mercaderia destino",

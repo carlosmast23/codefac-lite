@@ -137,6 +137,12 @@ public class ParametroCodefac implements Serializable {
     public static final String FACTURACION_RIDE_DIRECCION_EMPLEADO="facturacion_ride_direccion_empleado";
     public static final String FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO="facturacion_ride_punto_emision_empleado";
     
+    /**
+     * Variable que identifica que algunos campos como clientes, proveedores , proveedores pueden usar entre diferentres empresas
+     */
+    public static final String DATOS_COMPARTIDOS_EMPRESA="datos_compartidos_empresa";
+    
+    
     
     @Id
     @Column(name = "ID")

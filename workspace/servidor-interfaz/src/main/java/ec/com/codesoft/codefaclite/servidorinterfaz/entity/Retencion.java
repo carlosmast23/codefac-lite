@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -256,6 +257,22 @@ public class Retencion extends ComprobanteEntity implements Serializable {
         }
         return total;
     }
+    
+    public BigDecimal getTotalValorRetenido(String codigoRetencion)
+    {
+        //ServiceFactory.getFactory().getSriRetencionRentaServiceIf().obtenerTodosOrdenadoPorCodigo()
+        BigDecimal total=BigDecimal.ZERO;
+        for (RetencionDetalle detalle : detalles) 
+        {
+            if(detalle.getCodigoSri().equals(codigoRetencion))
+            {
+                total=total.add(detalle.getValorRetenido());
+            }
+        }
+        return total;
+    }
+    
+    
 
     @Override
     public int hashCode() {

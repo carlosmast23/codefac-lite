@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service.cartera;
 
 import ec.com.codesoft.codefaclite.servidor.facade.cartera.CarteraCruceFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -33,6 +34,16 @@ public class CarteraCruceService extends ServiceAbstract<CarteraCruce,CarteraCru
         //if(cartera.getTipoCarteraEnum().equals(tipoCarteraEnum.CL))
         //{
         parametros.put("carteraDetalle", carteraDetalle);
+        //}
+        return getFacade().findByMap(parametros);
+    }
+    
+    public List<CarteraCruce>  buscarPorCarteraAfecta(Cartera carteraAfecta) throws ServicioCodefacException, java.rmi.RemoteException
+    {
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        //if(cartera.getTipoCarteraEnum().equals(tipoCarteraEnum.CL))
+        //{
+        parametros.put("carteraAfectada", carteraAfecta);
         //}
         return getFacade().findByMap(parametros);
     }

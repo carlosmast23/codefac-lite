@@ -216,6 +216,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             fila.add(reporteFacturaData.getNumeroFactura());
             fila.add(reporteFacturaData.getReferencia());
             fila.add(reporteFacturaData.getFechaFactura());
+            fila.add(reporteFacturaData.getFechaAutorizacion());
             fila.add(reporteFacturaData.getIdentificacionCliente());
             fila.add(reporteFacturaData.getRazonSocialCliente());
             
@@ -269,6 +270,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         titulo.add("Preimpreso");
         titulo.add("Referencia");
         titulo.add("Fecha");
+        titulo.add("Fecha Autorización");
         titulo.add("Identificación");
         titulo.add("Razón social");
         

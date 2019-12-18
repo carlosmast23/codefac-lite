@@ -24,9 +24,34 @@ public abstract class DialogoCodefac {
     public static final Integer MENSAJE_INCORRECTO=2;
     public static final Integer MENSAJE_ADVERTENCIA=3;
     
+    public static final String ETIQUETA_MENSAJE_CORRECTO="Correcto";
+    public static final String  ETIQUETA_MENSAJE_INCORRECTO="Incorrecto";
+    public static final String  ETIQUETA_MENSAJE_ADVERTENCIA="Advertencia";
+    
     public static void mensaje(CodefacMsj codefacMsj) 
     {
         mensaje(codefacMsj.titulo,codefacMsj.mensaje,codefacMsj.modoMensaje);
+    }
+    
+    public static void mensaje(String mensaje,Integer tipoMensaje)
+    {
+        if(tipoMensaje.equals(MENSAJE_CORRECTO))
+        {
+            mensaje(ETIQUETA_MENSAJE_CORRECTO, mensaje, tipoMensaje);
+        }
+        else
+        {
+            if(tipoMensaje.equals(MENSAJE_INCORRECTO))
+            {
+                mensaje(ETIQUETA_MENSAJE_INCORRECTO, mensaje, tipoMensaje);
+            }
+            else
+            {
+                if (tipoMensaje.equals(MENSAJE_ADVERTENCIA)) {
+                    mensaje(ETIQUETA_MENSAJE_ADVERTENCIA, mensaje, tipoMensaje);
+                }
+            }
+        }
     }
     
     
@@ -74,6 +99,33 @@ public abstract class DialogoCodefac {
     
     public static boolean dialogoPregunta(CodefacMsj codefacMsj) {
         return dialogoPregunta(codefacMsj.titulo,codefacMsj.mensaje,codefacMsj.modoMensaje);
+    }
+    
+    /**
+     * TODO: Mejorar el codigo porque esos if se repiten en el metodo interno , se puede agregar un parametro en el metodo interno para que me de poniendo las etiqueteas por edefecto
+     * @param mensaje
+     * @param tipoMensaje
+     * @return 
+     */
+    public static Boolean dialogoPregunta(String mensaje, Integer tipoMensaje) {
+        if(tipoMensaje.equals(MENSAJE_CORRECTO))
+        {
+            return dialogoPregunta(ETIQUETA_MENSAJE_CORRECTO, mensaje, tipoMensaje);
+        }
+        else
+        {
+            if(tipoMensaje.equals(MENSAJE_INCORRECTO))
+            {
+                return dialogoPregunta(ETIQUETA_MENSAJE_INCORRECTO, mensaje, tipoMensaje);
+            }
+            else
+            {
+                if (tipoMensaje.equals(MENSAJE_ADVERTENCIA)) {
+                    return dialogoPregunta(ETIQUETA_MENSAJE_ADVERTENCIA, mensaje, tipoMensaje);
+                }
+            }
+        }
+        return null;
     }
     
     public static boolean dialogoPregunta(String titulo, String mensaje, Integer tipoMensaje) {

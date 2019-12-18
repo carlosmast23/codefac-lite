@@ -71,13 +71,13 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         cmbDocumentoCartera = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtAutorizacion = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         txtPreimpreso = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtCodigoAuxiliar = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        txtReferenciaManual = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtValorDetalle = new javax.swing.JTextField();
@@ -323,7 +323,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(jTextField2, gridBagConstraints);
+        jPanel3.add(txtAutorizacion, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText("Preimpreso:");
@@ -348,7 +348,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(jTextField4, gridBagConstraints);
+        jPanel3.add(txtCodigoAuxiliar, gridBagConstraints);
 
         jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel15.setText("Autorización:");
@@ -363,7 +363,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(jTextField5, gridBagConstraints);
+        jPanel3.add(txtReferenciaManual, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -669,9 +669,6 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
@@ -687,9 +684,12 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JTable tblDetalles;
     private javax.swing.JTable tblDetallesCruzar;
     private javax.swing.JTable tblDocumentosCruzar;
+    private javax.swing.JTextField txtAutorizacion;
+    private javax.swing.JTextField txtCodigoAuxiliar;
     private javax.swing.JTextField txtDescripcionDetalle;
     private javax.swing.JTextField txtIdentificacion;
     private javax.swing.JTextField txtPreimpreso;
+    private javax.swing.JTextField txtReferenciaManual;
     private javax.swing.JTextField txtValorDetalle;
     // End of variables declaration//GEN-END:variables
 
@@ -895,6 +895,19 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         this.txtPreimpreso = txtPreimpreso;
     }
 
+    public JTextField getTxtAutorizacion() {
+        return txtAutorizacion;
+    }
+
+    public JTextField getTxtCodigoAuxiliar() {
+        return txtCodigoAuxiliar;
+    }
+
+    public JTextField getTxtReferenciaManual() {
+        return txtReferenciaManual;
+    }
+
+    
     
     
     

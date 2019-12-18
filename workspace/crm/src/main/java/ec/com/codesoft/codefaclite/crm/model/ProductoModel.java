@@ -224,16 +224,21 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
+        if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) 
+        {
             try {
                 Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar el producto?", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if (!respuesta) {
                     throw new ExcepcionCodefacLite("Cancelacion usuario");
                 }
-                productoService.eliminar(producto);
+                productoService.eliminarProducto(producto);
                 DialogoCodefac.mensaje("Datos correctos", "El producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             } catch (RemoteException ex) {
                 Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ExcepcionCodefacLite(ex.getMessage());
             }
         }
 

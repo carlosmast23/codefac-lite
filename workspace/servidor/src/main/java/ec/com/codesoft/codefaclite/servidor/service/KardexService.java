@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.ObtenerFecha;
@@ -486,6 +487,44 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return movimientoOrigen;
     }
     
+    public void anularInventario(Kardex kardex) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        /**
+         * Validaciones del Stock
+         */
+        if(kardex.getStock()==0)
+        {
+            throw new ServicioCodefacException("No se puede eliminar porque el Stock esta en 0");
+        }
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                Integer stockAnular= kardex.getStock()*-1;
+                KardexDetalle kardexDetalle=new KardexDetalle();                
+                kardexDetalle.setPrecioUnitario(kardex.getPrecioPromedio());
+                
+                if(stockAnular>0)
+                {
+                    kardexDetalle.setCantidad(stockAnular);
+                    kardexDetalle.setCodigoTipoDocumentoEnum(TipoDocumentoEnum.ANULAR_MERCADERIA_POSITIVO);
+                }
+                else
+                {
+                    kardexDetalle.setCantidad(stockAnular*-1);
+                    kardexDetalle.setCodigoTipoDocumentoEnum(TipoDocumentoEnum.ANULAR_MERCADERIA_NEGATIVO);
+                }
+                kardexDetalle.recalcularTotalSinGarantia();
+                kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
+                kardexDetalle.setKardex(kardex);
+                
+                grabarKardexDetallSinTransaccion(kardexDetalle);
+            }
+        });
+        
+        
+    }
+    
     public void ingresarInventario(List<KardexDetalle> detalles) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -504,6 +543,16 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     public void grabarKardexDetallSinTransaccion(KardexDetalle detalle) throws RemoteException, ServicioCodefacException
     {
+        /**
+         * ==============================================================
+         *            VALIDACIONES PARA LOS DETALLES DE KARDEX
+         * ==============================================================
+         */
+        if(detalle.getKardex()==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar sin referencia de Kardex vacio");
+        }
+        
         //Buscar si ya existe el kardex o si no existe los creamos
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("bodega", detalle.getKardex().getBodega());
@@ -777,6 +826,15 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("producto", producto);
+        //KardexService kardexService = new KardexService();
+        return getFacade().findByMap(mapParametros);
+    }
+    
+    public List<Kardex> buscarPorProducto(Producto producto,GeneralEnumEstado estadoEnum) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("producto", producto);
+        mapParametros.put("estado", estadoEnum.getEstado());
         //KardexService kardexService = new KardexService();
         return getFacade().findByMap(mapParametros);
     }

@@ -173,17 +173,10 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if(verificarImprimirComprobanteVenta())
-                    {
-                        facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA);
-                        //imprimirComprobanteVenta();
-                    }
-                    else
-                    {
-                        generarReportePdf(clave.clave);
-                    }
+                    eventoImprimirComprobanteEvento(clave);
                 }
             });
+            eventoImprimirComprobanteEvento(clave);
             
         }
         
@@ -201,6 +194,16 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             //facturaProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         }
 
+    }
+    
+    private void eventoImprimirComprobanteEvento(ClaveAcceso clave)
+    {
+        if (verificarImprimirComprobanteVenta()) {
+            facturacionModel.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA);
+            //imprimirComprobanteVenta();
+        } else {
+            generarReportePdf(clave.clave);
+        }
     }
 
     @Override

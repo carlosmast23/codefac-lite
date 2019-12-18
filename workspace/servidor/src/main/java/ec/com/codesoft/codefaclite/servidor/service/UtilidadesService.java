@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesCodigos;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.RemoteServer;
@@ -468,9 +469,9 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         }
     }
     
-    public String crearCodigoPorEmpresaYSucursalSinTransaccion(Sucursal sucursal,String codigo,String nombreTabla) throws RemoteException,ServicioCodefacException
+    public String crearCodigoPorEmpresaYSucursalSinTransaccion(Sucursal sucursal,String codigoDocumento,String nombreTabla) throws RemoteException,ServicioCodefacException
     {
-        final String SEPARADOR_CODIGO="-";
+       // final String SEPARADOR_CODIGO="-";
         
         String codigoEmpresa=sucursal.getEmpresa().getCodigo();
         String codigoSucursal=sucursal.getCodigo();
@@ -484,14 +485,12 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         {
             throw new ServicioCodefacException("No tiene código de la sucursal");
         }
-        String prefijo=
-                codigoEmpresa+SEPARADOR_CODIGO+
-                codigoSucursal+SEPARADOR_CODIGO+
-                codigo;
+        
+        String prefijo=UtilidadesCodigos.generarPrefijo(codigoEmpresa, codigoSucursal, codigoDocumento,ParametrosSistemaCodefac.CARACTER_SEPARACION_CODIGO);
         
         UtilidadFacade utilidadFacade=new UtilidadFacade();
-        Integer codigoNuevo=utilidadFacade.obtenerCodigoMaximo(prefijo, nombreTabla);
-        return "";
+        Integer numeracionNueva=utilidadFacade.obtenerCodigoMaximo(prefijo, nombreTabla);
+        return UtilidadesCodigos.generarFormatoCodigo(prefijo,numeracionNueva,ParametrosSistemaCodefac.TAMANIO_CODIGOS);
         
     }
 

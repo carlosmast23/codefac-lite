@@ -41,6 +41,9 @@ public class ControllerCodefacMb implements Serializable {
     private String indiceTabSecundario;
     private GeneralAbstractMb generalAbstractMb;
     private EstadoFormEnum estadoEnum;
+    /**
+     * Variable para saber si la vista que se esta controlando fue abierta en modo dialogo
+     */
     private Boolean modoDialogo;
     //private String titulo;
 
@@ -128,14 +131,13 @@ public class ControllerCodefacMb implements Serializable {
             }
         }
         
-        
-        
     }
 
     public void delete() {
         try {
             System.err.println("Metodo para eliminar desde el controlador");
             generalAbstractMb.eliminar();
+            estadoEnum=EstadoFormEnum.GRABAR;
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -8,14 +8,18 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -24,7 +28,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "CARTERA_DETALLE")
-public class CarteraDetalle implements Serializable {
+public class CarteraDetalle implements Serializable,Cloneable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +56,9 @@ public class CarteraDetalle implements Serializable {
     @JoinColumn(name="CARTERA_ID")
     @ManyToOne(optional = false)
     private Cartera cartera;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "carteraDetalle", fetch = FetchType.EAGER)
+    private List<CarteraCruce> cruces;
     
 
     public Long getId() {
@@ -110,6 +117,16 @@ public class CarteraDetalle implements Serializable {
         this.descripcion = descripcion;
     }
 
+    public List<CarteraCruce> getCruces() {
+        return cruces;
+    }
+
+    public void setCruces(List<CarteraCruce> cruces) {
+        this.cruces = cruces;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -135,7 +152,15 @@ public class CarteraDetalle implements Serializable {
         return true;
     }
     
-    
+    public CarteraDetalle clone(){
+        CarteraDetalle obj=null;
+        try{
+            obj=(CarteraDetalle) super.clone();
+        }catch(CloneNotSupportedException ex){
+            System.out.println(" no se puede duplicar");
+        }
+        return obj;
+    }
     
     
     
