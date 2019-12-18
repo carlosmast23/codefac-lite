@@ -251,8 +251,21 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     }
 
     @Override
-    public void eliminar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void eliminar() throws ExcepcionCodefacLite, UnsupportedOperationException 
+    {
+        try {
+            
+            ServiceFactory.getFactory().getFacturacionServiceIf().eliminarProforma(factura);
+            MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+            //mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+            nuevo();
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+            MensajeMb.mostrarMensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+        }
+        
     }
 
     @Override

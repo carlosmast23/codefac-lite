@@ -51,15 +51,21 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     //============> Campos adicionales para el vendedor y fecha maxima de pago <====================//
     protected String fechaMaximaPago;
     protected String vendedor;
+    
+    /**
+     * Es la fecha de autorizacion del comprobante
+     */
+    protected String fechaAutorizacion;
 
     public ReporteFacturaData() {
     }
     
     
 
-    public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal,String referido,String referidoIdentificacion,String referidoPorcentaje,String valorComision,String claveAcceso,String puntoEmision) {
+    public ReporteFacturaData(String numeroFactura, String fechaFactura,String fechaAutorizacion, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal,String referido,String referidoIdentificacion,String referidoPorcentaje,String valorComision,String claveAcceso,String puntoEmision) {
         this.numeroFactura = numeroFactura;
         this.fechaFactura = fechaFactura;
+        this.fechaAutorizacion=fechaAutorizacion;
         this.identificacionCliente = identificacionCliente;
         this.razonSocialCliente = razonSocialCliente;
         this.nombreLegalCliente = nombreLegalCliente;
@@ -274,6 +280,16 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     public void setPuntoEmision(String puntoEmision) {
         this.puntoEmision = puntoEmision;
     }
+
+    public String getFechaAutorizacion() {
+        return fechaAutorizacion;
+    }
+
+    public void setFechaAutorizacion(String fechaAutorizacion) {
+        this.fechaAutorizacion = fechaAutorizacion;
+    }
+    
+    
     
 
     @Override
@@ -296,6 +312,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));
+        tiposDatos.add(new TipoDato(this.fechaAutorizacion, Excel.TipoDataEnum.FECHA));
         tiposDatos.add(new TipoDato(this.identificacionCliente, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.razonSocialCliente, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombreLegalCliente, Excel.TipoDataEnum.TEXTO));
@@ -323,6 +340,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));
+        tiposDatos.add(new TipoDato(this.fechaAutorizacion, Excel.TipoDataEnum.FECHA));
         tiposDatos.add(new TipoDato(this.identificacionCliente, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.razonSocialCliente, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombreLegalCliente, Excel.TipoDataEnum.TEXTO));

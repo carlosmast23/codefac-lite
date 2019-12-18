@@ -553,6 +553,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     {
         final String NOMBRE_CAMPO="claveAcceso";
         //ClaveAcceso claveAcceso=new ClaveAcceso(claveAccesoStr);
+        //TODO: Tener en cuenta que talvez no se deberian tomar en cuenta los eliminados
+        // Porque puede ser que este generando nuevamente el comprobante y tengo otro similar y va a generar problemas
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put(NOMBRE_CAMPO,claveAcceso.clave);
         

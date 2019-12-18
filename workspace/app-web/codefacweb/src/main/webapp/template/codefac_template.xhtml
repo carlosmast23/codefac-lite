@@ -110,19 +110,20 @@
                             <p:commandButton icon="new-icon" class="button-menu" title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}" update="panelContenido">
                             </p:commandButton>
 
+                            <!-- BOTON GRABAR -->
                             <p:commandButton icon="save-icon"  class="button-menu" type="button" onclick="PF('dialogConfirmarGrabar').show()" title="Grabar" disabled="false" >                                
                             </p:commandButton>
 
-                            <!-- IMPRIMI BOTON -->
+                            <!-- BOTON IMPRIMIR -->
                             <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" update="messages" />
 
-                            <!-- BUSCAR BOTON-->
+                            <!-- BOTON BUSCAR-->
                             <p:commandButton icon="find-icon" class="button-menu" process="@this" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" >
                                 <p:ajax event="dialogReturn" listener="#{controllerCodefacMb.onObjectChosen}" update="panelContenido" />
                             </p:commandButton>
 
                             <!-- ELIMINAR BOTON -->
-                            <p:commandButton icon="delete-icon" class="button-menu" title="Eliminar" actionListener="#{controllerCodefacMb.delete()}" />
+                            <p:commandButton icon="delete-icon" class="button-menu" type="button" onclick="PF('dialogConfirmarEliminar').show()" title="Eliminar" disabled="false" />
 
 
                             <p:commandButton icon="refresh-icon" class="button-menu" title="Refrescar" disabled="true" />
@@ -220,6 +221,12 @@
                     <p:confirmDialog message="Esta seguro que desea grabar los datos?" header="Alerta" severity="alert" widgetVar="dialogConfirmarGrabar">
                         <p:commandButton value="Si" process="@form" actionListener="#{controllerCodefacMb.save()}" update="messages,idDialogResultado,:formulario:panelSecundario,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
                         <p:commandButton value="No" onclick="PF('dialogConfirmarGrabar').hide();" type="button" />
+                    </p:confirmDialog>
+                    
+                    <!-- DIALOGO PARA CONFIRMAR ELIMINAR -->
+                    <p:confirmDialog message="Esta seguro que desea eliminar el  registro?" header="Alerta" severity="alert" widgetVar="dialogConfirmarEliminar">
+                        <p:commandButton value="Si" process="@form" actionListener="#{controllerCodefacMb.delete()}" update="messages,idDialogResultado,:formulario:panelSecundario,panelContenido"  onclick="PF('dialogConfirmarEliminar').hide();"  />
+                        <p:commandButton value="No" onclick="PF('dialogConfirmarEliminar').hide();" type="button" />
                     </p:confirmDialog>
 
                     <!-- DIALOGO DE RESULTADOS -->

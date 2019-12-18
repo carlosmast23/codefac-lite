@@ -212,6 +212,7 @@ public class ControladorReporteFactura {
                         ReporteFacturaData reporteData = new ReporteFacturaData(
                                 factura.getPreimpreso(),
                                 dateFormat.format(factura.getFechaEmision()),
+                                (factura.getFechaAutorizacionSri()!=null)?dateFormat.format(factura.getFechaAutorizacionSri()):"",
                                 factura.getCliente().getIdentificacion(),
                                 factura.getCliente().getRazonSocial(),
                                 ((factura.getSucursal().getNombreComercial()) != null) ? factura.getSucursal().getNombreComercial() : "",
@@ -254,6 +255,7 @@ public class ControladorReporteFactura {
                         ReporteFacturaData reporteData = new ReporteFacturaData(
                                 nota.getPreimpreso(),
                                 dateFormat.format(nota.getFechaEmision()),
+                                (nota.getFechaAutorizacionSri()!=null)?dateFormat.format(nota.getFechaAutorizacionSri()):"",
                                 nota.getCliente().getIdentificacion(),
                                 nota.getCliente().getRazonSocial(),
                                 (nota.getCliente().getEstablecimientos().get(0).getNombreComercial()!= null) ? nota.getCliente().getEstablecimientos().get(0).getNombreComercial(): "",
