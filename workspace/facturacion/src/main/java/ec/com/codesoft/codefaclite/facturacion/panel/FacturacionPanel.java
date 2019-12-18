@@ -845,7 +845,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         panelDatosFactura.add(jLabel35, gridBagConstraints);
 
         jLabel36.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel36.setText("Fecha Emision:");
+        jLabel36.setText("Fecha Emisión:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
