@@ -69,7 +69,9 @@ public abstract class ComprobantesElectronicosUtil {
             //file.createNewFile();
             fw = new FileWriter(file);
             //fw.write(xml.toString());
-            fw.write(new String(xml.toString().getBytes("UTF-8")));
+            String contenidoUtf8=normalizarDescripcionDetalleFacura(xml.toString()); //Este metodo me permite eliminar caracteres que no puedo usar con Utf8
+            contenidoUtf8=new String(contenidoUtf8.toString().getBytes("UTF-8"));            
+            fw.write(contenidoUtf8);
             fw.close();
         } catch (IOException ex) {
             Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
@@ -80,6 +82,24 @@ public abstract class ComprobantesElectronicosUtil {
                 Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+     /**
+     * Funcion que me permite reemplazar caracteres no imprimibles en UTF-8
+     */
+    public static String normalizarDescripcionDetalleFacura(String s)
+    {
+        //String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ[]{}^\\-¿";
+        String original = "ÁÍ";
+        // Cadena de caracteres ASCII que reemplazarán los originales.
+        String ascii = "ÀÌ";
+        //String ascii = "AI";
+        String output = s;
+        for (int i = 0; i < original.length(); i++) {
+            // Reemplazamos los caracteres especiales.
+            output = output.replace(original.charAt(i), ascii.charAt(i));
+        }
+        return output;
     }
 
     public static void moverArchivoXml(String pathOrigen, String pathDestino) {

@@ -54,21 +54,5 @@ public abstract class UtilidadValidador {
         return output;
     }
     
-    /**
-     * Funcion que me permite reemplazar caracteres no imprimibles en UTF-8
-     */
-    public static String normalizarDescripcionDetalleFacura(String s)
-    {
-        //String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ[]{}^\\-¿";
-        String original = "ÁÍ";
-        // Cadena de caracteres ASCII que reemplazarán los originales.
-        String ascii = "ÀÌ";
-        String output = s;
-        for (int i = 0; i < original.length(); i++) {
-            // Reemplazamos los caracteres especiales.
-            output = output.replace(original.charAt(i), ascii.charAt(i));
-        }
-        return output;
-    }
-    
+       
 }
