@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -33,15 +34,17 @@ public class TestGrabarFechaValidacion {
     {
         try {
             AbstractFacade.usuarioDb = "root";
-            AbstractFacade.claveDb = "Code17bwbtj";
-            String fecha="2019-08-08";
+            AbstractFacade.claveDb = "1234";
+            String fecha="2019-12-01";
            AbstractFacade.cargarEntityManager();
             
             EntityManager em = AbstractFacade.entityManager;
             EntityTransaction et = em.getTransaction();
             
             EmpresaService empresaService=new EmpresaService();
-            Empresa empresa=empresaService.buscarPorIdentificacion("1724218951001");
+            List<Empresa> empresasResultado=empresaService.obtenerTodos();
+            //Empresa empresa=empresaService.buscarPorIdentificacion("1724218951001");
+            Empresa empresa=empresasResultado.get(0);
             
             ParametroCodefacService servicioParametro=new ParametroCodefacService();
             ParametroCodefac parametro=servicioParametro.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION, empresa);

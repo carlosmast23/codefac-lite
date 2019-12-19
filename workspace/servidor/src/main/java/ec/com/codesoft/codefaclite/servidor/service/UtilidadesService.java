@@ -276,7 +276,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         /**
          * Numero de dias antes de empezar a verificar la licencia
          */
-        int diasToleraciaVerificacion=7;
+        int diasToleraciaVerificacion=5;
         
         try {
             ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
@@ -315,7 +315,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                             return validacionRespuesta;
                         }
 
-                        //Revisar la licencia cada 5 dias con un rango maximo de 8 dias 
+                        //Revisar la licencia cada 5 dias con un rango maximo de 14 dias 
                         if (dias > diasToleraciaVerificacion && dias < diasLimiteVerificacion) {
                             if (verificarLicenciaOnline(validacion)) {
                                 grabarFechaRevision(parametroFechaValidacion,empresa,false);
@@ -379,6 +379,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
+
         }
         
         validacionRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.LICENCIA_CORRECTA;
@@ -454,8 +455,17 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
 
             ParametroCodefacService servicio = new ParametroCodefacService();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date fechaHoy = UtilidadesFecha.getFechaNTP();
-            String dateStr=format.format(fechaHoy);
+            
+            Date fechaRevisar = UtilidadesFecha.hoy(); //Por feecto compara con la hora del sistema
+            try {
+                fechaRevisar = UtilidadesFecha.getFechaNTP(); //Si no existe internet hace el calculo con la hora del sistema
+            } catch (java.lang.NoSuchMethodError nse) {
+                nse.printStackTrace();
+            } catch (Exception ex) {
+                Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            String dateStr=format.format(fechaRevisar);
             parametroFechaValidacion.setValor(UtilidadesEncriptar.encriptar(dateStr,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             if (crear) {
                 servicio.grabar(parametroFechaValidacion);
