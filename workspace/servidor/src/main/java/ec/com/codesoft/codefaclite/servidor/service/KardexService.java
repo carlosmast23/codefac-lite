@@ -574,6 +574,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             //kardex.setProducto(value.getProductoProveedor().getProducto());
             kardex.setStock(0);
             kardex.setReserva(0);
+            kardex.setEstadoEnum(GeneralEnumEstado.ACTIVO);
             em.persist(kardex); //grabando la persistencia
         } else {
             //Si existe el kardex solo creo
@@ -849,7 +850,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return getFacade().findByMap(mapParametros);
     }
     
-    
+    /**
+     * TODO: Este metodo me parece que esta de remplazar al momento de hacer los ingresos desde la pantalla de inventario porque esta duplicado
+     * @param bodega
+     * @param producto
+     * @return 
+     */
     public Kardex crearObjeto(Bodega bodega,Producto producto)
     {
         Kardex kardex=new Kardex();
@@ -862,6 +868,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         kardex.setProducto(producto);
         kardex.setReserva(0);
         kardex.setStock(0);
+        kardex.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         return kardex;
         
     }

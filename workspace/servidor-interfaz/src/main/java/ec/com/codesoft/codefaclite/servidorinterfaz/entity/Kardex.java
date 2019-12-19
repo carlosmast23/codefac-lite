@@ -186,8 +186,8 @@ public class Kardex implements Serializable,Cloneable {
         this.estado = estado;
     }
     
-    public String getEstadoEnum() {
-        return GeneralEnumEstado.getEnum(estado).getEstado();
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
     }
 
     public void setEstadoEnum(GeneralEnumEstado estadoEnum) {

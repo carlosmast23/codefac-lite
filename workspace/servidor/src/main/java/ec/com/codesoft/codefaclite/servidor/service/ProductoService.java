@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
@@ -59,7 +60,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     }
     
     private void grabarSinTransaccion(Producto p) throws java.rmi.RemoteException,ServicioCodefacException{
-        validarGrabarProducto(p);
+        validarGrabarProducto(p,CrudEnum.CREAR);
         
         //Si el catalogo producto no esta creado primero crea la entidad
         CatalogoProducto catalogoProducto = p.getCatalogoProducto();
@@ -85,17 +86,37 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         entityManager.persist(p);
     }
     
-    private void validarGrabarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException    
+    private void validarGrabarProducto(Producto p,CrudEnum estadoEnum) throws java.rmi.RemoteException,ServicioCodefacException    
     {
         //TODO: Analizar porque el Sri supuestamente si deja mandar productos con valor 0 , por el momento solo pongo los menores que 0
         if(p.getValorUnitario().compareTo(BigDecimal.ZERO)<0)
         {
             throw new ServicioCodefacException("El valor unitario del producto no puede ser menor que cero");
         }
+        
+        /**
+         * =================================================================
+         *          VALIDAR QUE NO EXITAN PRODUCTOS DUPLICADOS
+         * =================================================================
+         */
+        Producto productoDuplicado=this.buscarProductoActivoPorCodigo(p.getCodigoPersonalizado(),p.getEmpresa());
+        if(estadoEnum.equals(CrudEnum.CREAR))
+        {            
+            if(productoDuplicado!=null)
+            {
+                throw new ServicioCodefacException("Ya existe un producto ingresado con el mismo código principal");
+            }
+        }else if(estadoEnum.equals(CrudEnum.EDITAR))
+        {
+            //TODO: Pensar en alguna validacion para no pueda editar un producto con un codigo que ya existe y generar problemas
+            //TODO: Queda pendiente en buscar la solución
+        }
+        
     }
     
     public void editarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException
     {
+        validarGrabarProducto(p,CrudEnum.EDITAR);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
@@ -116,14 +137,23 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 KardexService kardexService = new KardexService();
                 List<Kardex> resultadoKardex = kardexService.buscarPorProducto(p, GeneralEnumEstado.ACTIVO);
                 List<String> stockPositivoBodega = new ArrayList<String>();
+                
                 for (Kardex kardex : resultadoKardex) {
-                    stockPositivoBodega.add(kardex.getBodega().getNombre());
-                    if (kardex.getStock() > 0) {
-                        //throw new ServicioCodefacException("No se puede eliminar el producto porque tiene stock en las bodegas: ");
-                        //stockPositivoBodega.add(kardex.getBodega().getNombre());
-                    } else {
-                        kardex.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
-                        entityManager.merge(kardex);
+                    
+                    if(kardex.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                    {                        
+                        if (kardex.getStock() > 0) 
+                        {
+                            //Agrego a la lista la bodega con el kardex que tiene problema antes de eliminar
+                            stockPositivoBodega.add(kardex.getBodega().getNombre());                    
+                            //throw new ServicioCodefacException("No se puede eliminar el producto porque tiene stock en las bodegas: ");
+                            //stockPositivoBodega.add(kardex.getBodega().getNombre());
+                        } else 
+                        {
+                            //Si los kardex no tiene problema y estan con saldos en 0 los elimino y si no se cumple con todos no importa porque se realiza un rollback
+                            kardex.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                            entityManager.merge(kardex);
+                        }
                     }
                 }
 

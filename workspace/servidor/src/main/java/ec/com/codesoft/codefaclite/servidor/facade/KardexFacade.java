@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -141,7 +142,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
         
         //Talvez agregar condicion para buscar solo por kardex activos
-        String queryString = "SELECT k.producto,k.stock,k FROM Kardex k WHERE 1=1 AND k.producto IS NOT NULL "+whereBodega+whereCategoria;
+        String queryString = "SELECT k.producto,k.stock,k FROM Kardex k WHERE 1=1 AND k.producto IS NOT NULL AND k.estado<>?3 "+whereBodega+whereCategoria;
         Query query = getEntityManager().createQuery(queryString);
         
         if(bodega!=null)
@@ -153,6 +154,8 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         {
             query.setParameter(2,categoria);
         }
+        
+        query.setParameter(3,GeneralEnumEstado.ELIMINADO.getEstado());
         
         return query.getResultList();
 
