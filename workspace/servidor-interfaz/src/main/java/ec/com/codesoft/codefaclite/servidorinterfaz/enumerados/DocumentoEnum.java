@@ -14,6 +14,14 @@ import java.util.List;
  * @author Carlos
  */
 public enum DocumentoEnum {
+
+    LIQUIDACION_COMPRA("Liquidación Compra",
+            "LDC",
+            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA},
+            true,
+            true,
+            "03"),
     /**
      * Documento de la factura que puede ser electronica o fisica
      * TODO:Crear otro documento para facturacion fisica y poder tener clasificado

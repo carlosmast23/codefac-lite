@@ -31,8 +31,8 @@ import javax.xml.bind.annotation.XmlType;
     "importeTotal",
     "formaPagos"})
 public class InformacionFactura implements Serializable{
-    private String fechaEmision;
-    private String dirEstablecimiento;
+    protected String fechaEmision;
+    protected String dirEstablecimiento;
     private String tipoIdentificacionComprador;
     private String razonSocialComprador;
     private String identificacionComprador;
@@ -41,14 +41,14 @@ public class InformacionFactura implements Serializable{
     /**
      * Esta variable se refiere al subtotal antes de impuesto y menos los descuentos
      */
-    private BigDecimal totalSinImpuestos;
-    private BigDecimal totalDescuento;
-    private BigDecimal importeTotal;
+    protected BigDecimal totalSinImpuestos;
+    protected BigDecimal totalDescuento;
+    protected BigDecimal importeTotal;
     
-    private String obligadoContabilidad;
+    protected String obligadoContabilidad;
     
-    private List<TotalImpuesto> totalImpuestos;
-    private List<FormaPagoComprobante> formaPagos;
+    protected List<TotalImpuesto> totalImpuestos;
+    protected List<FormaPagoComprobante> formaPagos;
 
     public InformacionFactura() {
     }

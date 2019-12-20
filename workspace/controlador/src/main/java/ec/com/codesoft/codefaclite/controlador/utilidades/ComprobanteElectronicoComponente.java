@@ -239,7 +239,10 @@ public class ComprobanteElectronicoComponente {
                 case NOTA_CREDITO:
                     secuencial=puntoEmision.getSecuencialNotaCredito();
                     break;                    
-                    
+                
+                case LIQUIDACION_COMPRA:
+                    secuencial=puntoEmision.getSecuencialLiquidacionCompra();
+                    break;
                 /*case NOTA_DEBITO:
                     secuencial=puntoEmision.getSecuencialNotaDebito();
                     break;*/

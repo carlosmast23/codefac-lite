@@ -1971,6 +1971,12 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 validarSecuencial(secuencial);
                 puntoEmision.setSecuencialGuiaRemision(secuencial+1);
                 break;
+                
+            case LIQUIDACION_COMPRA:
+                secuencial = puntoEmision.getSecuencialLiquidacionCompra();
+                validarSecuencial(secuencial);
+                puntoEmision.setSecuencialLiquidacionCompra(secuencial+1);
+                break;
         }
         
              

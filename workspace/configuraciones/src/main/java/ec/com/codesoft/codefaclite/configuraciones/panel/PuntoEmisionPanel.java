@@ -63,6 +63,8 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         lblEspacio3 = new javax.swing.JLabel();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio4 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        txtLiquidacionCompra = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         txtNotaVentaInterna = new javax.swing.JSpinner();
@@ -150,7 +152,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         jLabel7.setText("Secuencial Nota de Venta:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel7, gridBagConstraints);
@@ -206,7 +208,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         jPanel1.add(txtRetenciones, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -256,6 +258,22 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(lblEspacio4, gridBagConstraints);
 
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel9.setText("Secuencial Liquidación Compra:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel9, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtLiquidacionCompra, gridBagConstraints);
+
         jTabbedPane1.addTab("Documentos Legales", jPanel1);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
@@ -304,6 +322,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -315,6 +334,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JSpinner txtFactura;
     private javax.swing.JSpinner txtGuiaRemision;
+    private javax.swing.JSpinner txtLiquidacionCompra;
     private javax.swing.JSpinner txtNotaCredito;
     private javax.swing.JSpinner txtNotaDebito;
     private javax.swing.JSpinner txtNotaVenta;
@@ -372,6 +392,16 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
     public void setTxtNotaVentaInterna(JSpinner txtNotaVentaInterna) {
         this.txtNotaVentaInterna = txtNotaVentaInterna;
     }
+
+    public JSpinner getTxtLiquidacionCompra() {
+        return txtLiquidacionCompra;
+    }
+
+    public void setTxtLiquidacionCompra(JSpinner txtLiquidacionCompra) {
+        this.txtLiquidacionCompra = txtLiquidacionCompra;
+    }
+    
+    
 
     
 }

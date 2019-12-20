@@ -79,6 +79,49 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return getFacade().buscarPorPremimpresoYEstadoFacade(secuencial, puntoEstablecimiento, puntoEmision, estadoEnum);
     }
     
+    /**
+     * TODO: Este metodo me parece que debe estar en compra y no en servicio de factura
+     * @param proforma
+     * @return
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
+    public Factura grabarLiquidacionCompra(Factura liquidacionCompra) throws RemoteException,ServicioCodefacException
+    {
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException {
+                    try
+                    {
+                        //liquidacionCompra.setSecuencial(obtenerSecuencialProformas(proforma.getEmpresa()).intValue());
+                        liquidacionCompra.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                        
+                        liquidacionCompra.setCodigoDocumento(DocumentoEnum.LIQUIDACION_COMPRA.getCodigo());
+                        
+                        ComprobantesService servicioComprobante = new ComprobantesService();
+                        servicioComprobante.setearSecuencialComprobanteSinTransaccion(liquidacionCompra);           
+                        setearDatosCliente(liquidacionCompra);
+                        grabarDetallesFactura(liquidacionCompra); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
+                        //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
+                    }
+                    catch (RemoteException ex)
+                    {
+                        Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+                    }catch (PersistenceException ex) {
+                        Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    //Relanzar la excepcion si sucede algun problema interno
+                    
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return liquidacionCompra;
+    }
+    
     
     public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.Retenci
  */
 public enum ComprobanteEnum {
     FACTURA("FACTURA","01","FAC",FacturaComprobante.class),
+    LIQUIDACION_COMPRA("LIQUIDACIÓN DE COMPRA","03","RET",RetencionComprobante.class),
     NOTA_CREDITO("NOTA DE CRÉDITO","04","CRE",NotaCreditoComprobante.class),
     NOTA_DEBITO("NOTA DEBITO","05","",null),
     GUIA_REMISION("GUIA REMISION","06","GUI",GuiaRemisionComprobante.class),
@@ -50,6 +51,9 @@ public enum ComprobanteEnum {
                     else
                         if(NOTA_DEBITO.codigo.equals(codigo))
                             return NOTA_DEBITO;
+                        else
+                            if(LIQUIDACION_COMPRA.equals(codigo))
+                                return LIQUIDACION_COMPRA;
         
         return null;
     }

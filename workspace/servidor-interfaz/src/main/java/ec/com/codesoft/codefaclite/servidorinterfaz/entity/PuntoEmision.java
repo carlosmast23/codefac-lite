@@ -65,6 +65,9 @@ public class PuntoEmision implements Serializable{
     @Column(name = "SECUENCIAL_NOTA_VENTA_INTERNA")
     private Integer secuencialNotaVentaInterna;
     
+    @Column(name = "SECUENCIAL_LIQUIDACION_COMPRA")
+    private Integer secuencialLiquidacionCompra;
+    
     @JoinColumn(name = "SUCURSAL_ID")
     private Sucursal sucursal;
 
@@ -165,6 +168,14 @@ public class PuntoEmision implements Serializable{
 
     public void setSecuencialNotaVentaInterna(Integer secuencialNotaVentaInterna) {
         this.secuencialNotaVentaInterna = secuencialNotaVentaInterna;
+    }
+
+    public Integer getSecuencialLiquidacionCompra() {
+        return secuencialLiquidacionCompra;
+    }
+
+    public void setSecuencialLiquidacionCompra(Integer secuencialLiquidacionCompra) {
+        this.secuencialLiquidacionCompra = secuencialLiquidacionCompra;
     }
     
     

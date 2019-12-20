@@ -46,4 +46,6 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public Factura buscarPorPremimpresoYEstado(Integer secuencial,BigDecimal puntoEstablecimiento,Integer puntoEmision,ComprobanteEntity.ComprobanteEnumEstado estadoEnum) throws RemoteException;    
     public void grabarCartera(Factura factura) throws RemoteException, ServicioCodefacException;
     
+    public Factura grabarLiquidacionCompra(Factura liquidacionCompra) throws RemoteException,ServicioCodefacException;
+    
 }
