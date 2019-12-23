@@ -59,6 +59,10 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
             case GUIA_REMISION:
                  nombreTabla="GuiaRemision";
                 break;
+                
+            case LIQUIDACION_COMPRA:
+                 nombreTabla="Factura";
+                break;
         }
         
         /*Factura f;

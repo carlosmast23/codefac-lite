@@ -157,6 +157,8 @@ import org.jdesktop.swingx.prompt.PromptSupport;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.facturacion.nocallback.FacturaRespuestaNoCallBack;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataLiquidacionCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -337,7 +339,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     {                        
                         try {
                             ClienteFacturaImplComprobante cic = new ClienteFacturaImplComprobante((FacturacionModel) formularioActual, factura, false);
-                            ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobante(obtenerComprobanteDataFactura(), factura, session.getUsuario(), cic);
+                            ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobante(obtenerComprobanteData(), factura, session.getUsuario(), cic);
                             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_EN_CURSO);
                             getBtnReProcesarComprobante().setEnabled(false);
                         } catch (RemoteException ex) {
@@ -1108,11 +1110,27 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     }
     
-    private ComprobanteDataFactura obtenerComprobanteDataFactura()
+    /*private ComprobanteDataFactura obtenerComprobanteDataFactura()
     {
         ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
         comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
         return comprobanteData;
+    }*/
+    
+    private ComprobanteDataInterface obtenerComprobanteData()
+    {
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        {
+            ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+            return comprobanteData;
+        } else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
+        {
+            ComprobanteDataLiquidacionCompra comprobanteData=new ComprobanteDataLiquidacionCompra(factura);
+            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+            return comprobanteData;
+        }
+        return null;
     }
 
     @Override
@@ -1132,10 +1150,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
             setearValoresDefaultFactura();
             
-            //factura.setVendedor(new Empleado());
-            //servicio.ejemplo(new Empleado(),factura);
-            
-            factura=servicio.grabar(factura);
+            //TODO: Por el momento dejo seteado para grabar distinto para la las liquidaciones de compra porque en verdad en el mismo procedimiento
+            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
+            {
+                factura=servicio.grabarLiquidacionCompra(factura);
+            }
+            else
+            {
+                factura=servicio.grabar(factura);
+            }
             
             facturaProcesando = factura;
             
@@ -1154,17 +1177,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             else
             {
                 PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
-                if(documentoEnum.equals(DocumentoEnum.FACTURA) && puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
+                if((documentoEnum.equals(DocumentoEnum.LIQUIDACION_COMPRA) || documentoEnum.equals(DocumentoEnum.FACTURA)) && puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {
                     facturarElectricamente(facturaProcesando);
                 }
                 else if(puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
                 {
                     facturaManual(documentoEnum);
-                    DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 }
-
-                
                 
             }
             
@@ -1190,7 +1211,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void facturarElectricamente(Factura facturaProcesando) throws RemoteException
     {
-        ComprobanteDataFactura comprobanteData = obtenerComprobanteDataFactura();
+        ComprobanteDataInterface comprobanteData = obtenerComprobanteData();
         //comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
         ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this, facturaProcesando, true);
         ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();

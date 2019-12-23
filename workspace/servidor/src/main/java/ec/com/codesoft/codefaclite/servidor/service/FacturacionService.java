@@ -88,6 +88,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      */
     public Factura grabarLiquidacionCompra(Factura liquidacionCompra) throws RemoteException,ServicioCodefacException
     {
+        validarLiquidacionCompra(liquidacionCompra);
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
@@ -120,6 +121,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
         
         return liquidacionCompra;
+    }
+    private void validarLiquidacionCompra(Factura liquidacionCompra) throws RemoteException,ServicioCodefacException
+    {
+        if(liquidacionCompra.getCliente().getIdentificacion().equals(Persona.IDENTIFICACION_CONSUMIDOR_FINAL))
+        {
+            throw new ServicioCodefacException("No se puede grabar una Liquidación de Compra a consumidor final");
+        }
     }
     
     

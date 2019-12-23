@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.GuiaRemisionComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.liquidacionCompra.LiquidacionCompraComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.lote.LoteComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.lote.LoteComprobanteCData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.NotaCreditoComprobante;
@@ -25,6 +26,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.ComprobanteEle
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.DetalleReporteData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.FacturaElectronicaReporte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.GuiaRemisionReporte;
+import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.LiquidacionCompraReporte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.NotaCreditoReporte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.RetencionElectronicaReporte;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
@@ -925,9 +927,10 @@ public class ComprobanteElectronicoService implements Runnable {
     
     private ComprobanteElectronicoReporte getComprobanteReporte(ComprobanteElectronico comprobante)
     {
+        //TODO: Por el momento utilizo el mismo reporte para factura y liquidacion de compras porque son iguales
         if(comprobante.getClass().equals(FacturaComprobante.class))
         {
-            FacturaElectronicaReporte factElectReport=new FacturaElectronicaReporte(comprobante);
+            FacturaElectronicaReporte factElectReport=new FacturaElectronicaReporte((FacturaComprobante) comprobante);
             factElectReport.setMapCodeAndNameFormaPago(mapCodeAndNameFormaPago);
             return factElectReport;
         }
@@ -953,9 +956,18 @@ public class ComprobanteElectronicoService implements Runnable {
                         return guiaRemisionReporte;
                     }
                     else
-                    {                    
-                        System.out.println("no esta comparando clases");
-                        return null;
+                    {
+                        if(comprobante.getClass().equals(LiquidacionCompraComprobante.class))
+                        {
+                            LiquidacionCompraReporte liquidacionCompraReporte = new LiquidacionCompraReporte((LiquidacionCompraComprobante) comprobante);
+                            liquidacionCompraReporte.setMapCodeAndNameFormaPago(mapCodeAndNameFormaPago);
+                            return liquidacionCompraReporte;
+                        }
+                        else
+                        {                    
+                            System.out.println("no esta comparando clases");
+                            return null;
+                        }
                     }
                     
                 }
@@ -1829,6 +1841,9 @@ public class ComprobanteElectronicoService implements Runnable {
         {
             //path=pathGuiaRemisionJasper.openStream();
             path=pathGuiaRemisionJasper;
+        }else if(ComprobanteEnum.LIQUIDACION_COMPRA.getCodigo().equals(clave.tipoComprobante))
+        {
+            path = pathFacturaJasper; //TODO: Por el momento utilio el mismo comprobante que de la factura
         }
         //comprobante.getTipoDocumento();
         //return path + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";

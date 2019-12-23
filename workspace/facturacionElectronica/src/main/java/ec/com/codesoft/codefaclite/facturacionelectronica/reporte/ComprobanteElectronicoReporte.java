@@ -48,6 +48,7 @@ public abstract class ComprobanteElectronicoReporte
         map.put("autorizacion",comprobante.getInformacionTributaria().getClaveAcceso());
         //map.put("estado","");
         map.put("fecha_hora_autorizacion","");
+        map.put("nombre_documento",comprobante.getInformacionTributaria().getCodigoDocumentoEnum().getNombre());
         String codAmbiente=comprobante.getInformacionTributaria().getAmbiente();
         if(codAmbiente.equals(ComprobanteElectronicoService.CODIGO_SRI_MODO_PRODUCCION.toString()))
              map.put("ambiente","producción");

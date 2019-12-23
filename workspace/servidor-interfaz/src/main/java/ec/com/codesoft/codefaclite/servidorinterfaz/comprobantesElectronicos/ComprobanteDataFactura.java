@@ -8,12 +8,16 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronicoFacturaAndLiquidacionAbstract;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.InformacionComprobanteAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleFacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FormaPagoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.InformacionFactura;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.liquidacionCompra.InformacionLiquidacionCompra;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.liquidacionCompra.LiquidacionCompraComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -27,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
@@ -71,7 +76,14 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
 
     @Override
     public String getCodigoComprobante() {
-        return ComprobanteEnum.FACTURA.getCodigo();
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        {
+            return ComprobanteEnum.FACTURA.getCodigo();
+        }else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
+        {
+            return ComprobanteEnum.LIQUIDACION_COMPRA.getCodigo();
+        }
+        return null;
     }
 
     @Override
@@ -80,18 +92,25 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
     }
 
     @Override
-    public FacturaComprobante getComprobante() {
-        FacturaComprobante facturaComprobante = new FacturaComprobante();
+    public ComprobanteElectronico getComprobante() {
+        ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobante = null;
 
-        InformacionFactura informacionFactura = new InformacionFactura();
-
-        informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(new java.sql.Date(factura.getFechaEmision().getTime())));
+        InformacionComprobanteAbstract informacionComprobante = null;
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        {
+            informacionComprobante = new InformacionFactura();
+            comprobante=new FacturaComprobante();
+        }else
+        {
+            informacionComprobante=new InformacionLiquidacionCompra();
+            comprobante=new LiquidacionCompraComprobante();
+        }
         
-                //if(factura.getDireccionEstablecimiento()!=null && !factura.getDireccionEstablecimiento().isEmpty())
-        //{
-        informacionFactura.setDirEstablecimiento(UtilidadValidador.normalizarTexto(factura.getDireccionEstablecimiento()));
-        //}
-
+        
+        informacionComprobante.setFechaEmision(ComprobantesElectronicosUtil.dateToString(new java.sql.Date(factura.getFechaEmision().getTime())));
+        
+        informacionComprobante.setDirEstablecimiento(UtilidadValidador.normalizarTexto(factura.getDireccionEstablecimiento()));
+        
         SriIdentificacionServiceIf servicioSri = ServiceFactory.getFactory().getSriIdentificacionServiceIf();
         SriIdentificacion sriIdentificacion = null;
         try {
@@ -101,34 +120,34 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
         }
 
         if (sriIdentificacion != null && sriIdentificacion.getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION)) {
-            informacionFactura.setIdentificacionComprador(factura.getCliente().getIdentificacion());
+            informacionComprobante.setIdentificacion(factura.getCliente().getIdentificacion());
         } else {
-            informacionFactura.setIdentificacionComprador(UtilidadesTextos.llenarCarateresDerecha(factura.getCliente().getIdentificacion(), 13, "0"));
+            informacionComprobante.setIdentificacion(UtilidadesTextos.llenarCarateresDerecha(factura.getCliente().getIdentificacion(), 13, "0"));
         }
         
         if(factura.getSucursal().getDireccion()!=null && !factura.getSucursal().getDireccion().equals(""))
         {
-            informacionFactura.setDireccionComprador(factura.getSucursal().getDireccion());
+            informacionComprobante.setDireccion(factura.getSucursal().getDireccion());
         }
-
-        informacionFactura.setImporteTotal(factura.getTotal());
+ 
         //Falta manejar este campo al momento de guardar
-        informacionFactura.setRazonSocialComprador(UtilidadValidador.normalizarTexto(factura.getCliente().getRazonSocial()));
+        informacionComprobante.setRazonSocial(UtilidadValidador.normalizarTexto(factura.getCliente().getRazonSocial()));
         //informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
-        informacionFactura.setTipoIdentificacionComprador(sriIdentificacion.getCodigo());
+        informacionComprobante.setTipoIdentificacion(sriIdentificacion.getCodigo());
+        
+         informacionComprobante.setImporteTotal(factura.getTotal());
 
         BigDecimal descuentoTotal = factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos());
-        informacionFactura.setTotalDescuento(descuentoTotal);
+        informacionComprobante.setTotalDescuento(descuentoTotal);
 
         BigDecimal subtotalTotalSinDescuentos = factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos());
         //Esta variable se refiere al subtotal antes de impuesto y menos los descuentos       
-        informacionFactura.setTotalSinImpuestos(subtotalTotalSinDescuentos.subtract(descuentoTotal));
+        informacionComprobante.setTotalSinImpuestos(subtotalTotalSinDescuentos.subtract(descuentoTotal));
         /**
          * Aqui hay que setear los valores de la base de datos
          */
-        informacionFactura.setObligadoContabilidad(factura.getObligadoLlevarContabilidad()); //TODO: Revisar esta parte porque debe cambiar dependiendo el cliente
-        //informacionFactura.setTotalImpuestos(totalImpuestos);
-
+        informacionComprobante.setObligadoContabilidad(factura.getObligadoLlevarContabilidad()); //TODO: Revisar esta parte porque debe cambiar dependiendo el cliente
+        
         /**
          * Grabar las formas de pago si la variable exise y es distinto de vacio
          */
@@ -142,7 +161,8 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
                 formaPagoComprobante.setUnidadTiempo(formaPago.getUnidadTiempo());
                 formaPagosFactura.add(formaPagoComprobante);
             }
-            informacionFactura.setFormaPagos(formaPagosFactura);
+            informacionComprobante.setFormaPagos(formaPagosFactura);
+            //infORMA.setFormaPagos(formaPagosFactura);
         }
 
         /**
@@ -185,13 +205,10 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
                     }
                 }
 
-                //detalle.setCodigoPrincipal(producto.getCodigoPersonalizado());
                 detalle.setCantidad(facturaDetalle.getCantidad());
-                //detalle.setDescripcion(UtilidadValidador.normalizarTexto(facturaDetalle.getDescripcion()));
                 /*
                 *   UTF-8 Validad caracteres no imprimibles Á y Í
                 */
-                //detalle.setDescripcion(UtilidadValidador.normalizarDescripcionDetalleFacura(facturaDetalle.getDescripcion())); //Supuestamente ya no tengo que validar porque esta validad en el ingreso de los detalles
                 detalle.setDescripcion(facturaDetalle.getDescripcion()); //Supuestamente ya no tengo que validar porque esta validad en el ingreso de los detalles
                 //Establecer el descuento en el aplicativo
                 detalle.setDescuento(facturaDetalle.getDescuento());
@@ -200,7 +217,6 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
                 //Todo: redondear valor porque en los comprobantes electronicos no me permite enviar con mas de 2 decimales aunque en los archivos xsd si permite
                 detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2, RoundingMode.HALF_UP));
 
-                //facturaDetalle.getProducto().get
                 /**
                  * Agregado impuesto que se cobran a cada detalle individual
                  */
@@ -265,8 +281,9 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
             }
         }
 
-        facturaComprobante.setDetalles(detallesComprobante);
-        facturaComprobante.setInformacionFactura(informacionFactura);
+        //comprobante.set
+        comprobante.setDetalles(detallesComprobante);
+        comprobante.setInformacionComprobante(informacionComprobante);
 
         /**
          * Crear los impuestos totales
@@ -277,14 +294,15 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
             TotalImpuesto value = entry.getValue();
             totalImpuestos.add(value);
         }
-        facturaComprobante.getInformacionFactura().setTotalImpuestos(totalImpuestos);
+        comprobante.getInformacionComprobante().setTotalImpuestos(totalImpuestos);
+        //comprobante.getInformacionFactura().setTotalImpuestos(totalImpuestos);
 
         /**
          * Informacion adicional
          */
-        facturaComprobante.setCorreos(getCorreos());
+        comprobante.setCorreos(getCorreos());
 
-        return facturaComprobante;
+        return comprobante;
     }
 
     private void sumarizarTotalesImpuestos(Map<ImpuestoDetalle, TotalImpuesto> mapTotalImpuestos, ImpuestoDetalle impuestoDetalle, ImpuestoComprobante impuesto) {

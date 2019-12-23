@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.InformacionComprobanteAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -30,48 +31,18 @@ import javax.xml.bind.annotation.XmlType;
     "totalImpuestos",
     "importeTotal",
     "formaPagos"})
-public class InformacionFactura implements Serializable{
-    protected String fechaEmision;
-    protected String dirEstablecimiento;
+public class InformacionFactura extends InformacionComprobanteAbstract{
+
     private String tipoIdentificacionComprador;
     private String razonSocialComprador;
     private String identificacionComprador;
     private String direccionComprador;
     
-    /**
-     * Esta variable se refiere al subtotal antes de impuesto y menos los descuentos
-     */
-    protected BigDecimal totalSinImpuestos;
-    protected BigDecimal totalDescuento;
-    protected BigDecimal importeTotal;
-    
-    protected String obligadoContabilidad;
-    
-    protected List<TotalImpuesto> totalImpuestos;
-    protected List<FormaPagoComprobante> formaPagos;
-
+   
     public InformacionFactura() {
     }
 
-    @XmlElement(name = "fechaEmision")
-    public String getFechaEmision() {
-        return fechaEmision;
-    }
-
-    public void setFechaEmision(String fechaEmision) {
-        this.fechaEmision = fechaEmision;
-    }
-
-    @XmlElement(name = "dirEstablecimiento")
-    public String getDirEstablecimiento() {
-        return dirEstablecimiento;
-    }
-
-    public void setDirEstablecimiento(String dirEstablecimiento) {
-        this.dirEstablecimiento = dirEstablecimiento;
-    }
-    
-    
+        
     
     @XmlElement(name = "tipoIdentificacionComprador")
     public String getTipoIdentificacionComprador() {
@@ -100,66 +71,7 @@ public class InformacionFactura implements Serializable{
         this.identificacionComprador = identificacionComprador;
     }
 
-    @XmlElement(name = "totalSinImpuestos")
-    public BigDecimal getTotalSinImpuestos() {
-        return totalSinImpuestos;
-    }
-
-
-    public void setTotalSinImpuestos(BigDecimal totalSinImpuestos) {
-        this.totalSinImpuestos = totalSinImpuestos;
-    }
-
-    @XmlElement(name = "totalDescuento")
-    public BigDecimal getTotalDescuento() {
-        return totalDescuento;
-    }
-
-    public void setTotalDescuento(BigDecimal totalDescuento) {
-        this.totalDescuento = totalDescuento;
-    }
-
-    @XmlElement(name = "importeTotal")
-    public BigDecimal getImporteTotal() {
-        return importeTotal;
-    }
-
-    public void setImporteTotal(BigDecimal importeTotal) {
-        this.importeTotal = importeTotal;
-    }
     
-    
-
-    @XmlElementWrapper(name = "totalConImpuestos")
-    @XmlElement(name = "totalImpuesto")
-    public List<TotalImpuesto> getTotalImpuestos() {
-        return totalImpuestos;
-    }
-
-    @XmlElementWrapper(name = "pagos")
-    @XmlElement(name = "pago")
-    public List<FormaPagoComprobante> getFormaPagos() {
-        return formaPagos;
-    }
-
-    public void setFormaPagos(List<FormaPagoComprobante> formaPagos) {
-        this.formaPagos = formaPagos;
-    }
-    
-    
-
-    public void setTotalImpuestos(List<TotalImpuesto> totalImpuestos) {
-        this.totalImpuestos = totalImpuestos;
-    }
-
-    @XmlElement(name = "obligadoContabilidad")    
-    public String getObligadoContabilidad() {
-        return obligadoContabilidad;
-    }
-
-    public void setObligadoContabilidad(String obligadoContabilidad) {
-        this.obligadoContabilidad = obligadoContabilidad;
-    }
 
     @XmlElement(name = "direccionComprador")   
     public String getDireccionComprador() {
@@ -169,11 +81,26 @@ public class InformacionFactura implements Serializable{
     public void setDireccionComprador(String direccionComprador) {
         this.direccionComprador = direccionComprador;
     }
-    
-    
-    
-    
-    
-    
+
+    @Override
+    public void setTipoIdentificacion(String tipoIdentificacion) {
+        this.tipoIdentificacionComprador=tipoIdentificacion;
+    }
+
+    @Override
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocialComprador=razonSocial;
+    }
+
+    @Override
+    public void setIdentificacion(String identificacion) {
+        this.identificacionComprador=identificacion;
+    }
+
+    @Override
+    public void setDireccion(String direccion) {
+        this.direccionComprador=direccion;
+    }
+
 
 }

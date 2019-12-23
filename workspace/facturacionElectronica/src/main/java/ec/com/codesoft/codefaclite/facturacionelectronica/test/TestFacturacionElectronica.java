@@ -77,7 +77,7 @@ public class TestFacturacionElectronica {
         informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(new Date(fechaHoy.getTime())));
         
         informacionFactura.setIdentificacionComprador("17242131515");
-        factura.setInformacionFactura(informacionFactura);
+        factura.setInformacionComprobante(informacionFactura);
         
         return factura;
     }

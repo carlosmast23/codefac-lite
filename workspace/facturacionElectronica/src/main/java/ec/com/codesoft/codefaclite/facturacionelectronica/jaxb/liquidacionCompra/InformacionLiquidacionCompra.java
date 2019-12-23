@@ -5,14 +5,29 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.liquidacionCompra;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.InformacionComprobanteAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.InformacionFactura;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author Carlos
  */
-public class InformacionLiquidacionCompra extends InformacionFactura{
+@XmlType(propOrder = {
+    "fechaEmision",
+    "dirEstablecimiento",
+    "obligadoContabilidad",
+    "tipoIdentificacionProveedor",
+    "razonSocialProveedor",
+    "identificacionProveedor",
+    "direccionProveedor",    
+    "totalSinImpuestos",
+    "totalDescuento",
+    "totalImpuestos",
+    "importeTotal",
+    "formaPagos"})
+public class InformacionLiquidacionCompra extends InformacionComprobanteAbstract{
     private String tipoIdentificacionProveedor;
     private String razonSocialProveedor;
     private String identificacionProveedor;
@@ -55,6 +70,26 @@ public class InformacionLiquidacionCompra extends InformacionFactura{
 
     public void setDireccionProveedor(String direccionProveedor) {
         this.direccionProveedor = direccionProveedor;
+    }
+
+    @Override
+    public void setTipoIdentificacion(String tipoIdentificacion) {
+        tipoIdentificacionProveedor=tipoIdentificacion;
+    }
+
+    @Override
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocialProveedor=razonSocial;
+    }
+
+    @Override
+    public void setIdentificacion(String identificacion) {
+        this.identificacionProveedor=identificacion;
+    }
+
+    @Override
+    public void setDireccion(String direccion) {
+        this.direccionProveedor=direccion;
     }
 
     

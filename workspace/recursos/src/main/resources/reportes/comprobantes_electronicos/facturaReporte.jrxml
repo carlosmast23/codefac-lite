@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
 	<property name="ireport.zoom" value="1.464100000000018"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="384"/>
+	<property name="ireport.x" value="88"/>
+	<property name="ireport.y" value="48"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -73,6 +73,7 @@
 	<parameter name="ice" class="java.lang.String"/>
 	<parameter name="SUBREPORT_INFO_OTRO" class="java.lang.Object"/>
 	<parameter name="direccion_comprador" class="java.lang.String"/>
+	<parameter name="nombre_documento" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -101,13 +102,6 @@
 			<rectangle radius="10">
 				<reportElement x="0" y="151" width="287" height="146" uuid="128a1725-5c7e-4bc8-b27b-142a8c3698f1"/>
 			</rectangle>
-			<staticText>
-				<reportElement x="313" y="54" width="144" height="32" uuid="f80e499f-05b1-47f6-9d9d-2328839da831"/>
-				<textElement>
-					<font size="24" isBold="true"/>
-				</textElement>
-				<text><![CDATA[FACTURA]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="313" y="106" width="221" height="20" uuid="8ce84796-bd04-40a2-b9d4-6aed40d2bb70"/>
 				<textElement>
@@ -310,6 +304,13 @@
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{direccion_comprador}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="314" y="54" width="238" height="32" uuid="b2c4b48c-b4cf-426f-a708-025db7b97ff0"/>
+				<textElement>
+					<font size="17" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nombre_documento}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

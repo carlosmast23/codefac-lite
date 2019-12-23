@@ -32,6 +32,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
     private PersonaEstablecimiento establecimiento;
     private EnumSiNo estadoEnviadoGuiaRemision;
     private Empresa empresa;
+    
 
     public FacturaBusqueda(Persona cliente,Empresa empresa) {
         this.cliente = cliente;    
@@ -87,18 +88,19 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         
         if(estadoEnviadoGuiaRemision!=null)
         {
-            queryString+=" AND u.estadoEnviadoGuiaRemision=?11";
+            queryString+=" AND u.estadoEnviadoGuiaRemision=?11 ";
         }
         
-        queryString+=" AND (u.codigoDocumento=?3 OR  u.codigoDocumento=?4) ";
+        queryString+=getQueryDocumentos();
         
         queryString+="AND ( LOWER(u.cliente.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
         queryString+=" ORDER BY u.secuencial+0 DESC ";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(2,filter);
-        queryDialog.agregarParametro(3,DocumentoEnum.FACTURA.getCodigo());
-        queryDialog.agregarParametro(4,DocumentoEnum.NOTA_VENTA_INTERNA.getCodigo());
+        //queryDialog.agregarParametro(3,DocumentoEnum.FACTURA.getCodigo());
+        //queryDialog.agregarParametro(4,DocumentoEnum.NOTA_VENTA_INTERNA.getCodigo());
+        setParameterQuery(queryDialog);
         
         
         if (empresa != null) {
@@ -122,6 +124,17 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         
         //queryDialog.agregarParametro(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
         return queryDialog;
+    }
+    
+    public String getQueryDocumentos()
+    {
+        return " AND (u.codigoDocumento=?3 OR  u.codigoDocumento=?4) ";
+    }
+    
+    public void setParameterQuery(QueryDialog queryDialog)
+    {
+        queryDialog.agregarParametro(3,DocumentoEnum.FACTURA.getCodigo());
+        queryDialog.agregarParametro(4,DocumentoEnum.NOTA_VENTA_INTERNA.getCodigo());
     }
 
     @Override

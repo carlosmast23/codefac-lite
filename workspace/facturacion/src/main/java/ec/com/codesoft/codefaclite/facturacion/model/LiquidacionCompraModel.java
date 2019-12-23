@@ -5,8 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.LiquidacionCompraBusqueda;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -47,10 +49,13 @@ public class LiquidacionCompraModel extends FacturacionModel{
         //desactivar el panel formas de pago porque no utilizo
         getPanelFormasPago().setVisible(false);    
         getPnlVuelto().setVisible(false);
+        getCmbConsumidorFinal().setVisible(false);
         
     }
      
-     @Override
+     
+     
+    /* @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
             validacionesGrabar(); //Metodo que realiza validaciones previas antes de grabar
@@ -69,6 +74,12 @@ public class LiquidacionCompraModel extends FacturacionModel{
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
         }        
 
+    }*/
+
+    @Override
+    public InterfaceModelFind getBusquedaInterface() {
+        LiquidacionCompraBusqueda compraModel=new LiquidacionCompraBusqueda(session.getEmpresa());
+        return compraModel;        
     }
     
     

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -198,6 +199,13 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     
     private void eventoImprimirComprobanteEvento(ClaveAcceso clave)
     {
+        //TODO: Parche temporal para imprimir y utilizar la misma metodologia para las liquidaciones de compra
+        if(clave.getTipoComprobante().equals(ComprobanteEnum.LIQUIDACION_COMPRA))
+        {
+            imprimirComprobanteRide(clave.clave);
+            return;
+        }
+        
         if (verificarImprimirComprobanteVenta()) {
             facturacionModel.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA);
             //imprimirComprobanteVenta();
@@ -205,7 +213,38 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             generarReportePdf(clave.clave);
         }
     }
+        
+    private void generarReportePdf(String clave) {
+        if(verificarImprimirComprobanteVenta())
+        {
+            facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA); //TODO:Verificar si este metodo no funciona
+        }
+        else
+        {
+            //byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave,facturaProcesando.getEmpresa());
+            //JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
+            //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
+            imprimirComprobanteRide(clave);
+        }
+        //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
 
+    }
+    
+    private void imprimirComprobanteRide(String clave)
+    {
+        try {
+            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave, facturaProcesando.getEmpresa());
+            JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
+            facturacionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     @Override
     public void error(ComprobanteElectronicoException cee,String claveAcceso) throws RemoteException {
         try {
@@ -250,30 +289,6 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
         facturacionModel.panelPadre.actualizarNotificacionesCodefac();
-    }
-    
-    private void generarReportePdf(String clave) {
-        try {
-            
-            if(verificarImprimirComprobanteVenta())
-            {
-                facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA); //TODO:Verificar si este metodo no funciona
-            }
-            else
-            {            
-                byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave,facturaProcesando.getEmpresa());
-                JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
-                facturacionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
-            }
-            //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
-        } catch (RemoteException ex) {
-            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
     }
     
     private boolean verificarImprimirComprobanteVenta()

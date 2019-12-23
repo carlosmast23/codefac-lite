@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronicoFacturaAndLiquidacionAbstract;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.InformacionComprobanteAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.DetalleNotaCreditoComprobante;
@@ -16,6 +18,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -26,10 +29,10 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement(name = ComprobanteElectronico.FACTURA)
 @XmlType(propOrder = {"informacionTributaria","informacionFactura","detalles","informacionAdicional"})
-public class FacturaComprobante extends ComprobanteElectronico{
+public class FacturaComprobante extends ComprobanteElectronicoFacturaAndLiquidacionAbstract{
 
     private InformacionFactura informacionFactura;
-    private List<DetalleFacturaComprobante> detalles;
+    //private List<DetalleFacturaComprobante> detalles;
     
     @Override
     public String getTipoDocumento() {
@@ -37,7 +40,7 @@ public class FacturaComprobante extends ComprobanteElectronico{
     }
     
 
-    @XmlElementWrapper(name = "detalles")
+    /*@XmlElementWrapper(name = "detalles")
     @XmlElement(name = "detalle")
     public List<DetalleFacturaComprobante> getDetalles() {
         return detalles;
@@ -45,33 +48,28 @@ public class FacturaComprobante extends ComprobanteElectronico{
 
     public void setDetalles(List<DetalleFacturaComprobante> detalles) {
         this.detalles = detalles;
-    }
+    }*/
 
     @XmlElement(name = "infoFactura")
     public InformacionFactura getInformacionFactura() {
         return informacionFactura;
     }
 
-    @Override
-    public String getFechaEmision() {
-        return this.informacionFactura.getFechaEmision();
-    }
-
     public void setInformacionFactura(InformacionFactura informacionFactura) {
         this.informacionFactura = informacionFactura;
     }
-/*
-    @XmlElement(name="infoTributaria")
-    public InformacionTributaria getInformacionTributaria() {
-        return informacionTributaria;
-    }
     
-    @XmlElementWrapper(name = "infoAdicional")
-    @XmlElement(name = "campoAdicional")
-    public List<InformacionAdicional> getInformacionAdicional() {
-        return informacionAdicional;
-    }
-*/
+    
+
+    /*@Override
+    public String getFechaEmision() {
+        return this.informacionFactura.getFechaEmision();
+    }*/
+
+    /*public void setInformacionFactura(InformacionFactura informacionFactura) {
+        this.informacionFactura = informacionFactura;
+    }*/
+
 
     @XmlAttribute(name = "version")
     public String getVersionAttribute() {
@@ -83,10 +81,20 @@ public class FacturaComprobante extends ComprobanteElectronico{
         return getInformacionFactura().getRazonSocialComprador();
     }
 
-    @Override
+    /*@Override
     public String getDireccionEstablecimiento() {
         return getInformacionFactura().getDirEstablecimiento();
+    }*/
+
+    @Override
+    @XmlTransient
+    public InformacionComprobanteAbstract getInformacionComprobante() {
+        return informacionFactura;
     }
-    
+
+    @Override
+    public void setInformacionComprobante(InformacionComprobanteAbstract informacionFactura) {
+        this.informacionFactura=(InformacionFactura) informacionFactura;
+    }
     
 }
