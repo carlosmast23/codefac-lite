@@ -431,15 +431,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             //getLblNombreCliente().setText("..");
             getBtnBuscarCliente().setEnabled(false);
         }
-        
-        //Agregar la lista de los elementos disponibles para buscar
-        getCmbDocumento().removeAllItems();
-        getCmbDocumento().addItem(DocumentoEnum.FACTURA);
-        getCmbDocumento().addItem(DocumentoEnum.NOTA_VENTA_INTERNA);
-        getCmbDocumento().addItem(DocumentoEnum.NOTA_CREDITO);
-        //for (DocumentosConsultarEnum documentoEnum : DocumentosConsultarEnum.values()) {
-        //    getCmbDocumento().addItem(documentoEnum);
-        //}
+        cargarDocumentosCombo();
         
         getChkTodosReferidos().setSelected(true);
         getBtnBuscarReferido().setEnabled(false);
@@ -460,6 +452,15 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getBtnBuscarReferido().setVisible(false);
         getChkTodosReferidos().setVisible(false);
         getChkReporteAgrupadoReferido().setVisible(false);
+    }
+    
+    public void cargarDocumentosCombo()
+    {
+        //Agregar la lista de los elementos disponibles para buscar
+        getCmbDocumento().removeAllItems();
+        getCmbDocumento().addItem(DocumentoEnum.FACTURA);
+        getCmbDocumento().addItem(DocumentoEnum.NOTA_VENTA_INTERNA);
+        getCmbDocumento().addItem(DocumentoEnum.NOTA_CREDITO);
     }
 
     protected void listenerBotones() {

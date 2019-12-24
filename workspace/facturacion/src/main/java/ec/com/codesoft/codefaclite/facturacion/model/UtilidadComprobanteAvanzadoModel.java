@@ -142,7 +142,15 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
             for (ComprobanteElectronico comprobante : comprobantes) {
                 Vector<Object> fila = new Vector<>();
                 fila.add(false);
-                fila.add(comprobante.getInformacionTributaria().getCodigoDocumentoEnum().getNombre());
+                if(comprobante.getInformacionTributaria().getCodigoDocumentoEnum()!=null)
+                {
+                    fila.add(comprobante.getInformacionTributaria().getCodigoDocumentoEnum().getNombre());
+                }
+                else
+                {
+                    fila.add("SIN DOCUMENTO");
+                }
+                
                 fila.add(comprobante.getInformacionTributaria().getPreimpreso());
                 fila.add(comprobante.getFechaEmision());
                 fila.add(comprobante.getInformacionTributaria().getClaveAcceso());

@@ -126,6 +126,7 @@ public class ControladorReporteFactura {
             data = new ArrayList<ReporteFacturaData>();
             
             switch (documentoConsultaEnum) {
+                case LIQUIDACION_COMPRA:
                 case NOTA_VENTA_INTERNA:
                 case FACTURA:
                     for (Factura factura : datafact) {
@@ -498,8 +499,12 @@ public class ControladorReporteFactura {
             parameters.putAll(totalAnulados.buildMap(EtiquetaReporteEnum.ANULADOS));
         }
         
-       if(documentoConsultaEnum.equals(documentoConsultaEnum.FACTURA) || documentoConsultaEnum.equals(documentoConsultaEnum.NOTA_VENTA_INTERNA))
+       if(
+               documentoConsultaEnum.equals(documentoConsultaEnum.FACTURA) || 
+               documentoConsultaEnum.equals(documentoConsultaEnum.NOTA_VENTA_INTERNA) ||
+               documentoConsultaEnum.equals(documentoConsultaEnum.LIQUIDACION_COMPRA))
        {
+           
            TotalSumatoria totalSinNotasCredito=total.subtract(totalNotasCredito);
            TotalSumatoria totalSinNotasCreditoYAnulados=totalSinNotasCredito.subtract(totalAnulados);
            parameters.putAll(total.buildMap(EtiquetaReporteEnum.TOTAL));
