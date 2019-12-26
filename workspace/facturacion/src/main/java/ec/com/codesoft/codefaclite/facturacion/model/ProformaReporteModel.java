@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
@@ -267,7 +267,7 @@ public class ProformaReporteModel extends ProformaReportePanel {
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(session.getEmpresa());
+                ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 buscarDialogoModel.getResultado();

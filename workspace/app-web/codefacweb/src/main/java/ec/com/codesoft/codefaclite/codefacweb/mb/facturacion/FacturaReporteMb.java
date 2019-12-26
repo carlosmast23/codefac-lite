@@ -11,7 +11,6 @@ import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.TablaNombreColumna;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EjemploDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
@@ -224,7 +223,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     // Abrir Dialogo Busqueda Cliente
     public void abrirDialogoBuscarCliente()
     {
-        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(sessionMb.getSession().getEmpresa());   
+        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession().getEmpresa());   
         abrirDialogoBusqueda(clienteBusquedaDialogo);
     }
     

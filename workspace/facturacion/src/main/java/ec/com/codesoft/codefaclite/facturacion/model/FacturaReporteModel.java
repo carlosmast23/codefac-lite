@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
@@ -13,7 +14,6 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaReportePanel;
@@ -469,7 +469,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(session.getEmpresa());
+                ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 persona = ((PersonaEstablecimiento) buscarDialogoModel.getResultado());

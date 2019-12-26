@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
@@ -18,7 +19,6 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
@@ -165,6 +165,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 
 /**
  *
@@ -811,7 +812,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     private void btnListenerBuscarCliente() {
-        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(session.getEmpresa());
+        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         //factura.setCliente((Persona) buscarDialogoModel.getResultado());        
@@ -2586,7 +2587,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             try {
                 
-                                //Variable del producto para verificar otros datos como el iva
+                //Variable del producto para verificar otros datos como el iva
                 CatalogoProducto catalogoProducto=null;
                 //Seleccionar la referencia dependiendo del tipo de documento
                 TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
@@ -2624,12 +2625,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                
                 //Calcula los valores dependiendo del iva para tener el valor unitario
                 BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
-                EnumSiNo enumSino=(EnumSiNo) getCmbIva().getSelectedItem();
-                if(enumSino.equals(EnumSiNo.SI))
-                {
-                    BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+                EnumSiNo incluidoIvaSiNo=(EnumSiNo) getCmbIva().getSelectedItem();
+                BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+                if(incluidoIvaSiNo.equals(EnumSiNo.SI))
+                {                    
                     BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
-                    valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP); //Redondeando con 4 decimales ya no genera problema con el centavo aveces
+                    valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,6,BigDecimal.ROUND_HALF_UP); //Redondeando con 4 decimales ya no genera problema con el centavo aveces
                 }                                
                 facturaDetalle.setPrecioUnitario(valorTotalUnitario);
                 
@@ -2641,17 +2642,30 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if (!getCheckPorcentaje().isSelected()) { //Cuando no es porcentaje el valor se setea directo
                     if (!getTxtDescuento().getText().equals("")) {
                         descuento = new BigDecimal(getTxtDescuento().getText());
+                        //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
+                        if(incluidoIvaSiNo.equals(EnumSiNo.SI))
+                        {
+                            descuento=UtilidadesImpuestos.quitarValorIva(ivaDefecto,descuento,6);
+                        }
+                        
                     } else {
                         descuento = BigDecimal.ZERO;
                     }
                     
                     facturaDetalle.setDescuento(descuento);
-                } else { //Cuando es porcentaje se calcula el valor directo
+                } else { //Cuando es porcentaje se calcula primero el valor en procentaje
                     if (!getTxtDescuento().getText().equals("")) {
                         BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
                         porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
                         BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario().setScale(2,BigDecimal.ROUND_HALF_UP)); //Escala a 2 decimales el valor del valor unitario porque algunos proveedores tienen 3 decimales
                         descuento = total.multiply(porcentajeDescuento);
+                        
+                        //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva                        
+                        if(incluidoIvaSiNo.equals(EnumSiNo.SI))
+                        {
+                            descuento=UtilidadesImpuestos.quitarValorIva(ivaDefecto,descuento,6);
+                        }
+                        
                         facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
                     }
                 }

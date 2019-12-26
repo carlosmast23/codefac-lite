@@ -53,7 +53,15 @@ public class BodegaBusquedaDialogo implements InterfaceModelFind<Bodega> {
     public void agregarObjeto(Bodega t, Vector dato) {
         dato.add(t.getNombre());
         dato.add(t.getDescripcion());
-        dato.add(t.getTipoBodegaEnum().getNombre());
+        if(t.getTipoBodegaEnum()!=null)
+        {
+            dato.add(t.getTipoBodegaEnum().getNombre());
+        }
+        else
+        {
+            dato.add("Error");
+        }
+        
         if(t.getSucursal()!=null)
         {
             dato.add(t.getSucursal().getNombre());

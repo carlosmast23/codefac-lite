@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.transporte.model;
 
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteGuiaRemision;
@@ -204,7 +204,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(session.getEmpresa());
+                ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 persona = ((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();

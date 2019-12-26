@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.codefacweb.core.SessionMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.ParametrosWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
@@ -312,7 +312,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     public void abrirDialogoBuscarCliente() {
         System.out.println("Abriendo dialogo init");
-        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(sessionMb.getSession().getEmpresa());
+        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession().getEmpresa());
         abrirDialogoBusqueda(clienteBusquedaDialogo);
         System.out.println("Abriendo dialogo fin");
     }

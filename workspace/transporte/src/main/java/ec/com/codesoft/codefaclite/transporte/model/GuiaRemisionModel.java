@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.transporte.model;
 
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.GuiaRemisionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
@@ -415,7 +415,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     }
     
     private void btnListenerBuscarCliente() {
-        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda(session.getEmpresa());
+        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         //factura.setCliente((Persona) buscarDialogoModel.getResultado());      
