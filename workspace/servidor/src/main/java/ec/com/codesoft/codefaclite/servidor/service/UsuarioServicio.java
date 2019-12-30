@@ -452,7 +452,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                 //DialogoCodefac.mensaje("Error", "El sistema detecta valores pendientes de pago y no se puede abrir\n Porfavor cancele los valores pendientes para continuar con el servicio.", DialogoCodefac.MENSAJE_INCORRECTO);
                 //System.exit(0);
                 respuesta.estadoEnum=FechaMaximoPagoRespuesta.EstadoEnum.FECHA_PAGO_SUPERADA;
-            } else if (diasFaltantes <= 10) {
+            } else if (diasFaltantes <= 7) {
                 //DialogoCodefac.mensaje("Advertencia", "El sistema registra valores pendientes por cancelar , le restan " + diasFaltantes + " días para usar el sistema,\n Si no cancela los valores pendientes el sistema automáticamente se bloqueará .", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 respuesta.estadoEnum=FechaMaximoPagoRespuesta.EstadoEnum.PROXIMO_PAGO_CERCA;
             }

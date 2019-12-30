@@ -124,6 +124,13 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
             throw new ServicioCodefacException("No se puede grabar retenciones sin detalles");
         }
         
+    
+        if(retencion.getProveedor().getIdentificacion().equals(Persona.IDENTIFICACION_CONSUMIDOR_FINAL))
+        {
+            throw new ServicioCodefacException("No se permite emitir retenciones a consumidor final");
+        }
+        
+        
         //TODO: Por el momento quito esta validacion porque ese problema de los duplicados puedo manejar en los ats agrupando nuevamente
         ///Validar que no existan codigos duplicados porque eso no permite el Sri
         /*List<String> codigosRetencion=new ArrayList<String>();

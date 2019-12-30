@@ -32,8 +32,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategori
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -232,22 +234,12 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      */
     public void grabarDocumentoCartera(ComprobanteEntity comprobante,Cartera.TipoCarteraEnum tipo) throws RemoteException, ServicioCodefacException 
     {
-        ParametroCodefacService parametroCodefacService=new ParametroCodefacService();
-        ParametroCodefac parametro=parametroCodefacService.getParametroByNombre(ParametroCodefac.ACTIVAR_CARTERA,comprobante.getEmpresa());
-        
-        //Si no existe este dato asumo que esta trabajando sin cartera
-        if(parametro==null )
+        //Si no esta activo el modulo de cartera no continua
+        if(!ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.ACTIVAR_CARTERA, EnumSiNo.SI))
         {
             return;
         }
-        else
-        {
-            //Si esta seleccinado la opcion no cancelo la creacion del inventario
-            if(EnumSiNo.getEnumByLetra(parametro.getValor()).equals(EnumSiNo.NO))
-            {
-                return;
-            }
-        }
+        
         
         Cartera cartera = new Cartera();
         cartera.setCodigoDocumento(comprobante.getCodigoDocumento());

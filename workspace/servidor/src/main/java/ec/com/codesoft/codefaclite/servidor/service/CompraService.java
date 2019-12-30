@@ -82,7 +82,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                     grabarCartera(compra); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new ServicioCodefacException("Error al grabar la compra");
+                    throw new ServicioCodefacException(e.getMessage());
 
                 }
             }

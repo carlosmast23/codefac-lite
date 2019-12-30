@@ -204,6 +204,7 @@ public class Main {
                 
                 //Solo actualizar si la version instalada es menor a la disponible en internet
                 if(UtilidadesSistema.compareVersion(ParametrosSistemaCodefac.VERSION,ultimaVersion)==-1)
+                //if(true)
                 {
                     if(!DialogoCodefac.dialogoPregunta("Actualizar Codefac","Existe una nueva versión disponible , desea actualizar ahora?", DialogoCodefac.MENSAJE_CORRECTO))
                     {
