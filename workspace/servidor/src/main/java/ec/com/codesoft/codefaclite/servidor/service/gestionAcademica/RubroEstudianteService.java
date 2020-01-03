@@ -153,78 +153,85 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         
     }
 
-    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla, MesEnum mesEnum, String nombreRubroMes,Integer anio) throws RemoteException {
-        try {
-            EntityTransaction transaccion = getTransaccion();
+    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla, MesEnum mesEnum, String nombreRubroMes,Integer anio) throws RemoteException,ServicioCodefacException {
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                //Crear el rubro nivel de esa plantilla
+                RubrosNivel rubroNivel = new RubrosNivel();
+                rubroNivel.setCatalogoProducto(rubroPlantilla.getCatalogoProducto());
+                rubroNivel.setDiasCredito(rubroPlantilla.getDiasCredito());
+                rubroNivel.setNivel(null);
+                rubroNivel.setNombre(nombreRubroMes);
+                rubroNivel.setPeriodo(rubroPlantilla.getPeriodo());
+                rubroNivel.setValor(rubroPlantilla.getValor());
+                rubroNivel.setMesNumero(mesEnum.getNumero());
+                rubroNivel.setAnio(anio);
+                rubroNivel.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                //rubroNivel.setReferenciaPlantilla(rubroPlantilla);
 
-            transaccion.begin();
-            //Crear el rubro nivel de esa plantilla
-            RubrosNivel rubroNivel = new RubrosNivel();
-            rubroNivel.setCatalogoProducto(rubroPlantilla.getCatalogoProducto());
-            rubroNivel.setDiasCredito(rubroPlantilla.getDiasCredito());
-            rubroNivel.setNivel(null);
-            rubroNivel.setNombre(nombreRubroMes);
-            rubroNivel.setPeriodo(rubroPlantilla.getPeriodo());
-            rubroNivel.setValor(rubroPlantilla.getValor());
-            rubroNivel.setMesNumero(mesEnum.getNumero());
-            rubroNivel.setAnio(anio);
-            rubroNivel.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-            //rubroNivel.setReferenciaPlantilla(rubroPlantilla);
+                entityManager.persist(rubroNivel);
 
-            entityManager.persist(rubroNivel);
+                for (RubroPlantillaEstudiante estudiateInscrito : rubroPlantilla.getDetalles()) {
+                                 
+                    //Si por algun motivo no tiene ligado un estuidante inscrito no ejecuto ninguna accion
+                    if(estudiateInscrito.getEstudianteInscrito()==null)
+                    {
+                        continue;
+                    }
+                    
+                    
+                    //Cuando el estudiante inscrito esta con estado inactivo no genera la deuda para ese estudiante
+                    if(!estudiateInscrito.getEstudianteInscrito().getEnumEstado().equals(GeneralEnumEstado.ACTIVO))
+                    {
+                        continue; //Pasa al siguiente registro
+                    }
 
-            for (RubroPlantillaEstudiante estudiateInscrito : rubroPlantilla.getDetalles()) {
-                
-                //Cuando el estudiante inscrito esta con estado inactivo no genera la deuda para ese estudiante
-                if(!estudiateInscrito.getEstudianteInscrito().getEnumEstado().equals(GeneralEnumEstado.ACTIVO))
-                {
-                    continue; //Pasa al siguiente registro
+                    //Si existen los valores del estudiante ingresado son los mismos , si no existen obtengo la valor general
+                    BigDecimal valorDeudaEstudiante=(estudiateInscrito.getValorPlantilla()!=null)?estudiateInscrito.getValorPlantilla():rubroNivel.getValor();
+
+                    //Si el valor de la deuda esta ingresada como 0 entonces no grabo
+                    if(valorDeudaEstudiante.compareTo(BigDecimal.ZERO)==0)
+                    {
+                        continue;
+                    }
+
+
+                    RubroEstudiante rubroEstudiante = new RubroEstudiante();
+
+                    rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                    rubroEstudiante.setFechaGenerado(UtilidadesFecha.getFechaHoy());
+                    rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
+                    rubroEstudiante.setEstudianteInscrito(estudiateInscrito.getEstudianteInscrito());
+                    rubroEstudiante.setRubroNivel(rubroNivel);
+
+                    rubroEstudiante.setSaldo(valorDeudaEstudiante);
+                    rubroEstudiante.setValor(valorDeudaEstudiante);
+
+                    entityManager.persist(rubroEstudiante);
                 }
-                
-                //Si existen los valores del estudiante ingresado son los mismos , si no existen obtengo la valor general
-                BigDecimal valorDeudaEstudiante=(estudiateInscrito.getValorPlantilla()!=null)?estudiateInscrito.getValorPlantilla():rubroNivel.getValor();
-                
-                //Si el valor de la deuda esta ingresada como 0 entonces no grabo
-                if(valorDeudaEstudiante.compareTo(BigDecimal.ZERO)==0)
-                {
-                    continue;
-                }
-                
-                
-                RubroEstudiante rubroEstudiante = new RubroEstudiante();
-                
-                rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-                rubroEstudiante.setFechaGenerado(UtilidadesFecha.getFechaHoy());
-                rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
-                rubroEstudiante.setEstudianteInscrito(estudiateInscrito.getEstudianteInscrito());
-                rubroEstudiante.setRubroNivel(rubroNivel);
 
-                rubroEstudiante.setSaldo(valorDeudaEstudiante);
-                rubroEstudiante.setValor(valorDeudaEstudiante);
+                //Grabar los valores del mes que se estan generando
+                RubroPlantillaMes rubroPlantillaMes=new RubroPlantillaMes();
+                rubroPlantillaMes.setAnio(anio);
+                rubroPlantillaMes.setNumeroMes(mesEnum.getNumero());
+                rubroPlantillaMes.setRubroPlantilla(rubroPlantilla);
+                rubroPlantillaMes.setRubroNivel(rubroNivel);
+                entityManager.persist(rubroPlantillaMes);
 
-                entityManager.persist(rubroEstudiante);
+                rubroPlantilla.addMesGenerado(rubroPlantillaMes);
+
+                //Actualizar el rubroPlantillaMes
+                entityManager.merge(rubroPlantilla);
+
+
+                //return rubroPlantilla;
             }
-
-            //Grabar los valores del mes que se estan generando
-            RubroPlantillaMes rubroPlantillaMes=new RubroPlantillaMes();
-            rubroPlantillaMes.setAnio(anio);
-            rubroPlantillaMes.setNumeroMes(mesEnum.getNumero());
-            rubroPlantillaMes.setRubroPlantilla(rubroPlantilla);
-            rubroPlantillaMes.setRubroNivel(rubroNivel);
-            entityManager.persist(rubroPlantillaMes);
-            
-            rubroPlantilla.addMesGenerado(rubroPlantillaMes);
-            
-            //Actualizar el rubroPlantillaMes
-            entityManager.merge(rubroPlantilla);
-
-            transaccion.commit();
-            return rubroPlantilla;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        });
+        
+       
+        return rubroPlantilla;
     }
     
     public void actualizarRubrosEstudiante(List<RubroEstudiante> rubroEstudiantes) throws RemoteException {

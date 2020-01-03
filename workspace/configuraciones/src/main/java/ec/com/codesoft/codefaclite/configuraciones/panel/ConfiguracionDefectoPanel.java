@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -119,6 +120,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel27 = new javax.swing.JLabel();
         cmbDatosCompartidosEmpresas = new javax.swing.JComboBox<>();
         lblEspacio637 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        txtDiasAlertaPago = new javax.swing.JSpinner();
 
         setClosable(true);
         setIconifiable(true);
@@ -645,10 +648,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
         jLabel27.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel27.setText("Datos Compartidos Entre Empresas:");
+        jLabel27.setText("Número de días para alertar deudas:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(jLabel27, gridBagConstraints);
@@ -657,14 +660,32 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(cmbDatosCompartidosEmpresas, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel9.add(lblEspacio637, gridBagConstraints);
+
+        jLabel28.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel28.setText("Datos Compartidos Entre Empresas:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jLabel28, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(txtDiasAlertaPago, gridBagConstraints);
 
         jTabbedPane1.addTab("General", jPanel9);
 
@@ -717,6 +738,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -751,6 +773,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacioVertical;
     private javax.swing.JLabel lblEspacioVertical1;
     private javax.swing.JTextArea txtCodigoHtml;
+    private javax.swing.JSpinner txtDiasAlertaPago;
     private javax.swing.JTextField txtMotivoTrasladoGuiaRemision;
     private javax.swing.JTextArea txtOrdenTrabajoReporte;
     private javax.swing.JTextField txtVariableGeneralComprobantes;
@@ -927,6 +950,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbDatosCompartidosEmpresas(JComboBox<EnumSiNo> cmbDatosCompartidosEmpresas) {
         this.cmbDatosCompartidosEmpresas = cmbDatosCompartidosEmpresas;
     }
+
+    public JSpinner getTxtDiasAlertaPago() {
+        return txtDiasAlertaPago;
+    }
+
+    public void setTxtDiasAlertaPago(JSpinner txtDiasAlertaPago) {
+        this.txtDiasAlertaPago = txtDiasAlertaPago;
+    }
+ 
     
     
 }

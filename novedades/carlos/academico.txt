@@ -1,1 +1,2 @@
 Verificar que eliminar estudiante funcione solo por el periodo activo
+investigar que cuando se quite un estuidante matriculado tambien se debeia eliminar el registro de estudiante inscrito porque luego genera problemas , o ver si solo se maneja por estados

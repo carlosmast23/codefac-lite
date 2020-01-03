@@ -366,6 +366,9 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
 
                         } catch (RemoteException ex) {
                             Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ServicioCodefacException ex) {
+                            DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                            Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }

@@ -177,6 +177,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         getCmbCargarProductoIvaFactura().addItem(EnumSiNo.NO);
         getCmbCargarProductoIvaFactura().addItem(EnumSiNo.SI);
         
+        getTxtDiasAlertaPago().setValue(7);//POR DEFECTO LOS DIAS PARA MOSTRAR LAS ALERTAS SON 7        
         
         
         UtilidadesComboBox.llenarComboBox(getCmbFacturarInventarioNegativo(),EnumSiNo.values());
@@ -319,6 +320,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             
             parametro = parametrosTodos.get(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS);
             getTxtVariableGeneralComprobantes().setText((parametro != null) ? parametro.getValor() : "");
+            
+            
+            parametro = parametrosTodos.get(ParametroCodefac.DIAS_ALERTA_PAGO);
+            getTxtDiasAlertaPago().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 7);
             //getTxtMotivoTrasladoGuiaRemision().setText(motivoGuiaRemision);
             
             parametro = parametrosTodos.get(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
@@ -475,6 +480,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO,getTxtCodigoHtml().getText());
         agregarParametroEditar(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
         
+        agregarParametro(ParametroCodefac.DIAS_ALERTA_PAGO, getTxtDiasAlertaPago().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.DIAS_ALERTA_PAGO);        
 
         /**
          * @author Carlos Sanchez

@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
@@ -28,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FechaMaximoPagoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
@@ -83,7 +85,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             }
             
             /////////=========> VALIDAR QUE NO TENGA DEUDAS EN EL SISTEMA PARA SEGUIR USANDO <================================///
-            FechaMaximoPagoRespuesta respuestaPago = verificarFechaMaximaPago(empresaLicencia.usuarioLicencia);
+            FechaMaximoPagoRespuesta respuestaPago = verificarFechaMaximaPago(empresaLicencia.usuarioLicencia,empresa);
             if (respuestaPago.estadoEnum.equals(respuestaPago.estadoEnum.FECHA_PAGO_SUPERADA)) {
                 loginRespuesta.estadoEnum = loginRespuesta.estadoEnum.PAGOS_PENDIENTES;
                 return loginRespuesta;
@@ -436,7 +438,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         return null;
     }
     
-    private static FechaMaximoPagoRespuesta verificarFechaMaximaPago(String usuario) {
+    private static FechaMaximoPagoRespuesta verificarFechaMaximaPago(String usuario,Empresa empresa) {
         FechaMaximoPagoRespuesta respuesta=new FechaMaximoPagoRespuesta();
         
         Date fechaLimite = WebServiceCodefac.obtenerFechaLimitePago(usuario);
@@ -445,14 +447,24 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             int diasFaltantes = UtilidadesFecha.obtenerDistanciaDias(UtilidadesFecha.getFechaHoy(), fechaLimite);
             respuesta.diasRestantes=diasFaltantes;
             respuesta.estadoEnum=FechaMaximoPagoRespuesta.EstadoEnum.VALORES_PENDIENTES;
-            //System.out.println("Hoy:"+UtilidadesFecha.hoy());
-            //System.out.println("otro:"+fechaLimite);
+
+            Integer diasPreviosAlerta=7; //Por defecto si no tienen algun valor se muestran las fechas de pago con 7 dias
+            try {
+                String diasPagoParametro=ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.DIAS_ALERTA_PAGO);
+                if(diasPagoParametro!=null && !diasPagoParametro.isEmpty())
+                {
+                    diasPreviosAlerta=Integer.parseInt(diasPagoParametro);
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             //diasFaltantes=diasFaltantes+1; //Le sumo un digito porqe la distancia me devuelve con un numero menos TODO: revisar esta parte
             if (diasFaltantes <= 0) {//Validacion cuando ya no tenga dias de espera ya no permite acceder al sistema
                 //DialogoCodefac.mensaje("Error", "El sistema detecta valores pendientes de pago y no se puede abrir\n Porfavor cancele los valores pendientes para continuar con el servicio.", DialogoCodefac.MENSAJE_INCORRECTO);
                 //System.exit(0);
                 respuesta.estadoEnum=FechaMaximoPagoRespuesta.EstadoEnum.FECHA_PAGO_SUPERADA;
-            } else if (diasFaltantes <= 7) {
+            } else if (diasFaltantes <= diasPreviosAlerta) {
                 //DialogoCodefac.mensaje("Advertencia", "El sistema registra valores pendientes por cancelar , le restan " + diasFaltantes + " días para usar el sistema,\n Si no cancela los valores pendientes el sistema automáticamente se bloqueará .", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 respuesta.estadoEnum=FechaMaximoPagoRespuesta.EstadoEnum.PROXIMO_PAGO_CERCA;
             }

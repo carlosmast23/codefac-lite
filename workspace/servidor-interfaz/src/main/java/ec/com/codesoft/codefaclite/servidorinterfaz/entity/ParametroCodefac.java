@@ -137,6 +137,8 @@ public class ParametroCodefac implements Serializable {
     public static final String FACTURACION_RIDE_DIRECCION_EMPLEADO="facturacion_ride_direccion_empleado";
     public static final String FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO="facturacion_ride_punto_emision_empleado";
     
+    public static final String DIAS_ALERTA_PAGO="dias_alerta_pago";
+    
     /**
      * Variable que identifica que algunos campos como clientes, proveedores , proveedores pueden usar entre diferentres empresas
      */
