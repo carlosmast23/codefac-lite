@@ -208,6 +208,7 @@ public class FacturaDetalle implements Serializable {
     }
 
     /**
+     * @deprecated Porque deberia trabajar directamente con el porcentjae como en el metodo de abajo
      * ====================> METODOS PERSONALIZADOS <===================== *
      */
     public void calcularValorIce(BigDecimal porcentajeIce) {
@@ -216,6 +217,11 @@ public class FacturaDetalle implements Serializable {
             this.icePorcentaje=porcentajeIce;
             this.valorIce=UtilidadBigDecimal.calcularValorPorcentaje(porcentajeIce, getSubtotalSinDescuentos()).setScale(2, RoundingMode.HALF_UP);        
         }
+    }
+    
+    public void calcularValorIce() 
+    {
+        calcularValorIce(icePorcentaje);
     }
 
     

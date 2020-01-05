@@ -2672,8 +2672,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 
                 //Calular el total despues del descuento porque necesito esa valor para grabar
-                //BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
-                //facturaDetalle.setTotal(setTotal.setcale(2, BigDecimal.ROUND_HALF_UP));
+
                 facturaDetalle.calcularTotalDetalle();
                 /**
                  * Revisar este calculo del iva para no calcular 2 veces al mostrar

@@ -240,7 +240,7 @@
 
 
                     <f:facet name="footer">
-                        <p:panelGrid columns="4" layout="grid" id="totalesTabla">
+                        <p:panelGrid columns="5"  id="totalesTabla">
                             <p:panel>
                                 <h:outputLabel style="font-weight: bold">Subtotal 12: </h:outputLabel>
                                 <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.subtotalImpuestos}" />
@@ -255,6 +255,12 @@
                                 <h:outputLabel style="font-weight: bold">Descuento: </h:outputLabel>
                                 <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.descuentoImpuestos}" />
                             </p:panel>
+                            
+                            <p:panel>
+                                <h:outputLabel style="font-weight: bold">ICE: </h:outputLabel>
+                                <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.ice}" />
+                            </p:panel>
+
                             <p:panel>
                                 <h:outputLabel style="font-weight: bold">IVA: </h:outputLabel>
                                 <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.iva}" />
