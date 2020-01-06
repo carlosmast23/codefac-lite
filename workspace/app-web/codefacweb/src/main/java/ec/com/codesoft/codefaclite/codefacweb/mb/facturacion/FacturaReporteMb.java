@@ -32,7 +32,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFin
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel;
-import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;

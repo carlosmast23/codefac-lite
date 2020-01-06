@@ -17,10 +17,11 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Factur
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
-import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -77,10 +78,14 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteE
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.math.RoundingMode;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
@@ -131,9 +136,13 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     @ManagedProperty(value = "#{parametrosWeb}")
     private ParametrosWeb parametrosWeb;
+    
+    private FacturaModelControlador controlador;
 
     @PostConstruct
     public void init() {
+        System.out.println("Creando controlador");
+        controlador=new FacturaModelControlador(sessionMb.getSession());
         String tipoPagina = UtilidadesWeb.buscarParametroPeticion(parametrosWeb.getCampoTipoFacturaOProforma());
         tipoPaginaEnum = TipoPaginaEnum.getByNombreParametro(tipoPagina);
         
@@ -175,9 +184,6 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
-        //PrimeFaces current = PrimeFaces.current();
-        //current.executeScript("PF('dialogResultado').show();");
-
         try {
             System.out.println("===========>INICIANDO PROCESO GRABAR <==============");     
             if (!validar()) //Si no valida mando una excepcion para cancelar el ciclo de vida 
@@ -193,43 +199,57 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
                 factura = servicio.grabarProforma(factura);
                 mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
 
-            } else if (tipoPaginaEnum.equals(TipoPaginaEnum.FACTURA)) {
+            }
+            else if (tipoPaginaEnum.equals(TipoPaginaEnum.FACTURA)) {
                 factura = servicio.grabar(factura);
                 
-                BarraProgreso<Factura> barraProgreso=new BarraProgreso<Factura>(factura,new BarraProgreso.InterfazBoton<Factura>() {
-                    public void alertaListener() {
-                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-
-                    public void imprimirListener(Factura dato) {
-                        try {
-                            dato=(Factura) ServiceFactory.getFactory().getFacturacionServiceIf().buscarPorId(dato.getId()); //Vuelvo a consultar porque el antigua dato no tenia la clave de acceso
-                            imprimirFactura(dato);
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+                //TODO:Toca validar que solo sea para electronica unir con el controlador para la factura
+                if (documentoSeleccionado.equals(DocumentoEnum.FACTURA)) 
+                {
+                    BarraProgreso<Factura> barraProgreso = new BarraProgreso<Factura>(factura, new BarraProgreso.InterfazBoton<Factura>() {
+                        public void alertaListener() {
+                            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                         }
-                    }
 
-                    public String tituloBarra(Factura dato) {
-                        return dato.getPreimpreso();
-                    }
-                });
+                        public void imprimirListener(Factura dato) {
+
+                            try {
+                                dato = (Factura) ServiceFactory.getFactory().getFacturacionServiceIf().buscarPorId(dato.getId()); //Vuelvo a consultar porque el antigua dato no tenia la clave de acceso
+                                if (ParametroUtilidades.comparar(sessionMb.getSession().getEmpresa(), ParametroCodefac.IMPRESORA_TICKETS_VENTAS, EnumSiNo.SI)) {
+                                    imprimirTicket(dato);
+                                } else {
+                                    imprimirFactura(dato);
+                                }
+
+                            } catch (RemoteException ex) {
+                                Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                        public String tituloBarra(Factura dato) {
+                            return dato.getPreimpreso();
+                        }
+                    });
+
+                    ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+                    comprobanteServiceIf.procesarComprobante(
+                            obtenerComprobanteDataFactura(),
+                            factura,
+                            sessionMb.getSession().getUsuario(),
+                            new InterfazCallBack(barraProgreso));
+
+                    sessionMb.getBarraProgresoList().add(barraProgreso);
+                    sessionMb.setActualizarMonitor(true);
+                    nuevo();
+                    UtilidadesWeb.ejecutarJavascript("PF('poll').start();"); //iniciar el comenten de actualizar monitor
+                    //UtilidadesWeb.actualizaComponente(":formulario:panelSecundario:barMonitor");       
+                    MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+                } else if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+                {
+                    mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+                }
+
                 
-                
-                
-                ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
-                comprobanteServiceIf.procesarComprobante(
-                        obtenerComprobanteDataFactura(),
-                        factura,
-                        sessionMb.getSession().getUsuario(),
-                        new InterfazCallBack(barraProgreso));
-                
-                sessionMb.getBarraProgresoList().add(barraProgreso);
-                sessionMb.setActualizarMonitor(true);                         
-                nuevo();
-                UtilidadesWeb.ejecutarJavascript("PF('poll').start();"); //iniciar el comenten de actualizar monitor
-                //UtilidadesWeb.actualizaComponente(":formulario:panelSecundario:barMonitor");       
-                MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
 
             }
 
@@ -485,7 +505,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
             factura.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
         }else
         {
-            factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
+            factura.setCodigoDocumento(documentoSeleccionado.getCodigo());
         }
         
         /**
@@ -507,7 +527,16 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
             imprimirProforma();
         }else if(tipoPaginaEnum.equals(tipoPaginaEnum.FACTURA))
         {
-            imprimirFactura(factura);
+            try {
+                if (ParametroUtilidades.comparar(sessionMb.getSession().getEmpresa(), ParametroCodefac.IMPRESORA_TICKETS_VENTAS, EnumSiNo.SI)) {
+                    imprimirTicket(factura);
+                } else {
+                    imprimirFactura(factura);
+                }
+                //imprimirFactura(factura);s
+            } catch (RemoteException ex) {
+                Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -549,6 +578,11 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         }
     }
     
+    
+    /**
+     * TODO: Ese codigo esta repetido el codigo para imprimir el comprobante
+     * @param factura 
+     */
     private void imprimirFactura(Factura factura)
     {
         
@@ -586,6 +620,52 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
             } catch (JRException ex) {
                 Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+    
+        /**
+     * TODO: Se debe unir de alguna forma con la de la pantalla de factura para no tener codigo duplicado
+     * Este metodo es para imprimir el comprobante pequeño
+     * @param factura 
+     */
+    private void imprimirTicket(Factura factura)
+    {
+        try {
+            //MOnitorCom
+            Map<String, Object> mapParametros = controlador.getMapParametrosReporte(factura);
+            List<ComprobanteVentaData> dataReporte = controlador.getDetalleDataReporte(factura);
+            InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
+            
+            String nombreReporte = factura.getCodigoDocumentoEnum().getNombre();
+            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+            {
+                nombreReporte="Nota de Venta";
+            }
+            
+            JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(),nombreReporte, OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
+            
+            
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            //HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
+            //byte[] bytes = JasperRunManager.runReportToPdf(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            //response.setHeader("Content-disposition", "inline; filename=proforma");
+            response.setContentType("application/pdf");
+            response.setContentLength(baos.size());
+
+            ServletOutputStream outStream = response.getOutputStream();
+            baos.writeTo(outStream);
+            //outStream.write(baos, 0, baos.size());
+
+            outStream.flush();
+            outStream.close();
+
+            FacesContext.getCurrentInstance().responseComplete();
+        } catch (JRException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -783,10 +863,17 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         documentos = new ArrayList<DocumentoEnum>();
 
         //TODO: Mejorar este metodo para cargar otras formas de pago de forma dinamica , pensar en la solucion de permisos de documentos
-        if (tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA)) {
+        if (tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA)) 
+        {
             documentos.add(DocumentoEnum.PROFORMA);
-        } else if (tipoPaginaEnum.equals(TipoPaginaEnum.FACTURA)) {
-            documentos.add(DocumentoEnum.FACTURA);
+        } 
+        else if (tipoPaginaEnum.equals(TipoPaginaEnum.FACTURA)) 
+        {
+            //System.out.println("Obteniendo lista de documentos");
+            documentos=controlador.buscarDocumentosFactura();
+            //System.out.println(documentos);
+            //UtilidadesComboBox.
+            //documentos.add(DocumentoEnum.FACTURA);
         }
     }
     

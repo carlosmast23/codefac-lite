@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosCompro
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
@@ -39,7 +40,7 @@ import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplCompro
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
 import ec.com.codesoft.codefaclite.facturacion.other.RenderPersonalizadoCombo;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
-import ec.com.codesoft.codefaclite.facturacion.reportdata.ComprobanteVentaData;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
@@ -198,6 +199,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      * facturacion electronica como por ejemplo el correo
      */
     //private Map<String, String> datosAdicionales;
+    
+    private FacturaModelControlador controlador;
 
     
 
@@ -215,7 +218,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
         initModelTablaDatoAdicional();
-        setearValoresVista();
+        setearValoresVista();        
         //setearVariablesIniciales();
 
     }
@@ -2388,6 +2391,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         System.out.println("Ingresando a iniciar");
+        
+        controlador=new FacturaModelControlador(session);
         if (!validacionParametrosCodefac()) {
             dispose();
             throw new ExcepcionCodefacLite("No cumple validacion inicial");
@@ -2874,8 +2879,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     public void iniciarValoresIniciales() {
-        List<DocumentoEnum> tiposDocumento=null;
-        
+                
         try {
             //Obtener la forma de pago
             formaPagoDefecto=ServiceFactory.getFactory().getSriServiceIf().obtenerFormarPagoDefecto();
@@ -2883,29 +2887,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        //cuando la factura es electronica
-        String letraTipoEmision=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor;
-        if(letraTipoEmision.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
-        {
-            ComprobanteEntity.TipoEmisionEnum tipoEmisionEnum=TipoEmisionEnum.getEnumByLetra(letraTipoEmision);
-            
-            tiposDocumento=DocumentoEnum.obtenerPorDocumentosElectronicos(ModuloCodefacEnum.FACTURACION,tipoEmisionEnum);
-            
-            ParametroCodefac paramCodefacNotaVenta=session.getParametrosCodefac().get(ParametroCodefac.ACTIVAR_NOTA_VENTA);
-                    
-            if(paramCodefacNotaVenta!=null)
-            {
-                EnumSiNo enumSino=EnumSiNo.getEnumByLetra(paramCodefacNotaVenta.getValor());
-                if(enumSino.equals(EnumSiNo.SI))
-                {
-                    tiposDocumento.add(DocumentoEnum.NOTA_VENTA_INTERNA); //Todo ver si utilizar este documento para grabar o crearme otros 
-                }
-            }
-        }
-        else //Cuando la factura es fisica
-        {
-            tiposDocumento=DocumentoEnum.obtenerPorDocumentosFisico(ModuloCodefacEnum.FACTURACION);
-        }
+        //Buscar todos los documentos permitidos para facturar
+        List<DocumentoEnum> tiposDocumento=controlador.buscarDocumentosFactura();
         
         getCmbDocumento().removeAllItems();
         for (DocumentoEnum tipoDocumentoEnum : tiposDocumento) {
@@ -3446,53 +3429,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
     }
     
-    public List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando)
-    {
-        List<ComprobanteVentaData> dataReporte = new ArrayList<ComprobanteVentaData>();
-
-        for (FacturaDetalle detalle : facturaProcesando.getDetalles()) {
-
-            ComprobanteVentaData data = new ComprobanteVentaData();
-            data.setCantidad(detalle.getCantidad().toString());
-            data.setCodigo(detalle.getId().toString());
-            data.setNombre(detalle.getDescripcion().toString());
-            data.setPrecioUnitario(detalle.getPrecioUnitario().toString());
-            data.setTotal(detalle.getTotal().toString());
-            
-            //Datos adicionales para las proformas
-            data.setDescuento(detalle.getDescuento().toString());
-            data.setDescripcion(detalle.getDescripcion());
-
-            dataReporte.add(data);
-        }
-        return dataReporte;
-    }
+    /**
+     * TODO: Por el momento dejo de esta manera porque en proforma como herada sobrescribe estos metodos y causa conflicto toca ver como corregir ese probelma
+     * @param facturaProcesando
+     * @return 
+     */
+    public List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando) {
+        return controlador.getDetalleDataReporte(facturaProcesando);
+    }    
     
-    public Map<String,Object> getMapParametrosReporte(Factura facturaProcesando)
-    {
-        //map de los parametros faltantes
-            Map<String,Object> mapParametros=new HashMap<String, Object>();
-            mapParametros.put("codigo", facturaProcesando.getPreimpreso());
-            mapParametros.put("cedula", facturaProcesando.getIdentificacion());
-            mapParametros.put("cliente", facturaProcesando.getRazonSocial());
-            mapParametros.put("direccion", facturaProcesando.getDireccion());
-            mapParametros.put("telefonos", facturaProcesando.getTelefono());
-            mapParametros.put("fechaIngreso", facturaProcesando.getFechaEmision().toString());
-            mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().add(facturaProcesando.getSubtotalSinImpuestos()).toString());
-            mapParametros.put("iva", facturaProcesando.getIva().toString());
-            mapParametros.put("total", facturaProcesando.getTotal().toString());
-            mapParametros.put("autorizacion", facturaProcesando.getClaveAcceso());
-            
-            
-            return mapParametros;
-            
+    public Map<String, Object> getMapParametrosReporte(Factura facturaProcesando) {
+        return controlador.getMapParametrosReporte(facturaProcesando);
     }
     
     public  void imprimirComprobanteVenta(Factura facturaProcesando,String nombre)
     {
 
         List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);
-        Map<String, Object> mapParametros = getMapParametrosReporte(facturaProcesando);
+        Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
         //InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
         String nombreReporte="comprobante_venta.jrxml";
         
