@@ -12,13 +12,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 
 /**
  *
  * @author PC
  */
-public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>
+public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>, InterfacesPropertisFindWeb
 {
 
     private Empresa empresa;
@@ -64,6 +65,17 @@ public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>
         dato.add(t.getCliente().getRazonSocial());
         dato.add(t.getFechaEmision());
         dato.add(t.getTotal());
+    }
+    
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        Vector<String> propiedades = new Vector<String>();
+        propiedades.add("id");
+        propiedades.add("preimpreso");
+        propiedades.add("cliente.razonSocial");//TODO: Ver como puedo hacer para establecer una propiedad personalizada
+        propiedades.add("fechaEmision");
+        propiedades.add("total");
+        return propiedades;
     }
 
     /*

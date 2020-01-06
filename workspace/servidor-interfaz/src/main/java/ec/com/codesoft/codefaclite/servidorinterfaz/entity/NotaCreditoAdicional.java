@@ -22,7 +22,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "NOTA_CREDITO_ADICIONAL")
 public class NotaCreditoAdicional extends ComprobanteAdicional implements Serializable{
+
+    public NotaCreditoAdicional() {
+    }
     
+    
+    public NotaCreditoAdicional(String correo, Tipo tipoCorreo, CampoDefectoEnum campoDefecto) {
+        super(correo, tipoCorreo, campoDefecto);
+        //this.factura = factura;
+    }
     
     @JoinColumn(name = "NOTA_CREDITO_ID")
     @ManyToOne

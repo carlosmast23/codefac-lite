@@ -591,7 +591,13 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
 
     @Override
     public void addDatoAdicionalAbstract(ComprobanteAdicional comprobanteAdicional) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         NotaCreditoAdicional datoAdicional=(NotaCreditoAdicional) comprobanteAdicional;
+        if(this.datosAdicionales==null)
+        {
+            this.datosAdicionales=new ArrayList<NotaCreditoAdicional>();
+        }
+        datoAdicional.setNotaCredito(this);
+        this.datosAdicionales.add(datoAdicional);
     }
 
     

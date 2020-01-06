@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Provee
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.NotaCreditoModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
@@ -112,6 +113,8 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     
     private static final int TAB_INDEX_VENTA=0;
     private static final int TAB_INDEX_LIBRE=1;
+    
+    private NotaCreditoModelControlador controlador;
     
 
     public NotaCreditoModel() {
@@ -338,7 +341,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         {
             crearDetalleTabla();
             this.notaCredito = notaCreditoTmp;
-            setearDatosProveedor(this.notaCredito.getCliente());
+            controlador.setearDatosProveedor(this.notaCredito.getCliente(),this.notaCredito);
             mostrarDatosNotaCredito(); 
             cargarDatosDetalles();
             cargarTablaDatosAdicionales();
@@ -782,7 +785,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                 {
                     notaCredito.setCliente(proveedorTmp);
                     agregarCorreo(proveedorTmp.getCorreoElectronico());
-                    setearDatosProveedor(proveedorTmp);                    
+                    controlador.setearDatosProveedor(proveedorTmp,notaCredito);                    
                     getTxtProveedor().setText(proveedorTmp.getIdentificacion()+" - "+proveedorTmp.getRazonSocial());
                     mostrarDatosNotaCredito();
                 }
@@ -868,11 +871,14 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                 buscarDialogoModel.setVisible(true);
                 Factura factura = (Factura) buscarDialogoModel.getResultado();
                 if (factura != null) {
-                    notaCredito.setFactura(factura);
-                    notaCredito.setNumDocModificado(factura.getPreimpreso());
-                    setearDatosProveedor(factura.getCliente());
-                    cargarDatosNotaCredito();
-                    cargarDatosAdicionales();
+                    controlador.setearDatosFacturaEnNotaCredito(factura, notaCredito);
+                    
+                    /**
+                     * =======================================
+                     *     ACTUALIZAR DATOS EN LA VISTA
+                     * =======================================
+                     */
+                    cargarDatosDetalles();
                     cargarTablaDatosAdicionales();
                     mostrarDatosNotaCredito();
                 }
@@ -880,101 +886,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         });
     }
     
-    private void setearDatosProveedor(Persona proveedor)
-    {
-        notaCredito.setCliente(proveedor);
-        notaCredito.setTelefono(proveedor.getEstablecimientos().get(0).getTelefonoConvencional());
-        notaCredito.setDireccion(proveedor.getEstablecimientos().get(0).getDireccion());
-        notaCredito.setRazonSocial(proveedor.getRazonSocial());
-    }
     
-    private void cargarDatosAdicionales()
-    {
-        //Si vuelve a escoger otra factura se borran los datos adicionales
-         if(notaCredito.getDatosAdicionales()!=null)
-            notaCredito.getDatosAdicionales().clear();
-        
-         List<FacturaAdicional> datosAdicional=notaCredito.getFactura().getDatosAdicionales();
-         if(datosAdicional!=null)
-         {
-             List<NotaCreditoAdicional> datosAdicionalNotaCredito=new ArrayList<NotaCreditoAdicional>();
-             for (FacturaAdicional facturaDetalle : datosAdicional) {
-                 NotaCreditoAdicional notaCreditoAdicional=new NotaCreditoAdicional();
-                 notaCreditoAdicional.setCampo(facturaDetalle.getCampo());
-                 notaCreditoAdicional.setNotaCredito(notaCredito);
-                 notaCreditoAdicional.setNumero(facturaDetalle.getNumero());
-                 notaCreditoAdicional.setTipo(facturaDetalle.getTipo());
-                 notaCreditoAdicional.setValor(facturaDetalle.getValor());
-                 datosAdicionalNotaCredito.add(notaCreditoAdicional);
-             }
-             notaCredito.setDatosAdicionales(datosAdicionalNotaCredito);
-         }
-
-    }
-
-    private void cargarDatosNotaCredito() {
-        
-        /**
-         * Setear datos de la factura a la nota de credito
-         */
-        notaCredito.setTotal(notaCredito.getFactura().getTotal());
-        notaCredito.setValorIvaDoce(notaCredito.getFactura().getIva());
-        notaCredito.setSubtotalCero(notaCredito.getFactura().getSubtotalSinImpuestos());
-        notaCredito.setSubtotalDoce(notaCredito.getFactura().getSubtotalImpuestos());
-        notaCredito.setCliente(notaCredito.getFactura().getCliente());
-        notaCredito.setDescuentoImpuestos(notaCredito.getFactura().getDescuentoImpuestos());
-        notaCredito.setDescuentoSinImpuestos(notaCredito.getFactura().getDescuentoSinImpuestos());
-        
-        /**
-         * CargarDetallesNotaCredito
-         */
-        List<FacturaDetalle> detallesFactura = notaCredito.getFactura().getDetalles();
-        if(notaCredito.getDetalles()!=null)
-            notaCredito.getDetalles().clear();
-        
-        for (FacturaDetalle facturaDetalle : detallesFactura) {
-            NotaCreditoDetalle notaDetalle = new NotaCreditoDetalle();
-            notaDetalle.setCantidad(facturaDetalle.getCantidad());
-            notaDetalle.setDescripcion(facturaDetalle.getDescripcion());
-            //System.out.println(facturaDetalle.getDescuento());
-            notaDetalle.setDescuento(facturaDetalle.getDescuento());
-            notaDetalle.setIva(facturaDetalle.getIva());
-            notaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario());
-            notaDetalle.setReferenciaId(facturaDetalle.getReferenciaId());
-            notaDetalle.setTipoReferencia(facturaDetalle.getTipoDocumento());
-            notaDetalle.setTotal(facturaDetalle.getTotal());
-            notaDetalle.setValorIce(facturaDetalle.getValorIce());
-            notaDetalle.setIvaPorcentaje(facturaDetalle.getIvaPorcentaje());
-
-            notaCredito.addDetalle(notaDetalle);
-        }
-        
-        /**
-         * Cargar los datos Adicionales
-         */
-        /*
-         List<FacturaAdicional> datosAdicional=notaCredito.getFactura().getDatosAdicionales();
-         if(datosAdicional!=null)
-         {
-             List<NotaCreditoAdicional> datosAdicionalNotaCredito=new ArrayList<NotaCreditoAdicional>();
-             for (FacturaAdicional facturaDetalle : datosAdicional) {
-                 NotaCreditoAdicional notaCreditoAdicional=new NotaCreditoAdicional();
-                 notaCreditoAdicional.setCampo(facturaDetalle.getCampo());
-                 notaCreditoAdicional.setNotaCredito(notaCredito);
-                 notaCreditoAdicional.setNumero(facturaDetalle.getNumero());
-                 notaCreditoAdicional.setTipo(facturaDetalle.getTipo());
-                 notaCreditoAdicional.setValor(facturaDetalle.getValor());
-                 datosAdicionalNotaCredito.add(notaCreditoAdicional);
-             }
-             notaCredito.setDatosAdicionales(datosAdicionalNotaCredito);
-         }
-        */
-        
-        cargarDatosDetalles();
-        mostrarDatosNotaCredito();
-
-    }
-
     private void mostrarDatosNotaCredito() {
         getTxtReferenciaFactura().setText(notaCredito.getNumDocModificado());
         
@@ -1247,6 +1159,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     }
 
     private void valoresIniciales() {
+        controlador=new NotaCreditoModelControlador();
         getCmbTipoDocumento().removeAllItems();
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.LIBRE);
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.VENTA);

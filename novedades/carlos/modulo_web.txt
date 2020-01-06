@@ -8,3 +8,4 @@ y otro campo que diga procesando
 y otro que diga terminado como una especia de auxiliar
 podriamos saber desde los clientes cuando ya termino y genero un error
 
+Pogramar para reutilizar componentes en las vistas ya que por ejemplo en la factura y nota de credito es un formato muy similar
