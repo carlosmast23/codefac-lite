@@ -549,7 +549,7 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> {
         this.subtotalImpuestos=subtotalMenosImpuestos.add(this.descuentoImpuestos);
         
         //Calcular el iva de la resta del del total -subtotal
-        this.iva=totalConImpuestos.subtract(subtotalMenosImpuestos);
+        this.iva=totalConImpuestos.subtract(subtotalMenosImpuestos).subtract(ice);
  
     
     }
