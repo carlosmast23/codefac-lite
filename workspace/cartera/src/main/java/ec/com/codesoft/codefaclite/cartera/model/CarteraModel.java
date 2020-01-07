@@ -139,7 +139,15 @@ public class CarteraModel extends CarteraPanel{
             {
                if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
                {
-                    ServiceFactory.getFactory().getCarteraServiceIf().eliminar(cartera);
+                    if(cartera.getCruces().size()>0)
+                    {
+                        DialogoCodefac.dialogoPregunta("La cartera tiene cruces registrados desea eliminar de todas maneras?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        
+                    }
+                    else
+                    {
+                        ServiceFactory.getFactory().getCarteraServiceIf().eliminar(cartera);
+                    }
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
                }
                else

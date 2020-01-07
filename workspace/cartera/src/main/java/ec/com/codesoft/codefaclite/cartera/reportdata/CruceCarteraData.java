@@ -24,6 +24,7 @@ public class CruceCarteraData {
     private String debe;
     private String haber;
     private String preimpreso;
+    private String codigo;
 
     public CruceCarteraData() {
     }
@@ -100,6 +101,14 @@ public class CruceCarteraData {
     public void setCarteraId(String carteraId) {
         this.carteraId = carteraId;
     }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
     
     
     
@@ -120,6 +129,7 @@ public class CruceCarteraData {
             data.setHaber("0");
             data.setPreimpreso(cartera.getPreimpreso());
             data.setCarteraId(cartera.getId().toString());
+            data.setCodigo(cartera.getCodigo().toString());
             resultadoData.add(data);
             
             for (CarteraCruce cruce : cartera.getCruces()) 

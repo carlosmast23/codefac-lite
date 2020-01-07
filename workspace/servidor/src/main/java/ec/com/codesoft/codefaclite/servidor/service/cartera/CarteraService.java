@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategori
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
@@ -413,8 +414,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     }
 
     @Override
-    public void eliminar(Cartera entity) throws ServicioCodefacException, RemoteException {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+    public void eliminar(Cartera entity,ModoProcesarEnum modo) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() 
+        {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 if(entity.getCruces()!=null && entity.getCruces().size()>0)
