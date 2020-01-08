@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.prestamos.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 
 /**
  *
@@ -31,10 +33,8 @@ public abstract class TablaInteresPanel extends ControladorCodefacInterface {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        cmbMeses = new javax.swing.JSpinner();
+        txtMeses = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
         txtInteres = new javax.swing.JTextField();
         lblEspacio1 = new javax.swing.JLabel();
@@ -48,32 +48,21 @@ public abstract class TablaInteresPanel extends ControladorCodefacInterface {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Nombre:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jLabel1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.ipadx = 150;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(txtNombre, gridBagConstraints);
-
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Meses:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(15, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbMeses, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(15, 5, 5, 5);
+        jPanel1.add(txtMeses, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Interes (%):");
@@ -104,13 +93,29 @@ public abstract class TablaInteresPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JSpinner cmbMeses;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JTextField txtInteres;
-    private javax.swing.JTextField txtNombre;
+    private javax.swing.JSpinner txtMeses;
     // End of variables declaration//GEN-END:variables
+
+    public JTextField getTxtInteres() {
+        return txtInteres;
+    }
+
+    public void setTxtInteres(JTextField txtInteres) {
+        this.txtInteres = txtInteres;
+    }
+
+    public JSpinner getTxtMeses() {
+        return txtMeses;
+    }
+
+    public void setTxtMeses(JSpinner txtMeses) {
+        this.txtMeses = txtMeses;
+    }
+
+    
 }

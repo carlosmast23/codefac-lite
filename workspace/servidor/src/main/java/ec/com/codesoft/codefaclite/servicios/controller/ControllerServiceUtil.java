@@ -57,6 +57,7 @@ import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraCruceService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
+import ec.com.codesoft.codefaclite.servidor.service.cartera.PrestamoTablaInteresService;
 import ec.com.codesoft.codefaclite.servidor.service.compra.OrdenCompraDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.compra.OrdenCompraService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.AulaService;
@@ -78,6 +79,7 @@ import ec.com.codesoft.codefaclite.servidor.service.transporte.TransportistaServ
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.PrestamoTablaInteres;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
@@ -153,6 +155,7 @@ import javax.persistence.PersistenceException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuarioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoTablaInteresServiceIf;
 
 /**
  *
@@ -241,6 +244,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(FacturaDetalleService.class, FacturaDetalleServiceIf.class);
             mapRecursos.put(TipoDocumentoService.class, TipoDocumentoServiceIf.class);
             mapRecursos.put(PuntoEmisionUsuarioService.class, PuntoEmisionUsuarioServiceIf.class);
+            mapRecursos.put(PrestamoTablaInteresService.class,PrestamoTablaInteresServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);
             LOG.log(Level.INFO,"Servidor Iniciado");

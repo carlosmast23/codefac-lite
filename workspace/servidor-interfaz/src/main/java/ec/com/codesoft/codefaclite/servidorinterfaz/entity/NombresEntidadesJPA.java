@@ -11,4 +11,5 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
  */
 public abstract class NombresEntidadesJPA {
     public static final String CARTERA="cartera";
+    public static final String PRESTAMO_TABLA_INTERES="PRESTAMO_TABLA_INTERES";
 }

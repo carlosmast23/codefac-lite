@@ -86,6 +86,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.Transpo
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuarioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoTablaInteresServiceIf;
 import java.rmi.Naming;
 
 /**
@@ -182,6 +183,7 @@ public abstract class ServiceFactory {
     public FacturaDetalleServiceIf getFacturaDetalleServiceIf(){return (FacturaDetalleServiceIf) getRecursosRMI(FacturaDetalleServiceIf.class);};
     public TipoDocumentoServiceIf getTipoDocumentoServiceIf(){return (TipoDocumentoServiceIf) getRecursosRMI(TipoDocumentoServiceIf.class);};
     public PuntoEmisionUsuarioServiceIf getPuntoEmisionUsuarioServiceIf(){return (PuntoEmisionUsuarioServiceIf) getRecursosRMI(PuntoEmisionUsuarioServiceIf.class);};
+    public PrestamoTablaInteresServiceIf getPrestamoTablaInteresServiceIf(){return (PrestamoTablaInteresServiceIf) getRecursosRMI(PrestamoTablaInteresServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente

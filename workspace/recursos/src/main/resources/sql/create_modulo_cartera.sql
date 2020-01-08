@@ -66,3 +66,14 @@ create table CARTERA_CRUCE(
     VALOR decimal(13,2),
     primary key (ID)
 )
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.1.8)*/
+create table PRESTAMO_TABLA_INTERES( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    SUCURSAL_ID BIGINT,
+    MESES INT,
+    PORCENTAJE BIGINT,
+    FECHA_CREACION  date,
+    ESTADO varchar(1),
+    primary key (ID)
+)
