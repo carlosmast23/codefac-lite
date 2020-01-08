@@ -166,7 +166,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -304,6 +309,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void addListenerButtons() { 
+        
         
         getBtnGenerarCartera().addActionListener(new ActionListener() {
             @Override
@@ -3505,6 +3511,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void addListenerChecks() {
+        
+        getChkActivarFinanciamiento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UtilidadesFormularios.habilitarComponentes(getChkActivarFinanciamiento().isSelected(),getTxtFinanciamientoEntrada(),getTxtFinanciamientoTarifa(),getTxtFinanciamientoDiaPago(),getTxtFinanciamientoNumeroCuotas());
+            }
+        });
         
         getChkActivarFechaVencimiento().addActionListener(new ActionListener() {
             @Override

@@ -115,6 +115,8 @@ public enum VentanaEnum {
     REFERIDO_REPORTE("ec.com.codesoft.codefaclite.facturacion.model.ReferidosReporteModel", "RERM", "Referido Reporte", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.PRO,null),
     LIQUIDACION_COMPRA("ec.com.codesoft.codefaclite.facturacion.model.LiquidacionCompraModel", "LICO", "Liquidación Compra", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.PRO,KeyEvent.VK_L),
     REPORTE_LIQUIDACION_COMPRA("ec.com.codesoft.codefaclite.facturacion.model.LiquidacionCompraReporteModel", "LICR", "Reporte Liquidación Compra", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.PRO,null),
+    TABLA_INTERES("ec.com.codesoft.codefaclite.prestamos.model.TablaInteresModel", "TAIN", "Tabla Interes", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.PRO,null,false),
+    PRESTAMO_MODEL("ec.com.codesoft.codefaclite.prestamos.model.PrestamoModel", "PRST", "Prestamo", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.PRO,null,true),
     ATS("ec.com.codesoft.codefaclite.impuestos.model.AtsModel", "ATSM", "ATS", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.PRO,null);
 
     
@@ -137,6 +139,17 @@ public enum VentanaEnum {
         this.modulo = modulo;
         this.categoriaMenu = categoriaMenu;
         this.maximizado = true;
+        this.tipoLicenciaEnum = tipoLicenciaEnum;
+        this.teclaAtajo=teclaAtajo;
+    }
+    
+    private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,TipoLicenciaEnum tipoLicenciaEnum,Integer teclaAtajo,Boolean maximizado) {
+        this.claseNombre = clase;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.modulo = modulo;
+        this.categoriaMenu = categoriaMenu;
+        this.maximizado = maximizado;
         this.tipoLicenciaEnum = tipoLicenciaEnum;
         this.teclaAtajo=teclaAtajo;
     }

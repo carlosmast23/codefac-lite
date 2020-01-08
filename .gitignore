@@ -42,6 +42,7 @@ derby.log
 /workspace/ws-virtualmall/target/
 /workspace/inventario/target/
 /workspace/servidor-interfaz/target/
+/workspace/prestamos/target/
 
 #Excluir archivo de configuracion inicial
 workspace/main/codefac.ini
@@ -88,3 +89,4 @@ workspace/main/codefac.ini
 /workspace/app-web/virtualmall/virtualmall-web/target/
 /workspace/app-web/virtualmall/virtualmall-ear/target/
 /workspace/impuestos/target/
+/workspace/mavenCodefacLite/prestamos/target/

@@ -17,11 +17,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -40,6 +42,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
      */
     public FacturacionPanel() {
         initComponents();    
+        setTitle(VentanaEnum.TABLA_INTERES.getNombre());
     }
     
    
@@ -212,6 +215,17 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         txtVendedor = new javax.swing.JTextField();
         btnLimpiarVendedor = new javax.swing.JButton();
         btnBuscarVendedor = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        txtFinanciamientoTarifa = new javax.swing.JTextField();
+        jLabel29 = new javax.swing.JLabel();
+        txtFinanciamientoDiaPago = new javax.swing.JSpinner();
+        lblEspacio2 = new javax.swing.JLabel();
+        jLabel37 = new javax.swing.JLabel();
+        txtFinanciamientoEntrada = new javax.swing.JTextField();
+        jLabel39 = new javax.swing.JLabel();
+        chkActivarFinanciamiento = new javax.swing.JCheckBox();
+        txtFinanciamientoNumeroCuotas = new javax.swing.JSpinner();
         pnlVuelto = new javax.swing.JPanel();
         txtValorRecibido = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
@@ -1249,6 +1263,96 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         jTabbedPane1.addTab("Datos Adicionales", lblEspacioVertical);
 
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel8.setText("Día de pago:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel2.add(jLabel8, gridBagConstraints);
+
+        txtFinanciamientoTarifa.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel2.add(txtFinanciamientoTarifa, gridBagConstraints);
+
+        jLabel29.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel29.setText("Tarifa(%):");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel2.add(jLabel29, gridBagConstraints);
+
+        txtFinanciamientoDiaPago.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel2.add(txtFinanciamientoDiaPago, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 0.1;
+        jPanel2.add(lblEspacio2, gridBagConstraints);
+
+        jLabel37.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel37.setText("Entrada:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel2.add(jLabel37, gridBagConstraints);
+
+        txtFinanciamientoEntrada.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel2.add(txtFinanciamientoEntrada, gridBagConstraints);
+
+        jLabel39.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel39.setText("No Cuotas:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel2.add(jLabel39, gridBagConstraints);
+
+        chkActivarFinanciamiento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkActivarFinanciamiento.setText("Activar Financiamiento");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel2.add(chkActivarFinanciamiento, gridBagConstraints);
+
+        txtFinanciamientoNumeroCuotas.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel2.add(txtFinanciamientoNumeroCuotas, gridBagConstraints);
+
+        jTabbedPane1.addTab("Financiamiento", jPanel2);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1358,6 +1462,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnLimpiarVendedor;
     private javax.swing.JCheckBox checkPorcentaje;
     private javax.swing.JCheckBox chkActivarFechaVencimiento;
+    private javax.swing.JCheckBox chkActivarFinanciamiento;
     private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
     private javax.swing.JCheckBox cmbConsumidorFinal;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
@@ -1388,6 +1493,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
@@ -1396,7 +1502,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
@@ -1404,8 +1512,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1418,6 +1528,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblDireccionCliente;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio1234;
+    private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio23;
     private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JPanel lblEspacioVertical;
@@ -1457,6 +1568,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtDescuento;
     private javax.swing.JTextField txtEstudiante;
+    private javax.swing.JSpinner txtFinanciamientoDiaPago;
+    private javax.swing.JTextField txtFinanciamientoEntrada;
+    private javax.swing.JSpinner txtFinanciamientoNumeroCuotas;
+    private javax.swing.JTextField txtFinanciamientoTarifa;
     private javax.swing.JTextField txtReferenciaContacto;
     private javax.swing.JTextField txtValorRecibido;
     private javax.swing.JTextField txtValorTotal;
@@ -1872,6 +1987,46 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public void setCmbConsumidorFinal(JCheckBox cmbConsumidorFinal) {
         this.cmbConsumidorFinal = cmbConsumidorFinal;
+    }
+
+    public JCheckBox getChkActivarFinanciamiento() {
+        return chkActivarFinanciamiento;
+    }
+
+    public void setChkActivarFinanciamiento(JCheckBox chkActivarFinanciamiento) {
+        this.chkActivarFinanciamiento = chkActivarFinanciamiento;
+    }
+
+    public JSpinner getTxtFinanciamientoDiaPago() {
+        return txtFinanciamientoDiaPago;
+    }
+
+    public void setTxtFinanciamientoDiaPago(JSpinner txtFinanciamientoDiaPago) {
+        this.txtFinanciamientoDiaPago = txtFinanciamientoDiaPago;
+    }
+
+    public JTextField getTxtFinanciamientoEntrada() {
+        return txtFinanciamientoEntrada;
+    }
+
+    public void setTxtFinanciamientoEntrada(JTextField txtFinanciamientoEntrada) {
+        this.txtFinanciamientoEntrada = txtFinanciamientoEntrada;
+    }
+
+    public JSpinner getTxtFinanciamientoNumeroCuotas() {
+        return txtFinanciamientoNumeroCuotas;
+    }
+
+    public void setTxtFinanciamientoNumeroCuotas(JSpinner txtFinanciamientoNumeroCuotas) {
+        this.txtFinanciamientoNumeroCuotas = txtFinanciamientoNumeroCuotas;
+    }
+
+    public JTextField getTxtFinanciamientoTarifa() {
+        return txtFinanciamientoTarifa;
+    }
+
+    public void setTxtFinanciamientoTarifa(JTextField txtFinanciamientoTarifa) {
+        this.txtFinanciamientoTarifa = txtFinanciamientoTarifa;
     }
     
     

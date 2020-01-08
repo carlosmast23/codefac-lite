@@ -10,6 +10,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import javax.swing.JComponent;
 import javax.swing.JTextField;
 
 /**
@@ -48,6 +49,14 @@ public class UtilidadesFormularios {
         });
     }
     
+    public static void habilitarComponentes(Boolean habilitado,JComponent ...campos)
+    {
+        for (JComponent campo : campos) {
+            campo.setEnabled(habilitado);
+        }
+        
+    }
+    
     private static void completarTextField(JTextField campoTexto, int limite) {
         String texto = campoTexto.getText();
         texto = UtilidadesTextos.llenarCarateresIzquierda(texto, limite, "0");
@@ -64,4 +73,5 @@ public class UtilidadesFormularios {
             e.consume();
         }*/
     }
+    
 }
