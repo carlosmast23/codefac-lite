@@ -9,9 +9,11 @@ import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -74,6 +76,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnReProcesarComprobante = new javax.swing.JButton();
         btnObtenerClaveAcceso = new javax.swing.JButton();
         btnAbrirXml = new javax.swing.JButton();
         btnReenviarCorreo = new javax.swing.JButton();
@@ -86,6 +89,10 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         lblAnulacionSri = new javax.swing.JLabel();
 
         setLayout(new org.jdesktop.swingx.VerticalLayout());
+
+        btnReProcesarComprobante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/enviar.png"))); // NOI18N
+        btnReProcesarComprobante.setToolTipText("Imprimir Clave de Acceso");
+        add(btnReProcesarComprobante);
 
         btnObtenerClaveAcceso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/datos.png"))); // NOI18N
         btnObtenerClaveAcceso.setToolTipText("Imprimir Clave de Acceso");
@@ -143,6 +150,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     private javax.swing.JButton btnAutorizarDocumento;
     private javax.swing.JButton btnCambiarEstado;
     private javax.swing.JButton btnObtenerClaveAcceso;
+    private javax.swing.JButton btnReProcesarComprobante;
     private javax.swing.JButton btnReenviarCorreo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -152,6 +160,29 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     // End of variables declaration//GEN-END:variables
 
     private void listenerBotones() {
+       
+        btnReProcesarComprobante.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                if(comprobante.getEstadoFormularioEnum().equals(GeneralPanelInterface.EstadoFormularioEnum.EDITAR))
+                {
+                    if(DialogoCodefac.dialogoPregunta("Advertencia","Esta opción solo debe ser usada para corregir problemas, Por ejemplo:\n-No se genero ninguna etapa al procesar el comprobante electrónico.\n-No existen en la carpeta de recursos ningun XML  ni RIDE. \n\n Está  seguro que desea continuar de todos modos ?  ",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                    {                        
+                        try {
+                            ClienteInterfaceComprobante cic=comprobante.getInterfaceComprobante();
+                            //ClienteFacturaImplComprobante cic = new ClienteFacturaImplComprobante((FacturacionModel) formularioActual, factura, false);
+                            ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobante(comprobante.obtenerComprobanteData(),comprobante.getComprobante(),comprobante.getComprobante().getUsuario(), cic);
+                            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_EN_CURSO);
+                            btnReProcesarComprobante.setEnabled(false);
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                         
+                    }
+                }
+            }
+        });
         
         btnCambiarEstado.addActionListener(new ActionListener() {
             @Override
@@ -355,8 +386,10 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnAbrirXml.setEnabled(habilitar);
         btnReenviarCorreo.setEnabled(habilitar);
         
+        btnReProcesarComprobante.setEnabled(false);
         btnAutorizarDocumento.setEnabled(false); //Por defecto este boton siempre va a estar desabilitado
         btnCambiarEstado.setEnabled(habilitar);
+        
         /*if(habilitar==true)
         {
             if(comprobante.getComprobante().getEstadoEnum()!=null && comprobante.getComprobante().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
@@ -392,6 +425,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         if(comprobante.getComprobante().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR) && comprobante.getComprobante().getEstadoEnum()!=null)
         {
             btnAutorizarDocumento.setEnabled(true);
+            btnReProcesarComprobante.setEnabled(true);
         }
     }
 

@@ -333,29 +333,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         });
         
                
-        getBtnReProcesarComprobante().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-               if(estadoFormulario.equals(ESTADO_EDITAR))
-                {
-                    if(DialogoCodefac.dialogoPregunta("Advertencia","Esta opción solo debe ser usada para corregir problemas, Por ejemplo:\n-No se genero ninguna etapa al procesar el comprobante electrónico.\n-No existen en la carpeta de recursos ningun XML  ni RIDE. \n\n Está  seguro que desea continuar de todos modos ?  ",DialogoCodefac.MENSAJE_ADVERTENCIA))
-                    {                        
-                        try {
-                            ClienteFacturaImplComprobante cic = new ClienteFacturaImplComprobante((FacturacionModel) formularioActual, factura, false);
-                            ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobante(obtenerComprobanteData(), factura, session.getUsuario(), cic);
-                            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_EN_CURSO);
-                            getBtnReProcesarComprobante().setEnabled(false);
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                         
-                    }
-                }
-            }
-        });
-        
-                
+                       
         getBtnCargarProforma().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1121,7 +1099,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return comprobanteData;
     }*/
     
-    private ComprobanteDataInterface obtenerComprobanteData()
+    public ComprobanteDataInterface obtenerComprobanteData()
     {
         if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
         {
@@ -1557,18 +1535,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         cargarTablaDatosAdicionales();
         
         getPnlDatosAdicionales().habiliarBotonAutorizar();
-        //Activar el boton de autorizar el comprobante solo si no esta autorizado
-        if (factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR)) {
-            //getBtnAutorizarComprobante().setEnabled(true);
-            getBtnReProcesarComprobante().setEnabled(true);
-            //getPnlDatosAdicionales().getBtnAutorizarDocumento().setEnabled(true);
-        }
-        else
-        {
-            //getBtnAutorizarComprobante().setEnabled(false);
-            getBtnReProcesarComprobante().setEnabled(false);
-            //getPnlDatosAdicionales().getBtnAutorizarDocumento().setEnabled(false);
-        }
+        
         
             
         //verificarActivarBtnCargarProforma(false);
@@ -3481,7 +3448,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getBtnCargarProforma().setEnabled(true);
             
             //getBtnAutorizarComprobante().setEnabled(false);
-            getBtnReProcesarComprobante().setEnabled(false);
+            //getBtnReProcesarComprobante().setEnabled(false);
             getPnlDatosAdicionales().habilitar(false);
             
             getBtnBuscarReferenciaContacto().setEnabled(true);
@@ -3644,6 +3611,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Verifica si existe stock para el producto seleccionado
         verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta, productoSeleccionado, Integer.parseInt(getTxtCantidad().getText()));
         return verificadorStock;
+    }
+
+    @Override
+    public ClienteInterfaceComprobante getInterfaceComprobante() throws RemoteException{
+        return new ClienteFacturaImplComprobante((FacturacionModel) formularioActual, factura, false);        
     }
     
     

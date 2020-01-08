@@ -5,10 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.controlador.componentes;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -20,5 +24,8 @@ public interface ComponenteDatosComprobanteElectronicosInterface {
     public Empresa getEmpresa();
     public InterfazComunicacionPanel getPanelPadre();
     public List<ComprobanteAdicional> getDatosAdicionales();
+    public GeneralPanelInterface.EstadoFormularioEnum getEstadoFormularioEnum();
+    public ClienteInterfaceComprobante getInterfaceComprobante() throws RemoteException;
+    public ComprobanteDataInterface obtenerComprobanteData();
     
 }

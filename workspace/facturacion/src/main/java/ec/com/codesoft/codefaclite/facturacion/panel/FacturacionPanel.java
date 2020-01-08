@@ -89,7 +89,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         btnCargarPedido = new javax.swing.JButton();
         btnCargarProforma = new javax.swing.JButton();
-        btnReProcesarComprobante = new javax.swing.JButton();
         btnGenerarCartera = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         PanelDetalleFactura = new javax.swing.JPanel();
@@ -229,9 +228,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnCargarProforma.setFocusable(false);
         btnCargarProforma.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnCargarProforma.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-        btnReProcesarComprobante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/enviar.png"))); // NOI18N
-        btnReProcesarComprobante.setToolTipText("Procesar nuevamente comprobante");
 
         btnGenerarCartera.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnGenerarCartera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/billetera.png"))); // NOI18N
@@ -1360,7 +1356,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnEditarDetalle;
     private javax.swing.JButton btnGenerarCartera;
     private javax.swing.JButton btnLimpiarVendedor;
-    private javax.swing.JButton btnReProcesarComprobante;
     private javax.swing.JCheckBox checkPorcentaje;
     private javax.swing.JCheckBox chkActivarFechaVencimiento;
     private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
@@ -1844,11 +1839,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     }
 
     
-    @ComponenteSecundarioAnotacion(nombreCategoria = "Utilidad",visible = true)
-    public JButton getBtnReProcesarComprobante() {
-        return btnReProcesarComprobante;
-    }
-
 
 
     @ComponenteSecundarioAnotacion(nombreCategoria = "Datos",visible = true)

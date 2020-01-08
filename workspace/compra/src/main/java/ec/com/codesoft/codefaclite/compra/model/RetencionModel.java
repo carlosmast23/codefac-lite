@@ -22,6 +22,8 @@ import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInte
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_GRABAR;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
@@ -1163,6 +1165,16 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         UtilidadesFormularios.llenarAutomaticamenteCamposTexto(getTxtPuntoEmisionCompra(),3);
         UtilidadesFormularios.llenarAutomaticamenteCamposTexto(getTxtSecuencialCompra(),9);
         
+    }
+
+    @Override
+    public ClienteInterfaceComprobante getInterfaceComprobante() throws RemoteException {
+        return new RetencionImplCallBack(retencion, this);
+    }
+
+    @Override
+    public ComprobanteDataInterface obtenerComprobanteData() {
+        return new ComprobanteDataRetencion(retencion);
     }
     
 

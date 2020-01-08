@@ -1,0 +1,1 @@
+En las guias de remision cuando edito y luego reproseso los datos adicionales se esta duplicando

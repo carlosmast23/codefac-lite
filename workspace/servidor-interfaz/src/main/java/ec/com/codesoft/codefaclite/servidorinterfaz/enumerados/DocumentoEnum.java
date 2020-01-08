@@ -32,7 +32,7 @@ public enum DocumentoEnum {
             new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION,ModuloCodefacEnum.COMPRA},
             true,
             true,
-            "999"),
+            "01"),
     
     /**
      * TODO: Ver si utilizar factura manual

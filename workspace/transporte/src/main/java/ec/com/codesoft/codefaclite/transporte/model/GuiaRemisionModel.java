@@ -25,7 +25,9 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPan
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.DetalleGuiaRemisionComprobante;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataGuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataNotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
@@ -193,7 +195,24 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(!guiaRemision.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
+        {
+            DialogoCodefac.mensaje("Advertencia","La guia de remisión no se pueden modificar ",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("cancelar el evento editar");
+        }
+        
+        try {
+            setearValores();
+            ServiceFactory.getFactory().getGuiaRemisionServiceIf().editar(guiaRemision);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje(ex.getMessage(), DialogoCodefac.MENSAJE_ADVERTENCIA);
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite(ex.getMessage());
+        }
     }
 
     @Override
@@ -901,6 +920,18 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         } catch (ParseException ex) {
             Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public ClienteInterfaceComprobante getInterfaceComprobante() throws RemoteException {
+        return new GuiaRemisionImplComprobante(this, guiaRemision);
+    }
+
+    @Override
+    public ComprobanteDataInterface obtenerComprobanteData() {
+        ComprobanteDataGuiaRemision comprobanteData= new ComprobanteDataGuiaRemision(this.guiaRemision);
+        comprobanteData.setMapInfoAdicional(getMapAdicional(guiaRemision));
+        return comprobanteData;
     }
     
     

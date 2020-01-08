@@ -39,6 +39,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteE
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataNotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -1402,6 +1403,16 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     @Override
     public List<ComprobanteAdicional> getDatosAdicionales() {
         return (List<ComprobanteAdicional>)(Object)notaCredito.getDatosAdicionales();
+    }
+
+    @Override
+    public ClienteInterfaceComprobante getInterfaceComprobante() throws RemoteException {
+        return new ClienteNotaCreditoImplComprobante(this, notaCredito);
+    }
+
+    @Override
+    public ComprobanteDataInterface obtenerComprobanteData() {
+        return new ComprobanteDataNotaCredito(notaCredito);
     }
 
     
