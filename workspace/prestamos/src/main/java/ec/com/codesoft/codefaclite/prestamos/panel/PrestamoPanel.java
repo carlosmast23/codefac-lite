@@ -7,6 +7,10 @@ package ec.com.codesoft.codefaclite.prestamos.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -35,32 +39,32 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        cmbFecha = new org.jdesktop.swingx.JXDatePicker();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtFactura = new javax.swing.JTextField();
         lblEspacio1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtCliente = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtDiaPago = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        txtPlazo = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        txtValorFinaciamiento = new javax.swing.JTextField();
         lblEspacio2 = new javax.swing.JLabel();
         lblEspacio5 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        txtValorTotal = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
+        txtCuotaInicial = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
+        txtCuotaMensual = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblCuotas = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -103,7 +107,7 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jXDatePicker1, gridBagConstraints);
+        jPanel2.add(cmbFecha, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -114,8 +118,8 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel5, gridBagConstraints);
 
-        jTextField1.setEditable(false);
-        jTextField1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtFactura.setEditable(false);
+        txtFactura.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -123,7 +127,7 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jTextField1, gridBagConstraints);
+        jPanel2.add(txtFactura, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -160,8 +164,8 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel7, gridBagConstraints);
 
-        jTextField3.setEditable(false);
-        jTextField3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtCliente.setEditable(false);
+        txtCliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -169,7 +173,7 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jTextField3, gridBagConstraints);
+        jPanel2.add(txtCliente, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -193,8 +197,8 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel8, gridBagConstraints);
 
-        jTextField4.setEditable(false);
-        jTextField4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtDiaPago.setEditable(false);
+        txtDiaPago.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
@@ -203,7 +207,7 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(jTextField4, gridBagConstraints);
+        jPanel3.add(txtDiaPago, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -216,8 +220,8 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel9, gridBagConstraints);
 
-        jTextField5.setEditable(false);
-        jTextField5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtPlazo.setEditable(false);
+        txtPlazo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
@@ -226,7 +230,7 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(jTextField5, gridBagConstraints);
+        jPanel3.add(txtPlazo, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -239,8 +243,8 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel10, gridBagConstraints);
 
-        jTextField6.setEditable(false);
-        jTextField6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtValorFinaciamiento.setEditable(false);
+        txtValorFinaciamiento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -249,7 +253,7 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(jTextField6, gridBagConstraints);
+        jPanel3.add(txtValorFinaciamiento, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -274,8 +278,8 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel11, gridBagConstraints);
 
-        jTextField7.setEditable(false);
-        jTextField7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtValorTotal.setEditable(false);
+        txtValorTotal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -284,7 +288,7 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(jTextField7, gridBagConstraints);
+        jPanel3.add(txtValorTotal, gridBagConstraints);
 
         jLabel12.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -297,8 +301,8 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel12, gridBagConstraints);
 
-        jTextField8.setEditable(false);
-        jTextField8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtCuotaInicial.setEditable(false);
+        txtCuotaInicial.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -307,7 +311,7 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(jTextField8, gridBagConstraints);
+        jPanel3.add(txtCuotaInicial, gridBagConstraints);
 
         jLabel13.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -320,8 +324,8 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel13, gridBagConstraints);
 
-        jTextField9.setEditable(false);
-        jTextField9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtCuotaMensual.setEditable(false);
+        txtCuotaMensual.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
@@ -330,7 +334,7 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(jTextField9, gridBagConstraints);
+        jPanel3.add(txtCuotaMensual, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -341,7 +345,7 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblCuotas);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -515,6 +519,7 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarDetalle;
     private javax.swing.JButton btnEditarDetalle;
     private javax.swing.JButton btnEliminarDetalle;
+    private org.jdesktop.swingx.JXDatePicker cmbFecha;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
@@ -541,24 +546,129 @@ public abstract class PrestamoPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     private javax.swing.JToolBar jToolBar1;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio45;
     private javax.swing.JLabel lblEspacio5;
+    private javax.swing.JTable tblCuotas;
+    private javax.swing.JTextField txtCliente;
+    private javax.swing.JTextField txtCuotaInicial;
+    private javax.swing.JTextField txtCuotaMensual;
+    private javax.swing.JTextField txtDiaPago;
+    private javax.swing.JTextField txtFactura;
+    private javax.swing.JTextField txtPlazo;
+    private javax.swing.JTextField txtValorFinaciamiento;
+    private javax.swing.JTextField txtValorTotal;
     // End of variables declaration//GEN-END:variables
+
+    public JButton getBtnAgregarDetalle() {
+        return btnAgregarDetalle;
+    }
+
+    public void setBtnAgregarDetalle(JButton btnAgregarDetalle) {
+        this.btnAgregarDetalle = btnAgregarDetalle;
+    }
+
+    public JButton getBtnEditarDetalle() {
+        return btnEditarDetalle;
+    }
+
+    public void setBtnEditarDetalle(JButton btnEditarDetalle) {
+        this.btnEditarDetalle = btnEditarDetalle;
+    }
+
+    public JButton getBtnEliminarDetalle() {
+        return btnEliminarDetalle;
+    }
+
+    public void setBtnEliminarDetalle(JButton btnEliminarDetalle) {
+        this.btnEliminarDetalle = btnEliminarDetalle;
+    }
+
+    public JXDatePicker getCmbFecha() {
+        return cmbFecha;
+    }
+
+    public void setCmbFecha(JXDatePicker cmbFecha) {
+        this.cmbFecha = cmbFecha;
+    }
+
+    public JTable getTblCuotas() {
+        return tblCuotas;
+    }
+
+    public void setTblCuotas(JTable tblCuotas) {
+        this.tblCuotas = tblCuotas;
+    }
+
+    public JTextField getTxtCliente() {
+        return txtCliente;
+    }
+
+    public void setTxtCliente(JTextField txtCliente) {
+        this.txtCliente = txtCliente;
+    }
+
+    public JTextField getTxtCuotaInicial() {
+        return txtCuotaInicial;
+    }
+
+    public void setTxtCuotaInicial(JTextField txtCuotaInicial) {
+        this.txtCuotaInicial = txtCuotaInicial;
+    }
+
+    public JTextField getTxtCuotaMensual() {
+        return txtCuotaMensual;
+    }
+
+    public void setTxtCuotaMensual(JTextField txtCuotaMensual) {
+        this.txtCuotaMensual = txtCuotaMensual;
+    }
+
+    public JTextField getTxtDiaPago() {
+        return txtDiaPago;
+    }
+
+    public void setTxtDiaPago(JTextField txtDiaPago) {
+        this.txtDiaPago = txtDiaPago;
+    }
+
+    public JTextField getTxtFactura() {
+        return txtFactura;
+    }
+
+    public void setTxtFactura(JTextField txtFactura) {
+        this.txtFactura = txtFactura;
+    }
+
+    public JTextField getTxtPlazo() {
+        return txtPlazo;
+    }
+
+    public void setTxtPlazo(JTextField txtPlazo) {
+        this.txtPlazo = txtPlazo;
+    }
+
+    public JTextField getTxtValorFinaciamiento() {
+        return txtValorFinaciamiento;
+    }
+
+    public void setTxtValorFinaciamiento(JTextField txtValorFinaciamiento) {
+        this.txtValorFinaciamiento = txtValorFinaciamiento;
+    }
+
+    public JTextField getTxtValorTotal() {
+        return txtValorTotal;
+    }
+
+    public void setTxtValorTotal(JTextField txtValorTotal) {
+        this.txtValorTotal = txtValorTotal;
+    }
+
+    
 }

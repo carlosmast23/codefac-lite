@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
+import ec.com.codesoft.codefaclite.servidor.service.cartera.PrestamoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -32,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -176,32 +178,57 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         venta.setTelefono(venta.getCliente().getTelefonoCelular()); //todo: ver si hago un metodo para obtener los telefonos        
     }
     
+    public Factura grabar(Factura factura,Prestamo prestamo) throws RemoteException, ServicioCodefacException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                grabarSinTransaccion(factura);
+                
+                /**
+                 * ============================================================
+                 *          GENERAR UN PRESTAMO SI EXISTE 
+                 * ============================================================
+                 */
+                if(prestamo!=null)
+                {
+                    PrestamoService prestamoService=new PrestamoService();
+                    prestamoService.grabarSinTransaccion(prestamo, factura);
+                }
+            }
+        });
+        return factura;
+    }
 
     public Factura grabar(Factura factura) throws ServicioCodefacException {
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                grabarSinTransaccion(factura);
                 
-                //TODO:Este codigo de doucmento ya no debo setear porque desde la factura ya mando el documento
-                //factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
-                factura.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.NO);
-                
-                //Setear los datos del cliente en la factura para tener un historico y vovler a consultar
-                //Todo: Ver si es necesario corregir este problema tambien en la factura cuando edita
-                factura.setRazonSocial(factura.getCliente().getRazonSocial());
-                factura.setIdentificacion(factura.getCliente().getIdentificacion());
-                factura.setDireccion(factura.getSucursal().getDireccion());
-                factura.setTelefono(factura.getSucursal().getTelefonoConvencional());
-
-                ComprobantesService servicioComprobante = new ComprobantesService();
-                servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);            
-                grabarDetallesFactura(factura);
-                grabarCarteraSinTransaccion(factura);
             }
         });
         return factura;
         
+    }
+    
+    public void grabarSinTransaccion(Factura factura) throws ServicioCodefacException, RemoteException
+    {
+        //TODO:Este codigo de doucmento ya no debo setear porque desde la factura ya mando el documento
+        //factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
+        factura.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.NO);
+
+        //Setear los datos del cliente en la factura para tener un historico y vovler a consultar
+        //Todo: Ver si es necesario corregir este problema tambien en la factura cuando edita
+        factura.setRazonSocial(factura.getCliente().getRazonSocial());
+        factura.setIdentificacion(factura.getCliente().getIdentificacion());
+        factura.setDireccion(factura.getSucursal().getDireccion());
+        factura.setTelefono(factura.getSucursal().getTelefonoConvencional());
+
+        ComprobantesService servicioComprobante = new ComprobantesService();
+        servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);
+        grabarDetallesFactura(factura);
+        grabarCarteraSinTransaccion(factura);
     }
     
     public void editarFactura(Factura factura) throws ServicioCodefacException {

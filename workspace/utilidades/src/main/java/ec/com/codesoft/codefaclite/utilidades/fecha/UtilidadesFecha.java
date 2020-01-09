@@ -217,6 +217,14 @@ public class UtilidadesFecha {
         calendar.add(Calendar.YEAR,anios);
         return calendar.getTime();
     }
+    
+    public static java.util.Date sumarMesesFecha(java.util.Date date, int meses)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH,meses);
+        return calendar.getTime();
+    }
 
     public static java.sql.Date stringFormatXMLGregorianCalendarToDate(String fechaFormat)
     {
@@ -235,5 +243,13 @@ public class UtilidadesFecha {
         return null;
     }
     
+    public static Date cambiarDiaFecha(Date fecha,Integer dia)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fecha); // Configuramos la fecha que se recibe
+        calendar.set(Calendar.DAY_OF_MONTH,dia);
+
+        return new java.sql.Date(calendar.getTime().getTime()); // Devuelve el objeto Date con los nuevos días añadidos
+    }
 
 }

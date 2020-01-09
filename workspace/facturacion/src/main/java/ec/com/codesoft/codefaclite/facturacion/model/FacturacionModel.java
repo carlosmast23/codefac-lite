@@ -162,6 +162,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataLiquidacionCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
@@ -1145,7 +1146,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
             else
             {
-                factura=servicio.grabar(factura);
+                factura=servicio.grabar(factura,crearDatosPrestamo());
             }
             
             facturaProcesando = factura;
@@ -1190,6 +1191,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
+    }
+    
+    private Prestamo crearDatosPrestamo()
+    {
+        //Solo cosntruir si esta seleccionado la opcion
+        if(getChkActivarFinanciamiento().isSelected())
+        {
+            Prestamo prestamo=new Prestamo();
+            prestamo.setCuotaInicial(new BigDecimal(getTxtFinanciamientoEntrada().getText()));
+            prestamo.setPlazo((Integer) getTxtFinanciamientoNumeroCuotas().getValue());
+            prestamo.setTazaInteres(new BigDecimal(getTxtFinanciamientoTarifa().getText()));
+            prestamo.setDiaPago((Integer) getTxtFinanciamientoDiaPago().getValue());
+            return prestamo;
+        }
+        return null;
     }
     
     /*private void generarNotaVentaInterna()

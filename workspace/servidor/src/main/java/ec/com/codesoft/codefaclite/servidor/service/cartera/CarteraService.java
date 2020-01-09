@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service.cartera;
 
 import ec.com.codesoft.codefaclite.servidor.facade.cartera.CarteraFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
@@ -461,5 +462,20 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         }
         return null;
     }
+    
+    /*public Cartera buscarPorVenta(Factura venta) throws ServicioCodefacException, RemoteException
+    {
+        return (Cartera) ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                Cartera c;
+                c.getCodigoDocumento();
+                c.getReferenciaID();
+                
+            }
+        });
+    }*/
+    
+    
             
 }

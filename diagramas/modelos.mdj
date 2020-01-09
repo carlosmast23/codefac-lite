@@ -15557,11 +15557,11 @@
 													"containerExtending": false,
 													"left": 376,
 													"top": 325,
-													"width": 102.24267578125,
+													"width": 110.419921875,
 													"height": 13,
 													"autoResize": false,
 													"underline": false,
-													"text": "cuota",
+													"text": "prestamo_cuota",
 													"horizontalAlignment": 2,
 													"verticalAlignment": 5,
 													"wordWrap": false
@@ -15684,7 +15684,7 @@
 													"containerExtending": false,
 													"left": 376,
 													"top": 343,
-													"width": 102.24267578125,
+													"width": 110.419921875,
 													"height": 68,
 													"autoResize": false
 												}
@@ -15700,7 +15700,7 @@
 											"containerExtending": false,
 											"left": 376,
 											"top": 320,
-											"width": 102.24267578125,
+											"width": 110.419921875,
 											"height": 91,
 											"autoResize": false,
 											"nameLabel": {
@@ -15741,7 +15741,7 @@
 													"height": 13,
 													"autoResize": false,
 													"underline": false,
-													"text": "credito",
+													"text": "prestamo",
 													"horizontalAlignment": 2,
 													"verticalAlignment": 5,
 													"wordWrap": false
@@ -16112,7 +16112,7 @@
 												"$ref": "AAAAAAFu+uzlMJ7afr8="
 											},
 											"lineStyle": 1,
-											"points": "543:359;478:362"
+											"points": "543:359;486:362"
 										},
 										{
 											"_type": "ERDEntityView",
@@ -17554,9 +17554,9 @@
 													"showShadow": true,
 													"containerChangeable": false,
 													"containerExtending": false,
-													"left": 427,
+													"left": 400,
 													"top": 112,
-													"width": 0,
+													"width": 54.18994140625,
 													"height": 13,
 													"autoResize": false,
 													"alpha": -0.5235987755982988,
@@ -18231,7 +18231,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFu+uZFQ52bXD0="
 									},
-									"name": "cuota",
+									"name": "prestamo_cuota",
 									"ownedElements": [
 										{
 											"_type": "ERDRelationship",
@@ -18325,7 +18325,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFu+uZFQ52bXD0="
 									},
-									"name": "credito",
+									"name": "prestamo",
 									"ownedElements": [
 										{
 											"_type": "ERDRelationship",

@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -28,6 +29,7 @@ import java.util.List;
 public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
 {
     public Factura grabar(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 
+    public Factura grabar(Factura factura,Prestamo prestamo) throws RemoteException, ServicioCodefacException;
     public Factura grabar(Factura factura,Empleado empleado) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 
     public List<Factura> obtenerFacturasPorIdentificacion(String identificacion) throws java.rmi.RemoteException;
     public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo) throws java.rmi.RemoteException;

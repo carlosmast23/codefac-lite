@@ -54,7 +54,20 @@ public class MigrarClientesModel extends MigrarModel {
             public void procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel {
                 try {
                     Persona cliente = new Persona();
+                    
+                    /**
+                     * =======================================================
+                     *       VERIFICAR QUE NO EXISTE CLIENTES REPETIDAS
+                     * =======================================================
+                     */
                     cliente.setIdentificacion(((String) fila.getByEnum(ExcelMigrarClientes.Enum.IDENTIFICACION).valor).trim());
+                    
+                    Persona clienteExistente=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(cliente.getIdentificacion(),session.getEmpresa());
+                    if(clienteExistente==null)
+                    {
+                        throw new ExcelMigrar.ExcepcionExcel("Identificación Repetida");
+                    }
+                    
                     cliente.setNombres((String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRES).valor);
                     cliente.setApellidos((String) fila.getByEnum(ExcelMigrarClientes.Enum.APELLIDOS).valor);
                     cliente.setRazonSocial(((String) fila.getByEnum(ExcelMigrarClientes.Enum.RAZON_SOCIAL).valor).trim());

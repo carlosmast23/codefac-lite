@@ -5,14 +5,22 @@
  */
 package ec.com.codesoft.codefaclite.prestamos.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.PrestamoDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.prestamos.panel.PrestamoPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.PrestamoCuota;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,6 +28,8 @@ import java.util.Map;
  */
 public class PrestamoModel extends PrestamoPanel{
 
+    private Prestamo prestamo;
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -84,12 +94,54 @@ public class PrestamoModel extends PrestamoPanel{
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new BuscarDialogoModel(new PrestamoDialogo());
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        prestamo=(Prestamo) entidad;
+        getCmbFecha().setDate(prestamo.getFechaCreacion());
+        getTxtCliente().setText(prestamo.getCliente().getRazonSocial());
+        if(prestamo.getVenta()!=null)
+        {
+            getTxtFactura().setText(prestamo.getVenta().getPreimpreso());
+        }
+        
+        getTxtCuotaInicial().setText(prestamo.getCuotaInicial().toString());
+        getTxtCuotaMensual().setText(prestamo.calcularCuotaMensual().toString());
+        getTxtDiaPago().setText(prestamo.getDiaPago().toString());
+        getTxtPlazo().setText(prestamo.getPlazo().toString());
+        getTxtValorFinaciamiento().setText(prestamo.getCapital().toString());
+        getTxtValorTotal().setText(prestamo.getTotalPrestamo().toString());
+        
+        crearTablaCuotas();
+    }
+    
+    
+    private void crearTablaCuotas()
+    {
+        try {
+            String[] titulo={"Número Cuota","Fecha Pago"," Valor"};
+            DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
+            
+            List<PrestamoCuota> cuotas= ServiceFactory.getFactory().getPrestamoServiceIf().buscarCuotasPorPrestamo(prestamo);
+            
+            for (PrestamoCuota cuota : cuotas) {
+                modeloTabla.addRow(new String[]{                    
+                    cuota.getNumeroCuota().toString(),
+                    cuota.getFechaPagoGenerado().toString(),
+                    cuota.getValorCuota().toString()
+                });
+            }
+            
+            getTblCuotas().setModel(modeloTabla);
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(PrestamoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PrestamoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
 }
