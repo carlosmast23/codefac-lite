@@ -63,7 +63,7 @@ public class MigrarClientesModel extends MigrarModel {
                     cliente.setIdentificacion(((String) fila.getByEnum(ExcelMigrarClientes.Enum.IDENTIFICACION).valor).trim());
                     
                     Persona clienteExistente=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(cliente.getIdentificacion(),session.getEmpresa());
-                    if(clienteExistente==null)
+                    if(clienteExistente!=null)
                     {
                         throw new ExcelMigrar.ExcepcionExcel("Identificación Repetida");
                     }
