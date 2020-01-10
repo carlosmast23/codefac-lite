@@ -371,6 +371,11 @@ public class Cartera implements Serializable{
      * Metodos Personalizados
      */
     
+    public BigDecimal calcularValorCobrado()
+    {
+        return this.total.subtract(saldo);
+    }
+    
     /**
      * Enum que identifica que tipo de cartera es de cliente o de proveedores
      */

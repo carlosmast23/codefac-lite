@@ -1,0 +1,1 @@
+ene el reporte de facturacion por el monento para imprimir en excel la fecha auotirizacion esta saliendo como formato de texto porque cuando es vacio genera un problema , pero me imagino si existe alguna forma de mandar null

@@ -26,6 +26,8 @@ public class CuentasPorCobrarData implements ExcelDatosInterface {
     private String nombreComercial;
     private String total;
     private String saldo;
+    private String cobrado;
+    
 
     public CuentasPorCobrarData() {
     }
@@ -102,6 +104,16 @@ public class CuentasPorCobrarData implements ExcelDatosInterface {
         this.saldo = saldo;
     }
 
+    public String getCobrado() {
+        return cobrado;
+    }
+
+    public void setCobrado(String cobrado) {
+        this.cobrado = cobrado;
+    }
+    
+    
+
     @Override
     public List<TipoDato> getDatos() {
         /*private String codigo;
@@ -148,6 +160,7 @@ public class CuentasPorCobrarData implements ExcelDatosInterface {
             data.setPreimpreso(cartera.getPreimpreso());
             data.setRazonSocial(cartera.getPersona().getRazonSocial());
             data.setSaldo(cartera.getSaldo().toString());
+            data.setCobrado(cartera.calcularValorCobrado().toString());
             data.setTotal(cartera.getTotal().toString());
             dataReport.add(data);
             
