@@ -375,26 +375,46 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 cartera.setSaldo(notaCredito.getTotal());
                 cartera.setTotal(notaCredito.getTotal());
                 
+                /**
+                 * ==========================================================================
+                 *          Buscar la factura de la cartera para poder hacer el cruce
+                 * ==========================================================================
+                 */
+                CarteraService carteraService=new CarteraService();
+                //carteraService.buscarCarteraPorReferencia(Long.MIN_VALUE, documentoEnum, GeneralEnumEstado.ACTIVO, tipo, sucursal)
+                Cartera carteraFactura=carteraService.buscarCarteraPorReferencia(
+                        notaCredito.getFactura().getId(),
+                        notaCredito.getFactura().getCodigoDocumentoEnum(), 
+                        GeneralEnumEstado.ACTIVO, 
+                        Cartera.TipoCarteraEnum.CLIENTE, 
+                        notaCredito.getSucursalEmpresa());
+                
                 for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {
                     CarteraDetalle carteraDetalle=new CarteraDetalle();
                     carteraDetalle.setDescripcion(detalle.getDescripcion());
                     carteraDetalle.setSaldo(detalle.getTotal());
                     carteraDetalle.setTotal(detalle.getTotal());
                     cartera.addDetalle(carteraDetalle);
+                                        
+                    /**
+                     * ==========================================================================
+                     * CREAR EL CRUCE DE LA FACTURA
+                     * ==========================================================================
+                     */
+                    CarteraCruce carteraCruceRenta = new CarteraCruce();
+                    carteraCruceRenta.setCarteraAfectada(carteraFactura);
+                    carteraCruceRenta.setCarteraDetalle(carteraDetalle);
+                    carteraCruceRenta.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+                    carteraCruceRenta.setFechaCruce(UtilidadesFecha.getFechaHoy());
+                    carteraCruceRenta.setValor(detalle.calcularTotalFinal());
+                    cruces.add(carteraCruceRenta);
                 }
+                
                 
                 break;
         }
         
-        /**
-         * Grabar la cartera y cartera detalle generado
-         */
         
-        /*for (CarteraDetalle carteraDetalle : cartera.getDetalles()) 
-        {
-            entityManager.persist(carteraDetalle);
-        }
-        entityManager.persist(cartera);*/
         grabarCarteraSinTransaccion(cartera, cruces);
 
     }

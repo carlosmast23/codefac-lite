@@ -163,7 +163,19 @@ public class NotaCreditoDetalle implements Serializable {
         this.ivaPorcentaje = ivaPorcentaje;
     }
     
+    /**
+     * ==================================================================
+     *                  METODOS PERSONALIZADOS
+     * ==================================================================     
+     */
     
+    /**
+     * Este valor se supone que debe ser el final tomando en cuenta descuentos , ice e iva
+     */
+    public BigDecimal calcularTotalFinal()
+    {
+        return this.total.add(iva);
+    }
 
     //Metodos personalizados implementados
     public TipoDocumentoEnum getTipoDocumentoEnum()
