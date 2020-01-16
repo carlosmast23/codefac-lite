@@ -91,6 +91,13 @@ public abstract class UtilidadesTablas {
 
     }
     
+    public static void eliminarTodosLosDatos(DefaultTableModel tablaModel)
+    {
+        while (tablaModel.getRowCount()>0) {
+            tablaModel.removeRow(0);
+        }
+    }
+    
     public static DefaultTableModel crearModeloTabla(String titulos[],Class[] tipoDatoFilas)
     {
          DefaultTableModel defaultTableModel=new javax.swing.table.DefaultTableModel(titulos,0) 

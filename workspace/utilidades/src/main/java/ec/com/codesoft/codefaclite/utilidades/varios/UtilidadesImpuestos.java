@@ -17,4 +17,10 @@ public class UtilidadesImpuestos {
         ivaDefecto=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
         return valor.divide(ivaDefecto,decimales,BigDecimal.ROUND_HALF_UP);
     }
+    
+    public static BigDecimal agregarValorIva(BigDecimal ivaDefecto,BigDecimal valor)
+    {        
+        ivaDefecto=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
+        return valor.multiply(ivaDefecto);
+    }
 }

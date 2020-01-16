@@ -106,7 +106,8 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     private FacturaDetalle facturaDetalle; 
 
     private List<DocumentoEnum> documentos; 
-    private List<PuntoEmision> puntosEmision;     
+    private List<PuntoEmision> puntosEmision;    
+    private EnumSiNo[] enumSiNoList;
     //private List<SriFormaPago> sriFormaPagosList;
 
     private Producto productoSeleccionado;  
@@ -117,6 +118,10 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     
     private TipoPaginaEnum tipoPaginaEnum;
     
+    /**
+     * Variable para saber si al momento de agregar un producto en la vista este ya incluye iva
+     */
+    private EnumSiNo incluyeIvaDetalleEnum;
     /**
      * Variable para saber si se tiene que mostrar o no el boton de cargar desde factura
      */
@@ -161,9 +166,16 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         factura.setCliente(new Persona());//Esto solo hago para evitar advertencias
         productoSeleccionado = new Producto();
         facturaDetalle = new FacturaDetalle();
-
+        incluyeIvaDetalleEnum=EnumSiNo.SI;
+        
         cargarDatosPorDefecto();
         cargarDatosLista();
+        cargarCombosBox();
+    }
+    
+    private void cargarCombosBox()
+    {
+        enumSiNoList=EnumSiNo.values();
     }
 
     @Override
@@ -1105,6 +1117,24 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     public void setVisualizarCargarProforma(Boolean visualizarCargarProforma) {
         this.visualizarCargarProforma = visualizarCargarProforma;
+    }
+
+    public EnumSiNo getIncluyeIvaDetalleEnum() {
+        return incluyeIvaDetalleEnum;
+    }
+
+    public void setIncluyeIvaDetalleEnum(EnumSiNo incluyeIvaDetalleEnum) {
+        this.incluyeIvaDetalleEnum = incluyeIvaDetalleEnum;
+    }
+
+    
+
+    public EnumSiNo[] getEnumSiNoList() {
+        return enumSiNoList;
+    }
+
+    public void setEnumSiNoList(EnumSiNo[] enumSiNoList) {
+        this.enumSiNoList = enumSiNoList;
     }
     
     

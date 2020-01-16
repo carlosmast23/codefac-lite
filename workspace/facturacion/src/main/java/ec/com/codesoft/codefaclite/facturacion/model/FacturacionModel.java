@@ -171,6 +171,8 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -207,6 +209,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     //private Map<String, String> datosAdicionales;
     
     private FacturaModelControlador controlador;
+    
+    /**
+     * Esta variable utilizo para corregir el comportamiento del listener y evitar ciclos en ese combo
+     */
+    private Boolean ejecutarListenerComboDocumento=false;
 
     
 
@@ -745,14 +752,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         int fila = getTblDetalleFactura().getSelectedRow();
         if(fila>=0)
         {
-            modeloTablaDetallesProductos.removeRow(fila);
-            factura.getDetalles().remove(fila);
+            eliminarDetalleModelo(fila);
             cargarTotales();
             getBtnEditarDetalle().setEnabled(false);
             getBtnAgregarDetalleFactura().setEnabled(true);
             getBtnAgregarProducto().setEnabled(true);
             getBtnCrearProducto().setEnabled(true);
         }
+    }
+    
+    private void eliminarDetalleModelo(int fila)
+    {
+        modeloTablaDetallesProductos.removeRow(fila);
+        factura.getDetalles().remove(fila);
     }
     
     private void btnListenerCrearProducto() {
@@ -1028,8 +1040,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (productoSeleccionado == null) {
             return;
         }
-        
+        verificarProductoConNotaVentaInterna(productoSeleccionado);
         this.productoSeleccionado=productoSeleccionado;
+        
         cargarPrecios(productoSeleccionado);
         String descripcion=productoSeleccionado.getNombre();
         descripcion+=(productoSeleccionado.getCaracteristicas()!=null)?" "+productoSeleccionado.getCaracteristicas():"";
@@ -1037,6 +1050,26 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         setearValoresProducto(productoSeleccionado.getValorUnitario(),descripcion,productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
         //setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre()+"",productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
+    }
+    
+    /**
+     * Este metodo sirve para que cuando algun producto que vaya a ingresarse a la factura y no tiene que llevar iva cambiar las propiedades
+     * @param producto 
+     */
+    private void verificarProductoConNotaVentaInterna(Producto producto)
+    {
+        DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
+        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            //Si el producto es distinto de 0 convierto a producto sin iva y cambio el costo
+            if(producto.getCatalogoProducto().getIva().getTarifa()!=0)
+            {
+                producto.getCatalogoProducto().getIva().setTarifa(0);
+                producto.getCatalogoProducto().getIva().setPorcentaje(BigDecimal.ZERO);
+                BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),producto.getValorUnitario());
+                producto.setValorUnitario(nuevoValorUnitario);
+            }
+        }
     }
     
     private void cargarPrecios(Producto producto) {
@@ -2548,9 +2581,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             return true;
         }
     }
+    
 
     /**
-     * TODO: VER SIS ESTE METODO SE PUEDE UNIR CON EL DE ABAJO PORQUE EISTE 2 SIMILARES
+     * TODO: VER SIS ESTE METODO SE PUEDE UNIR CON EL DE ABAJO PORQUE EISTE 2 SIMILARES !IMPORTANTE!
      * @param facturaDetalle
      * @return 
      */
@@ -2579,134 +2613,119 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
             
             
-            try {
+        //Variable del producto para verificar otros datos como el iva
+        CatalogoProducto catalogoProducto=null;
+        //Seleccionar la referencia dependiendo del tipo de documento
+        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
+        //Obtengo el catalogo producto dependiendo el documento para poder saber las caracteristicas del producto
+        switch (tipoDocumentoEnum)
+        {
+            case ACADEMICO:
+                facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
+                catalogoProducto = rubroSeleccionado.getRubroNivel().getCatalogoProducto();
+                break;
                 
-                //Variable del producto para verificar otros datos como el iva
-                CatalogoProducto catalogoProducto=null;
-                //Seleccionar la referencia dependiendo del tipo de documento
-                TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-                facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
+            case PRESUPUESTOS:
+                facturaDetalle.setReferenciaId(presupuestoSeleccionado.getId());
+                catalogoProducto=presupuestoSeleccionado.getCatalogoProducto();
+                break;
                 
-                //Obtengo el catalogo producto dependiendo el documento para poder saber las caracteristicas del producto
-                switch (tipoDocumentoEnum) 
-                {
-                    case ACADEMICO:
-                        facturaDetalle.setReferenciaId(rubroSeleccionado.getId());                        
-                        catalogoProducto = rubroSeleccionado.getRubroNivel().getCatalogoProducto();
-                        break;
-
-                    case PRESUPUESTOS:
-                        facturaDetalle.setReferenciaId(presupuestoSeleccionado.getId());
-                        catalogoProducto=presupuestoSeleccionado.getCatalogoProducto();
-                        break;
-                        
-                    //Para invetario o para libre es la misma logica    
-                    case INVENTARIO: case LIBRE:
-                        facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
-                        catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
-                        break;
-                }
-                
-                //Advertecia cuando el item a facturar no tiene asignando un catalogo producto que es importante porque es de donde obtiene los valore
-                if(catalogoProducto==null)
-                {
-                    DialogoCodefac.mensaje("Advertencia","No esta definido el Catalogo Producto ,donde se especifica los impuestos para facturar ",DialogoCodefac.MENSAJE_INCORRECTO);
-                    return false;
-                }
-                
-                facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
-                facturaDetalle.setDescripcion(getTxtDescripcion().getText());                
-                               
-                //Calcula los valores dependiendo del iva para tener el valor unitario
-                BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
-                EnumSiNo incluidoIvaSiNo=(EnumSiNo) getCmbIva().getSelectedItem();
-                BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+                //Para invetario o para libre es la misma logica
+            case INVENTARIO: case LIBRE: 
+                facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+                catalogoProducto =productoSeleccionado.getCatalogoProducto();
+                //catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                break;
+        }
+        //Advertecia cuando el item a facturar no tiene asignando un catalogo producto que es importante porque es de donde obtiene los valore
+        if(catalogoProducto==null)
+        {
+            DialogoCodefac.mensaje("Advertencia","No esta definido el Catalogo Producto ,donde se especifica los impuestos para facturar ",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+        facturaDetalle.setDescripcion(getTxtDescripcion().getText());
+        //Calcula los valores dependiendo del iva para tener el valor unitario
+        BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
+        EnumSiNo incluidoIvaSiNo=(EnumSiNo) getCmbIva().getSelectedItem();
+        BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+        if(incluidoIvaSiNo.equals(EnumSiNo.SI))
+        {
+            BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);
+            valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,6,BigDecimal.ROUND_HALF_UP); //Redondeando con 4 decimales ya no genera problema con el centavo aveces
+        }
+        facturaDetalle.setPrecioUnitario(valorTotalUnitario);
+        /**
+         * ===========> CALCULA LOS VALORES DEL DESCUENTO <=============
+         */
+        BigDecimal descuento;
+        if (!getCheckPorcentaje().isSelected()) { //Cuando no es porcentaje el valor se setea directo
+            if (!getTxtDescuento().getText().equals("")) {
+                descuento = new BigDecimal(getTxtDescuento().getText());
+                //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
                 if(incluidoIvaSiNo.equals(EnumSiNo.SI))
-                {                    
-                    BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
-                    valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,6,BigDecimal.ROUND_HALF_UP); //Redondeando con 4 decimales ya no genera problema con el centavo aveces
-                }                                
-                facturaDetalle.setPrecioUnitario(valorTotalUnitario);
-                
-                
-                /**
-                 * ===========> CALCULA LOS VALORES DEL DESCUENTO <=============
-                 */                
-                BigDecimal descuento;
-                if (!getCheckPorcentaje().isSelected()) { //Cuando no es porcentaje el valor se setea directo
-                    if (!getTxtDescuento().getText().equals("")) {
-                        descuento = new BigDecimal(getTxtDescuento().getText());
-                        //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
-                        if(incluidoIvaSiNo.equals(EnumSiNo.SI))
-                        {
-                            descuento=UtilidadesImpuestos.quitarValorIva(ivaDefecto,descuento,6);
-                        }
-                        
-                    } else {
-                        descuento = BigDecimal.ZERO;
-                    }
-                    
-                    //Redonde a 2 decimales porque en el Sri no permite con mas decimales
-                    facturaDetalle.setDescuento(descuento.setScale(2,BigDecimal.ROUND_HALF_UP));
-                } else { //Cuando es porcentaje se calcula primero el valor en procentaje
-                    if (!getTxtDescuento().getText().equals("")) {
-                        BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
-                        porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
-                        BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario().setScale(2,BigDecimal.ROUND_HALF_UP)); //Escala a 2 decimales el valor del valor unitario porque algunos proveedores tienen 3 decimales
-                        descuento = total.multiply(porcentajeDescuento);
-                        
-                        //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva                        
-                        if(incluidoIvaSiNo.equals(EnumSiNo.SI))
-                        {
-                            descuento=UtilidadesImpuestos.quitarValorIva(ivaDefecto,descuento,6);
-                        }
-                        
-                        facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
-                    }
-                }
-                
-                
-                //Calular el total despues del descuento porque necesito esa valor para grabar
-
-                facturaDetalle.calcularTotalDetalle();
-                /**
-                 * Revisar este calculo del iva para no calcular 2 veces al mostrar
-                 */
-                facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
-                
-                if(catalogoProducto.getIce()!=null)
                 {
-                    facturaDetalle.calcularValorIce(catalogoProducto.getIce().getPorcentaje());
+                    descuento=UtilidadesImpuestos.quitarValorIva(ivaDefecto,descuento,6);
                 }
                 
-                facturaDetalle.calculaIva();
-               
-                /**
-                 * ========> VALIDACION QUE EL VALOR UNITARIO MENOS DESCUENTO NO SEA NEGATIVO <=============
-                 * TODO: Ver si este codigo es correcto poner al final o se debe agrupar todos las validaciones en un bloque
-                 * para tener mas organiado porque en la parte superior de este metodo existen mas validaciones
-                 */
-                if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) >= 0) {
-                    
-                    //Solo agregar si se enviar un dato vacio
-                    if (agregar) {
-                        factura.addDetalle(facturaDetalle);
-                    }
-                    
-                    cargarDatosDetalles();
-                    limpiarDetalleFactura();
-                    cargarTotales();
-                } else {
-                    DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    limpiarDetalleFactura();
-                    return false;
-                }
-            } catch (RemoteException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                descuento = BigDecimal.ZERO;
             }
             
+            //Redonde a 2 decimales porque en el Sri no permite con mas decimales
+            facturaDetalle.setDescuento(descuento.setScale(2,BigDecimal.ROUND_HALF_UP));
+        } else { //Cuando es porcentaje se calcula primero el valor en procentaje
+            if (!getTxtDescuento().getText().equals("")) {
+                BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
+                porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
+                BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario().setScale(2,BigDecimal.ROUND_HALF_UP)); //Escala a 2 decimales el valor del valor unitario porque algunos proveedores tienen 3 decimales
+                descuento = total.multiply(porcentajeDescuento);
+                
+                //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
+                if(incluidoIvaSiNo.equals(EnumSiNo.SI))
+                {
+                    descuento=UtilidadesImpuestos.quitarValorIva(ivaDefecto,descuento,6);
+                }
+                
+                facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
+            }
+        }
+        //Calular el total despues del descuento porque necesito esa valor para grabar
+        
+        facturaDetalle.calcularTotalDetalle();
+        /**
+         * Revisar este calculo del iva para no calcular 2 veces al mostrar
+         */
+        facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
+        if(catalogoProducto.getIce()!=null)
+        {
+            facturaDetalle.calcularValorIce(catalogoProducto.getIce().getPorcentaje());
+        }
+        facturaDetalle.calculaIva();
+        /**
+         * ========> VALIDACION QUE EL VALOR UNITARIO MENOS DESCUENTO NO SEA NEGATIVO <=============
+         * TODO: Ver si este codigo es correcto poner al final o se debe agrupar todos las validaciones en un bloque
+         * para tener mas organiado porque en la parte superior de este metodo existen mas validaciones
+         */
+        if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) >= 0) {
+            
+            //Solo agregar si se enviar un dato vacio
+            if (agregar) {
+                factura.addDetalle(facturaDetalle);
+            }
+            
+            cargarDatosDetalles();
+            limpiarDetalleFactura();
+            cargarTotales();
+        } else {
+            DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            limpiarDetalleFactura();
+            return false;
+        }
+            
                         
-            return true; //si pasa todas las validaciones asumo que se edito correctamente
+        return true; //si pasa todas las validaciones asumo que se edito correctamente
 
         /*}
         else
@@ -2714,53 +2733,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             return false;
         }*/
         
-    }
-    
-    private boolean validarAgregarInventario()
-    {
-        try {
-            
-            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, EnumSiNo.NO))
-            {
-                try {                    
-                    //Verifico si el producto es inventario y esta activo la opción de construir ensamble en la venta porque en ese caso
-                    //tampoco debe validar el inventario en la vista para el ensamble
-                    if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
-                    {
-                         //Si tengo que construir el ensamble no valido en la vista porque puede tener stock insuficiente pero despues de construir si puede generar
-                        return true;
-                    }
-                    
-                    
-                    boolean verifadorStock = verificarExistenciaStockProducto();
-                    //Verificar si agrego los datos al fomurlaro cuando no existe inventario
-                    if (!verifadorStock) {
-                        
-                        DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        return false;
-                    } else {                        
-                        return true;
-                    }
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //Por defecto si no tiene nada seleccionado si permito agregar el inventario
-        return true;
-        
-    }
-    
-    @Deprecated
-    //TODO: Parece que este metodo ya no voy a usar
-    private void setearFacturaDetalle(FacturaDetalle facturaDetalle) {
-        facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
-        facturaDetalle.setDescripcion(getTxtDescripcion().getText());
     }
     
     //TODO: Para optimizar y mejorar el codigo analizar para utilizar una sola funcion con la anterior
@@ -2850,6 +2822,55 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         
     }
+    
+    private boolean validarAgregarInventario()
+    {
+        try {
+            
+            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, EnumSiNo.NO))
+            {
+                try {                    
+                    //Verifico si el producto es inventario y esta activo la opción de construir ensamble en la venta porque en ese caso
+                    //tampoco debe validar el inventario en la vista para el ensamble
+                    if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
+                    {
+                         //Si tengo que construir el ensamble no valido en la vista porque puede tener stock insuficiente pero despues de construir si puede generar
+                        return true;
+                    }
+                    
+                    
+                    boolean verifadorStock = verificarExistenciaStockProducto();
+                    //Verificar si agrego los datos al fomurlaro cuando no existe inventario
+                    if (!verifadorStock) {
+                        
+                        DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        return false;
+                    } else {                        
+                        return true;
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //Por defecto si no tiene nada seleccionado si permito agregar el inventario
+        return true;
+        
+    }
+    
+    @Deprecated
+    //TODO: Parece que este metodo ya no voy a usar
+    private void setearFacturaDetalle(FacturaDetalle facturaDetalle) {
+        facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+        facturaDetalle.setDescripcion(getTxtDescripcion().getText());
+    }
+    
+    
     
     /**
      * Metodo para setear valores de la factura de manera externa
@@ -2950,6 +2971,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         
     }
+    
+    private void eliminarTodosLosDetalles()
+    {
+        UtilidadesTablas.eliminarTodosLosDatos(modeloTablaDetallesProductos);
+        factura.getDetalles().clear();
+    }
 
     private void addListenerCombos() {
         
@@ -3012,6 +3039,64 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 limpiarDetalleFactura();
             }
         });
+        
+        
+       getCmbDocumento().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                
+                if(!ejecutarListenerComboDocumento)
+                {
+                    ejecutarListenerComboDocumento=true;
+                    return;
+                }
+                
+                DocumentoEnum documentoAnterior= (DocumentoEnum) e.getItem();
+                DocumentoEnum documentoNuevo=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                
+                if(documentoAnterior.equals(documentoNuevo))
+                {
+                    return;
+                }
+                
+                if(documentoNuevo.equals(DocumentoEnum.NOTA_VENTA_INTERNA)
+                        || documentoAnterior.equals(DocumentoEnum.NOTA_VENTA_INTERNA) )
+                {
+                    if(factura.getDetalles()!=null && factura.getDetalles().size()>0)
+                    {
+                        if(DialogoCodefac.dialogoPregunta("Si cambia el tipo de documento los detalles ingresados se perderan , desea continuar ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                        {   
+                            eliminarTodosLosDetalles();
+                            cargarTotales();
+                        }
+                        else
+                        {
+                            (new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ejecutarListenerComboDocumento=false;
+                                    getCmbDocumento().setSelectedItem(documentoAnterior);
+                                }
+                            })).start();
+                        
+                            //throw new Error("No se debe cambiar de item");
+                            /*e.setSource(documentoAnterior);
+                            getCmbDocumento().setSelectedItem(documentoAnterior);
+                            getCmbDocumento().SETsE
+                            //e.notify();
+                            getCmbDocumento().validate();
+                            getCmbDocumento().repaint();
+                            DialogoCodefac.mensaje("hicimos todo",DialogoCodefac.MENSAJE_ADVERTENCIA);*/
+                            
+                        }
+                    }
+                }
+            }                
+            
+        });
+              
+        
+        
         
         getCmbRepresentante().addActionListener(new ActionListener() {
             @Override
