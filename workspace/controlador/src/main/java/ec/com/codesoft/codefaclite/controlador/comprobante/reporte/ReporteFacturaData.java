@@ -312,7 +312,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));
-        tiposDatos.add(new TipoDato(this.fechaAutorizacion, Excel.TipoDataEnum.FECHA));
+        tiposDatos.add(new TipoDato((this.fechaAutorizacion!=null)?this.fechaAutorizacion:"", Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.identificacionCliente, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.razonSocialCliente, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombreLegalCliente, Excel.TipoDataEnum.TEXTO));
@@ -340,7 +340,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));
-        tiposDatos.add(new TipoDato(this.fechaAutorizacion, Excel.TipoDataEnum.FECHA));
+        tiposDatos.add(new TipoDato((this.fechaAutorizacion!=null)?this.fechaAutorizacion:"", Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.identificacionCliente, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.razonSocialCliente, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombreLegalCliente, Excel.TipoDataEnum.TEXTO));

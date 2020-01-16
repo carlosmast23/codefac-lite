@@ -2646,7 +2646,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         descuento = BigDecimal.ZERO;
                     }
                     
-                    facturaDetalle.setDescuento(descuento);
+                    //Redonde a 2 decimales porque en el Sri no permite con mas decimales
+                    facturaDetalle.setDescuento(descuento.setScale(2,BigDecimal.ROUND_HALF_UP));
                 } else { //Cuando es porcentaje se calcula primero el valor en procentaje
                     if (!getTxtDescuento().getText().equals("")) {
                         BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
@@ -2807,7 +2808,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 facturaDetalle.setValorIce(BigDecimal.ZERO);
                 
                 if (!descuentoPorcentaje) {
-                    facturaDetalle.setDescuento(descuento);
+                    facturaDetalle.setDescuento(descuento.setScale(2,BigDecimal.ROUND_HALF_UP));
                 } else {
                     BigDecimal porcentajeDescuento = descuento;
                     

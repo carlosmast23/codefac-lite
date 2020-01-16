@@ -60,15 +60,22 @@ public class MigrarProductoModel extends MigrarModel {
                     Producto producto = new Producto();
                     producto.setCodigoPersonalizado(((String) fila.getByEnum(ExcelMigrarProductos.Enum.CODIGO).valor).trim());
                     producto.setNombre(((String) fila.getByEnum(ExcelMigrarProductos.Enum.NOMBRE).valor).trim());
-
+                    System.out.println(producto.getNombre());
+                    
                     Double precioVentaPublico = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PUBLICO).valor;
-                    Double precioVentaOferta = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_OFERTA).valor;
-                    Double precioVentaPromedio = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
+                    
+                                        
+                    Object precioVentaPromedioObj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
+                    if(precioVentaPromedioObj!=null && !precioVentaPromedioObj.toString().isEmpty())
+                    {   
+                        Double precioVentaPromedio = (Double) precioVentaPromedioObj;
+                    }
                     
                     /**
                      * ==========> BUSCAR O CREAR LA CATEGORIA SI NO EXISTE PARA CREAR <=======
                      */
                     String nombreCategoria=((String) fila.getByEnum(ExcelMigrarProductos.Enum.CATEGORIA).valor).trim();
+                    
                     CategoriaProducto categoriaProducto=ServiceFactory.getFactory().getCategoriaProductoServiceIf().buscarPorNombre(session.getEmpresa(),nombreCategoria); //TODO: Revisar este tema porque segur que toca manejar las categorias por empresa
                     if(categoriaProducto==null)
                     {
@@ -82,7 +89,8 @@ public class MigrarProductoModel extends MigrarModel {
                     /**
                      * ============> CREAR EL CATALOGO PRODUCTO <=====================
                      */
-                    Double porcentajeIva = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.IVA_PORCENTAJE).valor;
+                    Object porcentajeIvaObj=fila.getByEnum(ExcelMigrarProductos.Enum.IVA_PORCENTAJE).valor;
+                    Double porcentajeIva = (Double)Double.parseDouble(porcentajeIvaObj.toString());
                     ImpuestoDetalle impuestoDetalleIva = ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorTarifa(porcentajeIva.intValue());
                     CatalogoProducto catalogoProducto = new CatalogoProducto();
                     catalogoProducto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
@@ -122,9 +130,9 @@ public class MigrarProductoModel extends MigrarModel {
 
                             Kardex kardex = new Kardex();
                             kardex.setBodega(bodega);
-                            if(precioVentaPromedio>0)
+                            if(precioVentaPublico>0)
                             {
-                                kardex.setPrecioPromedio(new BigDecimal(precioVentaPromedio.toString()));
+                                kardex.setPrecioPromedio(new BigDecimal(precioVentaPublico.toString()));
                             }
                             
                             kardex.setProducto(producto);
@@ -140,10 +148,17 @@ public class MigrarProductoModel extends MigrarModel {
                     
                    
                     producto.setValorUnitario(new BigDecimal(precioVentaPublico.toString()));
-                    if(precioVentaOferta>0)
+                    
+                    Object precioVentaOfertaObj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_OFERTA).valor;
+                    if(precioVentaOfertaObj!=null && !precioVentaOfertaObj.toString().isEmpty())
                     {
-                        producto.setPrecioDistribuidor(new BigDecimal(precioVentaOferta.toString()));
+                        Double precioVentaOferta = (Double) precioVentaOfertaObj;
+                        if(precioVentaOferta>0)
+                        {
+                            producto.setPrecioDistribuidor(new BigDecimal(precioVentaOferta.toString()));
+                        }
                     }
+                    
                     
                     producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                     //producto.setCatalogoProducto(CatalogoPro);

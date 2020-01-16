@@ -6,3 +6,5 @@ ver que aunque pongo eliminado las facturas ya no me sabe dejar usar el secuenci
 
 Realizar un script para cambiar el estado de la bodega llamada "Bodega por defecto" a estado eliminado para evitar confictos con un 
 nuevo cambio para manejar bodegas globales
+
+En las notas de credito esta de grabar el ice porque necesito ese dato para hacer el calculo del ice cuando para cuadrar con la cartera

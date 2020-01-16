@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
+import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -23,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -101,12 +103,22 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                     //Actualizar la referencia de la factura con el nuevo estado
                     entityManager.merge(notaCredito.getFactura());
                 }
+                
+                //Actualizar la cartera cuando se hacen notas de credito
+                grabarCarteraSinTransaccion(notaCredito);
 
 
             }
         });
         
         return notaCredito;
+    }
+    
+    private void grabarCarteraSinTransaccion(NotaCredito notaCredito) throws RemoteException, ServicioCodefacException
+    {
+        //Grabar en la cartera si todo el proceso anterior fue correcto
+        CarteraService carteraService = new CarteraService();
+        carteraService.grabarDocumentoCartera(notaCredito, Cartera.TipoCarteraEnum.CLIENTE);
     }
     
     private void anularRubroEstudiante(Long referenciaId,BigDecimal total) throws RemoteException
