@@ -251,5 +251,15 @@ public class UtilidadesFecha {
 
         return new java.sql.Date(calendar.getTime().getTime()); // Devuelve el objeto Date con los nuevos días añadidos
     }
+    
+    public static java.util.Date castDateSqlToUtil(java.sql.Date fechaSql)
+    {
+        return new java.util.Date(fechaSql.getTime());
+    }
+    
+    public static java.sql.Date castDateUtilToSql(java.util.Date fechaUtil)
+    {
+        return new java.sql.Date(fechaUtil.getTime());
+    }
 
 }

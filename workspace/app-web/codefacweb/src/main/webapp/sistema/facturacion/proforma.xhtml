@@ -100,13 +100,13 @@
                             <p:panel style="border: 0px;margin: 0px;padding: 0px" >
                                 <p:inputText id="txtProducto" placeholder="Código" value="#{proformaMb.productoSeleccionado.codigoPersonalizado}" style="width: 70%" />
                                 <p:commandButton  process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBusquedaProducto()}" style="width: 20%"  >
-                                    <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}" update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion"  />
+                                    <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}" update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,cmbIncluyeIvaDetalle"  />
                                 </p:commandButton>
                             </p:panel>
 
                             <p:panelGrid columns="2" id="pnlIncluyeIva" style="border: 0px;margin: 0px;padding: 0px;width: 100%">
                                 <p:outputLabel>Inc Iva:</p:outputLabel>
-                                <p:selectOneMenu  id="cmbIncluyeIvaDetalle" value="#{proformaMb.incluyeIvaDetalleEnum}" converter="siNoEnumConverter"  >
+                                <p:selectOneMenu  id="cmbIncluyeIvaDetalle" value="#{proformaMb.incluyeIvaDetalleEnum}" converter="siNoEnumConverter" disabled="#{!proformaMb.cmbIvaDetalleEnable}" >
                                     <f:selectItems value="#{proformaMb.enumSiNoList}" var="opcion" itemValue="#{opcion.letra}" />
                                 </p:selectOneMenu>
                             </p:panelGrid>
@@ -123,7 +123,24 @@
 
                                                         
                             <p:panel style="border: 0px;margin: 0px;padding: 0px" >
-                                <p:commandButton style="width: 20%" process="@this,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion" update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,:formulario:tblProductoDetalles,:formulario:messages" icon="fa fa-plus"   styleClass="white-button" action="#{proformaMb.agregarProducto()}" />
+                                <p:commandButton style="width: 20%" process="
+                                                 @this,
+                                                 txtValorUnitario,
+                                                 txtCantidad,
+                                                 txtDescuento,
+                                                 txtDescripcion,
+                                                 cmbIncluyeIvaDetalle,
+                                                 chkDescuento" 
+                                                 update="
+                                                 txtProducto,
+                                                 txtValorUnitario,
+                                                 txtCantidad,
+                                                 txtDescuento,
+                                                 txtDescripcion,
+                                                 cmbIncluyeIvaDetalle,
+                                                 :formulario:tblProductoDetalles,
+                                                 :formulario:messages" icon="fa fa-plus"   styleClass="white-button" action="#{proformaMb.agregarProducto()}" />
+                                
                                 <p:commandButton style="width: 20%" process="@this" icon="fa fa-pencil"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}"/>
                                 <p:commandButton style="width: 20%" process="@this" icon="fa fa-close"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}"/>
                             </p:panel>
@@ -138,6 +155,10 @@
                             <p:panelGrid columns="2" style="border: 0px;margin: 0px;padding: 0px;width: 100%">
                                 <p:outputLabel>Descuento:</p:outputLabel>
                                 <p:inputText id="txtDescuento" style="width: 100%" placeholder="Descuento" value="#{proformaMb.facturaDetalle.descuento}" />
+                            </p:panelGrid>
+                            
+                             <p:panelGrid columns="1" style="border: 0px;margin: 0px;padding: 0px;width: 100%">
+                                 <p:selectBooleanCheckbox id="chkDescuento" value="#{proformaMb.descuentoPorcentaje}" itemLabel="% descuento"/>
                             </p:panelGrid>
 
 

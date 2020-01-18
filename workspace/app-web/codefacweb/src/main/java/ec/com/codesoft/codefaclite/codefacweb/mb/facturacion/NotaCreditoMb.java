@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.codefacweb.core.SessionMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.ParametrosWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesReporteWeb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
@@ -23,6 +24,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.NotaCreditoModelControlador;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.NotaCreditoModelControlador.NotaCreditoModelInterface;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -87,6 +89,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoDocumento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -102,7 +105,7 @@ import java.util.Arrays;
  */
 @ManagedBean
 @ViewScoped
-public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable {
+public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,NotaCreditoModelInterface {
     private static final String ID_COMPONENTE_MONITOR="monitor";   
     
     private NotaCredito notaCredito;
@@ -153,7 +156,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable {
     public void init() {
         System.out.println("Creando controlador");
         facturaSeleccionada=new Factura(); //TODO: Da error cuando existe una propiedad vacia
-        controlador=new NotaCreditoModelControlador();
+        controlador=new NotaCreditoModelControlador(this,sessionMb.getSession());
         String tipoPagina = UtilidadesWeb.buscarParametroPeticion(parametrosWeb.getCampoTipoFacturaOProforma());
         //tipoPaginaEnum = TipoPaginaEnum.getByNombreParametro(tipoPagina);
         
@@ -206,11 +209,10 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable {
 
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
 
-            //if (tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA)) {
-                servicio.grabarProforma(null);
-                mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
-
-            //}
+            servicio.grabarProforma(null);
+            
+            
+            //mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             
 
             //MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
@@ -477,7 +479,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable {
 
     @Override
     public void imprimir() {
-        imprimirFactura(null);
+        imprimirNotaCredito(notaCredito);
     }
     
       
@@ -486,33 +488,17 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable {
      * TODO: Ese codigo esta repetido el codigo para imprimir el comprobante
      * @param factura 
      */
-    private void imprimirFactura(Factura factura)
+    private void imprimirNotaCredito(NotaCredito notaCredito)
     {
         
          //if (this.factura != null && estadoFormulario.equals(ESTADO_EDITAR)) {
-        if (factura != null) {
+        if (notaCredito != null) {
             try {
-                String claveAcceso = factura.getClaveAcceso();
-                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura.getClaveAcceso(),factura.getEmpresa());
+                String claveAcceso = notaCredito.getClaveAcceso();
+                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(notaCredito.getClaveAcceso(),notaCredito.getEmpresa());
                 JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                 
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                //HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-                net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
-                //byte[] bytes = JasperRunManager.runReportToPdf(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
-                HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-                //response.setHeader("Content-disposition", "inline; filename=proforma");
-                response.setContentType("application/pdf");
-                response.setContentLength(baos.size());
-
-                ServletOutputStream outStream = response.getOutputStream();
-                baos.writeTo(outStream);
-                //outStream.write(baos, 0, baos.size());
-
-                outStream.flush();
-                outStream.close();
-
-                FacesContext.getCurrentInstance().responseComplete();
+                UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,notaCredito.getPreimpreso());
                 
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -520,8 +506,6 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (JRException ex) {
-                Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -706,6 +690,62 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable {
             //new FacturaAdicional(ESTADO_EDITAR, ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO)
             notaCredito.addDatoAdicional(new NotaCreditoAdicional(notaCredito.getCliente().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
         }
+    }
+
+    public NotaCredito obtenerNotaCredito() {
+        return notaCredito;
+    }
+
+    public java.sql.Date obtenerCmbFechaCompra() {
+        return null;
+    }
+
+    public java.sql.Date obtenerDateFechaEmision() {
+        return UtilidadesFecha.castDateUtilToSql(fechaEmision);
+    }
+
+    public TipoDocumentoEnum obtenerCmbTipoDocumento() {
+        return TipoDocumentoEnum.LIBRE;
+    }
+
+    public String obtenerTxtMotivoAnulacion() {
+        return notaCredito.getRazonModificado();
+    }
+
+    public String obtenerTxtPreimpresoProveedor() {
+        return null;
+    }
+
+    public PuntoEmision obtenerPuntoEmisionSeleccionado() {
+        return puntoEmisionSeleccionado;
+    }
+
+    public ClienteInterfaceComprobante obtenerClienteInterfaceComprobante(NotaCredito notaCredito) {
+        return null;
+    }
+
+    public void procesarMonitor() {
+        BarraProgreso<NotaCredito> barraProgreso = new BarraProgreso<NotaCredito>(notaCredito, new BarraProgreso.InterfazBoton<NotaCredito>() {
+            public void alertaListener() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            public void imprimirListener(NotaCredito dato) {
+
+                try {
+                    dato = (NotaCredito) ServiceFactory.getFactory().getNotaCreditoServiceIf().buscarPorId(dato.getId()); //Vuelvo a consultar porque el antigua dato no tenia la clave de acceso                    
+                    imprimirNotaCredito(dato);
+                        
+
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            public String tituloBarra(NotaCredito dato) {
+                return dato.getPreimpreso();
+            }
+        });
     }
 
 

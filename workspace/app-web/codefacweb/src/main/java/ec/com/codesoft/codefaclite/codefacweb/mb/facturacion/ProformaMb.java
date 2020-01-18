@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.codefacweb.core.SessionMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.ParametrosWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesReporteWeb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
@@ -22,6 +23,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FacturaModelInterface;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -79,8 +81,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceCom
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -96,7 +101,7 @@ import java.util.Arrays;
  */
 @ManagedBean
 @ViewScoped
-public class ProformaMb extends GeneralAbstractMb implements Serializable {
+public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterface, Serializable {
 
     private static final String ID_COMPONENTE_MONITOR="monitor";   
     
@@ -122,10 +127,14 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
      * Variable para saber si al momento de agregar un producto en la vista este ya incluye iva
      */
     private EnumSiNo incluyeIvaDetalleEnum;
+    
+    private Boolean cmbIvaDetalleEnable;
     /**
      * Variable para saber si se tiene que mostrar o no el boton de cargar desde factura
      */
     private Boolean visualizarCargarProforma;
+    
+    private Boolean descuentoPorcentaje;
     //private String tipoPagina;
     //private String tituloPagina;
     /**
@@ -147,7 +156,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     @PostConstruct
     public void init() {
         System.out.println("Creando controlador");
-        controlador=new FacturaModelControlador(sessionMb.getSession());
+        controlador=new FacturaModelControlador(sessionMb.getSession(),this);
         String tipoPagina = UtilidadesWeb.buscarParametroPeticion(parametrosWeb.getCampoTipoFacturaOProforma());
         tipoPaginaEnum = TipoPaginaEnum.getByNombreParametro(tipoPagina);
         
@@ -167,6 +176,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         productoSeleccionado = new Producto();
         facturaDetalle = new FacturaDetalle();
         incluyeIvaDetalleEnum=EnumSiNo.SI;
+        cmbIvaDetalleEnable=false;
         
         cargarDatosPorDefecto();
         cargarDatosLista();
@@ -410,7 +420,8 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
 
     public void seleccionarProducto(SelectEvent event) {
         productoSeleccionado = (Producto) event.getObject();
-        cargarDetalleFacturaAgregar(productoSeleccionado); 
+        controlador.agregarProductoVista(productoSeleccionado);
+        //cargarDetalleFacturaAgregar(productoSeleccionado); 
     }
     
     public void seleccionarDatoAdicional(SelectEvent event) {
@@ -422,7 +433,7 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         
     }
 
-    private void cargarDetalleFacturaAgregar(Producto productoSeleccionado) {    
+    /*private void cargarDetalleFacturaAgregar(Producto productoSeleccionado) {    
         facturaDetalle = new FacturaDetalle();
         facturaDetalle.setCantidad(BigDecimal.ONE);
         facturaDetalle.setDescripcion(productoSeleccionado.getNombre());
@@ -436,24 +447,29 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         facturaDetalle.setTipoDocumentoEnum(TipoDocumentoEnum.LIBRE);//TODO: Por el momento solo dejo como documento por defecto libre
         facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
 
-    }
+    }*/
 
     public void agregarProducto() {
 
-        if (facturaDetalle.getCantidad().compareTo(BigDecimal.ZERO) <= 0) {
+        try {
+            /*if (facturaDetalle.getCantidad().compareTo(BigDecimal.ZERO) <= 0) {
             MensajeMb.mostrarMensajeDialogo("Error", "Porfavor ingrese un valor valido", FacesMessage.SEVERITY_WARN);
             return;
+            }
+            //facturaDetalle.
+            facturaDetalle.calcularTotalDetalle();
+            facturaDetalle.calculaIva();
+            
+            facturaDetalle.calcularValorIce();
+            
+            factura.addDetalle(facturaDetalle);
+            factura.calcularTotalesDesdeDetalles();
+            facturaDetalle = new FacturaDetalle();
+            productoSeleccionado = new Producto();*/
+            controlador.agregarDetallesFactura(null);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //facturaDetalle.        
-        facturaDetalle.calcularTotalDetalle();
-        facturaDetalle.calculaIva();
-        
-        facturaDetalle.calcularValorIce();
-
-        factura.addDetalle(facturaDetalle);
-        factura.calcularTotalesDesdeDetalles();
-        facturaDetalle = new FacturaDetalle();
-        productoSeleccionado = new Producto();
 
     }
 
@@ -554,40 +570,31 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     
     private void imprimirProforma()
     {
-        try {
-            System.out.println("Imprimir ...");
-            List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
-            Map<String, Object> mapParametros = getMapParametrosReporte(factura);
-            InputStream path = RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("proforma.jrxml");
-            JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
-            //JasperPrint jasperPrint = JasperFillManager.fillReport(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
-
-            mapParametros = ReporteCodefac.mapReportePlantilla(OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4, sessionMb.getSession());
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            //HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
-            //byte[] bytes = JasperRunManager.runReportToPdf(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
-            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            //response.setHeader("Content-disposition", "inline; filename=proforma");
-            response.setContentType("application/pdf");
-            response.setContentLength(baos.size());
-
-            ServletOutputStream outStream = response.getOutputStream();
-            baos.writeTo(outStream);
-            //outStream.write(baos, 0, baos.size());
-
-            outStream.flush();
-            outStream.close();
-
-            FacesContext.getCurrentInstance().responseComplete();
-
-        } catch (JRException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        System.out.println("Imprimir ...");
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
+        Map<String, Object> mapParametros = getMapParametrosReporte(factura);
+        InputStream path = RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("proforma.jrxml");
+        JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
+        //JasperPrint jasperPrint = JasperFillManager.fillReport(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
+        UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,"Presupuesto "+factura.getSecuencial()+".pdf");
+        /*mapParametros = ReporteCodefac.mapReportePlantilla(OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4, sessionMb.getSession());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        //HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
+        //byte[] bytes = JasperRunManager.runReportToPdf(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        //response.setHeader("Content-disposition", "inline; filename=proforma");
+        response.setContentType("application/pdf");
+        response.setContentLength(baos.size());
+        
+        ServletOutputStream outStream = response.getOutputStream();
+        baos.writeTo(outStream);
+        //outStream.write(baos, 0, baos.size());
+        
+        outStream.flush();
+        outStream.close();
+        
+        FacesContext.getCurrentInstance().responseComplete();*/
     }
     
     
@@ -597,41 +604,18 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
      */
     private void imprimirFactura(Factura factura)
     {
-        
-         //if (this.factura != null && estadoFormulario.equals(ESTADO_EDITAR)) {
-        if (factura != null) {
-            try {
-                String claveAcceso = factura.getClaveAcceso();
-                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura.getClaveAcceso(),factura.getEmpresa());
-                JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
-                
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                //HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-                net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
-                //byte[] bytes = JasperRunManager.runReportToPdf(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
-                HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-                //response.setHeader("Content-disposition", "inline; filename=proforma");
-                response.setContentType("application/pdf");
-                response.setContentLength(baos.size());
-
-                ServletOutputStream outStream = response.getOutputStream();
-                baos.writeTo(outStream);
-                //outStream.write(baos, 0, baos.size());
-
-                outStream.flush();
-                outStream.close();
-
-                FacesContext.getCurrentInstance().responseComplete();
-                
-            } catch (RemoteException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (JRException ex) {
-                Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            String claveAcceso = factura.getClaveAcceso();
+            byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura.getClaveAcceso(),factura.getEmpresa());
+            JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+            UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,factura.getPreimpreso()+".pdf");
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);        
         }
     }
     
@@ -642,74 +626,21 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
      */
     private void imprimirTicket(Factura factura)
     {
-        try {
-            //MOnitorCom
-            Map<String, Object> mapParametros = controlador.getMapParametrosReporte(factura);
-            List<ComprobanteVentaData> dataReporte = controlador.getDetalleDataReporte(factura);
-            InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
-            
-            String nombreReporte = factura.getCodigoDocumentoEnum().getNombre();
-            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
-            {
-                nombreReporte="Nota de Venta";
-            }
-            
-            JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(),nombreReporte, OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
-            
-            
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            //HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
-            //byte[] bytes = JasperRunManager.runReportToPdf(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
-            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            //response.setHeader("Content-disposition", "inline; filename=proforma");
-            response.setContentType("application/pdf");
-            response.setContentLength(baos.size());
-
-            ServletOutputStream outStream = response.getOutputStream();
-            baos.writeTo(outStream);
-            //outStream.write(baos, 0, baos.size());
-
-            outStream.flush();
-            outStream.close();
-
-            FacesContext.getCurrentInstance().responseComplete();
-        } catch (JRException ex) {
-            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        //MOnitorCom
+        Map<String, Object> mapParametros = controlador.getMapParametrosReporte(factura);
+        List<ComprobanteVentaData> dataReporte = controlador.getDetalleDataReporte(factura);
+        InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
+        String nombreReporte = factura.getCodigoDocumentoEnum().getNombre();
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        {
+            nombreReporte="Nota de Venta";
         }
+        JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(),nombreReporte, OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
+        UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,factura.getPreimpreso()+".pdf");
+        
     }
 
-    public void imprimirArchivoAdjunto() {
-        try {
-            System.out.println("Imprimir ...");
-            List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
-            Map<String, Object> mapParametros = getMapParametrosReporte(factura);
-            InputStream path = RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("proforma.jrxml");
-            JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
-            //JasperPrint jasperPrint = JasperFillManager.fillReport(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
-
-            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            response.addHeader("Content-disposition", "attachment; filename=reporte.pdf");
-            ServletOutputStream stream = response.getOutputStream();
-
-            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-
-            stream.flush();
-            stream.close();
-            FacesContext.getCurrentInstance().responseComplete();
-            System.out.println("termino de imprimir");
-
-        } catch (JRException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
+    
     public List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando) {
         List<ComprobanteVentaData> dataReporte = new ArrayList<ComprobanteVentaData>();
 
@@ -907,6 +838,157 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
         }
     }
 
+    public DocumentoEnum obtenerDocumentoSeleccionado() {
+        return documentoSeleccionado;
+    }
+
+    public void cargarPrecios(Producto producto) {
+        //TODO: Metodo donde se deben cargar los diferentes precios 
+    }
+
+    public void setearValoresProducto(BigDecimal valorUnitario, String descripcion, String codigo, CatalogoProducto catologoProducto) {
+        //Metodo para setear los valores en la pantalla
+    }
+
+    public void cargarDatosDetalleVista(BigDecimal valorUnitario, String descripcion, String codigo, CatalogoProducto catologoProducto) {
+        /*facturaDetalle = new FacturaDetalle();
+        facturaDetalle.setCantidad(BigDecimal.ONE);
+        facturaDetalle.setDescripcion(productoSeleccionado.getNombre());
+        facturaDetalle.setPrecioUnitario(productoSeleccionado.getValorUnitario());
+        facturaDetalle.setDescuento(BigDecimal.ZERO);
+        facturaDetalle.setIvaPorcentaje(productoSeleccionado.getCatalogoProducto().getIva().getTarifa()); //TODO: Revisar este valor porque parece que esta mal seteado y se refiere al iva del producto      
+        if (productoSeleccionado.getCatalogoProducto().getIce() != null) {
+            facturaDetalle.setIcePorcentaje(productoSeleccionado.getCatalogoProducto().getIce().getPorcentaje());
+        }
+        facturaDetalle.setTipoDocumentoEnum(TipoDocumentoEnum.LIBRE);//TODO: Por el momento solo dejo como documento por defecto libre
+        facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());*/
+        facturaDetalle = new FacturaDetalle();
+        facturaDetalle.setCantidad(BigDecimal.ONE);
+        facturaDetalle.setDescripcion(descripcion);
+        facturaDetalle.setPrecioUnitario(valorUnitario);
+        facturaDetalle.setDescuento(BigDecimal.ZERO);
+        facturaDetalle.setIvaPorcentaje(catologoProducto.getIva().getTarifa());
+        if (productoSeleccionado.getCatalogoProducto().getIce() != null) {
+            facturaDetalle.setIcePorcentaje(productoSeleccionado.getCatalogoProducto().getIce().getPorcentaje());
+        }
+        facturaDetalle.setTipoDocumentoEnum(TipoDocumentoEnum.LIBRE);
+        facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+    }
+
+    public void habilitarComboIva(Boolean opcion) {
+        cmbIvaDetalleEnable=opcion;
+    }
+
+    public void setComboIva(EnumSiNo enumSiNo) {
+        this.incluyeIvaDetalleEnum=enumSiNo;
+    }
+
+    public void setTxtValorUnitario(String valorUnitario) {
+        facturaDetalle.setPrecioUnitario(new BigDecimal(valorUnitario));
+    }
+
+    public TipoDocumentoEnum obtenerTipoDocumentoSeleccionado() {
+        return TipoDocumentoEnum.LIBRE; //TODO: por el momento dejo este documento como libre
+    }
+
+    public Producto obtenerProductoSeleccionado() {
+        return productoSeleccionado;
+    }
+
+    public Presupuesto obtenerPresupuestoSeleccionado() {
+        return null;
+    }
+
+    public RubroEstudiante obtenerRubroSeleccionado() {
+        return null;
+    }
+
+    public String obtenerTxtDescuento() {
+        return facturaDetalle.getDescuento().toString();
+    }
+
+    public String obtenerTxtCantidad() {
+        return facturaDetalle.getCantidad().toString();
+    }
+
+    public String obtenerTxtDescripcion() {
+        return facturaDetalle.getDescripcion();
+    }
+
+    public String obtenerTxtValorUnitario() {
+        return facturaDetalle.getPrecioUnitario().toString();
+    }
+
+    public EnumSiNo obtenerComboIva() {
+        return incluyeIvaDetalleEnum;
+    }
+
+    public Factura obtenerFactura() {
+        return factura;
+    }
+
+    public Boolean obtenerCheckPorcentajeSeleccion() {
+        return descuentoPorcentaje; 
+    }
+
+    public void limpiarComboPrecioVenta() {
+        //TODO: FALTA IMPLEMNTAR
+    }
+
+    public void focoTxtCodigoDetalle() {
+        //TODO: FALTA IMPLEMNTAR
+    }
+
+    public void setearCantidadTxt(String cantidad) {
+        facturaDetalle.setCantidad((cantidad==null || cantidad.isEmpty())?null:new BigDecimal(cantidad));
+    }
+
+    public void setearDescripcionTxt(String descripcion) {
+        facturaDetalle.setDescripcion(descripcion);
+    }
+
+    public void setearValorUnitarioTxt(String valorUnitario) {
+        facturaDetalle.setPrecioUnitario((valorUnitario==null || valorUnitario.isEmpty() )?null:new BigDecimal(valorUnitario));
+    }
+
+    public void setearDescuentoTxt(String descuento) {
+        facturaDetalle.setDescuento((descuento==null || descuento.isEmpty() )?null:new BigDecimal(descuento));
+    }
+
+    public void setearCodigoDetalleTxt(String codigoDetalle) {
+        //facturaDetalle.set
+        codigoDetalle=codigoDetalle;
+    }
+
+    public void cargarTotalesVista() {
+        
+    }
+
+    public void cargarFormasPagoTabla() {
+        
+    }
+
+    public void cargarDatosDetalles() {
+        
+    }
+
+    public Boolean validarIngresoDetalle() {
+        return true; //Falta implementar
+    }
+
+    public Integer filaSeleccionadaTablaDetalle() {
+        return 0;
+    }
+
+    public void seleccionarFilaTablaDetalle(int filaSeleccionada) {
+        
+    }
+
+    /**
+     * =============================================================
+     *              TIPO PAGINA ENUMA
+     * ==============================================================
+     */
     public enum TipoPaginaEnum {  
         FACTURA("Factura", "factura"),
         PROFORMA("Proforma", "proforma");
@@ -1136,7 +1218,22 @@ public class ProformaMb extends GeneralAbstractMb implements Serializable {
     public void setEnumSiNoList(EnumSiNo[] enumSiNoList) {
         this.enumSiNoList = enumSiNoList;
     }
-    
-    
 
+    
+    public Boolean getCmbIvaDetalleEnable() { 
+        return cmbIvaDetalleEnable;
+    }
+
+    public void setCmbIvaDetalleEnable(Boolean cmbIvaDetalleEnable) {
+        this.cmbIvaDetalleEnable = cmbIvaDetalleEnable;
+    }
+
+    public Boolean getDescuentoPorcentaje() {
+        return descuentoPorcentaje;
+    }
+
+    public void setDescuentoPorcentaje(Boolean descuentoPorcentaje) {
+        this.descuentoPorcentaje = descuentoPorcentaje;
+    }
+         
 }

@@ -20,9 +20,9 @@ public class UtilidadBigDecimal {
      * @param valor
      * @return 
      */
-    public static BigDecimal calcularValorPorcentaje(BigDecimal porcentaje,BigDecimal valor)
+    public static BigDecimal calcularValorPorcentaje(BigDecimal porcentaje,BigDecimal valor,Integer decimales)
     {        
-        BigDecimal decimalPorcentaje=porcentaje.divide(new  BigDecimal("100"),2,RoundingMode.HALF_UP);
+        BigDecimal decimalPorcentaje=porcentaje.divide(new  BigDecimal("100"),decimales,RoundingMode.HALF_UP);
         return valor.multiply(decimalPorcentaje);
         
     }

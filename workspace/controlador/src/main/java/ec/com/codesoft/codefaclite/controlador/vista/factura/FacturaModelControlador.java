@@ -5,18 +5,37 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
+import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,9 +44,12 @@ import java.util.Map;
 public class FacturaModelControlador {
     
     public SessionCodefacInterface session;
+    private FacturaModelInterface interfaz;
 
-    public FacturaModelControlador(SessionCodefacInterface session) {
+
+    public FacturaModelControlador(SessionCodefacInterface session,FacturaModelInterface interfaz) {
         this.session=session;
+        this.interfaz=interfaz;
     }
     
     
@@ -103,6 +125,474 @@ public class FacturaModelControlador {
         }
         
         return tiposDocumento;
+    }
+    
+    public void agregarProductoVista(Producto productoSeleccionado) {
+        if (productoSeleccionado == null) {
+            return;
+        }
+        verificarProductoConNotaVentaInterna(productoSeleccionado);
+        //this.productoSeleccionado=productoSeleccionado;
+        interfaz.setProductoSeleccionado(productoSeleccionado);
+        
+        //cargarPrecios(productoSeleccionado);
+        interfaz.cargarPrecios(productoSeleccionado);
+        
+        String descripcion=productoSeleccionado.getNombre();
+        descripcion+=(productoSeleccionado.getCaracteristicas()!=null)?" "+productoSeleccionado.getCaracteristicas():"";
+        descripcion=descripcion.replace("\n"," ");
+        
+        //interfaz.setearValoresProducto(productoSeleccionado.getValorUnitario(),descripcion,productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
+        setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre()+"",productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
+    }
+    
+        
+    /**
+     * Este metodo sirve para que cuando algun producto que vaya a ingresarse a la factura y no tiene que llevar iva cambiar las propiedades
+     * @param producto 
+     */
+    private void verificarProductoConNotaVentaInterna(Producto producto)
+    {
+        DocumentoEnum documentoEnum=interfaz.obtenerDocumentoSeleccionado() ;
+        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            //Si el producto es distinto de 0 convierto a producto sin iva y cambio el costo
+            if(producto.getCatalogoProducto().getIva().getTarifa()!=0)
+            {
+                producto.getCatalogoProducto().getIva().setTarifa(0);
+                producto.getCatalogoProducto().getIva().setPorcentaje(BigDecimal.ZERO);
+                BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),producto.getValorUnitario());
+                producto.setValorUnitario(nuevoValorUnitario);
+            }
+        }
+    }
+    
+    public  void setearValoresProducto(BigDecimal valorUnitario,String descripcion,String codigo,CatalogoProducto catologoProducto) {
+        interfaz.cargarDatosDetalleVista(valorUnitario,descripcion,codigo,catologoProducto);
+        if(catologoProducto.getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
+        {
+            //Carga el dato por defecto cuando no se puede ingresar productos que contengan iva
+            //getCmbIva().setSelectedItem(EnumSiNo.NO);
+            //getCmbIva().setEnabled(false);
+            interfaz.habilitarComboIva(false);
+            interfaz.setComboIva(EnumSiNo.NO);
+        }
+        else
+        {
+            try 
+            {
+                //getCmbIva().setEnabled(true);
+                interfaz.habilitarComboIva(true);
+                //TODO: Ver alguna forma de cargar por defecto el precio guardado en la base de datos
+                if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA, EnumSiNo.SI))
+                {
+                    //getCmbIva().setSelectedItem(EnumSiNo.SI);
+                    interfaz.setComboIva(EnumSiNo.SI);
+                    BigDecimal valorConIva=UtilidadIva.calcularValorConIvaIncluido(session.obtenerIvaActualDecimal(),valorUnitario);
+                    //getTxtValorUnitario().setText(valorConIva.toString());
+                    interfaz.setTxtValorUnitario(valorConIva.toString());
+                }
+                else
+                {
+                    //getCmbIva().setSelectedItem(EnumSiNo.NO);
+                    interfaz.setComboIva(EnumSiNo.NO);
+                }
+                
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
+            
+        }
+    }
+    
+    
+    /**
+     * @author Carlos
+     * Validacion de la la logica dependiendo el modulo
+     * @return 
+     */
+    private boolean validacionPersonalizadaPorModulos() {
+        TipoDocumentoEnum tipoDocEnum=interfaz.obtenerTipoDocumentoSeleccionado();
+        BigDecimal cantidad = new BigDecimal(interfaz.obtenerTxtCantidad());
+        BigDecimal valorUnitario = new BigDecimal(interfaz.obtenerTxtValorUnitario());
+
+        switch(tipoDocEnum)
+        {
+            case ACADEMICO:
+                //TODO: Analizar para el caso que tenga descuento
+                if (interfaz.obtenerRubroSeleccionado().getSaldo().compareTo(cantidad.multiply(valorUnitario)) == -1) {
+                    DialogoCodefac.mensaje("Validación", "El Total no puede exceder del valor " + interfaz.obtenerRubroSeleccionado().getSaldo() + " del rubro", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return false;
+                }
+                break;
+                
+            case PRESUPUESTOS:
+                /*if (presupuestoSeleccionado.getTotalVenta().compareTo(cantidad.multiply(valorUnitario)) == -1) {
+                    DialogoCodefac.mensaje("Validación", "El Total no puede exceder del valor " + rubroSeleccionado.getSaldo() + " del rubro", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return false;
+                }*/
+                break;
+                
+            case INVENTARIO:
+                return validarAgregarInventario(); //Metodo que se encarga de validar el inventario
+                
+        }
+        
+        return true;
+    }
+    
+    private boolean validarAgregarInventario()
+    {
+        try {
+            
+            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, EnumSiNo.NO))
+            {
+                try {                    
+                    //Verifico si el producto es inventario y esta activo la opción de construir ensamble en la venta porque en ese caso
+                    //tampoco debe validar el inventario en la vista para el ensamble
+                    if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
+                    {
+                         //Si tengo que construir el ensamble no valido en la vista porque puede tener stock insuficiente pero despues de construir si puede generar
+                        return true;
+                    }
+                    
+                    
+                    boolean verifadorStock = verificarExistenciaStockProducto();
+                    //Verificar si agrego los datos al fomurlaro cuando no existe inventario
+                    if (!verifadorStock) {
+                        
+                        DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        return false;
+                    } else {                        
+                        return true;
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //Por defecto si no tiene nada seleccionado si permito agregar el inventario
+        return true;
+        
+    }
+    
+    /**
+     * 
+     * @return
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     * @author Trebor
+     */
+    public boolean verificarExistenciaStockProducto() throws RemoteException, ServicioCodefacException
+    {
+        boolean verificadorStock;
+        KardexServiceIf serviceKardex = ServiceFactory.getFactory().getKardexServiceIf();
+        //Bodega activa de venta
+        BodegaServiceIf serviceBodega = ServiceFactory.getFactory().getBodegaServiceIf();
+        Bodega bodegaVenta = serviceBodega.obtenerBodegaVenta(session.getSucursal());
+        //Verifica si existe stock para el producto seleccionado
+        verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta,interfaz.obtenerProductoSeleccionado(), Integer.parseInt(interfaz.obtenerTxtCantidad()));
+        return verificadorStock;
+    }
+    
+    /**
+     * TODO: VER SIS ESTE METODO SE PUEDE UNIR CON EL DE ABAJO PORQUE EISTE 2 SIMILARES !IMPORTANTE!
+     * @param facturaDetalle
+     * @return 
+     */
+    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle) throws ServicioCodefacException {
+        boolean agregar = true;
+
+        //Verifica si manda un detalle existe solo se modifica
+        if (facturaDetalle != null) {
+            agregar = false;
+        } else {
+            facturaDetalle = new FacturaDetalle();
+        }
+
+        //Validacion de los datos ingresados para ver si puedo agregar al detalle
+        if (!interfaz.validarIngresoDetalle()) {
+            //int filaSeleccionada=getTblDetalleFactura().getSelectedRow();
+            int filaSeleccionada=interfaz.filaSeleccionadaTablaDetalle();
+            interfaz.cargarDatosDetalles(); //Si no se pudo editar vuelvo a cargar los detalles si se modifico desde la tabla para que quede la forma original
+            //getTblDetalleFactura().setRowSelectionInterval(filaSeleccionada,filaSeleccionada);
+            interfaz.seleccionarFilaTablaDetalle(filaSeleccionada);
+            return false;
+        }
+
+            
+        //Validacion personalizada dependiendo de la logica de cada tipo de documento
+        if (!validacionPersonalizadaPorModulos()) {
+                return false;
+        }
+            
+            
+        //Variable del producto para verificar otros datos como el iva
+        CatalogoProducto catalogoProducto=null;
+        //Seleccionar la referencia dependiendo del tipo de documento
+        TipoDocumentoEnum tipoDocumentoEnum=interfaz.obtenerTipoDocumentoSeleccionado();
+        facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
+        //Obtengo el catalogo producto dependiendo el documento para poder saber las caracteristicas del producto
+        switch (tipoDocumentoEnum)
+        {
+            case ACADEMICO:
+                facturaDetalle.setReferenciaId(interfaz.obtenerRubroSeleccionado().getId());
+                catalogoProducto = interfaz.obtenerRubroSeleccionado().getRubroNivel().getCatalogoProducto();
+                break;
+                
+            case PRESUPUESTOS:
+                facturaDetalle.setReferenciaId(interfaz.obtenerPresupuestoSeleccionado().getId());
+                catalogoProducto=interfaz.obtenerPresupuestoSeleccionado().getCatalogoProducto();
+                break;
+                
+                //Para invetario o para libre es la misma logica
+            case INVENTARIO: case LIBRE: 
+                facturaDetalle.setReferenciaId(interfaz.obtenerProductoSeleccionado().getIdProducto());
+                catalogoProducto =interfaz.obtenerProductoSeleccionado().getCatalogoProducto();
+                //catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                break;
+        }
+        //Advertecia cuando el item a facturar no tiene asignando un catalogo producto que es importante porque es de donde obtiene los valore
+        if(catalogoProducto==null)
+        {
+            DialogoCodefac.mensaje("Advertencia","No esta definido el Catalogo Producto ,donde se especifica los impuestos para facturar ",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));
+        facturaDetalle.setDescripcion(interfaz.obtenerTxtDescripcion());
+        //Calcula los valores dependiendo del iva para tener el valor unitario
+        BigDecimal valorTotalUnitario = new BigDecimal(interfaz.obtenerTxtValorUnitario());
+        EnumSiNo incluidoIvaSiNo=interfaz.obtenerComboIva();
+        BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+        if(incluidoIvaSiNo.equals(EnumSiNo.SI))
+        {
+            BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);
+            valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,6,BigDecimal.ROUND_HALF_UP); //Redondeando con 4 decimales ya no genera problema con el centavo aveces
+        }
+        facturaDetalle.setPrecioUnitario(valorTotalUnitario);
+        /**
+         * ===========> CALCULA LOS VALORES DEL DESCUENTO <=============
+         */
+        BigDecimal descuento;
+        //if (!getCheckPorcentaje().isSelected()) { //Cuando no es porcentaje el valor se setea directo
+        if (!interfaz.obtenerCheckPorcentajeSeleccion()) { //Cuando no es porcentaje el valor se setea directo
+            if (!interfaz.obtenerTxtDescuento().equals("")) {
+                descuento = new BigDecimal(this.interfaz.obtenerTxtDescuento());
+                //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
+                if(incluidoIvaSiNo.equals(EnumSiNo.SI))
+                {
+                    descuento=UtilidadesImpuestos.quitarValorIva(ivaDefecto,descuento,6);
+                }
+                
+            } else {
+                descuento = BigDecimal.ZERO;
+            }
+            
+            //Redonde a 2 decimales porque en el Sri no permite con mas decimales
+            facturaDetalle.setDescuento(descuento.setScale(2,BigDecimal.ROUND_HALF_UP));
+        } else { //Cuando es porcentaje se calcula primero el valor en procentaje
+            if (!interfaz.obtenerTxtDescuento().isEmpty()) {
+                BigDecimal porcentajeDescuento = new BigDecimal(interfaz.obtenerTxtDescuento());
+                porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
+                BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario().setScale(2,BigDecimal.ROUND_HALF_UP)); //Escala a 2 decimales el valor del valor unitario porque algunos proveedores tienen 3 decimales
+                descuento = total.multiply(porcentajeDescuento);
+                
+                //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
+                if(incluidoIvaSiNo.equals(EnumSiNo.SI))
+                {
+                    descuento=UtilidadesImpuestos.quitarValorIva(ivaDefecto,descuento,6);
+                }
+                
+                facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
+            }
+        }
+        //Calular el total despues del descuento porque necesito esa valor para grabar
+        
+        facturaDetalle.calcularTotalDetalle();
+        /**
+         * Revisar este calculo del iva para no calcular 2 veces al mostrar
+         */
+        facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
+        if(catalogoProducto.getIce()!=null)
+        {
+            facturaDetalle.calcularValorIce(catalogoProducto.getIce().getPorcentaje());
+        }
+        facturaDetalle.calculaIva();
+        /**
+         * ========> VALIDACION QUE EL VALOR UNITARIO MENOS DESCUENTO NO SEA NEGATIVO <=============
+         * TODO: Ver si este codigo es correcto poner al final o se debe agrupar todos las validaciones en un bloque
+         * para tener mas organiado porque en la parte superior de este metodo existen mas validaciones
+         */
+        if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) >= 0) {
+            
+            //Solo agregar si se enviar un dato vacio
+            if (agregar) {
+                interfaz.obtenerFactura().addDetalle(facturaDetalle);
+            }
+            
+            interfaz.cargarDatosDetalles();
+            limpiarDetalleFactura();
+            cargarTotales();
+        } else {
+            DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            limpiarDetalleFactura();
+            return false;
+        }
+            
+                        
+        return true; //si pasa todas las validaciones asumo que se edito correctamente
+
+        /*}
+        else
+        {
+            return false;
+        }*/
+        
+    }
+    
+    public void cargarTotales() {
+        Factura factura=interfaz.obtenerFactura();
+        //if(estadoFormulario.equals(ESTADO_GRABAR))
+        //{
+        factura.calcularTotalesDesdeDetalles();
+        //}
+        /**
+         * Setear los componentes graficos despues de los calculos
+         */
+        interfaz.cargarTotalesVista();
+        
+        //Verifico que solo exista una forma de pago y si cumple ese requesito actualizo el valor de la forma de pago
+        if (factura.getFormaPagos()!=null && factura.getFormaPagos().size() == 1) {
+            FormaPago formaPago = factura.getFormaPagos().get(0);
+            formaPago.setTotal(factura.getTotal());
+            interfaz.cargarFormasPagoTabla();
+        }
+
+    }
+    
+    /**
+     * Limpiar las variables y los campos de de la vista de la parte de detalle
+     */
+    public void limpiarDetalleFactura() {
+        
+        TipoDocumentoEnum tipoDocumentoEnum=interfaz.obtenerTipoDocumentoSeleccionado();
+        
+        //TODO: REVISAR PORQUE ME TOCA HACER ESTA VALIDACION
+        if(tipoDocumentoEnum==null)
+        {
+            tipoDocumentoEnum=tipoDocumentoEnum.LIBRE;
+        }
+        
+        /**
+         * TODO: Revisar esta parte que originalemente seteaba con null directamente , si no funciona toca crear metodos para setear las variable
+         */
+        switch(tipoDocumentoEnum)
+        {
+            case LIBRE:
+            case INVENTARIO:
+                Producto producto=interfaz.obtenerProductoSeleccionado();
+                producto=null;
+                break;
+                
+            case PRESUPUESTOS:
+                Presupuesto presupuestoSeleccionado=interfaz.obtenerPresupuestoSeleccionado();
+                presupuestoSeleccionado=null;
+                break;
+                
+            case ACADEMICO:
+                RubroEstudiante rubroEstudiante=interfaz.obtenerRubroSeleccionado();
+                rubroEstudiante=null;
+                break;
+        
+        }
+            
+        
+        //Limpio los datos en la pantalla
+        /*getTxtCantidad().setText("");
+        getTxtDescripcion().setText("");
+        getTxtValorUnitario().setText("");
+        getTxtDescuento().setText("0");
+        getTxtCodigoDetalle().setText("");*/
+        interfaz.setearCantidadTxt("1");
+        interfaz.setearDescripcionTxt("");
+        interfaz.setearValorUnitarioTxt("");
+        interfaz.setearDescuentoTxt("0");
+        interfaz.setearCodigoDetalleTxt("");
+        
+        interfaz.focoTxtCodigoDetalle();
+        
+        //Desctivar los diferentes precios si el producto fue agregado correctamente
+        //getCmbPreciosVenta().removeAllItems();
+        interfaz.limpiarComboPrecioVenta();
+    }
+    
+    
+    
+    public interface FacturaModelInterface
+    {
+        public DocumentoEnum obtenerDocumentoSeleccionado();
+        
+        public TipoDocumentoEnum obtenerTipoDocumentoSeleccionado();
+        
+        public Producto obtenerProductoSeleccionado();
+        public Presupuesto obtenerPresupuestoSeleccionado();
+        public RubroEstudiante obtenerRubroSeleccionado();
+        
+        /**
+         * Metodo que me permite establecer o seleccionar el producto seleccionado
+         */
+        public void setProductoSeleccionado(Producto producto);
+        
+        /*
+        Metodo que permite establecer como cargar los precios en la vista
+        */
+        public void cargarPrecios(Producto producto);
+        
+        /**
+         * 
+         * @param valorUnitario
+         * @param descripcion
+         * @param codigo
+         * @param catologoProducto 
+         */
+        public void setearValoresProducto(BigDecimal valorUnitario,String descripcion,String codigo,CatalogoProducto catologoProducto);
+        
+        /**
+         * Metodo que me permite cargar los detalle que necesito para mostrar en la vista los datos del cliente
+         */
+        public void cargarDatosDetalleVista(BigDecimal valorUnitario,String descripcion,String codigo,CatalogoProducto catologoProducto);
+        
+        public void habilitarComboIva(Boolean opcion);
+        public void setComboIva(EnumSiNo enumSiNo);
+        public void setTxtValorUnitario(String valorUnitario);
+        public String obtenerTxtDescuento();
+        public String obtenerTxtCantidad();
+        public String obtenerTxtDescripcion();
+        public String obtenerTxtValorUnitario();
+        public EnumSiNo obtenerComboIva();
+        public Factura obtenerFactura();
+        public Boolean obtenerCheckPorcentajeSeleccion();
+        
+        public void limpiarComboPrecioVenta();
+        public void focoTxtCodigoDetalle();
+        public void setearCantidadTxt(String cantidad);
+        public void setearDescripcionTxt(String descripcion);
+        public void setearValorUnitarioTxt(String valorUnitario);
+        public void setearDescuentoTxt(String descuento);
+        public void setearCodigoDetalleTxt(String codigoDetalle);
+        
+        public void cargarTotalesVista();
+        public void cargarFormasPagoTabla();
+        public void cargarDatosDetalles();
+        public Boolean validarIngresoDetalle();
+        public Integer filaSeleccionadaTablaDetalle();
+        public void seleccionarFilaTablaDetalle(int filaSeleccionada);
     }
     
 }

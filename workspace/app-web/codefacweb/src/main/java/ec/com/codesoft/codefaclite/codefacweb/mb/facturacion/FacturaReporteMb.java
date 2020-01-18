@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.codefacweb.mb.test.*;
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.TablaNombreColumna;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesReporteWeb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EjemploDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
@@ -320,7 +321,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     
     public ControladorReporteFactura crearControlador()
     {
-        return new ControladorReporteFactura(sessionMb.getSession().getEmpresa());
+        return new ControladorReporteFactura(sessionMb.getSession().getEmpresa()); 
     }
     
     public void imprimirReporte()
@@ -347,41 +348,31 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     
     public void imprimirReporteFactura(String titulo, InputStream path){
         //ControladorReporteFactura.TotalSumatoria total=controladorReporte.totalSinNotaCredito();
+        System.out.println("Imprimir ...");
+        //no cacho List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
+        //no cacho Map<String, Object> mapParametros = getMapParametrosReporte(factura);
+        JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, controladorReporte.mapParametrosReportePdf(), data, sessionMb.getSession(), titulo, OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.A4);
+        //JasperPrint jasperPrint = JasperFillManager.fillReport(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
+        UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,"Reporte Ventas.pdf");
+        /*Map<String, Object>mapParametros = ReporteCodefac.mapReportePlantilla(OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.A4, sessionMb.getSession());
         
-        try {
-            System.out.println("Imprimir ...");
-            //no cacho List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
-            //no cacho Map<String, Object> mapParametros = getMapParametrosReporte(factura); 
-            JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, controladorReporte.mapParametrosReportePdf(), data, sessionMb.getSession(), titulo, OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.A4);
-            //JasperPrint jasperPrint = JasperFillManager.fillReport(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
-            
-            Map<String, Object>mapParametros = ReporteCodefac.mapReportePlantilla(OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.A4, sessionMb.getSession());
-            
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            //HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
-            //byte[] bytes = JasperRunManager.runReportToPdf(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
-            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            //response.setHeader("Content-disposition", "inline; filename=proforma");
-            response.setContentType("application/pdf");
-            response.setContentLength(baos.size());
-
-            ServletOutputStream outStream = response.getOutputStream();
-            baos.writeTo(outStream);
-            //outStream.write(baos, 0, baos.size());
-
-            outStream.flush();
-            outStream.close();
-
-            FacesContext.getCurrentInstance().responseComplete();
-
-        } catch (JRException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        }    
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        //HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
+        //byte[] bytes = JasperRunManager.runReportToPdf(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        //response.setHeader("Content-disposition", "inline; filename=proforma");
+        response.setContentType("application/pdf");
+        response.setContentLength(baos.size());
+        
+        ServletOutputStream outStream = response.getOutputStream();
+        baos.writeTo(outStream);
+        //outStream.write(baos, 0, baos.size());
+        
+        outStream.flush();
+        outStream.close();
+        
+        FacesContext.getCurrentInstance().responseComplete();*/    
     }
 
     public void crearCabezeraTabla()

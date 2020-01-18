@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosCompro
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.NotaCreditoModelControlador;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.NotaCreditoModelControlador.NotaCreditoModelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
@@ -106,7 +107,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDatosComprobanteElectronicosInterface{
+public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDatosComprobanteElectronicosInterface,NotaCreditoModelInterface{
 
     private DefaultTableModel modeloTablaDetalle = new DefaultTableModel();
     private NotaCredito notaCredito;
@@ -127,174 +128,25 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         addListenerTablas();
         addListenerCombos();
         addPopUpListener();
+        
         super.validacionDatosIngresados=false;
     }
     
-    private PuntoEmision obtenerPuntoEmisionSeleccionado()
+    public PuntoEmision obtenerPuntoEmisionSeleccionado()
     {
         return (PuntoEmision)getCmbPuntoEmision().getSelectedItem();
     }
     
-    private void setearValoresNotaCredito()
-    {
-        notaCredito.setEmpresa(session.getEmpresa());
-        //notaCredito.setEstado(Factura.ESTADO_FACTURADO);
-        notaCredito.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-        notaCredito.setRazonModificado(getTxtMotivoAnulacion().getText());
-        notaCredito.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));
         
-        PuntoEmision puntoEmisionSeleccionado= obtenerPuntoEmisionSeleccionado();
-        //notaCredito.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
-        //notaCredito.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
-        notaCredito.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision());
-        notaCredito.setPuntoEstablecimiento(new BigDecimal(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString()));
-        
-        //notaCredito.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor));
-        notaCredito.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
-        //notaCredito.setSubtotalCero(BigDecimal.ZERO);
-        
-        
-        //Actualizar en el documento de nota_credito el nuevo tipo de documento
-        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-        notaCredito.setTipoDocumento(tipoDocumentoEnum.getCodigo());
-        
-        notaCredito.setDireccionEstablecimiento(session.getSucursal().getDirecccion());
-        notaCredito.setDireccionMatriz(session.getMatriz().getDirecccion());
-        notaCredito.setUsuario(session.getUsuario());
-        notaCredito.setSucursalEmpresa(session.getSucursal());
-        
-        switch(tipoDocumentoEnum)
-        {
-            case LIBRE:
-                //TODO: Validar que estos campos en la nota de credito esten ingresados correctamente
-                notaCredito.setNumDocModificado(getTxtPreimpresoProveedor().getText());
-                if(getCmbFechaCompra().getDate()!=null)
-                {
-                    notaCredito.setFechaEmisionDocSustento(new java.sql.Date(getCmbFechaCompra().getDate().getTime()));
-                }
-                break;
-                
-            case VENTA:
-                if(notaCredito.getFactura()!=null)
-                {
-                    notaCredito.setNumDocModificado(notaCredito.getFactura().getPreimpreso());
-                    notaCredito.setFechaEmisionDocSustento(new java.sql.Date(notaCredito.getFactura().getFechaEmision().getTime()));
-                }
-                break;
-        
-        }
-        //Verificacion para cambiar el estado de la factura
-        /*if(notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal())<0)
-        {
-            Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.getEstado();
-            notaCredito.getFactura().setEstado(FacturaEnumEstado.ANULADO_PARCIAL.getEstado());
-        }
-        else
-        {
-            notaCredito.getFactura().setEstado(FacturaEnumEstado.ANULADO_TOTAL.getEstado());
-        }*/
-    }
     
-    private boolean validarDatosNotaCredito()
-    {
-        if(notaCredito.getCliente()==null)
-        {
-            DialogoCodefac.mensaje("Error Validación","Porfavor seleccione un cliente",DialogoCodefac.MENSAJE_INCORRECTO);
-            return false;
-        }
-        
-        if(notaCredito.getDetalles()==null || notaCredito.getDetalles().size()==0)
-        {
-            DialogoCodefac.mensaje("Error Validación","Porfavor ingrese detalles al comprobante",DialogoCodefac.MENSAJE_INCORRECTO);
-            return false;
-        }
-        
-        
-        //Actualizar en el documento de nota_credito el nuevo tipo de documento
-        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-        if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
-        {
-            if(notaCredito.getFechaEmisionDocSustento()==null)
-            {
-                DialogoCodefac.mensaje("Error Validación","Porfavor seleccione la fecha de emisión",DialogoCodefac.MENSAJE_INCORRECTO);
-                return false;
-            }
-            
-            if(notaCredito.getNumDocModificado().replaceAll("-","").replaceAll(" ","").isEmpty())
-            {
-                DialogoCodefac.mensaje("Error Validación","Porfavor ingrese el preimpreso de la factura",DialogoCodefac.MENSAJE_INCORRECTO);
-                return false;
-            }
-        }
-        
-        
-        return true;    
-    }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         
-        Boolean pregunta=DialogoCodefac.dialogoPregunta("Alerta","Esta seguro que desea grabar la Nota de Crédito",DialogoCodefac.MENSAJE_ADVERTENCIA);
-        if(!pregunta)
-        {
-            throw new ExcepcionCodefacLite("cancelar el metodo grabar ...");
-        }
         
-        try {
-            NotaCredito notaCreditoGrabada;
-            NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
-            setearValoresNotaCredito();
-            
-            if(!validarDatosNotaCredito())
-            {
-                throw new ExcepcionCodefacLite("Error Validación");
-            }
-            
-            notaCredito=servicio.grabar(notaCredito);
-            notaCreditoGrabada=notaCredito;//graba una referencia con ambiento del metodo para los listener
-            
-            ComprobanteDataNotaCredito comprobanteData=new ComprobanteDataNotaCredito(notaCredito);
-
-            comprobanteData.setMapInfoAdicional(getMapAdicional(notaCredito));
-            
-                        
-            ClienteInterfaceComprobante cic=new ClienteNotaCreditoImplComprobante(this, notaCreditoGrabada);
-            
-            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
-                cic = null;
-            }
-            
-            ComprobanteServiceIf comprobanteServiceIf=ServiceFactory.getFactory().getComprobanteServiceIf();
-            comprobanteServiceIf.procesarComprobante(comprobanteData,notaCredito,session.getUsuario(),cic);    
-            
-            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) 
-            {
-                NotaCreditoNoCallBack respuestaNoCallBack = new NotaCreditoNoCallBack(notaCredito,this);
-                respuestaNoCallBack.iniciar();
-            }
-            
-
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
-            throw new ExcepcionCodefacLite(ex.getMessage());
-        } catch (RemoteException ex) {
-            Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
-    private Map<String,String> getMapAdicional(NotaCredito notaCredito)
-    {
-        Map<String,String> parametroMap=new HashMap<String ,String>();
-        if(notaCredito.getDatosAdicionales()!=null)
-        {
-            for (NotaCreditoAdicional datoAdicional : notaCredito.getDatosAdicionales()) 
-            {
-                parametroMap.put(datoAdicional.getCampo(),datoAdicional.getValor());
-            }
-        }
-        return parametroMap;
-    }
+    
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
@@ -1160,7 +1012,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     }
 
     private void valoresIniciales() {
-        controlador=new NotaCreditoModelControlador();
+        controlador=new NotaCreditoModelControlador(this,session);
         getCmbTipoDocumento().removeAllItems();
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.LIBRE);
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.VENTA);
@@ -1413,6 +1265,52 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     @Override
     public ComprobanteDataInterface obtenerComprobanteData() {
         return new ComprobanteDataNotaCredito(notaCredito);
+    }
+
+    @Override
+    public NotaCredito obtenerNotaCredito() {
+        return notaCredito;
+    }
+
+    @Override
+    public Date obtenerCmbFechaCompra() {
+        return UtilidadesFecha.castDateUtilToSql(getCmbFechaCompra().getDate());
+    }
+
+    @Override
+    public Date obtenerDateFechaEmision() {
+        return UtilidadesFecha.castDateUtilToSql(getCmbFechaCompra().getDate());
+    }
+
+    @Override
+    public TipoDocumentoEnum obtenerCmbTipoDocumento() {
+        return (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+    }
+
+    @Override
+    public String obtenerTxtMotivoAnulacion() {
+        return getTxtMotivoAnulacion().getText();
+    }
+
+    @Override
+    public String obtenerTxtPreimpresoProveedor() {
+        return getTxtPreimpresoProveedor().getText();
+    }
+
+    @Override
+    public ClienteInterfaceComprobante obtenerClienteInterfaceComprobante(NotaCredito notaCredito) {
+        try {
+            return new ClienteNotaCreditoImplComprobante(this, notaCredito);
+        } catch (RemoteException ex) {
+            Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public void procesarMonitor() {
+        NotaCreditoNoCallBack respuestaNoCallBack = new NotaCreditoNoCallBack(notaCredito, this);
+        respuestaNoCallBack.iniciar();
     }
 
     

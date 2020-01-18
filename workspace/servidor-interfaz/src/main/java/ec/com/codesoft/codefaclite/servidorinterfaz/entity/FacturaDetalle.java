@@ -215,7 +215,7 @@ public class FacturaDetalle implements Serializable {
         if(porcentajeIce.compareTo(BigDecimal.ZERO)>0)
         {
             this.icePorcentaje=porcentajeIce;
-            this.valorIce=UtilidadBigDecimal.calcularValorPorcentaje(porcentajeIce, getSubtotalSinDescuentos()).setScale(2, RoundingMode.HALF_UP);        
+            this.valorIce=UtilidadBigDecimal.calcularValorPorcentaje(porcentajeIce, getSubtotalSinDescuentos(),5).setScale(2, RoundingMode.HALF_UP);        
         }
     }
     
