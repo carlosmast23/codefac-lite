@@ -5,7 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.varios;
 
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  *
@@ -13,8 +15,30 @@ import java.math.BigDecimal;
  */
 public class UtilidadIva {
     
-    public static BigDecimal calcularValorConIvaIncluido(BigDecimal ivaPorcentaje,BigDecimal valor)
+    public static BigDecimal calcularValorConIvaIncluido(BigDecimal ivaPorcentaje,BigDecimal icePorcentaje,BigDecimal valor)
+    {       
+        if(icePorcentaje!=null)
+        {            
+            BigDecimal icePorcentajeTmp=icePorcentaje.
+                    divide(UtilidadBigDecimal.CIEN,5,BigDecimal.ROUND_HALF_UP).
+                    add(BigDecimal.ONE);
+            valor=valor.multiply(icePorcentajeTmp); //Finalmente calculo solo con 2 decimales porque no tiene sentido mas decimal porque se supoene que es el valor final de lafctura y al final solo pueden 2 facuras
+        }
+        return ivaPorcentaje.add(BigDecimal.ONE).multiply(valor).setScale(2,BigDecimal.ROUND_HALF_UP);
+    }
+    
+    public static BigDecimal calcularValorUnitario(BigDecimal ivaPorcentaje,BigDecimal icePorcentaje,BigDecimal total)
     {
-        return ivaPorcentaje.add(BigDecimal.ONE).multiply(valor);
+        BigDecimal ivaTmp=ivaPorcentaje.add(BigDecimal.ONE);
+        if(icePorcentaje!=null)
+        {            
+            BigDecimal iceTmp=icePorcentaje.divide(UtilidadBigDecimal.CIEN,5,BigDecimal.ROUND_HALF_UP).
+                    add(BigDecimal.ONE);
+            return total.divide(ivaTmp.multiply(iceTmp),5,BigDecimal.ROUND_HALF_UP);
+        }
+        else
+        {
+            return total.divide(ivaTmp,5,BigDecimal.ROUND_HALF_UP);
+        }
     }
 }

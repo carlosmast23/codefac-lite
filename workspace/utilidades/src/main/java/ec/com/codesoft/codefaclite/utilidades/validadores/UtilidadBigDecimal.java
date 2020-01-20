@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.utilidades.validadores;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 
 /**
@@ -13,6 +14,13 @@ import java.math.RoundingMode;
  * @author Carlos
  */
 public class UtilidadBigDecimal {
+    
+    private static final BigDecimal[] VALORES_DEFECTO = {
+        new BigDecimal("100"),
+        new BigDecimal("1000"),        
+    };
+    
+    public static final BigDecimal CIEN =VALORES_DEFECTO[0];
     
     /**
      * Me permite calcular el porcetaje desde un valor entero
@@ -22,8 +30,8 @@ public class UtilidadBigDecimal {
      */
     public static BigDecimal calcularValorPorcentaje(BigDecimal porcentaje,BigDecimal valor,Integer decimales)
     {        
-        BigDecimal decimalPorcentaje=porcentaje.divide(new  BigDecimal("100"),decimales,RoundingMode.HALF_UP);
-        return valor.multiply(decimalPorcentaje);
+        BigDecimal decimalPorcentaje=porcentaje.divide(UtilidadBigDecimal.CIEN,decimales,RoundingMode.HALF_UP);
+        return valor.multiply(decimalPorcentaje);        
         
     }
     

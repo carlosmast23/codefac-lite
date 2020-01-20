@@ -47,7 +47,7 @@ public class FacturaBusquedaNotaCredito implements InterfaceModelFind<Factura> ,
         //f.getEstadoNotaCredito()
         
         String queryString = "SELECT u FROM Factura u WHERE u.empresa=?5 and ( u.estado<>?1 and u.estadoNotaCredito<>?2 and u.estado<>?3 and u.estado<>?6 ) AND ";
-        queryString+=" ( LOWER(u.cliente.razonSocial) like ?4 OR CONCAT(u.secuencial,'') like ?4 ) order by CAST(u.secuencial AS BIGINT) asc";
+        queryString+=" ( LOWER(u.cliente.razonSocial) like ?4 OR CONCAT(u.secuencial,'') like ?4 ) order by CAST(u.secuencial AS BIGINT) desc";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(2,Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.getEstado());

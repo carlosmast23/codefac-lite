@@ -188,7 +188,11 @@ public class FacturaModelControlador {
                 {
                     //getCmbIva().setSelectedItem(EnumSiNo.SI);
                     interfaz.setComboIva(EnumSiNo.SI);
-                    BigDecimal valorConIva=UtilidadIva.calcularValorConIvaIncluido(session.obtenerIvaActualDecimal(),valorUnitario);
+                    BigDecimal porcentajeIce=(catologoProducto.getIce()!=null)?catologoProducto.getIce().getPorcentaje():null;
+                    BigDecimal valorConIva=UtilidadIva.calcularValorConIvaIncluido(
+                            session.obtenerIvaActualDecimal(),
+                            porcentajeIce,
+                            valorUnitario);
                     //getTxtValorUnitario().setText(valorConIva.toString());
                     interfaz.setTxtValorUnitario(valorConIva.toString());
                 }
@@ -369,11 +373,17 @@ public class FacturaModelControlador {
         //Calcula los valores dependiendo del iva para tener el valor unitario
         BigDecimal valorTotalUnitario = new BigDecimal(interfaz.obtenerTxtValorUnitario());
         EnumSiNo incluidoIvaSiNo=interfaz.obtenerComboIva();
+        //session.
         BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
         if(incluidoIvaSiNo.equals(EnumSiNo.SI))
         {
-            BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);
-            valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,6,BigDecimal.ROUND_HALF_UP); //Redondeando con 4 decimales ya no genera problema con el centavo aveces
+            //BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);
+            //valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,6,BigDecimal.ROUND_HALF_UP); //Redondeando con 4 decimales ya no genera problema con el centavo aveces
+            BigDecimal porcentajeIce=(catalogoProducto.getIce()!=null)?catalogoProducto.getIce().getPorcentaje():null;
+            valorTotalUnitario=UtilidadIva.calcularValorUnitario(
+                    session.obtenerIvaActualDecimal(),
+                    porcentajeIce,
+                    valorTotalUnitario);
         }
         facturaDetalle.setPrecioUnitario(valorTotalUnitario);
         /**
