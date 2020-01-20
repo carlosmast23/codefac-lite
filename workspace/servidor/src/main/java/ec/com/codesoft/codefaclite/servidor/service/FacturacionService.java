@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
@@ -38,6 +39,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -625,5 +627,53 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         factura.setVendedor(empleado);
         factura=grabar(factura);
         return factura;
+    }
+    
+    public ReferenciaDetalleFacturaRespuesta obtenerReferenciaDetalleFactura(TipoDocumentoEnum tipoDocumentoEnum,Long referenciaId) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        ReferenciaDetalleFacturaRespuesta respuesta=null;
+        try {
+                CatalogoProducto catalogoProducto=null;
+                if (tipoDocumentoEnum != null) {
+                    switch (tipoDocumentoEnum) {
+                        case ACADEMICO:
+                            RubroEstudiante rubroEstudiante;
+                            rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(referenciaId);
+
+                            catalogoProducto = rubroEstudiante.getRubroNivel().getCatalogoProducto();
+                            respuesta=new ReferenciaDetalleFacturaRespuesta(
+                                    catalogoProducto,
+                                    rubroEstudiante.getId(), 
+                                    tipoDocumentoEnum, 
+                                    rubroEstudiante);
+
+                            break;
+
+                        case LIBRE:
+                        case INVENTARIO:
+                            Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(referenciaId);
+                            catalogoProducto = producto.getCatalogoProducto();
+                            respuesta=new ReferenciaDetalleFacturaRespuesta(
+                                    catalogoProducto,
+                                    producto.getIdProducto(), 
+                                    tipoDocumentoEnum, 
+                                    producto);
+                            break;
+
+                        case PRESUPUESTOS:
+                            Presupuesto presupuesto = ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(referenciaId);
+                            catalogoProducto = presupuesto.getCatalogoProducto();
+                            respuesta=new ReferenciaDetalleFacturaRespuesta(
+                                    catalogoProducto,
+                                    presupuesto.getId(), 
+                                    tipoDocumentoEnum, 
+                                    presupuesto);
+                            break;
+                    }
+                }
+            } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        return respuesta;
     }
 }

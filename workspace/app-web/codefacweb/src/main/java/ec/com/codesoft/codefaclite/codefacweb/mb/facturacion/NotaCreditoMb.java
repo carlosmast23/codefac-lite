@@ -366,7 +366,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
     public void seleccionarDatoAdicional(SelectEvent event) {
         ComprobanteAdicional comprobanteAdicional = (ComprobanteAdicional) event.getObject();
         System.out.println("Obteniendo comprobanteAdicional: "+comprobanteAdicional);
-        notaCredito.addDatoAdicional(new FacturaAdicional(comprobanteAdicional));
+        notaCredito.addDatoAdicional(new NotaCreditoAdicional(comprobanteAdicional));
         
         //factura.addDatoAdicional(ESTADO_EDITAR, ESTADO_EDITAR);
         

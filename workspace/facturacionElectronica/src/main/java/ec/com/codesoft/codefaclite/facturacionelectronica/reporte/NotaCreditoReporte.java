@@ -48,11 +48,12 @@ public class NotaCreditoReporte extends ComprobanteElectronicoReporte{
          * Todo: Unir este calculo con el de facturas porque es el mismo 
          */
         List<TotalImpuesto> impuestos=comprobante.getInfoNotaCredito().getTotalImpuestos();
-        comprobante.getDetalles();
-        BigDecimal subTotalCero=BigDecimal.ZERO;
+        //comprobante.getDetalles();
+        /*BigDecimal subTotalCero=BigDecimal.ZERO;
         BigDecimal subTotalImpuesto=BigDecimal.ZERO;
         BigDecimal iva=BigDecimal.ZERO;
-        BigDecimal descuentos=BigDecimal.ZERO;
+        //BigDecimal descuentos=BigDecimal.ZERO;
+        BigDecimal ice=BigDecimal.ZERO;
         
         for (TotalImpuesto impuesto : impuestos) {
             if(impuesto.getValor().compareTo(BigDecimal.ZERO)==0)
@@ -67,15 +68,18 @@ public class NotaCreditoReporte extends ComprobanteElectronicoReporte{
                 subTotalImpuesto=subTotalImpuesto.add(impuesto.getBaseImponible());
                 iva=iva.add(impuesto.getValor());
             }
-        }
+        }*/
+        ImpuestosTotalesResponse respuesta= calcularImpuestos(impuestos);
         
         Map<String,Object> map=new HashMap<String,Object>();
-        map.put("subtotal_cero",subTotalCero.toString());
-        map.put("subtotal",subTotalImpuesto.toString());
+        map.put("subtotal_cero",respuesta.subTotalCero.toString());
+        map.put("subtotal",respuesta.subTotalImpuesto.toString());
         map.put("descuento",comprobante.obtenerTotalDescuentos().toString());
         //map.put("iva",comprobante.getInfoNotaCredito().getTotalSinImpuestos().subtract(comprobante.getInfoNotaCredito().getValorModificacion()).toString());
-        map.put("iva",comprobante.obtenerTotalImpuestos().toString());
+        //map.put("iva",comprobante.obtenerTotalImpuestos().toString());
+        map.put("iva",respuesta.iva.toString());
         map.put("total",comprobante.getInfoNotaCredito().getValorModificacion()+"");
+        map.put("ice",respuesta.ice.toString());
         /**
          * Falta setear el iva que se esta usando en el sistema
          */

@@ -40,7 +40,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "FACTURA")
-public class Factura extends ComprobanteEntity<FacturaAdicional> {
+public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional> {
 
     private static final long serialVersionUID = -1238278914412853684L;
     
@@ -58,42 +58,13 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> {
     //@Column(name = "TIPO_IDENTIFICACION_ID")
     //private Long tipoClienteId;
    
-    /**
-     * Valor del descuento de los productos que cobran iva
-     */
-    @Column(name = "DESCUENTO_IVA")
-    private BigDecimal descuentoImpuestos;
-    /**
-     * Valor del descuento de los productos que no cobran iva
-     */    
-    @Column(name = "DESCUENTO_IVA_CERO")
-    private BigDecimal descuentoSinImpuestos;
     
-    
-    @Column(name = "SUBTOTAL_IVA")
-    private BigDecimal subtotalImpuestos;
-    
-    @Column(name = "SUBTOTAL_IVA_CERO")
-    private BigDecimal subtotalSinImpuestos;
-    
-    /**
-     * Valor del iva cobrado
-     */
-    @Column(name = "IVA")
-    private BigDecimal iva;
-    
-    /**
-     * Valor del iva cobrado
-     */
-    @Column(name = "VALOR_ICE")
-    private BigDecimal ice;
 
     //@Column(name = "IVA_SRI_ID")
     @JoinColumn(name = "IVA_SRI_ID")
     private ImpuestoDetalle ivaSriId;
     
-    @Column(name = "TOTAL")
-    private BigDecimal total;
+
   
     @Column(name = "ESTADO_NOTA_CREDITO")
     private String estadoNotaCredito;
@@ -107,9 +78,6 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> {
     @Column(name = "FECHA_VENCIMIENTO_FACTURA")
     protected Date fechaVencimiento;
     
-    @JoinColumn(name = "CLIENTE_ID")
-    @ManyToOne    
-    private Persona cliente;
     
     @JoinColumn(name = "REFERIDO_ID")
     @ManyToOne    
@@ -157,16 +125,9 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> {
         return ivaSriId;
     }
 
-    public BigDecimal getTotal() {
-        return total;
-    }
 
 
-    public Persona getCliente() {
-        return cliente;
-    }
-    
-    
+
 
     public void setId(Long id) {
         this.id = id;
@@ -178,14 +139,7 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> {
         this.ivaSriId = ivaSriId;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
 
-
-    public void setCliente(Persona cliente) {
-        this.cliente = cliente;
-    }
 
     public List<FacturaDetalle> getDetalles() {
         return detalles;
@@ -195,45 +149,14 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> {
         this.detalles = detalles;
     }
 
-    public BigDecimal getDescuentoImpuestos() {
-        return descuentoImpuestos;
-    }
 
-    public void setDescuentoImpuestos(BigDecimal descuentoImpuestos) {
-        this.descuentoImpuestos = descuentoImpuestos;
-    }
-
-    public BigDecimal getDescuentoSinImpuestos() {
-        return descuentoSinImpuestos;
-    }
-
-    public void setDescuentoSinImpuestos(BigDecimal descuentoSinImpuestos) {
-        this.descuentoSinImpuestos = descuentoSinImpuestos;
-    }
-
-    public BigDecimal getSubtotalImpuestos() {
-        return subtotalImpuestos;
-    }
-
-    public void setSubtotalImpuestos(BigDecimal subtotalImpuestos) {
-        this.subtotalImpuestos = subtotalImpuestos;
-    }
-
-    public BigDecimal getSubtotalSinImpuestos() {
-        return subtotalSinImpuestos;
-    }
-
-    public void setSubtotalSinImpuestos(BigDecimal subtotalSinImpuestos) {
-        this.subtotalSinImpuestos = subtotalSinImpuestos;
-    }
-
-    public BigDecimal getIva() {
+    /*public BigDecimal getIva() {
         return iva;
     }
 
     public void setIva(BigDecimal iva) {
         this.iva = iva;
-    }
+    }*/
 
     public List<FormaPago> getFormaPagos() {
         return formaPagos;
@@ -314,15 +237,6 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> {
     public void setSucursal(PersonaEstablecimiento sucursal) {
         this.sucursal = sucursal;
     }
-
-    public BigDecimal getIce() {
-        return ice;
-    }
-
-    public void setIce(BigDecimal ice) {
-        this.ice = ice;
-    }
-
     
     
     
@@ -463,96 +377,7 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> {
         return true;
     }
    
-    public void calcularTotalesDesdeDetalles()
-    {
-        //Solo calcular si la variables de detalles fue creada
-        if(detalles==null || detalles.size()==0)
-        {
-            this.total=BigDecimal.ZERO;
-            this.descuentoSinImpuestos=BigDecimal.ZERO;
-            this.descuentoImpuestos=BigDecimal.ZERO;
-            this.subtotalSinImpuestos=BigDecimal.ZERO;            
-            this.subtotalSinImpuestos=BigDecimal.ZERO;
-            this.iva=BigDecimal.ZERO;
-            return;
-        }
-        
-        BigDecimal total=BigDecimal.ZERO; //total de la factura
-        
-        BigDecimal subTotalSinImpuestos=BigDecimal.ZERO;//Sin el descuento
-        BigDecimal subTotalConImpuestos=BigDecimal.ZERO;//Sin los descuentos
-        
-        BigDecimal descuentoSinImpuestos=BigDecimal.ZERO; //
-        BigDecimal descuentoConImpuestos=BigDecimal.ZERO; //
-        
-        BigDecimal impuestoIva=BigDecimal.ZERO; //
-        
-        BigDecimal ivaDecimal=BigDecimal.ZERO; //Todo: Variable donde se almacena el iva de uno de los detalles (pero si tuviera varias ivas distintos de 0 , se generaria poroblemas)
-        BigDecimal ice=BigDecimal.ZERO;
-        
-        for (FacturaDetalle detalle : detalles) {
-            
-            //Sumar el valor del Ice
-            ice=ice.add(detalle.getValorIce());
-            //Sumar los subtotales
-            //TODO: Ver si estos calculos los puede hacer internamente en la clase FacturaDetalle
-            if(detalle.getIvaPorcentaje().equals(0))
-            {
-                subTotalSinImpuestos=subTotalSinImpuestos.add(detalle.getPrecioUnitario().multiply(detalle.getCantidad()));
-                descuentoSinImpuestos=descuentoSinImpuestos.add(detalle.getDescuento());
-            }
-            else
-            {                
-                subTotalConImpuestos=subTotalConImpuestos.add(detalle.getPrecioUnitario().multiply(detalle.getCantidad()));
-                descuentoConImpuestos=descuentoConImpuestos.add(detalle.getDescuento());
-                
-                ivaDecimal=new BigDecimal(detalle.getIvaPorcentaje().toString()).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
-                impuestoIva=subTotalConImpuestos.add(ice).subtract(descuentoConImpuestos).multiply(ivaDecimal);
-            }
-            
-           
-            
-        }
-        
-        this.ice=ice;
-        
-        //Calcula el total de los totales
-        total=subTotalSinImpuestos.subtract(descuentoSinImpuestos)
-                .add(subTotalConImpuestos.subtract(descuentoConImpuestos))
-                .add(impuestoIva)
-                .add(ice);
-        
-       
-        /**
-         * Recalcular los valores partiendo del total para redondear con 2 cifras y que los valores cuadren
-         */
-        //total=total.setScale(2,BigDecimal.ROUND_HALF_UP);
-        this.total=total.setScale(2,BigDecimal.ROUND_HALF_UP); //valor final con 2 decimales
-        
-        this.descuentoSinImpuestos=descuentoSinImpuestos.setScale(2,BigDecimal.ROUND_HALF_UP); //Este valor no se mueve porque debe ser fijo de 2 decimales segun el sri
-        this.subtotalSinImpuestos=subTotalSinImpuestos.setScale(2,BigDecimal.ROUND_HALF_UP);// Este valor se redondea y tampoco ya no se mueve porque no interfiere con el iva donde se descuadra //TODO: PERO REVISAR ESTA AFIRMACION
-        
-        //---------------- CALCULOS PARA LOS VALORES CON IMPUESTAS QUE ES LA PARTE DONDE GENERAN PROBLEMAS ------------------------///
-        BigDecimal ivaDecimalTmp=ivaDecimal.add(BigDecimal.ONE); //1.12 por ejemplo
-        
-        //Valor total solo de los valores que tienen impuestos
-        BigDecimal totalConImpuestos=this.total.subtract(this.subtotalSinImpuestos).add(this.descuentoSinImpuestos); //esto ya tiene 2 decimales no debo redondear
-        
-        //Estos valores seteo directo porque solo pueden tener 2 decimales en los calculos y no deberia cambiar porque generarian confusion
-        this.descuentoImpuestos = descuentoConImpuestos.setScale(2,BigDecimal.ROUND_HALF_UP);
-        
-        //Calculo el subtotal ya restado el descuento diviendo para 1.12 por ejemplo
-        //TODO: Revisar este calculo porque esta medio confuso porque trata ya del valor total volver a calcular el subtotal antes de impuestos menos iva e ice
-        BigDecimal subtotalMenosImpuestos=totalConImpuestos.divide(ivaDecimalTmp,2,BigDecimal.ROUND_HALF_UP).subtract(this.ice);
-        
-        //Al subtotal menos impuesto le sumo el descuento y ya tengo el subtotal original
-        this.subtotalImpuestos=subtotalMenosImpuestos.add(this.descuentoImpuestos);
-        
-        //Calcular el iva de la resta del del total -subtotal
-        this.iva=totalConImpuestos.subtract(subtotalMenosImpuestos).subtract(ice);
- 
     
-    }
 
     public Empleado getVendedor() {
         return vendedor;
@@ -615,6 +440,11 @@ public class Factura extends ComprobanteEntity<FacturaAdicional> {
         }
         datoAdicional.setFactura(this);
         this.datosAdicionales.add(datoAdicional);
+    }
+
+    @Override
+    public List<DetalleFacturaNotaCeditoAbstract> getDetallesComprobante() {
+        return (List<DetalleFacturaNotaCeditoAbstract>)(List<?>)detalles;
     }
     
     

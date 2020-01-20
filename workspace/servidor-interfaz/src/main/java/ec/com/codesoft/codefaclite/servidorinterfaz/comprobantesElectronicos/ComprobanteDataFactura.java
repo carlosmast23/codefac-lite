@@ -31,8 +31,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -52,7 +54,7 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class ComprobanteDataFactura implements ComprobanteDataInterface, Serializable {
+public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbstract{
 
     private Factura factura;
     private Map<String, String> mapInfoAdicional;
@@ -90,6 +92,43 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
     public String getSecuencial() {
         return UtilidadesTextos.llenarCarateresIzquierda(factura.getSecuencial() + "", 9, "0");
     }
+    
+    public class InfoComprobante implements InfoComprobanteInterface{
+        
+        private InformacionComprobanteAbstract info;
+
+        public InfoComprobante(InformacionComprobanteAbstract info) {
+            this.info = info;
+        }
+
+        @Override
+        public void setFechaEmision(String fechaEmision) {
+            this.info.setFechaEmision(fechaEmision);
+        }
+
+        @Override
+        public void setDirEstablecimiento(String dirEstablecimiento) {
+            this.info.setDirEstablecimiento(dirEstablecimiento);
+        }
+
+        @Override
+        public void setIdentificacion(String identificacion) {
+            this.info.setIdentificacion(identificacion);
+        }
+
+        @Override
+        public void setObligadoContabilidad(String obligadoContabilidad) {
+            this.info.setObligadoContabilidad(obligadoContabilidad);
+        }
+
+        @Override
+        public void setTipoIdentificacion(String tipoIdentificacion) {
+            this.info.setTipoIdentificacion(tipoIdentificacion);
+        }
+    
+            
+    }
+            
 
     @Override
     public ComprobanteElectronico getComprobante() {
@@ -107,11 +146,11 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
         }
         
         
-        informacionComprobante.setFechaEmision(ComprobantesElectronicosUtil.dateToString(new java.sql.Date(factura.getFechaEmision().getTime())));
+        llenarInformacionComprobante(new InfoComprobante(informacionComprobante) , factura);
         
-        informacionComprobante.setDirEstablecimiento(UtilidadValidador.normalizarTexto(factura.getDireccionEstablecimiento()));
+        //informacionComprobante.setDirEstablecimiento(UtilidadValidador.normalizarTexto(factura.getDireccionEstablecimiento()));
         
-        SriIdentificacionServiceIf servicioSri = ServiceFactory.getFactory().getSriIdentificacionServiceIf();
+        /*SriIdentificacionServiceIf servicioSri = ServiceFactory.getFactory().getSriIdentificacionServiceIf();
         SriIdentificacion sriIdentificacion = null;
         try {
             sriIdentificacion = servicioSri.obtenerPorTransaccionEIdentificacion(factura.getCliente().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
@@ -123,7 +162,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
             informacionComprobante.setIdentificacion(factura.getCliente().getIdentificacion());
         } else {
             informacionComprobante.setIdentificacion(UtilidadesTextos.llenarCarateresDerecha(factura.getCliente().getIdentificacion(), 13, "0"));
-        }
+        }*/
         
         if(factura.getSucursal().getDireccion()!=null && !factura.getSucursal().getDireccion().equals(""))
         {
@@ -133,7 +172,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
         //Falta manejar este campo al momento de guardar
         informacionComprobante.setRazonSocial(UtilidadValidador.normalizarTexto(factura.getCliente().getRazonSocial()));
         //informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
-        informacionComprobante.setTipoIdentificacion(sriIdentificacion.getCodigo());
+        //informacionComprobante.setTipoIdentificacion(getSriIdentificacion(factura).getCodigo());
         
          informacionComprobante.setImporteTotal(factura.getTotal());
 
@@ -146,7 +185,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
         /**
          * Aqui hay que setear los valores de la base de datos
          */
-        informacionComprobante.setObligadoContabilidad(factura.getObligadoLlevarContabilidad()); //TODO: Revisar esta parte porque debe cambiar dependiendo el cliente
+        //informacionComprobante.setObligadoContabilidad(factura.getObligadoLlevarContabilidad()); //TODO: Revisar esta parte porque debe cambiar dependiendo el cliente
         
         /**
          * Grabar las formas de pago si la variable exise y es distinto de vacio
@@ -166,9 +205,9 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
         }
 
         /**
-         * Total con impuestos
+         * Total con impuestos la clave es el codigo del impuesto
          */
-        Map<ImpuestoDetalle, TotalImpuesto> mapTotalImpuestos = new HashMap<ImpuestoDetalle, TotalImpuesto>();
+        Map<Integer, TotalImpuesto> mapTotalImpuestos = new HashMap<Integer, TotalImpuesto>();
 
         /**
          * Informacion de los detalles
@@ -180,31 +219,10 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
             try {
                 DetalleFacturaComprobante detalle = new DetalleFacturaComprobante();
 
-                CatalogoProducto catalogoProducto = null;
+                ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(facturaDetalle.getTipoDocumentoEnum(),facturaDetalle.getReferenciaId());
+                detalle.setCodigoPrincipal(respuesta.referenciaId+"");
 
-                if (facturaDetalle.getTipoDocumento() != null) {
-                    switch (facturaDetalle.getTipoDocumentoEnum()) {
-                        case ACADEMICO:
-                            RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                            catalogoProducto = rubroEstudiante.getRubroNivel().getCatalogoProducto();
-                            detalle.setCodigoPrincipal(rubroEstudiante.getId() + "");
-                            break;
-
-                        case LIBRE:
-                        case INVENTARIO:
-                            Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                            catalogoProducto = producto.getCatalogoProducto();
-                            detalle.setCodigoPrincipal(producto.getCodigoPersonalizado());
-                            break;
-
-                        case PRESUPUESTOS:
-                            Presupuesto presupuesto = ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                            catalogoProducto = presupuesto.getCatalogoProducto();
-                            detalle.setCodigoPrincipal(presupuesto.getId() + "");
-                            break;
-                    }
-                }
-
+                
                 detalle.setCantidad(facturaDetalle.getCantidad());
                 /*
                 *   UTF-8 Validad caracteres no imprimibles Á y Í
@@ -220,63 +238,15 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
                 /**
                  * Agregado impuesto que se cobran a cada detalle individual
                  */
-                List<ImpuestoComprobante> listaComprobantes = new ArrayList<ImpuestoComprobante>();
+                //List<ImpuestoComprobante> listaComprobantes = new ArrayList<ImpuestoComprobante>();
 
-                ImpuestoComprobante impuesto = new ImpuestoComprobante();
-                impuesto.setCodigo(catalogoProducto.getIva().getImpuesto().getCodigoSri());
-                impuesto.setCodigoPorcentaje(catalogoProducto.getIva().getCodigo() + "");
-                impuesto.setTarifa(new BigDecimal(catalogoProducto.getIva().getTarifa() + ""));
-                impuesto.setBaseImponible(facturaDetalle.totalSinImpuestosConRise());
-                impuesto.setValor(facturaDetalle.getIva());
-
-                /**
-                 * Verificar valores para el total de impuesto
-                 */
-                sumarizarTotalesImpuestos(mapTotalImpuestos, catalogoProducto.getIva(), impuesto);
-                listaComprobantes.add(impuesto);
-
-                /**
-                 * Agregando el valor del ICE
-                 */
-                if (catalogoProducto.getIce() != null) {
-                    ImpuestoComprobante impuestoIce = new ImpuestoComprobante();
-                    impuestoIce.setCodigo(catalogoProducto.getIce().getImpuesto().getCodigoSri());
-                    impuestoIce.setCodigoPorcentaje(catalogoProducto.getIce().getCodigo() + "");
-                    impuestoIce.setTarifa(new BigDecimal(catalogoProducto.getIce().getPorcentaje() + ""));
-                    impuestoIce.setBaseImponible(facturaDetalle.getTotal());
-                    impuestoIce.setValor(facturaDetalle.getValorIce());
-                    sumarizarTotalesImpuestos(mapTotalImpuestos, catalogoProducto.getIce(), impuestoIce);
-                    listaComprobantes.add(impuestoIce); 
-                    
-                }
-
-                /*if(mapTotalImpuestos.get(catalogoProducto.getIva())==null)
-                {
-                    TotalImpuesto totalImpuesto=new TotalImpuesto();
-                    totalImpuesto.setBaseImponible(impuesto.getBaseImponible());
-                    totalImpuesto.setCodigo(impuesto.getCodigo());
-                    totalImpuesto.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
-                    totalImpuesto.setValor(impuesto.getValor());
-                    //totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
-                    mapTotalImpuestos.put(catalogoProducto.getIva(), totalImpuesto);
-                }
-                else
-                {
-                    TotalImpuesto totalImpuesto=mapTotalImpuestos.get(catalogoProducto.getIva());
-                    totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().add(impuesto.getBaseImponible()));
-                    totalImpuesto.setValor(totalImpuesto.getValor().add(impuesto.getValor()));
-                    //totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
-                    mapTotalImpuestos.put(catalogoProducto.getIva(), totalImpuesto);
-                    
-                }*/
-                //-------------> FIN <----------------
-                
-                
-
-                detalle.setImpuestos(listaComprobantes);
+                //calcularImpuestos(mapTotalImpuestos, facturaDetalle);
+                detalle.setImpuestos(calcularImpuestos(mapTotalImpuestos, facturaDetalle));
 
                 detallesComprobante.add(detalle);
             } catch (RemoteException ex) {
+                Logger.getLogger(ComprobanteDataFactura.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
                 Logger.getLogger(ComprobanteDataFactura.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -288,13 +258,8 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
         /**
          * Crear los impuestos totales
          */
-        List<TotalImpuesto> totalImpuestos = new ArrayList<TotalImpuesto>();
-        for (Map.Entry<ImpuestoDetalle, TotalImpuesto> entry : mapTotalImpuestos.entrySet()) {
-            ImpuestoDetalle key = entry.getKey();
-            TotalImpuesto value = entry.getValue();
-            totalImpuestos.add(value);
-        }
-        comprobante.getInformacionComprobante().setTotalImpuestos(totalImpuestos);
+       
+        comprobante.getInformacionComprobante().setTotalImpuestos(crearImpuestosTotales(mapTotalImpuestos));
         //comprobante.getInformacionFactura().setTotalImpuestos(totalImpuestos);
 
         /**
@@ -305,28 +270,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface, Seriali
         return comprobante;
     }
 
-    private void sumarizarTotalesImpuestos(Map<ImpuestoDetalle, TotalImpuesto> mapTotalImpuestos, ImpuestoDetalle impuestoDetalle, ImpuestoComprobante impuesto) {
-        /**
-         * Verificar valores para el total de impuesto
-         */
-        if (mapTotalImpuestos.get(impuestoDetalle) == null) {
-            TotalImpuesto totalImpuesto = new TotalImpuesto();
-            totalImpuesto.setBaseImponible(impuesto.getBaseImponible());
-            totalImpuesto.setCodigo(impuesto.getCodigo());
-            totalImpuesto.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
-            totalImpuesto.setValor(impuesto.getValor());
-            //totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
-            mapTotalImpuestos.put(impuestoDetalle, totalImpuesto);
-        } else {
-            TotalImpuesto totalImpuesto = mapTotalImpuestos.get(impuestoDetalle);
-            totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().add(impuesto.getBaseImponible()));
-            totalImpuesto.setValor(totalImpuesto.getValor().add(impuesto.getValor()));
-            //totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
-            mapTotalImpuestos.put(impuestoDetalle, totalImpuesto);
-
-        }
-    }
-
+    
     @Override
     public Map<String, String> getMapAdicional() {
         //Validar el tipo de texto para quitar carcteres especiales

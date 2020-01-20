@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.InformacionComprobanteAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.DetalleNotaCreditoComprobante;
@@ -24,6 +25,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
@@ -41,7 +44,7 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Serializable {
+public class ComprobanteDataNotaCredito extends ComprobanteDataFacturaNotaCreditoAbstract {
     private NotaCredito notaCredito;
     private Map<String,String> mapInfoAdicional;
     private List<String> correosAdicionales;
@@ -92,21 +95,58 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         }
         return correos;
     }
+    
+    public class InfoComprobante implements InfoComprobanteInterface{
+        
+        private InformacionNotaCredito info;
+
+        public InfoComprobante(InformacionNotaCredito info) {
+            this.info = info;
+        }
+
+        @Override
+        public void setFechaEmision(String fechaEmision) {
+            this.info.setFechaEmision(fechaEmision);
+        }
+
+        @Override
+        public void setDirEstablecimiento(String dirEstablecimiento) {
+            this.info.setDirEstablecimiento(dirEstablecimiento);
+        }
+
+        @Override
+        public void setIdentificacion(String identificacion) {
+            this.info.setIdentificacionComprador(identificacion);
+        }
+
+        @Override
+        public void setObligadoContabilidad(String obligadoContabilidad) {
+            this.info.setObligadoContabilidad(obligadoContabilidad);
+        }
+
+        @Override
+        public void setTipoIdentificacion(String tipoIdentificacion) {
+            this.info.setTipoIdentificacionComprador(tipoIdentificacion);
+        }
+    
+            
+    }
 
     @Override
     public NotaCreditoComprobante getComprobante() {
         NotaCreditoComprobante notaCreditoComprobante=new NotaCreditoComprobante();
         InformacionNotaCredito info=new InformacionNotaCredito();
         info.setCodDocModificado(ComprobanteEnum.FACTURA.getCodigo());
+        llenarInformacionComprobante(new InfoComprobante(info), notaCredito);
         
         //Revisar este dato porque solo se debe poner cuando sea contribuyente especial
         //info.setContribuyenteEspecial(claveAcceso);
         
-        info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(notaCredito.getDireccionEstablecimiento()));
-        info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(new java.sql.Date(notaCredito.getFechaEmision().getTime())));
+        //info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(notaCredito.getDireccionEstablecimiento()));
+        //info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(new java.sql.Date(notaCredito.getFechaEmision().getTime())));
         info.setFechaEmisionDocSustento(ComprobantesElectronicosUtil.dateToString(notaCredito.getFechaEmisionDocSustento()));
         
-        SriIdentificacionServiceIf servicioSri=ServiceFactory.getFactory().getSriIdentificacionServiceIf();
+        /*SriIdentificacionServiceIf servicioSri=ServiceFactory.getFactory().getSriIdentificacionServiceIf();
         SriIdentificacion sriIdentificacion=null;
         try {
             sriIdentificacion=servicioSri.obtenerPorTransaccionEIdentificacion(notaCredito.getCliente().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
@@ -121,7 +161,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         else
         {
             info.setIdentificacionComprador(UtilidadesTextos.llenarCarateresDerecha(notaCredito.getCliente().getIdentificacion(), 13, "0"));
-        }
+        }*/
         /**
          * Verificar que valor no mas acepta
          */
@@ -129,7 +169,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         
         info.setMotivo(notaCredito.getRazonModificado());
         info.setNumDocModificado(notaCredito.getNumDocModificado());
-        info.setObligadoContabilidad(notaCredito.getObligadoLlevarContabilidad());
+        //info.setObligadoContabilidad(notaCredito.getObligadoLlevarContabilidad());
         info.setRazonSocialComprador(UtilidadValidador.normalizarTexto(notaCredito.getCliente().getRazonSocial()));
         
         /**
@@ -137,13 +177,13 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
          */
         //info.setRise(claveAcceso);
         
-        info.setTipoIdentificacionComprador(UtilidadValidador.normalizarTexto(sriIdentificacion.getCodigo()));
+        //info.setTipoIdentificacionComprador(UtilidadValidador.normalizarTexto(getSriIdentificacion(notaCredito).getCodigo()));
         //info.setTotalImpuestos(totalImpuestos);
         info.setTotalSinImpuestos(notaCredito.getSubtotalDoce().add(notaCredito.getSubtotalCero()).subtract(notaCredito.getDescuentoImpuestos()).subtract(notaCredito.getDescuentoSinImpuestos()));
         info.setValorModificacion(notaCredito.getTotal());
         
         
-        Map<ImpuestoDetalle,TotalImpuesto> mapTotalImpuestos=new HashMap<ImpuestoDetalle,TotalImpuesto>();
+        Map<Integer,TotalImpuesto> mapTotalImpuestos=new HashMap<Integer,TotalImpuesto>();
         
                 /**
          * Informacion de los detalles
@@ -156,29 +196,8 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
                 
                 CatalogoProducto catalogoProducto=null;
                 DetalleNotaCreditoComprobante detalle=new DetalleNotaCreditoComprobante();                
-               
-                switch(detalleNotaCredito.getTipoDocumentoEnum())
-                {
-                    case ACADEMICO:
-                        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalleNotaCredito.getReferenciaId());
-                        catalogoProducto = rubroEstudiante.getRubroNivel().getCatalogoProducto();
-                        detalle.setCodigoInterno(rubroEstudiante.getId() + "");
-                        break;
-                        
-                    case INVENTARIO:
-                    case LIBRE:
-                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalleNotaCredito.getReferenciaId());
-                        catalogoProducto = producto.getCatalogoProducto();
-                        detalle.setCodigoInterno(producto.getCodigoPersonalizado());
-                        break;
-                        
-                    case PRESUPUESTOS:
-                        Presupuesto presupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(detalleNotaCredito.getReferenciaId());
-                        catalogoProducto = presupuesto.getCatalogoProducto();
-                        detalle.setCodigoInterno(presupuesto.getId()+"");
-                        break;
-                
-                }
+                ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(detalleNotaCredito.getTipoDocumentoEnum(),detalleNotaCredito.getReferenciaId());
+                detalle.setCodigoInterno(respuesta.referenciaId+"");
                 
                 detalle.setCantidad(detalleNotaCredito.getCantidad());
                 detalle.setDescripcion(UtilidadValidador.normalizarTexto(detalleNotaCredito.getDescripcion()));
@@ -193,43 +212,16 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
                 /**
                  * Agregado impuesto que se cobran a cada detalle individual
                  */
-                List<ImpuestoComprobante> listaComprobantes=new ArrayList<ImpuestoComprobante>();
-                
-                ImpuestoComprobante impuesto=new ImpuestoComprobante();
-                impuesto.setCodigo(catalogoProducto.getIva().getImpuesto().getCodigoSri());
-                impuesto.setCodigoPorcentaje(catalogoProducto.getIva().getCodigo()+"");
-                impuesto.setTarifa(new BigDecimal(catalogoProducto.getIva().getTarifa()+""));
-                impuesto.setBaseImponible(detalleNotaCredito.getTotal());
-                impuesto.setValor(detalleNotaCredito.getIva());
-                
-                /**
-                 * Verificar valores para el total de impuesto
-                 */
-                if(mapTotalImpuestos.get(catalogoProducto.getIva())==null)
-                {
-                    TotalImpuesto totalImpuesto=new TotalImpuesto();
-                    totalImpuesto.setBaseImponible(impuesto.getBaseImponible());
-                    totalImpuesto.setCodigo(impuesto.getCodigo());
-                    totalImpuesto.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
-                    totalImpuesto.setValor(impuesto.getValor());
-                    mapTotalImpuestos.put(catalogoProducto.getIva(), totalImpuesto);
-                }
-                else
-                {
-                    TotalImpuesto totalImpuesto=mapTotalImpuestos.get(catalogoProducto.getIva());
-                    totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().add(impuesto.getBaseImponible()));
-                    totalImpuesto.setValor(totalImpuesto.getValor().add(impuesto.getValor()));
-                    mapTotalImpuestos.put(catalogoProducto.getIva(), totalImpuesto);
-                    
-                }
                 
                 //-------------> FIN <----------------
-                listaComprobantes.add(impuesto);
+                //listaComprobantes.add(impuesto);
                 
-                detalle.setImpuestos(listaComprobantes);
+                detalle.setImpuestos(calcularImpuestos(mapTotalImpuestos, detalleNotaCredito));
                 
                 detallesComprobante.add(detalle);
             } catch (RemoteException ex) {
+                Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
                 Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -240,13 +232,8 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
                 /**
          * Crear los impuestos totales
          */
-        List<TotalImpuesto> totalImpuestos = new ArrayList<TotalImpuesto>();
-        for (Map.Entry<ImpuestoDetalle, TotalImpuesto> entry : mapTotalImpuestos.entrySet()) {
-            ImpuestoDetalle key = entry.getKey();
-            TotalImpuesto value = entry.getValue();
-            totalImpuestos.add(value);
-        }
-        notaCreditoComprobante.getInfoNotaCredito().setTotalImpuestos(totalImpuestos);
+        
+        notaCreditoComprobante.getInfoNotaCredito().setTotalImpuestos(crearImpuestosTotales(mapTotalImpuestos));
         
         //Todo: Ver si se elimina el correo porque esta opcion no se esta usando para generar el comprobante
         notaCreditoComprobante.setCorreos(getCorreos());

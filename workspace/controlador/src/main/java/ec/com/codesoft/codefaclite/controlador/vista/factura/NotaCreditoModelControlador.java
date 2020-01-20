@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
@@ -21,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -75,6 +77,7 @@ public class NotaCreditoModelControlador {
         notaCredito.setCliente(notaCredito.getFactura().getCliente());
         notaCredito.setDescuentoImpuestos(notaCredito.getFactura().getDescuentoImpuestos());
         notaCredito.setDescuentoSinImpuestos(notaCredito.getFactura().getDescuentoSinImpuestos());
+        notaCredito.setIce(notaCredito.getFactura().getIce());
         
         /**
          * CargarDetallesNotaCredito
@@ -92,10 +95,11 @@ public class NotaCreditoModelControlador {
             notaDetalle.setIva(facturaDetalle.getIva());
             notaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario());
             notaDetalle.setReferenciaId(facturaDetalle.getReferenciaId());
-            notaDetalle.setTipoReferencia(facturaDetalle.getTipoDocumento());
+            notaDetalle.setTipoDocumento(facturaDetalle.getTipoDocumento());
             notaDetalle.setTotal(facturaDetalle.getTotal());
             notaDetalle.setValorIce(facturaDetalle.getValorIce());
             notaDetalle.setIvaPorcentaje(facturaDetalle.getIvaPorcentaje());
+            notaDetalle.setIcePorcentaje(facturaDetalle.getIcePorcentaje());
 
             notaCredito.addDetalle(notaDetalle);
         }
@@ -155,6 +159,7 @@ public class NotaCreditoModelControlador {
             }
 
             notaCredito = servicio.grabar(notaCredito);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             notaCreditoGrabada = notaCredito;//graba una referencia con ambiento del metodo para los listener
 
             ComprobanteDataNotaCredito comprobanteData = new ComprobanteDataNotaCredito(notaCredito);

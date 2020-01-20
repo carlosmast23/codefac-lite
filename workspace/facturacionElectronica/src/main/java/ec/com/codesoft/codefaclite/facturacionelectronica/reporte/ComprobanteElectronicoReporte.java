@@ -8,8 +8,10 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.reporte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,6 +101,56 @@ public abstract class ComprobanteElectronicoReporte
         //    Logger.getLogger(ComprobanteElectronicoReporte.class.getName()).log(Level.SEVERE, null, ex);
         //}
         //return null;
+    }
+    
+    public ImpuestosTotalesResponse calcularImpuestos(List<TotalImpuesto> impuestos)
+    { 
+        BigDecimal subTotalCero=BigDecimal.ZERO;
+        BigDecimal subTotalImpuesto=BigDecimal.ZERO;
+        BigDecimal iva=BigDecimal.ZERO;
+        //BigDecimal descuentos=BigDecimal.ZERO;
+        BigDecimal ice=BigDecimal.ZERO;
+        
+        for (TotalImpuesto impuesto : impuestos) {
+            
+            if(impuesto.getCodigo().equals("2"))//TODO: Parametriza esta valor por el momento e codigo 1 significa IVA
+            {
+                if(impuesto.getValor().compareTo(BigDecimal.ZERO)==0)
+                {
+                    subTotalCero=subTotalCero.add(impuesto.getBaseImponible());
+
+                }
+                else
+                {
+                    subTotalImpuesto=subTotalImpuesto.add(impuesto.getBaseImponible());
+                    iva=iva.add(impuesto.getValor());
+                }
+            }
+            else if(impuesto.getCodigo().equals("3")) //TODO: Parametrizar este valor por el momento significa ICE
+            {
+                ice=ice.add(impuesto.getValor());
+            }
+        }
+        
+        ImpuestosTotalesResponse respuesta=new ImpuestosTotalesResponse();
+        respuesta.ice=ice;
+        respuesta.iva=iva;
+        respuesta.subTotalCero=subTotalCero;
+        respuesta.subTotalImpuesto=subTotalImpuesto;
+        return respuesta;
+    }
+    
+    public class ImpuestosTotalesResponse
+    {
+        public BigDecimal subTotalCero=BigDecimal.ZERO;
+        public BigDecimal subTotalImpuesto=BigDecimal.ZERO;
+        public BigDecimal iva=BigDecimal.ZERO;
+        public BigDecimal ice=BigDecimal.ZERO;
+
+        public ImpuestosTotalesResponse() {
+        }
+
+        
     }
     
 }

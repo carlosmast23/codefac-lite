@@ -121,15 +121,6 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
 
     public NotaCreditoModel() {
         
-        valoresIniciales();
-        initComponenesGraficos();
-        listenerComponentes();
-        addListenerButtons();
-        addListenerTablas();
-        addListenerCombos();
-        addPopUpListener();
-        
-        super.validacionDatosIngresados=false;
     }
     
     public PuntoEmision obtenerPuntoEmisionSeleccionado()
@@ -142,8 +133,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        
-        
+        controlador.grabar();
     }
     
     
@@ -452,7 +442,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             //Seleccionar la referencia dependiendo del tipo de documento
             //TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
             
-            facturaDetalle.setTipoReferencia(TipoDocumentoEnum.LIBRE.getCodigo());
+            facturaDetalle.setTipoDocumento(TipoDocumentoEnum.LIBRE.getCodigo());
             facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
             try {
                 catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
@@ -561,6 +551,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         getLblSubtotal12().setText("" + notaCredito.getSubtotalImpuestos());
         getLblSubtotal0().setText("" + notaCredito.getSubtotalSinImpuestos());
         getLblIva12().setText("" + notaCredito.getIva());
+        getLblValorIce().setText(""+notaCredito.getIce());
         getTxtValorTotal().setText("" + this.notaCredito.getTotal());
         //getLblSubTotalDescuentoConImpuesto().setText("" + notaCredito.getDescuentoImpuestos());
         //getLblSubTotalDescuentoSinImpuesto().setText("" + notaCredito.getDescuentoSinImpuestos());
@@ -793,6 +784,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
          * Cargar Los calculos de los totales
          */
         getTxtValorTotal().setText(notaCredito.getTotal() + "");
+        getLblValorIce().setText(notaCredito.getIce()+"");
         getLblIva12().setText(notaCredito.getIva() + "");
         getLblSubtotal0().setText(notaCredito.getSubtotalCero() + "");
         getLblSubtotal12().setText(notaCredito.getSubtotalDoce() + "");
@@ -865,6 +857,17 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             dispose();
             throw new ExcepcionCodefacLite("No cumple validacion inicial");
         }
+        
+        
+        valoresIniciales();
+        initComponenesGraficos();
+        listenerComponentes();
+        addListenerButtons();
+        addListenerTablas();
+        addListenerCombos();
+        addPopUpListener();
+        
+        super.validacionDatosIngresados=false;
     }
 
     @Override
@@ -1279,7 +1282,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
 
     @Override
     public Date obtenerDateFechaEmision() {
-        return UtilidadesFecha.castDateUtilToSql(getCmbFechaCompra().getDate());
+        return UtilidadesFecha.castDateUtilToSql(getjDateFechaEmision().getDate());
     }
 
     @Override

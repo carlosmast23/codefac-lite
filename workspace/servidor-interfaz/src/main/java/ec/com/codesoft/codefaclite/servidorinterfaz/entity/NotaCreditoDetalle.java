@@ -23,38 +23,18 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "NOTA_CREDITO_DETALLE")
-public class NotaCreditoDetalle implements Serializable {
+public class NotaCreditoDetalle extends DetalleFacturaNotaCeditoAbstract {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //@Column(name = "PRODUCTO_ID")
-    //private Long productoId;
-    @Column(name = "CANTIDAD")
-    private BigDecimal cantidad;
-    @Column(name = "PRECIO_UNITARIO")
-    private BigDecimal precioUnitario;
-    @Column(name = "DESCUENTO")
-    private BigDecimal descuento;
-    @Column(name = "VALOR_ICE")
-    private BigDecimal valorIce;
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
-    @Column(name = "TOTAL")
-    private BigDecimal total;
-    @Column(name = "IVA")
-    private BigDecimal iva;
     
     @JoinColumn(name="NOTA_CREDITO_ID")
     @ManyToOne(optional = false)
     private NotaCredito notaCredito;
     
-    @Column(name = "REFERENCIA_ID")
-    private Long referenciaId;
-    
-    @Column(name = "TIPO_REFERENCIA")
-    private String tipoReferencia;
-    
+
+        
     /**
      * Variable adicional para grabar el porcentaje del iva
      * @fecha_modificacion 11/10/2018
@@ -75,61 +55,7 @@ public class NotaCreditoDetalle implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(BigDecimal cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public BigDecimal getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(BigDecimal precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-
-    public BigDecimal getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(BigDecimal descuento) {
-        this.descuento = descuento;
-    }
-
-    public BigDecimal getValorIce() {
-        return valorIce;
-    }
-
-    public void setValorIce(BigDecimal valorIce) {
-        this.valorIce = valorIce;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-
-    public BigDecimal getIva() {
-        return iva;
-    }
-
-    public void setIva(BigDecimal iva) {
-        this.iva = iva;
-    }
+    
 
     public NotaCredito getNotaCredito() {
         return notaCredito;
@@ -139,21 +65,7 @@ public class NotaCreditoDetalle implements Serializable {
         this.notaCredito = notaCredito;
     }
 
-    public Long getReferenciaId() {
-        return referenciaId;
-    }
 
-    public void setReferenciaId(Long referenciaId) {
-        this.referenciaId = referenciaId;
-    }
-
-    public String getTipoReferencia() {
-        return tipoReferencia;
-    }
-
-    public void setTipoReferencia(String tipoReferencia) {
-        this.tipoReferencia = tipoReferencia;
-    }
 
     public Integer getIvaPorcentaje() {
         return ivaPorcentaje;
@@ -172,16 +84,16 @@ public class NotaCreditoDetalle implements Serializable {
     /**
      * Este valor se supone que debe ser el final tomando en cuenta descuentos , ice e iva
      */
-    public BigDecimal calcularTotalFinal()
-    {
-        return this.total.add(iva);
-    }
+    //public BigDecimal calcularTotalFinal()
+    //{
+    //    return this.total.add(iva);
+    //}
 
     //Metodos personalizados implementados
-    public TipoDocumentoEnum getTipoDocumentoEnum()
+    /*public TipoDocumentoEnum getTipoDocumentoEnum()
     {
         return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(getTipoReferencia());
-    }
+    }*/
     
     
 }

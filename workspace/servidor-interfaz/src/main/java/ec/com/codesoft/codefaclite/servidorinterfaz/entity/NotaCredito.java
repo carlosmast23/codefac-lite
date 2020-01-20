@@ -31,7 +31,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "NOTA_CREDITO")
-public class NotaCredito extends ComprobanteEntity implements Serializable {
+public class NotaCredito extends ComprobanteVentaNotaCreditoAbstract<NotaCreditoAdicional>{
     
     @Id
     @Column(name = "ID")
@@ -84,6 +84,9 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     private Long ivaSriId;
     @Column(name = "TOTAL")
     private BigDecimal total;
+    
+    @Column(name = "VALOR_ICE")
+    private BigDecimal ice;
     //@Column(name = "USUARIO_ID")
     //private Long usuarioId;
     //@Column(name = "ESTADO")
@@ -104,9 +107,9 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     private Factura factura;
 
 
-    @JoinColumn(name = "CLIENTE_ID")
+    /*@JoinColumn(name = "CLIENTE_ID")
     @ManyToOne    
-    private Persona cliente;
+    private Persona cliente;*/
     
     @Column(name = "TIPO_DOCUMENTO")
     private String tipoDocumento;
@@ -272,13 +275,13 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
         this.factura = factura;
     }
 
-    public Persona getCliente() {
+    /*public Persona getCliente() {
         return cliente;
     }
 
     public void setCliente(Persona cliente) {
         this.cliente = cliente;
-    }
+    }*/
 
     public List<NotaCreditoDetalle> getDetalles() {
         return detalles;
@@ -405,6 +408,15 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
         this.numDocModificado = numDocModificado;
     }
     
+    public BigDecimal getIce() {
+        return ice;
+    }
+
+    public void setIce(BigDecimal ice) {
+        this.ice = ice;
+    }
+
+    
     
 
     @Override
@@ -501,6 +513,9 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
         this.datosAdicionales.add(datoAdicional);
     
     }
+
+
+    
     
     
     public void calcularTotalesDesdeDetalles()
@@ -585,12 +600,12 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     }
 
     @Override
-    public List<ComprobanteAdicional> getDatosAdicionalesComprobante() {
-        return (List<ComprobanteAdicional>)(ArrayList<?>)getDatosAdicionales();
+    public List<NotaCreditoAdicional> getDatosAdicionalesComprobante() {
+        return (List<NotaCreditoAdicional>)(ArrayList<?>)getDatosAdicionales();
     }
 
     @Override
-    public void addDatoAdicionalAbstract(ComprobanteAdicional comprobanteAdicional) {
+    public void addDatoAdicionalAbstract(NotaCreditoAdicional comprobanteAdicional) {
          NotaCreditoAdicional datoAdicional=(NotaCreditoAdicional) comprobanteAdicional;
         if(this.datosAdicionales==null)
         {
@@ -598,6 +613,11 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
         }
         datoAdicional.setNotaCredito(this);
         this.datosAdicionales.add(datoAdicional);
+    }
+
+    @Override
+    public List<DetalleFacturaNotaCeditoAbstract> getDetallesComprobante() {
+        return (List<DetalleFacturaNotaCeditoAbstract>)(List<?>)detalles;
     }
 
     

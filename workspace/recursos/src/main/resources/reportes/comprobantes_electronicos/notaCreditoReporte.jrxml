@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.3310000000000108"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="151"/>
+	<property name="ireport.zoom" value="1.9487171000000163"/>
+	<property name="ireport.x" value="125"/>
+	<property name="ireport.y" value="883"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -73,6 +73,7 @@
 	<parameter name="pl_facebook" class="java.lang.String"/>
 	<parameter name="pl_adicional" class="java.lang.String"/>
 	<parameter name="pl_celular" class="java.lang.String"/>
+	<parameter name="ice" class="java.lang.String"/>
 	<field name="codigo" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="precio_unitario" class="java.lang.String"/>
@@ -596,7 +597,7 @@
 				<text><![CDATA[Descuento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="334" y="84" width="144" height="20" uuid="aa551d68-e966-4e06-baab-38a79ed77e21"/>
+				<reportElement x="334" y="104" width="144" height="20" uuid="aa551d68-e966-4e06-baab-38a79ed77e21"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -621,10 +622,10 @@
 					<font isBold="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Subtotal" +$P{iva_porcentaje}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Subtotal " +$P{iva_porcentaje}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="334" y="64" width="144" height="20" uuid="ce24b8b6-6c0d-4c94-b178-b0259fe4a0de"/>
+				<reportElement x="334" y="84" width="144" height="20" uuid="ce24b8b6-6c0d-4c94-b178-b0259fe4a0de"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -635,7 +636,7 @@
 					<font isBold="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA["IVA" +$P{iva_porcentaje}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["IVA " +$P{iva_porcentaje}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="478" y="4" width="78" height="20" uuid="729d639f-b306-48de-b9ee-b15daaeb3a0e"/>
@@ -677,7 +678,7 @@
 				<textFieldExpression><![CDATA[$P{descuento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="478" y="64" width="78" height="20" uuid="eab30fe7-35ac-44db-b399-0ef6901bbfa0"/>
+				<reportElement x="478" y="84" width="78" height="20" uuid="eab30fe7-35ac-44db-b399-0ef6901bbfa0"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -690,7 +691,7 @@
 				<textFieldExpression><![CDATA[$P{iva}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="478" y="84" width="78" height="20" uuid="ee338e0e-e028-4795-88d7-e613f19ad4d3"/>
+				<reportElement x="478" y="104" width="78" height="20" uuid="ee338e0e-e028-4795-88d7-e613f19ad4d3"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -701,6 +702,33 @@
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="477" y="64" width="78" height="20" uuid="636959a7-c4e2-4f2c-8557-6916dda97fd8"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="334" y="64" width="144" height="20" uuid="5c6a1caa-8f04-4ee1-ac3c-a737a62e78ec"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[ICE]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

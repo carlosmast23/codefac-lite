@@ -26,6 +26,10 @@ public class NotaCreditoAdicional extends ComprobanteAdicional implements Serial
     public NotaCreditoAdicional() {
     }
     
+    public NotaCreditoAdicional(ComprobanteAdicional comprobanteAdicional)
+    {
+        super(comprobanteAdicional.getCampo(),comprobanteAdicional.getValor(),comprobanteAdicional.getTipoEnum());
+    }
     
     public NotaCreditoAdicional(String correo, Tipo tipoCorreo, CampoDefectoEnum campoDefecto) {
         super(correo, tipoCorreo, campoDefecto);

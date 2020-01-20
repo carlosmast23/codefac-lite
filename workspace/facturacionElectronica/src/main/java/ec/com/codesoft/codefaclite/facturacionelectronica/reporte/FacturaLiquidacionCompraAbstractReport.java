@@ -47,7 +47,7 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
          * Calcular los valores de los subtotales 0 y con impuestos         * 
          */
         List<TotalImpuesto> impuestos=comprobante.getInformacionComprobante().getTotalImpuestos();
-        BigDecimal subTotalCero=BigDecimal.ZERO;
+        /*BigDecimal subTotalCero=BigDecimal.ZERO;
         BigDecimal subTotalImpuesto=BigDecimal.ZERO;
         BigDecimal iva=BigDecimal.ZERO;
         BigDecimal ice=BigDecimal.ZERO;
@@ -71,16 +71,17 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
             {
                 ice=ice.add(impuesto.getValor());
             }
-        }
+        }*/
+        ImpuestosTotalesResponse respuesta= calcularImpuestos(impuestos);
         
         Map<String,Object> map=new HashMap<String,Object>();
         
-        map.put("subtotal_cero",subTotalCero.toString());
-        map.put("subtotal",subTotalImpuesto.toString());
+        map.put("subtotal_cero",respuesta.subTotalCero.toString());
+        map.put("subtotal",respuesta.subTotalImpuesto.toString());
         map.put("descuento",comprobante.getInformacionComprobante().getTotalDescuento().toString());
         
-        map.put("ice",ice.toString());
-        map.put("iva",iva.toString());
+        map.put("ice",respuesta.ice.toString());
+        map.put("iva",respuesta.iva.toString());
         map.put("total",comprobante.getInformacionComprobante().getImporteTotal()+"");
         /**
          * Falta setear el iva que se esta usando en el sistema
