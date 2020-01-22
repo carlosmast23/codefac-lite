@@ -39,6 +39,11 @@ public class ComprobanteElectronicoException extends Exception {
         return tipoError;
     }
     
+    public String obtenerErrorFormato()
+    {
+        return"Etapa: " + getEtapa() + "\n" + getMessage();
+    }
+    
     
 
     

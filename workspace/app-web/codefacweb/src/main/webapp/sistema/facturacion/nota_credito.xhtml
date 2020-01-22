@@ -14,6 +14,10 @@
                 <f:event type="preRenderView" listener="#{notaCreditoMb.verificarPagina()}"/>
             </f:metadata>
 
+            <p:panel>
+                <p:outputLabel value="Motivo Anulación:"/>
+                <p:inputText placeholder="Ingrese el  Motivo" value="#{notaCreditoMb.notaCredito.razonModificado}"/>
+            </p:panel>
 
             <p:accordionPanel multiple="true">
                 <p:tab title="Datos Cabecera">
@@ -62,7 +66,7 @@
                             <h:outputLabel style="font-weight: bold">Dirección:  </h:outputLabel>
                             <h:outputLabel>#{notaCreditoMb.notaCredito.cliente.imprimirDireccionPorDefecto()}</h:outputLabel>
                         </p:panel>
-
+                        
                         <!--
                         <p:panel style="border: none">
                             <h:outputLabel style="font-weight: bold">Telefonos:  </h:outputLabel>

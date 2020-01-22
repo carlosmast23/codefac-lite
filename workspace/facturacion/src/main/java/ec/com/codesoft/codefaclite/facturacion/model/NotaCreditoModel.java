@@ -133,6 +133,11 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
+        Boolean pregunta = DialogoCodefac.dialogoPregunta("Alerta", "Esta seguro que desea grabar la Nota de Crédito", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        if (!pregunta) {
+            throw new ExcepcionCodefacLite("cancelar el metodo grabar ...");
+        }
+        
         controlador.grabar();
     }
     
@@ -831,7 +836,14 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                     case INVENTARIO:
                     case LIBRE:
                         Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
-                        fila.add((producto.getCodigoPersonalizado() != null) ? producto.getCodigoPersonalizado() : "");
+                        if(producto!=null)
+                        {
+                            fila.add((producto.getCodigoPersonalizado() != null) ? producto.getCodigoPersonalizado() : "");
+                        }
+                        else
+                        {
+                            fila.add("Sin Código");
+                        }
                         //fila.add(producto.getValorUnitario() + "");
                         break;
 
@@ -1015,7 +1027,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     }
 
     private void valoresIniciales() {
-        controlador=new NotaCreditoModelControlador(this,session);
+        controlador=new NotaCreditoModelControlador(this,session,DialogoCodefac.intefaceMensaje);
         getCmbTipoDocumento().removeAllItems();
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.LIBRE);
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.VENTA);
@@ -1311,9 +1323,11 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     }
 
     @Override
-    public void procesarMonitor() {
-        NotaCreditoNoCallBack respuestaNoCallBack = new NotaCreditoNoCallBack(notaCredito, this);
-        respuestaNoCallBack.iniciar();
+    public void procesarMonitor(NotaCredito notaCredito) {
+        if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+            NotaCreditoNoCallBack respuestaNoCallBack = new NotaCreditoNoCallBack(notaCredito, this);
+            respuestaNoCallBack.iniciar();
+        }
     }
 
     

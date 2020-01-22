@@ -11,6 +11,8 @@ import es.mityc.firmaJava.libreria.xades.DataToSign;
 import es.mityc.firmaJava.libreria.xades.FirmaXML;
 import es.mityc.firmaJava.libreria.xades.XAdESSchemas;
 import es.mityc.javasign.EnumFormatoFirma;
+import es.mityc.javasign.pkstore.IPKStoreManager;
+import es.mityc.javasign.pkstore.keystore.KSStore;
 import es.mityc.javasign.xml.refs.InternObjectToSign;
 import es.mityc.javasign.xml.refs.ObjectToSign;
 import java.io.File;
@@ -24,9 +26,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.CertStoreException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -98,7 +102,7 @@ public class FirmaElectronica {
     public Document firmar(String recursoParaFirmar)throws ComprobanteElectronicoException
     {
         try {
-            KeyStore keyStore= obtenerAlmacenFirma(almacenCertificadoClave, claveFirma);
+            IPKStoreManager keyStore= obtenerAlmacenFirma(almacenCertificadoClave, claveFirma);
             
             //Validar cunado el sistema no puede encontrar el archivo de la firma
             if(keyStore==null)
@@ -107,11 +111,12 @@ public class FirmaElectronica {
                         "El sistema no puede encontrar el archivo de la firma");
             }
             
-            String almacenAlias = getAlias(keyStore);
+            //String almacenAlias = getAlias(keyStore);
             X509Certificate certificado = null;
             try {
-                certificado = (X509Certificate) keyStore
-                        .getCertificate(almacenAlias);
+                //certificado = (X509Certificate) keyStore
+                //        .getCertificate(almacenAlias);
+                certificado=getFirstCertificate(keyStore);
                 if (certificado == null) {
                     throw new Exception(
                             "No se ha encontrado certificado para firmar");
@@ -123,18 +128,9 @@ public class FirmaElectronica {
             
             PrivateKey llavePrivada = null;
             
-            try {
-                llavePrivada = (PrivateKey) keyStore.getKey(almacenAlias,
-                        this.claveFirma.toCharArray());
-            } catch (UnrecoverableKeyException e) {
-                throw new Exception("No existe clave privada para firmar");
-            } catch (KeyStoreException e) {
-                throw new Exception("No existe clave privada para firmar");
-            } catch (NoSuchAlgorithmException e) {
-                throw new Exception("No existe clave privada para firmar");
-            }
+            llavePrivada = (PrivateKey) keyStore.getPrivateKey(certificado);
 
-            Provider proveedor = keyStore.getProvider();
+            Provider proveedor = keyStore.getProvider(certificado);
             DataToSign datosParaFirmar = createDataToSign(recursoParaFirmar);
             
             FirmaXML firma = new FirmaXML();
@@ -239,6 +235,7 @@ public class FirmaElectronica {
         return almacenAlias;
     }
     
+    /*
     private KeyStore obtenerAlmacenFirma(String rutaAlmacenCertificado,String passwordAlmacenCertificado)
     {
         try {
@@ -258,6 +255,52 @@ public class FirmaElectronica {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CertificateException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }*/
+    
+    private IPKStoreManager obtenerAlmacenFirma(String rutaAlmacenCertificado,String passwordAlmacenCertificado)
+    {
+        try {
+            IPKStoreManager storeManager = null;
+            KeyStore clave=null;
+            clave=KeyStore.getInstance("PKCS12");
+            FileInputStream file=new FileInputStream(rutaAlmacenCertificado);
+            clave.load(new FileInputStream(rutaAlmacenCertificado),
+                    passwordAlmacenCertificado.toCharArray());     
+            
+            storeManager = new KSStore(clave, new PassStoreKS(passwordAlmacenCertificado));
+            return storeManager;
+        } catch (KeyStoreException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CertificateException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    private X509Certificate getFirstCertificate(final IPKStoreManager storeManager) throws Exception {
+        try {
+            List<X509Certificate> certs = null;
+            certs = storeManager.getSignCertificates();
+            if ((certs == null) || (certs.size() == 0)) {
+                throw new Exception("La lista de certificados se encuentra vacía.");
+            }
+            for (X509Certificate cert : certs) {
+                if (cert.getKeyUsage()[0]) {
+                    return cert;
+                }
+            }
+            //X509Certificate certificate = certs.get(1).getKe;
+            //return certificate;
+        } catch (CertStoreException ex) {
+            throw new Exception(ex.getMessage());
         }
         return null;
     }

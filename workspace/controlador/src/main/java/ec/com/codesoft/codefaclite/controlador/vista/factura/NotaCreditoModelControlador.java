@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
@@ -41,16 +42,16 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class NotaCreditoModelControlador {
+public class NotaCreditoModelControlador extends ModelControladorAbstract{
     
     public NotaCreditoModelInterface interfaz;
     public SessionCodefacInterface session;
 
-    public NotaCreditoModelControlador(NotaCreditoModelInterface interfaz, SessionCodefacInterface session) {
+    public NotaCreditoModelControlador(NotaCreditoModelInterface interfaz, SessionCodefacInterface session, MensajeVistaInterface mensajeVista) {
+        super(mensajeVista);
         this.interfaz = interfaz;
         this.session = session;
     }
-
     
     
     
@@ -143,12 +144,7 @@ public class NotaCreditoModelControlador {
     public void grabar() throws ExcepcionCodefacLite {
     
         NotaCredito notaCredito=interfaz.obtenerNotaCredito();
-        
-        Boolean pregunta = DialogoCodefac.dialogoPregunta("Alerta", "Esta seguro que desea grabar la Nota de Crédito", DialogoCodefac.MENSAJE_ADVERTENCIA);
-        if (!pregunta) {
-            throw new ExcepcionCodefacLite("cancelar el metodo grabar ...");
-        }
-
+                
         try {
             NotaCredito notaCreditoGrabada;
             NotaCreditoServiceIf servicio = ServiceFactory.getFactory().getNotaCreditoServiceIf();
@@ -159,7 +155,7 @@ public class NotaCreditoModelControlador {
             }
 
             notaCredito = servicio.grabar(notaCredito);
-            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+            mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             notaCreditoGrabada = notaCredito;//graba una referencia con ambiento del metodo para los listener
 
             ComprobanteDataNotaCredito comprobanteData = new ComprobanteDataNotaCredito(notaCredito);
@@ -175,13 +171,11 @@ public class NotaCreditoModelControlador {
             ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
             comprobanteServiceIf.procesarComprobante(comprobanteData, notaCredito, session.getUsuario(), cic);
 
-            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
-                interfaz.procesarMonitor();
-            }
+            interfaz.procesarMonitor(notaCreditoGrabada);
 
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(NotaCreditoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+            mostrarMensaje(new CodefacMsj("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));            
             throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (RemoteException ex) {
             Logger.getLogger(NotaCreditoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -262,13 +256,13 @@ public class NotaCreditoModelControlador {
         NotaCredito notaCredito=interfaz.obtenerNotaCredito();
         if(notaCredito.getCliente()==null)
         {
-            DialogoCodefac.mensaje("Error Validación","Porfavor seleccione un cliente",DialogoCodefac.MENSAJE_INCORRECTO);
+            mostrarMensaje(new CodefacMsj("Error Validación","Porfavor seleccione un cliente",DialogoCodefac.MENSAJE_INCORRECTO));            
             return false;
         }
         
         if(notaCredito.getDetalles()==null || notaCredito.getDetalles().size()==0)
         {
-            DialogoCodefac.mensaje("Error Validación","Porfavor ingrese detalles al comprobante",DialogoCodefac.MENSAJE_INCORRECTO);
+            mostrarMensaje(new CodefacMsj("Error Validación","Porfavor ingrese detalles al comprobante",DialogoCodefac.MENSAJE_INCORRECTO));            
             return false;
         }
         
@@ -279,13 +273,13 @@ public class NotaCreditoModelControlador {
         {
             if(notaCredito.getFechaEmisionDocSustento()==null)
             {
-                DialogoCodefac.mensaje("Error Validación","Porfavor seleccione la fecha de emisión",DialogoCodefac.MENSAJE_INCORRECTO);
+                mostrarMensaje(new CodefacMsj("Error Validación","Porfavor seleccione la fecha de emisión",DialogoCodefac.MENSAJE_INCORRECTO));
                 return false;
             }
             
             if(notaCredito.getNumDocModificado().replaceAll("-","").replaceAll(" ","").isEmpty())
             {
-                DialogoCodefac.mensaje("Error Validación","Porfavor ingrese el preimpreso de la factura",DialogoCodefac.MENSAJE_INCORRECTO);
+                mostrarMensaje(new CodefacMsj("Error Validación","Porfavor ingrese el preimpreso de la factura",DialogoCodefac.MENSAJE_INCORRECTO));
                 return false;
             }
         }
@@ -304,6 +298,6 @@ public class NotaCreditoModelControlador {
         public String obtenerTxtPreimpresoProveedor();
         public PuntoEmision obtenerPuntoEmisionSeleccionado();
         public ClienteInterfaceComprobante obtenerClienteInterfaceComprobante(NotaCredito notaCredito);
-        public void procesarMonitor();
+        public void procesarMonitor(NotaCredito notaCredito);
     }
 }

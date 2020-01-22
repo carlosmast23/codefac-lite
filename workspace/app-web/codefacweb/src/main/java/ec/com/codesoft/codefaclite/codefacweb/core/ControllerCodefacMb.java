@@ -88,7 +88,7 @@ public class ControllerCodefacMb implements Serializable {
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedOperationException ex) {
-            MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
+            MensajeMb.mensaje(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
         }
     }
 
@@ -118,7 +118,7 @@ public class ControllerCodefacMb implements Serializable {
             } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
             } catch (UnsupportedOperationException ex) {
-                MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
+                MensajeMb.mensaje(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
             }
         } else if (estadoEnum.equals(EstadoFormEnum.EDITAR)) {
             try {
@@ -127,7 +127,7 @@ public class ControllerCodefacMb implements Serializable {
             } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
             } catch (UnsupportedOperationException ex) {
-                MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
+                MensajeMb.mensaje(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
             }
         }
         
@@ -163,7 +163,7 @@ public class ControllerCodefacMb implements Serializable {
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedOperationException ex) {
-            MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
+            MensajeMb.mensaje(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
         }
     }
 

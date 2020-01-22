@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogModel;
 import ec.com.codesoft.codefaclite.controlador.panel.DialogoCargando;
 import ec.com.codesoft.codefaclite.controlador.panel.PanelCargando;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -19,6 +20,12 @@ import javax.swing.JOptionPane;
  * @author Carlos
  */
 public abstract class DialogoCodefac {
+    
+    public static ModelControladorAbstract.MensajeVistaInterface intefaceMensaje=new ModelControladorAbstract.MensajeVistaInterface() {
+        public void mensaje(CodefacMsj codefacMensaje) {
+            DialogoCodefac.mensaje(codefacMensaje);
+        }
+    };
     
     public static final Integer MENSAJE_CORRECTO=1;
     public static final Integer MENSAJE_INCORRECTO=2;

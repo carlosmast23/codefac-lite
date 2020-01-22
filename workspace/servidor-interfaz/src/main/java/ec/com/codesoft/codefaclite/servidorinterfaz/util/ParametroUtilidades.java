@@ -9,7 +9,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -73,6 +78,15 @@ public abstract class ParametroUtilidades {
         return null;
     }
     
+    public static <T extends ComparadorInterface> T obtenerValorParametroEnum(Empresa empresa , String nombreParametro,T instancia) throws RemoteException
+    {
+        String valor = obtenerValorParametro(empresa, nombreParametro);
+        if (valor != null) {
+            return (T) instancia.consultarParametro(valor);
+        }
+        return null;
+    }
+    
     public interface ComparadorInterface<T>
     {
         /**
@@ -81,5 +95,6 @@ public abstract class ParametroUtilidades {
          * @return 
          */
         public T consultarParametro(String nombreParametro);
+       
     }
 }

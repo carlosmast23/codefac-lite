@@ -41,13 +41,13 @@ public class EjemploTestMb  extends GeneralAbstractMb implements Serializable {
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         System.out.println("grabar creado desde ejemplo");
-        MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+        MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
         System.out.println("editar creado desde ejemplo");
-        MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+        MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
     }
 
     @Override

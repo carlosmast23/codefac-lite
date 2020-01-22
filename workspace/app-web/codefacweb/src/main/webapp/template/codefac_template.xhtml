@@ -166,7 +166,7 @@
                                         <p:progressBar   widgetVar="pbAjax" ajax="true" value="#{barra.porcentaje}"  labelTemplate="#{barra.titulo()}" styleClass="animated " style="border: 2px;border-style: inset;background-color:  darkcyan;font-size: 12px;font-weight: normal;font-family: monospace" global="false">
                                             <p:ajax event="complete"   oncomplete="PF('startButton2').enable()"/>
                                         </p:progressBar>
-                                        <p:commandButton id="btnMonitorAlerta" process="@this"  icon="fa fa-bell-o"  />
+                                        <p:commandButton id="btnMonitorAlerta" process="@this"  icon="fa fa-bell-o" actionListener="#{barra.alerta()}"  />
                                         <p:commandButton id="btnMonitorBuscar" process="@this" ajax="false" actionListener="#{barra.imprimir()}"  icon="fa fa-search"  />
                                         <p:commandButton id="btnMonitorImprimir" process="@this" icon="fa fa-close"  />
                                     </p:panelGrid>

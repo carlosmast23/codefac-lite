@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.codefacweb.mb.utilidades;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import java.util.HashMap;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
@@ -18,6 +19,12 @@ import org.primefaces.PrimeFaces;
  * @author Carlos
  */
 public class MensajeMb {
+    
+    public static ModelControladorAbstract.MensajeVistaInterface intefaceMensaje=new ModelControladorAbstract.MensajeVistaInterface() {
+        public void mensaje(CodefacMsj codefacMensaje) {
+            MensajeMb.mensaje(codefacMensaje);
+        }
+    };
 
     //public static final String ID_MENSAJE_DIALOGO = "messages";
     public static Map<Integer, FacesMessage.Severity> homologarAlertasMap=new HashMap<Integer,FacesMessage.Severity>(){{
@@ -26,7 +33,7 @@ public class MensajeMb {
         put(DialogoCodefac.MENSAJE_CORRECTO,FacesMessage.SEVERITY_INFO);
     }};
 
-    public static void mostrarMensaje(String titulo, String mensaje, FacesMessage.Severity tipoMensaje) {
+    public static void mensaje(String titulo, String mensaje, FacesMessage.Severity tipoMensaje) {
         FacesMessage message = new FacesMessage(tipoMensaje, titulo, mensaje);
         PrimeFaces.current().dialog().showMessageDynamic(message);
     }
@@ -37,7 +44,7 @@ public class MensajeMb {
     }
     
     
-    public static void mostrarMensajeDialogo(CodefacMsj codefacMensaje) {
+    public static void mensaje(CodefacMsj codefacMensaje) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(homologarAlertasMap.get(codefacMensaje.modoMensaje),codefacMensaje.titulo,codefacMensaje.mensaje));        
     }

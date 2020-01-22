@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.corecodefaclite.views;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.util.Map;
@@ -21,6 +22,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 public interface InterfazComunicacionPanel 
 {
     public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla);
+    public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla,ConfiguracionImpresoraEnum configuracionImpresora);
     public void crearVentanaCodefac(GeneralPanelInterface panel,boolean maximizado);
     
     /**

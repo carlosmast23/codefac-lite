@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Client
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
@@ -151,12 +152,14 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
     //private FacturaModelControlador controlador;
     
     private NotaCreditoModelControlador controlador;
+    
+    private BarraProgreso<NotaCredito> barraProgreso;
 
     @PostConstruct
     public void init() {
         System.out.println("Creando controlador");
         facturaSeleccionada=new Factura(); //TODO: Da error cuando existe una propiedad vacia
-        controlador=new NotaCreditoModelControlador(this,sessionMb.getSession());
+        controlador=new NotaCreditoModelControlador(this,sessionMb.getSession(),MensajeMb.intefaceMensaje);
         String tipoPagina = UtilidadesWeb.buscarParametroPeticion(parametrosWeb.getCampoTipoFacturaOProforma());
         //tipoPaginaEnum = TipoPaginaEnum.getByNombreParametro(tipoPagina);
         
@@ -198,7 +201,8 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
-        try {
+        controlador.grabar();
+        /*try {
             System.out.println("===========>INICIANDO PROCESO GRABAR <==============");     
             if (!validar()) //Si no valida mando una excepcion para cancelar el ciclo de vida 
             {
@@ -222,7 +226,8 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
             MensajeMb.mostrarMensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
+        
 
     }
 
@@ -238,14 +243,14 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
         try {
             
             ServiceFactory.getFactory().getFacturacionServiceIf().eliminarProforma(null);
-            MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+            MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
             //mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
             nuevo();
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-            MensajeMb.mostrarMensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+            MensajeMb.mensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
         }
         
     }
@@ -697,7 +702,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
     }
 
     public java.sql.Date obtenerCmbFechaCompra() {
-        return null;
+        return UtilidadesFecha.castDateUtilToSql(facturaSeleccionada.getFechaEmision());
     }
 
     public java.sql.Date obtenerDateFechaEmision() {
@@ -705,7 +710,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
     }
 
     public TipoDocumentoEnum obtenerCmbTipoDocumento() {
-        return TipoDocumentoEnum.LIBRE;
+        return TipoDocumentoEnum.VENTA;
     }
 
     public String obtenerTxtMotivoAnulacion() {
@@ -713,7 +718,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
     }
 
     public String obtenerTxtPreimpresoProveedor() {
-        return null;
+        return facturaSeleccionada.getPreimpreso();
     }
 
     public PuntoEmision obtenerPuntoEmisionSeleccionado() {
@@ -721,31 +726,50 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
     }
 
     public ClienteInterfaceComprobante obtenerClienteInterfaceComprobante(NotaCredito notaCredito) {
+        try {
+            barraProgreso = new BarraProgreso<NotaCredito>(notaCredito, new BarraProgreso.InterfazBoton<NotaCredito>() {
+                public void alertaListener(String mensajeAlerta) {
+                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                }
+                
+                public void imprimirListener(NotaCredito dato) {
+                    
+                    try {
+                        dato = (NotaCredito) ServiceFactory.getFactory().getNotaCreditoServiceIf().buscarPorId(dato.getId()); //Vuelvo a consultar porque el antigua dato no tenia la clave de acceso
+                        imprimirNotaCredito(dato);
+                        
+                        
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
+                public String tituloBarra(NotaCredito dato) {
+                    return dato.getPreimpreso();
+                }
+            });
+            
+            ProformaMb.InterfazCallBack interfazCallBack = new ProformaMb.InterfazCallBack(barraProgreso, sessionMb);
+            
+            //new ProformaMb.InterfazCallBack(barraProgreso, sessionMb);
+            //return new ProformaMb.InterfazCallBack(barraProgreso, sessionMb);
+            return interfazCallBack;
+        } catch (RemoteException ex) {
+            Logger.getLogger(NotaCreditoMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
 
-    public void procesarMonitor() {
-        BarraProgreso<NotaCredito> barraProgreso = new BarraProgreso<NotaCredito>(notaCredito, new BarraProgreso.InterfazBoton<NotaCredito>() {
-            public void alertaListener() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            public void imprimirListener(NotaCredito dato) {
-
-                try {
-                    dato = (NotaCredito) ServiceFactory.getFactory().getNotaCreditoServiceIf().buscarPorId(dato.getId()); //Vuelvo a consultar porque el antigua dato no tenia la clave de acceso                    
-                    imprimirNotaCredito(dato);
-                        
-
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            public String tituloBarra(NotaCredito dato) {
-                return dato.getPreimpreso();
-            }
-        });
+    public void procesarMonitor(NotaCredito notaCredito) {
+        
+        try {
+            sessionMb.getBarraProgresoList().add(barraProgreso);
+            sessionMb.setActualizarMonitor(true);
+            nuevo();
+            UtilidadesWeb.ejecutarJavascript("PF('poll').start();"); //iniciar el comenten de actualizar monitor
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(NotaCreditoMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 

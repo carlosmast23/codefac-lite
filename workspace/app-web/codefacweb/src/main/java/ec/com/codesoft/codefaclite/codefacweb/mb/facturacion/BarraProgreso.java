@@ -10,6 +10,7 @@ package ec.com.codesoft.codefaclite.codefacweb.mb.facturacion;
  * @author Carlos
  */
 public class BarraProgreso <T> {
+    private String mensajeAlerta;
     private Integer porcentaje;
     private InterfazBoton<T> interfazBoton;
     private T dato;
@@ -56,10 +57,25 @@ public class BarraProgreso <T> {
         return interfazBoton.tituloBarra(dato);
     }
     
+    public void alerta()
+    {
+        interfazBoton.alertaListener(mensajeAlerta);
+    }
+
+    public String getMensajeAlerta() {
+        return mensajeAlerta;
+    }
+
+    public void setMensajeAlerta(String mensajeAlerta) {
+        this.mensajeAlerta = mensajeAlerta;
+    }
+    
+    
+    
 
     public interface InterfazBoton<T>
     {
-        public void alertaListener();
+        public void alertaListener(String mensajeAlerta);
         public void imprimirListener(T dato);
         public String tituloBarra(T dato);
         

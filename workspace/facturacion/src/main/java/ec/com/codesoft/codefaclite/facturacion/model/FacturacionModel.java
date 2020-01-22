@@ -164,6 +164,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
@@ -1105,8 +1106,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         else
         {
+            DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
             //Advertir cuando no exista ningun correo para que el usuario pueda ingresar antes de enviar al cliente
-            if (!factura.verificarExistenCorreosIngresados()) {
+            if (!factura.verificarExistenCorreosIngresados() && !documentoEnum.equals(documentoEnum.NOTA_VENTA_INTERNA)) {
                 if (!DialogoCodefac.dialogoPregunta("Advertencia", "No esta ningun correo ingresado para informar al cliente.\nDesea continuar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
                     throw new ExcepcionCodefacLite("Cancelado por el usuario");
                 }
@@ -1178,7 +1180,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             {
                 DialogoCodefac.mensaje("Correcto", "La nota de venta interna se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                 //facturaManual(factura.getCodigoDocumentoEnum());
-                imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA);
+                imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA,true);
             }
             else
             {
@@ -1237,8 +1239,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this, facturaProcesando, true);
         ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
 
-        if (ServiceFactory.getFactory().getComprobanteServiceIf().verificarDisponibilidadSri(session.getEmpresa())) {
-            Boolean repuestaFacturaElectronica = DialogoCodefac.dialogoPregunta("Correcto", "La factura se grabo correctamente,Desea autorizar en el SRI ahora?", DialogoCodefac.MENSAJE_CORRECTO);
+        //if (ServiceFactory.getFactory().getComprobanteServiceIf().verificarDisponibilidadSri(session.getEmpresa())) {
+            //Boolean repuestaFacturaElectronica = DialogoCodefac.dialogoPregunta("Correcto", "La factura se grabo correctamente,Desea autorizar en el SRI ahora?", DialogoCodefac.MENSAJE_CORRECTO);
+            Boolean repuestaFacturaElectronica = true;
 
             //Si quiere que se procese en ese momento le ejecuto el proceso normal
             if (repuestaFacturaElectronica) {
@@ -1274,7 +1277,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
             }
 
-        } else { //Si el servidor del sri no esta disponible solo existe un camino
+        /*} else { //Si el servidor del sri no esta disponible solo existe un camino
             DialogoCodefac.mensaje("Advertencia", "El servidor del Sri no esta disponible\n El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_ADVERTENCIA);
 
             if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
@@ -1288,7 +1291,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 FacturaRespuestaNoCallBack respuestaNoCallBack = new FacturaRespuestaNoCallBack(factura, this, false);
                 respuestaNoCallBack.iniciar();
             }
-        }
+        }*/
 
         //=====================> Imprimir comprobante de venta <==============================//
         //imprimirComprobanteVenta(factura);
@@ -1476,11 +1479,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             case 0: //opcion para RIDE
                                 byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,factura.getEmpresa());
                                 JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                                
                                 panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
                                 break;
 
                             case 1: //opcion para comprobantes Venta
-                                imprimirComprobanteVenta(factura, NOMBRE_REPORTE_FACTURA_ELECTRONICA);
+                                imprimirComprobanteVenta(factura, NOMBRE_REPORTE_FACTURA_ELECTRONICA,false);
                                 break;
 
                             case 2: //Cancelar
@@ -1510,9 +1514,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
             }else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
             {
-                imprimirComprobanteVenta(factura, FacturacionModel.NOMBRE_REPORTE_FACTURA_INTERNA);;
+                imprimirComprobanteVenta(factura, FacturacionModel.NOMBRE_REPORTE_FACTURA_INTERNA,false);
             }
         }
+    }
+    
+    private ConfiguracionImpresoraEnum obtenerConfiguracionImpresora()
+    {
+        try {
+            return ParametroUtilidades.<ConfiguracionImpresoraEnum>obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,ConfiguracionImpresoraEnum.NINGUNA);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
@@ -2784,6 +2798,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 DocumentoEnum documentoAnterior= (DocumentoEnum) e.getItem();
                 DocumentoEnum documentoNuevo=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                 
+                if(documentoNuevo==null)
+                {
+                    return;
+                }
+                
                 if(documentoAnterior.equals(documentoNuevo))
                 {
                     return;
@@ -3213,7 +3232,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return controlador.getMapParametrosReporte(facturaProcesando);
     }
     
-    public  void imprimirComprobanteVenta(Factura facturaProcesando,String nombre)
+    public  void imprimirComprobanteVenta(Factura facturaProcesando,String nombre,Boolean activarConfiguracionesImpresion)
     {
 
         List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);
@@ -3240,8 +3259,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         }
         
+        ConfiguracionImpresoraEnum configuracion=null;        
+        if(activarConfiguracionesImpresion)
+        {
+            configuracion=obtenerConfiguracionImpresora();
+        }
         //ReporteCodefac.generarReporteInternalFramePlantilla(parametro, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
-        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, this.panelPadre, nombre, OrientacionReporteEnum.VERTICAL,formatoEnum);
+        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, this.panelPadre, nombre, OrientacionReporteEnum.VERTICAL,formatoEnum,configuracion);
 
     }
 

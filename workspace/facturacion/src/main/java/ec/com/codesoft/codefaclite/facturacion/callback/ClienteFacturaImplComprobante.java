@@ -207,7 +207,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         }
         
         if (verificarImprimirComprobanteVenta()) {
-            facturacionModel.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA);
+            facturacionModel.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA,true);
             //imprimirComprobanteVenta();
         } else {
             generarReportePdf(clave.clave);
@@ -217,7 +217,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     private void generarReportePdf(String clave) {
         if(verificarImprimirComprobanteVenta())
         {
-            facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA); //TODO:Verificar si este metodo no funciona
+            facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
         }
         else
         {
@@ -255,13 +255,13 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             monitorData.getBtnReporte().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JOptionPane.showMessageDialog(null, "Etapa: " + cee.getEtapa() + "\n" + cee.getMessage());
+                    JOptionPane.showMessageDialog(null,cee.obtenerErrorFormato());
                     monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             if(verificarImprimirComprobanteVenta())
                             {
-                                facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA); //TODO:Verificar si este metodo no funciona
+                                facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
                             }
                             else
                             {

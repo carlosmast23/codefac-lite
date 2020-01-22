@@ -53,7 +53,7 @@ public class EmpleadoMb extends GeneralAbstractMb implements Serializable {
         try {
             ServiceFactory.getFactory().getEmpleadoServiceIf().grabar(empleado);
             System.out.println("Empleado guardado");
-            MensajeMb.mostrarMensaje("Correctamente","Ejemplo guardado correctamente",FacesMessage.SEVERITY_INFO);
+            MensajeMb.mensaje("Correctamente","Ejemplo guardado correctamente",FacesMessage.SEVERITY_INFO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(EmpleadoMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {

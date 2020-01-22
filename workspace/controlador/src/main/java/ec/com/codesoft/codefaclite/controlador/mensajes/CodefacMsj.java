@@ -11,6 +11,7 @@ package ec.com.codesoft.codefaclite.controlador.mensajes;
  */
 public class CodefacMsj {
     
+    
     public static final String TITULO_ADVERTENCIA="Advertencia";
     public static final String TITULO_CORRECTO="Correcto";
     public static final String TITULO_ERROR="Error";

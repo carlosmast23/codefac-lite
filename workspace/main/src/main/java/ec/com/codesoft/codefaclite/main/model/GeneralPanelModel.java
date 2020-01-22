@@ -69,6 +69,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
@@ -78,6 +79,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
@@ -152,6 +154,7 @@ import javax.swing.text.JTextComponent;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.swing.JRViewer;
 import org.jfree.util.Log;
@@ -2436,11 +2439,37 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     //public GeneralPanelInterface pantallaReporte=new GeneralPanelInterface() {
     //        
     //}
-
+    
     @Override
     public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla) {
+        crearReportePantalla(jasperPrint, nombrePantalla, ConfiguracionImpresoraEnum.NINGUNA);
+    }
+
+    @Override
+    public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla,ConfiguracionImpresoraEnum configuracionImpresora) {
         JRViewer viewer=new JRViewer(jasperPrint);
         viewer.setZoomRatio(0.6f);
+        
+        if(configuracionImpresora!=null)
+        {
+            if(configuracionImpresora.equals(ConfiguracionImpresoraEnum.IMPRESORA_POR_DEFECTO) || configuracionImpresora.equals(ConfiguracionImpresoraEnum.SELECCIONAR_IMPRESORA))
+            {   
+                Boolean mostrarSeleccionImpresora=true;
+                if(configuracionImpresora.equals(ConfiguracionImpresoraEnum.IMPRESORA_POR_DEFECTO))
+                {
+                    mostrarSeleccionImpresora=false;
+                }
+                
+                try 
+                { 
+                    JasperPrintManager.printReport(jasperPrint, mostrarSeleccionImpresora);
+                    LOG.log(Level.INFO,"Imprimiendo desde el computador");
+                } catch (JRException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
         
         GeneralPanelInterface internal = new GeneralPanelInterface() {
             @Override
@@ -2467,7 +2496,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
             @Override
             public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                
             }
 
             @Override

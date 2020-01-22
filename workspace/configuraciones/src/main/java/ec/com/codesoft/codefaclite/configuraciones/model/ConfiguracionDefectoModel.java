@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
@@ -21,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.awt.event.KeyEvent;
@@ -145,6 +147,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentosCompra) {
             getCmbTipoDocumentoCompra().addItem(tipoDocumento);
         }
+        
+        //getCmbConfiguracionImpresora().removeAllItems();
+        UtilidadesComboBox.llenarComboBox(getCmbConfiguracionImpresora(),ConfiguracionImpresoraEnum.values());
+        getCmbConfiguracionImpresora().setSelectedItem(ConfiguracionImpresoraEnum.NINGUNA);
 
         //Agregar los datos del combo de tipo formato de hoja de las ordenes de trabajo
         FormatoHojaEnum[] formatos = FormatoHojaEnum.values();
@@ -245,6 +251,14 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             {
                 TipoDocumentoEnum tipoDocumentoCompraEnum = TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroTipoDocumentoCompra.getValor());
                 getCmbTipoDocumentoCompra().setSelectedItem(tipoDocumentoCompraEnum);
+            }
+            
+            ParametroCodefac parametroConfiguracionImpresora = parametrosTodos.get(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA);
+            if(parametroConfiguracionImpresora!=null )
+            {
+                ConfiguracionImpresoraEnum configuracionImpresoraEnum=ConfiguracionImpresoraEnum.buscarPorLetra(parametroConfiguracionImpresora.getValor());
+                getCmbConfiguracionImpresora().setSelectedItem(configuracionImpresoraEnum);
+                
             }
 
             //Cargar el documento de la compra
@@ -371,6 +385,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
             getCmbDatosCompartidosEmpresas().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            ParametroCodefac parametroDato= parametrosTodos.get(ParametroCodefac.ACTIVAR_NOTA_VENTA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroDato != null) ? parametroDato.getValor() : null);
+            getCmbActivarNotaVenta().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             
 
         } catch (RemoteException ex) {
@@ -388,6 +406,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         TipoDocumentoEnum tipoDocumentoCompra = (TipoDocumentoEnum) getCmbTipoDocumentoCompra().getSelectedItem();
         agregarParametro(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA,tipoDocumentoCompra.getCodigo());        
         agregarParametroEditar(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA);
+        
+        ConfiguracionImpresoraEnum configuracionImpresoraEnum =(ConfiguracionImpresoraEnum) getCmbConfiguracionImpresora().getSelectedItem();
+        agregarParametro(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,configuracionImpresoraEnum.getLetra());
+        agregarParametroEditar(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA);
 
         //Agregar detalle para la orden de trabajo
         agregarParametro(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES, getTxtOrdenTrabajoReporte().getText());

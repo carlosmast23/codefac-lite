@@ -56,7 +56,7 @@ public class FacturaRespuestaNoCallBack extends ComprobanteRespuestaNoCallBack
             
             if(verificarImprimirComprobanteVenta())
             {
-                facturacionModel.imprimirComprobanteVenta((Factura) comprobante,NOMBRE_REPORTE_FACTURA_ELECTRONICA); //TODO:Verificar si este metodo no funciona
+                facturacionModel.imprimirComprobanteVenta((Factura) comprobante,NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
             }
             else
             {            

@@ -115,7 +115,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
                 cliente=ServiceFactory.getFactory().getPersonaServiceIf().grabar(cliente);
                 personaReturnDialog=cliente;
                 //mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
-                MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+                MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 nuevo();
 
             } catch (ServicioCodefacException ex) {
@@ -135,11 +135,11 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         if (validarDatosVista()) {
             try {
                 ServiceFactory.getFactory().getPersonaServiceIf().editar(cliente);
-                MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+                MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
                 nuevo();
 
             } catch (ServicioCodefacException ex) {
-                MensajeMb.mostrarMensajeDialogo(new CodefacMsj("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO));
+                MensajeMb.mensaje(new CodefacMsj("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO));
                 Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
             } catch (RemoteException ex) {
                 Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);

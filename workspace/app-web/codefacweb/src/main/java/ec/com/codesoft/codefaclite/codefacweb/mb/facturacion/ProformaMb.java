@@ -229,8 +229,9 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
                 if (documentoSeleccionado.equals(DocumentoEnum.FACTURA)) 
                 {
                     BarraProgreso<Factura> barraProgreso = new BarraProgreso<Factura>(factura, new BarraProgreso.InterfazBoton<Factura>() {
-                        public void alertaListener() {
-                            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                        
+                        public void alertaListener(String mensajeAlerta) {
+                            MensajeMb.mensaje("Alerta",mensajeAlerta,FacesMessage.SEVERITY_WARN);
                         }
 
                         public void imprimirListener(Factura dato) {
@@ -258,14 +259,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
                             obtenerComprobanteDataFactura(),
                             factura,
                             sessionMb.getSession().getUsuario(),
-                            new InterfazCallBack(barraProgreso));
+                            new InterfazCallBack(barraProgreso,sessionMb));
 
                     sessionMb.getBarraProgresoList().add(barraProgreso);
                     sessionMb.setActualizarMonitor(true);
                     nuevo();
                     UtilidadesWeb.ejecutarJavascript("PF('poll').start();"); //iniciar el comenten de actualizar monitor
                     //UtilidadesWeb.actualizaComponente(":formulario:panelSecundario:barMonitor");       
-                    MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+                    MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 } else if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
                 {
                     mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
@@ -279,7 +280,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             //imprimir();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-            MensajeMb.mostrarMensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+            MensajeMb.mensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -298,14 +299,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         try {
             
             ServiceFactory.getFactory().getFacturacionServiceIf().eliminarProforma(factura);
-            MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+            MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
             //mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
             nuevo();
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-            MensajeMb.mostrarMensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+            MensajeMb.mensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
         }
         
     }
@@ -1028,12 +1029,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         }
     }
 
-    public class InterfazCallBack extends UnicastRemoteObject implements ClienteInterfaceComprobante {
+    public static class InterfazCallBack extends UnicastRemoteObject implements ClienteInterfaceComprobante {
 
         private BarraProgreso barraProgreso;
+        private SessionMb sessionMb;
         
-        public InterfazCallBack(BarraProgreso barraProgreso) throws RemoteException {
+        public InterfazCallBack(BarraProgreso barraProgreso,SessionMb sessionMb) throws RemoteException {
             this.barraProgreso=barraProgreso;
+            this.sessionMb=sessionMb;
         }
         
 
@@ -1092,6 +1095,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         }
 
         public void error(ComprobanteElectronicoException cee, String claveAcceso) throws RemoteException {
+            String mensaje=cee.obtenerErrorFormato();            
+            barraProgreso.setMensajeAlerta(mensaje);
             System.out.println("error ...");
             sessionMb.setActualizarMonitor(false);
         }

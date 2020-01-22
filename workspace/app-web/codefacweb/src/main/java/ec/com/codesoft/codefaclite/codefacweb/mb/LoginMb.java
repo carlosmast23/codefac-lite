@@ -75,10 +75,10 @@ public class LoginMb implements Serializable {
                     construirSession(loginRespuesta.usuario, empresaSeleccionada, sucursalSeleccionada);
                     return PAGINA_INICIO_ADMIN;
                 case INCORRECTO_USUARIO:
-                    MensajeMb.mostrarMensaje("Error",LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje() , FacesMessage.SEVERITY_ERROR);
+                    MensajeMb.mensaje("Error",LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje() , FacesMessage.SEVERITY_ERROR);
                     break;
                 default:
-                    MensajeMb.mostrarMensaje("Error Login", loginRespuesta.estadoEnum.getMensaje(), FacesMessage.SEVERITY_ERROR);
+                    MensajeMb.mensaje("Error Login", loginRespuesta.estadoEnum.getMensaje(), FacesMessage.SEVERITY_ERROR);
                     break;
 
             }
