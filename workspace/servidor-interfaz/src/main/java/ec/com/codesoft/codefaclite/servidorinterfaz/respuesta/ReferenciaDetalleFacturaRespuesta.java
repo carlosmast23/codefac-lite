@@ -16,6 +16,7 @@ import java.io.Serializable;
 public class ReferenciaDetalleFacturaRespuesta implements Serializable{
     public CatalogoProducto catalogoProducto;
     public Long referenciaId;
+    public String codigoPrincipal;
     public TipoDocumentoEnum tipoDocumentoEnum;
     public Object objecto;
 
@@ -31,6 +32,20 @@ public class ReferenciaDetalleFacturaRespuesta implements Serializable{
         this.objecto = objecto;
     }
     
-    
+    public String obtenerCodigoPrincipal()
+    {
+        if(codigoPrincipal!=null && !codigoPrincipal.isEmpty())
+        {
+            return codigoPrincipal;
+        }
+        else
+        {
+            if(referenciaId!=null)
+            {
+                return referenciaId+"";
+            }
+        }
+        return "";
+    }
     
 }

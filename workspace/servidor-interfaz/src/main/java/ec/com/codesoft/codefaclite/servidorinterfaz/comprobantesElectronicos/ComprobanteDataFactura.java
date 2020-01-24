@@ -220,7 +220,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                 DetalleFacturaComprobante detalle = new DetalleFacturaComprobante();
 
                 ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(facturaDetalle.getTipoDocumentoEnum(),facturaDetalle.getReferenciaId());
-                detalle.setCodigoPrincipal(respuesta.referenciaId+"");
+                detalle.setCodigoPrincipal(respuesta.obtenerCodigoPrincipal()+"");
 
                 
                 detalle.setCantidad(facturaDetalle.getCantidad());

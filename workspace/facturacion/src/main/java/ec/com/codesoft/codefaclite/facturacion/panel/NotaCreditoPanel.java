@@ -481,7 +481,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jLabel22.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel22.setText("Proveedor:");
+        jLabel22.setText("Cliente:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;

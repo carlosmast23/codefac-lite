@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import com.sun.imageio.plugins.common.BogusColorSpace;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
@@ -658,6 +657,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                                     producto.getIdProducto(), 
                                     tipoDocumentoEnum, 
                                     producto);
+                            respuesta.codigoPrincipal=producto.getCodigoPersonalizado();
                             break;
 
                         case PRESUPUESTOS:

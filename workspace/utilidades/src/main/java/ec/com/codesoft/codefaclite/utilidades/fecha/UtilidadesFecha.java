@@ -254,11 +254,17 @@ public class UtilidadesFecha {
     
     public static java.util.Date castDateSqlToUtil(java.sql.Date fechaSql)
     {
+        if(fechaSql==null)
+            return null;
+            
         return new java.util.Date(fechaSql.getTime());
     }
     
     public static java.sql.Date castDateUtilToSql(java.util.Date fechaUtil)
     {
+        if(fechaUtil==null)
+            return null;
+        
         return new java.sql.Date(fechaUtil.getTime());
     }
 

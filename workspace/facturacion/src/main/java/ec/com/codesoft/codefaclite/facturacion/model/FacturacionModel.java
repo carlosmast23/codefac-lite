@@ -876,7 +876,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             cargarFormaPago();
             setearValoresCliente();
-            cargarDatosAdicionales();
+            controlador.cargarDatosAdicionales(factura);
             cargarTablaDatosAdicionales();
             getTxtCodigoDetalle().requestFocus();
             
@@ -1901,7 +1901,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     
                     case INVENTARIO: case LIBRE:
                         Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
-                        fila.add(producto.getCodigoPersonalizado());
+                        /**
+                         * Todo: Este artificio lo hago de forma temporal porque puede ser porque por algun motivo se hayan borrado los productos
+                         */
+                        if(producto!=null)
+                        {
+                            fila.add(producto.getCodigoPersonalizado());
+                        }
+                        else
+                        {
+                            fila.add("Sin Código");
+                        }
+                            
                         break;
 
                 }
@@ -2070,73 +2081,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante() + "",ComprobanteAdicional.Tipo.TIPO_OTRO));
     }
     
-    private void cargarDatosAdicionales()
-    {
-        //Cargar el correo solo cuando exista 
-        if (factura.getCliente().getCorreoElectronico() != null) {
-            
-                       
-            //Obtiene el campo del correo por defecto sis existe
-            FacturaAdicional campoAdicional=(FacturaAdicional) factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.CORREO);
-            //Si no existe el campo del correo del cliente lo creo
-            
-            String correoElectronico=null;
-            if(factura.getCliente().getCorreoElectronico()!=null && !factura.getCliente().getCorreoElectronico().toString().isEmpty())
-            {
-                correoElectronico=factura.getCliente().getCorreoElectronico();
-            }
-
-            if (campoAdicional == null) 
-            {
-                if (correoElectronico != null) 
-                {
-                    factura.addDatoAdicional(new FacturaAdicional(correoElectronico, FacturaAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
-                }
-            } 
-            else //Si existe el campo del correo del cliente lo edito
-            {
-                if (correoElectronico != null) 
-                {
-                    campoAdicional.setValor(correoElectronico);
-                }
-                else
-                {
-                    factura.getDatosAdicionales().remove(campoAdicional);
-                }
-            }
-           
-
-            
-            //datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
-        }
-        
-        //Cargar el numero e celular del cliente
-        if (factura.getSucursal().getTelefonoCelular() != null) {
-            //Obtiene el campo del correo por defecto sis existe
-            FacturaAdicional campoAdicional=(FacturaAdicional) factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.CELULAR);
-            //Si no existe el campo del correo del cliente lo creo
-            
-            String numeroCelular=null;
-            if(factura.getSucursal().getTelefonoCelular()!=null && !factura.getSucursal().getTelefonoCelular().toString().isEmpty())
-                numeroCelular=factura.getSucursal().getTelefonoCelular();
-                
-            if(campoAdicional==null)
-            {
-                if(numeroCelular!=null)
-                    factura.addDatoAdicional(new FacturaAdicional(numeroCelular,FacturaAdicional.Tipo.TIPO_CELULAR,ComprobanteAdicional.CampoDefectoEnum.CELULAR));
-            }
-            else //Si existe el campo del telefono del cliente lo edito
-            {
-                if(numeroCelular!=null)
-                    campoAdicional.setValor(numeroCelular);
-                else
-                    factura.getDatosAdicionales().remove(campoAdicional);
-            }                
-            
-            //datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
-        }
-        
-    }
+    
 
     private void setearValoresCliente() {
         
@@ -2308,7 +2253,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void iniciar() throws ExcepcionCodefacLite {
         System.out.println("Ingresando a iniciar");
         
-        controlador=new FacturaModelControlador(session,this);
+        controlador=new FacturaModelControlador(session,this,DialogoCodefac.intefaceMensaje);
         if (!validacionParametrosCodefac()) {
             dispose();
             throw new ExcepcionCodefacLite("No cumple validacion inicial");

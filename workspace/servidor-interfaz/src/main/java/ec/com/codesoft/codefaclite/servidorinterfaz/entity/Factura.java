@@ -89,12 +89,6 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     @JoinColumn(name = "VENDEDOR_ID")
     private Empleado vendedor;
     
-    /**
-     * Se refiere a la sucucursal del cliente
-     */
-    @JoinColumn(name = "SUCURSAL_ID")
-    @ManyToOne    
-    private PersonaEstablecimiento sucursal;
         
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -230,14 +224,6 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         this.estadoEnviadoGuiaRemision = estadoEnviadoGuiaRemisionEnum.getLetra();
     }
 
-    public PersonaEstablecimiento getSucursal() {
-        return sucursal;
-    }
-
-    public void setSucursal(PersonaEstablecimiento sucursal) {
-        this.sucursal = sucursal;
-    }
-    
     
     
     

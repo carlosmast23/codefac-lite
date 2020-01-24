@@ -42,7 +42,7 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class NotaCreditoModelControlador extends ModelControladorAbstract{
+public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControladorAbstract{
     
     public NotaCreditoModelInterface interfaz;
     public SessionCodefacInterface session;

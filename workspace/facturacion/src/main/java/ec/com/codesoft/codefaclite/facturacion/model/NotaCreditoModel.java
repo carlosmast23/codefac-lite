@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
@@ -625,15 +626,19 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         getBtnBuscarProveedor().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProveedorBusquedaDialogo clienteBusquedaDialogo = new ProveedorBusquedaDialogo(session.getEmpresa());
+                ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(session.getEmpresa());
+                //ProveedorBusquedaDialogo clienteBusquedaDialogo = new ProveedorBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
-                Persona proveedorTmp=((PersonaEstablecimiento) buscarDialogoModel.getResultado()).getPersona();
+                PersonaEstablecimiento personaEstablecimiento=(PersonaEstablecimiento) buscarDialogoModel.getResultado();
+                Persona proveedorTmp=personaEstablecimiento.getPersona();
                 
                 if(proveedorTmp!=null)
                 {
                     notaCredito.setCliente(proveedorTmp);
-                    agregarCorreo(proveedorTmp.getCorreoElectronico());
+                    notaCredito.setSucursal(personaEstablecimiento);
+                    //agregarCorreo(proveedorTmp.getCorreoElectronico());
+                    controlador.cargarDatosAdicionales(notaCredito);
                     controlador.setearDatosProveedor(proveedorTmp,notaCredito);                    
                     getTxtProveedor().setText(proveedorTmp.getIdentificacion()+" - "+proveedorTmp.getRazonSocial());
                     mostrarDatosNotaCredito();

@@ -41,13 +41,12 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class FacturaModelControlador {
+public class FacturaModelControlador extends FacturaNotaCreditoModelControladorAbstract{
     
-    public SessionCodefacInterface session;
-    private FacturaModelInterface interfaz;
+    private FacturaModelControlador.FacturaModelInterface interfaz;
 
-
-    public FacturaModelControlador(SessionCodefacInterface session,FacturaModelInterface interfaz) {
+    public FacturaModelControlador(SessionCodefacInterface session,FacturaModelInterface interfaz,MensajeVistaInterface mensajeVista) {
+        super(mensajeVista);
         this.session=session;
         this.interfaz=interfaz;
     }

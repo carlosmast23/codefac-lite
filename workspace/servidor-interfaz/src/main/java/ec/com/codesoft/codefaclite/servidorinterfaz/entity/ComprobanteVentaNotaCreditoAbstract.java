@@ -55,6 +55,13 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne
     private Persona cliente;
+    
+    /**
+     * Se refiere a la sucucursal del cliente
+     */
+    @JoinColumn(name = "SUCURSAL_ID")
+    @ManyToOne    
+    private PersonaEstablecimiento sucursal;
 
 
     public ComprobanteVentaNotaCreditoAbstract() {
@@ -124,6 +131,14 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
 
     public void setCliente(Persona cliente) {
         this.cliente = cliente;
+    }
+
+    public PersonaEstablecimiento getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(PersonaEstablecimiento sucursal) {
+        this.sucursal = sucursal;
     }
     
     

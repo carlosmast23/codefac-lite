@@ -156,7 +156,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     @PostConstruct
     public void init() {
         System.out.println("Creando controlador");
-        controlador=new FacturaModelControlador(sessionMb.getSession(),this);
+        controlador=new FacturaModelControlador(sessionMb.getSession(),this,MensajeMb.intefaceMensaje);
         String tipoPagina = UtilidadesWeb.buscarParametroPeticion(parametrosWeb.getCampoTipoFacturaOProforma());
         tipoPaginaEnum = TipoPaginaEnum.getByNombreParametro(tipoPagina);
         
