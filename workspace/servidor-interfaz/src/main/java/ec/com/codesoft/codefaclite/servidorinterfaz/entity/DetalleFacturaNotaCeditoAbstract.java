@@ -45,6 +45,9 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
 
     @Column(name = "TIPO_REFERENCIA")
     private String tipoDocumento;
+    
+    @Column(name = "CODIGO_PRINCIPAL")
+    private String codigoPrincipal;
     /**
      * El total del detalle corresonde a la siguiente formular
      * Total=cantidad*valorUnitario-descuento
@@ -215,5 +218,15 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public BigDecimal calcularTotalFinal() {
         return this.total.add(iva).add(this.valorIce);
     }
+
+    public String getCodigoPrincipal() {
+        return codigoPrincipal;
+    }
+
+    public void setCodigoPrincipal(String codigoPrincipal) {
+        this.codigoPrincipal = codigoPrincipal;
+    }
+    
+    
 
 }

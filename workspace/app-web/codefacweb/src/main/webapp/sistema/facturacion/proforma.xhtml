@@ -19,9 +19,9 @@
                 <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProforma}" update="panelContenido"  />
             </p:commandButton>
 
-            <p:accordionPanel multiple="true">
+            <p:accordionPanel multiple="true" id="acordionCabecera">
                 <p:tab title="Datos Cabecera">
-                    <p:panelGrid columns="4" layout="grid" styleClass="showcase-text-align-center" columnClasses="ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-3">
+                    <p:panelGrid id="panelCabecera" columns="4" layout="grid" styleClass="showcase-text-align-center" columnClasses="ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-3">
                         <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
 
                             <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 55%" />                    
@@ -40,8 +40,8 @@
                         </p:panel>
 
 
-                        <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
-                            <p:selectOneMenu id="car" value="#{proformaMb.documentoSeleccionado}" converter="documentoEnumConverter" >
+                        <p:panel id="pnlComboDocumento" class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
+                            <p:selectOneMenu id="cmbDocumento" value="#{proformaMb.documentoSeleccionado}" converter="documentoEnumConverter" >
                                 <f:selectItems value="#{proformaMb.documentos}" var="documento" itemValue="#{documento.codigo}" />
                             </p:selectOneMenu>
                         </p:panel>
@@ -99,8 +99,8 @@
 
                             <p:panel style="border: 0px;margin: 0px;padding: 0px" >
                                 <p:inputText id="txtProducto" placeholder="Código" value="#{proformaMb.productoSeleccionado.codigoPersonalizado}" style="width: 70%" />
-                                <p:commandButton  process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBusquedaProducto()}" style="width: 20%"  >
-                                    <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}" update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,cmbIncluyeIvaDetalle"  />
+                                <p:commandButton  process="@this,:formulario:acordionCabecera:cmbDocumento" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBusquedaProducto()}" style="width: 20%"  >
+                                    <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}"  update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,cmbIncluyeIvaDetalle"  />
                                 </p:commandButton>
                             </p:panel>
 

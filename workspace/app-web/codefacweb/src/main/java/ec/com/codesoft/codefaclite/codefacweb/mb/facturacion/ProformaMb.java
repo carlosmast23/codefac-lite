@@ -103,11 +103,14 @@ import java.util.Arrays;
 @ViewScoped
 public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterface, Serializable {
 
-    private static final String ID_COMPONENTE_MONITOR="monitor";   
+    private static final String ID_COMPONENTE_MONITOR="monitor";
     
         
     private Factura factura;   
 
+    /**
+     * Esta referencia me permite saber cual factura esta seleccionada para editar 
+     */
     private FacturaDetalle facturaDetalle; 
 
     private List<DocumentoEnum> documentos; 
@@ -144,6 +147,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
      * funcionalidades
      */
     private java.util.Date fechaEmision;
+    
 
     @ManagedProperty(value = "#{sessionMb}")
     private SessionMb sessionMb;
@@ -152,6 +156,11 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     private ParametrosWeb parametrosWeb;
     
     private FacturaModelControlador controlador;
+    
+        /**
+     * Referencia para saber si estan en modo de editar un detalle o no 
+     */
+    private Boolean modoEdicionDetalle;
 
     @PostConstruct
     public void init() {
@@ -177,6 +186,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         facturaDetalle = new FacturaDetalle();
         incluyeIvaDetalleEnum=EnumSiNo.SI;
         cmbIvaDetalleEnable=false;
+        modoEdicionDetalle=false;
         
         cargarDatosPorDefecto();
         cargarDatosLista();
@@ -420,7 +430,9 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     }
 
     public void seleccionarProducto(SelectEvent event) {
-        productoSeleccionado = (Producto) event.getObject();
+        System.out.println("Metodo ejecutando seleccionar producto");
+        System.out.println("Documento seleccionado : "+documentoSeleccionado.getNombre());
+        productoSeleccionado = (Producto) event.getObject(); 
         controlador.agregarProductoVista(productoSeleccionado);
         //cargarDetalleFacturaAgregar(productoSeleccionado); 
     }
@@ -467,7 +479,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             factura.calcularTotalesDesdeDetalles();
             facturaDetalle = new FacturaDetalle();
             productoSeleccionado = new Producto();*/
-            controlador.agregarDetallesFactura(null);
+            controlador.agregarDetallesFactura(facturaDetalle);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -768,7 +780,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public void filaEditaTablaEvent(RowEditEvent event) {
         FacturaDetalle detalleEditado = (FacturaDetalle) event.getObject();
-        detalleEditado.calcularTotalDetalle();
+        /*detalleEditado.calcularTotalDetalle();
         detalleEditado.calculaIva();
         factura.calcularTotalesDesdeDetalles();
         //FacesMessage msg = new FacesMessage("Car Edited", ((FacturaDeta) event.getObject()).getId());
@@ -776,8 +788,15 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         System.err.println("Evento editar la fila ");
         System.err.println("cantidad editada: " + factura.getDetalles().get(0).getCantidad());
         System.err.println("cantidad editada: " + factura.getDetalles().get(0).getTotal());
-        System.err.println("total final: " + factura.getTotal());
-
+        System.err.println("total final: " + factura.getTotal());*/
+        //controlador.agregarDetallesFactura(detalleEditado);
+        /**
+         * TODO: Lo correcto sera en vez de usar la logica de abajo unir con  controlador.agregarDetallesFactura(detalleEditado)
+         * que tiene logica adicional de validaciones y otras cosas mas
+         */
+        controlador.calcularTotalesDetalles(detalleEditado);
+        controlador.cargarTotales();
+        
         //PrimeFaces.current().ajax().update(":formulario:tblProductoDetalles");
     }
 
@@ -983,6 +1002,28 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public void seleccionarFilaTablaDetalle(int filaSeleccionada) {
         
+    }
+
+    public void cargarDatosDetalleVista(BigDecimal valorUnitario, String descripcion, String codigo) {
+        
+    }
+
+    public void setFacturaDetalleSeleccionado(FacturaDetalle facturaDetalle) {
+        this.facturaDetalle=facturaDetalle;
+    }
+
+    public Boolean getModoEdicionDetalle() {
+        return modoEdicionDetalle;
+    }
+
+    public void setModoEdicionDetalle(Boolean modoEdicionDetalle) {
+        this.modoEdicionDetalle=modoEdicionDetalle;
+    }
+
+    public void limpiarIngresoDetalleVista() {
+        productoSeleccionado = new Producto();
+        this.facturaDetalle=new FacturaDetalle();
+        this.facturaDetalle.setCantidad(BigDecimal.ONE);
     }
 
     /**
@@ -1240,5 +1281,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     public void setDescuentoPorcentaje(Boolean descuentoPorcentaje) {
         this.descuentoPorcentaje = descuentoPorcentaje;
     }
+    
+    
          
 }

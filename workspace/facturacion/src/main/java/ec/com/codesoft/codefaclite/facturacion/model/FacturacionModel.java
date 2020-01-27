@@ -165,6 +165,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
@@ -216,6 +217,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      * Esta variable utilizo para corregir el comportamiento del listener y evitar ciclos en ese combo
      */
     private Boolean ejecutarListenerComboDocumento=false;
+    
+    /**
+     * Referencia que permite tener cual es el detalle que se va a agregar o a editar
+     */
+    private FacturaDetalle facturaDetalleSeleccionado;
+    
+    /**
+     * Referencia para saber si estan en modo de editar un detalle o no 
+     */
+    private Boolean modoEdicionDetalle;
 
     
 
@@ -548,6 +559,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 int fila = getTblDetalleFactura().getSelectedRow();
                 if(fila>=0)
                 {
+                    modoEdicionDetalle=true;
                     //setear valores para cargar de nuevo en los campos de la factura
                     FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
                     getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario() + "");
@@ -569,7 +581,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void actionPerformed(ActionEvent e) {
                 try {
                     //System.out.println(panelPadre.validarPorGrupo("detalles"));
-                    controlador.agregarDetallesFactura(null);
+                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -583,7 +595,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(getBtnAgregarDetalleFactura().isEnabled())
                 {   try {
                     //Si esta habilitado el boton de agregar funciona para agregar
-                    controlador.agregarDetallesFactura(null);
+                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -785,7 +797,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void updateInterface(Producto entity) {
                 if (entity != null) {
                     productoSeleccionado = entity;
-                    controlador.setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
+                    FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
+                            productoSeleccionado.getValorUnitario(), 
+                            productoSeleccionado.getNombre(), 
+                            productoSeleccionado.getCodigoPersonalizado(), 
+                            productoSeleccionado.getCatalogoProducto(), 
+                            entity.getIdProducto(), 
+                            TipoDocumentoEnum.LIBRE); //TODO: El metodo libre esta de revisar porque no se desde que pantalla estan usando si es con inventario o con no
+                    controlador.setearValoresProducto(facturaDetalle);
                     //Establecer puntero en la cantidad para agregar
                     getTxtCantidad().requestFocus();
                     getTxtCantidad().selectAll();
@@ -921,7 +940,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             presupuestoSeleccionado=presupuestoTmp;
             
             String descripcion="P"+presupuestoSeleccionado.getId()+" OT"+presupuestoSeleccionado.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoSeleccionado.getDescripcion();
-            controlador.setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString(),presupuestoSeleccionado.getCatalogoProducto());
+            FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(presupuestoSeleccionado.getTotalVenta(), descripcion, presupuestoSeleccionado.getId().toString(), presupuestoSeleccionado.getCatalogoProducto(), presupuestoSeleccionado.getId(),(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem());
+            controlador.setearValoresProducto(facturaDetalle);
+            //controlador.setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString(),presupuestoSeleccionado.getCatalogoProducto());
             for (PersonaEstablecimiento establecimiento : presupuestoSeleccionado.getPersona().getEstablecimientos()) {
                 cargarCliente(establecimiento);
                 break;
@@ -946,7 +967,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }            
             
             rubroSeleccionado=rubroEstudianteTmp;
-            controlador.setearValoresProducto(rubroEstudianteTmp.getSaldo(),rubroEstudianteTmp.getRubroNivel().getNombre(),rubroEstudianteTmp.getId().toString(),rubroEstudianteTmp.getRubroNivel().getCatalogoProducto());
+            FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(rubroEstudianteTmp.getSaldo(), 
+                    rubroEstudianteTmp.getRubroNivel().getNombre(), 
+                    rubroEstudianteTmp.getId().toString(), 
+                    rubroEstudianteTmp.getRubroNivel().getCatalogoProducto(), 
+                    rubroEstudianteTmp.getId(), 
+                    (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem());
+            controlador.setearValoresProducto(facturaDetalle);
         }
         
     }
@@ -1627,6 +1654,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public void limpiar() {
         this.factura = new Factura();
+        modoEdicionDetalle=false;
         //this.for=new ArrayList<FormaPago>();
         this.factura.setDetalles(new ArrayList<FacturaDetalle>());
 
@@ -1869,55 +1897,49 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      * Cargar los detalles de las facturas agregados
      */
     public void cargarDatosDetalles() {
-        Vector<String> titulo = new Vector<>();
-        titulo.add("Codigo");
-        titulo.add("ValorUni");
-        titulo.add("Cantidad");
-        titulo.add("Descripcion");
-        titulo.add("Descuento");
-        titulo.add("Valor Total");
-        titulo.add(""); //Columna para el boton de eliminar
+        String[] titulo ={
+        "Codigo",
+        "ValorUni",
+        "Cantidad",
+        "Descripcion",
+        "Descuento",
+        "Valor Total",
+        ""}; //Columna para el boton de eliminar
 
         List<FacturaDetalle> detalles = factura.getDetalles();
 
-        this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
+        //this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
+        this.modeloTablaDetallesProductos=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,});
+        
         for (FacturaDetalle detalle : detalles) {
             try {
                 
                 TipoDocumentoEnum tipoReferenciaEnum=detalle.getTipoDocumentoEnum();
                 Vector<String> fila = new Vector<String>();
                 
-                switch(tipoReferenciaEnum)
+                if(detalle.getCodigoPrincipal()!=null)
                 {
-                    case ACADEMICO:
-                        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
-                        fila.add(rubroEstudiante.getId() + "");
-                        break;
-                        
-                    case PRESUPUESTOS:
-                        //Presupuesto presupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(detalle.getReferenciaId());
-                        fila.add(detalle.getReferenciaId().toString());
-                        break;
-                    
-                    case INVENTARIO: case LIBRE:
-                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
-                        /**
-                         * Todo: Este artificio lo hago de forma temporal porque puede ser porque por algun motivo se hayan borrado los productos
-                         */
-                        if(producto!=null)
-                        {
-                            fila.add(producto.getCodigoPersonalizado());
-                        }
-                        else
-                        {
-                            fila.add("Sin Código");
-                        }
-                            
-                        break;
-
+                    fila.add(detalle.getCodigoPrincipal());
                 }
-                 
-
+                else
+                {
+                    /**
+                     * Para evitar retrocompatibilidad con datos anteriores
+                     */
+                    ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(tipoReferenciaEnum,detalle.getReferenciaId());
+                    if (respuesta.objecto != null) {
+                        fila.add(((Producto)respuesta.objecto).getCodigoPersonalizado());
+                    } else {
+                        fila.add("Sin Código");
+                    }
+                }
+                
                 //Cargar los totales
                 fila.add(detalle.getPrecioUnitario().toString());               
                 //Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
@@ -1929,6 +1951,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 fila.add("Eliminar"); //Boton de eliminar para la tabla
                 modeloTablaDetallesProductos.addRow(fila);
             } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -2512,7 +2536,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
     }
     
-    private boolean validarAgregarInventario()
+    /*private boolean validarAgregarInventario()
     {
         try {
             
@@ -2550,7 +2574,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Por defecto si no tiene nada seleccionado si permito agregar el inventario
         return true;
         
-    }
+    }*/
     
     @Deprecated
     //TODO: Parece que este metodo ya no voy a usar
@@ -3397,7 +3421,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     @Override
-    public void cargarDatosDetalleVista(BigDecimal valorUnitario,String descripcion,String codigo,CatalogoProducto catologoProducto) {
+    public void cargarDatosDetalleVista(BigDecimal valorUnitario,String descripcion,String codigo) {
         getTxtValorUnitario().setText(valorUnitario+"");
         getTxtDescripcion().setText(descripcion);
         //getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
@@ -3515,6 +3539,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtCodigoDetalle().setText(codigoDetalle);
     }
 
+    public FacturaDetalle getFacturaDetalleSeleccionado() {
+        return facturaDetalleSeleccionado;
+    }
+
+    public void setFacturaDetalleSeleccionado(FacturaDetalle facturaDetalleSeleccionado) {
+        this.facturaDetalleSeleccionado = facturaDetalleSeleccionado;
+    }
+
+    public Boolean getModoEdicionDetalle() {
+        return modoEdicionDetalle;
+    }
+
+    public void setModoEdicionDetalle(Boolean modoEdicionDetalle) {
+        this.modoEdicionDetalle = modoEdicionDetalle;
+    }
+    
+    
+
     @Override
     public void cargarTotalesVista() {
         getLblSubtotalSinImpuesto().setText("" + factura.getSubtotalSinImpuestos().add(factura.getSubtotalImpuestos()));
@@ -3541,6 +3583,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public void seleccionarFilaTablaDetalle(int filaSeleccionada) {
         getTblDetalleFactura().setRowSelectionInterval(filaSeleccionada,filaSeleccionada);
+    }
+
+    @Override
+    public void limpiarIngresoDetalleVista() {
+        setearCantidadTxt("1");
+        setearDescripcionTxt("");
+        setearValorUnitarioTxt("");
+        setearDescuentoTxt("0");
+        setearCodigoDetalleTxt("");
+        
     }
     
     

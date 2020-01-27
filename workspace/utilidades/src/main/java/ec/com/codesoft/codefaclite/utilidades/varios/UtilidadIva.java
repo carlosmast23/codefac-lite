@@ -27,6 +27,26 @@ public class UtilidadIva {
         return ivaPorcentaje.add(BigDecimal.ONE).multiply(valor).setScale(2,BigDecimal.ROUND_HALF_UP);
     }
     
+    /**
+     * TODO: Ver si puedo unir con el metodo de arriba
+     * @param icePorcentaje
+     * @param valor
+     * @return 
+     */
+    public static BigDecimal calcularValorConIce(BigDecimal icePorcentaje,BigDecimal valor)
+    {       
+        if(icePorcentaje!=null)
+        {            
+            BigDecimal icePorcentajeTmp=icePorcentaje.
+                    divide(UtilidadBigDecimal.CIEN,5,BigDecimal.ROUND_HALF_UP).
+                    add(BigDecimal.ONE);
+            valor=valor.multiply(icePorcentajeTmp); //Finalmente calculo solo con 2 decimales porque no tiene sentido mas decimal porque se supoene que es el valor final de lafctura y al final solo pueden 2 facuras
+            return valor;
+        }
+        return null;
+        
+    }
+    
     public static BigDecimal calcularValorUnitario(BigDecimal ivaPorcentaje,BigDecimal icePorcentaje,BigDecimal total)
     {
         BigDecimal ivaTmp=ivaPorcentaje.add(BigDecimal.ONE);

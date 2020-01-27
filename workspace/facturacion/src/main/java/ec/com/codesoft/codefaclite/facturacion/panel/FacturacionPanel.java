@@ -42,7 +42,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
      */
     public FacturacionPanel() {
         initComponents();    
-        setTitle(VentanaEnum.TABLA_INTERES.getNombre());
+        setTitle(VentanaEnum.FACTURACION.getNombre());
     }
     
    

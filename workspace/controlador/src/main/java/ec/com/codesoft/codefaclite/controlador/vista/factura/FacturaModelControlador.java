@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -22,13 +23,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -141,8 +146,49 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         descripcion+=(productoSeleccionado.getCaracteristicas()!=null)?" "+productoSeleccionado.getCaracteristicas():"";
         descripcion=descripcion.replace("\n"," ");
         
+        
+        FacturaDetalle facturaDetalle=crearFacturaDetalle(
+                productoSeleccionado.getValorUnitario(), 
+                descripcion, 
+                productoSeleccionado.getCodigoPersonalizado(), 
+                productoSeleccionado.getCatalogoProducto(), 
+                productoSeleccionado.getIdProducto(), 
+                interfaz.obtenerTipoDocumentoSeleccionado());
+        
         //interfaz.setearValoresProducto(productoSeleccionado.getValorUnitario(),descripcion,productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
-        setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre()+"",productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
+        interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
+        setearValoresProducto(facturaDetalle);
+    }
+    
+    public FacturaDetalle crearFacturaDetalle(BigDecimal valorUnitario,String descripcion,String codigo,CatalogoProducto catalogoProducto,Long referenciaId,TipoDocumentoEnum tipoDocumentoReferencia)
+    {
+        FacturaDetalle facturaDetalle=new FacturaDetalle();
+        facturaDetalle.setCantidad(BigDecimal.ONE);
+        facturaDetalle.setDescripcion(descripcion);
+        facturaDetalle.setDescuento(BigDecimal.ZERO);
+        facturaDetalle.setPrecioUnitario(valorUnitario);
+        facturaDetalle.setReferenciaId(referenciaId);
+        facturaDetalle.setCodigoPrincipal(codigo);
+        facturaDetalle.setTipoDocumentoEnum(tipoDocumentoReferencia);
+        
+        if(catalogoProducto!=null)
+        {
+            if(catalogoProducto.getIce()!=null)
+            {
+                facturaDetalle.setIcePorcentaje(catalogoProducto.getIce().getPorcentaje());                
+            }
+            
+            if(catalogoProducto.getIva()!=null)
+            {
+                facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
+            }
+        }
+        else
+        {
+            mostrarMensaje(new CodefacMsj("Advertencia","El producto no tiene catalago",DialogoCodefac.MENSAJE_ADVERTENCIA));            
+        }
+        
+        return facturaDetalle;
     }
     
         
@@ -153,22 +199,43 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     private void verificarProductoConNotaVentaInterna(Producto producto)
     {
         DocumentoEnum documentoEnum=interfaz.obtenerDocumentoSeleccionado() ;
+        BigDecimal valorUnitario=producto.getValorUnitario();
         if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
         {
+            /**
+             * Si el producto tiene ice calculo el nuevo subtotal
+             */
+            CatalogoProducto catalogoProducto=producto.getCatalogoProducto();
+            if(catalogoProducto.getIce()!=null && catalogoProducto.getIce().getPorcentaje()!=null)
+            {
+                BigDecimal porcentajeIce = (catalogoProducto.getIce() != null) ? catalogoProducto.getIce().getPorcentaje() : null;
+                valorUnitario = UtilidadIva.calcularValorConIce(
+                        porcentajeIce,
+                        valorUnitario).setScale(5,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
+                
+                catalogoProducto.setIce(null);//Pongo el null para que posteriormente no realice este calculo
+
+            }
+            
             //Si el producto es distinto de 0 convierto a producto sin iva y cambio el costo
-            if(producto.getCatalogoProducto().getIva().getTarifa()!=0)
+            if(catalogoProducto.getIva().getTarifa()!=0)
             {
                 producto.getCatalogoProducto().getIva().setTarifa(0);
                 producto.getCatalogoProducto().getIva().setPorcentaje(BigDecimal.ZERO);
-                BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),producto.getValorUnitario());
+                
+                BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),valorUnitario);
                 producto.setValorUnitario(nuevoValorUnitario);
             }
         }
     }
     
-    public  void setearValoresProducto(BigDecimal valorUnitario,String descripcion,String codigo,CatalogoProducto catologoProducto) {
-        interfaz.cargarDatosDetalleVista(valorUnitario,descripcion,codigo,catologoProducto);
-        if(catologoProducto.getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
+    public  void setearValoresProducto(FacturaDetalle facturaDetalle) {
+        interfaz.cargarDatosDetalleVista(
+                facturaDetalle.getPrecioUnitario(),
+                facturaDetalle.getDescripcion(),
+                facturaDetalle.getCodigoPrincipal());
+        
+        if(facturaDetalle.getIvaPorcentaje()==0)
         {
             //Carga el dato por defecto cuando no se puede ingresar productos que contengan iva
             //getCmbIva().setSelectedItem(EnumSiNo.NO);
@@ -187,11 +254,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 {
                     //getCmbIva().setSelectedItem(EnumSiNo.SI);
                     interfaz.setComboIva(EnumSiNo.SI);
-                    BigDecimal porcentajeIce=(catologoProducto.getIce()!=null)?catologoProducto.getIce().getPorcentaje():null;
+                    BigDecimal porcentajeIce=(facturaDetalle.getIcePorcentaje()!=null)?facturaDetalle.getIcePorcentaje():null;
                     BigDecimal valorConIva=UtilidadIva.calcularValorConIvaIncluido(
                             session.obtenerIvaActualDecimal(),
                             porcentajeIce,
-                            valorUnitario);
+                            facturaDetalle.getPrecioUnitario());
                     //getTxtValorUnitario().setText(valorConIva.toString());
                     interfaz.setTxtValorUnitario(valorConIva.toString());
                 }
@@ -215,10 +282,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * Validacion de la la logica dependiendo el modulo
      * @return 
      */
-    private boolean validacionPersonalizadaPorModulos() {
-        TipoDocumentoEnum tipoDocEnum=interfaz.obtenerTipoDocumentoSeleccionado();
-        BigDecimal cantidad = new BigDecimal(interfaz.obtenerTxtCantidad());
-        BigDecimal valorUnitario = new BigDecimal(interfaz.obtenerTxtValorUnitario());
+    private boolean validacionPersonalizadaPorModulos(FacturaDetalle facturaDetalle) {
+        TipoDocumentoEnum tipoDocEnum=facturaDetalle.getTipoDocumentoEnum();
+        BigDecimal cantidad = facturaDetalle.getCantidad();
+        BigDecimal valorUnitario = facturaDetalle.getPrecioUnitario();
 
         switch(tipoDocEnum)
         {
@@ -238,14 +305,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 break;
                 
             case INVENTARIO:
-                return validarAgregarInventario(); //Metodo que se encarga de validar el inventario
+                return validarAgregarInventario(facturaDetalle); //Metodo que se encarga de validar el inventario
                 
         }
         
         return true;
     }
     
-    private boolean validarAgregarInventario()
+    private boolean validarAgregarInventario(FacturaDetalle facturaDetalle)
     {
         try {
             
@@ -261,11 +328,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     }
                     
                     
-                    boolean verifadorStock = verificarExistenciaStockProducto();
+                    boolean verifadorStock = verificarExistenciaStockProducto(facturaDetalle);
                     //Verificar si agrego los datos al fomurlaro cuando no existe inventario
                     if (!verifadorStock) {
-                        
-                        DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        mostrarMensaje(new CodefacMsj("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA));
+                        //DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
                         return false;
                     } else {                        
                         return true;
@@ -292,7 +359,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @throws ServicioCodefacException 
      * @author Trebor
      */
-    public boolean verificarExistenciaStockProducto() throws RemoteException, ServicioCodefacException
+    public boolean verificarExistenciaStockProducto(FacturaDetalle facturaDetalle) throws RemoteException, ServicioCodefacException
     {
         boolean verificadorStock;
         KardexServiceIf serviceKardex = ServiceFactory.getFactory().getKardexServiceIf();
@@ -300,7 +367,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         BodegaServiceIf serviceBodega = ServiceFactory.getFactory().getBodegaServiceIf();
         Bodega bodegaVenta = serviceBodega.obtenerBodegaVenta(session.getSucursal());
         //Verifica si existe stock para el producto seleccionado
-        verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta,interfaz.obtenerProductoSeleccionado(), Integer.parseInt(interfaz.obtenerTxtCantidad()));
+        ProductoServiceIf productoServiceIf=ServiceFactory.getFactory().getProductoServiceIf();
+        Producto producto=productoServiceIf.buscarPorId(facturaDetalle.getReferenciaId());
+        
+        //verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta,interfaz.obtenerProductoSeleccionado(), facturaDetalle.getCantidad().intValue());
+        verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta,producto, facturaDetalle.getCantidad().intValue());
         return verificadorStock;
     }
     
@@ -310,14 +381,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @return 
      */
     public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle) throws ServicioCodefacException {
-        boolean agregar = true;
+        //boolean agregar = true;
 
         //Verifica si manda un detalle existe solo se modifica
-        if (facturaDetalle != null) {
-            agregar = false;
-        } else {
-            facturaDetalle = new FacturaDetalle();
-        }
+        //if (facturaDetalle != null) {
+        //    agregar = false;
+        //} else {
+        //    facturaDetalle = new FacturaDetalle();
+        //}
 
         //Validacion de los datos ingresados para ver si puedo agregar al detalle
         if (!interfaz.validarIngresoDetalle()) {
@@ -331,18 +402,26 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
 
             
         //Validacion personalizada dependiendo de la logica de cada tipo de documento
-        if (!validacionPersonalizadaPorModulos()) {
+        if (!validacionPersonalizadaPorModulos(facturaDetalle)) {
                 return false;
         }
             
             
         //Variable del producto para verificar otros datos como el iva
-        CatalogoProducto catalogoProducto=null;
+        //CatalogoProducto catalogoProducto=null;
+        /*try {
+            if(facturaDetalle.get)
+            ReferenciaDetalleFacturaRespuesta respuesta=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(facturaDetalle.getTipoDocumentoEnum(),facturaDetalle.getReferenciaId());
+            catalogoProducto=respuesta.catalogoProducto;
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        
         //Seleccionar la referencia dependiendo del tipo de documento
-        TipoDocumentoEnum tipoDocumentoEnum=interfaz.obtenerTipoDocumentoSeleccionado();
-        facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
+        //TipoDocumentoEnum tipoDocumentoEnum=interfaz.obtenerTipoDocumentoSeleccionado();
+        //facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());s
         //Obtengo el catalogo producto dependiendo el documento para poder saber las caracteristicas del producto
-        switch (tipoDocumentoEnum)
+        /*switch (tipoDocumentoEnum)
         {
             case ACADEMICO:
                 facturaDetalle.setReferenciaId(interfaz.obtenerRubroSeleccionado().getId());
@@ -360,13 +439,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 catalogoProducto =interfaz.obtenerProductoSeleccionado().getCatalogoProducto();
                 //catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                 break;
-        }
+        }*/
+        
         //Advertecia cuando el item a facturar no tiene asignando un catalogo producto que es importante porque es de donde obtiene los valore
-        if(catalogoProducto==null)
+        /*if(catalogoProducto==null)
         {
             DialogoCodefac.mensaje("Advertencia","No esta definido el Catalogo Producto ,donde se especifica los impuestos para facturar ",DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
-        }
+        }*/
         facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));
         facturaDetalle.setDescripcion(interfaz.obtenerTxtDescripcion());
         //Calcula los valores dependiendo del iva para tener el valor unitario
@@ -374,11 +454,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         EnumSiNo incluidoIvaSiNo=interfaz.obtenerComboIva();
         //session.
         BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+        
         if(incluidoIvaSiNo.equals(EnumSiNo.SI))
         {
             //BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);
             //valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,6,BigDecimal.ROUND_HALF_UP); //Redondeando con 4 decimales ya no genera problema con el centavo aveces
-            BigDecimal porcentajeIce=(catalogoProducto.getIce()!=null)?catalogoProducto.getIce().getPorcentaje():null;
+            BigDecimal porcentajeIce=(facturaDetalle.getIcePorcentaje()!=null)?facturaDetalle.getIcePorcentaje():null;
             valorTotalUnitario=UtilidadIva.calcularValorUnitario(
                     session.obtenerIvaActualDecimal(),
                     porcentajeIce,
@@ -421,18 +502,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
             }
         }
-        //Calular el total despues del descuento porque necesito esa valor para grabar
         
-        facturaDetalle.calcularTotalDetalle();
-        /**
-         * Revisar este calculo del iva para no calcular 2 veces al mostrar
-         */
-        facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
-        if(catalogoProducto.getIce()!=null)
-        {
-            facturaDetalle.calcularValorIce(catalogoProducto.getIce().getPorcentaje());
-        }
-        facturaDetalle.calculaIva();
+        calcularTotalesDetalles(facturaDetalle);
         /**
          * ========> VALIDACION QUE EL VALOR UNITARIO MENOS DESCUENTO NO SEA NEGATIVO <=============
          * TODO: Ver si este codigo es correcto poner al final o se debe agrupar todos las validaciones en un bloque
@@ -440,29 +511,43 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
          */
         if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) >= 0) {
             
-            //Solo agregar si se enviar un dato vacio
-            if (agregar) {
+            //Solo agregar si no esta en modo edicion
+            if (!interfaz.getModoEdicionDetalle()) {
                 interfaz.obtenerFactura().addDetalle(facturaDetalle);
             }
             
-            interfaz.cargarDatosDetalles();
-            limpiarDetalleFactura();
+            interfaz.cargarDatosDetalles();            
             cargarTotales();
+            limpiarDetalleFactura();
         } else {
-            DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            mostrarMensaje(new CodefacMsj("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA));
+            //DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
             limpiarDetalleFactura();
             return false;
         }
-            
-                        
+        
+        
+        interfaz.setModoEdicionDetalle(false); //Por defecto pongo este valor en falso porque aunque este editando o agregando pongo terminar modo edicion
         return true; //si pasa todas las validaciones asumo que se edito correctamente
 
-        /*}
-        else
-        {
-            return false;
-        }*/
         
+        
+    }
+    
+    public void calcularTotalesDetalles(FacturaDetalle facturaDetalle)
+    {
+        //Calular el total despues del descuento porque necesito esa valor para grabar
+        
+        facturaDetalle.calcularTotalDetalle();
+        /**
+         * Revisar este calculo del iva para no calcular 2 veces al mostrar
+         */
+        facturaDetalle.setIvaPorcentaje(facturaDetalle.getIvaPorcentaje());
+        if(facturaDetalle.getIcePorcentaje()!=null)
+        {
+            facturaDetalle.calcularValorIce(facturaDetalle.getIcePorcentaje());
+        }
+        facturaDetalle.calculaIva();
     }
     
     public void cargarTotales() {
@@ -500,39 +585,20 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         /**
          * TODO: Revisar esta parte que originalemente seteaba con null directamente , si no funciona toca crear metodos para setear las variable
+         * FALTA AGREGAR LIMPIAR PARA EL RESTO DE VARIABLES
          */
-        switch(tipoDocumentoEnum)
-        {
-            case LIBRE:
-            case INVENTARIO:
-                Producto producto=interfaz.obtenerProductoSeleccionado();
-                producto=null;
-                break;
-                
-            case PRESUPUESTOS:
-                Presupuesto presupuestoSeleccionado=interfaz.obtenerPresupuestoSeleccionado();
-                presupuestoSeleccionado=null;
-                break;
-                
-            case ACADEMICO:
-                RubroEstudiante rubroEstudiante=interfaz.obtenerRubroSeleccionado();
-                rubroEstudiante=null;
-                break;
-        
-        }
-            
+        interfaz.setProductoSeleccionado(null);
+        //PRE presupuestoSeleccionado=null;
+        //interfazrubroEstudiante=null;
+           
         
         //Limpio los datos en la pantalla
-        /*getTxtCantidad().setText("");
-        getTxtDescripcion().setText("");
-        getTxtValorUnitario().setText("");
-        getTxtDescuento().setText("0");
-        getTxtCodigoDetalle().setText("");*/
-        interfaz.setearCantidadTxt("1");
+        /*interfaz.setearCantidadTxt("1");
         interfaz.setearDescripcionTxt("");
         interfaz.setearValorUnitarioTxt("");
         interfaz.setearDescuentoTxt("0");
-        interfaz.setearCodigoDetalleTxt("");
+        interfaz.setearCodigoDetalleTxt("");*/
+        interfaz.limpiarIngresoDetalleVista();
         
         interfaz.focoTxtCodigoDetalle();
         
@@ -575,7 +641,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         /**
          * Metodo que me permite cargar los detalle que necesito para mostrar en la vista los datos del cliente
          */
-        public void cargarDatosDetalleVista(BigDecimal valorUnitario,String descripcion,String codigo,CatalogoProducto catologoProducto);
+        public void cargarDatosDetalleVista(BigDecimal valorUnitario,String descripcion,String codigo);
         
         public void habilitarComboIva(Boolean opcion);
         public void setComboIva(EnumSiNo enumSiNo);
@@ -602,6 +668,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public Boolean validarIngresoDetalle();
         public Integer filaSeleccionadaTablaDetalle();
         public void seleccionarFilaTablaDetalle(int filaSeleccionada);
+        public void setFacturaDetalleSeleccionado(FacturaDetalle facturaDetalle);
+        public Boolean getModoEdicionDetalle();
+        public void setModoEdicionDetalle(Boolean modoEdicionDetalle);
+        public void limpiarIngresoDetalleVista();
+        
     }
     
 }

@@ -86,6 +86,8 @@ create table FACTURA_DETALLE
     ICE_PORCENTAJE INT,
     TOTAL decimal(13,2),
     DESCRIPCION varchar(300),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.2.1)*/
+    CODIGO_PRINCIPAL varchar(100),
     primary key (ID)
 );
 
