@@ -90,6 +90,10 @@ public abstract class AbstractFacade<T>
     }
     */
 
+    /**
+     * @deprecated 
+     * @param entity 
+     */
     public void edit(T entity) {
         EntityTransaction tx= getEntityManager().getTransaction();
         tx.begin();

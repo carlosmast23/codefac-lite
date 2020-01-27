@@ -143,29 +143,6 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         clientesLista=new Vector<ClienteInterfaceComprobante>();
     }
     
-    /**
-     * Obtiene el siguiente secuencial y setea ese valor
-     * @return 
-     */
-    /*public Integer obtenerSecuencialFacturaYAvanzar() throws RemoteException
-    {
-        try {
-            ParametroCodefacService servicio=new ParametroCodefacService();
-            ParametroCodefac parametroCodefac=servicio.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
-            String secuencialStr=parametroCodefac.getValor();
-            Integer secuencialInt=Integer.parseInt(secuencialStr)+1;
-            parametroCodefac.setValor(secuencialInt.toString());
-            
-            servicio.editar(parametroCodefac);
-            return secuencialInt;
-                    
-                    } catch (RemoteException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }*/
     
     public void eliminarComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException,ServicioCodefacException
     {
@@ -191,24 +168,19 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     
     public boolean verificarCredencialesFirma(String claveFirma,Empresa empresa) throws RemoteException
-    {
-        
-        try {
-            ParametroCodefacService servicioParametros=new ParametroCodefacService();
-            Map<String,ParametroCodefac> parametrosMap=  servicioParametros.getParametrosMap(empresa);
-            
-            String pathFirma=parametrosMap.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor();
-            String rutaDestino = parametrosMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/"+pathFirma;
-            
-            if (!claveFirma.equals("") && !pathFirma.equals("")) {
-                if (FirmaElectronica.FirmaVerificar(rutaDestino, claveFirma)) {
-                    return true;
-                }
+    {        
+        ParametroCodefacService servicioParametros = new ParametroCodefacService();
+        Map<String, ParametroCodefac> parametrosMap = servicioParametros.getParametrosMap(empresa);
+
+        String pathFirma = parametrosMap.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor();
+        String rutaDestino = parametrosMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/" + pathFirma;
+
+        if (!claveFirma.equals("") && !pathFirma.equals("")) {
+            if (FirmaElectronica.FirmaVerificar(rutaDestino, claveFirma)) {
+                return true;
             }
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return false;
     }
     
@@ -263,7 +235,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 //TODOS: Lista de los documentos autorizados
                 
                 for (Autorizacion autorizacion: autorizaciones) {
-                    setearDatosComprobanteAutorizado(autorizacion);                                        
+                    try {                                        
+                        setearDatosComprobanteAutorizado(autorizacion);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 
             }
@@ -485,7 +463,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
             @Override
             public void autorizado(Autorizacion documentoAutorizado) {
-                    setearDatosComprobanteAutorizado(documentoAutorizado);
+                    try {
+                        setearDatosComprobanteAutorizado(documentoAutorizado);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
             }
             });
         //}
@@ -514,14 +498,14 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         return true;
     }
     
-    private void setearDatosComprobanteAutorizado(Autorizacion documentoAutorizado )
+    private void setearDatosComprobanteAutorizado(Autorizacion documentoAutorizado ) throws ServicioCodefacException, RemoteException
     {
         if(documentoAutorizado.getNumeroAutorizacion()==null || documentoAutorizado.getNumeroAutorizacion().isEmpty())
         {
             return;
         }
         
-        try {
+        //try {
             ClaveAcceso clave = new ClaveAcceso(documentoAutorizado.getNumeroAutorizacion());
             ComprobanteEntity comprobante = obtenerComprobantePorClaveAcceso(clave);
             if (comprobante != null) {
@@ -537,11 +521,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             } else {
                 LOG.log(Level.SEVERE, "Error se autorizo el comprobante pero no se encuentra el registro; " + documentoAutorizado.getNumeroAutorizacion());
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
-            LOG.log(Level.SEVERE, "Error: " + ex.getMessage() + " \n Clave Acceso:" + documentoAutorizado.getNumeroAutorizacion());
-        }
+        //} catch (RemoteException ex) {
+        //    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        //} catch (ServicioCodefacException ex) {
+        //    LOG.log(Level.SEVERE, "Error: " + ex.getMessage() + " \n Clave Acceso:" + documentoAutorizado.getNumeroAutorizacion());
+        //}
     }
     
     /**
@@ -776,6 +760,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }        
     }
@@ -819,6 +805,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -845,6 +833,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     }
                     
                 } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }            
@@ -2017,9 +2007,20 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             comprobante.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
         }
 
-        //parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
-        //parametroService.editar(parametro);
+        /**
+         * Grabar la entidad de punto de emision con el secuencial agregado
+         */
         entityManager.merge(puntoEmision);
+        entityManager.flush();
+        
+        
+        /**
+         * @DATE 27/01/2020
+         * TODO: Validacion adicional temporal hasta ver porque aveces se descuadra el secuencial del comprobante del punto de emision
+         */
+        
+        
+        
     }
    
     /**

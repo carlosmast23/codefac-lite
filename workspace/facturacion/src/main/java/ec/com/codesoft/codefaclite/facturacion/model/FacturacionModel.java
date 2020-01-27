@@ -1442,6 +1442,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.dialogoPregunta(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite(ex.getMessage());
+            
         }
         //ServiceFactory.getFactory().getComp
         
@@ -1468,7 +1473,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(DialogoCodefac.dialogoPregunta("Advertencia","Está seguro que quiere eliminar el registro ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
                 {
                     factura.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO);
-                    ServiceFactory.getFactory().getFacturacionServiceIf().eliminarFactura(factura);
+                    try {
+                        ServiceFactory.getFactory().getFacturacionServiceIf().eliminarFactura(factura);
+                    } catch (ServicioCodefacException ex) {
+                        DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);                        
+                        throw new ExcepcionCodefacLite(ex.getMessage());
+                        
+                    }
                 }
                 else
                 {

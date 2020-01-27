@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Factur
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
@@ -192,10 +193,14 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
             }
 
             setearDatosAdicionales();
-            ServiceFactory.getFactory().getFacturacionServiceIf().editar(null);
-            mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+            ServiceFactory.getFactory().getFacturacionServiceIf().editar(null);            mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.EDITADO);
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            MensajeMb.mensaje(new CodefacMsj("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO));
+            Logger.getLogger(NotaCreditoMb.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite(ex.getMessage());
+            
         }
     }
 

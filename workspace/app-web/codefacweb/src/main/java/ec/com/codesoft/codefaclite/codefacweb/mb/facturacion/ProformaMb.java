@@ -211,6 +211,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.EDITADO);
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

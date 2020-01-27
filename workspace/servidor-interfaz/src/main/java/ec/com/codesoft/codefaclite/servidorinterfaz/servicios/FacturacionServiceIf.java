@@ -30,19 +30,20 @@ import java.util.List;
  */
 public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
 {
+    public void editar(Factura factura) throws ServicioCodefacException, RemoteException;
     public Factura grabar(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 
     public Factura grabar(Factura factura,Prestamo prestamo) throws RemoteException, ServicioCodefacException;
     public Factura grabar(Factura factura,Empleado empleado) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 
     public List<Factura> obtenerFacturasPorIdentificacion(String identificacion) throws java.rmi.RemoteException;
     public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo) throws java.rmi.RemoteException;
-    public void editar(Factura factura) throws java.rmi.RemoteException;
+    //public void editar(Factura factura) throws java.rmi.RemoteException;
     public void editarFactura(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 
     public List<Factura> obtenerTodos()throws java.rmi.RemoteException;
     //public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa) throws java.rmi.RemoteException;
     public List<Factura> obtenerFacturasReporte(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum) throws java.rmi.RemoteException;
     public List<Factura> obtenerFacturasActivas() throws java.rmi.RemoteException;
     //public String getPreimpresoSiguiente() throws java.rmi.RemoteException;
-    public void eliminarFactura(Factura factura) throws java.rmi.RemoteException;
+    public void eliminarFactura(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException;
     public Long obtenerSecuencialProformas(Empresa empresa) throws RemoteException;
     public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException;
     public void eliminarProforma(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException;

@@ -33,6 +33,7 @@ import net.sf.jasperreports.view.save.JRXmlSaveContributor;
 /**
  *
  * @author CARLOS_CODESOFT
+ * link: https://xbuba.com/questions/47349042
  */
 public class VisualizadorJRViewer extends JRViewer {
 
