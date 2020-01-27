@@ -55,6 +55,7 @@ import static ec.com.codesoft.codefaclite.main.init.Main.obtenerPerfilesUsuario;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.panel.VentanaManualUsuario;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
+import ec.com.codesoft.codefaclite.main.report.VisualizadorJRViewer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.main.utilidades.UtilidadServicioWeb;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -118,6 +119,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -157,6 +159,10 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.swing.JRViewer;
+import net.sf.jasperreports.swing.JRViewerToolbar;
+import net.sf.jasperreports.view.JRSaveContributor;
+import net.sf.jasperreports.view.JasperViewer;
+import net.sf.jasperreports.view.save.JRPdfSaveContributor;
 import org.jfree.util.Log;
 
 /**
@@ -2444,11 +2450,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla) {
         crearReportePantalla(jasperPrint, nombrePantalla, ConfiguracionImpresoraEnum.NINGUNA);
     }
-
+    
+   
+    
     @Override
     public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla,ConfiguracionImpresoraEnum configuracionImpresora) {
-        JRViewer viewer=new JRViewer(jasperPrint);
+        //JRViewer viewer=new  JRViewer(jasperPrint);
+        JRViewer viewer=new VisualizadorJRViewer(jasperPrint);
         viewer.setZoomRatio(0.6f);
+        
         
         if(configuracionImpresora!=null)
         {
