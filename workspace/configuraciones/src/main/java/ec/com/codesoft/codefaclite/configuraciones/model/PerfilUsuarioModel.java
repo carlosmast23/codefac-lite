@@ -164,9 +164,10 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                 {
                     try {
                         LoginRespuesta loginRespuesta= ServiceFactory.getFactory().getUsuarioServicioIf().login(usuario.getNick(),claveAnterior,session.getEmpresa());
-                        if(loginRespuesta.estadoEnum.equals(loginRespuesta.estadoEnum.CORRECTO_USUARIO))
+                        //Si la clave tiene alguna advertencia mando el mensaje
+                        if(!loginRespuesta.estadoEnum.equals(loginRespuesta.estadoEnum.CORRECTO_USUARIO))
                         {
-                            DialogoCodefac.mensaje("Error", "La clave anterior es incorrecta no se puede grabar la nueva clave", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                            DialogoCodefac.mensaje("Error",loginRespuesta.obtenerAlertasConFormato(), DialogoCodefac.MENSAJE_ADVERTENCIA);
                         }
                         else
                         {
