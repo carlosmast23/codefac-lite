@@ -382,12 +382,16 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                  */
                 CarteraService carteraService=new CarteraService();
                 //carteraService.buscarCarteraPorReferencia(Long.MIN_VALUE, documentoEnum, GeneralEnumEstado.ACTIVO, tipo, sucursal)
-                Cartera carteraFactura=carteraService.buscarCarteraPorReferencia(
-                        notaCredito.getFactura().getId(),
-                        notaCredito.getFactura().getCodigoDocumentoEnum(), 
-                        GeneralEnumEstado.ACTIVO, 
-                        Cartera.TipoCarteraEnum.CLIENTE, 
-                        notaCredito.getSucursalEmpresa());
+                Cartera carteraFactura=null;
+                if(notaCredito.getFactura()!=null)
+                {
+                    carteraFactura=carteraService.buscarCarteraPorReferencia(
+                            notaCredito.getFactura().getId(),
+                            notaCredito.getFactura().getCodigoDocumentoEnum(), 
+                            GeneralEnumEstado.ACTIVO, 
+                            Cartera.TipoCarteraEnum.CLIENTE, 
+                            notaCredito.getSucursalEmpresa());
+                }
                 
                 for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {
                     CarteraDetalle carteraDetalle=new CarteraDetalle();
@@ -400,14 +404,18 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                      * ==========================================================================
                      * CREAR EL CRUCE DE LA FACTURA
                      * ==========================================================================
+                     * Solo hacer un cruce si existe la referencia de la factura en el sistema
                      */
-                    CarteraCruce carteraCruceRenta = new CarteraCruce();
-                    carteraCruceRenta.setCarteraAfectada(carteraFactura);
-                    carteraCruceRenta.setCarteraDetalle(carteraDetalle);
-                    carteraCruceRenta.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-                    carteraCruceRenta.setFechaCruce(UtilidadesFecha.getFechaHoy());
-                    carteraCruceRenta.setValor(detalle.calcularTotalFinal());
-                    cruces.add(carteraCruceRenta);
+                    if(carteraFactura!=null)
+                    {
+                        CarteraCruce carteraCruceRenta = new CarteraCruce();
+                        carteraCruceRenta.setCarteraAfectada(carteraFactura);
+                        carteraCruceRenta.setCarteraDetalle(carteraDetalle);
+                        carteraCruceRenta.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+                        carteraCruceRenta.setFechaCruce(UtilidadesFecha.getFechaHoy());
+                        carteraCruceRenta.setValor(detalle.calcularTotalFinal());
+                        cruces.add(carteraCruceRenta);
+                    }
                 }
                 
                 

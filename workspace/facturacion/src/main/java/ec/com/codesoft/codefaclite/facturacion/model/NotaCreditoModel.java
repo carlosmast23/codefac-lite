@@ -642,6 +642,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                     controlador.setearDatosProveedor(proveedorTmp,notaCredito);                    
                     getTxtProveedor().setText(proveedorTmp.getIdentificacion()+" - "+proveedorTmp.getRazonSocial());
                     mostrarDatosNotaCredito();
+                    cargarTablaDatosAdicionales();
                 }
             }
         });

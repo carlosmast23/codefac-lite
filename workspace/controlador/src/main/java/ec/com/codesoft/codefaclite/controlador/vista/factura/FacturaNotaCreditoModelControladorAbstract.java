@@ -16,6 +16,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
  */
 public abstract class FacturaNotaCreditoModelControladorAbstract extends ModelControladorAbstract {
     public SessionCodefacInterface session;
+    
+    public abstract ComprobanteAdicional crearComprobanteAdicional(String correo, ComprobanteAdicional.Tipo tipoCorreo, ComprobanteAdicional.CampoDefectoEnum campoDefecto);
 
     public FacturaNotaCreditoModelControladorAbstract(MensajeVistaInterface mensajeVista) {
         super(mensajeVista);
@@ -42,7 +44,8 @@ public abstract class FacturaNotaCreditoModelControladorAbstract extends ModelCo
             {
                 if (correoElectronico != null) 
                 {
-                    comprobante.addDatoAdicional(new FacturaAdicional(correoElectronico, FacturaAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
+                    comprobante.addDatoAdicional(crearComprobanteAdicional(correoElectronico, FacturaAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
+                    //comprobante.addDatoAdicional(new FacturaAdicional(correoElectronico, FacturaAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
                 }
             } 
             else //Si existe el campo del correo del cliente lo edito

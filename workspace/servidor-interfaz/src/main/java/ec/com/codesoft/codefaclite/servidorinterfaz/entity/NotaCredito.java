@@ -128,6 +128,9 @@ public class NotaCredito extends ComprobanteVentaNotaCreditoAbstract<NotaCredito
     private List<NotaCreditoAdicional> datosAdicionales;
 
     public NotaCredito() {
+        descuentoImpuestos=BigDecimal.ZERO;
+        descuentoSinImpuestos=BigDecimal.ZERO;
+        ice=BigDecimal.ZERO;
     }
     
     public Long getId() {
