@@ -1,7 +1,7 @@
-Agregar reporte basico de facturas desde el modulo web
+Agregar para hacer notas de credito desde el modulo web
 Verificar que se pueda anular una factura desde cualquier punto en una nota de credito diferente de otro punto de emision
 En el modulo web hacer que los dialogos hagan consultas por partes porque demora mucho consultando todo 
-ver como informar de algun error cuando es via remota, 
+ver como informar de algun error cuando es via remota o web , 
 yo creo que si grabamos un campo de ultimo_error
 y otro campo que diga procesando
 y otro que diga terminado como una especia de auxiliar

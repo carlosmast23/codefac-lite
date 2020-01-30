@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -512,7 +513,13 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         this.ice = ice;
     }
     
-    
+    public TipoDocumentoEnum getCodigoTipoDocumentoEnum() {
+        return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(codigoTipoDocumento);
+    }
+
+    public void setCodigoTipoDocumentoEnum(TipoDocumentoEnum codigoTipoDocumentoEnum) {
+        this.codigoTipoDocumento = codigoTipoDocumentoEnum.getCodigo();
+    }
     
     
     

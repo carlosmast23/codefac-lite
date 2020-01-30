@@ -345,6 +345,8 @@ public class CompraModel extends CompraPanel{
         
         this.getCmbDocumento().setSelectedItem(DocumentoEnum.obtenerDocumentoPorCodigo(compra.getCodigoDocumento()));
         this.getCmbSustentoComprobante().setSelectedItem(compra.getCodigoSustentoSriEnum());
+        this.getCmbTipoDocumento().setSelectedItem(compra.getCodigoTipoDocumentoEnum());
+        
         
         //Cargar la orden de compra si existe referencia
         if(this.compra.getOrdenCompra()!=null)
@@ -447,7 +449,6 @@ public class CompraModel extends CompraPanel{
         
        
         //getCmbSustentoComprobante().setSelectedIndex(0);
-        //getCmbDocumento().setSelectedIndex(0);
         cargarCatalogoRetencionesDefecto();
         
         getRdbEmisionFisica().setSelected(true);
