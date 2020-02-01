@@ -500,6 +500,47 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum);
     }
 
+    /**
+     * TODO: Este metodo es temporal hasta poder grabar el costo en la misma factura
+     * @deprecated 
+     * @param facturas
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
+    public Map<Factura,BigDecimal> obtenerCostoFacturas(List<Factura> facturas) throws RemoteException, ServicioCodefacException
+    {
+        Map<Factura,BigDecimal> mapCostos=new HashMap<Factura,BigDecimal>();
+        
+        for (Factura factura : facturas) {
+            BigDecimal costoFactura=BigDecimal.ZERO;
+            for (FacturaDetalle detalle : factura.getDetalles()) {
+                
+                KardexService kardexService = new KardexService();
+                ReferenciaDetalleFacturaRespuesta referenciaDetalle = obtenerReferenciaDetalleFactura(detalle.getTipoDocumentoEnum(), detalle.getReferenciaId());
+                if (referenciaDetalle.objecto != null) {
+                    if(referenciaDetalle.tipoDocumentoEnum.equals(TipoDocumentoEnum.INVENTARIO))
+                    {
+                        Producto producto=(Producto) referenciaDetalle.objecto;
+                        Kardex kardexTemp=kardexService.buscarKardexPorProducto(producto);
+                        if(kardexTemp!=null)
+                        {
+                            BigDecimal costoTotalDetalle=kardexTemp.getPrecioPromedio().multiply(detalle.getCantidad());
+                            costoFactura=costoFactura.add(costoTotalDetalle);
+                        }
+                    }
+                }
+                
+                /**
+                 * Setear el costo obtenido
+                 */
+                mapCostos.put(factura, costoFactura);
+                
+            }
+        }
+        return mapCostos;
+        
+    }
+    
     public List<Factura> obtenerFacturasActivas()
     {
         return facturaFacade.getFacturaEnable();

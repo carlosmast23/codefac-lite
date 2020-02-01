@@ -59,4 +59,6 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
      */
     public void anularInventario(Kardex kardex) throws java.rmi.RemoteException,ServicioCodefacException;
     
+    public Kardex buscarKardexPorProducto(Producto producto) throws java.rmi.RemoteException;
+    
 }

@@ -295,6 +295,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     protected Vector<String>  crearCabezeraExcel()
     {
         Vector<String> titulos=crearCabezeraTabla();
+        titulos.add(titulos.size(),"Costo");
         titulos.add(0,"Clave de Acceso");
         titulos.add(1,"Fecha Max Pago");
         titulos.add(2,"Vendedor");

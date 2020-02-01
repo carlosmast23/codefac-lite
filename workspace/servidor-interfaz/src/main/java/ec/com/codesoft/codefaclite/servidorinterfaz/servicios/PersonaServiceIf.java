@@ -38,4 +38,6 @@ public interface PersonaServiceIf extends ServiceAbstractIf<Persona>{
     
     public Persona buscarConsumidorFinal(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException;
     
+    public Persona crearConsumidorFinal(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException;
+    
 }

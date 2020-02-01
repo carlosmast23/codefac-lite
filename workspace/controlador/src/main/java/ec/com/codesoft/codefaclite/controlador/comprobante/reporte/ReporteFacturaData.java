@@ -51,6 +51,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     //============> Campos adicionales para el vendedor y fecha maxima de pago <====================//
     protected String fechaMaximaPago;
     protected String vendedor;
+    protected String costo;
     
     /**
      * Es la fecha de autorizacion del comprobante
@@ -288,6 +289,15 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     public void setFechaAutorizacion(String fechaAutorizacion) {
         this.fechaAutorizacion = fechaAutorizacion;
     }
+
+    public String getCosto() {
+        return costo;
+    }
+
+    public void setCosto(String costo) {
+        this.costo = costo;
+    }
+    
     
     
     
@@ -325,6 +335,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.ivaDoceFactura, Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.valorAfecta, Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.totalFinal, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.costo, Excel.TipoDataEnum.NUMERO));
 
         return tiposDatos;
     }

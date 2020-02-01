@@ -84,6 +84,29 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     }
     
     /**
+     * @deprecated 
+     * TODO: Este metodo solo es temporal hasta solucionar un problema con el reporte de factura con costos
+     * @param producto
+     * @return
+     * @throws java.rmi.RemoteException 
+     */
+   public Kardex buscarKardexPorProducto(Producto producto) throws java.rmi.RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        //mapParametros.put("bodega",bodega);
+        mapParametros.put("producto",producto);   
+        List<Kardex> listaKardex=getFacade().findByMap(mapParametros);
+        //List<Kardex> listaKardex=obtenerPorMap(mapParametros);
+        
+        if(listaKardex!=null && listaKardex.size()>0)
+        {
+            return listaKardex.get(0);
+        }
+        
+        return null;
+    }
+    
+    /**
      * Obtiene los valores modificos del stock y la reserva para grabar en el Kardex
      * @return 
      */
@@ -226,16 +249,16 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
 
         ///Actualizar los totales del emsamble
-        kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(costoIndividualEnsamble).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
-        kardex.setPrecioTotal(kardex.getPrecioTotal().add(costoIndividualEnsamble));
-        kardex.setPrecioUltimo(costoIndividualEnsamble);
+        //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(costoIndividualEnsamble).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
+        //kardex.setPrecioTotal(kardex.getPrecioTotal().add(costoIndividualEnsamble));
+        //kardex.setPrecioUltimo(costoIndividualEnsamble);
 
         //Agregar o descontar el stock cuando se ingrese o salga mercaderia
-        if (accion.equals(ProductoEnsamble.EnsambleAccionEnum.AGREGAR) || accion.equals(ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA) ) {
-            kardex.setStock(kardex.getStock() + cantidad);
-        } else {
-            kardex.setStock(kardex.getStock() - cantidad);
-        }
+        //if (accion.equals(ProductoEnsamble.EnsambleAccionEnum.AGREGAR) || accion.equals(ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA) ) {
+        //    kardex.setStock(kardex.getStock() + cantidad);
+        //} else {
+        //    kardex.setStock(kardex.getStock() - cantidad);
+        //}
 
         //Crear el registro del kardex detalle 
         KardexDetalle kardexDetalle = new KardexDetalle();
@@ -262,6 +285,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
 
         kardex.addDetalleKardex(kardexDetalle);
+        recalcularValoresKardex(kardex, kardexDetalle);
         entityManager.persist(kardexDetalle);
         entityManager.merge(kardex);
         entityManager.flush();

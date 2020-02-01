@@ -186,7 +186,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     {
         Persona persona=new Persona();
         persona.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-        persona.setIdentificacion("9999999999999");
+        persona.setIdentificacion(Persona.IDENTIFICACION_CONSUMIDOR_FINAL);
         persona.setRazonSocial(Usuario.CONSUMIDOR_FINAL_NOMBRE);
         persona.setTipClienteEnum(Persona.TipoClienteEnum.CLIENTE);
         persona.setTipoEnum(OperadorNegocioEnum.AMBOS);
@@ -206,6 +206,19 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         entityManager.merge(persona);
         
         return persona;
+    }
+    
+    public Persona crearConsumidorFinal(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
+    {
+        MetodoInterfaceTransaccion transaccion=new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                crearConsumidorFinalSinTransaccion(empresa);
+            }
+        };
+        ejecutarTransaccion(transaccion);
+        
+        return buscarConsumidorFinal(empresa);
     }
 
 }

@@ -12,3 +12,6 @@ Hacer que en al momento de transferir bodegas si no ingresa ningun precio que se
 Analizar para que el campo de ubicacion de cada producto funcione por bodega
 Agregar un campo de fecha de ingreso en los productos para ver cuales fueron los ultimos
 Ver que al momento de eliminar algo de inventario se pueda asiganar a otro producto porque voy a generar inconsistencias si por ejemplo se anula con nota de credito un producto ya eliminando no deberia afectar al karde previamente eliminado
+Revisar que al momento de generar los costos , totales y ultimo precio no genere problemas con los ensambles (KardexService )-> ingresoEgresoInventarioEnsambleSinTransaccion();
+Para poder sacar un reporte de costos precios por factura debo grabar de alguna forma del detalle de la factura con el kardex para poder saber el costo exacto en esa transaccion , ahorita se graba en el detalle del kardex la referencia de la factura pero eso no me permite relacionar correctamente los datos
+ver alguna forma si se puede grabar directamente en la factura el costo de todos los items del producto para poder saber directamente el margen de utilidad

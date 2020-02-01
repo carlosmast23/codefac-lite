@@ -2716,7 +2716,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             {
                                 if(DialogoCodefac.dialogoPregunta("Crear Consumidor Final","No existe el Consumidor Final, lo desea crear?",DialogoCodefac.MENSAJE_ADVERTENCIA))
                                 {
-                                    btnListenerAgregarCliente();
+                                    Persona consumidorFinal=ServiceFactory.getFactory().getPersonaServiceIf().crearConsumidorFinal(session.getEmpresa());
+                                    cargarCliente(consumidorFinal.getEstablecimientos().get(0));
                                 }
                             }
                             else

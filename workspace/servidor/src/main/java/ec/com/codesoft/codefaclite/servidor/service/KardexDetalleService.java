@@ -21,4 +21,5 @@ public class KardexDetalleService extends ServiceAbstract<KardexDetalle, KardexD
         super(KardexDetalleFacade.class);
     }
     
+    
 }
