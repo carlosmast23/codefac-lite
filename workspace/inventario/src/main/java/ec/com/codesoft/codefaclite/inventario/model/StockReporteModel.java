@@ -29,6 +29,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,7 +108,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 public void excel() {
                     try{
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Código", "Producto","Categoria","Ubicación", "Stock", "Cantidad Min"};
+                        String nombreCabeceras[] = {"Código", "Producto","Categoria","Ubicación", "Stock", "Cantidad Min","Costo"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras,listaData);
                         excel.abrirDocumento();
                     }
@@ -206,6 +207,7 @@ public class StockReporteModel extends StockMinimoPanel{
                      {
                         Producto producto = (Producto) objeto[0];
                         Integer cantidad = (Integer) objeto[1];
+                        BigDecimal costoPromedio=(BigDecimal)objeto[2];
                         //Kardex kardexTemp = (Kardex) objeto[2];
                         
                         /*if(producto==null)
@@ -230,6 +232,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto()!=null)?producto.getCatalogoProducto().getCategoriaProducto().getNombre():"");
                         data.setUbicacion(producto.getUbicacion());
                         data.setCantidadMinima(producto.getCantidadMinima().toString());
+                        data.setCosto(costoPromedio.toString());
                         
                         listaData.add(data);                        
                     }
@@ -255,7 +258,8 @@ public class StockReporteModel extends StockMinimoPanel{
             "Categoria",
             "Ubicación",
             "Stock",
-            "Cantidad Minima"
+            "Cantidad Minima",
+            "Costo"
         };
         
         DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
@@ -269,6 +273,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 stockMinimo.getUbicacion(),
                 stockMinimo.getStock(),
                 stockMinimo.getCantidadMinima(),
+                stockMinimo.getCosto()
             };
             
             modeloTabla.addRow(datos);
