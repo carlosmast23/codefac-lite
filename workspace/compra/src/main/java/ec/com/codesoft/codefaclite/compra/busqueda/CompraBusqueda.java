@@ -58,7 +58,7 @@ public class CompraBusqueda implements InterfaceModelFind<Compra>
         dato.add(t.getProveedor().getRazonSocial());
         DocumentoEnum estadoEnum= DocumentoEnum.obtenerDocumentoPorCodigo(t.getCodigoDocumento());
         dato.add(estadoEnum.getNombre());
-        dato.add(t.getCodigoTipoDocumento()); 
+        dato.add(t.getCodigoTipoDocumentoEnum().getNombre()); 
         dato.add(t.getFechaFactura());
         dato.add(t.getTotal());
     }
