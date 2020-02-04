@@ -974,6 +974,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     rubroEstudianteTmp.getId(), 
                     (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem());
             controlador.setearValoresProducto(facturaDetalle);
+            setFacturaDetalleSeleccionado(facturaDetalle);
         }
         
     }

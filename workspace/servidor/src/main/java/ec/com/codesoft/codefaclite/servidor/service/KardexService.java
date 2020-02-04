@@ -572,10 +572,11 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
          *            VALIDACIONES PARA LOS DETALLES DE KARDEX
          * ==============================================================
          */
-        if(detalle.getKardex()==null)
+        /*if(detalle.getKardex()==null)
         {
             throw new ServicioCodefacException("No se puede grabar sin referencia de Kardex vacio");
-        }
+        }*/
+        validarDetallesKardex(detalle);
         
         //Buscar si ya existe el kardex o si no existe los creamos
         Map<String, Object> map = new HashMap<String, Object>();
@@ -641,6 +642,23 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
     }
     
+    private void validarDetallesKardex(KardexDetalle detalle) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+         /**
+         * ==============================================================
+         *            VALIDACIONES PARA LOS DETALLES DE KARDEX
+         * ==============================================================
+         */
+        if(detalle.getKardex()==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar sin referencia de Kardex vacio");
+        }
+        
+        if(detalle.getCantidad()==null || detalle.getCantidad()==0)
+        {
+            throw new ServicioCodefacException("No se puede ingresar cantidad negativas de stock o que sean 0");
+        }
+    }
     
     /**
      * TODO: Ver si no voy a usar este metodo borrar

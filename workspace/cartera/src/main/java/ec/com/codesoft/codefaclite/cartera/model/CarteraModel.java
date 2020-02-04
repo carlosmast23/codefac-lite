@@ -8,10 +8,10 @@ package ec.com.codesoft.codefaclite.cartera.model;
 import ec.com.codesoft.codefaclite.cartera.busqueda.CarteraBusqueda;
 import ec.com.codesoft.codefaclite.cartera.panel.CarteraPanel;
 import ec.com.codesoft.codefaclite.cartera.reportdata.CarteraData;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -21,10 +21,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
@@ -38,7 +36,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraCru
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
-import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -47,7 +44,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,14 +52,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import org.apache.commons.collections4.map.HashedMap;
 
 /**
  *
@@ -128,7 +121,18 @@ public class CarteraModel extends CarteraPanel{
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearVariables();
+            validar();
+            ServiceFactory.getFactory().getCarteraServiceIf().editar(cartera);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+        }
     }
 
     @Override

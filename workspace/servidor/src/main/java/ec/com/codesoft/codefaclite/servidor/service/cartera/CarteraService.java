@@ -443,6 +443,19 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     }
 
     @Override
+    public void editar(Cartera entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                //Falta agregar validaciones porque no siempre se puede editar cualquier dato
+                entityManager.merge(entity);
+            }
+        });
+    }
+    
+    
+
+    @Override
     public void eliminar(Cartera entity,ModoProcesarEnum modo) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() 
         {
