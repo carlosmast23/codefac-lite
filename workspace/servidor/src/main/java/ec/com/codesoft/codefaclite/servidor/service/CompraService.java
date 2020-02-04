@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
@@ -70,6 +71,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 try {
+                    compra.setInventarioIngreso(EnumSiNo.NO.getLetra()); //La primera vez que grabo por defecto grabo para poder ingresar al inventario
                     //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
                     for (CompraDetalle compraDetalle : compra.getDetalles()) {
                         if (compraDetalle.getProductoProveedor().getId() == null) {

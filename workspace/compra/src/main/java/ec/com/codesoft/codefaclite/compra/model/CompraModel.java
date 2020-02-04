@@ -206,7 +206,7 @@ public class CompraModel extends CompraPanel{
         compra.setSecuencial(Integer.parseInt(getTxtSecuencialCompra().getText()));
         
         compra.setTipoFacturacion(""); //TODO: Establecer el metodo de facturacion manual y electronica
-        compra.setInventarioIngreso(EnumSiNo.NO.getLetra());
+        //compra.setInventarioIngreso(EnumSiNo.NO.getLetra());
         compra.setObservacion(getTxtObservacion().getText());
         compra.setAutorizacion(getTxtAutorizacion().getText().trim());
         
