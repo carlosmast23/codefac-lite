@@ -125,7 +125,7 @@ public class CarteraModel extends CarteraPanel{
         try {
             setearVariables();
             validar();
-            ServiceFactory.getFactory().getCarteraServiceIf().editar(cartera);
+            ServiceFactory.getFactory().getCarteraServiceIf().editar(cartera, cruces);
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);

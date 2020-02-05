@@ -98,6 +98,15 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
         //TODO: Solucion para tener problemas con las referencias de datos similares
         clonarCruces(cruces);
+        
+        /**
+         * =================================================================
+         * OBTENER EL NUEVO CODIGO DE LA CARTERA
+         * =================================================================
+         */
+        String codigoCartera = generarCodigoCartera(cartera.getSucursal(), cartera.getCodigoDocumento());
+        cartera.setCodigo(codigoCartera);
+
         /**
          * ==================================================================
          *              GRABAR LOS DETALLES Y CRUCES NUEVOS
@@ -108,14 +117,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         //Actualizar reerencias de los cruces
         //grabar la cartera
         if(cartera.getId()==null)
-        {
-            /**
-            * =================================================================
-            *              OBTENER EL NUEVO CODIGO DE LA CARTERA
-            * =================================================================
-            */        
-            String codigoCartera = generarCodigoCartera(cartera.getSucursal(), cartera.getCodigoDocumento());
-            cartera.setCodigo(codigoCartera);
+        {           
             entityManager.persist(cartera);
         }else
         {

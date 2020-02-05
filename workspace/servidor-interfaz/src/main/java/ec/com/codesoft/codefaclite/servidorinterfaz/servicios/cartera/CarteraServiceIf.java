@@ -26,5 +26,6 @@ public interface  CarteraServiceIf extends ServiceAbstractIf<Cartera>{
     public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Boolean carteraConSaldo) throws ServicioCodefacException, RemoteException;
     public List<CarteraCruce> consultarMovimientoCartera(Persona persona) throws java.rmi.RemoteException;
     public void eliminar(Cartera entity,ModoProcesarEnum modo) throws ServicioCodefacException, RemoteException;
+    public void editar(Cartera entity,List<CarteraCruce> cruces) throws ServicioCodefacException, RemoteException;
     
 }

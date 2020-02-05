@@ -49,14 +49,14 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<ColumnaDialogo>();
-        titulo.add(new ColumnaDialogo("Código", 0.15d));
+        titulo.add(new ColumnaDialogo("Código", 0.31d));
         titulo.add(new ColumnaDialogo("Preimpreso", 0.15d));
-        titulo.add(new ColumnaDialogo("Documento", 0.3d));
+        titulo.add(new ColumnaDialogo("Documento", 0.15d));
         titulo.add(new ColumnaDialogo("Estado", 0.1d));
         titulo.add(new ColumnaDialogo("Identificacion", 0.15d));
-        titulo.add(new ColumnaDialogo("Nombre Completo", 0.15d));
+        titulo.add(new ColumnaDialogo("Nombre Completo", 0.20d));
         titulo.add(new ColumnaDialogo("Saldo", 0.1d));
-        titulo.add(new ColumnaDialogo("Total", 0.2d));
+        titulo.add(new ColumnaDialogo("Total", 0.1d));
         
         return titulo;
     }
