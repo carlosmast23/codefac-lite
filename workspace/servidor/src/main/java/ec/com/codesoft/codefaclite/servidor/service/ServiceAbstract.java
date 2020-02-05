@@ -197,7 +197,10 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             }  
             
             
-        } catch(Exception e) //Hacer un RollBack si se produce cualquier error
+        }catch(NullPointerException e)
+        {
+            throw new ServicioCodefacException("Problema con variable nula \n\n"+e.getMessage());
+        }catch(Exception e) //Hacer un RollBack si se produce cualquier error
         {
              if (transaccion.isActive()) {
                 transaccion.rollback();

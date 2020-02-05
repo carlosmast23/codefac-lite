@@ -137,7 +137,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
          Map<Long, CarteraDetalle> mapDetallesGrabados = new HashMap<Long, CarteraDetalle>();
         //grabar los detalles de la cartera
         for (CarteraDetalle detalle : cartera.getDetalles()) {
-            Long idTemporal = detalle.getId(); //Valor de id temporal para poder guardar los cruces , este artificio se usa porque el id de los nuevos detales viene con npumeros negativos
+            /**
+             * Esto funciona de esta manera porque cuando se usan cruces tienes ids negativos auxiliares , pero cuando vienen desde otro modulos tiene id null porque son nuevos
+             * asd
+             */
+            Long idTemporal=(detalle.getId()!=null)?detalle.getId():-1l; //Valor de id temporal para poder guardar los cruces , este artificio se usa porque el id de los nuevos detales viene con npumeros negativos
             if(idTemporal<0)
             {
                 detalle.setId(null); //Esta variable dejo en null para que al grabar genere el nuevo objeto

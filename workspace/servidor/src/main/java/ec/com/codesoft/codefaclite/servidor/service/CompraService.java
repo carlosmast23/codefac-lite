@@ -65,28 +65,24 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     
     
     @Override
-    public void grabarCompra(Compra compra) throws ServicioCodefacException
+    public void grabarCompra(Compra compra) throws ServicioCodefacException, RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                try {
-                    compra.setInventarioIngreso(EnumSiNo.NO.getLetra()); //La primera vez que grabo por defecto grabo para poder ingresar al inventario
-                    //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
-                    for (CompraDetalle compraDetalle : compra.getDetalles()) {
-                        if (compraDetalle.getProductoProveedor().getId() == null) {
-                            entityManager.persist(compraDetalle.getProductoProveedor());
-                        } else {
-                            entityManager.merge(compraDetalle.getProductoProveedor());
-                        }
-                    }                    
-                    entityManager.persist(compra);
-                    grabarCartera(compra); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new ServicioCodefacException(e.getMessage());
-
+               
+                compra.setInventarioIngreso(EnumSiNo.NO.getLetra()); //La primera vez que grabo por defecto grabo para poder ingresar al inventario
+                //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
+                for (CompraDetalle compraDetalle : compra.getDetalles()) {
+                    if (compraDetalle.getProductoProveedor().getId() == null) {
+                        entityManager.persist(compraDetalle.getProductoProveedor());
+                    } else {
+                        entityManager.merge(compraDetalle.getProductoProveedor());
+                    }
                 }
+                entityManager.persist(compra);
+                grabarCartera(compra); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera
+                
             }
         });
         
