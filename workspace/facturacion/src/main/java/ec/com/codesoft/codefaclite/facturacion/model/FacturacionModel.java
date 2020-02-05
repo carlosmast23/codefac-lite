@@ -805,6 +805,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             entity.getIdProducto(), 
                             TipoDocumentoEnum.LIBRE); //TODO: El metodo libre esta de revisar porque no se desde que pantalla estan usando si es con inventario o con no
                     controlador.setearValoresProducto(facturaDetalle);
+                    setFacturaDetalleSeleccionado(facturaDetalle);
                     //Establecer puntero en la cantidad para agregar
                     getTxtCantidad().requestFocus();
                     getTxtCantidad().selectAll();

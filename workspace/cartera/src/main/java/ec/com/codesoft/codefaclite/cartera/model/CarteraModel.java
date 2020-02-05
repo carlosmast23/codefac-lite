@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.CarteraCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -297,6 +298,10 @@ public class CarteraModel extends CarteraPanel{
         this.cartera=cartera;
         
         getCmbTipoCartera().setSelectedItem(this.cartera.getTipoCarteraEnum());
+        CarteraCategoriaEnum carteraCategoria=CarteraCategoriaEnum.buscarPorTipoYDocumentoCategoria(this.cartera.getTipoCarteraEnum(),this.cartera.getCarteraDocumentoEnum().getCategoria());
+                
+        getCmbDocumentoCategoriaCartera().setSelectedItem(carteraCategoria);
+        //getCmbDocumentoCartera().setSelectedItem(this.cartera.getCarteraDocumentoEnum());        
         getCmbDocumentoCartera().setSelectedItem(this.cartera.getCarteraDocumentoEnum());
         getCmbFechaEmision().setDate(this.cartera.getFechaEmision());
         cargarDatosCliente(this.cartera.getPersona());

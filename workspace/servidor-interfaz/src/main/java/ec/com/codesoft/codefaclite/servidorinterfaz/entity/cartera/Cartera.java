@@ -426,6 +426,9 @@ public class Cartera implements Serializable{
         
     }
     
+    /**
+     * Tipo de enum que me permie separar los mismo tipos de comprobante pero por ventas y compras
+     */
     public enum CarteraCategoriaEnum
     {        
         COMPRAS("Compras",TipoCarteraEnum.PROVEEDORES,DocumentoCategoriaEnum.COMPROBANTES_VENTA),
@@ -473,5 +476,15 @@ public class Cartera implements Serializable{
             return resultados;
         }
         
+        public static CarteraCategoriaEnum buscarPorTipoYDocumentoCategoria(TipoCarteraEnum tipoEnum,DocumentoCategoriaEnum documentoCategoriaEnum)
+        {
+            for (CarteraCategoriaEnum value : CarteraCategoriaEnum.values()) {
+                if(value.getTipoCartera().equals(tipoEnum) && value.getDocumentoCategoriaEnum().equals(documentoCategoriaEnum))
+                {
+                    return value;
+                }
+            }
+            return null;
+        }
     }
 }

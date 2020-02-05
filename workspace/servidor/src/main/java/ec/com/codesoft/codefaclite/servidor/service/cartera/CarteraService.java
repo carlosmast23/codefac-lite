@@ -89,45 +89,85 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     
     private void grabarCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
     {
+        /**
+         * ===========================================================
+         *                   VALIDAR LA CARTERA
+         * ===========================================================
+         */
         validacionCartera(cartera,cruces);
+        
         //TODO: Solucion para tener problemas con las referencias de datos similares
         clonarCruces(cruces);
+        /**
+         * ==================================================================
+         *              GRABAR LOS DETALLES Y CRUCES NUEVOS
+         * ==================================================================
+         */
+        grabarDetallesCarteraSinTransaccion(cartera, cruces);        
+       
+        //Actualizar reerencias de los cruces
+        //grabar la cartera
+        if(cartera.getId()==null)
+        {
+            /**
+            * =================================================================
+            *              OBTENER EL NUEVO CODIGO DE LA CARTERA
+            * =================================================================
+            */        
+            String codigoCartera = generarCodigoCartera(cartera.getSucursal(), cartera.getCodigoDocumento());
+            cartera.setCodigo(codigoCartera);
+            entityManager.persist(cartera);
+        }else
+        {
+            entityManager.merge(cartera);
+        }
         
-        Map<Long, CarteraDetalle> mapDetallesGrabados = new HashMap<Long, CarteraDetalle>();
 
-        //ObtenerCodigoNuevoCartera
-        String codigoCartera = generarCodigoCartera(cartera.getSucursal(), cartera.getCodigoDocumento());
-        cartera.setCodigo(codigoCartera);
+        //Actuaizar Saldo de las entidades de cartera afectada en los cruces
+        actualizarSaldosCarteraSinTrasaccion(cruces);
 
+        //TODO:Metodo temporal para actualizar las referencias de los cruces y que esten actualizadas las listas que tienen referencias
+        actualizarReferenciasCartera(cartera);
+    }
+    
+    private void grabarDetallesCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces)
+    {
+         Map<Long, CarteraDetalle> mapDetallesGrabados = new HashMap<Long, CarteraDetalle>();
         //grabar los detalles de la cartera
         for (CarteraDetalle detalle : cartera.getDetalles()) {
-            Long idTemporal = detalle.getId(); //Valor de id temporal para poder guardar los cruces
-            detalle.setId(null); //Esta variable dejo en null para que al grabar genere el nuevo objeto
-            entityManager.persist(detalle);
+            Long idTemporal = detalle.getId(); //Valor de id temporal para poder guardar los cruces , este artificio se usa porque el id de los nuevos detales viene con npumeros negativos
+            if(idTemporal<0)
+            {
+                detalle.setId(null); //Esta variable dejo en null para que al grabar genere el nuevo objeto
+                entityManager.persist(detalle);
+                //Grabar los antiguos id con los nuevos que despues me sirve para poder grabar los cruces
+                mapDetallesGrabados.put(idTemporal, detalle);
+            }
+            else
+            {
+                mapDetallesGrabados.put(detalle.getId(),detalle); //Si ya existe grabado solo agrego para luego poder grabar la referencia mas abajao
+            }
 
-            //Grabar los antiguos id con los nuevos que despues me sirve para poder grabar los cruces
-            mapDetallesGrabados.put(idTemporal, detalle);
         }
 
         //Grabar los cruces con al referencia de los nuevos detalles ya grabados
         for (CarteraCruce carteraCruce : cruces) {
             CarteraDetalle carteraDetalleGrabada = mapDetallesGrabados.get(carteraCruce.getCarteraDetalle().getId());
             carteraCruce.setCarteraDetalle(carteraDetalleGrabada);
-            entityManager.persist(carteraCruce);
+            
+            if(carteraCruce.getId()==null)
+            {
+                entityManager.persist(carteraCruce); //Si no existe la referencia solo le grabo
+            }
+            else
+            {
+                entityManager.merge(carteraCruce); //Si existe la referencia solo le edito
+            }   
 
             ////Actualizar en los detalles de la cartera TODO: Revisar
             //carteraCruce.getCarteraAfectada().getCruces().add(carteraCruce);
         }
-
-        //Actualizar reerencias de los cruces
-        //grabar la cartera
-        entityManager.persist(cartera);
-
-        //Actuaizar Saldo de las entidades de cartera afectada en los cruces
-        actualizarSaldosCarteraSinTrasaccion(cruces);
-
-        //TODO:Metodo temporal para actualizar las referencias de los cruces
-        actualizarReferenciasCartera(cartera);
+        
     }
     
     private void  clonarCruces(List<CarteraCruce> cruces) throws RemoteException, ServicioCodefacException
@@ -148,6 +188,13 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         }
     }
     
+    
+    /**
+     * Metodo que permite actualizar las nuevas referencias de cruces para tener actualizada en las listas de las rferencias
+     * @param cartera
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
     private void actualizarReferenciasCrucesSinTransaccion(Cartera cartera) throws RemoteException, ServicioCodefacException
     {
         CarteraCruceService carteraCruceService=new CarteraCruceService();
@@ -156,6 +203,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         CarteraDetalleService carteraDetalleService=new CarteraDetalleService();
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("cartera",cartera);
+        
         List<CarteraDetalle> detallesCartera=carteraDetalleService.obtenerPorMap(mapParametros);
         cartera.setDetalles(detallesCartera);
         
@@ -199,6 +247,10 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             
     }
     
+    /**
+     * Metodo que me permite actualizar los saldos de los cruces
+     * @param cruces 
+     */
     private void actualizarSaldosCarteraSinTrasaccion(List<CarteraCruce> cruces)
     {
         if(cruces.size()>0)
@@ -442,13 +494,13 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera,carteraConSaldo);
     }
 
-    @Override
-    public void editar(Cartera entity) throws ServicioCodefacException, RemoteException {
+    
+    public void editar(Cartera entity,List<CarteraCruce> cruces) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 //Falta agregar validaciones porque no siempre se puede editar cualquier dato
-                entityManager.merge(entity);
+                grabarCarteraSinTransaccion(entity, cruces);
             }
         });
     }
