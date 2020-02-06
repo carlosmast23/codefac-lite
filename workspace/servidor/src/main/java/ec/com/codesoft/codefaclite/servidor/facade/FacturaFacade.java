@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -39,11 +40,12 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum) {
+    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal) {
         //Factura factura;
+        //factura.getSucursalEmpresa();
         //factura.getSucursal();
         //factura.getCodigoDocumentoEnum();
-        String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="";
+        String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="",filtrarSucursal="";
         if (persona != null) {
             //cliente = "u.cliente=?1";
             cliente = "u.sucursal=?1";
@@ -87,6 +89,11 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             }
         }
         
+        if(sucursal!=null)
+        {
+            filtrarSucursal+=" AND u.sucursalEmpresa=?13 ";
+        }
+        
         String filtroPuntoEmision="";
         if(puntoEmision!=null)
         {
@@ -96,7 +103,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         //f.getPuntoEmision()
 
         try {
-            String queryString = "SELECT u FROM Factura u WHERE u.empresa=?7 and u.codigoDocumento=?6 and  " + cliente + fecha + estadoFactura +filtrarReferidos+filtroPuntoEmision+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
+            String queryString = "SELECT u FROM Factura u WHERE u.empresa=?7 and u.codigoDocumento=?6 and  " + cliente + fecha + estadoFactura +filtrarReferidos+filtroPuntoEmision+filtrarSucursal+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
             Query query = getEntityManager().createQuery(queryString);
             //System.err.println("QUERY--->"+query.toString());
             if (persona != null) {
@@ -133,6 +140,11 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             
             if (puntoEmision != null) {
                 query.setParameter(12,puntoEmision.getPuntoEmision()); //TODO: Grabo este valor porque de esta manera se esta grababndo en la factura
+            }
+            
+            if(sucursal!=null)
+            {
+                query.setParameter(13,sucursal);
             }
             
             

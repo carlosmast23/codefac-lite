@@ -28,7 +28,7 @@ public class ControladorReporteReferidos extends ControladorReporteFactura{
 
     
     public ControladorReporteReferidos(PersonaEstablecimiento persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentoEnum documentoConsultaEnum,Empresa empresa) {
-        super(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado, afectarNotaCredito, documentoConsultaEnum,empresa);
+        super(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado, afectarNotaCredito, documentoConsultaEnum,empresa,null);
     }
 
     @Override

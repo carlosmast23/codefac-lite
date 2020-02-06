@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -124,6 +125,12 @@ public class FacturaReporteModel extends FacturaReportePanel {
             if (getDateFechaFin().getDate() != null) {
                 fechaFin = new Date(getDateFechaFin().getDate().getTime());
             }
+            
+            Sucursal sucursal=null;
+            if(!getChkSucursalTodos().isSelected())
+            {
+                sucursal=(Sucursal) getCmbSucursal().getSelectedItem();
+            }
 
             DocumentoEnum documentoConsultaEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
             //Seteando datos para el controlador         
@@ -132,6 +139,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             controladorReporte.setFechaInicio(fechaInicio);
             controladorReporte.setFechaFin(fechaFin);
             controladorReporte.setEstadoFactura(estadoFactura);
+            controladorReporte.setSucursal(sucursal);
             controladorReporte.setFiltrarReferidos(filtrarReferidos);
             controladorReporte.setReferido(referido);
             controladorReporte.setReporteAgrupado(getChkReporteAgrupadoReferido().isSelected());
@@ -418,6 +426,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
             List<PuntoEmision> puntosEmisionList=ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorEmpresa(session.getEmpresa()); //TODO: Analizar si los puntos de venta deberia filtrar por sucursales
             UtilidadesComboBox.llenarComboBox(getCmbPuntoEmision(),puntosEmisionList);
             
+            List<Sucursal> sucursales= ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(session.getEmpresa());
+            UtilidadesComboBox.llenarComboBox(getCmbSucursal(),sucursales);
+            getCmbSucursal().setSelectedItem(session.getSucursal());
+            
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
@@ -549,6 +561,17 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     getCmbPuntoEmision().setEnabled(false);
                 } else {
                     getCmbPuntoEmision().setEnabled(true);
+                }
+            }
+        });
+        
+        getChkSucursalTodos().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    getCmbSucursal().setEnabled(false);
+                } else {
+                    getCmbSucursal().setEnabled(true);
                 }
             }
         });

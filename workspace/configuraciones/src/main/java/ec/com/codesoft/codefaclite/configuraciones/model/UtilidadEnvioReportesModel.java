@@ -438,7 +438,8 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
                 false,
                 true,
                 documentoEnum,
-                session.getEmpresa());
+                session.getEmpresa(),
+                null); //Sucursal
 
         controlador.generarReporte();
 

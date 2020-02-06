@@ -90,7 +90,14 @@
                     <f:selectItems var="tipoReporte" value="#{facturaReporteMb.tiposReporte}" itemValue="#{tipoReporte.nombre}"/>
                 </p:selectOneMenu>
                 <p:spacer/>
-
+                
+                <p:spacer/>
+                <h:outputLabel for="console5" value="Sucursales" style="display: block; text-align:left;"/>
+                <p:selectOneMenu id="console5" value="#{facturaReporteMb.sucursalSeleccionada}" converter="sucursalConverter" style="width:150px">
+                    <f:selectItems var="sucursal" value="#{facturaReporteMb.sucursales}" itemValue="#{sucursal.id.toString()}"/>
+                </p:selectOneMenu>
+                <p:spacer/>
+                <p:selectBooleanCheckbox value="#{facturaReporteMb.sucursalCheck}" itemLabel="Todos"  />
 
                 <p:panelGrid columns="1" styleClass="ui-noborder">
                     <p:commandButton value="Consultar " process="@form" update="tabla, subtotal, subtotal12, subtotal0, totalDescuento, iva12, valorTotal" action="#{facturaReporteMb.consultar}" styleClass="ui-priority-primary" />

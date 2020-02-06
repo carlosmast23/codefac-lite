@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
@@ -76,6 +77,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     private List<DocumentoEnum> documentos;
     private ComprobanteEntity.ComprobanteEnumEstado[] comprobanteEstados;
     private List<PuntoEmision> puntosEmision;
+    private List<Sucursal> sucursales;
     private FacturaReporteModel.TipoReporteEnum[] tiposReporte;
     
     private DocumentoEnum documentoSeleccionado;
@@ -88,6 +90,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     private Boolean puntoEmisionCheckTodos;
     private Boolean notaCreditoCheck;
     private Boolean notaDebitoCheck;
+    private Boolean sucursalCheck;
     private Boolean reporteAgrupadoReferidoCheck;
     private Boolean filtrarReferidos;
     private PersonaEstablecimiento persona;
@@ -97,6 +100,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     private ControladorReporteFactura controladorReporte;
     private List<ReporteFacturaData> data;
     private List<TablaNombreColumna> titulos;
+    private Sucursal sucursalSeleccionada;
 
     //Datos para imprimir los totales del reporte
     private String subtotal;
@@ -215,6 +219,10 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         for (PuntoEmisionUsuario puntoEmisionUsuario : puntosEmisionUsuario) {
             puntosEmision.add(puntoEmisionUsuario.getPuntoEmision());
         }
+        
+        //Sucursales
+        sucursales=ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(sessionMb.getSession().getEmpresa());
+                
         this.puntosEmision=puntosEmision;
         
         //Tipo Reporte
@@ -288,6 +296,12 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
             if (fechaFinal != null) {
                 fechaFin = new java.sql.Date(fechaFinal.getTime());
             }
+            
+            Sucursal sucursalTmp=null;
+            if(!sucursalCheck)
+            {
+                sucursalTmp=sucursalSeleccionada;
+            }
  
             //Seteando datos para el controlador         
             controladorReporte =crearControlador();
@@ -300,6 +314,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
             controladorReporte.setReporteAgrupado(reporteAgrupadoReferidoCheck);
             controladorReporte.setAfectarNotaCredito(notaCreditoCheck);
             controladorReporte.setDocumentoConsultaEnum(documentoSeleccionado);
+            controladorReporte.setSucursal(sucursalTmp);
             
             PuntoEmision puntoEmisionReporte = ((puntoEmisionCheckTodos)?null:puntoEmisionSeleccionado);
             controladorReporte.setPuntoEmision(puntoEmisionReporte);
@@ -613,6 +628,31 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     public void setValorTotal(String valorTotal) {
         this.valorTotal = valorTotal;
     }
+
+    public List<Sucursal> getSucursales() {
+        return sucursales;
+    }
+
+    public void setSucursales(List<Sucursal> sucursales) {
+        this.sucursales = sucursales;
+    }
+
+    public Sucursal getSucursalSeleccionada() {
+        return sucursalSeleccionada;
+    }
+
+    public void setSucursalSeleccionada(Sucursal sucursalSeleccionada) {
+        this.sucursalSeleccionada = sucursalSeleccionada;
+    }
+
+    public Boolean getSucursalCheck() {
+        return sucursalCheck;
+    }
+
+    public void setSucursalCheck(Boolean sucursalCheck) {
+        this.sucursalCheck = sucursalCheck;
+    }
+    
     
     
       

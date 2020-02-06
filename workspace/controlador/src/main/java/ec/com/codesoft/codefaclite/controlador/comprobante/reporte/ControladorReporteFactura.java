@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
@@ -72,6 +73,7 @@ public class ControladorReporteFactura {
     private TotalSumatoria totalAnulados; //en esta variable se van a calcular los totales de los anulados
     private TotalSumatoria totalNotasCredito; //en este campo se van a guardar los valores solo de las notas de credito
     private PuntoEmision puntoEmision; //en este campo me permite filtrar por el punto de emision
+    private Sucursal sucursal;
     protected Empresa empresa;
 
     public ControladorReporteFactura(Empresa empresa) {
@@ -81,7 +83,7 @@ public class ControladorReporteFactura {
     
     
     
-    public ControladorReporteFactura(PersonaEstablecimiento persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentoEnum documentoConsultaEnum,Empresa empresa) {
+    public ControladorReporteFactura(PersonaEstablecimiento persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentoEnum documentoConsultaEnum,Empresa empresa,Sucursal sucursal) {
         this.persona = persona;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -94,6 +96,7 @@ public class ControladorReporteFactura {
         this.empresa=empresa;
         //this.mapTotales = new HashMap<String,BigDecimal>();
         this.data = new ArrayList<ReporteFacturaData>();
+        this.sucursal=sucursal;
     }
     
     private void buildMapTotales()
@@ -109,7 +112,7 @@ public class ControladorReporteFactura {
         try {
             buildMapTotales();
             FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
-            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum);
+            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,sucursal);
             /**
              * TODO: Este metodo solo es temporal hasta ver una forma mucha mas optima
              */
@@ -747,6 +750,16 @@ public class ControladorReporteFactura {
     public void setPuntoEmision(PuntoEmision puntoEmision) {
         this.puntoEmision = puntoEmision;
     }
+
+    public Sucursal getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(Sucursal sucursal) {
+        this.sucursal = sucursal;
+    }
+    
+    
     
     
 }
