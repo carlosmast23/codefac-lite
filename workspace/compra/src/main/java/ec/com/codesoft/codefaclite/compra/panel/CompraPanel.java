@@ -1007,7 +1007,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Descripción",grupo = "detalles")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = ExpresionRegular.textoSinSaltosLinea,nombre = "Descripción",grupo = "detalles")
     public JTextField getTxtDescripcionItem() {
         return txtDescripcionItem;
     }
@@ -1056,7 +1056,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Observación")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = ExpresionRegular.textoSinSaltosLinea,nombre = "Observación")
     public JTextField getTxtObservacion() {
         return txtObservacion;
     }
