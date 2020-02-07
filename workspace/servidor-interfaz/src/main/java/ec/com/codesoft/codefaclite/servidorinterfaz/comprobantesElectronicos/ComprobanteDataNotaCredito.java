@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -202,7 +203,7 @@ public class ComprobanteDataNotaCredito extends ComprobanteDataFacturaNotaCredit
                 detalle.setCantidad(detalleNotaCredito.getCantidad());
                 detalle.setDescripcion(UtilidadValidador.normalizarTexto(detalleNotaCredito.getDescripcion()));
                 //Establecer el descuento en el aplicativo
-                detalle.setDescuento(detalleNotaCredito.getDescuento());
+                detalle.setDescuento(detalleNotaCredito.getDescuento().setScale(2,BigDecimal.ROUND_HALF_UP));
                 detalle.setPrecioTotalSinImpuesto(detalleNotaCredito.getTotal());
                 detalle.setPrecioUnitario(detalleNotaCredito.getPrecioUnitario());
                 

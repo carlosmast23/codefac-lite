@@ -485,21 +485,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             }
             
             //Redonde a 2 decimales porque en el Sri no permite con mas decimales
-            facturaDetalle.setDescuento(descuento.setScale(2,BigDecimal.ROUND_HALF_UP));
+            //facturaDetalle.setDescuento(descuento.setScale(2,BigDecimal.ROUND_HALF_UP));
+            facturaDetalle.setDescuento(descuento);
         } else { //Cuando es porcentaje se calcula primero el valor en procentaje
             if (!interfaz.obtenerTxtDescuento().isEmpty()) {
                 BigDecimal porcentajeDescuento = new BigDecimal(interfaz.obtenerTxtDescuento());
-                porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
-                BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario().setScale(2,BigDecimal.ROUND_HALF_UP)); //Escala a 2 decimales el valor del valor unitario porque algunos proveedores tienen 3 decimales
-                descuento = total.multiply(porcentajeDescuento);
-                
-                //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
-                if(incluidoIvaSiNo.equals(EnumSiNo.SI))
-                {
-                    descuento=UtilidadesImpuestos.quitarValorIva(ivaDefecto,descuento,6);
-                }
-                
-                facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
+                facturaDetalle.calcularDescuentoConPorcentaje(porcentajeDescuento, incluidoIvaSiNo, ivaDefecto);                
             }
         }
         
@@ -522,7 +513,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         } else {
             mostrarMensaje(new CodefacMsj("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA));
             //DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            limpiarDetalleFactura();
+            //limpiarDetalleFactura();
             return false;
         }
         

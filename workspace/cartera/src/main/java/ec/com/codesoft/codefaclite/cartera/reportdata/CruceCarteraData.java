@@ -144,8 +144,9 @@ public class CruceCarteraData {
                 data.setFechaEmision(cruce.getCarteraDetalle().getCartera().getFechaEmision()+"");
                 data.setDebe("0");
                 data.setHaber(cruce.getValor()+"");
+                data.setCodigo(cruce.getCarteraDetalle().getCartera().getCodigo());
                 //data.setPreimpreso(cruce.getCarteraDetalle().getCartera().getPreimpreso());
-                data.setPreimpreso(""); //TODO: PUEDE SER QUE SI TENGA PREIMPRESO POR EJEMPLOE RETENCIONES 
+                data.setPreimpreso(cruce.getCarteraDetalle().getCartera().getPreimpreso()); //TODO: PUEDE SER QUE SI TENGA PREIMPRESO POR EJEMPLOE RETENCIONES 
                 //data.setPreimpreso(cruce.getCarteraDetalle().getCartera().getPreimpreso());
                 data.setCarteraId(cartera.getId().toString());
                 resultadoData.add(data);

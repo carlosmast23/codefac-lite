@@ -132,11 +132,17 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         actualizarReferenciasCartera(cartera);
     }
     
-    private void grabarDetallesCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces)
+    private void grabarDetallesCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
     {
          Map<Long, CarteraDetalle> mapDetallesGrabados = new HashMap<Long, CarteraDetalle>();
         //grabar los detalles de la cartera
         for (CarteraDetalle detalle : cartera.getDetalles()) {
+            
+            /*if((cruces!=null && cruces.size()>0) && detalle.getId()==null)
+            {
+                throw new ServicioCodefacException("No se puede relacionar sin un id fijo o temporal en la cartera");
+            }*/
+            
             /**
              * Esto funciona de esta manera porque cuando se usan cruces tienes ids negativos auxiliares , pero cuando vienen desde otro modulos tiene id null porque son nuevos
              * asd
@@ -456,7 +462,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                     carteraDetalle.setDescripcion(detalle.getDescripcion());
                     carteraDetalle.setSaldo(detalle.getTotal());
                     carteraDetalle.setTotal(detalle.getTotal());
+                    carteraDetalle.setId(carteraDetalle.hashCode()*-1l);
                     cartera.addDetalle(carteraDetalle);
+                    
                                         
                     /**
                      * ==========================================================================

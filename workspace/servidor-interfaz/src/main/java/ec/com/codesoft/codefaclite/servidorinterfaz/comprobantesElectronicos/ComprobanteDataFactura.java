@@ -234,6 +234,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                 
                 //Todo: redondear valor porque en los comprobantes electronicos no me permite enviar con mas de 2 decimales aunque en los archivos xsd si permite
                 detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2, RoundingMode.HALF_UP));
+                detalle.setDescuento(detalle.getDescuento().setScale(2,RoundingMode.HALF_UP));
 
                 /**
                  * Agregado impuesto que se cobran a cada detalle individual
