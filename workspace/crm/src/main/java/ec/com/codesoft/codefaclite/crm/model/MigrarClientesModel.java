@@ -67,6 +67,7 @@ public class MigrarClientesModel extends MigrarModel {
                     {
                         throw new ExcelMigrar.ExcepcionExcel("Identificación Repetida");
                     }
+                   
                     
                     cliente.setNombres((String) fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRES).valor);
                     cliente.setApellidos((String) fila.getByEnum(ExcelMigrarClientes.Enum.APELLIDOS).valor);
@@ -119,6 +120,7 @@ public class MigrarClientesModel extends MigrarModel {
                     //establecimientos.add(personaEstablecimiento);
                     cliente.setEstablecimientos(Arrays.asList(personaEstablecimiento));
                     cliente.setEmpresa(session.getEmpresa());
+                    System.out.println(cliente.getRazonSocial());
                     ServiceFactory.getFactory().getPersonaServiceIf().grabar(cliente);
                     
                     
@@ -131,6 +133,9 @@ public class MigrarClientesModel extends MigrarModel {
                     
                 } catch (RemoteException ex) {
                     Logger.getLogger(MigrarClientesModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception e)
+                {
+                    throw new ExcelMigrar.ExcepcionExcel(e.getMessage());
                 }
                 //return false;
             }
