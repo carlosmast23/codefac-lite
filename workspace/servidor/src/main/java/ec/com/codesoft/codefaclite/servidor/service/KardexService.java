@@ -958,6 +958,6 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         //kardexNuevo.se
         return kardexNuevo;
     }
-    
+            
 }
 

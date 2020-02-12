@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialog
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioEspecificoDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
@@ -163,6 +164,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataLiquidacionCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
@@ -1060,6 +1062,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
+        
+        /**
+         * ==========================================================================
+         *         FALTA IMPLEMENTAR EL METODO PARA MANEJAR PRODUCTOS INDIVIDUALES
+         * ==========================================================================
+         */
+        int cantidadItemsIndividuales=ServiceFactory.getFactory().getItemEspecificoServiceIf().obtenerCantidadItemsEspecificosPorKardex(productoSeleccionado);
+        if(productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI) && cantidadItemsIndividuales>0)
+        {
+            ProductoInventarioEspecificoDialogo dialogoEspecifico=new ProductoInventarioEspecificoDialogo(productoSeleccionado);
+            buscarDialogoModel = new BuscarDialogoModel(dialogoEspecifico);
+            buscarDialogoModel.setVisible(true);
+            KardexItemEspecifico kardexItemEspecifico=(KardexItemEspecifico)buscarDialogoModel.getResultado();
+            /*
+            TODO:Solucion para por el momento agregar el codigo invividual pero falta programar en solo servicios para dar de baja a los productos individuales y que no me aparesca en la lista
+            */
+            productoSeleccionado.setNombre("["+kardexItemEspecifico.getCodigoEspecifico()+"] "+productoSeleccionado.getNombre());
+        }
         //productoSeleccionado = (Producto)resultados[0];
         getCmbIva().setSelectedItem(EnumSiNo.NO);
         controlador.agregarProductoVista(productoSeleccionado);
