@@ -87,6 +87,7 @@ import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
@@ -747,12 +748,13 @@ public class Main {
                 if (parametroDirectorioRecursos == null) {
                     //Abrir un dialogo para preguntar si desea cambiar de ubicacion de la carpeta de recursos
                     if (DialogoCodefac.dialogoPregunta("Directorio Recursos", "Por defecto la carpeta de recursos se creará en el directorio del usuario \n Desea cambiar el directorio por defecto? ", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
-                        JFileChooser f = new JFileChooser();
+                        /*JFileChooser f = new JFileChooser();
                         f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                         f.showSaveDialog(null);
                         if (f.getSelectedFile() != null) {
                             directorioUsuario = f.getSelectedFile().getPath();
-                        }
+                        }*/
+                        directorioUsuario= UtilidadesDirectorios.buscarDirectorio();
                     }
                     
                     parametroDirectorioRecursos = new ParametroCodefac();
@@ -782,6 +784,39 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
                 
+    }
+    
+    /**
+     * Este metodo sirve para buscar un nuevo directorio para los recursos
+     * TODO: Esta de ver si se puede reutilizar con el metodo de arriba
+     * @param empresa 
+     */
+    public static void actualizarDirectorioLicencia(Empresa empresa) {
+        try {
+            ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS, empresa);
+            String directorioUsuario = UtilidadesDirectorios.buscarDirectorio();
+            if(parametroDirectorioRecursos==null)
+            {
+                parametroDirectorioRecursos = new ParametroCodefac();            
+            }    
+            parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
+            parametroDirectorioRecursos.setValor(directorioUsuario);
+            parametroDirectorioRecursos.setEmpresa(empresa);
+            
+            if(parametroDirectorioRecursos.getId()==null)
+            {
+                ServiceFactory.getFactory().getParametroCodefacServiceIf().grabar(parametroDirectorioRecursos);
+            }
+            else
+            {
+                ServiceFactory.getFactory().getParametroCodefacServiceIf().editar(parametroDirectorioRecursos);
+            }
+
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private static void activarServicioWeb()

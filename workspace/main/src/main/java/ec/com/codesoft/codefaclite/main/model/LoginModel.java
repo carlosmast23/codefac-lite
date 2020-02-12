@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
+import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.awt.Frame;
@@ -176,7 +177,18 @@ public class LoginModel extends LoginFormDialog{
                     case LICENCIA_DESACTUALIZADA:
                         LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
                         DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.LICENCIA_DESACTUALIZADA.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
-                        pantallaRegistrarLicencia();
+                        String[] opciones = {"Ingresar Datos licencia","Cambiar directorio licencia", "Cancelar"};
+                        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Seleccione una opción para solucionar el problema", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
+                        switch(opcionSeleccionada)
+                        {
+                            case 0:
+                                pantallaRegistrarLicencia();
+                                break;
+                            case 1:
+                                Main.actualizarDirectorioLicencia(empresaSeleccionada);
+                                break;
+                                
+                        }
                         //validacionesEmpresa
                         break;
                         

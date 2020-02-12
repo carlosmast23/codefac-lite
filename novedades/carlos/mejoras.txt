@@ -34,3 +34,4 @@ validar que cuando se configura multiempresa no permita ingresa directorios repe
 
 Al momento de aplicar un descuento si esta o no inluido iva, que eso afecte tambien al campo de descuento porque ahora siempre toma en cuenta que el descuento es sobre el subtotal antes de impuestos
 Aplicar un descuento global por toda la factura
+Al momento de ingresar al sistema cuando la licencia es incorrecta o exista la liencia el mensaje es el mismo , creo que se puede separar en 2 casos distintos 
