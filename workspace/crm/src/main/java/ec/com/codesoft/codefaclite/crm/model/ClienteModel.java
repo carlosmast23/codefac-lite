@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
@@ -47,6 +48,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -434,7 +436,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             getCmbTipoOperador().setSelectedItem(operadorNegocioDefault);
             getjTextExtension().setText("0");
             
-            getCmbFormaPagoDefecto().setSelectedIndex(0);
+            //getCmbFormaPagoDefecto().setSelectedIndex(0);
 
             //Setear el valor por defecto
             getCmbEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
@@ -446,6 +448,28 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             this.razonSocial = "";
             limpiarCrearEstablecimiento();
             getTblEstablecimientos().setModel(new DefaultTableModel());
+            
+             /**
+             * ========================================================
+             * SELECCIONAR LA FORMA DE PAGO POR DEFECTO
+             * ========================================================
+             */
+            SriFormaPago sriFormaPagoDefecto = ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE, new ParametroUtilidades.ComparadorInterface() {
+                @Override
+                public Object consultarParametro(String nombreParametro) {
+                    try {
+                        return ServiceFactory.getFactory().getSriFormaPagoServiceIf().buscarPorId(Long.parseLong(nombreParametro));
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    return null;
+                }
+            });
+
+            if (sriFormaPagoDefecto != null) {
+                getCmbFormaPagoDefecto().setSelectedItem(sriFormaPagoDefecto);
+            }
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
@@ -540,6 +564,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             {
                 getCmbFormaPagoDefecto().addItem(formaPago);
             }
+            
+            ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE);
             
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);

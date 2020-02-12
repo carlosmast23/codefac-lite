@@ -42,8 +42,8 @@
 	</columnHeader>
 	<detail>
 		<band height="12" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="127" height="12" uuid="bb6edb64-1f24-47fa-94d5-e5bed77b65fd"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="127" height="12" uuid="bb6edb64-1f24-47fa-94d5-e5bed77b65fd"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -57,8 +57,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="127" y="0" width="48" height="12" uuid="e7de7115-1387-4db0-b5ba-54ae18259315"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="127" y="0" width="48" height="12" uuid="e7de7115-1387-4db0-b5ba-54ae18259315"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>

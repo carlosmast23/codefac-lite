@@ -78,6 +78,25 @@ public abstract class ParametroUtilidades {
         return null;
     }
     
+    /**
+     * Mejorar este tema para poder retorar por plantilla el tipo de objeto directo
+     * @param <T>
+     * @param empresa
+     * @param nombreParametro
+     * @param interfaceConsulta
+     * @return
+     * @throws RemoteException 
+     */
+    public static <T extends Object> T obtenerValorBaseDatos(Empresa empresa , String nombreParametro,ComparadorInterface interfaceConsulta) throws RemoteException
+    {
+        String idParametro=obtenerValorParametro(empresa, nombreParametro);
+        if(idParametro!=null)
+        {
+            return (T) interfaceConsulta.consultarParametro(idParametro);
+        }
+        return null;
+    }
+    
     public static <T extends ComparadorInterface> T obtenerValorParametroEnum(Empresa empresa , String nombreParametro,T instancia) throws RemoteException
     {
         String valor = obtenerValorParametro(empresa, nombreParametro);

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
@@ -101,6 +102,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbActivarReporteSimpleGuiaRemision = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         txtMotivoTrasladoGuiaRemision = new javax.swing.JTextField();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel31 = new javax.swing.JLabel();
+        cmbFormaPagoDefecto = new javax.swing.JComboBox<>();
+        lblEspacio12 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         cmbRetencionIva = new javax.swing.JComboBox<>();
@@ -551,6 +556,33 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jTabbedPane1.addTab("Transporte", jPanel5);
 
+        jPanel10.setLayout(new java.awt.GridBagLayout());
+
+        jLabel31.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel31.setText("Forma de pago por defecto:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(jLabel31, gridBagConstraints);
+
+        cmbFormaPagoDefecto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(cmbFormaPagoDefecto, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel10.add(lblEspacio12, gridBagConstraints);
+
+        jTabbedPane1.addTab("Clientes", jPanel10);
+
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -745,6 +777,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbEditarDescuentoFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarPrecioUnitFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbFacturarInventarioNegativo;
+    private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<FormatoHojaEnum> cmbFormatoHojas;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
@@ -775,6 +808,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -782,6 +816,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -795,6 +830,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblEspacio1;
+    private javax.swing.JLabel lblEspacio12;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio4;
@@ -1001,7 +1037,16 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbConfiguracionImpresora(JComboBox<ConfiguracionImpresoraEnum> cmbConfiguracionImpresora) {
         this.cmbConfiguracionImpresora = cmbConfiguracionImpresora;
     }
+
+    public JComboBox<SriFormaPago> getCmbFormaPagoDefecto() {
+        return cmbFormaPagoDefecto;
+    }
+
+    public void setCmbFormaPagoDefecto(JComboBox<SriFormaPago> cmbFormaPagoDefecto) {
+        this.cmbFormaPagoDefecto = cmbFormaPagoDefecto;
+    }
  
+    
     
     
 }

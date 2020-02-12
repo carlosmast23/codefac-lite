@@ -590,23 +590,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
             }
         });
+        
+        getTxtValorUnitario().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                agregarItemFacturaListener();
+            }
+        });
 
         getTxtCantidad().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(getBtnAgregarDetalleFactura().isEnabled())
-                {   try {
-                    //Si esta habilitado el boton de agregar funciona para agregar
-                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado);
-                    } catch (ServicioCodefacException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else //Si no esta habilitado el boton de editar funciona como para editar
-                {
-                    btnListenerEditar();
-                }
-                
+                agregarItemFacturaListener();               
             }
         });
 
@@ -704,6 +699,22 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
             }
         });
+
+    }
+    
+    private void agregarItemFacturaListener()
+    {
+        if (getBtnAgregarDetalleFactura().isEnabled()) {
+            try {
+                //Si esta habilitado el boton de agregar funciona para agregar
+                controlador.agregarDetallesFactura(facturaDetalleSeleccionado);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else //Si no esta habilitado el boton de editar funciona como para editar
+        {
+            btnListenerEditar();
+        }
 
     }
     

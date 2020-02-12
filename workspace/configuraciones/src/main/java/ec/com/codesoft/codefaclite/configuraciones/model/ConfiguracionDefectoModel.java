@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
@@ -147,6 +148,19 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentosCompra) {
             getCmbTipoDocumentoCompra().addItem(tipoDocumento);
         }
+        
+        //Cargar las formas de pago vigentes en el SRI
+        try {
+            List<SriFormaPago> formasPago = ServiceFactory.getFactory().getSriServiceIf().obtenerFormasPagoActivo();
+            getCmbFormaPagoDefecto().removeAllItems();
+            for (SriFormaPago formaPago : formasPago) {
+                getCmbFormaPagoDefecto().addItem(formaPago);
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
         
         //getCmbConfiguracionImpresora().removeAllItems();
         UtilidadesComboBox.llenarComboBox(getCmbConfiguracionImpresora(),ConfiguracionImpresoraEnum.values());
@@ -388,6 +402,21 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroDato= parametrosTodos.get(ParametroCodefac.ACTIVAR_NOTA_VENTA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroDato != null) ? parametroDato.getValor() : null);
             getCmbActivarNotaVenta().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+                        
+            ParametroCodefac parametroFormaPago= parametrosTodos.get(ParametroCodefac.FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE);
+            
+            //enumSiNo = EnumSiNo.getEnumByLetra((parametroFormaPago != null) ? parametroFormaPago.getValor() : null);
+            //getCmbActivarNotaVenta().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            if(parametroFormaPago!=null && parametroFormaPago.getValor()!=null && !parametroFormaPago.getValor().isEmpty())
+            {
+                SriFormaPago sriFormaPago=ServiceFactory.getFactory().getSriFormaPagoServiceIf().buscarPorId(Long.parseLong(parametroFormaPago.getValor()));
+                getCmbFormaPagoDefecto().setSelectedItem(sriFormaPago);
+                //getCmbRetencionRenta().setSelectedItem(retencion);
+            }
+            else
+            {
+                getCmbFormaPagoDefecto().setSelectedItem(null);
+            }
             
             
 
@@ -489,6 +518,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         SriRetencionRenta sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
         agregarParametro(ParametroCodefac.VALOR_DEFECTO_RETENCION_RENTA, (sriRetencionRenta != null) ? sriRetencionRenta.getId().toString(): "");
         agregarParametroEditar(ParametroCodefac.VALOR_DEFECTO_RETENCION_RENTA);
+        
+        SriFormaPago sriFormaPagoDefecto = (SriFormaPago) getCmbFormaPagoDefecto().getSelectedItem();
+        agregarParametro(ParametroCodefac.FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE, (sriFormaPagoDefecto != null) ? sriFormaPagoDefecto.getId().toString(): "");
+        agregarParametroEditar(ParametroCodefac.FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE);
         
         
         enumSiNo = (EnumSiNo) EnumSiNo.getEnumByBoolean(getChkImpresoraTickets().isSelected());

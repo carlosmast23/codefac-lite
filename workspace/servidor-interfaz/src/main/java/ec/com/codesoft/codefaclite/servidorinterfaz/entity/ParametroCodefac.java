@@ -146,7 +146,7 @@ public class ParametroCodefac implements Serializable {
     
     public static final String CONFIGURACION_IMPRESORA_FACTURA="config_impresora_factura";
     
-    
+    public static final String FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE="formal_pago_defecto_pantalla_cliente";
     
     @Id
     @Column(name = "ID")
