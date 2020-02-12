@@ -94,6 +94,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemAcerca = new javax.swing.JMenuItem();
         jMenuItemActualizarLicencia = new javax.swing.JMenuItem();
         btnManualUsuario = new javax.swing.JMenuItem();
+        jMenuEstadoComprobantes = new javax.swing.JMenu();
 
         JpanelAuxiliar.setLayout(new javax.swing.BoxLayout(JpanelAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -417,6 +418,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuBar1.add(jMenuAyuda);
 
+        jMenuEstadoComprobantes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/carpeta.png"))); // NOI18N
+        jMenuEstadoComprobantes.setToolTipText("Panel Secundario");
+        jMenuBar1.add(jMenuEstadoComprobantes);
+
         setJMenuBar(jMenuBar1);
 
         pack();
@@ -559,6 +564,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenu jMenuAyuda;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuCalculadora;
+    private javax.swing.JMenu jMenuEstadoComprobantes;
     private javax.swing.JMenu jMenuInicio;
     private javax.swing.JMenuItem jMenuItemAcerca;
     private javax.swing.JMenuItem jMenuItemActualizarLicencia;
@@ -894,6 +900,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public JMenuItem getBtnManualUsuario() {
         return btnManualUsuario;
+    }
+
+    public JMenu getjMenuEstadoComprobantes() {
+        return jMenuEstadoComprobantes;
+    }
+
+    public void setjMenuEstadoComprobantes(JMenu jMenuEstadoComprobantes) {
+        this.jMenuEstadoComprobantes = jMenuEstadoComprobantes;
     }
     
     

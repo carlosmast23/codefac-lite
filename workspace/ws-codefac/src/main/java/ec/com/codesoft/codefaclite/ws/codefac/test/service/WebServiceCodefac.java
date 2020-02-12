@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.ws.codefac.test.service;
 
-import com.sun.xml.internal.ws.client.ClientTransportException;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
@@ -80,7 +79,7 @@ public abstract class WebServiceCodefac {
             ObtenerlicenciaResponseType respuestaLicencia = soapServerPort.obtenerlicencia(parametrosLicencia);
             return respuestaLicencia.getReturn();
         }
-        catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
+        catch(com.sun.xml.ws.client.ClientTransportException cte)
         {
             throw cte;
         }
@@ -208,7 +207,7 @@ public abstract class WebServiceCodefac {
                 }
 
             }
-        }catch(com.sun.xml.internal.ws.client.ClientTransportException e)
+        }catch(com.sun.xml.ws.client.ClientTransportException e)
         {            
             e.printStackTrace();
         }

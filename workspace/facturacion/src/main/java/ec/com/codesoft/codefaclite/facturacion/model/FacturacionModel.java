@@ -1788,7 +1788,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public String getURLAyuda() {
-        return "http://www.cf.codesoft-ec.com/ayuda#efactura";
+      //return "https://docs.google.com/document/d/1AJGbwPOj4rw0uiSMUv0FJQRMlNoYNRbl2TcoE_24ivk/edit#heading=h.i205r9ivb9na";
+        return "https://docs.google.com/document/d/e/2PACX-1vRxHiHd5vpEu1In25BKtCXigpl4m1phGAZwNR7Rh2Jm-Xqe7ffQpivlYJsMAWHFBS0BOnYxj4dpUi7H/pub?embedded=true#h.1vkhsaz68ozt";
     }
 
     @Override

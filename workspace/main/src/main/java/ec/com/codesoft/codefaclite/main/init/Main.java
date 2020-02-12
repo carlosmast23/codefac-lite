@@ -862,7 +862,7 @@ public class Main {
     public static Map<String,PanelSecundarioAbstract> agregarPanelesSecundarios()
     {
         Map<String,PanelSecundarioAbstract> paneles=new HashMap<String,PanelSecundarioAbstract>();
-        paneles.put(PanelSecundarioAbstract.PANEL_AYUDA,new AyudaCodefacModel() );
+        //paneles.put(PanelSecundarioAbstract.PANEL_AYUDA,new AyudaCodefacModel() );
         paneles.put(PanelSecundarioAbstract.PANEL_MONITOR,MonitorComprobanteModel.getInstance());
         paneles.put(PanelSecundarioAbstract.PANEL_VALIDACION,new ValidadorCodefacModel());
 

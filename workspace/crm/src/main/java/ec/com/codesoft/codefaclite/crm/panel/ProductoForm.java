@@ -971,7 +971,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = false, nombre = "Caracteristica", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = false, nombre = "Caracteristica",max = 5000, expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextArea getTxtCaracteristica() {
         return txtCaracteristica;
     }
@@ -999,7 +999,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Observaciones", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = false,max =100 , expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Observaciones", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextArea getTxtObservaciones() {
         return txtObservaciones;
     }

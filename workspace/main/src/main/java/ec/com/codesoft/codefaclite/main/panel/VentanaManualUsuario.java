@@ -22,12 +22,23 @@ import java.util.Map;
  */
 public class VentanaManualUsuario extends ControladorCodefacInterface {
 
+    /**
+     * Variable que tiene la url de la ayuda para mostrar
+     */
+    private String urlAyuda;
     SwingBrowser browser = new SwingBrowser();
     /**
      * Creates new form VentanaManualUsuario
      */
     public VentanaManualUsuario() {
         initComponents();
+        urlAyuda="https://docs.google.com/document/d/e/2PACX-1vRxHiHd5vpEu1In25BKtCXigpl4m1phGAZwNR7Rh2Jm-Xqe7ffQpivlYJsMAWHFBS0BOnYxj4dpUi7H/pub?embedded=true";
+        cargarPaginaAyuda();
+    }
+    
+    public VentanaManualUsuario(String url) {
+        initComponents();
+        this.urlAyuda=url;
         cargarPaginaAyuda();
     }
 
@@ -73,7 +84,8 @@ public class VentanaManualUsuario extends ControladorCodefacInterface {
     {
         browser = new SwingBrowser();
         //browser.loadURL("https://docs.google.com/document/d/1AJGbwPOj4rw0uiSMUv0FJQRMlNoYNRbl2TcoE_24ivk/edit#");
-        browser.loadURL("https://docs.google.com/document/d/e/2PACX-1vRxHiHd5vpEu1In25BKtCXigpl4m1phGAZwNR7Rh2Jm-Xqe7ffQpivlYJsMAWHFBS0BOnYxj4dpUi7H/pub?embedded=true");
+        //browser.loadURL("https://docs.google.com/document/d/e/2PACX-1vRxHiHd5vpEu1In25BKtCXigpl4m1phGAZwNR7Rh2Jm-Xqe7ffQpivlYJsMAWHFBS0BOnYxj4dpUi7H/pub?embedded=true");
+        browser.loadURL(urlAyuda);
         
         browser.setBounds(1, 1, this.getWidth(),this.getHeight());
         

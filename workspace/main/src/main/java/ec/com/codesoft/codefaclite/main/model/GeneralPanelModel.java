@@ -150,6 +150,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import javax.swing.plaf.SplitPaneUI;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.text.JTextComponent;
@@ -182,11 +184,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private SessionCodefac sessionCodefac;
     private Map<String,PanelSecundarioAbstract> panelesSecundariosMap;
     
+    
+    /**
+     * ========================================================================
+     *          PARAMETROS DE CONFIGURACION DE LA PANTALLA SECUNDARIA
+     * Esta pantalla me sirve para dividir de forma forma horizontal y vertical
+     * la seccion secundaria
+     * ========================================================================
+     */
     private static double PROPORCION_HORIZONTAL=0.75d;
-    private static double PROPORCION_VERTICAL=0.7d;
+    private static double PROPORCION_VERTICAL=0.6d;
     
     private static double PROPORCION_HORIZONTAL_DEFAULT=0.75d;
-    private static double PROPORCION_VERTICAL_DEFAULT=0.7d;
+    private static double PROPORCION_VERTICAL_DEFAULT=0.6d;
     
     private static double PROPORCION_HORIZONTAL_MIN=0.95d;
     private static double PROPORCION_VERTICAL_MIN=0.95d;
@@ -531,7 +541,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     }
     
     
-    private void cargarAyuda()
+    /*private void cargarAyuda()
     {
         final String PAGINA_DEFECTO=ParametrosSistemaCodefac.PAGINA_DEFECTO_AYUDA;
         
@@ -585,7 +595,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
         //getjSplitPanelVerticalSecundario().setLeftComponent(getJPanelContenidoAuxiliar());
             
-    }
+    }*/
     
     /**
      * Carga toda la ayuda por defecto sin importar el panel
@@ -630,7 +640,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void cargarPublicidad()
     {
             browserPublicidad = new SwingBrowser();
-            browserPublicidad.loadURL("http://www.vm.codesoft-ec.com/general/publicidad/b");
+            browserPublicidad.loadURL(ParametrosSistemaCodefac.LINK_PUBLICIDAD_CODEDAC);
             browserPublicidad.setBounds(1, 1, getjPanelPublicidadContenido().getWidth() - 1, getjPanelPublicidadContenido().getHeight() - 1);
             getjPanelPublicidadContenido().removeAll();
             getjPanelPublicidadContenido().add(browserPublicidad);            
@@ -1085,19 +1095,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getBtnAyuda().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    
-                    if(!getjPanelSeleccion().isVisible())//Si no esta visible el panel lo muestra
-                    {
-                        cargarAyuda();
-                        mostrarPanelSecundario(true, PanelSecundarioAbstract.PANEL_AYUDA);
-                    }
-                    else //Si esta vosible el panel lo oculta
-                    {
-                        cargarAyuda();
-                        mostrarPanelSecundario(false, PanelSecundarioAbstract.PANEL_AYUDA);
-                    }
-
-                    
+                    //abrirPanelSecundario();
+                    abrirManualUsuario();
                 }
             });
         
@@ -1112,6 +1111,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             });
         
+    }
+    
+    private void abrirPanelSecundario()
+    {
+        if (!getjPanelSeleccion().isVisible())//Si no esta visible el panel lo muestra
+        {
+            //cargarAyuda();
+            mostrarPanelSecundario(true, PanelSecundarioAbstract.PANEL_AYUDA);
+        } else //Si esta vosible el panel lo oculta
+        {
+            //cargarAyuda();
+            mostrarPanelSecundario(false, PanelSecundarioAbstract.PANEL_AYUDA);
+        }
     }
     
     /**
@@ -2043,7 +2055,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             {                                
                                 ControladorCodefacInterface panel = (ControladorCodefacInterface) getjDesktopPane1().getSelectedFrame();
                                 panel.formularioCerrando = true;
-                                cargarAyuda();
+                                //cargarAyuda();
                                 mostrarPanelSecundario(false);
                                 e.getInternalFrame().dispose();
                                 getjDesktopPane1().remove(panel);
@@ -2635,6 +2647,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             this.getJMenuBar().add(menu);
         }
         this.getJMenuBar().add(getjMenuAyuda());
+        this.getJMenuBar().add(getjMenuEstadoComprobantes());
         this.getJMenuBar().add(getjMenuVentanasActivas());
         //actualizarMenuCodefac();
         agregarListenerMenu();
@@ -3164,8 +3177,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getBtnManualUsuario().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                agregarListenerMenu(new VentanaManualUsuario(),false,800,900);                
-                
+                abrirManualUsuario();                
             }
         });
         
@@ -3231,6 +3243,22 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
         });
         
+    }
+    
+    private void abrirManualUsuario()
+    {
+        try
+        {   //Cuando presiona ayuda busca el link configurado para la pantalla
+            JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
+            ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
+            String urlAyuda = frameInterface.getURLAyuda();
+            agregarListenerMenu(new VentanaManualUsuario(urlAyuda), false, 800, 900);
+        } catch (UnsupportedOperationException ex) {
+            // Si no encuentra el link abre por defecto desde el inicio
+            agregarListenerMenu(new VentanaManualUsuario(), false, 800, 900);
+        } catch (java.lang.NullPointerException ex) {
+            agregarListenerMenu(new VentanaManualUsuario(), false, 800, 900);
+        }
     }
     
     private void minimizarTodasVentanas()
@@ -3374,6 +3402,32 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             @Override
             public void actionPerformed(ActionEvent e) {
                 getBtnAyuda().doClick();
+            }
+        });
+        
+        getjMenuEstadoComprobantes().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                abrirPanelSecundario();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        
+        getjMenuEstadoComprobantes().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                abrirPanelSecundario();
             }
         });
         

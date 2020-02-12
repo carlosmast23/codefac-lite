@@ -356,7 +356,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public String getURLAyuda() {
-        return "http://www.cf.codesoft-ec.com/ayuda#eproductos";
+        return "https://docs.google.com/document/d/e/2PACX-1vRxHiHd5vpEu1In25BKtCXigpl4m1phGAZwNR7Rh2Jm-Xqe7ffQpivlYJsMAWHFBS0BOnYxj4dpUi7H/pub?embedded=true#h.4y1m2n6myaod";
     }
 
     @Override
