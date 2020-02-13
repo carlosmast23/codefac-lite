@@ -1817,14 +1817,14 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 comprobante.addDatoAdicional(comprobanteAdicional);
             }
             
-            if(ParametroUtilidades.comparar(comprobante.getEmpresa(),ParametroCodefac.FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO,EnumSiNo.SI))
-            {
-                
-                String puntosEmisionFormato=comprobante.getUsuario().formatoPuntoEmisionActivos();
-                ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Punto de Emisión",puntosEmisionFormato);
-                comprobante.addDatoAdicional(comprobanteAdicional);
-            }
         
+        }
+        
+        if (ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO, EnumSiNo.SI)) {
+
+            String puntosEmisionFormato = comprobante.getUsuario().formatoPuntoEmisionActivos();
+            ComprobanteAdicional comprobanteAdicional = construirDatoAdicionalSinTransaccion(comprobante, "*Punto de Emisión", puntosEmisionFormato);
+            comprobante.addDatoAdicional(comprobanteAdicional);
         }
         
     }

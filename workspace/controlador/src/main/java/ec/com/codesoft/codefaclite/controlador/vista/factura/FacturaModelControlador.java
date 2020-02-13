@@ -112,6 +112,15 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             tiposDocumento=DocumentoEnum.obtenerPorDocumentosElectronicos(ModuloCodefacEnum.FACTURACION,tipoEmisionEnum);
             
+            try {
+                if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_NOTA_VENTA,EnumSiNo.SI))
+                {
+                    tiposDocumento.add(DocumentoEnum.NOTA_VENTA_INTERNA); //Todo ver si utilizar este documento para grabar o crearme otros 
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            /*
             ParametroCodefac paramCodefacNotaVenta=session.getParametrosCodefac().get(ParametroCodefac.ACTIVAR_NOTA_VENTA);
                     
             if(paramCodefacNotaVenta!=null)
@@ -121,7 +130,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 {
                     tiposDocumento.add(DocumentoEnum.NOTA_VENTA_INTERNA); //Todo ver si utilizar este documento para grabar o crearme otros 
                 }
-            }
+            }*/
         }
         else //Cuando la factura es fisica
         {
