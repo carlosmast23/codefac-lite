@@ -90,7 +90,7 @@ public abstract class ParametroUtilidades {
     public static <T extends Object> T obtenerValorBaseDatos(Empresa empresa , String nombreParametro,ComparadorInterface interfaceConsulta) throws RemoteException
     {
         String idParametro=obtenerValorParametro(empresa, nombreParametro);
-        if(idParametro!=null)
+        if(idParametro!=null && !idParametro.toString().isEmpty())
         {
             return (T) interfaceConsulta.consultarParametro(idParametro);
         }

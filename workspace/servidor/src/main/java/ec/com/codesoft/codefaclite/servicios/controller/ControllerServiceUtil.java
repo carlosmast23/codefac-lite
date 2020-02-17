@@ -74,12 +74,14 @@ import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudi
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlantillaEstudianteService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlantillaService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubrosNivelService;
+import ec.com.codesoft.codefaclite.servidor.service.pos.CajaService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.DestinatarioGuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.DetalleProductoGuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionAdicionalService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.TransportistaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
@@ -159,6 +161,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCu
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoTablaInteresServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
 
 /**
  *
@@ -252,6 +255,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(PrestamoCuotaCargoService.class,PrestamoCuotaCargoServiceIf.class);
             mapRecursos.put(PrestamoCuotaService.class,PrestamoCuotaServiceIf.class);
             mapRecursos.put(PrestamoService.class,PrestamoServiceIf.class);
+            mapRecursos.put(CajaService.class,CajaServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);
             LOG.log(Level.INFO,"Servidor Iniciado");

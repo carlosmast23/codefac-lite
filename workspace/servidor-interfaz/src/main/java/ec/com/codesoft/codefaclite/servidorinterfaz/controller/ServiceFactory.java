@@ -90,6 +90,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCu
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoTablaInteresServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
 
 /**
  *
@@ -190,6 +191,8 @@ public abstract class ServiceFactory {
     public PrestamoCuotaCargoServiceIf getPrestamoCuotaCargoServiceIf(){return (PrestamoCuotaCargoServiceIf) getRecursosRMI(PrestamoCuotaCargoServiceIf.class);};
     public PrestamoCuotaServiceIf getPrestamoCuotaServiceIf(){return (PrestamoCuotaServiceIf) getRecursosRMI(PrestamoCuotaServiceIf.class);};
     public PrestamoServiceIf getPrestamoServiceIf(){return (PrestamoServiceIf) getRecursosRMI(PrestamoServiceIf.class);};
+    
+    public CajaServiceIf getCajaServiceIf(){return (CajaServiceIf) getRecursosRMI(CajaServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente

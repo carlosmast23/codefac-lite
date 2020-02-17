@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">                   
+                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <title>PrimeFaces</title>
+            </f:facet>
+        </h:head>
+
+        <h:body >   
+
+            <p:stack icon="/resources/demo/images/dock/stack.png" expanded="true">
+                <p:menuitem value="Home" icon="/resources/demo/images/dock/home.png" url="#"/>
+                <p:menuitem value="Music" icon="/resources/demo/images/dock/music.png" url="#"/>
+                <p:menuitem value="Video" icon="/resources/demo/images/dock/video.png" url="#"/>
+                <p:menuitem value="Email" icon="/resources/demo/images/dock/email.png" url="#"/>
+                <p:menuitem value="Portfolio" icon="/resources/demo/images/dock/portfolio.png" url="#"/>
+            </p:stack>
+
+            <div class="p-grid">
+                <!--==========================BARRA DE ENCABENZADO=============================-->
+                <div class="p-col-12 p-md-12 p-lg-12" style="background-color: activeborder">
+                    <div class="p-grid">
+                        <!--================== BOTON DEL MENU SECUNDARIO =======================-->
+                        <div class="p-col-2 p-md-4 p-lg-6" style="background-color: activeborder">
+                            <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
+                                <h1 style="font-weight:normal">Menu Principal</h1>
+                                <p:commandButton value="Cancel" oncomplete="PF('sidebar1').hide()"/>
+                            </p:sidebar>
+                            <p:commandButton icon="fa fa-fw fa-bars" oncomplete="PF('sidebar1').show()" />
+                        </div>
+                        <!--  BARRA LATERAL DE OTRAS OPCIONES  -->
+                        <div class="p-col-10 p-md-8 p-lg-6" style="background-color: activeborder">
+                            <p:toolbar id="tb">
+                                <f:facet name="left">
+                                    <p:commandButton type="button" class="button-menu"  icon="home-icon"  />
+                                    <p:commandButton type="button" class="button-menu"  icon="new-icon"  />
+                                    <p:commandButton type="button" class="button-menu"  icon="save-icon"  />
+                                    <p:commandButton type="button" class="button-menu"  icon="print-icon"  />
+                                    <p:commandButton type="button" class="button-menu"  icon="find-icon"  />
+                                </f:facet>
+                                <f:facet name="right">
+                                    <p:commandButton type="button" title="Save" icon="pi pi-save"/>
+                                    <p:commandButton type="button" title="Delete" icon="fa fa-desktop"/>
+                                    <p:commandButton type="button" title="Print" icon="fa fa-sign-out"/>
+                                </f:facet>
+                            </p:toolbar>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="p-col-12 p-md-12 p-lg-12">                    
+                    <div class="p-grid">
+                        <div class="p-col-12 p-md-6 p-lg-8" style="background-color: cyan">
+                            DATOS
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-4" style="background-color: yellow">
+                            PANEL SECUNDARIO
+                        </div>
+                    </div>
+
+                </div> 
+                <div class="p-col-12 p-md-12 p-lg-12" style="background-color: rgb(62,93,162);color: white;text-align: center">
+                    Todos los derechos reservador Codefac 2018
+                </div> 
+            </div>
+            <h:outputStylesheet name="primeflex/primeflex.css" library="css" />
+            <h:outputStylesheet library="css" name="estilo.css" />
+        </h:body>
+
+    </f:view>
+</html>

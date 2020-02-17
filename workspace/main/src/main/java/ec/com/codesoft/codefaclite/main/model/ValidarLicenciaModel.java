@@ -32,6 +32,8 @@ import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -72,6 +74,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
 
     private void addListener() {
         addListenerButtons();
+        addListenerChecks();
     }
     
     private void crearLicencia()
@@ -133,32 +136,35 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
             public void actionPerformed(ActionEvent e) {
                 crearLicencia();
                 
-                //Verificar que no exista el usuario admin
-                if(getTxtUsuarioRegistrar().getText().equals("admin") || getTxtUsuarioRegistrar().getText().equals("root"))
+                if(!getChkNoCrearUsuario().isSelected())
                 {
-                    DialogoCodefac.mensaje("Error","No se puede crear un usuario con la palabra admin o root",DialogoCodefac.MENSAJE_INCORRECTO);
-                    return;
-                }
-                
-                
-                //Genera un nuevo usuario con los datos ingresados                
-                UsuarioServicioIf servicio=ServiceFactory.getFactory().getUsuarioServicioIf();
-                Usuario usuario=new Usuario();
-                String clave=new String(getTxtClaveRegistrar().getPassword());
-                usuario.setClave(clave);
-                usuario.setNick(getTxtUsuarioRegistrar().getText());    
-                usuario.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-                usuario.setEmpresa(empresa);
-                                
-                try {
-                    
-                    servicio.grabarUsuario(usuario,Perfil.PERFIL_GRATIS);
-                    
-                } catch (ServicioCodefacException ex) {
-                    DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
-                    return;
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+                    //Verificar que no exista el usuario admin
+                    if(getTxtUsuarioRegistrar().getText().equals("admin") || getTxtUsuarioRegistrar().getText().equals("root"))
+                    {
+                        DialogoCodefac.mensaje("Error","No se puede crear un usuario con la palabra admin o root",DialogoCodefac.MENSAJE_INCORRECTO);
+                        return;
+                    }
+
+
+                    //Genera un nuevo usuario con los datos ingresados                
+                    UsuarioServicioIf servicio=ServiceFactory.getFactory().getUsuarioServicioIf();
+                    Usuario usuario=new Usuario();
+                    String clave=new String(getTxtClaveRegistrar().getPassword());
+                    usuario.setClave(clave);
+                    usuario.setNick(getTxtUsuarioRegistrar().getText());    
+                    usuario.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                    usuario.setEmpresa(empresa);
+
+                    try {
+
+                        servicio.grabarUsuario(usuario,Perfil.PERFIL_GRATIS);
+
+                    } catch (ServicioCodefacException ex) {
+                        DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                        return;
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 
                 licenciaCreada=true;
@@ -331,6 +337,22 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
             Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+
+    private void addListenerChecks() {
+        getChkNoCrearUsuario().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                
+                Boolean seleccionado=false;
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    seleccionado=true;
+                }
+                getTxtUsuarioRegistrar().setEnabled(!seleccionado);
+                getTxtClaveRegistrar().setEnabled(!seleccionado);
+                
+            }
+        });
     }
     
     

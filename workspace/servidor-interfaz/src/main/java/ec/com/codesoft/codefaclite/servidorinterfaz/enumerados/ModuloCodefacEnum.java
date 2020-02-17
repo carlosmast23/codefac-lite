@@ -21,6 +21,9 @@ public enum ModuloCodefacEnum {
     FACTURACION("Facturacion","FAC",
             "f","modulo_facturacion",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/facturacion.png")),
     
+    POS("Pos","POS",
+            "p","modulo_pos",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/pos.png")),
+    
     CRM("Crm","CRM",
             "c","modulo_crm",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/crm.png")),
     

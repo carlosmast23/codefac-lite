@@ -325,6 +325,7 @@ public class Main {
         conjuntoOnline.add("transporte-1.0-SNAPSHOT.jar");
         conjuntoOnline.add("recursosWeb-1.0-SNAPSHOT.jar");
         conjuntoOnline.add("impuestos-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("pos-1.0-SNAPSHOT.jar");
         conjuntoOnline.add("codefac.war");
        
         //Crear el map con los datos para descargar

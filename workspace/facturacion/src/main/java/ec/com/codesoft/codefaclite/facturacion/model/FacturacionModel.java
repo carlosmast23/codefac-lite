@@ -543,6 +543,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         } catch (RemoteException ex) {
                             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (ServicioCodefacException ex) {
+                            DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_ADVERTENCIA);
                             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         break;
@@ -1127,8 +1128,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     public void validacionesGrabar() throws ExcepcionCodefacLite
     {
+        if(session.getMatriz()==null)
+        {
+            DialogoCodefac.mensaje("Alerta","No tiene configurado un establecimiento principal o matriz", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("No tiene configurado un establecimiento principal o matriz");
+        }
         
         if (!verificarSumaFormaPago()) {
+            DialogoCodefac.mensaje("Alerta","Formas de pago erroneas", DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("Formas de pago erroneas");
         }
         
