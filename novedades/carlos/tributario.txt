@@ -1,0 +1,14 @@
+Al momento de generar el Ats de compras genera problema cuando tiene los siguientes campos:
+
+buscar:COSTO_O_GASTO_IR
+<detalleCompras>
+	<codSustento>01</codSustento> -> CREDITO_TRIBUTARIO_IVA
+        <tpIdProv>01</tpIdProv>
+        <idProv>1710083369001</idProv>
+        <tipoComprobante>02</tipoComprobante> -> NOTA DE VENTA
+
+Ese tipo combinación al parecer no es permitita y tiene sentido
+Revisar donde se graba el tipo de Credito tributario en la compra porque actualmente se graba por detalle
+
+Tambien por algun motivo se pasaron cedulas de clientes con 9 digitos , esta de hacer una validación previa al momento de generar el ats
+(caso de Escuela Crecer)
