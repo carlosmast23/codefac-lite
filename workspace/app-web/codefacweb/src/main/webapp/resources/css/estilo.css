@@ -8,6 +8,37 @@ and open the template in the editor.
     Author     : Carlos
 */
 
+.pie-pagina
+{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    background-color: rgb(62,93,162);
+    color: white;
+    text-align: center    
+}
+
+.cabecera
+{
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  
+}
+
+.titulo_contenido
+{
+    text-align: center;
+    color: darkgrey;
+    padding-top: 5px;
+    margin: 0px;
+}
+/* ===============================================================
+                        ICONOS
+==================================================================
+*/
+
 .ui-layout-north {
     z-index:20 !important;
     overflow:visible !important;
@@ -99,7 +130,7 @@ and open the template in the editor.
 
 .button-menu
 {
-    height: 32px;
+    height: 35px;
     width: 45px !important;
     background-color: white !important;
 }

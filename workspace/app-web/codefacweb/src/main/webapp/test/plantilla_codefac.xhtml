@@ -17,18 +17,8 @@
         </h:head>
 
         <h:body >
-            <!--- ============= PANELE AUXILIARES DERECHA, ABAJO ============= -->
-            <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
-                <h1 style="font-weight:normal">Menu Principal</h1>
-                <p:commandButton value="Cancel" oncomplete="PF('sidebar1').hide()"/>
-            </p:sidebar>
 
-            <p:sidebar widgetVar="sidebar4" position="bottom" baseZIndex="10000">
-                <h1 style="font-weight:normal">Comprobantes Procesados</h1>
-                <p:commandButton value="Cancel" oncomplete="PF('sidebar4').hide()"/>
-            </p:sidebar>
-
-            <!-- ============== MENU SUPERIOR DE LAS OPCIONES PRINCIPALES ====== -->
+            <!-- ============ CABECERA ================= -->
             <h:form>
                 <p:toolbar id="tb">
                     <f:facet name="left">
@@ -54,31 +44,13 @@
                             <p:menuitem value="Homepage" url="http://www.primefaces.org" icon="pi pi-home" />
                         </p:menuButton>
                     </f:facet>
-                </p:toolbar>
+                </p:toolbar>                
+                <div style="height:800px"></div>
+
+                <p:sticky target="tb" />
             </h:form>
 
-            <!-- =================== TITULO DE LA PAGINA ========================= -->
-            <ui:insert name="titulo_contenido">
-                <div class="titulo_contenido" >
-                    Sin titulo de la pantalla
-                </div>
-            </ui:insert>   
-            <p:separator />
 
-            <!-- =================== CONTENIDO DONDE VAN A ESTAR LOS DATOS ========================= -->
-            <div  style="padding: 10px">
-                <ui:insert name="contenido">
-                    Contenido por defecto de la plantilla  
-                </ui:insert>
-            </div>
-
-            <!-- ========================= PIE DE LA PAGINA ====================== -->
-            <div class="pie-pagina" >
-                Todos los derechos reservador Codefac 2018
-            </div> 
-
-            <h:outputStylesheet name="primeflex/primeflex.css" library="css" />
-            <h:outputStylesheet library="css" name="estilo.css" />
 
         </h:body>
 
