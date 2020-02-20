@@ -14,105 +14,144 @@
             <!--<p:remoteCommand process="@this" name="panelDatos" update="@form"/>-->
             <p:tabView>
                 <p:tab title="Datos Principales">
-                    <p:panelGrid id="panelDatos" columns="4"   layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-5,ui-grid-col-2, ui-grid-col-3"  >
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <h:outputLabel id="txtIdentificacion"  value="Identificación:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">                            
+                            <h:inputText required="false" value="#{clienteMb.cliente.identificacion}" />
+                        </div> 
 
-                        <h:outputLabel id="txtIdentificacion" style="float: right" value="Identificación:"/>
-                        <h:inputText required="false" value="#{clienteMb.cliente.identificacion}" />
-
-                        <h:outputLabel style="float: right" value="Pasaporte:"/>
-                        <p:selectBooleanCheckbox value="#{clienteMb.identificacionPasaporte}" />
-
-
-                        <h:outputLabel style="float: right" value="Nombres:"/>
-                        <p:inputText required="false" value="#{clienteMb.cliente.nombres}" >
-                            <p:ajax update="txtRazonSocial" event="keyup" listener="#{clienteMb.eventoNombreKeyUp()}" />
-                        </p:inputText>
-
-                        <h:outputLabel style="float: right" value="Nacionalidad:"/>
-
-                        <p:selectOneMenu id="console1" value="#{clienteMb.nacionalidadSeleccionada}"  style="width:125px" converter="nacionalidadConverter">
-                            <f:selectItems var="nacionalidad" value="#{clienteMb.nacionalidadesList}" itemValue="#{nacionalidad.idNacionalidad.toString()}"    />
-                        </p:selectOneMenu>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel value="Pasaporte:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">                            
+                            <p:selectBooleanCheckbox value="#{clienteMb.identificacionPasaporte}" />
+                        </div>
 
 
 
-                        <h:outputLabel style="float: right" value="Apellidos:"/>
-                        <p:inputText required="false" value="#{clienteMb.cliente.apellidos}" >
-                            <p:ajax update="txtRazonSocial"  event="keyup"  listener="#{clienteMb.eventoNombreKeyUp()}" />
-                        </p:inputText>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Nombres:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">                            
+                            <p:inputText required="false" value="#{clienteMb.cliente.nombres}" style="width: 90%" >
+                                <p:ajax update="txtRazonSocial" event="keyup"  listener="#{clienteMb.eventoNombreKeyUp()}" />
+                            </p:inputText>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Nacionalidad:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:selectOneMenu id="console1" value="#{clienteMb.nacionalidadSeleccionada}"  style="width:125px" converter="nacionalidadConverter">
+                                <f:selectItems var="nacionalidad" value="#{clienteMb.nacionalidadesList}" itemValue="#{nacionalidad.idNacionalidad.toString()}"    />
+                            </p:selectOneMenu>
+                        </div>
 
-                        <h:outputLabel style="float: right" value="Estado:"/>
-                        <p:selectOneMenu id="console2" value="#{clienteMb.estadoSeleccionada}"  style="width:125px" converter="estadoEnumConverter">
-                            <f:selectItems var="estado" value="#{clienteMb.estadosEnumList}" itemValue="#{estado.estado}"    />
-                        </p:selectOneMenu>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Apellidos:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:inputText required="false" value="#{clienteMb.cliente.apellidos}" style="width: 90%"  >
+                                <p:ajax update="txtRazonSocial"  event="keyup"  listener="#{clienteMb.eventoNombreKeyUp()}" />
+                            </p:inputText>
+                        </div>
 
-                        <h:outputLabel style="float: right" value="Razón Social:"/>
-                        <p:inputText id="txtRazonSocial" required="false" value="#{clienteMb.cliente.razonSocial}" style="width: 80%" />
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Estado:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:selectOneMenu id="console2" value="#{clienteMb.estadoSeleccionada}"  style="width:125px" converter="estadoEnumConverter">
+                                <f:selectItems var="estado" value="#{clienteMb.estadosEnumList}" itemValue="#{estado.estado}"    />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Razón Social:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:inputText id="txtRazonSocial" required="false" value="#{clienteMb.cliente.razonSocial}" style="width: 90%" />
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Nombre Legal:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:inputText required="false" value="#{clienteMb.establecimientoDefecto.nombreComercial}" style="width: 90%" />
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Nombre Contacto:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:inputText  required="false" value="#{clienteMb.cliente.contactoClienteNombre}" style="width: 90%" />
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Dirección:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:inputText required="false" value="#{clienteMb.establecimientoDefecto.direccion}"  style="width: 90%"/> 
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Teléfono Convencional:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:inputText required="false" value="#{clienteMb.establecimientoDefecto.telefonoConvencional}" />
 
-                        <p:spacer/><p:spacer/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Extensión:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:inputText required="false" value="#{clienteMb.establecimientoDefecto.extensionTelefono}" style="width: 50%" />
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Teléfono Celular:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:inputText required="false" value="#{clienteMb.establecimientoDefecto.telefonoCelular}" />
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Correo Electrónico:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:inputText  required="false" value="#{clienteMb.cliente.correoElectronico}" style="width: 80%" />
+                        </div>
+                    </div>
 
-                        <h:outputLabel style="float: right" value="Nombre Legal:"/>
-                        <h:inputText required="false" value="#{clienteMb.establecimientoDefecto.nombreComercial}" style="width: 80%" />
 
-                        <p:spacer/><p:spacer/>
-
-                        <h:outputLabel style="float: right" value="Nombre Contacto:"/>
-                        <h:inputText  required="false" value="#{clienteMb.cliente.contactoClienteNombre}" style="width: 80%" />
-
-                        <p:spacer/><p:spacer/>
-
-                        <h:outputLabel style="float: right" value="Dirección:"/>
-                        <h:inputText required="false" value="#{clienteMb.establecimientoDefecto.direccion}"  style="width: 80%"/> 
-
-                        <p:spacer/><p:spacer/>
-
-                        <h:outputLabel style="float: right" value="Teléfono Convencional:"/>
-                        <h:inputText required="false" value="#{clienteMb.establecimientoDefecto.telefonoConvencional}" />
-
-                        <h:outputLabel style="float: right" value="Extensión:"/>
-                        <h:inputText required="false" value="#{clienteMb.establecimientoDefecto.extensionTelefono}" style="width: 50%" />
-
-                        <h:outputLabel style="float: right" value="Teléfono Celular:"/>
-                        <h:inputText required="false" value="#{clienteMb.establecimientoDefecto.telefonoCelular}" />
-
-                        <p:spacer/><p:spacer/>
-
-                        <h:outputLabel style="float: right" value="Correo Electrónico:"/>
-                        <h:inputText  required="false" value="#{clienteMb.cliente.correoElectronico}" style="width: 80%" />
-
-                        <p:spacer/><p:spacer/>
-
-                    </p:panelGrid>
                 </p:tab>
                 <p:tab title="Datos Adicionales">
-                    <p:panelGrid columns="4"   layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-5,ui-grid-col-2, ui-grid-col-3" >
 
-                        <h:outputLabel  style="float: right" value="Tipo Cliente:"/>
-                        <p:selectOneMenu  value="#{clienteMb.cliente.tipCliente}"  style="width:125px" converter="stringConverter" >
-                            <f:selectItems var="tipo" value="#{clienteMb.tiposClientes}" itemValue="#{tipo}"    />
-                        </p:selectOneMenu>
-                        
-                        <p:spacer/><p:spacer/>
-
-                        <h:outputLabel  style="float: right" value="Tipo :"/>
-                        <p:selectOneMenu  value="#{clienteMb.operadorNegocioSeleccionado}"  style="width:125px" converter="operadorNegocioConverter">
-                            <f:selectItems var="operador" value="#{clienteMb.operadoresNegocio}" itemValue="#{operador.letra}"    />
-                        </p:selectOneMenu>
-                        
-                        <p:spacer/><p:spacer/>
-
-                        <h:outputLabel  style="float: right" value="Forma pago por defecto :"/>
-                        <p:selectOneMenu id="cmbFormaPago"   style="width:125px" value="#{clienteMb.sriFormaPagoSeleccionada}" converter="formaPagoConverter">
-                            <f:selectItems var="formaPago" value="#{clienteMb.sriFormaPagoList}" itemValue="#{formaPago.id.toString()}"    />
-                        </p:selectOneMenu>
-                        
-                        <p:spacer/><p:spacer/>
-                        
-                        <h:outputLabel  style="float: right" value="Dias crédito cobro :"/>
-                        <h:inputText required="false" value="#{clienteMb.cliente.diasCreditoCliente}"  style="width: 20%"/> 
-                        
-
-                    </p:panelGrid>
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <h:outputLabel   value="Tipo Cliente:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <p:selectOneMenu  value="#{clienteMb.cliente.tipCliente}"  style="width:125px" converter="stringConverter" >
+                                <f:selectItems var="tipo" value="#{clienteMb.tiposClientes}" itemValue="#{tipo}"    />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <h:outputLabel   value="Tipo :"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <p:selectOneMenu  value="#{clienteMb.operadorNegocioSeleccionado}"  style="width:125px" converter="operadorNegocioConverter">
+                                <f:selectItems var="operador" value="#{clienteMb.operadoresNegocio}" itemValue="#{operador.letra}"    />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <h:outputLabel   value="Forma pago por defecto :"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <p:selectOneMenu id="cmbFormaPago"   style="width:125px" value="#{clienteMb.sriFormaPagoSeleccionada}" converter="formaPagoConverter">
+                                <f:selectItems var="formaPago" value="#{clienteMb.sriFormaPagoList}" itemValue="#{formaPago.id.toString()}"    />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <h:outputLabel   value="Dias crédito cobro :"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <h:inputText required="false" value="#{clienteMb.cliente.diasCreditoCliente}"  style="width: 20%"/> 
+                        </div>
+                    </div>
 
 
                 </p:tab>

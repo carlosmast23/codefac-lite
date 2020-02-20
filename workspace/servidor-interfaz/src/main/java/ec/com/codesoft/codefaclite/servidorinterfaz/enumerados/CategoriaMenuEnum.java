@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import java.io.Serializable;
 import java.net.URL;
 import javax.swing.ImageIcon;
 
@@ -13,7 +14,7 @@ import javax.swing.ImageIcon;
  *
  * @author Carlos
  */
-public enum CategoriaMenuEnum {
+public enum CategoriaMenuEnum implements Serializable{
     GESTIONAR("Gestionar",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/gestionar.png")),
     PROCESOS("Procesos",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/proceso.png")),
     DEUDAS_ACADEMICOS("Rubros",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/deudas.png")),

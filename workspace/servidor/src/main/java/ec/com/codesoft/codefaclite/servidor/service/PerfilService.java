@@ -11,21 +11,35 @@ import ec.com.codesoft.codefaclite.servidor.facade.PerfilFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.MenuCodefacRespuesta;
 import java.rmi.RemoteException;
 import java.util.List;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
+import java.awt.Font;
+import java.awt.event.InputEvent;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Session;
 import javax.persistence.EntityTransaction;
+//import javax.swing.JMenu;
+//import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 /**
  *
  * @author Carlos
  */
 public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implements PerfilServiceIf{
+    private static final Logger LOG = Logger.getLogger(PerfilService.class.getName());
 
     private PerfilFacade perfilFacade;
     public PerfilService() throws RemoteException 
@@ -129,6 +143,183 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
         
     }
     
+    public MenuCodefacRespuesta construirMenuPermisosUsuario(SessionCodefac sessionCodefac) throws RemoteException, ServicioCodefacException
+    {
+        //List<JMenu> menus=new ArrayList<JMenu>();
+        MenuCodefacRespuesta respuesta=new MenuCodefacRespuesta();
+        
+                
+        for (ModuloCodefacEnum moduloSistema : ModuloCodefacEnum.values()) {
+                
+                //JMenu menuModulo = new JMenu(moduloSistema.getNombre());
+                //menuModulo.setIcon(moduloSistema.getIcono());
+                //menuModulo.setFont(new Font("Arial",2,15));
+                boolean existenCategorias=false;
+                
+                for (CategoriaMenuEnum categoriaEnum : CategoriaMenuEnum.values()) {
+                    //JMenu menuCategoria=new JMenu(categoriaEnum.getNombre());
+                    //menuCategoria.setIcon(categoriaEnum.getIcono());
+                    //menuCategoria.setFont(new Font("Arial", 0, 13));
+                    
+                    boolean existenMenuItem=false;
+                    for (VentanaEnum menuControlador : VentanaEnum.getListValues())  //Todo: Analizar para que la variables ventanasMenuList pueda setera cada vez que busco las pantalla que pertence al menu y se vayagn quitando de la lista para acelerar el proceso
+                    {
+                        //Si la ventana no pertecene a la categoria no hago mas validaciones
+                        if(!menuControlador.getCategoriaMenu().equals(categoriaEnum))
+                        {
+                            continue; //salta a la siguiente vuelta
+                        }
+                        
+                        //Verificacion cuando es un modulo habilitado
+                        boolean agregarAlMenu=false;
+                        
+                        //Si esta en modo de desarrollo carga todos las opciones de los menus
+                        if(ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO))
+                        {
+                            if (menuControlador.getModulo().equals(moduloSistema)) 
+                            {
+                                agregarAlMenu=true;
+                            }
+                        }
+                        else //Si esta en modo de produccion hago las validaciones normales
+                        {                        
+                            //Validacion de las ventanas cuando el usuario es gratis
+                            if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
+                            {
+                                //Si el tipo de licencia de la pantala es gratis le activo solo las pantallas disponibles para esta modalidad
+                                if (menuControlador.getModulo().equals(moduloSistema)) 
+                                {                                                                
+                                    //El acceso es el mismo para cualquier usuario gratis y para el administrador
+                                    if(menuControlador.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS)) 
+                                    {
+                                        agregarAlMenu = true;
+                                    }
+
+                                }
+                            }
+                            else //Validacion para usuarios premiun
+                            {                        
+                                if(isModuloPermitido(moduloSistema,sessionCodefac))
+                                {
+                                    if(menuControlador.getModulo().equals(moduloSistema))
+                                    {                                    
+                                        if(verificarMenuUsuario(menuControlador,sessionCodefac) || sessionCodefac.getUsuario().isRoot)
+                                        {
+                                            agregarAlMenu=true;
+                                        }
+
+                                      }
+                                }
+                                else //Verificacion cuando no es un modulo habilitado
+                                {
+                                    //Solo agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
+                                    //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
+                                    if (menuControlador.getModulo().equals(moduloSistema)) {
+                                        //Verifica si es super usuario carga todos los modulos
+
+
+                                        //Verifica si la pantalla adicional deberia agregarse porque esta depende de otra que si se cargo el modulo
+                                        if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulos())) 
+                                        {
+                                            //Verifica si el usuario tienes permisos para esa pantalla o son son super usuarios
+                                            if(verificarMenuUsuario(menuControlador,sessionCodefac) || sessionCodefac.getUsuario().isRoot)
+                                            {
+                                                agregarAlMenu = true;
+                                            }
+                                        } 
+
+
+                                    }
+
+
+                                }
+
+                            }
+                        }
+                        
+                        //Esta pantalla filtra que solo se agregue si pertenece al modulo y a la submenu corecto
+                        if (menuControlador.getCategoriaMenu().equals(categoriaEnum)&& agregarAlMenu ) {
+                            existenMenuItem = true;
+                            /*String nombreVentana = "Sin nombre";
+                            try {
+                                LOG.log(Level.INFO,moduloSistema.getNombre()+":"+categoriaEnum.getNombre()+"->"+menuControlador.getNombre());
+                                nombreVentana =menuControlador.getNombre();
+                            } catch (java.lang.UnsupportedOperationException uoe) {
+                                LOG.log(Level.WARNING,menuControlador.getClass().getSimpleName() + ": Ventana sin implementar nombre");
+                            }*/
+
+                            //JMenuItem menuVentana = new JMenuItem(nombreVentana);
+                            //menuVentana.setFont(new Font("Arial", 0, 13));
+                            
+                            //Agregar atajo de teclado si existe
+                            if(menuControlador.getTeclaAtajo()!=null)
+                            {
+                                //menuVentana.setAccelerator(KeyStroke.getKeyStroke(menuControlador.getTeclaAtajo(),InputEvent.ALT_MASK));
+                            }
+                            
+                            respuesta.getVentanasDisponibles().add(menuControlador);
+                            //menuCategoria.add(menuVentana);
+
+                            //TODO: Esto no va porque activa el menuItem 
+                            //menuControlador.setJmenuItem(menuVentana);
+                        }
+                        
+                    }
+                    
+                    if(existenMenuItem)
+                    {
+                        //menuModulo.add(menuCategoria);
+                        respuesta.agregarCategoria(moduloSistema, categoriaEnum);
+                        existenCategorias=true;
+                    }
+                    
+                } 
+                
+                //Si existen categorias agrego el modulo
+                if(existenCategorias)
+                {
+                    respuesta.getModulosDisponibles().add(moduloSistema);
+                    //menus.add(menuModulo);
+                }
+            //}
+            
+            
+        }
+        //return menus;
+        return respuesta;
+    }
     
+    /*
+    Metodo que permite verificar si el usuario tiene permiso para el menu seleccionado
+    */
+    private boolean verificarMenuUsuario(VentanaEnum ventanaEnum,SessionCodefac sessionCodefac)
+    {
+        List<Perfil> perfiles=sessionCodefac.getPerfiles();
+        for (Perfil perfil : perfiles) {
+            //Verificar si tiene permisos dentro de cada perfil asignado al usuario
+            for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
+                if(permisoVentana.getVentanaEnum().equals(ventanaEnum))
+                {
+                    return true;
+                }
+            }
+ 
+        }
+        return false;
+    }
+    
+    private boolean isModuloPermitido(ModuloCodefacEnum moduloVerificar,SessionCodefac sessionCodefac)
+    {
+        List<ModuloCodefacEnum> modulosPermitidos =sessionCodefac.getModulos();
+        for (ModuloCodefacEnum modulosPermitido : modulosPermitidos) {
+            if(modulosPermitido.equals(moduloVerificar))
+            {
+                return true;
+            }
+        }
+        //Si no encuentra ninguna coincidencia manda false
+        return false;
+    
+    }
     
 }

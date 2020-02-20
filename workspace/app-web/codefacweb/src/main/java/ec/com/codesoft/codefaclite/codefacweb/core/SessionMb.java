@@ -7,13 +7,28 @@ package ec.com.codesoft.codefaclite.codefacweb.core;
 
 import ec.com.codesoft.codefaclite.codefacweb.mb.facturacion.BarraProgreso;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.MenuCodefacRespuesta;
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultSubMenu;
+import org.primefaces.model.menu.MenuModel;
 
 /**
  *
@@ -34,6 +49,16 @@ public class SessionMb implements Serializable{
       "/login.xhtml?faces-redirect=true";
     
     public List<BarraProgreso> barraProgresoList;
+    
+    /**
+     * Variable que me permite almacenar los permisos del perfil para acceso a las diferentes pantallas
+     */
+    public MenuCodefacRespuesta menuCodefacRespuesta;
+    
+    /**
+     * Modelo del menu para la vista construido segun 
+     */
+    private Map<ModuloCodefacEnum,MenuModel> menuModelMap;
 
     @PostConstruct
     public void init() {
@@ -50,6 +75,8 @@ public class SessionMb implements Serializable{
     public void setSession(SessionCodefac session) {
         this.session = session;
         this.actualizarMonitor=false;
+        consultarVentanasUsuario();
+        construirMenuVista();
     }
 
     /**
@@ -93,6 +120,66 @@ public class SessionMb implements Serializable{
         //this.actualizarMonitor=!this.actualizarMonitor;
         System.out.println("Activando o apagando monitor");
     }
+    
+    private void consultarVentanasUsuario()
+    {
+        try {
+            menuCodefacRespuesta=ServiceFactory.getFactory().getPerfilServicioIf().construirMenuPermisosUsuario(session);
+            
+            for (ModuloCodefacEnum modulosDisponible : menuCodefacRespuesta.getModulosDisponibles()) {
+                System.out.println("---->"+modulosDisponible.getNombre());
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(SessionMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SessionMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Metodo que me permite construir el modelo de los menus de las vistas
+     */
+    private void construirMenuVista()
+    {
+        menuModelMap=new HashMap<ModuloCodefacEnum, MenuModel>();
+                
+        for (ModuloCodefacEnum moduloDisponible : menuCodefacRespuesta.getModulosDisponibles()) {
+            MenuModel modelMenu = new DefaultMenuModel();
+            List<CategoriaMenuEnum> categorias=menuCodefacRespuesta.getCategoriasActivasMap().get(moduloDisponible);
+            for (CategoriaMenuEnum categoria : categorias) {
+                DefaultSubMenu submenu = construirSubMenu(categoria.getNombre());
+                for (VentanaEnum ventanaEnum : menuCodefacRespuesta.buscarVentanasPorCategoriaYModulo(moduloDisponible, categoria)) 
+                {
+                    DefaultMenuItem itemMenu=construirItemMenu(ventanaEnum.getNombre(),ventanaEnum.getUrlModuloWeb(),"");
+                    submenu.getElements().add(itemMenu);
+                }
+                modelMenu.getElements().add(submenu);
+            }
+            menuModelMap.put(moduloDisponible,modelMenu);
+        }
+        
+    }
+    
+    private DefaultMenuItem construirItemMenu(String nombre,String url,String icono)
+    {
+        DefaultMenuItem item = new DefaultMenuItem();
+        //DefaultMenuItem item = DefaultMenuItem.builder();
+        item.setValue(nombre);
+        if(url!=null && !url.isEmpty())
+        {
+            item.setCommand(url);
+        }
+        item.setIcon("pi pi-home"); //en esta parte va el icono
+        item.setAjax(false);
+        return item;
+    }
+    
+    private DefaultSubMenu construirSubMenu(String nombre) {
+        DefaultSubMenu firstSubmenu = new DefaultSubMenu();
+        firstSubmenu.setLabel(nombre);
+        firstSubmenu.setExpanded(false);
+        return firstSubmenu;
+    }
 
     public Boolean getActualizarMonitor() {
         return actualizarMonitor;
@@ -109,6 +196,22 @@ public class SessionMb implements Serializable{
 
     public void setBarraProgresoList(List<BarraProgreso> barraProgresoList) {
         this.barraProgresoList = barraProgresoList;
+    }
+
+    public MenuCodefacRespuesta getMenuCodefacRespuesta() {
+        return menuCodefacRespuesta;
+    }
+
+    public void setMenuCodefacRespuesta(MenuCodefacRespuesta menuCodefacRespuesta) {
+        this.menuCodefacRespuesta = menuCodefacRespuesta;
+    }
+
+    public Map<ModuloCodefacEnum, MenuModel> getMenuModelMap() {
+        return menuModelMap;
+    }
+
+    public void setMenuModelMap(Map<ModuloCodefacEnum, MenuModel> menuModelMap) {
+        this.menuModelMap = menuModelMap;
     }
     
     

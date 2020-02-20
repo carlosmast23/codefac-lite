@@ -78,6 +78,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.MenuCodefacRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -142,6 +143,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.MenuElement;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
@@ -180,7 +182,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private ControladorCodefacInterface panelActual;
     private SwingBrowser browser ;
     private SwingBrowser browserPublicidad ;
-    private List<VentanaEnum> ventanasMenuList;
+    //private List<VentanaEnum> ventanasMenuList;
     private SessionCodefac sessionCodefac;
     private Map<String,PanelSecundarioAbstract> panelesSecundariosMap;
     
@@ -649,9 +651,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     }
     
     
-    private void agregarListenerMenu()
+    /*private void agregarListenerMenu(List<VentanaEnum> ventanas)
     {
-        for (VentanaEnum menuControlador : ventanasMenuList) {
+        for (VentanaEnum menuControlador : ventanas) {
             
             if(menuControlador.getJmenuItem()==null)
                 continue; //Si no tiene asiganod un jmenu item continua al siguiente menu
@@ -665,7 +667,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
         
 
-    }
+    }*/
     
     /**
      * Todo: Revisar si no existe alguna mejora en este metodo
@@ -1465,14 +1467,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         for (Map.Entry<GeneralPanelInterface, JMenuItem> entry : mapPantallaAbiertas.entrySet()) {
             GeneralPanelInterface key = entry.getKey();
             JMenuItem value = entry.getValue();            
-            
-            if(panel.equals(key))
+            if(panel!=null)
             {
-                value.setFont(new Font("Arial", Font.BOLD, 13));      
-            }
-            else
-            {
-                value.setFont(new Font("Arial", Font.PLAIN, 13));
+                if(panel.equals(key))
+                {
+                    value.setFont(new Font("Arial", Font.BOLD, 13));      
+                }
+                else
+                {
+                    value.setFont(new Font("Arial", Font.PLAIN, 13));
+                }
             }
             
         }
@@ -2631,207 +2635,108 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         agregarListenerMenu((ControladorCodefacInterface) panel,maximizado,null,null);
     }
     
-    public List<VentanaEnum> getVentanasMenuList() {
+    /*public List<VentanaEnum> getVentanasMenuList() {
         return ventanasMenuList;
-    }
+    }*/
 
     public void setVentanasMenuList(List<VentanaEnum> ventanasMenuList) {
-        this.ventanasMenuList=VentanaEnum.getListValues();
-        
-        this.getJMenuBar().removeAll();
-        List<JMenu> menus=construirMenuDinamico();
-        this.getJMenuBar().add(getjMenuInicio());
-        this.getJMenuBar().add(getjMenuUtilidades());
-        
-        for (JMenu menu : menus) {
-            this.getJMenuBar().add(menu);
+        try {
+            //this.ventanasMenuList=VentanaEnum.getListValues();
+            
+            this.getJMenuBar().removeAll();
+            //List<JMenu> menus=ServiceFactory.getFactory().getPerfilServicioIf().construirMenuPermisosUsuario(sessionCodefac);
+            MenuCodefacRespuesta respuestaMenu=ServiceFactory.getFactory().getPerfilServicioIf().construirMenuPermisosUsuario(sessionCodefac);
+            List<JMenu> menus=construirMenuSwing(respuestaMenu);
+            //List<JMenu> menus=construirMenuDinamico();
+            this.getJMenuBar().add(getjMenuInicio());
+            this.getJMenuBar().add(getjMenuUtilidades());
+            
+            for (JMenu menu : menus) {
+                this.getJMenuBar().add(menu);
+            }
+            this.getJMenuBar().add(getjMenuAyuda());
+            this.getJMenuBar().add(getjMenuEstadoComprobantes());
+            this.getJMenuBar().add(getjMenuVentanasActivas());
+            //actualizarMenuCodefac();
+            //agregarListenerMenu();
+        } catch (RemoteException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.getJMenuBar().add(getjMenuAyuda());
-        this.getJMenuBar().add(getjMenuEstadoComprobantes());
-        this.getJMenuBar().add(getjMenuVentanasActivas());
-        //actualizarMenuCodefac();
-        agregarListenerMenu();
     }
     
-    private boolean isModuloPermitido(ModuloCodefacEnum moduloVerificar)
+    private List<JMenu> construirMenuSwing(MenuCodefacRespuesta respuestaMenu)
     {
-        List<ModuloCodefacEnum> modulosPermitidos =sessionCodefac.getModulos();
-        for (ModuloCodefacEnum modulosPermitido : modulosPermitidos) {
-            if(modulosPermitido.equals(moduloVerificar))
+        List<JMenu> menusRespuesta=new ArrayList<JMenu>();
+        for (ModuloCodefacEnum moduloEnum : respuestaMenu.getModulosDisponibles()) 
+        {
+            JMenu menuModulo = new JMenu(moduloEnum.getNombre());
+            menuModulo.setIcon(moduloEnum.getIcono());
+            menuModulo.setFont(new Font("Arial",2,15));
+            
+            List<CategoriaMenuEnum> categoriaEnumList=respuestaMenu.getCategoriasActivasMap().get(moduloEnum);
+            for (CategoriaMenuEnum categoriaMenuEnum : categoriaEnumList) 
             {
-                return true;
-            }
-        }
-        //Si no encuentra ninguna coincidencia manda false
-        return false;
-    
-    }
-    
-    private List<JMenu> construirMenuDinamico()
-    {
-        List<JMenu> menus=new ArrayList<JMenu>();
-        
-        for (ModuloCodefacEnum moduloSistema : ModuloCodefacEnum.values()) {
-            System.out.println("MOdulo prueba:"+moduloSistema.getNombre());
-        }
-        
+                JMenu menuCategoria=new JMenu(categoriaMenuEnum.getNombre());
+                menuCategoria.setIcon(categoriaMenuEnum.getIcono());
+                menuCategoria.setFont(new Font("Arial", 0, 13));
+                List<VentanaEnum> ventanaEnumList=respuestaMenu.buscarVentanasPorCategoriaYModulo(moduloEnum, categoriaMenuEnum);
                 
-        for (ModuloCodefacEnum moduloSistema : ModuloCodefacEnum.values()) {
-            
-                if(moduloSistema.equals(ModuloCodefacEnum.GESTIONA_ACADEMICA))
+                for (VentanaEnum ventanaEnum : ventanaEnumList) 
                 {
-                    System.out.println("MODO CONSTRUYENDO:"+moduloSistema.getNombre());
-                }
-                
-                JMenu menuModulo = new JMenu(moduloSistema.getNombre());
-                menuModulo.setIcon(moduloSistema.getIcono());
-                menuModulo.setFont(new Font("Arial",2,15));
-                boolean existenCategorias=false;
-                
-                for (CategoriaMenuEnum categoriaEnum : CategoriaMenuEnum.values()) {
-                    JMenu menuCategoria=new JMenu(categoriaEnum.getNombre());
-                    menuCategoria.setIcon(categoriaEnum.getIcono());
-                    menuCategoria.setFont(new Font("Arial", 0, 13));
                     
-                    boolean existenMenuItem=false;
-                    for (VentanaEnum menuControlador : ventanasMenuList)  //Todo: Analizar para que la variables ventanasMenuList pueda setera cada vez que busco las pantalla que pertence al menu y se vayagn quitando de la lista para acelerar el proceso
-                    {
-                        //Si la ventana no pertecene a la categoria no hago mas validaciones
-                        if(!menuControlador.getCategoriaMenu().equals(categoriaEnum))
-                        {
-                            continue; //salta a la siguiente vuelta
-                        }
-                        
-                        //Verificacion cuando es un modulo habilitado
-                        boolean agregarAlMenu=false;
-                        
-                        //Si esta en modo de desarrollo carga todos las opciones de los menus
-                        if(ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO))
-                        {
-                            if (menuControlador.getModulo().equals(moduloSistema)) 
-                            {
-                                agregarAlMenu=true;
-                            }
-                        }
-                        else //Si esta en modo de produccion hago las validaciones normales
-                        {                        
-                            //Validacion de las ventanas cuando el usuario es gratis
-                            if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
-                            {
-                                //Si el tipo de licencia de la pantala es gratis le activo solo las pantallas disponibles para esta modalidad
-                                if (menuControlador.getModulo().equals(moduloSistema)) 
-                                {                                                                
-                                    //El acceso es el mismo para cualquier usuario gratis y para el administrador
-                                    if(menuControlador.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS)) 
-                                    {
-                                        agregarAlMenu = true;
-                                    }
-
-                                }
-                            }
-                            else //Validacion para usuarios premiun
-                            {                        
-                                if(isModuloPermitido(moduloSistema))
-                                {
-                                    if(menuControlador.getModulo().equals(moduloSistema))
-                                    {                                    
-                                        if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().isRoot)
-                                        {
-                                            agregarAlMenu=true;
-                                        }
-
-                                      }
-                                }
-                                else //Verificacion cuando no es un modulo habilitado
-                                {
-                                    //Solo agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
-                                    //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
-                                    if (menuControlador.getModulo().equals(moduloSistema)) {
-                                        //Verifica si es super usuario carga todos los modulos
-
-
-                                        //Verifica si la pantalla adicional deberia agregarse porque esta depende de otra que si se cargo el modulo
-                                        if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulos())) 
-                                        {
-                                            //Verifica si el usuario tienes permisos para esa pantalla o son son super usuarios
-                                            if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().isRoot)
-                                            {
-                                                agregarAlMenu = true;
-                                            }
-                                        } 
-
-
-                                    }
-
-
-                                }
-
-                            }
-                        }
-                        
-                        //Esta pantalla filtra que solo se agregue si pertenece al modulo y a la submenu corecto
-                        if (menuControlador.getCategoriaMenu().equals(categoriaEnum)&& agregarAlMenu ) {
-                            existenMenuItem = true;
-                            String nombreVentana = "Sin nombre";
-                            try {
-                                LOG.log(Level.INFO,moduloSistema.getNombre()+":"+categoriaEnum.getNombre()+"->"+menuControlador.getNombre());
-                                nombreVentana =menuControlador.getNombre();
-                            } catch (java.lang.UnsupportedOperationException uoe) {
-                                LOG.log(Level.WARNING,menuControlador.getClass().getSimpleName() + ": Ventana sin implementar nombre");
-                            }
-
-                            JMenuItem menuVentana = new JMenuItem(nombreVentana);
-                            menuVentana.setFont(new Font("Arial", 0, 13));
-                            
-                            //Agregar atajo de teclado si existe
-                            if(menuControlador.getTeclaAtajo()!=null)
-                            {
-                                menuVentana.setAccelerator(KeyStroke.getKeyStroke(menuControlador.getTeclaAtajo(),InputEvent.ALT_MASK));
-                            }
-                            
-                            menuCategoria.add(menuVentana);
-
-                            menuControlador.setJmenuItem(menuVentana);
-                        }
-                        
+                    String nombreVentana = "Sin nombre";
+                    try {
+                        LOG.log(Level.INFO, moduloEnum.getNombre() + ":" + categoriaMenuEnum.getNombre() + "->" + ventanaEnum.getNombre());
+                        nombreVentana = ventanaEnum.getNombre();
+                    } catch (java.lang.UnsupportedOperationException uoe) {
+                        LOG.log(Level.WARNING, ventanaEnum.getClass().getSimpleName() + ": Ventana sin implementar nombre");
                     }
                     
-                    if(existenMenuItem)
-                    {
-                        menuModulo.add(menuCategoria);
-                        existenCategorias=true;
+                    JMenuItem menuVentana = new JMenuItem(nombreVentana);
+                    menuVentana.setFont(new Font("Arial", 0, 13));
+
+                    //Agregar atajo de teclado si existe
+                    if (ventanaEnum.getTeclaAtajo() != null) {
+                        menuVentana.setAccelerator(KeyStroke.getKeyStroke(ventanaEnum.getTeclaAtajo(),InputEvent.ALT_MASK));
                     }
                     
-                } 
-                if(existenCategorias)
-                {
-                    menus.add(menuModulo);
+                    menuVentana.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            abrirVentanaCodefac((ControladorCodefacInterface)ventanaEnum.getInstance(),ventanaEnum);
+                        }
+                    });
+                    menuCategoria.add(menuVentana);
+                    
                 }
-            //}
-            
-            
+                menuModulo.add(menuCategoria);
+                
+            }
+            menusRespuesta.add(menuModulo);
         }
-        return menus;
+        return menusRespuesta;
     }
     
-    /*
-    Metodo que permite verificar si el usuario tiene permiso para el menu seleccionado
-    */
-    private boolean verificarMenuUsuario(VentanaEnum ventanaEnum)
+    private void funcionEjemploRecorrerMenu(List<JMenu> menus)
     {
-        List<Perfil> perfiles=sessionCodefac.getPerfiles();
-        for (Perfil perfil : perfiles) {
-            //Verificar si tiene permisos dentro de cada perfil asignado al usuario
-            for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
-                if(permisoVentana.getVentanaEnum().equals(ventanaEnum))
-                {
-                    return true;
-                }
+        /*for (JMenu menu : menus) {
+            System.out.println("Primer nivel -> "+menu.getText());
+            menu.get
+            for (MenuElement subElement : menu.getSubElements()) {
+                subElement.
+                System.out.println("Segundo nivel -> "+subElement.toString());
             }
- 
-        }
-        return false;
+        }*/
     }
+    
+    
+    
+    
+    
+   
+    
     
     /**
      * Permite actualizar los menus disponibles segun los modulos que tengan permisos
@@ -3102,11 +3007,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     }
 
     /**
+     * TODO: En esta lista solo deberia poder recorrer las ventanas permitidas
      * Buscar los panes que se pueden usar como dialogos
      */
     private Class buscarPanelDialog(String nombre)
     {
-        for (VentanaEnum menuControlador : ventanasMenuList) {
+        for (VentanaEnum menuControlador : VentanaEnum.getListValues()) {
             Class<GeneralPanelInterface> clase=menuControlador.getClase();
             if(clase.getName().equals(nombre))
             {

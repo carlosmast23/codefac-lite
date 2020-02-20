@@ -17,20 +17,30 @@
         </h:head>
 
         <h:body >
-            <!--- ============= PANELE AUXILIARES DERECHA, ABAJO ============= -->
-            <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
-                <h1 style="font-weight:normal">Menu Principal</h1>
-                <p:commandButton value="Cancel" oncomplete="PF('sidebar1').hide()"/>
-            </p:sidebar>
-
-            <p:sidebar widgetVar="sidebar4" position="bottom" baseZIndex="10000">
-                <h1 style="font-weight:normal">Comprobantes Procesados</h1>
-                <p:commandButton value="Cancel" oncomplete="PF('sidebar4').hide()"/>
-            </p:sidebar>
-
-            <!-- ============== MENU SUPERIOR DE LAS OPCIONES PRINCIPALES ====== -->
             <h:form>
-                <p:toolbar id="tb">
+                <!--- ============= PANELES AUXILIARES DERECHA, ABAJO ============= -->
+                <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
+
+                    <h1 style="font-weight:normal">Menu Principal</h1>
+
+                    <p:commandButton value="Salir" style="width: 100%" oncomplete="PF('sidebar1').hide()"/>
+                    <p:separator/>
+
+<!--<p:accordionPanel value="#{ejemploMenu.menuCodefacRespuesta.modulosDisponibles}" var="modulo" >
+    <p:tab title="#{modulo.nombre}">
+        <p:menu model="#{ejemploMenu.model}" toggleable="true" />
+    </p:tab>
+</p:accordionPanel>-->
+
+                </p:sidebar>
+
+                <p:sidebar widgetVar="sidebar4" position="bottom" baseZIndex="10000">
+                    <h1 style="font-weight:normal">Comprobantes Procesados</h1>
+                    <p:commandButton value="Cancel" oncomplete="PF('sidebar4').hide()"/>
+                </p:sidebar>
+
+                <!-- ============== MENU SUPERIOR DE LAS OPCIONES PRINCIPALES ====== -->            
+                <p:toolbar id="tb" >
                     <f:facet name="left">
                         <p:commandButton type="button" class="button-menu"  icon="home-icon"  />
                         <p:commandButton type="button" class="button-menu"  icon="new-icon"  />
@@ -55,6 +65,7 @@
                         </p:menuButton>
                     </f:facet>
                 </p:toolbar>
+                <p:sticky target="tb" />
             </h:form>
 
             <!-- =================== TITULO DE LA PAGINA ========================= -->
@@ -69,6 +80,14 @@
             <div  style="padding: 10px">
                 <ui:insert name="contenido">
                     Contenido por defecto de la plantilla  
+
+                    <div style="height: 400px"/>
+                    adasd
+                    <div style="height: 500px"/>
+                    asd
+                    <div style="height: 400px"/>
+                    asd
+
                 </ui:insert>
             </div>
 

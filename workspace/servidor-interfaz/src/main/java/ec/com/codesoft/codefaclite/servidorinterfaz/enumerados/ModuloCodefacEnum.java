@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import java.io.Serializable;
 import java.net.URL;
 import javax.swing.ImageIcon;
 
@@ -14,7 +15,7 @@ import javax.swing.ImageIcon;
  *
  * @author Carlos
  */
-public enum ModuloCodefacEnum {
+public enum ModuloCodefacEnum implements Serializable{
     CONTABILIDAD("Contabilidad","CONT",
             "o","modulo_contabilidad",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/contabilidad.png")),
     

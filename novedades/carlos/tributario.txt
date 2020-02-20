@@ -9,6 +9,5 @@ buscar:COSTO_O_GASTO_IR
 
 Ese tipo combinación al parecer no es permitita y tiene sentido
 Revisar donde se graba el tipo de Credito tributario en la compra porque actualmente se graba por detalle
+preguntar si las notas de venta deben aparecer en el ats o ver cual es la combinación corecta
 
-Tambien por algun motivo se pasaron cedulas de clientes con 9 digitos , esta de hacer una validación previa al momento de generar el ats
-(caso de Escuela Crecer)

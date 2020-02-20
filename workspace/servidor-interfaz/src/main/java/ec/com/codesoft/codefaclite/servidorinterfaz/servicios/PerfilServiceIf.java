@@ -7,7 +7,10 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
-import java.rmi.Remote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.MenuCodefacRespuesta;
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -17,4 +20,5 @@ import java.util.List;
 public interface PerfilServiceIf extends ServiceAbstractIf<Perfil>
 {
         public List<Perfil> obtenerPerfilesPorUsuario(Usuario usuario) throws java.rmi.RemoteException;
+        public MenuCodefacRespuesta construirMenuPermisosUsuario(SessionCodefac sessionCodefac) throws RemoteException, ServicioCodefacException;
 }

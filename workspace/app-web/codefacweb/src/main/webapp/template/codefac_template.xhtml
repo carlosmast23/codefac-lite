@@ -8,9 +8,12 @@
     <f:view contentType="text/html">
         <h:head>
             <f:facet name="first">
-                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+                <meta name="apple-mobile-web-app-capable" content="yes" />
                 <h:outputStylesheet library="css" name="estilo.css" />
-                <title>PrimeFaces</title>
+                <title>Codefac</title>
             </f:facet>
 
             <!--<f:metadata>
@@ -23,228 +26,109 @@
             <h:form id="formulario" target="_blank" onkeypress="if (event.keyCode == 13) {
                         return false;
                     }">
-                <p:poll process="@this" interval="1" listener="#{sessionMb.ejemploContador()}" update=":formulario:panelSecundario" stop="#{!sessionMb.actualizarMonitor}" autoStart="true" widgetVar="poll" />
-
-                <p:remoteCommand id="remoteCommand" name="updatePoll" update=":formulario:panelSecundario"/>
-                <p:remoteCommand name="onload" action="#{applicationCodefacMb.controladorConexionServidor()}" autoRun="true" />
-
-                <p:layout fullPage="true" >
-
-                    <p:layoutUnit position="north" resizable="true" closable="true" collapsible="true" size="16%"  visible="#{!controllerCodefacMb.modoDialogo}" >
-                        <p:growl id="messages" showDetail="true" life="5000"/>
-
-                        <p:menubar style="z-index:1000 !important;">
-                            <p:submenu label="Archivo" icon="ui-icon-document">
-                                <p:submenu label="New" icon="ui-icon-contact">
-                                    <p:menuitem value="Project" url="#" />
-                                    <p:menuitem value="Other" url="#" />
-                                </p:submenu>
-                                <p:menuitem value="Open" url="#" />
-                                <p:separator />
-                                <p:menuitem value="Quit" url="#" />
-                            </p:submenu>
-
-                            <p:submenu label="Control Empleado" icon="ui-icon-pencil">
-                                <p:submenu label="Proceso" icon="ui-icon-contact">
-                                    <p:menuitem value="Empleado" action="empleado" />
-                                </p:submenu>
-                            </p:submenu>
+                <!--- ============= PANELES AUXILIARES DERECHA, ABAJO ============= -->
+                <p:sidebar widgetVar="sidebar1" baseZIndex="10000" class="leftCol">
+                    <h1 style="font-weight:normal">Menu Principal</h1>
+                    <p:commandButton value="Salir" style="width: 100%" oncomplete="PF('sidebar1').hide()"/>
 
 
-                            <p:submenu label="Facturación" icon="ui-icon-pencil">
-                                <p:submenu label="Proceso" icon="ui-icon-contact">
-                                    <p:menuitem process="@this" value="Proforma" action="proforma" >
-                                        <f:param name="#{parametrosWeb.campoTipoFacturaOProforma}" value="#{parametrosWeb.tipoProforma}"/> <!-- Parametrizar estas varaibles por ejemplo en alguna clase de configuraciones genereales similares a laversion descritorio -->
-                                    </p:menuitem>
-                                    <p:menuitem process="@this" value="Factura" action="factura" >
-                                        <f:param name="#{parametrosWeb.campoTipoFacturaOProforma}" value="factura"/>;
-                                    </p:menuitem>
-                                    <p:menuitem value="Nota de Crédito" action="nota_credito"/>                                      
-                                </p:submenu>
-                                
-                                <!-- Reportes -->
-                                <p:submenu label="Reportes" icon="ui-icon-contact">
-                                    <p:menuitem value="Factura Reporte" action="factura_reporte"/>
-                                </p:submenu>
-                            </p:submenu>
+                    <p:separator/>
 
-                            <p:submenu label="CRM" icon="ui-icon-pencil">
-                                <p:submenu label="Proceso" icon="ui-icon-contact">
-                                    <p:menuitem value="Cliente" action="cliente" />
-                                    <p:menuitem value="Proveedor" action="proveedor" />
-                                </p:submenu>
-                            </p:submenu>
+                    <p:accordionPanel value="#{sessionMb.menuCodefacRespuesta.modulosDisponibles}" var="modulo" >
 
-                            <p:submenu label="Ayuda" icon="ui-icon-help">
-                                <p:menuitem value="Contents" url="#" />
-                                <p:submenu label="Search" icon="ui-icon-search">
-                                    <p:submenu label="Text">
-                                        <p:menuitem value="Workspace" url="#" />
-                                    </p:submenu>
-                                    <p:menuitem value="File" url="#" />
-                                </p:submenu>
-                            </p:submenu>
+                        <p:tab title="#{modulo.nombre}">
+                            <p:menu model="#{sessionMb.menuModelMap.get(modulo)}" toggleable="true" />
+                        </p:tab>
 
-                            <p:submenu label="Ventanas" icon="ui-icon-gear">
-                                <p:submenu label="Mensajes SMS" icon="ui-icon-refresh">
-                                    <p:menuitem value="Save" ajax="false" action="#{menuView.save}" icon="ui-icon-disk" update="formulario" />
-                                    <p:menuitem value="Update" actionListener="#{menuView.update}" icon="ui-icon-arrowrefresh-1-w" update="messages"/>
-                                </p:submenu>
-                                <p:submenu label="Imprimir" icon="ui-icon-newwin">
-                                    <p:menuitem value="Delete" actionListener="#{menuView.delete}" icon="ui-icon-close" update="messages" ajax="false"/>
-                                </p:submenu>
-                            </p:submenu>
+                    </p:accordionPanel>
 
-                            <p:menuitem value="Salir"  icon="ui-icon-close" />
+                </p:sidebar>
 
-                            <f:facet name="options">
-                                <!--<p:inputText style="margin-right:10px" placeholder="Buscar"/>-->
-                                <p:commandButton process="@this" action="#{sessionMb.logout()}"  value="Salir" icon="ui-icon-extlink" />
-                            </f:facet>
-                        </p:menubar>
+                <p:sidebar id="panelSecundario" widgetVar="sidebar4" position="bottom" baseZIndex="10000">
+                    <h1 style="font-weight:normal">Comprobantes Procesados</h1>
 
-                        <!-- BOTONES DE LAS ACCCIONES GENERALES !-->
-                        <p:panel style="text-align: center">
-                            <p:commandButton icon="home-icon" process="@this" class="button-menu" title="Home" action="indexCodefac" />
+                    <p:repeat id="barMonitor" value="#{sessionMb.barraProgresoList}" var="barra">
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-9, ui-grid-col-1,ui-grid-col-1, ui-grid-col-1">
+                            <p:progressBar   widgetVar="pbAjax" ajax="true" value="#{barra.porcentaje}"  labelTemplate="#{barra.titulo()}" styleClass="animated " style="border: 2px;border-style: inset;background-color:  darkcyan;font-size: 12px;font-weight: normal;font-family: monospace" global="false">
+                                <p:ajax event="complete"   oncomplete="PF('startButton2').enable()"/>
+                            </p:progressBar>
+                            <p:commandButton id="btnMonitorAlerta" process="@this"  icon="fa fa-bell-o" actionListener="#{barra.alerta()}"  />
+                            <p:commandButton id="btnMonitorBuscar" process="@this" ajax="false" actionListener="#{barra.imprimir()}"  icon="fa fa-search"  />
+                            <p:commandButton id="btnMonitorImprimir" process="@this" icon="fa fa-close"  />
+                        </p:panelGrid>
+                    </p:repeat>
 
-                            <p:commandButton icon="new-icon" class="button-menu" title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}" update="panelContenido">
-                            </p:commandButton>
+                    <p:commandButton value="Cancel" oncomplete="PF('sidebar4').hide()"/>
+                </p:sidebar>
 
-                            <!-- BOTON GRABAR -->
-                            <p:commandButton icon="save-icon"  class="button-menu" type="button" onclick="PF('dialogConfirmarGrabar').show()" title="Grabar" disabled="false" >                                
-                            </p:commandButton>
+                <!-- ============== MENU SUPERIOR DE LAS OPCIONES PRINCIPALES ====== -->            
+                <p:toolbar id="tb" style="cabecera">
+                    <f:facet name="left">
+                        <p:commandButton icon="home-icon" process="@this" class="button-menu" title="Home" action="indexCodefac" />
 
-                            <!-- BOTON IMPRIMIR -->
-                            <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" update="messages" />
+                        <p:commandButton icon="new-icon" class="button-menu" title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}" update="panelContenido">
+                        </p:commandButton>
 
-                            <!-- BOTON BUSCAR-->
-                            <p:commandButton icon="find-icon" class="button-menu" process="@this" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" >
-                                <p:ajax event="dialogReturn" listener="#{controllerCodefacMb.onObjectChosen}" update="panelContenido" />
-                            </p:commandButton>
+                        <!-- BOTON GRABAR -->
+                        <p:commandButton icon="save-icon"  class="button-menu" type="button" onclick="PF('dialogConfirmarGrabar').show()" title="Grabar" disabled="false" >                                
+                        </p:commandButton>
 
-                            <!-- ELIMINAR BOTON -->
-                            <p:commandButton icon="delete-icon" class="button-menu" type="button" onclick="PF('dialogConfirmarEliminar').show()" title="Eliminar" disabled="false" />
+                        <!-- BOTON IMPRIMIR -->
+                        <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" update="messages" />
+
+                        <!-- BOTON BUSCAR-->
+                        <p:commandButton icon="find-icon" class="button-menu" process="@this" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" >
+                            <p:ajax event="dialogReturn" listener="#{controllerCodefacMb.onObjectChosen}" update="panelContenido" />
+                        </p:commandButton>
+
+                        <!-- ELIMINAR BOTON -->
+                        <p:commandButton icon="delete-icon" class="button-menu" type="button" onclick="PF('dialogConfirmarEliminar').show()" title="Eliminar" disabled="false" />
 
 
-                            <p:commandButton icon="refresh-icon" class="button-menu" title="Refrescar" disabled="true" />
-                            <ui:insert name="btnAyuda">
-                                <p:commandButton icon="help-icon" class="button-menu" title="Ayuda" actionListener="#{controllerCodefacMb.mostrarAyuda()}" update="panelSecundario" process="@this" disabled="false" />
-                            </ui:insert>
-                        </p:panel>
+                        <!--<p:commandButton icon="refresh-icon" class="button-menu" title="Refrescar" disabled="true" />-->
+                        <ui:insert name="btnAyuda">
+                            <p:commandButton icon="help-icon" class="button-menu" title="Ayuda" actionListener="#{controllerCodefacMb.mostrarAyuda()}" update="panelSecundario" process="@this" disabled="false" />
+                        </ui:insert>
 
-                    </p:layoutUnit>
+                    </f:facet>   
+                    <f:facet name="right">
 
-                    <p:layoutUnit position="south" size="30" closable="false" collapsible="true" style="padding: 0px;border: 0px;height: 0px">
-                        <div style="text-align: center;background-color: rgb(62,93,162);color: white;padding-top: 6px;height: 22px">
-                            <p:outputLabel value="Usuario: #{sessionMb.session.usuario.nick} | Empresa: #{sessionMb.session.empresa.razonSocial}" />
-                        </div>                        
-                    </p:layoutUnit>
 
-                    <!--<p:layoutUnit position="west" size="175" header="Barra Tareas" collapsible="true" style="height: auto;border:1px;border-style: ridge">
-                        <h:graphicImage library="img" name="logoCodefac.gif" style="height: 30%" />
-                        <p:menu toggleable="true">
-                            <p:submenu label="Mensajeria">
-                                <p:menuitem value="Sms" actionListener="#{menuView.save}" update="messages" icon="ui-icon-disk" />
-                                <p:menuitem value="Correo" actionListener="#{menuView.update}" update="messages" icon="ui-icon-arrowrefresh-1-w"/>
-                            </p:submenu>
-                            <p:submenu label="Componente">
-                                <p:menuitem value="Accion" actionListener="#{menuView.delete}" update="messages" ajax="false" icon="ui-icon-close"/>
-                            </p:submenu>
-                            <p:submenu label="Componente 2">
-                                <p:menuitem value="Opción 1" url="http://www.primefaces.org" icon="ui-icon-home"/>
-                                <p:menuitem value="Opción 2" icon="ui-icon-star"/>
-                            </p:submenu>
-                        </p:menu>
-                    </p:layoutUnit>-->
+                        <p:commandButton value="Menu" icon="fa fa-fw fa-bars" oncomplete="PF('sidebar1').show()" />
+                        <p:commandButton value="%" icon="fa fa-fw fa-download" oncomplete="PF('sidebar4').show()" />
+                        <p:menuButton value="Más">
+                            <p:menuitem value="Save" action="#{toolbarView.save}"  icon="pi pi-save" />
+                            <p:menuitem value="Update" action="#{toolbarView.update}"  icon="pi pi-refresh" />
+                            <p:menuitem value="Delete" action="#{toolbarView.delete}" ajax="false" icon="pi pi-times" />
+                            <p:menuitem value="Homepage" url="http://www.primefaces.org" icon="pi pi-home" />
+                        </p:menuButton>
+                    </f:facet>
+                </p:toolbar>
+                <p:sticky target="tb" />
 
-                    <p:layoutUnit position="east" size="270" header="Menu" collapsible="true" style="border: 1px;border-style: ridge" visible="#{!controllerCodefacMb.modoDialogo}" >
-                        <p:tabView id="panelSecundario" dynamic="true" cache="true" effect="fold"  activeIndex="#{controllerCodefacMb.indiceTabSecundario}">
 
-                            <p:tab title="Monitor" id="monitor">
-                                <p:repeat id="barMonitor" value="#{sessionMb.barraProgresoList}" var="barra">
-                                    <p:panelGrid columns="4" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-9, ui-grid-col-1,ui-grid-col-1, ui-grid-col-1">
-                                        <p:progressBar   widgetVar="pbAjax" ajax="true" value="#{barra.porcentaje}"  labelTemplate="#{barra.titulo()}" styleClass="animated " style="border: 2px;border-style: inset;background-color:  darkcyan;font-size: 12px;font-weight: normal;font-family: monospace" global="false">
-                                            <p:ajax event="complete"   oncomplete="PF('startButton2').enable()"/>
-                                        </p:progressBar>
-                                        <p:commandButton id="btnMonitorAlerta" process="@this"  icon="fa fa-bell-o" actionListener="#{barra.alerta()}"  />
-                                        <p:commandButton id="btnMonitorBuscar" process="@this" ajax="false" actionListener="#{barra.imprimir()}"  icon="fa fa-search"  />
-                                        <p:commandButton id="btnMonitorImprimir" process="@this" icon="fa fa-close"  />
-                                    </p:panelGrid>
-                                </p:repeat>
+                <p:panel id="panelContenido" style="text-align: center">
+                    <!-- =================== TITULO DE LA PAGINA ========================= -->
+                    <div class="titulo_contenido" >
+                        <p:outputLabel style="font-size: 17px" id="txtTituloPagina" value="#{controllerCodefacMb.getTituloPagina()}" />
+                    </div>
+                    <p:separator />
 
-                            </p:tab>
+                    <!-- =================== CONTENIDO DONDE VAN A ESTAR LOS DATOS ========================= -->
+                    <div  style="padding: 10px">
+                        <ui:insert name="contenido">
+                            Contenido por defecto de la plantilla  
+                        </ui:insert>
+                    </div>
 
-                            <p:tab title="Ayuda">
-                                <iframe id="iframeCenter" src="#{controllerCodefacMb.generalAbstractMb.linkAyuda()}"  
-                                        height="800px" frameborder="0">  
-                                </iframe>   
-                            </p:tab>
-                            <p:tab title="Validacion">
-                                <h:panelGrid columns="2" cellpadding="10">
-                                    <h:outputText value="Tercer Panel" />
-                                </h:panelGrid>
-                            </p:tab>
-                        </p:tabView>
+                    <!-- ========================= PIE DE LA PAGINA ====================== -->
+                    <div class="pie-pagina" >
+                        Todos los derechos reservador Codefac 2018
+                    </div> 
+                </p:panel>
 
-                    </p:layoutUnit>
-
-                    <p:layoutUnit position="center" style="border:1px;border-style: none">
-                        <p:panel id="panelContenido" style="text-align: center">
-                            <f:facet name="header" >
-                                <p:outputLabel id="txtTituloPagina" value="#{controllerCodefacMb.getTituloPagina()}" />
-                                <!--<ui:insert name="titulo_contenido">
-                                    Sin titulo por defecto
-                                </ui:insert>-->
-                            </f:facet>
-
-                            <div  style="padding: 10px;text-align: left">
-
-                                <div style="text-align: center">
-                                    <p:commandButton rendered="#{controllerCodefacMb.modoDialogo}" process="@this" onclick="PF('dialogConfirmarGrabar').show()" style="float: contour;margin-bottom:  10px;margin-right: 50px" label="Grabar" value="G U A R D A R" icon="save-icon" />
-                                </div>
-
-                                <ui:insert  name="contenido">
-                                    <f:facet name="ejemplo" id="contenidoPagina2">
-                                        Contenido por defecto de la plantilla  
-                                    </f:facet>
-                                </ui:insert>
-                            </div>
-
-                            <f:facet name="actions">
-                                <h:commandLink styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default"><h:outputText styleClass="ui-icon ui-icon-help" /></h:commandLink>
-                                <h:commandLink styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default"><h:outputText styleClass="ui-icon ui-icon-star" /></h:commandLink>
-                            </f:facet>
-                        </p:panel>
-                    </p:layoutUnit>
-
-                    <!-- DIALOGO PARA CONFIRMAR EL GUARDAR -->
-                    <p:confirmDialog message="Esta seguro que desea grabar los datos?" header="Alerta" severity="alert" widgetVar="dialogConfirmarGrabar">
-                        <p:commandButton value="Si" process="@form" actionListener="#{controllerCodefacMb.save()}" update="messages,idDialogResultado,:formulario:panelSecundario,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
-                        <p:commandButton value="No" onclick="PF('dialogConfirmarGrabar').hide();" type="button" />
-                    </p:confirmDialog>
-                    
-                    <!-- DIALOGO PARA CONFIRMAR ELIMINAR -->
-                    <p:confirmDialog message="Esta seguro que desea eliminar el  registro?" header="Alerta" severity="alert" widgetVar="dialogConfirmarEliminar">
-                        <p:commandButton value="Si" process="@form" actionListener="#{controllerCodefacMb.delete()}" update="messages,idDialogResultado,:formulario:panelSecundario,panelContenido"  onclick="PF('dialogConfirmarEliminar').hide();"  />
-                        <p:commandButton value="No" onclick="PF('dialogConfirmarEliminar').hide();" type="button" />
-                    </p:confirmDialog>
-
-                    <!-- DIALOGO DE RESULTADOS -->
-                    <p:dialog id="idDialogResultado" header="#{controllerCodefacMb.generalAbstractMb.resultadoDialogo.titulo}" widgetVar="dialogResultado" modal="true" height="100" style="text-align: center">
-                        <h:graphicImage library="img" name="logoCodefac.gif" style="height: 50%" />
-                        <p:separator />
-                        <p:outputLabel value="#{controllerCodefacMb.generalAbstractMb.resultadoDialogo.mensaje}" />
-                        <f:facet name="footer"  >
-                            <div style="text-align: center">
-                                <p:commandButton value="Aceptar" process="@form" actionListener="#{controllerCodefacMb.nuevo()}" update="messages,idDialogResultado,:formulario:panelSecundario:barMonitor,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
-                                <p:commandButton value="Imprimir" process="@this" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" icon="ui-icon-print" />
-                            </div>
-                        </f:facet>
-
-                    </p:dialog> 
-
-                </p:layout>
-
+                <h:outputStylesheet name="primeflex/primeflex.css" library="css" />
+                <h:outputStylesheet library="css" name="estilo.css" />
             </h:form>
 
         </h:body>
