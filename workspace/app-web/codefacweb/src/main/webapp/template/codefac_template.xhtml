@@ -26,6 +26,7 @@
             <h:form id="formulario" target="_blank" onkeypress="if (event.keyCode == 13) {
                         return false;
                     }">
+                <p:growl id="messages" showDetail="true" life="5000"/>
                 <!--- ============= PANELES AUXILIARES DERECHA, ABAJO ============= -->
                 <p:sidebar widgetVar="sidebar1" baseZIndex="10000" class="leftCol">
                     <h1 style="font-weight:normal">Menu Principal</h1>
@@ -44,21 +45,29 @@
 
                 </p:sidebar>
 
-                <p:sidebar id="panelSecundario" widgetVar="sidebar4" position="bottom" baseZIndex="10000">
+                <p:sidebar id="panelSecundario" widgetVar="sidebar4" position="right" baseZIndex="10000">
                     <h1 style="font-weight:normal">Comprobantes Procesados</h1>
 
+                    
                     <p:repeat id="barMonitor" value="#{sessionMb.barraProgresoList}" var="barra">
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-9, ui-grid-col-1,ui-grid-col-1, ui-grid-col-1">
-                            <p:progressBar   widgetVar="pbAjax" ajax="true" value="#{barra.porcentaje}"  labelTemplate="#{barra.titulo()}" styleClass="animated " style="border: 2px;border-style: inset;background-color:  darkcyan;font-size: 12px;font-weight: normal;font-family: monospace" global="false">
-                                <p:ajax event="complete"   oncomplete="PF('startButton2').enable()"/>
-                            </p:progressBar>
-                            <p:commandButton id="btnMonitorAlerta" process="@this"  icon="fa fa-bell-o" actionListener="#{barra.alerta()}"  />
-                            <p:commandButton id="btnMonitorBuscar" process="@this" ajax="false" actionListener="#{barra.imprimir()}"  icon="fa fa-search"  />
-                            <p:commandButton id="btnMonitorImprimir" process="@this" icon="fa fa-close"  />
-                        </p:panelGrid>
+                        <p:separator />
+                        <div class="p-grid">
+                            <div class="p-col-12 ">
+                                <p:progressBar   widgetVar="pbAjax" ajax="true" value="#{barra.porcentaje}"  labelTemplate="#{barra.titulo()}" styleClass="animated " style="border: 2px;border-style: inset;background-color:  darkcyan;font-size: 12px;font-weight: normal;font-family: monospace" global="false">
+                                    <p:ajax event="complete"   oncomplete="PF('startButton2').enable()"/>
+                                </p:progressBar>
+                            </div>
+                            <div class="p-col-12 " style="text-align: center">
+                                <p:commandButton id="btnMonitorAlerta" process="@this"  icon="fa fa-bell-o" actionListener="#{barra.alerta()}"  />
+                                <p:commandButton id="btnMonitorBuscar" process="@this" ajax="false" actionListener="#{barra.imprimir()}"  icon="fa fa-search"  />
+                                <p:commandButton id="btnMonitorImprimir" process="@this" icon="fa fa-close"  />
+                            </div>
+                        </div>
+                        
+                        
                     </p:repeat>
 
-                    <p:commandButton value="Cancel" oncomplete="PF('sidebar4').hide()"/>
+                    <!--<p:commandButton value="Cancel" oncomplete="PF('sidebar4').hide()"/>-->
                 </p:sidebar>
 
                 <!-- ============== MENU SUPERIOR DE LAS OPCIONES PRINCIPALES ====== -->            
@@ -129,7 +138,34 @@
 
                 <h:outputStylesheet name="primeflex/primeflex.css" library="css" />
                 <h:outputStylesheet library="css" name="estilo.css" />
+
+                <!-- DIALOGO PARA CONFIRMAR EL GUARDAR -->
+                <p:confirmDialog message="Esta seguro que desea grabar los datos?" header="Alerta" severity="alert" widgetVar="dialogConfirmarGrabar">
+                    <p:commandButton value="Si" process="@form" actionListener="#{controllerCodefacMb.save()}" update="messages,idDialogResultado,panelSecundario,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
+                    <p:commandButton value="No" onclick="PF('dialogConfirmarGrabar').hide();" type="button" />
+                </p:confirmDialog>
+
+                <!-- DIALOGO DE RESULTADOS -->
+                <p:dialog id="idDialogResultado" header="#{controllerCodefacMb.generalAbstractMb.resultadoDialogo.titulo}" widgetVar="dialogResultado" modal="true" height="100" style="text-align: center">
+                    <h:graphicImage library="img" name="logoCodefac.gif" style="height: 50%" />
+                    <p:separator />
+                    <p:outputLabel value="#{controllerCodefacMb.generalAbstractMb.resultadoDialogo.mensaje}" />
+                    <f:facet name="footer"  >
+                        <div style="text-align: center">
+                            <p:commandButton value="Aceptar" process="@form" actionListener="#{controllerCodefacMb.nuevo()}" update="messages,idDialogResultado,formulario:panelSecundario,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
+                            <p:commandButton value="Imprimir" process="@this" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" icon="ui-icon-print" />
+                        </div>
+                    </f:facet>
+                </p:dialog>
+
+                <!-- DIALOGO PARA CONFIRMAR ELIMINAR -->
+                <p:confirmDialog message="Esta seguro que desea eliminar el  registro?" header="Alerta" severity="alert" widgetVar="dialogConfirmarEliminar">
+                    <p:commandButton value="Si" process="@form" actionListener="#{controllerCodefacMb.delete()}" update="messages,idDialogResultado,:formulario:panelSecundario,panelContenido"  onclick="PF('dialogConfirmarEliminar').hide();"  />
+                    <p:commandButton value="No" onclick="PF('dialogConfirmarEliminar').hide();" type="button" />
+                </p:confirmDialog>
+
             </h:form>
+
 
         </h:body>
 

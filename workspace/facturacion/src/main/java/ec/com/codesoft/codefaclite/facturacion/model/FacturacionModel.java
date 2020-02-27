@@ -1215,7 +1215,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             validacionesGrabar();
             
-            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea facturar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Esta seguro que desea facturar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (!respuesta) {
                 throw new ExcepcionCodefacLite("Cancelacion usuario");
             }
@@ -1552,7 +1552,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         }
                         
                         String[] opciones = {"Ride", "Comprobante Venta", "Cancelar"};
-                        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Porfavor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_CORRECTO, opciones);
+                        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Por favor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_CORRECTO, opciones);
                         switch (opcionSeleccionada) 
                         {
                             case 0: //opcion para RIDE

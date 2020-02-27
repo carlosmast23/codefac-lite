@@ -3292,7 +3292,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     private void iniciarComponentesPantalla() {
         String anioActualStr=UtilidadesFecha.obtenerAnioStr(UtilidadesFecha.getFechaHoy());
-        getLblPiePagina().setText("Todos los derechos reservador por @Codesoft "+anioActualStr);
+        getLblPiePagina().setText("Todos los derechos reservados por @Codesoft "+anioActualStr);
     }
 
     private void agregarListenerItemMenu() {

@@ -181,6 +181,10 @@ public class ControllerCodefacMb implements Serializable {
         options.put("resizable", false);
         options.put("draggable", false);
         options.put("modal", true);
+        options.put("responsive", true);
+        options.put("width", "80%");
+        options.put("contentWidth", "100%");
+        //responsive="true"
         //options.put("busquedaClase", new EmpleadoBusquedaDialogo() ); //TODO: Mando por defecto un dialogo por defecto
         String nombreDialogoBusqueda = "dialogo_busqueda";
         //PrimeFaces.current().dialog()
