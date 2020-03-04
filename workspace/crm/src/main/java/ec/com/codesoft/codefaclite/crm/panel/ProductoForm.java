@@ -154,6 +154,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jPanel7 = new javax.swing.JPanel();
         chkOcultarDetalleVenta = new javax.swing.JCheckBox();
         lblEspacio23 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        txtPrecio1SinSubsidio = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -798,11 +800,29 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel7.add(chkOcultarDetalleVenta, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel7.add(lblEspacio23, gridBagConstraints);
+
+        jLabel28.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel28.setText("PVP1 sin subsidio:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel7.add(jLabel28, gridBagConstraints);
+
+        txtPrecio1SinSubsidio.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel7.add(txtPrecio1SinSubsidio, gridBagConstraints);
 
         tabMenu.addTab("Otros", jPanel7);
 
@@ -862,6 +882,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel31;
@@ -907,6 +928,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JTextField txtImagenProducto;
     private javax.swing.JTextField txtMarca;
     private javax.swing.JTextArea txtObservaciones;
+    private javax.swing.JTextField txtPrecio1SinSubsidio;
     private javax.swing.JTextField txtPrecioDistribuidor;
     private javax.swing.JTextField txtPrecioTarjeta;
     private javax.swing.JTextField txtProductoEnsamble;
@@ -1200,8 +1222,16 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     public void setChkOcultarDetalleVenta(JCheckBox chkOcultarDetalleVenta) {
         this.chkOcultarDetalleVenta = chkOcultarDetalleVenta;
     }
-    
-    
+
+    public JTextField getTxtPrecio1SinSubsidio() {
+        return txtPrecio1SinSubsidio;
+    }
+
+    public void setTxtPrecio1SinSubsidio(JTextField txtPrecio1SinSubsidio) {
+        this.txtPrecio1SinSubsidio = txtPrecio1SinSubsidio;
+    }
+
+        
     
     
 

@@ -26,6 +26,12 @@
             <h:form id="formulario" target="_blank" onkeypress="if (event.keyCode == 13) {
                         return false;
                     }">
+                
+                <p:poll process="@this" interval="1" listener="#{sessionMb.ejemploContador()}" update=":formulario:panelSecundario" stop="#{!sessionMb.actualizarMonitor}" autoStart="true" widgetVar="poll" />
+                <!--<p:remoteCommand id="remoteCommand" name="updatePoll" update=":formulario:panelSecundario"/>-->
+                <p:remoteCommand name="onload" action="#{applicationCodefacMb.controladorConexionServidor()}" autoRun="true" />
+                
+                
                 <p:growl id="messages" showDetail="true" life="5000"/>
                 <!--- ============= PANELES AUXILIARES DERECHA, ABAJO ============= -->
                 <p:sidebar widgetVar="sidebar1" baseZIndex="10000" class="leftCol">
@@ -45,19 +51,19 @@
 
                 </p:sidebar>
 
-                <p:sidebar id="panelSecundario" widgetVar="sidebar4" position="right" baseZIndex="10000">
+                <p:sidebar id="panelSecundario" widgetVar="sidebar4" position="right" baseZIndex="10000" style="width: 250px">
                     <h1 style="font-weight:normal">Comprobantes Procesados</h1>
 
                     
                     <p:repeat id="barMonitor" value="#{sessionMb.barraProgresoList}" var="barra">
                         <p:separator />
                         <div class="p-grid">
-                            <div class="p-col-12 ">
+                            <div class="p-col-7 ">
                                 <p:progressBar   widgetVar="pbAjax" ajax="true" value="#{barra.porcentaje}"  labelTemplate="#{barra.titulo()}" styleClass="animated " style="border: 2px;border-style: inset;background-color:  darkcyan;font-size: 12px;font-weight: normal;font-family: monospace" global="false">
                                     <p:ajax event="complete"   oncomplete="PF('startButton2').enable()"/>
                                 </p:progressBar>
                             </div>
-                            <div class="p-col-12 " style="text-align: center">
+                            <div class="p-col-5 " style="text-align: center">
                                 <p:commandButton id="btnMonitorAlerta" process="@this"  icon="fa fa-bell-o" actionListener="#{barra.alerta()}"  />
                                 <p:commandButton id="btnMonitorBuscar" process="@this" ajax="false" actionListener="#{barra.imprimir()}"  icon="fa fa-search"  />
                                 <p:commandButton id="btnMonitorImprimir" process="@this" icon="fa fa-close"  />

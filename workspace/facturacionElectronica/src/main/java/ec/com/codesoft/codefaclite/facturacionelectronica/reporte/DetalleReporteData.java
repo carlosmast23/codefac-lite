@@ -16,6 +16,7 @@ public class DetalleReporteData {
     private String precio_unitario;
     private String descuento;
     private String precio_total;
+    private String subsidio;
 
     public DetalleReporteData() {
     }
@@ -69,6 +70,15 @@ public class DetalleReporteData {
     public void setPrecio_total(String precio_total) {
         this.precio_total = precio_total;
     }
+
+    public String getSubsidio() {
+        return subsidio;
+    }
+
+    public void setSubsidio(String subsidio) {
+        this.subsidio = subsidio;
+    }
+    
     
     
     

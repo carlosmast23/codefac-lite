@@ -160,6 +160,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setCantidadMinima(Integer.parseInt(getTxtCantidadMinima().getText()));
         producto.setPrecioDistribuidor(new BigDecimal(getTxtPrecioDistribuidor().getText()));
         producto.setPrecioTarjeta(new BigDecimal(getTxtPrecioTarjeta().getText()));
+        producto.setPrecioSinSubsidio(new BigDecimal(getTxtPrecio1SinSubsidio().getText()));
         //producto.setStockInicial(Long.parseLong(getTxtStockInicial().getText()));
         producto.setMarca(getTxtMarca().getText());
         producto.setImagen(getTxtImagenProducto().getText());
@@ -306,6 +307,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getComboIva().setSelectedItem(producto.getCatalogoProducto().getIva());
         getComboIrbpnr().setSelectedItem(producto.getCatalogoProducto().getIrbpnr());
         getComboIce().setSelectedItem(producto.getCatalogoProducto().getIce()); 
+        getTxtPrecio1SinSubsidio().setText((producto.getPrecioSinSubsidio()!=null)?producto.getPrecioSinSubsidio().toString():"0");
         
         //Setear la opcion de inventario y si no esta escogida ninguna opcion de si maneja inventario por defecte seteo en no
         String letraInventario=(producto.getManejarInventario()!=null)?producto.getManejarInventario():EnumSiNo.NO.getLetra();        
@@ -581,6 +583,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtCantidadMinima().setText("0");
         getTxtPrecioDistribuidor().setText("0");
         getTxtPrecioTarjeta().setText("0");
+        getTxtPrecio1SinSubsidio().setText("0");
         //getTxtStockInicial().setText("0");
     }
     

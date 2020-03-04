@@ -158,6 +158,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         FacturaDetalle facturaDetalle=crearFacturaDetalle(
                 productoSeleccionado.getValorUnitario(), 
+                productoSeleccionado.getPrecioSinSubsidio(),
                 descripcion, 
                 productoSeleccionado.getCodigoPersonalizado(), 
                 productoSeleccionado.getCatalogoProducto(), 
@@ -169,7 +170,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         setearValoresProducto(facturaDetalle);
     }
     
-    public FacturaDetalle crearFacturaDetalle(BigDecimal valorUnitario,String descripcion,String codigo,CatalogoProducto catalogoProducto,Long referenciaId,TipoDocumentoEnum tipoDocumentoReferencia)
+    public FacturaDetalle crearFacturaDetalle(
+            BigDecimal valorUnitario,
+            BigDecimal valorSinSubsidio,
+            String descripcion,
+            String codigo,
+            CatalogoProducto catalogoProducto,
+            Long referenciaId,
+            TipoDocumentoEnum tipoDocumentoReferencia)
     {
         FacturaDetalle facturaDetalle=new FacturaDetalle();
         facturaDetalle.setCantidad(BigDecimal.ONE);
@@ -179,6 +187,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         facturaDetalle.setReferenciaId(referenciaId);
         facturaDetalle.setCodigoPrincipal(codigo);
         facturaDetalle.setTipoDocumentoEnum(tipoDocumentoReferencia);
+        facturaDetalle.setPrecioSinSubsidio(valorSinSubsidio);
         
         if(catalogoProducto!=null)
         {

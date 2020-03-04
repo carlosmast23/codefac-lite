@@ -64,7 +64,8 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     @JoinColumn(name = "IVA_SRI_ID")
     private ImpuestoDetalle ivaSriId;
     
-
+    @Column(name = "TOTAL_SUBSIDIO")
+    private BigDecimal totalSubsidio;
   
     @Column(name = "ESTADO_NOTA_CREDITO")
     private String estadoNotaCredito;
@@ -275,6 +276,15 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         //totalFormasPago = totalFormasPago.add(valorTotalFormaDePago);
     
     }
+
+    public BigDecimal getTotalSubsidio() {
+        return totalSubsidio;
+    }
+
+    public void setTotalSubsidio(BigDecimal totalSubsidio) {
+        this.totalSubsidio = totalSubsidio;
+    }
+    
     
     
     
@@ -408,6 +418,18 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
             }
         }
         return false;
+    }
+    
+    public BigDecimal calcularSubsidio()
+    {
+        BigDecimal subSidioTotal=BigDecimal.ZERO;
+        if(detalles!=null)
+        {
+            for (FacturaDetalle detalle : detalles) {
+                subSidioTotal=subSidioTotal.add(detalle.calcularSubsidio());
+            }
+        }
+        return subSidioTotal;
     }
 
     @Override

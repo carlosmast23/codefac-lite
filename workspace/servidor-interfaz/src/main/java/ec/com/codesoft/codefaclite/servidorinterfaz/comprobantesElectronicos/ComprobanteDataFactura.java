@@ -243,13 +243,30 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
 
                 //calcularImpuestos(mapTotalImpuestos, facturaDetalle);
                 detalle.setImpuestos(calcularImpuestos(mapTotalImpuestos, facturaDetalle));
-
+                
+                /**
+                 * Agregar valor del subsidio si existe o es mayor que cero
+                 */
+                if(facturaDetalle.getPrecioSinSubsidio()!=null && facturaDetalle.getPrecioSinSubsidio().compareTo(BigDecimal.ZERO)!=0)
+                {
+                    detalle.setPrecioSinSubsidio(facturaDetalle.getPrecioSinSubsidio());
+                }
+                
                 detallesComprobante.add(detalle);
             } catch (RemoteException ex) {
                 Logger.getLogger(ComprobanteDataFactura.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(ComprobanteDataFactura.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        /**
+         * Agregar el valor del Subsidio al xml en el caso de que exista
+         */
+        BigDecimal totalSubsidio=factura.calcularSubsidio();
+        if(totalSubsidio.compareTo(BigDecimal.ZERO)>0)
+        {
+            InformacionFactura comprobanteFactura=(InformacionFactura)informacionComprobante;
+            comprobanteFactura.setTotalSubsidio(totalSubsidio);
         }
 
         //comprobante.set

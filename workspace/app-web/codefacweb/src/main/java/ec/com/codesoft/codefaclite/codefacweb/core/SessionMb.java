@@ -59,6 +59,8 @@ public class SessionMb implements Serializable{
      * Modelo del menu para la vista construido segun 
      */
     private Map<ModuloCodefacEnum,MenuModel> menuModelMap;
+    
+    private Boolean variableFalsa=true;
 
     @PostConstruct
     public void init() {
@@ -111,7 +113,7 @@ public class SessionMb implements Serializable{
     public void ejemploContador()
     {
         //this.actualizarMonitor=true;
-        System.out.println("Actualizando monitor");
+        System.out.println("Actualizando monitor =>" +actualizarMonitor);
     }
     
     public void ejemploActivar()
@@ -213,6 +215,15 @@ public class SessionMb implements Serializable{
     public void setMenuModelMap(Map<ModuloCodefacEnum, MenuModel> menuModelMap) {
         this.menuModelMap = menuModelMap;
     }
+
+    public Boolean getVariableFalsa() {
+        return variableFalsa;
+    }
+
+    public void setVariableFalsa(Boolean variableFalsa) {
+        this.variableFalsa = variableFalsa;
+    }
+    
     
     
     

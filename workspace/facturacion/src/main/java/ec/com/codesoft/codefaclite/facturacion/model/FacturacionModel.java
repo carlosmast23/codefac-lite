@@ -813,6 +813,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     productoSeleccionado = entity;
                     FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
                             productoSeleccionado.getValorUnitario(), 
+                            productoSeleccionado.getPrecioSinSubsidio(), 
                             productoSeleccionado.getNombre(), 
                             productoSeleccionado.getCodigoPersonalizado(), 
                             productoSeleccionado.getCatalogoProducto(), 
@@ -955,7 +956,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             presupuestoSeleccionado=presupuestoTmp;
             
             String descripcion="P"+presupuestoSeleccionado.getId()+" OT"+presupuestoSeleccionado.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoSeleccionado.getDescripcion();
-            FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(presupuestoSeleccionado.getTotalVenta(), descripcion, presupuestoSeleccionado.getId().toString(), presupuestoSeleccionado.getCatalogoProducto(), presupuestoSeleccionado.getId(),(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem());
+            FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
+                    presupuestoSeleccionado.getTotalVenta(), 
+                    null, //No tiene valor del subsidio
+                    descripcion, 
+                    presupuestoSeleccionado.getId().toString(), 
+                    presupuestoSeleccionado.getCatalogoProducto(), 
+                    presupuestoSeleccionado.getId(),
+                    (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem());
+            
             controlador.setearValoresProducto(facturaDetalle);
             //controlador.setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString(),presupuestoSeleccionado.getCatalogoProducto());
             for (PersonaEstablecimiento establecimiento : presupuestoSeleccionado.getPersona().getEstablecimientos()) {
@@ -982,7 +991,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }            
             
             rubroSeleccionado=rubroEstudianteTmp;
-            FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(rubroEstudianteTmp.getSaldo(), 
+            FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
+                    rubroEstudianteTmp.getSaldo(), 
+                    null, //Este tipo de valores no tienen subsidio
                     rubroEstudianteTmp.getRubroNivel().getNombre(), 
                     rubroEstudianteTmp.getId().toString(), 
                     rubroEstudianteTmp.getRubroNivel().getCatalogoProducto(), 

@@ -9,6 +9,9 @@
     <ui:composition  template="/template/codefac_template.xhtml">
 
         <ui:define name="contenido" >
+            
+            <f:event listener="#{controllerCodefacMb.agregarVista(proformaMb)}" type="preRenderView" />
+            
             <f:metadata>
                 <!--<f:viewParam name="tipo" value="#{proformaMb.tipoPagina}"/>-->
                 <f:event type="preRenderView" listener="#{proformaMb.verificarPagina()}"/>
@@ -21,109 +24,140 @@
 
             <p:accordionPanel multiple="true" id="acordionCabecera">
                 <p:tab title="Datos Cabecera">
-                    <p:panelGrid id="panelCabecera" columns="4" layout="grid" styleClass="showcase-text-align-center" columnClasses="ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-3">
-                        <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
-
-                            <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 55%" />                    
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 70%" />                    
                             <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}">
                                 <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarCliente}" update="txtCliente,datosCliente,formulario:tabDatosFactura:tblDatosAdicional"  />
-                            </p:commandButton>                    
-
+                            </p:commandButton>   
                             <p:commandButton process="@this" icon="fa fa-plus"  styleClass="white-button" action="#{proformaMb.abrirDialogoCrearCliente()}">
                                 <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarClienteCreado}" update="txtCliente,datosCliente,formulario:tabDatosFactura:tblDatosAdicional"  />
-                            </p:commandButton>                    
+                            </p:commandButton>   
+                        </div>                            
 
-                        </p:panel>
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <p:datePicker  id="button" value="#{proformaMb.fechaEmision}" showIcon="true" placeholder="Fecha Emisión" style="width: 70%" />
+                        </div>
 
-                        <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
-                            <p:datePicker  id="button" value="#{proformaMb.fechaEmision}" showIcon="true" placeholder="Fecha Emisión" />
-                        </p:panel>
-
-
-                        <p:panel id="pnlComboDocumento" class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
-                            <p:selectOneMenu id="cmbDocumento" value="#{proformaMb.documentoSeleccionado}" converter="documentoEnumConverter" >
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <p:selectOneMenu id="cmbDocumento" value="#{proformaMb.documentoSeleccionado}" converter="documentoEnumConverter" style="width: 70%" >
                                 <f:selectItems value="#{proformaMb.documentos}" var="documento" itemValue="#{documento.codigo}" />
                             </p:selectOneMenu>
-                        </p:panel>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <div class="p-grid" style="text-align: left" >
+                                <div class="p-col-12 p-md-3 p-lg-6" >
+                                    <p:outputLabel value="Punto Emisión:" />
+                                </div>
+                                <div class="p-col-12 p-md-3 p-lg-6" >
+                                    <p:selectOneMenu label="label" title="title" id="cmbPuntoEmision" value="#{proformaMb.puntoEmisionSeleccionado}" converter="puntoEmisionConverter" style="width: 70%" >
+                                        <f:selectItems value="#{proformaMb.puntosEmision}" var="puntoEmision" itemValue="#{puntoEmision.id.toString()}" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
 
-                        <p:panel class="ui-inputgroup" style="border: 0px;margin: 0px;padding: 0px">
-                            <p:outputLabel value="Punto Emisión:" />
-                            <p:selectOneMenu id="cmbPuntoEmision" value="#{proformaMb.puntoEmisionSeleccionado}" converter="puntoEmisionConverter" >
-                                <f:selectItems value="#{proformaMb.puntosEmision}" var="puntoEmision" itemValue="#{puntoEmision.id.toString()}" />
-                            </p:selectOneMenu>
-                            <p:outputLabel value="" />
-                        </p:panel>
+                        </div>
+                    </div>
 
 
-                    </p:panelGrid>
+                    <p:panel id="datosCliente" styleClass="ui-noborder">      
+                        <div class="p-grid" style="text-align: left" >
+                            <div class="p-col-12 p-md-3 p-lg-3" >
+                                <h:outputLabel style="font-weight: bold">Razon Social:  </h:outputLabel>
+                            </div>
+                            <div class="p-col-12 p-md-3 p-lg-3" >
+                                <h:outputLabel>#{proformaMb.factura.cliente.razonSocial}</h:outputLabel>
+                            </div>
+                            <div class="p-col-12 p-md-3 p-lg-3" >
+                                <h:outputLabel style="font-weight: bold">Dirección:  </h:outputLabel>
+                            </div><div class="p-col-12 p-md-3 p-lg-3" >
+                                <h:outputLabel>#{proformaMb.factura.cliente.imprimirDireccionPorDefecto()}</h:outputLabel>
+                            </div>
 
-
-                    <p:panelGrid columns="2" layout="grid" id="datosCliente" styleClass="ui-noborder">      
-                        <p:panel style="border: none">
-                            <h:outputLabel style="font-weight: bold">Razon Social:  </h:outputLabel>
-                            <h:outputLabel>#{proformaMb.factura.cliente.razonSocial}</h:outputLabel>
-                        </p:panel>
-
-                        <p:panel style="border: none">
-                            <h:outputLabel style="font-weight: bold">Dirección:  </h:outputLabel>
-                            <h:outputLabel>#{proformaMb.factura.cliente.imprimirDireccionPorDefecto()}</h:outputLabel>
-                        </p:panel>
-
-                        <!--
-                        <p:panel style="border: none">
-                            <h:outputLabel style="font-weight: bold">Telefonos:  </h:outputLabel>
-                            <h:outputLabel>#{proformaMb.factura.telefono}</h:outputLabel>
-                        </p:panel>-->
-
-                    </p:panelGrid>
+                        </div>
+                    </p:panel>
                 </p:tab>
 
             </p:accordionPanel>
 
-
-            <f:event listener="#{controllerCodefacMb.agregarVista(proformaMb)}" type="preRenderView" />
+            
             <p:remoteCommand name="updateDataTable" update=":formulario:tblProductoDetalles"/>
-
-
 
             <p:panel id="pnlDatosFactura">
                 <p:tabView id="tabDatosFactura">
                     <p:tab title="Productos" >
-                        <p:panelGrid columns="5" layout="grid" style="width: 100%" styleClass="ui-noborder showcase-text-align-center" 
-                                     columnClasses="
-                                     ui-g-12 ui-md-12 ui-lg-4, 
-                                     ui-g-12 ui-md-12 ui-lg-2, 
-                                     ui-g-12 ui-md-12 ui-lg-2,
-                                     ui-g-12 ui-md-12 ui-lg-2,
-                                     ui-g-12 ui-md-12 ui-lg-2">
+                        <div class="p-grid " style="text-align: left"  >
+                            <div class="p-col-12 p-md-6 p-lg-3" >
+                                <div class="p-grid" style="text-align: left" >
+                                    <div class="p-col-9 p-md-8 p-lg-10" >
+                                        <p:inputText id="txtProducto" placeholder="Código" value="#{proformaMb.productoSeleccionado.codigoPersonalizado}" style="width: 100%" />
+                                    </div>
+                                    <div class="p-col-3 p-md-4 p-lg-2" >
+                                        <p:commandButton  process="@this,:formulario:acordionCabecera:cmbDocumento" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBusquedaProducto()}" style="width: 100%"  >
+                                            <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}"  update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,cmbIncluyeIvaDetalle"  />
+                                        </p:commandButton>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-3" >
+                                <div class="p-grid" style="text-align: left" >
+                                    <div class="p-col-3 p-md-3 p-lg-3" >
+                                        <p:outputLabel>Inc Iva:</p:outputLabel>
+                                    </div>
+                                    <div class="p-col-6 p-md-6 p-lg-6" >
+                                        <p:selectOneMenu  id="cmbIncluyeIvaDetalle" value="#{proformaMb.incluyeIvaDetalleEnum}" converter="siNoEnumConverter" disabled="#{!proformaMb.cmbIvaDetalleEnable}" >
+                                            <f:selectItems value="#{proformaMb.enumSiNoList}" var="opcion" itemValue="#{opcion.letra}" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
 
-                            <p:panel style="border: 0px;margin: 0px;padding: 0px" >
-                                <p:inputText id="txtProducto" placeholder="Código" value="#{proformaMb.productoSeleccionado.codigoPersonalizado}" style="width: 70%" />
-                                <p:commandButton  process="@this,:formulario:acordionCabecera:cmbDocumento" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBusquedaProducto()}" style="width: 20%"  >
-                                    <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}"  update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,cmbIncluyeIvaDetalle"  />
-                                </p:commandButton>
-                            </p:panel>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-3" >
+                                <div class="p-grid" style="text-align: left" >
+                                    <div class="p-col-3 p-md-3 p-lg-3" >
+                                        <p:outputLabel>Valor:</p:outputLabel>
+                                    </div>
+                                    <div class="p-col-6 p-md-6 p-lg-6" >
+                                        <p:inputText style="width: 90%" id="txtValorUnitario"  placeholder="Valor" value="#{proformaMb.facturaDetalle.precioUnitario}" />  
+                                    </div>
+                                </div>                                
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-3" >
+                                <div class="p-grid" style="text-align: left" >
+                                    <div class="p-col-3 p-md-3 p-lg-3" >
+                                        <p:outputLabel >Cantidad:</p:outputLabel>
+                                    </div>
+                                    <div class="p-col-6 p-md-6 p-lg-6" >
+                                        <p:inputText style="width: 90%" id="txtCantidad"  placeholder="Cantidad" value="#{proformaMb.facturaDetalle.cantidad}" /> 
+                                    </div>
+                                </div>   
 
-                            <p:panelGrid columns="2" id="pnlIncluyeIva" style="border: 0px;margin: 0px;padding: 0px;width: 100%">
-                                <p:outputLabel>Inc Iva:</p:outputLabel>
-                                <p:selectOneMenu  id="cmbIncluyeIvaDetalle" value="#{proformaMb.incluyeIvaDetalleEnum}" converter="siNoEnumConverter" disabled="#{!proformaMb.cmbIvaDetalleEnable}" >
-                                    <f:selectItems value="#{proformaMb.enumSiNoList}" var="opcion" itemValue="#{opcion.letra}" />
-                                </p:selectOneMenu>
-                            </p:panelGrid>
+                            </div>
 
-                            <p:panelGrid columns="2" id="datosProducto" style="border: 0px;margin: 0px;padding: 0px;width: 100%">
-                                <p:outputLabel>Valor:</p:outputLabel>
-                                <p:inputText id="txtValorUnitario" style="width: 100%" placeholder="Valor" value="#{proformaMb.facturaDetalle.precioUnitario}" />                                
-                            </p:panelGrid>
 
-                            <p:panelGrid columns="2" id="datosProducto2" style="border: 0px;margin: 0px;padding: 0px;width: 100%">
-                                <p:outputLabel >Cantidad:</p:outputLabel>
-                                <p:inputText id="txtCantidad"  placeholder="Cantidad" value="#{proformaMb.facturaDetalle.cantidad}" />                                
-                            </p:panelGrid>
+                            <div class="p-col-12 p-md-6 p-lg-3"  >
+                                <p:inputText  id="txtDescripcion" style="width: 90%" placeholder="Descripción" value="#{proformaMb.facturaDetalle.descripcion}" />                                                                
+                            </div>
 
-                                                        
-                            <p:panel style="border: 0px;margin: 0px;padding: 0px" >
-                                <p:commandButton style="width: 20%" process="
+                            <div class="p-col-12 p-md-6 p-lg-3" >
+                                <div class="p-grid" style="text-align: left" >
+                                    <div class="p-col-3 p-md-3 p-lg-3" >
+                                        <p:outputLabel>Descuento:</p:outputLabel>
+                                    </div>
+                                    <div class="p-col-4 p-md-4 p-lg-4" >
+                                        <p:inputText id="txtDescuento" style="width: 100%" placeholder="Descuento" value="#{proformaMb.facturaDetalle.descuento}" />
+                                    </div>
+                                    <div class="p-col-5 p-md-5 p-lg-5" >
+                                        <p:selectBooleanCheckbox id="chkDescuento" value="#{proformaMb.descuentoPorcentaje}" itemLabel="% descuento"/>
+                                    </div>
+                                </div>   
+
+                            </div>
+
+                            <div class="p-col-12 p-md-offset-4 p-md-4 p-lg-offset-3 p-lg-3" style="text-align: center">
+                                <p:commandButton style="width: 32%"
+                                                 title="Agregar Detalle"
+                                                 process="
                                                  @this,
                                                  txtValorUnitario,
                                                  txtCantidad,
@@ -138,32 +172,18 @@
                                                  txtDescuento,
                                                  txtDescripcion,
                                                  cmbIncluyeIvaDetalle,
+                                                 :formulario:totalesTabla,
                                                  :formulario:tblProductoDetalles,
-                                                 :formulario:messages" icon="fa fa-plus"   styleClass="white-button" action="#{proformaMb.agregarProducto()}" />
-                                
-                                <p:commandButton style="width: 20%" process="@this" icon="fa fa-pencil"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}"/>
-                                <p:commandButton style="width: 20%" process="@this" icon="fa fa-close"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}"/>
-                            </p:panel>
+                                                 :formulario:messages"  
+                                                 icon="fa fa-plus"   
+                                                 styleClass="white-button" 
+                                                 action="#{proformaMb.agregarProducto()}" />
 
-                            <!-- SEGUNDA COLUMNA -->
-                            <p:panelGrid columns="1" style="border: 0px;margin: 0px;padding: 0px;width: 100%">
-                                <p:inputText style="width: 100%" id="txtDescripcion"  placeholder="Descripción" value="#{proformaMb.facturaDetalle.descripcion}" />                                
-                            </p:panelGrid>
-                            
-                            <p:spacer/>
+                                <p:commandButton style="width: 32%" title="Editar Detalle"  process="@this" update=":formulario:totalesTabla" icon="fa fa-pencil"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}"/>
+                                <p:commandButton style="width: 32%" title="Quitar Detalle"  process="@this" update=":formulario:totalesTabla" icon="fa fa-close"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}"/>
+                            </div>
 
-                            <p:panelGrid columns="2" style="border: 0px;margin: 0px;padding: 0px;width: 100%">
-                                <p:outputLabel>Descuento:</p:outputLabel>
-                                <p:inputText id="txtDescuento" style="width: 100%" placeholder="Descuento" value="#{proformaMb.facturaDetalle.descuento}" />
-                            </p:panelGrid>
-                            
-                             <p:panelGrid columns="1" style="border: 0px;margin: 0px;padding: 0px;width: 100%">
-                                 <p:selectBooleanCheckbox id="chkDescuento" value="#{proformaMb.descuentoPorcentaje}" itemLabel="% descuento"/>
-                            </p:panelGrid>
-
-
-                        </p:panelGrid>
-
+                        </div>
 
                     </p:tab>
 
@@ -176,7 +196,7 @@
                                     <p:commandButton process="@this"   id="btnAgregarFormaPago"  icon="fa fa-plus" value="Agregar" style="margin: 0 auto" />
                                 </div>
 
-                                <p:dataTable 
+                                <p:dataTable                                     
                                     var="detalleFormaPago" 
                                     value="#{proformaMb.factura.formaPagos}">
 
@@ -233,12 +253,19 @@
                     </p:tab>
                 </p:tabView>
 
-                <p:dataTable id="tblProductoDetalles" var="detalle" value="#{proformaMb.factura.detalles}" editable="true"  style="margin-bottom:20px">
+                <p:dataTable 
+                    id="tblProductoDetalles" 
+                    var="detalle" 
+                    reflow="true"
+                    value="#{proformaMb.factura.detalles}" 
+                    editable="true"  
+                    style="margin-bottom:20px">
+
                     <f:facet name="header">
                         Detalles Factura
                     </f:facet>
 
-                    <p:ajax event="rowEdit" oncomplete="updateDataTable()"  listener="#{proformaMb.filaEditaTablaEvent}"  />
+                    <p:ajax event="rowEdit" oncomplete="updateDataTable()" update=":formulario:totalesTabla" listener="#{proformaMb.filaEditaTablaEvent}"  />
 
                     <p:column headerText="Descripción" style="width: 50%">
                         <p:cellEditor>
@@ -282,44 +309,82 @@
                     </p:column>
 
                     <p:column style="width:35px">
-                        <p:commandButton ajax="true" icon=" fa fa-close" label="Eliminar item" action="#{proformaMb.eliminarFilaProducto(detalle)}" update="tblProductoDetalles" />
+                        <p:commandButton ajax="true" icon=" fa fa-close" label="Eliminar item" action="#{proformaMb.eliminarFilaProducto(detalle)}" update="tblProductoDetalles,:formulario:totalesTabla" />
                     </p:column>
 
-
-
-                    <f:facet name="footer">
-                        <p:panelGrid columns="5"  id="totalesTabla">
-                            <p:panel>
-                                <h:outputLabel style="font-weight: bold">Subtotal 12: </h:outputLabel>
-                                <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.subtotalImpuestos}" />
-                            </p:panel>
-
-                            <p:panel>
-                                <h:outputLabel style="font-weight: bold">Subtotal 0: </h:outputLabel>
-                                <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.subtotalSinImpuestos}" />
-                            </p:panel>
-
-                            <p:panel>
-                                <h:outputLabel style="font-weight: bold">Descuento: </h:outputLabel>
-                                <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.descuentoImpuestos}" />
-                            </p:panel>
-
-                            <p:panel>
-                                <h:outputLabel style="font-weight: bold">ICE: </h:outputLabel>
-                                <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.ice}" />
-                            </p:panel>
-
-                            <p:panel>
-                                <h:outputLabel style="font-weight: bold">IVA: </h:outputLabel>
-                                <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.iva}" />
-                            </p:panel>
-                        </p:panelGrid>
-                        <p:panel>
-                            <h:outputLabel style="font-weight: bold;font-size: 18px">Total: </h:outputLabel>
-                            <h:outputLabel style="font-weight: normal;font-size: 18px" value="#{proformaMb.factura.total}" />
-                        </p:panel>
-                    </f:facet>
                 </p:dataTable>
+
+                <p:panel id="totalesTabla" style="border: none">
+                    <div class="p-grid " style="text-align: left"   >
+                        <div class="p-col-6 p-md-6 p-lg-3" style="border-width: 2px;border-style: groove;" >
+                            <div class="p-grid " style="text-align: left"  >
+                                <div class="p-col-6 p-md-6 p-lg-6" >
+                                    <h:outputLabel style="font-weight: bold">Subtotal 12: </h:outputLabel>
+                                </div>
+                                <div class="p-col-6 p-md-6 p-lg-6" >
+                                    <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.subtotalImpuestos}" />
+                                </div>
+                            </div>                        
+                        </div>        
+
+
+                        <div class="p-col-6 p-md-6 p-lg-3"  style="border-width: 2px;border-style: groove;">
+                            <div class="p-grid " style="text-align: left"  >
+                                <div class="p-col-6 p-md-6 p-lg-6" >
+                                    <h:outputLabel style="font-weight: bold">Subtotal 0: </h:outputLabel>
+                                </div>
+                                <div class="p-col-6 p-md-6 p-lg-6" >
+                                    <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.descuentoImpuestos}" />
+                                </div>
+                            </div>                        
+                        </div> 
+
+                        <div class="p-col-6 p-md-6 p-lg-3" style="border-width: 2px;border-style: groove;" >
+                            <div class="p-grid " style="text-align: left"  >
+                                <div class="p-col-6 p-md-6 p-lg-6" >
+                                    <h:outputLabel style="font-weight: bold">Descuento: </h:outputLabel>
+                                </div>
+                                <div class="p-col-6 p-md-6 p-lg-6" >
+                                    <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.subtotalSinImpuestos}" />
+                                </div>
+                            </div>                        
+                        </div>   
+
+                        <div class="p-col-6 p-md-6 p-lg-3" style="border-width: 2px;border-style: groove;" >
+                            <div class="p-grid " style="text-align: left"  >
+                                <div class="p-col-6 p-md-6 p-lg-6" >
+                                    <h:outputLabel style="font-weight: bold">ICE: </h:outputLabel>
+                                </div>
+                                <div class="p-col-6 p-md-6 p-lg-6" >
+                                    <h:outputLabel style="font-weight: normal" value="#{proformaMb.factura.ice}" />
+                                </div>
+                            </div>                        
+                        </div>
+
+                        <div class="p-col-6 p-md-6 p-lg-6" style="border-width: 2px;border-style: groove;" >
+                            <div class="p-grid " style="text-align: left"  >
+                                <div class="p-col-6 p-md-6 p-lg-6" >
+                                    <h:outputLabel style="font-weight: bold;font-size: 18px">IVA: </h:outputLabel>
+                                </div>
+                                <div class="p-col-6 p-md-6 p-lg-6" >
+                                    <h:outputLabel style="font-weight: normal;font-size: 18px" value="#{proformaMb.factura.iva}" />
+                                </div>
+                            </div>                        
+                        </div>
+
+                        <div class="p-col-6 p-md-6 p-lg-6" style="border-width: 2px;border-style: groove;" >
+                            <div class="p-grid " style="text-align: left"  >
+                                <div class="p-col-6 p-md-6 p-lg-6" >
+                                    <h:outputLabel style="font-weight: bold;font-size: 18px">Total: </h:outputLabel>
+                                </div>
+                                <div class="p-col-6 p-md-6 p-lg-6" >
+                                    <h:outputLabel style="font-weight: normal;font-size: 18px" value="#{proformaMb.factura.total}" />
+                                </div>
+                            </div>                        
+                        </div>
+                    </div>              
+                </p:panel>
+
             </p:panel>
 
         </ui:define>

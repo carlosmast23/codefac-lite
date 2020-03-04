@@ -82,7 +82,7 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
         
         map.put("ice",respuesta.ice.toString());
         map.put("iva",respuesta.iva.toString());
-        map.put("total",comprobante.getInformacionComprobante().getImporteTotal()+"");
+        map.put("total",totalFactura()+"");
         /**
          * Falta setear el iva que se esta usando en el sistema
          */
@@ -103,6 +103,16 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
             data.setDescuento(detalleFacturaComprobante.getDescuento()+"");
             data.setPrecio_total(detalleFacturaComprobante.getPrecioTotalSinImpuesto()+"");
             data.setPrecio_unitario(detalleFacturaComprobante.getPrecioUnitario()+"");
+            if(detalleFacturaComprobante.calcularSubsidioDetalle().compareTo(BigDecimal.ZERO)==0)
+            {
+                data.setSubsidio("0");
+            }
+            else
+            {
+                data.setSubsidio(detalleFacturaComprobante.getPrecioSinSubsidio()+"");
+                //data.setSubsidio(
+                //        detalleFacturaComprobante.calcularSubsidioDetalle().subtract(detalleFacturaComprobante.getPrecioTotalSinImpuesto())+""); //Valor el subsidio para emitir en la factura
+            }
             detalles.add(data);
         }
         
@@ -137,5 +147,9 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
         this.mapCodeAndNameFormaPago = mapCodeAndNameFormaPago;
     }
     
+    public BigDecimal totalFactura()
+    {
+        return comprobante.getInformacionComprobante().getImporteTotal();
+    }
     
 }

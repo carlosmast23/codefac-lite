@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.codefacweb.core.SessionMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.ParametrosWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesDialogo;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesReporteWeb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
@@ -274,9 +275,9 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
                             new InterfazCallBack(barraProgreso,sessionMb));
 
                     sessionMb.getBarraProgresoList().add(barraProgreso);
-                    sessionMb.setActualizarMonitor(true);
+                    sessionMb.setActualizarMonitor(true); //Variable para indicar que no esta actualiado el monitor
                     nuevo();
-                    UtilidadesWeb.ejecutarJavascript("PF('poll').start();"); //iniciar el comenten de actualizar monitor
+                    UtilidadesWeb.ejecutarJavascript("PF('poll').start();"); //iniciar el actualizador en la pantalla
                     //UtilidadesWeb.actualizaComponente(":formulario:panelSecundario:barMonitor");       
                     MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 } else if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
@@ -348,7 +349,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     {
         System.out.println("Abriendo dialogo proforma init");
         ProformaBusqueda proformaBusqueda = new ProformaBusqueda(sessionMb.getSession().getEmpresa());
-        abrirDialogoBusqueda(proformaBusqueda);
+        //abrirDialogoBusqueda(proformaBusqueda);
+        UtilidadesDialogo.abrirDialogoBusqueda(proformaBusqueda);
         System.out.println("Abriendo dialogo proforma fin");
     }
     
@@ -368,11 +370,12 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     public void abrirDialogoBuscarCliente() {
         System.out.println("Abriendo dialogo init");
         ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession().getEmpresa());
-        abrirDialogoBusqueda(clienteBusquedaDialogo);
+        //abrirDialogoBusqueda(clienteBusquedaDialogo);
+        UtilidadesDialogo.abrirDialogoBusqueda(clienteBusquedaDialogo);
         System.out.println("Abriendo dialogo fin");
     }
 
-    public void abrirDialogoCrearCliente() {
+    /*public void abrirDialogoCrearCliente() {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("resizable", true);
         options.put("draggable", false);
@@ -391,14 +394,15 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
         PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, params);
 
-    }
+    }*/
 
     public void abrirDialogoBusquedaProducto() {
         ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo(sessionMb.getSession().getEmpresa());
-        abrirDialogoBusqueda(dialogModel);
+        //abrirDialogoBusqueda(dialogModel);
+        UtilidadesDialogo.abrirDialogoBusqueda(dialogModel);
     }
 
-    public void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) {
+    /*public void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) {
         //find();
         System.out.println("Abriendo dialogo busqueda");
 
@@ -409,14 +413,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
         //Esstablecer porpiedades que se van a enviar al dialogo en map
         Map<String, Object> options = new HashMap<String, Object>();
-        options.put("resizable", false);
+        options.put("resizable", true);
         options.put("draggable", false);
         options.put("modal", true);
         //options.put("busquedaClase", new EmpleadoBusquedaDialogo() ); //TODO: Mando por defecto un dialogo por defecto
         String nombreDialogoBusqueda = "dialogo_busqueda";
         //PrimeFaces.current().dialog()
         PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, null);           
-    } 
+    } */
 
     public void seleccionarCliente(SelectEvent event) {
         PersonaEstablecimiento clienteOficina = (PersonaEstablecimiento) event.getObject();

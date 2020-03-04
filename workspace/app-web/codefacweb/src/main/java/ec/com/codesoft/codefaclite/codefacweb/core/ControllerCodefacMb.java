@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
@@ -159,7 +160,8 @@ public class ControllerCodefacMb implements Serializable {
     public void abrirDialogoBusqueda() {
         try {
             System.out.println("ejecutar abrir dialogo controlador");
-            abrirDialogoBusqueda(generalAbstractMb.obtenerDialogoBusqueda());
+            UtilidadesDialogo.abrirDialogoBusqueda(generalAbstractMb.obtenerDialogoBusqueda());
+            //abrirDialogoBusqueda(generalAbstractMb.obtenerDialogoBusqueda());
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedOperationException ex) {
@@ -167,29 +169,7 @@ public class ControllerCodefacMb implements Serializable {
         }
     }
 
-    public void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) {
-        //find();
-        //System.out.println("Abriendo dialogo busqueda");
-
-        //Establecer objeto de la clase que tiene la implemetacion del dialogo de busqueda que necesito para construir el dialogo web
-        //TODO: Solucion temporal porque es una gasto innesario de memoria , buscar otra forma
-        Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-        sessionMap.put("busquedaClase", modeloBusqueda); 
-
-        //Esstablecer porpiedades que se van a enviar al dialogo en map
-        Map<String, Object> options = new HashMap<String, Object>();
-        options.put("resizable", false);
-        options.put("draggable", false);
-        options.put("modal", true);
-        options.put("responsive", true);
-        options.put("width", "80%");
-        options.put("contentWidth", "100%");
-        //responsive="true"
-        //options.put("busquedaClase", new EmpleadoBusquedaDialogo() ); //TODO: Mando por defecto un dialogo por defecto
-        String nombreDialogoBusqueda = "dialogo_busqueda";
-        //PrimeFaces.current().dialog()
-        PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, null);
-    }
+    
 
     //Metodo que permite recibir el dato seleccionado
     public void onObjectChosen(SelectEvent event) {
@@ -227,9 +207,8 @@ public class ControllerCodefacMb implements Serializable {
 
     public void agregarVista(GeneralAbstractMb vista) {
         try {
-            generalAbstractMb = vista; 
-            System.out.println("Agregando Vista"+vista.titulo());
-            System.out.println("Estó agregando oficial "+estadoEnum.getLetra()+" "+estadoEnum.getLetra());
+            generalAbstractMb = vista;   
+            System.out.println("Agregando al Controlador la Vista "+vista.titulo());
             PrimeFaces.current().ajax().update("formulario:txtTituloPagina"); //Actualizar un componente desde la vista
             //System.out.println("actualizando el titulo en la pagina:"+titulo);
         } catch (ExcepcionCodefacLite ex) {

@@ -100,6 +100,9 @@ public class Producto implements Serializable, Comparable<Producto> {
     @Column(name = "TRANSPORTAR_EN_GUIA_REMISION")
     private String transportarEnGuiaRemision;
     
+    @Column(name = "PRECIO_SIN_SUBSIDIO")
+    private BigDecimal precioSinSubsidio;
+    
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
     
@@ -364,6 +367,15 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setOcultarDetalleVentaEnum(EnumSiNo enumSiNo) {
         this.ocultarDetalleVenta=enumSiNo.getLetra();
     }
+
+    public BigDecimal getPrecioSinSubsidio() {
+        return precioSinSubsidio;
+    }
+
+    public void setPrecioSinSubsidio(BigDecimal precioSinSubsidio) {
+        this.precioSinSubsidio = precioSinSubsidio;
+    }
+    
     
     
     

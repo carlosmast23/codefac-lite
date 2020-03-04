@@ -45,6 +45,8 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract{
     private Factura factura;
 
 
+    @Column(name = "PRECIO_SIN_SUBSIDIO")
+    private BigDecimal precioSinSubsidio; 
 
 
     public FacturaDetalle() {
@@ -70,8 +72,16 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract{
         this.factura = factura;
     }
 
-   
+    public BigDecimal getPrecioSinSubsidio() {
+        return precioSinSubsidio;
+    }
 
+    public void setPrecioSinSubsidio(BigDecimal precioSinSubsidio) {
+        this.precioSinSubsidio = precioSinSubsidio;
+    }
+
+   
+    
 
 
     @Override
@@ -100,12 +110,16 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract{
     }
 
     /**
-     * @deprecated Porque deberia trabajar directamente con el porcentjae como en el metodo de abajo
      * ====================> METODOS PERSONALIZADOS <===================== *
      */
     
-    
-
-
+    public BigDecimal calcularSubsidio()
+    {
+        if(precioSinSubsidio!=null)
+        {
+            return precioSinSubsidio.subtract(getPrecioUnitario()).multiply(getCantidad());
+        }
+        return BigDecimal.ZERO;
+    }
 
 }

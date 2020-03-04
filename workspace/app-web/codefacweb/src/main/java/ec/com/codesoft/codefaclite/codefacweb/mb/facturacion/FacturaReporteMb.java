@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.codefacweb.mb.test.*;
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.TablaNombreColumna;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesDialogo;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesReporteWeb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EjemploDialogo;
@@ -233,11 +234,12 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     public void abrirDialogoBuscarCliente()
     {
         ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession().getEmpresa());   
-        abrirDialogoBusqueda(clienteBusquedaDialogo);
+        //abrirDialogoBusqueda(clienteBusquedaDialogo);
+        UtilidadesDialogo.abrirDialogoBusqueda(clienteBusquedaDialogo);
     }
     
     //Estandar para abrir los dialogos solo debo cambiar el tipo de Interfaces
-    public void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) 
+    /*public void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) 
     {
         //find();
         System.out.println("Abriendo dialogo busqueda");
@@ -256,7 +258,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         String nombreDialogoBusqueda = "dialogo_busqueda";
         //PrimeFaces.current().dialog()
         PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, null);           
-    }
+    }*/
     
     //Obtener el dato seleccionado de la ventana de dialogo
     public void seleccionarCliente(SelectEvent event)

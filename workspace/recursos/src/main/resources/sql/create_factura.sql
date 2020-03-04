@@ -63,6 +63,8 @@ create table FACTURA
     VALOR_ICE decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.7.9.8)*/
     SUCURSAL_EMPRESA_ID BIGINT,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.2.5)*/
+    TOTAL_SUBSIDIO decimal(13,2),
     
     primary key (ID)
     /*CONSTRAINT id_cliente_factura_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID)*/
@@ -88,6 +90,8 @@ create table FACTURA_DETALLE
     DESCRIPCION varchar(300),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.2.1)*/
     CODIGO_PRINCIPAL varchar(100),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.2.5)*/
+    PRECIO_SIN_SUBSIDIO decimal(13,2),
     primary key (ID)
 );
 

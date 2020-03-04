@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.codefacweb.core.SessionMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.ParametrosWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesDialogo;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesReporteWeb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
@@ -281,7 +282,8 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
     {
         System.out.println("Abriendo dialogo buscar factura");
         FacturaBusquedaNotaCredito facturaBusqueda = new FacturaBusquedaNotaCredito(sessionMb.getSession().getEmpresa());
-        abrirDialogoBusqueda(facturaBusqueda);
+        //abrirDialogoBusqueda(facturaBusqueda);
+        UtilidadesDialogo.abrirDialogoBusqueda(facturaBusqueda);
         System.out.println("Abriendo dialogo buscar factura");
     }
     
@@ -305,7 +307,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
         System.out.println("Abriendo dialogo fin");
     }*/
 
-    public void abrirDialogoCrearCliente() {
+    /*public void abrirDialogoCrearCliente() {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("resizable", true);
         options.put("draggable", false);
@@ -324,14 +326,15 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
 
         PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, params);
 
-    }
+    }*/
 
     public void abrirDialogoBusquedaProducto() {
         ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo(sessionMb.getSession().getEmpresa());
-        abrirDialogoBusqueda(dialogModel);
+        UtilidadesDialogo.abrirDialogoBusqueda(dialogModel);
+        //abrirDialogoBusqueda(dialogModel);
     }
 
-    public void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) {
+    /*public void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) {
         //find();
         System.out.println("Abriendo dialogo busqueda");
 
@@ -349,7 +352,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
         String nombreDialogoBusqueda = "dialogo_busqueda";
         //PrimeFaces.current().dialog()
         PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, null);           
-    } 
+    } */
 
     public void seleccionarFactura(SelectEvent event) {
         facturaSeleccionada = (Factura) event.getObject();        

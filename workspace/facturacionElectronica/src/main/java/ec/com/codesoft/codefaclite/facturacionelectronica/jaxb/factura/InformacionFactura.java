@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlType;
     "identificacionComprador",
     "direccionComprador",    
     "totalSinImpuestos",
+    "totalSubsidio",
     "totalDescuento",
     "totalImpuestos",
     "importeTotal",
@@ -37,6 +38,7 @@ public class InformacionFactura extends InformacionComprobanteAbstract{
     private String razonSocialComprador;
     private String identificacionComprador;
     private String direccionComprador;
+    private BigDecimal totalSubsidio;
     
    
     public InformacionFactura() {
@@ -71,12 +73,21 @@ public class InformacionFactura extends InformacionComprobanteAbstract{
         this.identificacionComprador = identificacionComprador;
     }
 
-    
-
     @XmlElement(name = "direccionComprador")   
     public String getDireccionComprador() {
         return direccionComprador;
     }
+
+    @XmlElement(name = "totalSubsidio")   
+    public BigDecimal getTotalSubsidio() {
+        return totalSubsidio;
+    }
+
+    public void setTotalSubsidio(BigDecimal totalSubsidio) {
+        this.totalSubsidio = totalSubsidio;
+    }
+    
+    
 
     public void setDireccionComprador(String direccionComprador) {
         this.direccionComprador = direccionComprador;
