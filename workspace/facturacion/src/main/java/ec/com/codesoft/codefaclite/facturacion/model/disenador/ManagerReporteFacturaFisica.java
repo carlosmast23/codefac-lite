@@ -99,7 +99,7 @@ public class ManagerReporteFacturaFisica {
                 if(componente.getOculto().equals("s"))
                 {
                     tipoElemento.detach();
-                    return; //Si el componente de elimina termina el ciclo
+                    return; //Si el componente esta oculto lo elimino termino de buscar
                 }
                 
                 elementoReporte.getAttribute(NOMBRE_X_COMPONENTE).setValue(componente.getX()+"");
@@ -108,6 +108,7 @@ public class ManagerReporteFacturaFisica {
                 elementoReporte.getAttribute(NOMBRE_ALTO_COMPONENTE).setValue(componente.getAlto()+"");
                 
                 Element elementoCaracteristica=buscarEtiquetaPorNombre(tipoElemento, "textElement");
+                
                 if(elementoCaracteristica!=null)
                 {
                     Element elementoFont=buscarEtiquetaPorNombre(elementoCaracteristica, "font");
@@ -116,6 +117,7 @@ public class ManagerReporteFacturaFisica {
                     String boldTxt=(componente.getNegrita().equals("s"))?"true":"false";
                     elementoFont.getAttribute(NOMBRE_BOLD_COMPONENTE).setValue(boldTxt);                    
                 }
+                
                 return;
             }
             

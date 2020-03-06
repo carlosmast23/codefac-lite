@@ -1378,14 +1378,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private void facturaManual(DocumentoEnum documentoEnum) throws ServicioCodefacException
     {
             
-        try {
-            //DocumentoEnum documentoEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
+        try 
+        {
             
             
             InputStream reporteOriginal = null;
             if(documentoEnum.NOTA_VENTA_INTERNA.equals(documentoEnum))
-            {
-                                
+            {                   
                 
             }else if (documentoEnum.NOTA_VENTA.equals(documentoEnum)) {
                 reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("nota_venta.jrxml");
@@ -1397,11 +1396,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
              * =========> ESTE RESTO DE CODIGO SIRVE PARA CONSULTAR LAS PLANTILLAS DE LAS FACTURAS Y NOTAS DE VENTAS <=============
              */
             ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(reporteOriginal);
-            ComprobanteFisicoDisenioServiceIf servicioComprobanteDisenio = ServiceFactory.getFactory().getComprobanteFisicoDisenioServiceIf();;
-            //Map<String, Object> parametroComprobanteMap = new HashMap<String, Object>();
-            //parametroComprobanteMap.put("codigoDocumento", documentoEnum.getCodigo());
+            ComprobanteFisicoDisenioServiceIf servicioComprobanteDisenio = ServiceFactory.getFactory().getComprobanteFisicoDisenioServiceIf();
+            
+            /**
+             * Consultando el documento para poder editar como la factura y nota de venta 
+             */
             ComprobanteFisicoDisenio documento = servicioComprobanteDisenio.buscarPorCodigoDocumento(documentoEnum.getCodigo());
             manager.setearNuevosValores(documento);
+            
             InputStream reporteNuevo = manager.generarNuevoDocumento();
             
             Map<String, Object> parametros = getParametroReporte(documentoEnum);
@@ -1411,18 +1413,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             for (FacturaDetalle detalleFactura : factura.getDetalles()) {
                 DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
-                
-                //Todo: Ver alguna mejora
-                //Validacion para ver si existe algun item que no se debe imprimir en el reporte
-                /*if(detalleFactura.getTipoDocumentoEnum().equals(TipoDocumentoEnum.INVENTARIO) || detalleFactura.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
-                {
-                    Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalleFactura.getReferenciaId());
-                    if(producto.getOcultarDetalleVentaEnum().equals(EnumSiNo.SI))
-                    {
-                        continue; //Si el item es oculto no va a imprimir en los detalles
-                    }
-                    
-                }*/
                 
                 detalle.setCantidad(detalleFactura.getCantidad() + "");
                 detalle.setDescripcion(detalleFactura.getDescripcion());
@@ -1434,6 +1424,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
             
             ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa");
+            
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {

@@ -133,6 +133,8 @@ INSERT INTO COMPONENTE_COMPROBANTE_FISICO (BANDA_COMPROBANTE_ID,NOMBRE,UUID,X,Y,
           (2,'descripcion','63c13824-dd49-434e-a00d-7c356f78688b',99,0,270,15,10,'n','n'),
           (2,'valorUnitario','4352aef2-1d77-425e-95bd-736cd2211c25',369,0,93,15,10,'n','n'),
           (2,'valorTotal','3119d150-a3dc-4e39-9e60-4e349cc1daf9',462,0,93,15,10,'n','n'),
+          (2,'codigoPrincipal','e9273991-5c40-484d-8858-a722d863aa60',18,0,73,15,10,'n','s'),
+          (2,'descuento','107d6f63-0c26-4b99-8921-75d43cb504b8',18,0,73,15,10,'n','s'),
           (3,'subtotalSinImpuesto','b9a3a0cb-774d-485f-8933-f4ca3b41fba7',451,21,100,15,10,'n','n'),
           (3,'subtotalImpuesto','86054d4c-ae41-4430-9510-2d8749561874',451,6,100,15,10,'n','n'),
           (3,'descuento','0e91accb-5609-49f8-9878-4f77c27b8491',451,36,100,15,10,'n','n'),
@@ -140,6 +142,13 @@ INSERT INTO COMPONENTE_COMPROBANTE_FISICO (BANDA_COMPROBANTE_ID,NOMBRE,UUID,X,Y,
           (3,'valorIva','ad8a6e6b-030a-4490-9630-ee0dadf104db',451,66,100,15,10,'n','n'),
           (3,'iva','bfa48f42-e1e5-4bda-84a5-41af89f66937',422,66,19,15,10,'n','n'),
           (3,'total','e8b582dc-3b95-4f26-a1b6-dddde4a42378',451,81,100,15,10,'n','n'),
+          (3,'direccion_pie_pagina','e0093ae7-97e7-4a30-bf24-16207c5d9819',18,31,85,20,10,'n','s'),
+          (3,'telefono_pie_pagina','1caa08b5-5b51-4a2d-8265-0d21118832bf',18,51,100,20,10,'n','s'),
+          (3,'correoElectronico_pie_pagina','63fe999c-ba9e-46ef-9d95-81e16d44e3b5',18,71,100,20,10,'n','s'),
+          (3,'subtotalAntesImpuestos','53b5eba0-0107-4d3b-9633-4bfddc42a777',227,31,127,20,10,'n','s'),
+
+
+
 
           (4,'identificacion','e165fa85-1cb1-47e9-9af2-f89f0ff2c065',389,50,133,15,10,'n','n'),
           (4,'fechaEmision','2915f0d2-afa9-4aba-8f9a-6bc7a4ac49c7',18,5,133,15,10,'n','n'),
