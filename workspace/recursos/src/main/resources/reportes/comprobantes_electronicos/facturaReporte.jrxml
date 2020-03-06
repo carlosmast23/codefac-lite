@@ -213,7 +213,7 @@
 				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="375" y="34" width="176" height="20" uuid="5fa1f26b-0472-4a9a-b9f4-b166fa81bf34"/>
+				<reportElement x="353" y="34" width="176" height="20" uuid="5fa1f26b-0472-4a9a-b9f4-b166fa81bf34"/>
 				<textFieldExpression><![CDATA[$P{ruc}]]></textFieldExpression>
 			</textField>
 			<textField>

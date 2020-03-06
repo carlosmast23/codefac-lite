@@ -102,7 +102,8 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             whereCategoria=" and k.producto.catalogoProducto.categoriaProducto=?2 ";
         }
         
-        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 "+whereBodega+whereCategoria+" group by k.producto having max(k.stock)<=k.producto.cantidadMinima  ";
+        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 )  "+whereBodega+whereCategoria+" "
+                + " group by k.producto having max(k.stock)<=k.producto.cantidadMinima  ";
         Query query = getEntityManager().createQuery(queryString);
         
         if(bodega!=null)
@@ -114,6 +115,8 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         {
             query.setParameter(2,categoria);
         }
+        
+        query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
         //query.setParameter(1,producto);
         return query.getResultList();
 
