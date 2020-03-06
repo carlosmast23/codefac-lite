@@ -160,6 +160,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         venta.setTelefono(venta.getCliente().getTelefonoCelular()); //todo: ver si hago un metodo para obtener los telefonos        
     }
     
+    /**
+     * El prestamos sirve para identificar cuando se genera con el modulo de Crédito
+     * @param factura
+     * @param prestamo
+     * @return
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
     public Factura grabar(Factura factura,Prestamo prestamo) throws RemoteException, ServicioCodefacException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override

@@ -1999,13 +1999,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
          * Por el momento a todas las facturas no procesadas grabo con no facturar
          * TODO: Analizar este metodo cuando sea fisica porque en ese caso deberia grabar directamente como autorizado
          */
-        if(comprobante.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
-        {
-            comprobante.setEstadoEnum(ComprobanteEnumEstado.SIN_AUTORIZAR);
-        }else if(comprobante.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))
-        {
-            comprobante.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
-        }
+        setearEstadoComoprobante(comprobante);
+        
 
         /**
          * Grabar la entidad de punto de emision con el secuencial agregado
@@ -2021,6 +2016,26 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         
         
+    }
+    
+    private void setearEstadoComoprobante(ComprobanteEntity comprobante)
+    {
+        //Si el documento es nota de venta interna se supone que no so autorizados
+        //TODO: Esta de generalizar este caso para todos los documentos que no son legales para poner en estado sin autorizar
+        if(comprobante.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            comprobante.setEstadoEnum(ComprobanteEnumEstado.SIN_AUTORIZAR);
+            return;
+        }
+        
+        if(comprobante.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
+        {
+            comprobante.setEstadoEnum(ComprobanteEnumEstado.SIN_AUTORIZAR);
+        }else if(comprobante.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))
+        {
+            comprobante.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
+        }
+    
     }
    
     /**
