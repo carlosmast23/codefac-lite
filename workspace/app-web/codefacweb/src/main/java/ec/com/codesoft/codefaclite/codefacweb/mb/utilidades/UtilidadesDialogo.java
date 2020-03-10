@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.codefacweb.mb.utilidades;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
@@ -39,6 +41,29 @@ public abstract class UtilidadesDialogo {
         String nombreDialogoBusqueda = "dialogo_busqueda";
         //PrimeFaces.current().dialog()
         PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, null);
+    }
+    
+    public static void abrirDialogoFormulario(String nombreDialogoBusqueda,Map<String, List<String>> parametros)
+    {
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("resizable", true);
+        options.put("draggable", false);
+        options.put("modal", true);
+        options.put("responsive", true);
+        options.put("width", "70%");
+        options.put("height", "90%");
+        options.put("contentWidth", "100%");
+        options.put("contentHeight", "100%");
+        //options.put("busquedaClase", new EmpleadoBusquedaDialogo() ); //TODO: Mando por defecto un dialogo por defecto
+        //String nombreDialogoBusqueda = "cliente";
+        
+
+        Map<String, List<String>> params = new HashMap<String, List<String>>();
+        params.put("isDialog", Arrays.asList("true")); //TODO: Parametrizar esta variable
+        //params.put("tipo", Arrays.asList("cliente"));
+        params.putAll(parametros);
+        
+        PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, params);
     }
     
 }

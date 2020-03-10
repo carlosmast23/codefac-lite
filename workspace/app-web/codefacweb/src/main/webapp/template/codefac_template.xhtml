@@ -26,12 +26,12 @@
             <h:form id="formulario" target="_blank" onkeypress="if (event.keyCode == 13) {
                         return false;
                     }">
-                
+
                 <p:poll process="@this" interval="1" listener="#{sessionMb.ejemploContador()}" update=":formulario:panelSecundario" stop="#{!sessionMb.actualizarMonitor}" autoStart="true" widgetVar="poll" />
                 <!--<p:remoteCommand id="remoteCommand" name="updatePoll" update=":formulario:panelSecundario"/>-->
                 <p:remoteCommand name="onload" action="#{applicationCodefacMb.controladorConexionServidor()}" autoRun="true" />
-                
-                
+
+
                 <p:growl id="messages" showDetail="true" life="5000"/>
                 <!--- ============= PANELES AUXILIARES DERECHA, ABAJO ============= -->
                 <p:sidebar widgetVar="sidebar1" baseZIndex="10000" class="leftCol">
@@ -54,7 +54,7 @@
                 <p:sidebar id="panelSecundario" widgetVar="sidebar4" position="right" baseZIndex="10000" style="width: 250px">
                     <h1 style="font-weight:normal">Comprobantes Procesados</h1>
 
-                    
+
                     <p:repeat id="barMonitor" value="#{sessionMb.barraProgresoList}" var="barra">
                         <p:separator />
                         <div class="p-grid">
@@ -69,15 +69,15 @@
                                 <p:commandButton id="btnMonitorImprimir" process="@this" icon="fa fa-close"  />
                             </div>
                         </div>
-                        
-                        
+
+
                     </p:repeat>
 
                     <!--<p:commandButton value="Cancel" oncomplete="PF('sidebar4').hide()"/>-->
                 </p:sidebar>
 
                 <!-- ============== MENU SUPERIOR DE LAS OPCIONES PRINCIPALES ====== -->            
-                <p:toolbar id="tb" style="cabecera">
+                <p:toolbar id="tb" style="cabecera" rendered="#{!controllerCodefacMb.modoDialogo}">
                     <f:facet name="left">
                         <p:commandButton icon="home-icon" process="@this" class="button-menu" title="Home" action="indexCodefac" />
 
@@ -116,6 +116,9 @@
                         </p:menuButton>
                     </f:facet>
                 </p:toolbar>
+                <div style="text-align: center">
+                    <p:commandButton rendered="#{controllerCodefacMb.modoDialogo}" process="@this" onclick="PF('dialogConfirmarGrabar').show()" style="float: contour;margin-bottom:  10px;margin-right: 50px" label="Grabar" value="G U A R D A R" icon="save-icon" />
+                </div>
                 <p:sticky target="tb" />
 
 

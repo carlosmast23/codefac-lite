@@ -375,8 +375,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         System.out.println("Abriendo dialogo fin");
     }
 
-    /*public void abrirDialogoCrearCliente() {
-        Map<String, Object> options = new HashMap<String, Object>();
+    public void abrirDialogoCrearCliente() {
+        /*Map<String, Object> options = new HashMap<String, Object>();
         options.put("resizable", true);
         options.put("draggable", false);
         options.put("modal", true);
@@ -392,9 +392,13 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         params.put("isDialog", Arrays.asList("true")); //TODO: Parametrizar esta variable
         params.put("tipo", Arrays.asList("cliente"));
 
-        PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, params);
+        PrimeFaces.current().dialog().openDynamic(nombreDialogoBusqueda, options, params);*/
+        Map<String, List<String>> params = new HashMap<String, List<String>>();
+        params.put("tipo", Arrays.asList("cliente"));
 
-    }*/
+        UtilidadesDialogo.abrirDialogoFormulario("cliente", params);
+
+    }
 
     public void abrirDialogoBusquedaProducto() {
         ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo(sessionMb.getSession().getEmpresa());
