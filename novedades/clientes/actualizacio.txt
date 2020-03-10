@@ -1,0 +1,2 @@
+terminar de revisar que todas las pantallas funcionen con el nuevo cambio del modulo de la plantilla web especialmente la factura
+y hacer un manual para informar a los clientes

@@ -21,10 +21,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.sri.ComprobantesElectronicosParametros;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -67,6 +70,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     @Override
     public void grabarCompra(Compra compra) throws ServicioCodefacException, RemoteException
     {
+        validarDatosCompra(compra);
+        
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
@@ -87,6 +92,47 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         });
         
         //TODO: Falta retornar el tipo de dato por ejemplo en los dialogos necesita obtener el nuevo dato modificado.
+    }
+    
+    private void validarDatosCompra(Compra compra) throws RemoteException, ServicioCodefacException
+    {
+        /**
+         * =====================================================================
+         *          VALIDAR EL TAMANIO DE LA AUTORIZACION
+         * =====================================================================
+         */
+        if(compra.getAutorizacion()!=null)
+        {
+            if(compra.getAutorizacion().length()>ComprobantesElectronicosParametros.TAMANIO_MAXIMO_AUTORIZACION)
+            {
+                throw new ServicioCodefacException("El tamanio de la autorización no puede ser superior a "+ComprobantesElectronicosParametros.TAMANIO_MAXIMO_AUTORIZACION);
+            }
+        }
+        
+        /**
+         * =====================================================================
+         *          VALIDAR EL INGRESO DE DATOS NO REPETIDOS
+         * =====================================================================
+         * TODO: Poner en metodo facade porque seguro esta funcion utilice algunas veces mas para las vistas
+         * Solo hacer esta validacion cuando no sea consumidor final
+         */
+        if(!compra.getIdentificacion().equals(Persona.IDENTIFICACION_CONSUMIDOR_FINAL))
+        {
+            Map<String,Object> mapParametros=new HashMap<String,Object>();
+            mapParametros.put("puntoEstablecimiento",compra.getPuntoEstablecimiento());
+            mapParametros.put("puntoEmision",compra.getPuntoEmision());
+            mapParametros.put("secuencial",compra.getSecuencial());
+            mapParametros.put("empresa",compra.getEmpresa());
+            mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+
+            List<Compra> resultadoCompra= getFacade().findByMap(mapParametros);
+            if(resultadoCompra.size()>0)
+            {
+                throw new ServicioCodefacException("No se puede ingresar compras repetidas del mismo proveedor");
+            }
+        }
+        
+        
     }
     
     private void grabarCartera(Compra compra) throws RemoteException, ServicioCodefacException

@@ -111,11 +111,8 @@
 
                         <p:commandButton value="Menu" icon="fa fa-fw fa-bars" oncomplete="PF('sidebar1').show()" />
                         <p:commandButton value="%" icon="fa fa-fw fa-download" oncomplete="PF('sidebar4').show()" />
-                        <p:menuButton value="Más">
-                            <p:menuitem value="Save" action="#{toolbarView.save}"  icon="pi pi-save" />
-                            <p:menuitem value="Update" action="#{toolbarView.update}"  icon="pi pi-refresh" />
-                            <p:menuitem value="Delete" action="#{toolbarView.delete}" ajax="false" icon="pi pi-times" />
-                            <p:menuitem value="Homepage" url="http://www.primefaces.org" icon="pi pi-home" />
+                        <p:menuButton value="Más">                            
+                            <p:menuitem value="Cerrar la sesión" action="login" icon="pi pi-home" />
                         </p:menuButton>
                     </f:facet>
                 </p:toolbar>

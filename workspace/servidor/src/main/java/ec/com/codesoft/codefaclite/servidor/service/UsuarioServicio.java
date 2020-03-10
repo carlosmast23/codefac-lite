@@ -194,6 +194,10 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                     {
                         LOG.log(Level.INFO, "Error Usuario inactivo: "+nick);                        
                         loginRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.INACTIVO_USUARIO;
+                    }else if(usuario.getEstadoEnum().equals(GeneralEnumEstado.ELIMINADO))
+                    {
+                        LOG.log(Level.INFO, "Error Usuario eliminado: "+nick);                        
+                        loginRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.USUARIO_ELIMINADO;
                     }
                 }
                 else

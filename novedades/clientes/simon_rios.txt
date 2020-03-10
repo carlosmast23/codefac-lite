@@ -1,3 +1,0 @@
-Verificar y hacer que las proformas no afecten al modulo de inventario
-Verificar el correo empresarial que no le esta funcionando a Don Simon
-Ver como hacer para que se visible la ubicacion del producto al momento de facturar

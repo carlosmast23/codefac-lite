@@ -65,7 +65,11 @@ public class LoginRespuesta implements Serializable{
         /**
          * Estado cuando el usuario se encuentra inactivo en el sistem
          */
-        INACTIVO_USUARIO("Usuario Inactivo en el sistema , porfavor consulte con el administrador"),
+        INACTIVO_USUARIO("Usuario Inactivo en el sistema , porfavor consulte con el administrador"),        
+        /**
+         * El usuario fue eliminando del sistema 
+         */
+        USUARIO_ELIMINADO("El usuario fue eliminado del sistema"),
         /**
          * Mensaje cuando no existe seleccionado un directorio para poder verificar la licencia
          */

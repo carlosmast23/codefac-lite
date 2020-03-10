@@ -22,98 +22,98 @@ import javax.persistence.Transient;
  * @author Carlos
  */
 @MappedSuperclass
-public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implements Serializable{
-    
-    
+public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implements Serializable {
+
     public abstract List<T> getDatosAdicionalesComprobante();
+
     public abstract void addDatoAdicionalAbstract(T comprobanteAdicional);
     //public abstract void(ComprobanteEntity comprobante);
-    
+
     @Column(name = "CLAVE_ACCESO")
     protected String claveAcceso;
-    
+
     @Column(name = "SECUENCIAL")
     protected Integer secuencial;
-    
+
     @Column(name = "PUNTO_ESTABLECIMIENTO")
     protected BigDecimal puntoEstablecimiento;
-    
+
     @Column(name = "PUNTO_EMISION")
     protected Integer puntoEmision;
-    
+
     //@Column(name = "EMPRESA_ID")
     //protected Long empresaId;
-    
     //@Column(name = "USUARIO_ID")
     @JoinColumn(name = "USUARIO_ID")
     protected Usuario usuario;
     //protected Long usuarioId;
-    
+
     @Column(name = "FECHA_CREACION")
     protected Date fechaCreacion;
-    
+
     @Column(name = "FECHA_EMISION")
     protected Date fechaEmision;
-    
+
     @Column(name = "RAZON_SOCIAL")
     protected String razonSocial;
-    
+
     @Column(name = "IDENTIFICACION")
     protected String identificacion;
-    
+
     /**
      * Este campo se va a referir a la direccion del cliente
      */
     @Column(name = "DIRECCION")
     protected String direccion;
-    
+
     /**
      * Este campo se refiere a la direccion desde donde se esta facturando
      */
     @Column(name = "DIRECCION_ESTABLECIMIENTO")
     protected String direccionEstablecimiento;
-    
+
     @Column(name = "DIRECCION_MATRIZ")
     protected String direccionMatriz;
-    
+
     @Column(name = "TELEFONO")
     protected String telefono;
-    
+
     @Column(name = "ESTADO")
     protected String estado;
-    
+
     @Column(name = "OBLIGADO_LLEVAR_CONTABILIDAD")
     protected String obligadoLlevarContabilidad;
-    
+
     //Para saber el tipo de emision si fue electronica o manual
     @Column(name = "TIPO_FACTURACION")
     private String tipoFacturacion;
-    
+
     //Para grabar el codigo de los documentos que me va a sservir posiblemente en los ats
     @Column(name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
-    
+
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
-    
+
     /**
-     * La fecha de cuando fue autorizado el documento , información importante en especial para que puedan anular comprobante en el Sri
+     * La fecha de cuando fue autorizado el documento , información importante
+     * en especial para que puedan anular comprobante en el Sri
      */
     @Column(name = "FECHA_AUTORIZACION_SRI")
     protected Date fechaAutorizacionSri;
-    
+
     /**
-     * Tipo de ambiente de produccion o pruebas en el que fue emitido el comprobante
+     * Tipo de ambiente de produccion o pruebas en el que fue emitido el
+     * comprobante
      */
     @Column(name = "TIPO_AMBIENTE")
     protected String tipoAmbiente;
-    
+
     /**
-     * 
+     *
      */
     @JoinColumn(name = "SUCURSAL_EMPRESA_ID")
     protected Sucursal sucursalEmpresa;
-    
 
     public ComprobanteEntity() {
     }
@@ -158,14 +158,13 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         this.empresaId = empresaId;
     }*/
 
-    /*public Long getUsuarioId() {
+ /*public Long getUsuarioId() {
         return usuarioId;
     }
 
     public void setUsuarioId(Long usuarioId) {
         this.usuarioId = usuarioId;
     }*/
-
     public Usuario getUsuario() {
         return usuario;
     }
@@ -173,7 +172,6 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-    
 
     public Date getFechaCreacion() {
         return fechaCreacion;
@@ -190,8 +188,7 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     public void setFechaEmision(Date fechaEmision) {
         this.fechaEmision = fechaEmision;
     }
-    
-    
+
     public String getRazonSocial() {
         return razonSocial;
     }
@@ -231,7 +228,7 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     public void setEstado(String estado) {
         this.estado = estado;
     }
-    
+
     public void setEstadoEnum(ComprobanteEnumEstado estadoEnum) {
         this.estado = estadoEnum.getEstado();
     }
@@ -307,109 +304,91 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     public void setSucursalEmpresa(Sucursal sucursalEmpresa) {
         this.sucursalEmpresa = sucursalEmpresa;
     }
-    
-    
-    
-    
-    public void addDatoAdicional(T comprobante)
-    {
-        if(comprobante.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_OTRO))
-        {
+
+    public void addDatoAdicional(T comprobante) {
+        if (comprobante.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_OTRO)) {
             addDatoAdicionalAbstract(comprobante);
-        }
-        else
-        {
-            if(comprobante.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_CORREO))
-            {
+        } else {
+            if (comprobante.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_CORREO)) {
                 addDatosAdicionalCorreo(comprobante);
             }
         }
     }
-    
-    
+
     /**
-     * ==================> Metodos Personalizados <================================
-     * @return 
+     * ==================> Metodos Personalizados
+     * <================================ @return
      */
-    
-    protected void addDatosAdicionalCorreo(T comprobanteAdicional)
-    {
-        
+    protected void addDatosAdicionalCorreo(T comprobanteAdicional) {
+
         //if (this.datosAdicionales == null) {
         //    this.datosAdicionales = new ArrayList<FacturaAdicional>();
         //}
-        
         //Buscar si existe un correo anterior para nombrar de forma secuencial
-        Integer numeroMaximo=0;
-        if(getDatosAdicionalesComprobante()!=null)
-        {
-            for (ComprobanteAdicional datoAdicional : getDatosAdicionalesComprobante()) {            
-                if(datoAdicional.getTipo().equals(comprobanteAdicional.getTipo()))
-                {
-                    if(datoAdicional.getNumero()>numeroMaximo)
-                    {
-                        numeroMaximo=datoAdicional.getNumero();
+        Integer numeroMaximo = 0;
+        if (getDatosAdicionalesComprobante() != null) {
+            for (ComprobanteAdicional datoAdicional : getDatosAdicionalesComprobante()) {
+                if (datoAdicional.getTipo().equals(comprobanteAdicional.getTipo())) {
+                    if (datoAdicional.getNumero() > numeroMaximo) {
+                        numeroMaximo = datoAdicional.getNumero();
                     }
                 }
             }
         }
-        
-        comprobanteAdicional.setNumero(numeroMaximo+1);
+
+        comprobanteAdicional.setNumero(numeroMaximo + 1);
         //Modificar el nombre si el correo es mas de 2
-        if(comprobanteAdicional.getNumero()>1)
-        {
-            comprobanteAdicional.setCampo(comprobanteAdicional.getCampo()+" "+comprobanteAdicional.getNumero());
+        if (comprobanteAdicional.getNumero() > 1) {
+            comprobanteAdicional.setCampo(comprobanteAdicional.getCampo() + " " + comprobanteAdicional.getNumero());
         }
 
         addDatoAdicionalAbstract(comprobanteAdicional);
-    
+
     }
-    
-    public ComprobanteAdicional obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum campo)
-    {
-        if(getDatosAdicionalesComprobante()!=null)
-        {
+
+    public ComprobanteAdicional obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum campo) {
+        if (getDatosAdicionalesComprobante() != null) {
             for (ComprobanteAdicional comprobanteAdicional : getDatosAdicionalesComprobante()) {
-                if(comprobanteAdicional.getCampo().equals(campo.getNombre()))
-                {
+                if (comprobanteAdicional.getCampo().equals(campo.getNombre())) {
                     return comprobanteAdicional;
                 }
             }
         }
         return null;
     }
-    
+
     /**
-     * Elimina datos adicionales de la factura como correos o codigos de enlace de los documentos
+     * Elimina datos adicionales de la factura como correos o codigos de enlace
+     * de los documentos
      */
-    public void eliminarTodosDatosAdicionales()
-    {
-        if(getDatosAdicionalesComprobante()!=null)
-        {
+    public void eliminarTodosDatosAdicionales() {
+        if (getDatosAdicionalesComprobante() != null) {
             getDatosAdicionalesComprobante().clear();
         }
     }
-    
-    
-    
-    public String getPreimpreso()
-    {
-       return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento.toString(),3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.toString(),3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
+
+    public String getPreimpreso() {
+        
+        //TODO: Este artificio utilizo porque genera para imprimir presupuestos desde la interfaz web
+        if (puntoEmision == null) {
+            puntoEmision = 0;
+        }
+
+        return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento.toString(), 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.toString(), 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(secuencial + "", 9, "0");
     }
-    
+
     public DocumentoEnum getCodigoDocumentoEnum() {
         return DocumentoEnum.obtenerDocumentoPorCodigo(codigoDocumento);
     }
 
-    
     public TipoEmisionEnum getTipoFacturacionEnum() {
         return TipoEmisionEnum.getEnumByEstado(tipoFacturacion);
     }
-    
+
     public ComprobanteEntity.ComprobanteEnumEstado getEstadoEnum() {
         return ComprobanteEntity.ComprobanteEnumEstado.getEnum(estado);
     }
-    
+
     public enum ComprobanteEnumEstado {
         /**
          * Cuando la factura se grabo y se autorizo en el SRI y no aplica
@@ -422,19 +401,21 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
          */
         SIN_AUTORIZAR("S", "Sin Autorizar"),
         /**
-         * Estado eliminado solo permitido si el comprobante no fue autorizado , en especial para las pruebas o casos que toque volver a generar el comprobante porque estaba mal estructurado
+         * Estado eliminado solo permitido si el comprobante no fue autorizado ,
+         * en especial para las pruebas o casos que toque volver a generar el
+         * comprobante porque estaba mal estructurado
          */
         ELIMINADO("E", "Eliminado"),
         /**
-         * Este estado debere manejarse para saber que una factura autorizada fue eliminada para el caso  cuando se elimine desde el portal del SRI
+         * Este estado debere manejarse para saber que una factura autorizada
+         * fue eliminada para el caso cuando se elimine desde el portal del SRI
          */
-        ELIMINADO_SRI("N","Anulado Sri"),
-                /**
-         * Estado auxiliar para decir al sistema que tiene buscar autorizados y anulados por el Sri
+        ELIMINADO_SRI("N", "Anulado Sri"),
+        /**
+         * Estado auxiliar para decir al sistema que tiene buscar autorizados y
+         * anulados por el Sri
          */
         TODOS_SRI("T", "Todos Sri");
-        
-        
 
         private ComprobanteEnumEstado(String estado, String nombre) {
             this.estado = estado;
@@ -474,25 +455,26 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         public String toString() {
             return nombre;
         }
-        
-        
+
     }
-    
+
     /**
-     * Enumerado que me sirve para saber el tipo de emision si fue electronica o manual
+     * Enumerado que me sirve para saber el tipo de emision si fue electronica o
+     * manual
      */
     public enum TipoEmisionEnum {
-        ELECTRONICA("e","E", "Electrónica"),
-        NORMAL("m","F","Manual");
+        ELECTRONICA("e", "E", "Electrónica"),
+        NORMAL("m", "F", "Manual");
 
-        private TipoEmisionEnum(String letra,String codigoSri, String nombre) {
+        private TipoEmisionEnum(String letra, String codigoSri, String nombre) {
             this.letra = letra;
             this.nombre = nombre;
-            this.codigoSri=codigoSri;
+            this.codigoSri = codigoSri;
         }
 
         /**
-         * Este va a ser el codigo principal que voy a grabar en la base de datos para todo los casos
+         * Este va a ser el codigo principal que voy a grabar en la base de
+         * datos para todo los casos
          */
         private String letra;
         private String nombre;
@@ -509,8 +491,6 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         public String getCodigoSri() {
             return codigoSri;
         }
-        
-        
 
         public static TipoEmisionEnum getEnumByEstado(String estado) {
 
@@ -521,7 +501,7 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
             }
             return null;
         }
-        
+
         public static TipoEmisionEnum getEnumByCodigoSri(String codigoSri) {
 
             for (TipoEmisionEnum enumerador : TipoEmisionEnum.values()) {
@@ -531,7 +511,7 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
             }
             return null;
         }
-        
+
         public static TipoEmisionEnum getEnumByLetra(String letra) {
 
             for (TipoEmisionEnum enumerador : TipoEmisionEnum.values()) {
@@ -548,15 +528,15 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         }
 
     }
-    
-    public enum TipoAmbienteEnum
-    {
-        PRODUCCION("p","PRODUCCIÓN","Producción"),
-        PRUEBAS("b","PRUEBAS","Pruebas");
-        
+
+    public enum TipoAmbienteEnum {
+        PRODUCCION("p", "PRODUCCIÓN", "Producción"),
+        PRUEBAS("b", "PRUEBAS", "Pruebas");
+
         private String letra;
         /**
-         * Se refiere al nombre que me devuelve en el documento de autorizado del Sri
+         * Se refiere al nombre que me devuelve en el documento de autorizado
+         * del Sri
          */
         private String nombreSRI;
         private String nombre;
@@ -578,21 +558,17 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         public String getNombre() {
             return nombre;
         }
-        
-        public static TipoAmbienteEnum buscarPorNombreSri(String nombreSri)
-        {
+
+        public static TipoAmbienteEnum buscarPorNombreSri(String nombreSri) {
             for (TipoAmbienteEnum enumerador : TipoAmbienteEnum.values()) {
-                
-                if(enumerador.getNombreSRI().equals(nombreSri))
-                {
+
+                if (enumerador.getNombreSRI().equals(nombreSri)) {
                     return enumerador;
                 }
             }
             return null;
         }
-        
-        
-        
+
     }
-    
+
 }

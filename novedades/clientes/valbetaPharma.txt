@@ -1,0 +1,3 @@
+Revisar que una compra al pasar a ingreso de mercaderia tiene problemas
+al parecer este se genera porque ingreso varias compras de lo mismo
+( Emitir cuando ya existe ingresado una compra como la misma secuencial para evitar este problema)

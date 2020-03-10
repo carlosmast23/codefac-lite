@@ -155,7 +155,7 @@ public class LoginMb implements Serializable {
     }
 
     public void setSessionMb(SessionMb sessionMb) {
-        this.sessionMb = sessionMb;
+        this.sessionMb = sessionMb; 
     }
 
     public List<Sucursal> getSucursales() {
