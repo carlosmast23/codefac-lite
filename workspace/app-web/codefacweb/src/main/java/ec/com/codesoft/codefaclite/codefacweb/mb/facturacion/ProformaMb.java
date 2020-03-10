@@ -208,7 +208,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             }
 
             setearDatosAdicionales();
-            ServiceFactory.getFactory().getFacturacionServiceIf().editar(factura);
+            factura=ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura);
             mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.EDITADO);
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);

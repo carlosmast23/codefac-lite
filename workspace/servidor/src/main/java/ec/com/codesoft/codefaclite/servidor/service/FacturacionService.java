@@ -148,6 +148,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return proforma;
     }
     
+    public Factura editarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                setearDatosCliente(proforma);
+                entityManager.merge(proforma);
+            }
+        });
+        return proforma;
+    }
+    
     /**
      * Metodo que permite setear los datos del cliente en la venta para poder datos estaticos para realizar control de la venta
      * @param venta 

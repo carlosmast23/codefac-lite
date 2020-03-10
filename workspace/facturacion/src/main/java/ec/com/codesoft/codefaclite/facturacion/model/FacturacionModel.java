@@ -1479,7 +1479,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         try {
             setearValoresDefaultFactura();
-            ServiceFactory.getFactory().getFacturacionServiceIf().editar(factura);
+            ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura);
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
             
         } catch (RemoteException ex) {
