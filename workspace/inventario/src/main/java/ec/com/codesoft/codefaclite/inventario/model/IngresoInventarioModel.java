@@ -212,7 +212,8 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
     private void listenerBotones() {
         getBtnBuscarCompraPendiente().addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) 
+            {
                 CompraBusquedaDialogo buscarBusquedaDialogo = new CompraBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);

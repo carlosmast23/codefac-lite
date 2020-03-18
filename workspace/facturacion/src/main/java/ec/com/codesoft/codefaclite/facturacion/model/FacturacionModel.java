@@ -1269,7 +1269,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else if(puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
                 {
-                    facturaManual(documentoEnum);
+                    facturaManual(documentoEnum,true);
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 }
                 
@@ -1375,13 +1375,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //imprimirComprobanteVenta(factura);
     }
     
-    private void facturaManual(DocumentoEnum documentoEnum) throws ServicioCodefacException
+    private void facturaManual(DocumentoEnum documentoEnum,Boolean activarConfiguracionesImpresion) throws ServicioCodefacException
     {
-            
         try 
         {
-            
-            
             InputStream reporteOriginal = null;
             if(documentoEnum.NOTA_VENTA_INTERNA.equals(documentoEnum))
             {                   
@@ -1423,7 +1420,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 detalles.add(detalle);
             }
             
-            ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa");
+            ConfiguracionImpresoraEnum configuracion = null;
+            if (activarConfiguracionesImpresion) {
+                configuracion = obtenerConfiguracionImpresora();
+            }
+            
+            ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa",configuracion);
             
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1465,6 +1467,49 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             String ivaStr = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
             parametros.put("iva", ivaStr);
         
+        }
+        
+        //Agregar forma de pago
+        parametros.putAll(getMapFormaPagoReporteFacturaFisica(factura));
+        
+        return parametros;
+    }
+    
+    /**
+     * TODO: Parametrizar los formatos de las formas de pago porque ahorita esta quemado en el codigo
+     * TODO: Ver si toda esta parte la puede construir el servidor
+     * @param venta
+     * @return 
+     */
+    private Map<String,Object> getMapFormaPagoReporteFacturaFisica(Factura venta)
+    {
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        if(venta.getFormaPagos()!=null && venta.getFormaPagos().size()>0)
+        {
+            FormaPago formaPago=venta.getFormaPagos().get(0);
+            if(formaPago.getSriFormaPago().getAlias().equals("Efectivo"))
+            {
+                parametros.put("formaPagoEfectivo","X");
+            
+            }else if(formaPago.getSriFormaPago().getAlias().equals("Otros"))
+            {
+                parametros.put("formaPagoCheque","X");
+                
+            }else if(formaPago.getSriFormaPago().getAlias().equals("Dinero electrónico"))
+            {
+                parametros.put("formaPagoDineroElec","X");
+            }else if(formaPago.getSriFormaPago().getAlias().equals("Tarjeta crédito"))
+            {
+                parametros.put("formaPagoTarjetaCred","X");
+            }else
+            {
+                parametros.put("formaPagoOtros","X");
+            }
+            
+        }
+        else
+        {
+            parametros.put("formaPagoEfectivo","X");
         }
         return parametros;
     }
@@ -1587,7 +1632,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                      * Imprimir facturas manuales
                      */
                     try {
-                        facturaManual(factura.getCodigoDocumentoEnum());
+                        facturaManual(factura.getCodigoDocumentoEnum(),false);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }

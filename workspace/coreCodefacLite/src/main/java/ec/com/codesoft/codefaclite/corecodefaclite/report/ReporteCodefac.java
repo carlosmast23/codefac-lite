@@ -93,14 +93,14 @@ public class ReporteCodefac {
         }
     }
     
-    public static void generarReporteInternalFrame(InputStream pathReporte,Map parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte)
+    public static void generarReporteInternalFrame(InputStream pathReporte,Map parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,ConfiguracionImpresoraEnum configuracionImpresora)
     {
         try {
             JasperReport report =JasperCompileManager.compileReport(pathReporte);
             JRBeanCollectionDataSource dataReport= new JRBeanCollectionDataSource(datos);
             JasperPrint print =JasperFillManager.fillReport(report, parametros,dataReport);
             //JasperViewer.viewReport(print,false);
-            panelPadre.crearReportePantalla(print,tituloReporte);
+            panelPadre.crearReportePantalla(print,tituloReporte,configuracionImpresora);
         } catch (JRException ex) {
             Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }

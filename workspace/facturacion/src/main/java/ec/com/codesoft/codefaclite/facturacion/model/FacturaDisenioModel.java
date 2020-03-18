@@ -176,7 +176,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         detalle.setValorUnitario("10");
         detalles.add(detalle);
 
-        ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa");
+        ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa",null);
 
     }
 

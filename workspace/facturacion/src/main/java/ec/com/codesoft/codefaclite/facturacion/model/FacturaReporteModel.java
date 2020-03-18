@@ -149,27 +149,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
             
             controladorReporte.setPuntoEmision(puntoEmisionReporte);
             
-            /*controladorReporte = new ControladorReporteFactura(
-                    persona,
-                    fechaInicio,
-                    fechaFin,
-                    estadoFactura,
-                    filtrarReferidos,
-                    referido,
-                    getChkReporteAgrupadoReferido().isSelected(),
-                    getChkAfectaNotaCredito().isSelected(),
-                    documentoConsultaEnum);*/
-            
             controladorReporte.generarReporte();
             data=controladorReporte.getData();
-            //mapTotales=controladorReporte.getMapTotales();
             
-            //if (tabla) 
-            //{
-                imprimirTabla();      
-                
-                
-            //}
+            imprimirTabla();      
 
     }
     
@@ -207,6 +190,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     
                     case NORMAL:
                         controladorReporte.obtenerReportePdf(panelPadre);
+                        break;
+                        
+                    case AGRUPADO_POR_PRODUCTO:
+                        controladorReporte.obtenerReporteAgrupadoPorProducto(panelPadre);
                         break;
                 }
                 
@@ -612,7 +599,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
     public enum TipoReporteEnum
     {
         NORMAL("Normal"),
-        AGRUPADO_POR_CATEGORIA("Agrupado por punto de emisión");
+        AGRUPADO_POR_CATEGORIA("Agrupado por punto de emisión"),
+        AGRUPADO_POR_PRODUCTO("Agrupado por producto");
 
         private TipoReporteEnum(String nombre) {
             this.nombre = nombre;

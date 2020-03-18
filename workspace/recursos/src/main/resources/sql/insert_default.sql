@@ -146,6 +146,11 @@ INSERT INTO COMPONENTE_COMPROBANTE_FISICO (BANDA_COMPROBANTE_ID,NOMBRE,UUID,X,Y,
           (3,'telefono_pie_pagina','1caa08b5-5b51-4a2d-8265-0d21118832bf',18,51,100,20,10,'n','s'),
           (3,'correoElectronico_pie_pagina','63fe999c-ba9e-46ef-9d95-81e16d44e3b5',18,71,100,20,10,'n','s'),
           (3,'subtotalAntesImpuestos','53b5eba0-0107-4d3b-9633-4bfddc42a777',227,31,127,20,10,'n','s'),
+          (3,'formaPagoEfectivo','7884b397-66d7-481f-bb9c-5b797e66cf6c',172,21,69,15,10,'n','s'),
+          (3,'formaPagoCheque','1e3ff100-b5f3-4f41-8546-a4bab11c618e',172,36,69,15,10,'n','s'),
+          (3,'formaPagoDineroElec','a320d71f-4e5d-42a1-943b-c67bb2520ea6',172,51,69,15,10,'n','s'),
+          (3,'formaPagoTarjetaCred','0061e225-2555-43ea-96b1-5a3a5990c0a4',172,66,69,15,10,'n','s'),
+          (3,'formaPagoOtros','773022d8-63ad-475c-adb6-1bc251ce1fd4',172,81,69,15,10,'n','s'),
 
 
 

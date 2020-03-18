@@ -58,6 +58,12 @@ public class ReporteFacturaData implements ExcelDatosInterface {
      */
     protected String fechaAutorizacion;
 
+    /**
+     * Estos 2 productos voy a utilizar cuando necesite un reporte agrupado por productos
+     */
+    protected String codigoProducto;
+    protected String nombreProducto;
+    
     public ReporteFacturaData() {
     }
     
@@ -296,6 +302,22 @@ public class ReporteFacturaData implements ExcelDatosInterface {
 
     public void setCosto(String costo) {
         this.costo = costo;
+    }
+
+    public String getCodigoProducto() {
+        return codigoProducto;
+    }
+
+    public void setCodigoProducto(String codigoProducto) {
+        this.codigoProducto = codigoProducto;
+    }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
     
     

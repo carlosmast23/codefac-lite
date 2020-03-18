@@ -248,6 +248,7 @@ public class ControladorReporteFactura {
                         reporteData.setVendedor((factura.getVendedor() != null) ? factura.getVendedor().getNombresCompletos() : "");
                         reporteData.setCosto((mapCostos.get(factura)!=null)?mapCostos.get(factura).toString():"0");
                         
+                        
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
                         data.add(reporteData);
 
@@ -458,6 +459,12 @@ public class ControladorReporteFactura {
         
     }
     
+    public void obtenerReporteAgrupadoPorProducto(InterfazComunicacionPanel panelPadre)
+    {
+        String titulo = "Reporte Ventas Agrupado por Punto de Emisión";
+        InputStream path=getReportePuntosEmision();
+    }
+    
     /**
      * Metodo que me permite organizar la lista por 
      * @param reporteData 
@@ -482,6 +489,11 @@ public class ControladorReporteFactura {
     protected InputStream getReportePuntosEmision()
     {
         return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_ventas_punto_emision.jrxml");
+    }
+    
+    protected InputStream getReportePorProductos()
+    {//reporte_factura_por_producto
+        return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_factura_por_producto.jrxml");
     }
    
 

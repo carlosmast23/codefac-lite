@@ -301,6 +301,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @return 
      */
     private boolean validacionPersonalizadaPorModulos(FacturaDetalle facturaDetalle) {
+        
+        if(facturaDetalle==null)
+        {
+            mostrarMensaje(new CodefacMsj("Advertencia","Por favor seleccionar un producto para agregar al detalle de la factura",DialogoCodefac.MENSAJE_ADVERTENCIA));
+            //DialogoCodefac.mensaje("Por favor seleccionar un producto para agregar al detalle de la factura",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
         TipoDocumentoEnum tipoDocEnum=facturaDetalle.getTipoDocumentoEnum();
         BigDecimal cantidad = facturaDetalle.getCantidad();
         BigDecimal valorUnitario = facturaDetalle.getPrecioUnitario();
