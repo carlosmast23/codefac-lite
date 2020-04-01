@@ -44,7 +44,7 @@ create table SRI_RETENCION_RENTA
     RETENCION_ID BIGINT,
     NOMBRE varchar(256),
     CODIGO_SRI varchar(4),
-    PORCENTAJE integer,
+    PORCENTAJE decimal(13,4),
     DESCRIPCION varchar(512),
     FECHA_INICIO date,
     FECHA_FIN date,
