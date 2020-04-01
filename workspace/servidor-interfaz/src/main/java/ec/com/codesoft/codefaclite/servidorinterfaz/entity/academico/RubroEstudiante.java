@@ -209,6 +209,12 @@ public class RubroEstudiante implements Serializable{
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return this.getRubroNivel().getNombre()+"["+this.valor+"]";
+    }
+    
     
     
     public enum FacturacionEstadoEnum {

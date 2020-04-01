@@ -744,7 +744,7 @@ public class Main {
             ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,empresa);
             //Si no existe el parametro seteo la ruta por defecto que va a ser el directorio del usuario para no tener problemas de permisos
             if (parametroDirectorioRecursos == null || parametroDirectorioRecursos.getValor().equals("")) {
-                String directorioUsuario = System.getProperty("user.home") + "/codefacRecursos";
+                String directorioUsuario = System.getProperty("user.home") + "/codefacRecursos"; 
                 
                 if (parametroDirectorioRecursos == null) {
                     //Abrir un dialogo para preguntar si desea cambiar de ubicacion de la carpeta de recursos

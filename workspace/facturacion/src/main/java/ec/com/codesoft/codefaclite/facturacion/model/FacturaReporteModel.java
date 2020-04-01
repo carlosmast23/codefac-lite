@@ -149,6 +149,12 @@ public class FacturaReporteModel extends FacturaReportePanel {
             
             controladorReporte.setPuntoEmision(puntoEmisionReporte);
             
+            //Cuando se quiere agrupar por produto activo la opcion de Agrupado por Producto
+            if(getCmbTipoReporte().getSelectedItem().equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO))
+            {
+                controladorReporte.setReporteConDetallesFactura(true);
+            }
+            
             controladorReporte.generarReporte();
             data=controladorReporte.getData();
             

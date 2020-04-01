@@ -235,6 +235,10 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         return total.add(valorIce);
     }
 
+    /**
+     * Valor final del producto incluido impuestos
+     * @return 
+     */
     public BigDecimal calcularTotalFinal() {
         return this.total.add(iva).add(this.valorIce);
     }

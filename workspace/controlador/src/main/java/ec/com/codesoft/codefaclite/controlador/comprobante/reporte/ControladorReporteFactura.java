@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
@@ -64,6 +65,11 @@ public class ControladorReporteFactura {
     private Boolean afectarNotaCredito;
     private DocumentoEnum documentoConsultaEnum;
     
+    /**
+     * Parametros que me permite desglosar el reporte
+     */
+    private Boolean reporteConDetallesFactura;
+    
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     //private Map<String,BigDecimal> mapTotales;
     
@@ -79,6 +85,7 @@ public class ControladorReporteFactura {
     public ControladorReporteFactura(Empresa empresa) {
         this.empresa=empresa;
         this.data = new ArrayList<ReporteFacturaData>();
+        this.reporteConDetallesFactura=false;
     }
     
     
@@ -97,8 +104,12 @@ public class ControladorReporteFactura {
         //this.mapTotales = new HashMap<String,BigDecimal>();
         this.data = new ArrayList<ReporteFacturaData>();
         this.sucursal=sucursal;
+        this.reporteConDetallesFactura=false;
     }
     
+    /**
+     * Construir los objetos de los totales para utilizar en las sumatorias
+     */
     private void buildMapTotales()
     {
         total=new TotalSumatoria();
@@ -112,16 +123,29 @@ public class ControladorReporteFactura {
         try {
             buildMapTotales();
             FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
+            /**
+             * ===============================================================
+             *              OBTENER TODAS LAS FACTURAS POR FILTROS
+             * ===============================================================
+             */
             List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,sucursal);
             /**
+             * ===============================================================
+             *           AGREGAR EL COSTO DE LA VENTA DISPONIBLE EN EL EXCEL
+             * ===============================================================
              * TODO: Este metodo solo es temporal hasta ver una forma mucha mas optima
              */
             Map<Factura,BigDecimal> mapCostos=fs.obtenerCostoFacturas(datafact);
-            //DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
+            
+            /**
+             * =====================================================================
+             *          SERVICIO PARA BUSCAR LAS NOTAS DE CREDITO SEGUN LOS FILTROS
+             * =====================================================================
+             */
             NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();
             List<NotaCredito> dataNotCre = null;
             
-            /**
+            /**             
              * Todo: Analizar si las notas de credito se deben obtener por cada sucursal de la persona
              */
             if (documentoConsultaEnum.equals(DocumentoEnum.FACTURA) || documentoConsultaEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA)) {
@@ -130,6 +154,7 @@ public class ControladorReporteFactura {
                 dataNotCre = nc.obtenerNotasReporte((persona!=null)?persona.getPersona():null, fechaInicio, fechaFin, estadoFactura,empresa);
             }
             
+            //Array para obtener los datos consultados para los reportes
             data = new ArrayList<ReporteFacturaData>();
             
             switch (documentoConsultaEnum) {
@@ -137,7 +162,7 @@ public class ControladorReporteFactura {
                 case NOTA_VENTA_INTERNA:
                 case FACTURA:
                     for (Factura factura : datafact) {
-                        
+                        //Valores iniciales por factura
                         BigDecimal totalMenosNotaCredito = BigDecimal.ZERO;
                         BigDecimal totalNotaCredito = BigDecimal.ZERO;
                         Boolean calcularTotalesSinNotasCredito = false;
@@ -155,7 +180,11 @@ public class ControladorReporteFactura {
                         total.addDescuentoconImpuesto(descuentoConImpuestos);
                         total.addDescuentoSinImpuesto(descuentoSinImpuestos);   
                         
-                        //Sumar solo si esta buscando todos los comprobantes del Sri y esta eliminado en el Sri
+                        /**
+                         * =============================================================
+                         *   SUMAR LOS VALORES DE LOS COMPROBANTES ELIMINADOS EN EL SRI
+                         * =============================================================
+                         */
                         if(estadoEnum.equals(estadoEnum.ELIMINADO_SRI) && estadoFactura.equals(estadoEnum.TODOS_SRI))
                         {
                             totalAnulados.addSubtotalSinImpuesto(factura.getSubtotalSinImpuestos());
@@ -165,18 +194,20 @@ public class ControladorReporteFactura {
                             totalAnulados.addDescuentoSinImpuesto(descuentoSinImpuestos);                            
                         }
                                                 
-
+                        /**
+                         * ========================================================================
+                         *  BUSCAR LOS VALORES DE LAS NOTAS DE CREDITO QUE AFECTAN A LA FACTURA
+                         *  Nota: Solo si activa si el filtro lo requiere
+                         * ========================================================================
+                         */
                         if (afectarNotaCredito) {                        
                             NotaCredito notaCredito = verificarPorFactura(factura, dataNotCre);
-                            if (notaCredito != null) {
-                                //System.out.println(notaCredito.getPreimpreso());
+                            if (notaCredito != null) {                                
                                 //Calculo de los valores cuando existe una nota de credito
                                 preimpresoNotaCreditoAfecta = notaCredito.getPreimpreso();
                                 totalNotaCredito = notaCredito.getTotal();
                                 totalMenosNotaCredito = factura.getTotal().subtract(notaCredito.getTotal());
                                 
-                                
-
                                 //Solo hacer la sumatoria de los valores de las notas de credito
                                 //TODO: Ver si se puede optimizar para sumar todo y luego restar de las notas de credito
                                 totalNotasCredito.addSubtotalSinImpuesto(notaCredito.getSubtotalCero());
@@ -197,9 +228,13 @@ public class ControladorReporteFactura {
                         //Hacer el calculo normal sin notas de credito
                         if (calcularTotalesSinNotasCredito) {
                             totalMenosNotaCredito = factura.getTotal();
-                            //ComprobanteEntity.ComprobanteEnumEstado estadoEnum= factura.getEstadoEnum();
                         }
                         
+                        /**
+                         * =====================================================
+                         *       CALCULO ADICIONAL PARA LAS COMISIONES
+                         * =====================================================
+                         */
                         BigDecimal valorComision = BigDecimal.ZERO;
                         if (factura.getReferido() != null) {
                             BigDecimal porcentajeComision = (factura.getReferido().getContactoClientePorcentaje() != null) ? factura.getReferido().getContactoClientePorcentaje() : BigDecimal.ZERO;
@@ -217,6 +252,11 @@ public class ControladorReporteFactura {
                             }
                         }
                         
+                        /**
+                         * ======================================================
+                         *      CONSTRUIR EL MODELO PARA EL REPORTE
+                         * ======================================================
+                         */
                         ReporteFacturaData reporteData = new ReporteFacturaData(
                                 factura.getPreimpreso(),
                                 dateFormat.format(factura.getFechaEmision()),
@@ -243,15 +283,21 @@ public class ControladorReporteFactura {
                                 factura.getPuntoEmision().toString()
                         );
                         
-                        //UtilidadesFecha.formatoDiaMesAño(fechaFin);
+                        //Agregar datos adicionales al modelo de la factura
                         reporteData.setFechaMaximaPago((factura.getFechaVencimiento() != null) ? UtilidadesFecha.formatoDiaMesAño(factura.getFechaVencimiento()) : "");
                         reporteData.setVendedor((factura.getVendedor() != null) ? factura.getVendedor().getNombresCompletos() : "");
-                        reporteData.setCosto((mapCostos.get(factura)!=null)?mapCostos.get(factura).toString():"0");
-                        
-                        
+                        reporteData.setCosto((mapCostos.get(factura)!=null)?mapCostos.get(factura).toString():"0");                                                
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
-                        data.add(reporteData);
-
+                        
+                        if(reporteConDetallesFactura)
+                        {
+                            List<ReporteFacturaData> respuesta=convertirDatosReportePorProducto(factura, reporteData);
+                            data.addAll(respuesta);
+                        }
+                        else
+                        {
+                            data.add(reporteData);
+                        }
                         
                     }
                     
@@ -308,7 +354,6 @@ public class ControladorReporteFactura {
                         totalNotasCredito.addDescuentoconImpuesto(nota.getDescuentoImpuestos());
                         totalNotasCredito.addDescuentoSinImpuesto(nota.getDescuentoSinImpuestos());
                         //TODO: ver si agregar el descuento
-                        //acumdesc = acumdesc.add(nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()));
                         
                     }
                     
@@ -322,25 +367,42 @@ public class ControladorReporteFactura {
         }
 
     }
-    /*
-    private void agregarValorTotal(String nombre, BigDecimal valor,ComprobanteEntity.ComprobanteEnumEstado estado)                
+    
+    /**
+     * Metodo que permite convertir el dato de reporte original para separar por detalles para el reporte de productos
+     * @param factura
+     * @param reporteData 
+     */
+    private List<ReporteFacturaData> convertirDatosReportePorProducto(Factura factura,ReporteFacturaData reporteData)
     {
-        if(estadoFactura.equals(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI))
-        {
-            if(estado.equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI))
+        List<ReporteFacturaData> resultados=new ArrayList<ReporteFacturaData>();
+        try {            
+            for (FacturaDetalle detalle : factura.getDetalles()) 
             {
-                nombre+="Anulado";
+                //detalle.getIva()
+                ReporteFacturaData dataFacturaCopia=(ReporteFacturaData) reporteData.clone();
+                dataFacturaCopia.setCantidad(detalle.getCantidad()+"");
+                dataFacturaCopia.setDescFactura(detalle.getDescuento()+"");
+                dataFacturaCopia.setIvaDoceFactura(detalle.getIva()+"");
+                dataFacturaCopia.setTotalFactura(detalle.getPrecioUnitario()+"");
+                if(!factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.SIN_ANULAR))
+                {
+                    dataFacturaCopia.setTotalFinal(BigDecimal.ZERO+"");
+                }
+                else
+                {
+                    dataFacturaCopia.setTotalFinal(detalle.calcularTotalFinal()+"");
+                }
+                dataFacturaCopia.setNombreProducto(detalle.getDescripcion());
+                dataFacturaCopia.setCodigoProducto(detalle.getCodigoPrincipal());
+                resultados.add(dataFacturaCopia);
             }
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return resultados;
         
-        BigDecimal valorTmp = mapTotales.get(nombre);
-        if (valorTmp == null) {
-            mapTotales.put(nombre, valor);
-        } else {
-            valorTmp = valorTmp.add(valor);
-            mapTotales.put(nombre, valorTmp);
-        }
-    }*/
+    }
     
     private NotaCredito verificarPorFactura(Factura factura, List<NotaCredito> notasCredito) {
         for (NotaCredito notaCredito : notasCredito) {
@@ -461,8 +523,29 @@ public class ControladorReporteFactura {
     
     public void obtenerReporteAgrupadoPorProducto(InterfazComunicacionPanel panelPadre)
     {
-        String titulo = "Reporte Ventas Agrupado por Punto de Emisión";
-        InputStream path=getReportePuntosEmision();
+        String titulo = "Reporte Ventas Agrupado por Producto";
+        InputStream path=getReportePorProductos();
+        ordenarListaPorProducto(data);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+    }
+    
+    /**
+     * Metodo que permite ordenar la lista de resultados por productos
+     * @param reporteData 
+     */
+    private void ordenarListaPorProducto(List<ReporteFacturaData> reporteData)
+    {
+        Collections.sort(reporteData,new Comparator<ReporteFacturaData>(){
+            public int compare(ReporteFacturaData obj1, ReporteFacturaData obj2) 
+            {
+                int comparacion=obj1.getNombreProducto().compareTo(obj2.getNombreProducto());
+                if(comparacion==0)
+                {
+                    comparacion=obj1.getCodigoProducto().compareTo(obj2.getCodigoProducto());
+                }
+                return comparacion;
+            }
+        });
     }
     
     /**
@@ -769,6 +852,14 @@ public class ControladorReporteFactura {
 
     public void setSucursal(Sucursal sucursal) {
         this.sucursal = sucursal;
+    }
+
+    public Boolean getReporteConDetallesFactura() {
+        return reporteConDetallesFactura;
+    }
+
+    public void setReporteConDetallesFactura(Boolean reporteConDetallesFactura) {
+        this.reporteConDetallesFactura = reporteConDetallesFactura;
     }
     
     

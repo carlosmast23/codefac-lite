@@ -162,7 +162,7 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
 
     public List<RubroEstudiante> getRubrosActivosPorEstudiante(EstudianteInscrito estudianteInscrito) throws RemoteException {
 
-        String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estado!=?1 and u.estado!=?2 and u.estudianteInscrito=?3  ";
+        String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estado!=?1 and u.estado!=?2 and u.estudianteInscrito=?3 and u.saldo>0";
         Query query = getEntityManager().createQuery(queryString);
 
         query.setParameter(1, GeneralEnumEstado.ANULADO.getEstado());

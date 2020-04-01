@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author CodesoftDesarrollo
  */
-public class ReporteFacturaData implements ExcelDatosInterface {
+public class ReporteFacturaData implements ExcelDatosInterface,Cloneable  {
     
     public Boolean mostrarReferido=false;
 
@@ -63,6 +63,7 @@ public class ReporteFacturaData implements ExcelDatosInterface {
      */
     protected String codigoProducto;
     protected String nombreProducto;
+    protected String cantidad;
     
     public ReporteFacturaData() {
     }
@@ -319,9 +320,21 @@ public class ReporteFacturaData implements ExcelDatosInterface {
     public void setNombreProducto(String nombreProducto) {
         this.nombreProducto = nombreProducto;
     }
+
+    public String getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(String cantidad) {
+        this.cantidad = cantidad;
+    }
     
     
-    
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
     
 
     @Override

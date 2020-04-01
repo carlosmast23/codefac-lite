@@ -2034,7 +2034,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                      */
                     ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(tipoReferenciaEnum,detalle.getReferenciaId());
                     if (respuesta.objecto != null) {
-                        fila.add(((Producto)respuesta.objecto).getCodigoPersonalizado());
+                        switch(respuesta.tipoDocumentoEnum)
+                        {
+                            case LIBRE:
+                            case INVENTARIO:
+                                fila.add(((Producto)respuesta.objecto).getCodigoPersonalizado());
+                                break;
+                            case ACADEMICO:
+                                fila.add(((RubroEstudiante)respuesta.objecto).getId()+"");
+                                break;
+                        }
+                        
                     } else {
                         fila.add("Sin Código");
                     }

@@ -72,6 +72,12 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         return getFacade().getRubrosActivosPorEstudianteYEstadoFacturado(estadoFacturadoEnum);
     }
 
+    /**
+     * Obtener rubros activos por estudiante que aun no han sido pagados
+     * @param estudianteInscrito
+     * @return
+     * @throws RemoteException 
+     */
     public List<RubroEstudiante> obtenerRubrosActivosPorEstudiantesInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException {
         return getFacade().getRubrosActivosPorEstudiante(estudianteInscrito);
     }

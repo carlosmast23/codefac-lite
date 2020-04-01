@@ -285,14 +285,18 @@ public class MatriculaModel extends MatriculaPanel {
                 else
                 {
                     //Verifica que el estudiante inscrito no tenga relaciones con los rubros para eliminar
-                    if(verificarEliminarMatriculaEstudianteGrabado(estudianteInscrito))
+                    List<RubroEstudiante> rubroEstudiante=verificarEliminarMatriculaEstudianteGrabado(estudianteInscrito);
+                    if(rubroEstudiante.size()==0)
                     {
                         eliminarMatriculaEstudiante(estudianteInscrito);
                         estudiantesEliminar.add(estudianteInscrito);
                     }
                     else //Si tiene restricciones los grabo en una lista para mostrar al usuario
                     {
-                        nombresEstudiantes.add(estudianteInscrito.getEstudiante().getNombreCompleto());
+                        String mensaje=estudianteInscrito.getEstudiante().getNombreCompleto()+"\n";
+                        mensaje+=UtilidadesLista.castListToString(rubroEstudiante,"\n")+"\n\n";
+                        
+                        nombresEstudiantes.add(mensaje);
                     }
                 }
             }
@@ -308,22 +312,22 @@ public class MatriculaModel extends MatriculaPanel {
         
     }
     
-    private Boolean verificarEliminarMatriculaEstudianteGrabado(EstudianteInscrito estudianteInscrito)
+    private List<RubroEstudiante> verificarEliminarMatriculaEstudianteGrabado(EstudianteInscrito estudianteInscrito)
     {
         try {
             List<RubroEstudiante> rubros=ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosActivosPorEstudiantesInscrito(estudianteInscrito);
             if(rubros.size()==0)
             {
-                return true;
+                return rubros;
             }
             else
             {
-                return false;
+                return rubros;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return null;
     }
     
     private void pasarEstudiantesNoMatriculados(NivelAcademico nivelAcademico)
