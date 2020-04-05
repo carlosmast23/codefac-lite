@@ -1,0 +1,22 @@
+nova-dark
+nova-light
+nova-color
+omega
+delta
+redmond
+======================
+	ALTERNO
+======================
+dot-luv
+excite-bike
+start
+cupertino
+flick (Esta bien pero tiene rosado)
+hot-sneaks
+ui-lightness
+====================
+DESCARTADOS
+====================
+aristo
+bootstrap (No constrasta subtitulos)
+pepper-grinder (No contrasta)

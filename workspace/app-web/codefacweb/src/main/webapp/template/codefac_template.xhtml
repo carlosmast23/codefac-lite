@@ -27,7 +27,7 @@
                         return false;
                     }">
 
-                <p:poll process="@this" interval="1" listener="#{sessionMb.ejemploContador()}" update=":formulario:panelSecundario" stop="#{!sessionMb.actualizarMonitor}" autoStart="true" widgetVar="poll" />
+                <p:poll process="@this" interval="1" listener="#{sessionMb.ejemploContador()}" update=":formulario:panelComprobantesProcesados" stop="#{!sessionMb.actualizarMonitor}" autoStart="true" widgetVar="poll" />
                 <!--<p:remoteCommand id="remoteCommand" name="updatePoll" update=":formulario:panelSecundario"/>-->
                 <p:remoteCommand name="onload" action="#{applicationCodefacMb.controladorConexionServidor()}" autoRun="true" />
 
@@ -51,69 +51,73 @@
 
                 </p:sidebar>
 
-                <p:sidebar id="panelSecundario" widgetVar="sidebar4" position="right" baseZIndex="10000" style="width: 250px">
-                    <h1 style="font-weight:normal">Comprobantes Procesados</h1>
+                <!-- Comprobante donde se van a encontrar los comprobantes procesados -->
+                <p:sidebar 
+                    id="panelSecundario" 
+                    widgetVar="sidebar4" 
+                    position="right" 
+                    baseZIndex="10000" 
+                    style="width: 250px" 
 
+                    >
 
-                    <p:repeat id="barMonitor" value="#{sessionMb.barraProgresoList}" var="barra">
-                        <p:separator />
-                        <div class="p-grid">
-                            <div class="p-col-7 ">
-                                <p:progressBar   widgetVar="pbAjax" ajax="true" value="#{barra.porcentaje}"  labelTemplate="#{barra.titulo()}" styleClass="animated " style="border: 2px;border-style: inset;background-color:  darkcyan;font-size: 12px;font-weight: normal;font-family: monospace" global="false">
-                                    <p:ajax event="complete"   oncomplete="PF('startButton2').enable()"/>
-                                </p:progressBar>
-                            </div>
-                            <div class="p-col-5 " style="text-align: center">
-                                <p:commandButton id="btnMonitorAlerta" process="@this"  icon="fa fa-bell-o" actionListener="#{barra.alerta()}"  />
-                                <p:commandButton id="btnMonitorBuscar" process="@this" ajax="false" actionListener="#{barra.imprimir()}"  icon="fa fa-search"  />
-                                <p:commandButton id="btnMonitorImprimir" process="@this" icon="fa fa-close"  />
-                            </div>
-                        </div>
-
-
-                    </p:repeat>
 
                     <!--<p:commandButton value="Cancel" oncomplete="PF('sidebar4').hide()"/>-->
                 </p:sidebar>
 
                 <!-- ============== MENU SUPERIOR DE LAS OPCIONES PRINCIPALES ====== -->            
-                <p:toolbar id="tb" style="cabecera" rendered="#{!controllerCodefacMb.modoDialogo}">
+                <p:toolbar id="tb"  rendered="#{!controllerCodefacMb.modoDialogo}">
                     <f:facet name="left">
-                        <p:commandButton icon="home-icon" process="@this" class="button-menu" title="Home" action="indexCodefac" />
+                        <p:commandButton icon="fa fa-fw fa-home" process="@this"  title="Home" action="indexCodefac" style="background-color:#0097A;font-size: 18px " value="Codefac" />
 
-                        <p:commandButton icon="new-icon" class="button-menu" title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}" update="panelContenido">
-                        </p:commandButton>
+                        <!--<p:commandButton icon="new-icon" class="button-menu" title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}" update="panelContenido">-->
+                        <p:commandButton icon="fa fa-fw fa-plus"  title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}"  update="panelContenido" style="font-size: 14px" />
 
                         <!-- BOTON GRABAR -->
-                        <p:commandButton icon="save-icon"  class="button-menu" type="button" onclick="PF('dialogConfirmarGrabar').show()" title="Grabar" disabled="false" >                                
-                        </p:commandButton>
+                        <p:commandButton icon="fa fa-fw fa-save"   type="button" onclick="PF('dialogConfirmarGrabar').show()" title="Grabar" disabled="false" style="font-size: 14px" />                                
+
+                        <span class="ui-separator">
+                            <span class="ui-icon pi pi-ellipsis-v" />
+                        </span>
 
                         <!-- BOTON IMPRIMIR -->
-                        <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" update="messages" />
+                        <p:commandButton icon="fa fa-fw fa-print" title="Imprimir" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" update="messages" style="font-size: 14px" />
 
                         <!-- BOTON BUSCAR-->
-                        <p:commandButton icon="find-icon" class="button-menu" process="@this" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" >
+                        <p:commandButton icon="fa fa-fw fa-search"  process="@this" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" style="font-size: 14px" >
                             <p:ajax event="dialogReturn" listener="#{controllerCodefacMb.onObjectChosen}" update="panelContenido" />
                         </p:commandButton>
 
                         <!-- ELIMINAR BOTON -->
-                        <p:commandButton icon="delete-icon" class="button-menu" type="button" onclick="PF('dialogConfirmarEliminar').show()" title="Eliminar" disabled="false" />
+                        <p:commandButton icon="fa fa-fw fa-close"  type="button" onclick="PF('dialogConfirmarEliminar').show()" title="Eliminar" disabled="false" style="font-size: 14px" />
 
+                        <span class="ui-separator">
+                            <span class="ui-icon pi pi-ellipsis-v" />
+                        </span>
 
                         <!--<p:commandButton icon="refresh-icon" class="button-menu" title="Refrescar" disabled="true" />-->
                         <ui:insert name="btnAyuda">
-                            <p:commandButton icon="help-icon" class="button-menu" title="Ayuda" actionListener="#{controllerCodefacMb.mostrarAyuda()}" update="panelSecundario" process="@this" disabled="false" />
+                            <p:commandButton icon="fa fa-fw fa-question-circle"  title="Ayuda" actionListener="#{controllerCodefacMb.mostrarAyuda()}" update="panelSecundario" process="@this" disabled="false" style="font-size: 14px" />
                         </ui:insert>
 
                     </f:facet>   
                     <f:facet name="right">
 
 
-                        <p:commandButton value="Menu" icon="fa fa-fw fa-bars" oncomplete="PF('sidebar1').show()" />
-                        <p:commandButton value="%" icon="fa fa-fw fa-download" oncomplete="PF('sidebar4').show()" />
-                        <p:menuButton value="Más">                            
-                            <p:menuitem value="Cerrar la sesión" action="login" icon="pi pi-home" />
+                        <p:commandButton  icon="fa fa-fw fa-bars" oncomplete="PF('sidebar1').show()" style="background-color: #FFA000;font-size: 14px" />
+                        <!--<p:commandButton icon="fa fa-fw fa-download" oncomplete="PF('panelComprobantesProcesados').show()" />-->
+                        <p:commandButton icon="fa fa-fw fa-download" actionListener="#{controllerCodefacMb.mostrarPanelComprobantes()}" update=":formulario:panelComprobantesProcesados,messages" style="font-size: 14px" />
+                        <p:menuButton value="" style="font-size: 14px" >                            
+                            <p:menuitem value="Cerrar la sesión" action="login" icon="pi pi-home"  />
                         </p:menuButton>
+                    </f:facet>
+
+                    <f:facet name="header">
+                        CABECERA
+                    </f:facet>
+
+                    <f:facet name="footer">
+                        CABECERA
                     </f:facet>
                 </p:toolbar>
                 <div style="text-align: center">
@@ -123,22 +127,95 @@
 
 
                 <p:panel id="panelContenido" style="text-align: center">
-                    <!-- =================== TITULO DE LA PAGINA ========================= -->
-                    <div class="titulo_contenido" >
-                        <p:outputLabel style="font-size: 17px" id="txtTituloPagina" value="#{controllerCodefacMb.getTituloPagina()}" />
-                    </div>
-                    <p:separator />
 
-                    <!-- =================== CONTENIDO DONDE VAN A ESTAR LOS DATOS ========================= -->
-                    <div  style="padding: 10px">
-                        <ui:insert name="contenido">
-                            Contenido por defecto de la plantilla  
-                        </ui:insert>
-                    </div>
+                    <div class="p-grid "  >
+                        <div class="p-col-12 p-md-12 p-lg-12" >
+                            <!-- =================== BARRA DE LOS COMPROBANTES PROCESADOS ========================= -->
+                            <p:panel 
+                                visible="#{controllerCodefacMb.visiblePanelComprobantes}"
+                                id="panelComprobantesProcesados" 
+                                header="Comprobantes Procesados"
+                                toggleable="true" 
+                                toggleSpeed="500" 
+                                widgetVar="panelComprobantesProcesados"
+                                >
+
+                                <div class="p-grid">
+                                    <p:repeat id="barMonitor" value="#{sessionMb.barraProgresoList}" var="barra">
+
+                                        <div class="p-col-12 p-md-6 p-lg-3">
+                                            <div class="ui-inputgroup" style="padding-left: 10px;padding-right: 10px;padding-bottom: 2px;padding-top: 2px">
+                                                <p:progressBar   widgetVar="pbAjax"  ajax="true" value="#{barra.porcentaje}"  labelTemplate="#{barra.titulo()}" styleClass="animated " style="width: 100%;color: white;padding-right: 20px;margin-right: 20px" global="false">
+                                                    <p:ajax event="complete"   oncomplete="PF('startButton2').enable()"/>
+                                                </p:progressBar>
+
+                                                <p:commandButton id="btnMonitorAlerta" process="@this"  icon="fa fa-bell-o" actionListener="#{barra.alerta()}"  />
+                                                <p:commandButton id="btnMonitorBuscar" process="@this" ajax="false" actionListener="#{barra.imprimir()}"  icon="fa fa-search"  />
+                                                <p:commandButton id="btnMonitorImprimir" process="@this" icon="fa fa-close"  />
+                                            </div>
+                                        </div>
+                                    </p:repeat>
+                                </div>
+
+                                <f:facet name="options">
+                                    <p:menu>
+                                        <p:submenu label="Opciones">
+                                            <p:menuitem value="Minimizar" url="#" icon="pi pi-clone" onclick="PF('panelComprobantesProcesados').toggle()" />
+                                            <p:menuitem value="Cerrar" url="#" icon="pi pi-times" onclick="PF('panelComprobantesProcesados').close()" />
+
+                                        </p:submenu>
+                                    </p:menu>
+                                </f:facet>
+                            </p:panel>  
+
+                        </div>
+
+                        <div class="p-col-12 p-md-12 p-lg-12" >
+                            <p:panel 
+                                id="pnlDatos" 
+                                header="#{controllerCodefacMb.getTituloPagina()}" 
+                                toggleable="true" 
+                                closable="false" 
+                                toggleSpeed="500" 
+                                closeSpeed="500" 
+                                widgetVar="panel" 
+                                style="margin-bottom:20px">
+
+                                <p:ajax event="close"   />
+                                <p:ajax event="toggle"   />
+
+                                <ui:insert name="contenido">
+                                    Contenido por defecto de la plantilla  
+                                </ui:insert>
+
+                                <f:facet name="options">
+                                    <p:menu>
+                                        <p:submenu label="Opciones">
+                                            <!--<p:menuitem value="Toggle" url="#" icon="pi pi-clone" onclick="PF('panel').toggle()" />
+                                            <p:menuitem value="Remove" url="#" icon="pi pi-times" onclick="PF('panel').close()" />-->
+                                            <ui:insert name="opciones">
+                                                Opciones
+                                            </ui:insert>
+                                        </p:submenu>
+                                    </p:menu>
+                                </f:facet>
+                            </p:panel> 
+
+                        </div>
+
+                    </div>                    
+
+
+
+
+
+
 
                     <!-- ========================= PIE DE LA PAGINA ====================== -->
                     <div class="pie-pagina" >
-                        Todos los derechos reservador Codefac 2018
+                        <p:panel style="color: red">
+                            Todos los derechos <b>reservados Codefac 2018</b>
+                        </p:panel>
                     </div> 
                 </p:panel>
 

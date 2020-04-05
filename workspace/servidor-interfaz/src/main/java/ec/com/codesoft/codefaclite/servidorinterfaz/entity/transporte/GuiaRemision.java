@@ -152,7 +152,7 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
     public void addDatosAdicionalCorreo(String correo, FacturaAdicional.Tipo tipoCorreo, FacturaAdicional.CampoDefectoEnum campoDefecto) {
         
         //Validacion para no ingresar correos vacios o nulos
-        if(correo.trim().isEmpty() || correo==null)
+        if(correo==null || correo.trim().isEmpty())
         {
            return ; 
         }

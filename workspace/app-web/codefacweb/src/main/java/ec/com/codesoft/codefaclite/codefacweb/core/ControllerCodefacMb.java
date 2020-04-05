@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.codefacweb.core;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -47,11 +48,14 @@ public class ControllerCodefacMb implements Serializable {
      */
     private Boolean modoDialogo;
     //private String titulo;
+    
+    private Boolean visiblePanelComprobantes;
 
     @PostConstruct
     public void init() {
         System.out.println("Iniciando el postConstruct del controlador");
         modoDialogo=false;
+        visiblePanelComprobantes=false;
         indiceTabSecundario = "0";
         this.estadoEnum = EstadoFormEnum.GRABAR;
         //titulo="Sin titulo";
@@ -204,12 +208,20 @@ public class ControllerCodefacMb implements Serializable {
     public void setGeneralAbstractMb(GeneralAbstractMb generalAbstractMb) {
         this.generalAbstractMb = generalAbstractMb;
     }
+    
+    public void mostrarPanelComprobantes()
+    {
+        //System.out.println("Activando o desactivando el panel de los comprobantes");
+        visiblePanelComprobantes=!visiblePanelComprobantes;
+        //System.out.println(visiblePanelComprobantes);
+        //MensajeMb.mensaje(new CodefacMsj("Actualizando panel",":)",1));
+    }
 
     public void agregarVista(GeneralAbstractMb vista) {
         try {
             generalAbstractMb = vista;   
             System.out.println("Agregando al Controlador la Vista "+vista.titulo());
-            PrimeFaces.current().ajax().update("formulario:txtTituloPagina"); //Actualizar un componente desde la vista
+            PrimeFaces.current().ajax().update("formulario:pnlDatos"); //Actualizar un componente desde la vista
             //System.out.println("actualizando el titulo en la pagina:"+titulo);
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -219,7 +231,7 @@ public class ControllerCodefacMb implements Serializable {
     }
 
     public String getTituloPagina() {
-        try {
+        try { 
             String tituloPagina = this.generalAbstractMb.titulo();
             return estadoEnum.construirFormato(tituloPagina);
             //return "Errro Nombre";
@@ -259,11 +271,21 @@ public class ControllerCodefacMb implements Serializable {
 
     public Boolean getModoDialogo() {
         return modoDialogo;
-    }
+    } 
 
     public void setModoDialogo(Boolean modoDialogo) {
         this.modoDialogo = modoDialogo;
     }
+
+    public Boolean getVisiblePanelComprobantes() {
+        return visiblePanelComprobantes;
+    }
+
+    public void setVisiblePanelComprobantes(Boolean visiblePanelComprobantes) {
+        this.visiblePanelComprobantes = visiblePanelComprobantes;
+    }
+    
+    
     
     
 }

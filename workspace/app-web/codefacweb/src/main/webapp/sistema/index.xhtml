@@ -6,6 +6,10 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition  template="/template/codefac_template.xhtml">
+        <ui:define name="opciones" >
+            
+        </ui:define>
+        
     
         <ui:define name="contenido" >
             <f:event listener="#{controllerCodefacMb.agregarVista(indexSistemaMb)}" type="preRenderView" />

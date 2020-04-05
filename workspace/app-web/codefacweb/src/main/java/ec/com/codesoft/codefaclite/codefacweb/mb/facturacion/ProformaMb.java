@@ -101,7 +101,7 @@ import java.util.Arrays;
  * @author Carlos
  */
 @ManagedBean
-@ViewScoped
+@ViewScoped 
 public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterface, Serializable {
 
     private static final String ID_COMPONENTE_MONITOR="monitor";
@@ -114,7 +114,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
      */
     private FacturaDetalle facturaDetalle; 
 
-    private List<DocumentoEnum> documentos; 
+    private List<DocumentoEnum> documentos;     
     private List<PuntoEmision> puntosEmision;    
     private EnumSiNo[] enumSiNoList;
     //private List<SriFormaPago> sriFormaPagosList;
@@ -254,7 +254,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
                                 if (ParametroUtilidades.comparar(sessionMb.getSession().getEmpresa(), ParametroCodefac.IMPRESORA_TICKETS_VENTAS, EnumSiNo.SI)) {
                                     imprimirTicket(dato);
                                 } else {
-                                    imprimirFactura(dato);
+                                    imprimirFactura(dato); 
                                 }
 
                             } catch (RemoteException ex) {
@@ -266,7 +266,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
                             return dato.getPreimpreso();
                         }
                     });
-
+ 
                     ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
                     comprobanteServiceIf.procesarComprobante(
                             obtenerComprobanteDataFactura(),
@@ -277,7 +277,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
                     sessionMb.getBarraProgresoList().add(barraProgreso);
                     sessionMb.setActualizarMonitor(true); //Variable para indicar que no esta actualiado el monitor
                     nuevo();
-                    UtilidadesWeb.ejecutarJavascript("PF('poll').start();"); //iniciar el actualizador en la pantalla
+                    UtilidadesWeb.ejecutarJavascript("PF('poll').start();"); //iniciar el actualizador en la pantalla 
+                    UtilidadesWeb.ejecutarJavascript("PF('panelComprobantesProcesados').show()");
                     //UtilidadesWeb.actualizaComponente(":formulario:panelSecundario:barMonitor");       
                     MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 } else if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
@@ -287,7 +288,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
                 
 
-            }
+            } 
 
             //MensajeMb.mostrarMensajeDialogo(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             //imprimir();
@@ -295,7 +296,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
             MensajeMb.mensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
         } catch (RemoteException ex) {
-            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex); 
         }
 
     }

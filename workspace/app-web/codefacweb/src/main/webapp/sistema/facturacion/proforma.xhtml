@@ -7,10 +7,20 @@
       xmlns:c="http://xmlns.jcp.org/jsf/composite/componentes">
 
     <ui:composition  template="/template/codefac_template.xhtml">
+        
+        <ui:define name="opciones" >
+            <p:menuitem oncomplete="PF('btnCargarProforma').jq.click();" value="Cargar desde la proforma"  icon="pi pi-clone"  />
+        </ui:define>
 
         <ui:define name="contenido" >
+            <!--<p:commandButton type="button" onclick="rc()" value="Execute" icon="pi pi-refresh" />-->
+            <!--<p:remoteCommand name="rc" autoRun="true" oncomplete="PF('btnCargarProforma').jq.click()"/>-->
             
-            <f:event listener="#{controllerCodefacMb.agregarVista(proformaMb)}" type="preRenderView" />
+            <!--<p:remoteCommand name="rc" update="panelContenido" action="#{remoteCommandView.execute}" >
+                <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProforma}" update="panelContenido"  />
+            </p:remoteCommand>-->
+            
+            <f:event listener="#{controllerCodefacMb.agregarVista(proformaMb)}" type="preRenderComponent" /> 
             
             <f:metadata>
                 <!--<f:viewParam name="tipo" value="#{proformaMb.tipoPagina}"/>-->
@@ -18,7 +28,7 @@
             </f:metadata>
 
 
-            <p:commandButton value="Cargar desde proforma" action="#{proformaMb.abrirDialogoBuscarProforma()}" rendered="#{proformaMb.visualizarCargarProforma}" >
+            <p:commandButton widgetVar="btnCargarProforma" value="Cargar desde proforma" action="#{proformaMb.abrirDialogoBuscarProforma()}" rendered="#{proformaMb.visualizarCargarProforma}" style="display:none" >
                 <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProforma}" update="panelContenido"  />
             </p:commandButton>
 
@@ -102,7 +112,7 @@
                             <div class="p-col-12 p-md-6 p-lg-3" >
                                 <div class="p-grid" style="text-align: left" >
                                     <div class="p-col-3 p-md-3 p-lg-3" >
-                                        <p:outputLabel>Inc Iva:</p:outputLabel>
+                                        <p:outputLabel style="font-weight: bold">Inc Iva:</p:outputLabel>
                                     </div>
                                     <div class="p-col-6 p-md-6 p-lg-6" >
                                         <p:selectOneMenu  id="cmbIncluyeIvaDetalle" value="#{proformaMb.incluyeIvaDetalleEnum}" converter="siNoEnumConverter" disabled="#{!proformaMb.cmbIvaDetalleEnable}" >
