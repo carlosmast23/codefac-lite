@@ -98,7 +98,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteService
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
-import java.math.RoundingMode;
+import java.math.RoundingMode; 
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 
@@ -109,9 +109,9 @@ import java.util.Arrays;
 @ManagedBean
 @ViewScoped
 public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,NotaCreditoModelInterface {
-    private static final String ID_COMPONENTE_MONITOR="monitor";   
+    private static final String ID_COMPONENTE_MONITOR="monitor";       
     
-    private NotaCredito notaCredito;
+    private NotaCredito notaCredito;        
     
     private NotaCreditoDetalle notaCreditoDetale;
         
@@ -119,14 +119,14 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
 
     //private FacturaDetalle facturaDetalle; 
 
-    private List<DocumentoEnum> documentos; 
+    private List<DocumentoEnum> documentos;  
     private List<PuntoEmision> puntosEmision;     
     //private List<SriFormaPago> sriFormaPagosList;
 
     private Producto productoSeleccionado;  
     private DocumentoEnum documentoSeleccionado;
     private PuntoEmision puntoEmisionSeleccionado;
-    private FacturaAdicional facturaAdicionalSeleccionada;
+    private FacturaAdicional facturaAdicionalSeleccionada; 
     private SriFormaPago sriFormaPagoSeleccionado;
     
     //private TipoPaginaEnum tipoPaginaEnum;
@@ -134,11 +134,11 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
     /**
      * Variable para saber si se tiene que mostrar o no el boton de cargar desde factura
      */
-    private Boolean visualizarCargarProforma;
+    private Boolean visualizarCargarProforma;           
     //private String tipoPagina;
     //private String tituloPagina;
     /**
-     * TODO:Por el momento seteo con una variable adicional de la fecha porque
+     * TODO:Por el momento seteo con una variable adicional de la fecha porque  
      * en el modelo esta con sql y fuciona correctamente para las consultas pero
      * cuando hago ese cambio en el modelo tengo problemas con otras
      * funcionalidades
@@ -208,6 +208,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
     @Override
     public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
         controlador.grabar();
+        UtilidadesWeb.ejecutarJavascript("mostrarComprobantesRC();");
         /*try {
             System.out.println("===========>INICIANDO PROCESO GRABAR <==============");     
             if (!validar()) //Si no valida mando una excepcion para cancelar el ciclo de vida 

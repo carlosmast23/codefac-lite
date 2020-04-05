@@ -152,8 +152,14 @@ public class SessionMb implements Serializable{
                 DefaultSubMenu submenu = construirSubMenu(categoria.getNombre());
                 for (VentanaEnum ventanaEnum : menuCodefacRespuesta.buscarVentanasPorCategoriaYModulo(moduloDisponible, categoria)) 
                 {
-                    DefaultMenuItem itemMenu=construirItemMenu(ventanaEnum.getNombre(),ventanaEnum.getUrlModuloWeb(),"");
-                    submenu.getElements().add(itemMenu);
+                    /**
+                     * Solo construir el menu de las pantallas construidas para la parte web
+                     */
+                    if(ventanaEnum.getUrlModuloWeb()!=null && !ventanaEnum.getUrlModuloWeb().isEmpty())
+                    {
+                        DefaultMenuItem itemMenu=construirItemMenu(ventanaEnum.getNombre(),ventanaEnum.getUrlModuloWeb(),"");
+                        submenu.getElements().add(itemMenu);
+                    }
                 }
                 modelMenu.getElements().add(submenu);
             }

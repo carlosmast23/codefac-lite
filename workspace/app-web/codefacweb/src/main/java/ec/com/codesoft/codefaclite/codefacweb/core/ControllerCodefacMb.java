@@ -216,6 +216,11 @@ public class ControllerCodefacMb implements Serializable {
         //System.out.println(visiblePanelComprobantes);
         //MensajeMb.mensaje(new CodefacMsj("Actualizando panel",":)",1));
     }
+    
+    public void activarPanelComprobante()
+    {
+        visiblePanelComprobantes=true;
+    }
 
     public void agregarVista(GeneralAbstractMb vista) {
         try {

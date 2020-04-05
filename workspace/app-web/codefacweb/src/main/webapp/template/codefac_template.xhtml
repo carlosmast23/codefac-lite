@@ -11,7 +11,8 @@
                 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <meta name="apple-mobile-web-app-capable" content="yes" />                
+                <h:outputStylesheet library="css" name="plantilla_editada.css" />
                 <h:outputStylesheet library="css" name="estilo.css" />
                 <title>Codefac</title>
             </f:facet>
@@ -23,13 +24,14 @@
 
         <h:body style="font-size: 11px">
 
-            <h:form id="formulario" target="_blank" onkeypress="if (event.keyCode == 13) {
+            <h:form id="formulario" onkeypress="if (event.keyCode == 13) {
                         return false;
                     }">
 
                 <p:poll process="@this" interval="1" listener="#{sessionMb.ejemploContador()}" update=":formulario:panelComprobantesProcesados" stop="#{!sessionMb.actualizarMonitor}" autoStart="true" widgetVar="poll" />
                 <!--<p:remoteCommand id="remoteCommand" name="updatePoll" update=":formulario:panelSecundario"/>-->
                 <p:remoteCommand name="onload" action="#{applicationCodefacMb.controladorConexionServidor()}" autoRun="true" />
+                <p:remoteCommand name="mostrarComprobantesRC" update=":formulario:panelComprobantesProcesados" action="#{controllerCodefacMb.activarPanelComprobante()}" />
 
 
                 <p:growl id="messages" showDetail="true" life="5000"/>
@@ -44,7 +46,7 @@
                     <p:accordionPanel value="#{sessionMb.menuCodefacRespuesta.modulosDisponibles}" var="modulo" >
 
                         <p:tab title="#{modulo.nombre}">
-                            <p:menu model="#{sessionMb.menuModelMap.get(modulo)}" toggleable="true" />
+                            <p:menu  model="#{sessionMb.menuModelMap.get(modulo)}" toggleable="true"  />
                         </p:tab>
 
                     </p:accordionPanel>
@@ -68,28 +70,37 @@
                 <!-- ============== MENU SUPERIOR DE LAS OPCIONES PRINCIPALES ====== -->            
                 <p:toolbar id="tb"  rendered="#{!controllerCodefacMb.modoDialogo}">
                     <f:facet name="left">
-                        <p:commandButton icon="fa fa-fw fa-home" process="@this"  title="Home" action="indexCodefac" style="background-color:#0097A;font-size: 18px " value="Codefac" />
+                        <p:commandButton icon="fa fa-fw fa-home" process="@this"  title="Home" action="indexCodefac" style="background-color:#0097A;font-size: 19px " value="Codefac" />
 
                         <!--<p:commandButton icon="new-icon" class="button-menu" title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}" update="panelContenido">-->
-                        <p:commandButton icon="fa fa-fw fa-plus"  title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}"  update="panelContenido" style="font-size: 14px" />
+                        <p:commandButton id="btnNuevo" icon="fa fa-fw fa-plus"  title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}"  update="panelContenido" class="boton-principal"  />
 
                         <!-- BOTON GRABAR -->
-                        <p:commandButton icon="fa fa-fw fa-save"   type="button" onclick="PF('dialogConfirmarGrabar').show()" title="Grabar" disabled="false" style="font-size: 14px" />                                
+                        <p:commandButton icon="fa fa-fw fa-save"   type="button" onclick="PF('dialogConfirmarGrabar').show()" title="Grabar" disabled="false" class="boton-principal" />                                
 
                         <span class="ui-separator">
-                            <span class="ui-icon pi pi-ellipsis-v" />
+                            <span class="ui-icon pi pi-ellipsis-v" /> 
                         </span>
 
                         <!-- BOTON IMPRIMIR -->
-                        <p:commandButton icon="fa fa-fw fa-print" title="Imprimir" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" update="messages" style="font-size: 14px" />
+                        <p:commandButton 
+                            icon="fa fa-fw fa-print" 
+                            title="Imprimir" 
+                            ajax="false" 
+                            actionListener="#{controllerCodefacMb.imprimir()}" 
+                            update="messages" 
+                            class="boton-principal" 
+                            onclick="this.form.target='_blank'"  
+                            onblur="this.form.target='_self'"
+                            />
 
                         <!-- BOTON BUSCAR-->
-                        <p:commandButton icon="fa fa-fw fa-search"  process="@this" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" style="font-size: 14px" >
+                        <p:commandButton icon="fa fa-fw fa-search"  process="@this" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" class="boton-principal" >
                             <p:ajax event="dialogReturn" listener="#{controllerCodefacMb.onObjectChosen}" update="panelContenido" />
                         </p:commandButton>
 
                         <!-- ELIMINAR BOTON -->
-                        <p:commandButton icon="fa fa-fw fa-close"  type="button" onclick="PF('dialogConfirmarEliminar').show()" title="Eliminar" disabled="false" style="font-size: 14px" />
+                        <p:commandButton icon="fa fa-fw fa-close"  type="button" onclick="PF('dialogConfirmarEliminar').show()" title="Eliminar" disabled="false" class="boton-principal" />
 
                         <span class="ui-separator">
                             <span class="ui-icon pi pi-ellipsis-v" />
@@ -97,7 +108,7 @@
 
                         <!--<p:commandButton icon="refresh-icon" class="button-menu" title="Refrescar" disabled="true" />-->
                         <ui:insert name="btnAyuda">
-                            <p:commandButton icon="fa fa-fw fa-question-circle"  title="Ayuda" actionListener="#{controllerCodefacMb.mostrarAyuda()}" update="panelSecundario" process="@this" disabled="false" style="font-size: 14px" />
+                            <p:commandButton icon="fa fa-fw fa-question-circle"  title="Ayuda" actionListener="#{controllerCodefacMb.mostrarAyuda()}" update="panelSecundario" process="@this" disabled="false" class="boton-principal" />
                         </ui:insert>
 
                     </f:facet>   
@@ -106,7 +117,7 @@
 
                         <p:commandButton  icon="fa fa-fw fa-bars" oncomplete="PF('sidebar1').show()" style="background-color: #FFA000;font-size: 14px" />
                         <!--<p:commandButton icon="fa fa-fw fa-download" oncomplete="PF('panelComprobantesProcesados').show()" />-->
-                        <p:commandButton icon="fa fa-fw fa-download" actionListener="#{controllerCodefacMb.mostrarPanelComprobantes()}" update=":formulario:panelComprobantesProcesados,messages" style="font-size: 14px" />
+                        <p:commandButton icon="fa fa-fw fa-download" actionListener="#{controllerCodefacMb.mostrarPanelComprobantes()}" update=":formulario:panelComprobantesProcesados,messages" class="boton-principal" />
                         <p:menuButton value="" style="font-size: 14px" >                            
                             <p:menuitem value="Cerrar la sesión" action="login" icon="pi pi-home"  />
                         </p:menuButton>
@@ -147,11 +158,18 @@
                                             <div class="ui-inputgroup" style="padding-left: 10px;padding-right: 10px;padding-bottom: 2px;padding-top: 2px">
                                                 <p:progressBar   widgetVar="pbAjax"  ajax="true" value="#{barra.porcentaje}"  labelTemplate="#{barra.titulo()}" styleClass="animated " style="width: 100%;color: white;padding-right: 20px;margin-right: 20px" global="false">
                                                     <p:ajax event="complete"   oncomplete="PF('startButton2').enable()"/>
-                                                </p:progressBar>
-
-                                                <p:commandButton id="btnMonitorAlerta" process="@this"  icon="fa fa-bell-o" actionListener="#{barra.alerta()}"  />
-                                                <p:commandButton id="btnMonitorBuscar" process="@this" ajax="false" actionListener="#{barra.imprimir()}"  icon="fa fa-search"  />
+                                                </p:progressBar>                                                
+                                                <p:commandButton id="btnMonitorAlerta" process="@this"  icon="fa fa-bell-o" actionListener="#{barra.alerta()}"  />                                                
+                                                <p:commandButton id="btnMonitorBuscar" 
+                                                                 process="@this" 
+                                                                 ajax="false" 
+                                                                 actionListener="#{barra.imprimir()}"  
+                                                                 icon="fa fa-search" 
+                                                                 onclick="this.form.target='_blank'"  
+                                                                 onblur="this.form.target='_self'"
+                                                                 />
                                                 <p:commandButton id="btnMonitorImprimir" process="@this" icon="fa fa-close"  />
+
                                             </div>
                                         </div>
                                     </p:repeat>
@@ -194,7 +212,7 @@
                                             <!--<p:menuitem value="Toggle" url="#" icon="pi pi-clone" onclick="PF('panel').toggle()" />
                                             <p:menuitem value="Remove" url="#" icon="pi pi-times" onclick="PF('panel').close()" />-->
                                             <ui:insert name="opciones">
-                                                Opciones
+                                                
                                             </ui:insert>
                                         </p:submenu>
                                     </p:menu>
@@ -236,7 +254,15 @@
                     <f:facet name="footer"  >
                         <div style="text-align: center">
                             <p:commandButton value="Aceptar" process="@form" actionListener="#{controllerCodefacMb.nuevo()}" update="messages,idDialogResultado,formulario:panelSecundario,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
-                            <p:commandButton value="Imprimir" process="@this" ajax="false" actionListener="#{controllerCodefacMb.imprimir()}" icon="ui-icon-print" />
+                            <p:commandButton 
+                                value="Imprimir" 
+                                process="@this" 
+                                ajax="false" 
+                                actionListener="#{controllerCodefacMb.imprimir()}" 
+                                icon="ui-icon-print" 
+                                onclick="this.form.target='_blank'"  
+                                onblur="this.form.target='_self'"
+                                />
                         </div>
                     </f:facet>
                 </p:dialog>

@@ -278,7 +278,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
                     sessionMb.setActualizarMonitor(true); //Variable para indicar que no esta actualiado el monitor
                     nuevo();
                     UtilidadesWeb.ejecutarJavascript("PF('poll').start();"); //iniciar el actualizador en la pantalla 
-                    UtilidadesWeb.ejecutarJavascript("PF('panelComprobantesProcesados').show()");
+                    UtilidadesWeb.ejecutarJavascript("mostrarComprobantesRC();");
                     //UtilidadesWeb.actualizaComponente(":formulario:panelSecundario:barMonitor");       
                     MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 } else if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
