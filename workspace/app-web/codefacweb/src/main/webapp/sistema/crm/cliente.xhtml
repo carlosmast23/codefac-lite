@@ -7,10 +7,14 @@
       xmlns:c="http://xmlns.jcp.org/jsf/composite/componentes">
 
     <ui:composition  template="/template/codefac_template.xhtml">
+        
+        <ui:define name="opciones" >
+            <p:menuitem oncomplete="PF('btnCargarProforma').jq.click();" value="Cargar desde la proforma"  icon="pi pi-clone"  />
+        </ui:define>
 
         <ui:define name="contenido" >
 
-            <f:event listener="#{controllerCodefacMb.agregarVista(clienteMb)}" type="preRenderView" />
+            <f:event listener="#{controllerCodefacMb.agregarVista(clienteMb)}" type="preRenderComponent" /> 
             <!--<p:remoteCommand process="@this" name="panelDatos" update="@form"/>-->
             <p:tabView>
                 <p:tab title="Datos Principales">

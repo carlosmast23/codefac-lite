@@ -27,16 +27,16 @@ public enum VentanaEnum implements Serializable{
     SUCURSAL("ec.com.codesoft.codefaclite.configuraciones.model.SucursalModel", "SUCU", "Sucursal", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.PROCESOS, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
     UTILIDAD_ENVIO_COMPROBANTES("ec.com.codesoft.codefaclite.configuraciones.model.UtilidadEnvioReportesModel", "UECT", "Utilidad envio reportes", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.UTILIDADES, false, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     PUNTO_EMISION("ec.com.codesoft.codefaclite.configuraciones.model.PuntoEmisionModel", "PUVE", "Punto de Emision", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.PROCESOS, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
-    PROVEEDOR("ec.com.codesoft.codefaclite.crm.model.ProveedorModel", "PROV", "Proveedor", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
+    PROVEEDOR("ec.com.codesoft.codefaclite.crm.model.ProveedorModel", "PROV", "Proveedor", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,"proveedor"),
     PRODUCTO("ec.com.codesoft.codefaclite.crm.model.ProductoModel", "PROD", "Producto", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,KeyEvent.VK_P,null),
     IMPRIMIR_CODIGO_BARRAS("ec.com.codesoft.codefaclite.inventario.model.ImprimirCodidoBarrasModel", "ICDB", "Imprimir Códigos Barras", ModuloCodefacEnum.INVENTARIO , CategoriaMenuEnum.GESTIONAR, false, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
-    FACTURACION("ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel", "FACT", "Facturación", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.GRATIS,KeyEvent.VK_F),
+    FACTURACION("ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel", "FACT", "Facturación", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.GRATIS,KeyEvent.VK_F,"factura"),
     EMPRESA("ec.com.codesoft.codefaclite.crm.model.EmpresaModel", "EMPR", "Empresa", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,KeyEvent.VK_E,null),
     COMPROBANTE_CONFIGURACION("ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel", "CONF", "Configuración Comprobantes", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.GRATIS,null),
     UTILIDAD_COMPROBANTE("ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteSimpleModel", "UTIL", "Utilidad Comprobante", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.UTILIDADES,TipoLicenciaEnum.GRATIS,null),
     UTILIDAD_COMPROBANTE_AVANZADO("ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteAvanzadoModel", "UTIA", "Utilidad Comprobante Avanzado", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.UTILIDADES,TipoLicenciaEnum.GRATIS,null),
-    NOTA_CREDITO("ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel", "NOTC", "Nota de Credito", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.GRATIS,KeyEvent.VK_N),
-    FACTURA_REPORTE("ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel", "FACR", "Factura Reporte", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.GRATIS,null),
+    NOTA_CREDITO("ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel", "NOTC", "Nota de Credito", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.GRATIS,KeyEvent.VK_N,"nota_credito"),
+    FACTURA_REPORTE("ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel", "FACR", "Factura Reporte", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.GRATIS,null,"factura_reporte"),
     CLIENTE_REPORTE("ec.com.codesoft.codefaclite.crm.model.ClienteReporte", "CLIR", "Cliente Reporte", ModuloCodefacEnum.CRM, CategoriaMenuEnum.REPORTES, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
     PROVEEDOR_REPORTE("ec.com.codesoft.codefaclite.crm.model.ProveedorReporte", "PVOR", "Proveedor Reporte", ModuloCodefacEnum.CRM, CategoriaMenuEnum.REPORTES, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
     PRODUCTO_REPORTE("ec.com.codesoft.codefaclite.crm.model.ProductoReporte", "PROR", "Producto Reporte", ModuloCodefacEnum.CRM, CategoriaMenuEnum.REPORTES, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
@@ -95,7 +95,7 @@ public enum VentanaEnum implements Serializable{
     TRANSPORTISTA("ec.com.codesoft.codefaclite.transporte.model.TransportistaModel", "TRTA", "Transportista", ModuloCodefacEnum.TRANSPORTE, CategoriaMenuEnum.GESTIONAR,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     GUIA_REMISION("ec.com.codesoft.codefaclite.transporte.model.GuiaRemisionModel", "GURE", "Guía de Remisión", ModuloCodefacEnum.TRANSPORTE, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,KeyEvent.VK_R,null),
     REPORTE_GUIAREMISIO("ec.com.codesoft.codefaclite.transporte.model.GuiasRemisionReporteModel", "RGUR", "Reporte Guia Remision", ModuloCodefacEnum.TRANSPORTE, CategoriaMenuEnum.REPORTES,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
-    PROFORMA_VENTA("ec.com.codesoft.codefaclite.facturacion.model.ProformaModel", "PROF", "Proforma", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
+    PROFORMA_VENTA("ec.com.codesoft.codefaclite.facturacion.model.ProformaModel", "PROF", "Proforma", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,"proforma"),
     PROFORMA_REPORTE("ec.com.codesoft.codefaclite.facturacion.model.ProformaReporteModel", "PRRE", "Reporte Proforma", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.REPORTES,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     REPORTE_ACADEMICO_CLIENTE("ec.com.codesoft.codefaclite.gestionacademica.model.ClienteReporte", "RACL", "Reporte Representante", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES,null),
     PLAN_CUENTAS("ec.com.codesoft.codefaclite.contabilidad.model.PlanCuentasModel", "PLCU", "Plan de Cuentas", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.GESTIONAR,null),
@@ -143,6 +143,20 @@ public enum VentanaEnum implements Serializable{
         this.maximizado = true;
         this.tipoLicenciaEnum = tipoLicenciaEnum;
         this.teclaAtajo=teclaAtajo;
+    }
+    
+    
+    
+    private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,TipoLicenciaEnum tipoLicenciaEnum,Integer teclaAtajo,String urlModuloWeb) {
+        this.claseNombre = clase;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.modulo = modulo;
+        this.categoriaMenu = categoriaMenu;
+        this.maximizado = true;
+        this.tipoLicenciaEnum = tipoLicenciaEnum;
+        this.teclaAtajo=teclaAtajo;
+        this.urlModuloWeb=urlModuloWeb;
     }
     
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,TipoLicenciaEnum tipoLicenciaEnum,Integer teclaAtajo,Boolean maximizado) {

@@ -486,4 +486,9 @@ body .ui-terminal .ui-terminal-input {
     font-size: var(--tamanio-letras)
 }
 
+body .ui-progressbar .ui-progressbar-label {
+    margin-top: 0;
+    color: white;
+    display:block !important;
+}
 
