@@ -53,7 +53,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
-import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
+//import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;

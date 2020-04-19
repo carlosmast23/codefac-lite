@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -52,12 +53,15 @@ public abstract class MigrarModel extends MigrarPanel{
     public abstract ExcelMigrar.MigrarInterface getInterfaceMigrar();
     public abstract ExcelMigrar getExcelMigrar() ;
     public abstract InputStream getInputStreamExcel();
+        
     
     //private ExcelMigrar excelMigrar;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        listenerBotonesInit();        
+        listenerBotonesInit();  
+        setTitle(getTitulo());
+        agregarOtrosComponentes();
     }
     
     private JFileChooser construirSelectorArchivos()
@@ -67,6 +71,19 @@ public abstract class MigrarModel extends MigrarPanel{
         jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         return jFileChooser;
         
+    }
+    
+    public  String getTitulo()
+    {
+        return "Sin Titulo";
+    }
+    
+    /**
+     * Metodo para agregar mas componentes al inicio de la carga
+     */
+    public void agregarOtrosComponentes()
+    {
+    
     }
     
     private boolean copiarArchivo(File ubicacionArchivoCopiar)
@@ -214,15 +231,20 @@ public abstract class MigrarModel extends MigrarPanel{
         construirDatosRequeridos();
         
     }
+    
+    public void agregarComponenteOtroPanel(Component componente)
+    {
+        getPnlOtrasOpciones().add(componente);        
+    }
 
     private void construirDatosRequeridos() {
         getPnlCamposRequeridos().removeAll();
         
         for (ExcelMigrar.CampoMigrarInterface campoMigrar : this.excelMigrar.obtenerCampos()) {
             JCheckBox jcheckBox=new JCheckBox(campoMigrar.getNombre());
-            jcheckBox.setSelected(true);
+            jcheckBox.setSelected(campoMigrar.getCampoRequerido());
             getPnlCamposRequeridos().add(jcheckBox);
-            campoMigrar.setCampoRequerido(true);
+            //campoMigrar.setCampoRequerido(true);
             
             //AgregarListener para campos requeridos
             jcheckBox.addActionListener(new ActionListener() {

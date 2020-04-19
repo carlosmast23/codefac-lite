@@ -28,21 +28,21 @@ public class ExcelMigrarRepresentantes  extends ExcelMigrar{
     
     public enum Enum implements CampoMigrarInterface
     {
-        IDENTIFICACION("Identificación",0,String.class),
-        NOMBRES("Nombres",1,String.class),
-        APELLIDOS("Apellidos",2,String.class),
-        RAZON_SOCIAL("Razon Social",3,String.class),
-        DIRECCION("Direccion",4,String.class),
-        TELEFONO("Telefono",5,String.class),
-        CELULAR("Celular",6,String.class),
-        CORREO("Correo",7,String.class),
-        ESTADO("Estado",8,String.class);
+        IDENTIFICACION("Identificación",0,String.class,true),
+        NOMBRES("Nombres",1,String.class,false),
+        APELLIDOS("Apellidos",2,String.class,false),
+        RAZON_SOCIAL("Razon Social",3,String.class,true),
+        DIRECCION("Direccion",4,String.class,false),
+        TELEFONO("Telefono",5,String.class,false),
+        CELULAR("Celular",6,String.class,false),
+        CORREO("Correo",7,String.class,false),
+        ESTADO("Estado",8,String.class,false);
 
-        private Enum(String nombre,Integer posicion,Class tipoDato) {
+        private Enum(String nombre,Integer posicion,Class tipoDato,Boolean requerido) {
             this.nombre = nombre;
             this.posicion=posicion;
             this.tipoDato=tipoDato;
-            this.requerido=true;
+            this.requerido=requerido;
         }
         
         public String nombre;

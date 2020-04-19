@@ -90,6 +90,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCu
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoTablaInteresServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.DescuentoAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
 
 /**
@@ -191,6 +192,7 @@ public abstract class ServiceFactory {
     public PrestamoCuotaCargoServiceIf getPrestamoCuotaCargoServiceIf(){return (PrestamoCuotaCargoServiceIf) getRecursosRMI(PrestamoCuotaCargoServiceIf.class);};
     public PrestamoCuotaServiceIf getPrestamoCuotaServiceIf(){return (PrestamoCuotaServiceIf) getRecursosRMI(PrestamoCuotaServiceIf.class);};
     public PrestamoServiceIf getPrestamoServiceIf(){return (PrestamoServiceIf) getRecursosRMI(PrestamoServiceIf.class);};
+    public DescuentoAcademicoServiceIf getDescuentoAcademicoServiceIf(){return (DescuentoAcademicoServiceIf) getRecursosRMI(DescuentoAcademicoServiceIf.class);};
     
     public CajaServiceIf getCajaServiceIf(){return (CajaServiceIf) getRecursosRMI(CajaServiceIf.class);};
     
@@ -200,7 +202,7 @@ public abstract class ServiceFactory {
      */
     public static void newController(String ipServidor)
     {
-        serviceController=new ServiceFactory(ipServidor) {};
+        serviceController=new ServiceFactory(ipServidor) {};        
     }
     
     

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.controlador.excel.entidades;
 
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
 import java.io.File;
+import java.util.Date;
 
 /**
  *
@@ -27,23 +28,26 @@ public class ExcelMigrarEstudiantes extends ExcelMigrar{
     
     public enum Enum implements CampoMigrarInterface
     {        
-        IDENTIFICACION("Identificacion",0),
-        NOMBRES("Nombres",1),
-        APELLIDOS("Apellidos",2),
-        GENERO("genero",3),
-        IDENTIFICACION_REPRESENTATE_1("representante1",4),
-        IDENTIFICACION_REPRESENTATE_2("representante2",5),
-        CURSO_ACTUAL("curso",6),
-        ESTADO("estado",7);
+        IDENTIFICACION("Identificacion",0,String.class),
+        NOMBRES("Nombres",1,String.class),
+        APELLIDOS("Apellidos",2,String.class),
+        GENERO("genero",3,String.class),
+        FECHA_NACIMIENTO("fechaNacimiento",4,Date.class),
+        IDENTIFICACION_REPRESENTATE_1("representante1",5,String.class),
+        IDENTIFICACION_REPRESENTATE_2("representante2",6,String.class),
+        CURSO_ACTUAL("curso",7,String.class),
+        ESTADO("estado",8,String.class);
 
-        private Enum(String nombre,Integer posicion) {
+        private Enum(String nombre,Integer posicion,Class tipoDato) {
             this.nombre = nombre;
             this.posicion=posicion;
             this.requerido=true;
+            this.tipoDato=tipoDato;
         }
         
         private boolean requerido;
         public String nombre;
+        public Class tipoDato;
         public Integer posicion;
 
         @Override
@@ -58,7 +62,7 @@ public class ExcelMigrarEstudiantes extends ExcelMigrar{
 
         @Override
         public Class getTipoDato() {
-            return String.class;
+            return tipoDato;
         }
 
         @Override

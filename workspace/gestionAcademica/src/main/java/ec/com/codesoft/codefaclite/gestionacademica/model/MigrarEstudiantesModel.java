@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcadem
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -31,12 +32,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.sql.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
@@ -59,6 +63,14 @@ public class MigrarEstudiantesModel extends MigrarModel{
     
     //private List<Estudiante> estudiantes;
     //private ExcelMigrarEstudiantes excelMigrarEstudiantes;
+    //private JCheckBox chkPermitirGrabarSinRepresentante;
+
+    @Override
+    public void agregarOtrosComponentes() {
+        //chkPermitirGrabarSinRepresentante=new JCheckBox("Representantes requeridos");
+        //agregarComponenteOtroPanel(chkPermitirGrabarSinRepresentante);
+    }
+    
     
     
     @Override
@@ -139,6 +151,20 @@ public class MigrarEstudiantesModel extends MigrarModel{
                     estudiante.setNombres(((String) fila.get(ExcelMigrarEstudiantes.Enum.NOMBRES.posicion).valor).trim());
                     estudiante.setApellidos(((String) fila.get(ExcelMigrarEstudiantes.Enum.APELLIDOS.posicion).valor).trim());
                     estudiante.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                    
+                    ExcelMigrar.CampoResultado fechaCampo=fila.get(ExcelMigrarEstudiantes.Enum.FECHA_NACIMIENTO.posicion);                    
+                    if(fechaCampo!=null)
+                    {
+                        try
+                        {
+                            java.util.Date fechaNacimiento=(java.util.Date) fechaCampo.valor;
+                            estudiante.setFechaNacimiento(new java.sql.Date(fechaNacimiento.getTime()));
+                        }
+                        catch(Exception ex)
+                        {
+                            System.out.println("error al leer la fecha"+ex.getMessage());
+                        }
+                    }
 
                     procesarGenero(fila.getByEnum(ExcelMigrarEstudiantes.Enum.GENERO),estudiante);
                     
@@ -193,6 +219,9 @@ public class MigrarEstudiantesModel extends MigrarModel{
                     
                 } catch (RemoteException ex) {
                     Logger.getLogger(MigrarEstudiantesModel.class.getName()).log(Level.SEVERE, null, ex);
+                }catch(Exception ex)
+                {
+                    throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());
                 }
 
 
@@ -204,9 +233,9 @@ public class MigrarEstudiantesModel extends MigrarModel{
             {
                 String genero = (String) campo.valor;
 
-                if (genero.trim().toLowerCase().equals("femenino")) {
+                if (genero.trim().toLowerCase().equals("femenino") || genero.trim().toLowerCase().equals("f")) {
                     estudiante.setGenero(GeneroEnum.FEMENINO.getEstado());
-                } else if (genero.trim().toLowerCase().equals("masculino")) {
+                } else if (genero.trim().toLowerCase().equals("masculino") || genero.trim().toLowerCase().equals("m") ) {
                     estudiante.setGenero(GeneroEnum.MASCULINO.getEstado());
                 } else {
                     throw new ExcelMigrar.ExcepcionExcel("No se reconece un formato valido para el campo genero");
@@ -266,6 +295,11 @@ public class MigrarEstudiantesModel extends MigrarModel{
     @Override
     public InputStream getInputStreamExcel() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getTitulo() {
+        return "Migrar Estudiantes"; //To change body of generated methods, choose Tools | Templates.
     }
 
     

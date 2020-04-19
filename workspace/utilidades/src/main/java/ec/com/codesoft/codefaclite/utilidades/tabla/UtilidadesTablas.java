@@ -144,6 +144,11 @@ public abstract class UtilidadesTablas {
         }
     }
     
+    /**
+     * @deprecated Este metodo no funciona no se ni porque esta escrito
+     * @param table
+     * @param puedeEditar 
+     */
     public static void bloquearColumnasTabla(JTable table, Boolean[] puedeEditar)
     {
         table = new JTable(){

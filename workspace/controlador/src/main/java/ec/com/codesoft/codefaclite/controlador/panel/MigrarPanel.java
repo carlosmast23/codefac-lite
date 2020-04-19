@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import java.awt.Color;
 import java.awt.Component;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -42,6 +43,7 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
         btnMigrar = new javax.swing.JButton();
         pnlCamposRequeridos = new javax.swing.JPanel();
         btnDescargarPlantilla = new javax.swing.JButton();
+        pnlOtrasOpciones = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtRutaArchivo = new javax.swing.JTextField();
@@ -63,11 +65,13 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
         btnDescargarPlantilla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/excel.png"))); // NOI18N
         btnDescargarPlantilla.setText("Descarga Plantilla");
 
+        pnlOtrasOpciones.setLayout(new BoxLayout(pnlOtrasOpciones,BoxLayout.Y_AXIS));
+
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Migrar Estudiantes");
+        setTitle("Migrar");
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
@@ -157,6 +161,7 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JPanel pnlCamposRequeridos;
+    private javax.swing.JPanel pnlOtrasOpciones;
     private javax.swing.JTable tblDatos;
     private javax.swing.JTextField txtRutaArchivo;
     // End of variables declaration//GEN-END:variables
@@ -201,6 +206,13 @@ public abstract class MigrarPanel extends ControladorCodefacInterface {
     public JButton getBtnDescargarPlantilla() {
         return btnDescargarPlantilla;
     }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Otras Opciones",visible = true)
+    public JPanel getPnlOtrasOpciones() {
+        return pnlOtrasOpciones;
+    }
+    
+    
     
 
     

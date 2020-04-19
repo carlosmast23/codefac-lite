@@ -119,7 +119,8 @@ public enum VentanaEnum implements Serializable{
     TABLA_INTERES("ec.com.codesoft.codefaclite.prestamos.model.TablaInteresModel", "TAIN", "Tabla Interes", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.PRO,null,false),
     PRESTAMO_MODEL("ec.com.codesoft.codefaclite.prestamos.model.PrestamoModel", "PRST", "Prestamo", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.PRO,null,true),
     ATS("ec.com.codesoft.codefaclite.impuestos.model.AtsModel", "ATSM", "ATS", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.PRO,null),
-    CAJA("ec.com.codesoft.codefaclite.pos.model.CajaModel", "CAJA", "CAJA", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.PRO,null);
+    CAJA("ec.com.codesoft.codefaclite.pos.model.CajaModel", "CAJA", "CAJA", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.PRO,null),
+    DESCUENTO_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.DescuentoAcademicoModel", "DSAC", "Descuento Académico", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR,null)  ;
 
     
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,Integer teclaAtajo) {

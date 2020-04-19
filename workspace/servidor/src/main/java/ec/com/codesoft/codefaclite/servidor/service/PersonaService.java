@@ -60,17 +60,25 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
             }
         });
     }
-
+    
     public Persona grabar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
+        return grabar(p,true);
+    }
+    
+
+    public Persona grabar(Persona p,Boolean validarCedula) throws ServicioCodefacException, java.rmi.RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 /**
                  * Validaciones previas de los datos
                  */
-                if(!p.validarCedula())
+                if(validarCedula)
                 {
-                    throw new ServicioCodefacException("Error al validar la identificación");
+                    if(!p.validarCedula())
+                    {
+                        throw new ServicioCodefacException("Error al validar la identificación");
+                    }
                 }
                 
                 if(p.getRazonSocial()==null || p.getRazonSocial().isEmpty())

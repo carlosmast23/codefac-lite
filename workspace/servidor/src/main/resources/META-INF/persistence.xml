@@ -85,6 +85,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.PrestamoCuota</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.PrestamoCuotaCargo</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoAcademico</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

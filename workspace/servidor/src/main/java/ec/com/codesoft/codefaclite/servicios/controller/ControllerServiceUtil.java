@@ -65,6 +65,7 @@ import ec.com.codesoft.codefaclite.servidor.service.compra.OrdenCompraDetalleSer
 import ec.com.codesoft.codefaclite.servidor.service.compra.OrdenCompraService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.AulaService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.CatalogoProductoService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.DescuentoAcademicoService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.EstudianteInscritoService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.EstudianteService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelAcademicoService;
@@ -161,6 +162,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCu
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoTablaInteresServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.DescuentoAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
 
 /**
@@ -256,6 +258,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(PrestamoCuotaService.class,PrestamoCuotaServiceIf.class);
             mapRecursos.put(PrestamoService.class,PrestamoServiceIf.class);
             mapRecursos.put(CajaService.class,CajaServiceIf.class);
+            mapRecursos.put(DescuentoAcademicoService.class,DescuentoAcademicoServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);
             LOG.log(Level.INFO,"Servidor Iniciado");

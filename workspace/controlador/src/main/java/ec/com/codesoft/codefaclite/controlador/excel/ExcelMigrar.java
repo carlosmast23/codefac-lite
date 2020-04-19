@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.component.Component;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import static org.apache.poi.hssf.usermodel.HeaderFooter.file;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -114,10 +116,19 @@ public abstract class ExcelMigrar {
                     break;
 
                 case NUMERIC:
-                    //System.out.println(celda.getNumericCellValue());
-                    if(!tiposDatosCabecera.get(i).equals(Double.class))
+                    
+                    if(HSSFDateUtil.isCellDateFormatted(celda))
                     {
-                       throw new ExcepcionMigrar("Se esperaba un tipo Double pero la columna "+i+" tiene un tipo de dato diferente de "+tiposDatosCabecera.get(i).getName());
+                        if(!tiposDatosCabecera.get(i).equals(Date.class))
+                        {
+                            throw new ExcepcionMigrar("Se esperaba un tipo Date pero la columna "+i+" tiene un tipo de dato diferente de "+tiposDatosCabecera.get(i).getName());
+                        }
+                    }else
+                    {
+                        if(!tiposDatosCabecera.get(i).equals(Double.class))
+                        {
+                           throw new ExcepcionMigrar("Se esperaba un tipo Double pero la columna "+i+" tiene un tipo de dato diferente de "+tiposDatosCabecera.get(i).getName());
+                        }
                     }
                     break;
                     
@@ -258,8 +269,16 @@ public abstract class ExcelMigrar {
                                 //System.out.print(cell.getStringCellValue() + " | ");
                                 break;
                             case NUMERIC:
-                                filaResultado.agregarDato(new CampoResultado<Double>(Double.class, cell.getNumericCellValue(), obtenerCampos()[i]), false);
+                                //Cuando es numero tambien puede ser fechas
+                                if(HSSFDateUtil.isCellDateFormatted(cell))
+                                {
 
+                                    filaResultado.agregarDato(new CampoResultado<Date>(Date.class, cell.getDateCellValue(), obtenerCampos()[i]), false);
+                                }
+                                else
+                                {
+                                    filaResultado.agregarDato(new CampoResultado<Double>(Double.class, cell.getNumericCellValue(), obtenerCampos()[i]), false);
+                                }
                                 break;
 
                             case BLANK:
@@ -357,7 +376,7 @@ public abstract class ExcelMigrar {
             if(!fila.migrado)
             {
                 //Cuando no existe ni ningun error mostrar el texto de sin migrar
-                if(fila.error.isEmpty())
+                if(fila.error==null || fila.error.isEmpty())
                 {
                     datos=ArrayUtils.add(datos,ESTADO_SIN_MIGRADO);
                 }

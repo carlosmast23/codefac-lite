@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -100,6 +101,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     public void iniciar() throws ExcepcionCodefacLite {
         cargarValoresIniciales();
         iniciarListener();
+        iniciarListenerPopUp();
     }
 
     @Override
@@ -611,8 +613,8 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     
     private void cargarEstudiantesInscritosTabla(NivelAcademico nivelAcademico)
     {
-        String[] titulo={"objeto","Seleccionar","Nombre","Valor"};
-        DefaultTableModel modeloTabla=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{RubroPlantillaEstudiante.class,Boolean.class,String.class,BigDecimal.class});
+        String[] titulo={"objeto","Seleccionar","Nombre","Valor","Descuento"};
+        DefaultTableModel modeloTabla=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{RubroPlantillaEstudiante.class,Boolean.class,String.class,BigDecimal.class,BigDecimal.class},new Boolean[]{false,true,false,true,false});
         
         List<RubroPlantillaEstudiante> estudiantesInscritos= estudiantesRegistradosMap.get(nivelAcademico);
         
@@ -627,7 +629,8 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                             estudianteInscrito,
                             false,
                             estudianteInscrito.getEstudianteInscrito().getEstudiante().getNombreCompleto(),
-                            estudianteInscrito.getValorPlantilla()
+                            estudianteInscrito.getValorPlantilla(),
+                            BigDecimal.ZERO
                         }
                 );
             }
@@ -635,7 +638,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         }
         
         getTblDatosRegistrados().setModel(modeloTabla);
-        UtilidadesTablas.ocultarColumna(getTblDatosRegistrados(),0);   
+        UtilidadesTablas.ocultarColumna(getTblDatosRegistrados(),0);  
         
         modeloTabla.addTableModelListener(new TableModelListener() {
             @Override
@@ -653,6 +656,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                 }
             }
         });
+        
         
     }
     
@@ -1017,6 +1021,20 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                 getCmbCursosRegistrados().setSelectedIndex(getCmbCursosRegistrados().getSelectedIndex());
             }
         }
+    }
+
+    private void iniciarListenerPopUp() {
+        JPopupMenu menuOpcionesEstudiantesRegistrados=new JPopupMenu();
+        JMenuItem itemAgregarDescuento=new JMenuItem("Cambiar Descuento");
+        itemAgregarDescuento.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DialogoCodefac.mensaje("EJEMPLO",DialogoCodefac.MENSAJE_CORRECTO);
+            }
+        });
+        
+        menuOpcionesEstudiantesRegistrados.add(itemAgregarDescuento);
+        getTblDatosRegistrados().setComponentPopupMenu(menuOpcionesEstudiantesRegistrados);
     }
     
     

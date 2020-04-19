@@ -1,0 +1,2 @@
+#caracteres especiales en jsf
+https://stackoverflow.com/questions/6883860/how-to-insert-special-characters-like-and-into-jsf-components-value-attribu
