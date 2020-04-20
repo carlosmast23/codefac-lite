@@ -1015,7 +1015,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         
     }
 
-    public void cargarDatosDetalleVista(BigDecimal valorUnitario, String descripcion, String codigo) {
+    public void cargarDatosDetalleVista(BigDecimal valorUnitario, BigDecimal descuentos,String descripcion, String codigo) {
         
     }
 

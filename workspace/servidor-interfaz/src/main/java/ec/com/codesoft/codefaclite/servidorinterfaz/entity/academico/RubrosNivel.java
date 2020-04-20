@@ -48,6 +48,9 @@ public class RubrosNivel implements Serializable{
     
     @Column(name = "ANIO")
     private Integer anio;
+    
+    @Column(name = "DESCUENTO_PORCENTAJE")
+    private BigDecimal descuentoPorcentaje;
 
     @JoinColumn(name = "NIVEL_ID")
     @ManyToOne
@@ -164,6 +167,15 @@ public class RubrosNivel implements Serializable{
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public BigDecimal getDescuentoPorcentaje() {
+        return descuentoPorcentaje;
+    }
+
+    public void setDescuentoPorcentaje(BigDecimal descuentoPorcentaje) {
+        this.descuentoPorcentaje = descuentoPorcentaje;
+    }
+    
     
     
     

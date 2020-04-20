@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.RubroEstudia
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
@@ -20,11 +21,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlanti
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AplicarDescuentoAcademicoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -159,11 +163,18 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         
     }
 
-    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla, MesEnum mesEnum, String nombreRubroMes,Integer anio) throws RemoteException,ServicioCodefacException {
+    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla, MesEnum mesEnum, String nombreRubroMes,Integer anio,DescuentoAcademico descuentoAcademico,AplicarDescuentoAcademicoEnum aplicarDescuentoEnum) throws RemoteException,ServicioCodefacException {
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                /**
+                 * =============================================================
+                 *      CALCULAR EL TEMA DE PORCENTAJES DE DESCUENTOS
+                 * ============================================================
+                 */
+                BigDecimal porcentajeDescuento=descuentoAcademico.getPorcentaje();
+                
                 //Crear el rubro nivel de esa plantilla
                 RubrosNivel rubroNivel = new RubrosNivel();
                 rubroNivel.setCatalogoProducto(rubroPlantilla.getCatalogoProducto());
@@ -175,6 +186,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
                 rubroNivel.setMesNumero(mesEnum.getNumero());
                 rubroNivel.setAnio(anio);
                 rubroNivel.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                rubroNivel.setDescuentoPorcentaje(porcentajeDescuento);
                 //rubroNivel.setReferenciaPlantilla(rubroPlantilla);
 
                 entityManager.persist(rubroNivel);
@@ -211,10 +223,16 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
                     rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
                     rubroEstudiante.setEstudianteInscrito(estudiateInscrito.getEstudianteInscrito());
                     rubroEstudiante.setRubroNivel(rubroNivel);
-
-                    rubroEstudiante.setSaldo(valorDeudaEstudiante);
-                    rubroEstudiante.setValor(valorDeudaEstudiante);
-
+                    
+                    BigDecimal descuentoEstudiante=calcularDescuentoFinalEstudiante(estudiateInscrito, descuentoAcademico, aplicarDescuentoEnum);
+                    rubroEstudiante.setProcentajeDescuento((descuentoEstudiante!=null)?descuentoEstudiante.intValue():0);
+                    
+                    //Obtener el valor menos descuento porque finalmente ese es el valor que debemos cobrar
+                    BigDecimal valorNeto=UtilidadesPorcentajes.calcularValorMenosDescuento(valorDeudaEstudiante,new BigDecimal(rubroEstudiante.getProcentajeDescuento()));                    
+                    rubroEstudiante.setValorDescuento(valorDeudaEstudiante.subtract(valorNeto));
+                    rubroEstudiante.setSaldo(valorNeto);
+                    rubroEstudiante.setValor(valorNeto);
+                    
                     entityManager.persist(rubroEstudiante);
                 }
 
@@ -238,6 +256,55 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         
        
         return rubroPlantilla;
+    }
+    
+    /**
+     * Calcula los descuentos para los diferentes casos cuando se generan las deduas desde las plantillas
+     * @param estudiateInscrito
+     * @param descuentoAcademico
+     * @param aplicarDescuentoEnum
+     * @return 
+     */
+    private BigDecimal calcularDescuentoFinalEstudiante(RubroPlantillaEstudiante estudiateInscrito,DescuentoAcademico descuentoAcademico,AplicarDescuentoAcademicoEnum aplicarDescuentoEnum)
+    {
+        //verificar primero si tiene un porcentaje asigando la plantilla o directamente devuelvo el descuento por estudiante
+        if (descuentoAcademico.getPorcentaje().compareTo(BigDecimal.ZERO) == 0) {
+            return estudiateInscrito.getDescuentoPlantilla();
+        }
+
+        BigDecimal porcentajeDescuentoGeneral = descuentoAcademico.getPorcentaje();
+        switch (aplicarDescuentoEnum) {
+            /**
+             * FORMULA PARA CALCULAR EL DESCUENTO ACUMULADO
+             * d1= descuento 1
+             * d2= descuento 2
+             * porcentajeTotalEntero=d1+d2 -(d2*d1/100)
+             */
+            case FUSIONAR_DESCUENTO:
+                if (estudiateInscrito.getDescuentoPlantilla()!=null && estudiateInscrito.getDescuentoPlantilla().compareTo(BigDecimal.ZERO) != 0) {
+                    BigDecimal descuentoTotal=porcentajeDescuentoGeneral.add(estudiateInscrito.getDescuentoPlantilla());
+                    descuentoTotal=descuentoTotal.subtract(porcentajeDescuentoGeneral.multiply(estudiateInscrito.getDescuentoPlantilla()).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP));
+                    return descuentoTotal;
+                } else {
+                    //Si no tiene descuentos el estudiante devuelvo solo el descuento global
+                    return porcentajeDescuentoGeneral;
+                }
+
+            case APLICAR_SOLO_DESCUENTO_ACTUAL_SI_TIENE_OTROS_DESCUENTOS:
+                return porcentajeDescuentoGeneral;
+
+            case NO_APLICAR_DESCUENTO_SI_YA_TIENE_ASIGANDO_DESCUENTO:
+                if(estudiateInscrito.getDescuentoPlantilla()==null || estudiateInscrito.getDescuentoPlantilla().compareTo(BigDecimal.ZERO)==0)
+                {
+                    return porcentajeDescuentoGeneral;
+                }
+                else
+                {
+                    return estudiateInscrito.getDescuentoPlantilla();
+                }
+        }
+        return BigDecimal.ZERO;
+        
     }
     
     public void actualizarRubrosEstudiante(List<RubroEstudiante> rubroEstudiantes) throws RemoteException {

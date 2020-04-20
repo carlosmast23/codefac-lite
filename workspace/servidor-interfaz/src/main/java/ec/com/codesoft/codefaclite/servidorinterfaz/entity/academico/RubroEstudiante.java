@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDescuentoRubroEnum;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -52,6 +53,9 @@ public class RubroEstudiante implements Serializable{
 
     @Column(name = "PORCENTAJE_DESCUENTO  ")
     private Integer procentajeDescuento;
+    
+    @Column(name = "VALOR_DESCUENTO")
+    private BigDecimal valorDescuento;
     
     @Column(name = "FECHA_GENERADO")
     private Date fechaGenerado;
@@ -160,8 +164,14 @@ public class RubroEstudiante implements Serializable{
     public void setFechaGenerado(Date fechaGenerado) {
         this.fechaGenerado = fechaGenerado;
     }
-    
-    
+
+    public BigDecimal getValorDescuento() {
+        return valorDescuento;
+    }
+
+    public void setValorDescuento(BigDecimal valorDescuento) {
+        this.valorDescuento = valorDescuento;
+    }
     
     
     /**
@@ -215,6 +225,28 @@ public class RubroEstudiante implements Serializable{
         return this.getRubroNivel().getNombre()+"["+this.valor+"]";
     }
     
+    public BigDecimal obtenerValorSaldoDescuento()
+    {
+        return obtenerSaldoIncluidoDescuento().subtract(saldo);
+    }
+    
+    public BigDecimal obtenerSaldoIncluidoDescuento()
+    {
+        //Si por algun motivo este valor esta grabado como nulo
+        if(procentajeDescuento==null)
+        {
+            procentajeDescuento=0;
+        }
+        
+        if(procentajeDescuento>=100)
+        {
+            return valorDescuento;// TODO: Verificar que no de problema cuando el descuento sea de un 100%
+        }
+        else
+        {
+            return UtilidadesPorcentajes.construirValorAntesDeDescuento(saldo,new BigDecimal(procentajeDescuento));
+        }
+    }
     
     
     public enum FacturacionEstadoEnum {

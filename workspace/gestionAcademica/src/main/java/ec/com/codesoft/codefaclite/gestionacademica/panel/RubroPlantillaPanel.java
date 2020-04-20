@@ -8,11 +8,13 @@ package ec.com.codesoft.codefaclite.gestionacademica.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AplicarDescuentoAcademicoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -94,6 +96,10 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         lstMesesGenerados = new javax.swing.JList<>();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        cmbAplicarDescuentoMes = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        cmbFormaAplicarDescuentoMes = new javax.swing.JComboBox<>();
 
         jLabel3.setText("jLabel3");
 
@@ -374,14 +380,14 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel10.setText("Nombre Mes:");
+        jLabel10.setText("Forma Aplicar Descuento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel10, gridBagConstraints);
 
-        txtNombreMes.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtNombreMes.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -405,7 +411,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 283;
@@ -419,7 +425,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 283;
@@ -429,24 +435,58 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 1.0;
         jPanel4.add(jScrollPane4, gridBagConstraints);
 
-        jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Arial", 3, 12)); // NOI18N
         jLabel11.setText("Meses Sin Generar Deuda");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
         jPanel4.add(jLabel11, gridBagConstraints);
 
-        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Arial", 3, 12)); // NOI18N
         jLabel12.setText("Meses Generados Deuda");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
         jPanel4.add(jLabel12, gridBagConstraints);
+
+        jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel14.setText("Nombre Mes:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel14, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbAplicarDescuentoMes, gridBagConstraints);
+
+        jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel15.setText("Aplicar Descuento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel15, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbFormaAplicarDescuentoMes, gridBagConstraints);
 
         jTabPanel.addTab("Generar Rubros", jPanel4);
 
@@ -465,8 +505,10 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkCursoRegistrado;
     private javax.swing.JCheckBox chkCursoSinRegistrar;
+    private javax.swing.JComboBox<DescuentoAcademico> cmbAplicarDescuentoMes;
     private javax.swing.JComboBox<NivelAcademico> cmbCursoSinRegistrar;
     private javax.swing.JComboBox<NivelAcademico> cmbCursosRegistrados;
+    private javax.swing.JComboBox<AplicarDescuentoAcademicoEnum> cmbFormaAplicarDescuentoMes;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
     private javax.swing.JComboBox<CatalogoProducto> cmbRubro;
     private javax.swing.JComboBox<RubroPlantilla.TipoValorEnum> cmbTipoValor;
@@ -475,6 +517,8 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -678,6 +722,20 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     public JComboBox<RubroPlantilla.TipoValorEnum> getCmbTipoValor() {
         return cmbTipoValor;
     }
+
+    public JComboBox<DescuentoAcademico> getCmbAplicarDescuentoMes() {
+        return cmbAplicarDescuentoMes;
+    }
+
+    public JComboBox<AplicarDescuentoAcademicoEnum> getCmbFormaAplicarDescuentoMes() {
+        return cmbFormaAplicarDescuentoMes;
+    }
+
+    public void setCmbFormaAplicarDescuentoMes(JComboBox<AplicarDescuentoAcademicoEnum> cmbFormaAplicarDescuentoMes) {
+        this.cmbFormaAplicarDescuentoMes = cmbFormaAplicarDescuentoMes;
+    }
+
+    
     
     
     

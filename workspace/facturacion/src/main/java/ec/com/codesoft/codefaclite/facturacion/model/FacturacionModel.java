@@ -818,7 +818,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             productoSeleccionado.getCodigoPersonalizado(), 
                             productoSeleccionado.getCatalogoProducto(), 
                             entity.getIdProducto(), 
-                            TipoDocumentoEnum.LIBRE); //TODO: El metodo libre esta de revisar porque no se desde que pantalla estan usando si es con inventario o con no
+                            TipoDocumentoEnum.LIBRE,
+                            BigDecimal.ZERO); //TODO: El metodo libre esta de revisar porque no se desde que pantalla estan usando si es con inventario o con no
                     controlador.setearValoresProducto(facturaDetalle);
                     setFacturaDetalleSeleccionado(facturaDetalle);
                     //Establecer puntero en la cantidad para agregar
@@ -963,7 +964,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     presupuestoSeleccionado.getId().toString(), 
                     presupuestoSeleccionado.getCatalogoProducto(), 
                     presupuestoSeleccionado.getId(),
-                    (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem());
+                    (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem(),
+                    BigDecimal.ZERO);
             
             controlador.setearValoresProducto(facturaDetalle);
             //controlador.setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString(),presupuestoSeleccionado.getCatalogoProducto());
@@ -990,15 +992,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 return;
             }            
             
-            rubroSeleccionado=rubroEstudianteTmp;
+            rubroSeleccionado=rubroEstudianteTmp;            
+            BigDecimal descuentoValor=rubroEstudianteTmp.obtenerValorSaldoDescuento();
+            
             FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
-                    rubroEstudianteTmp.getSaldo(), 
+                    rubroEstudianteTmp.obtenerSaldoIncluidoDescuento(), 
                     null, //Este tipo de valores no tienen subsidio
                     rubroEstudianteTmp.getRubroNivel().getNombre(), 
                     rubroEstudianteTmp.getId().toString(), 
                     rubroEstudianteTmp.getRubroNivel().getCatalogoProducto(), 
                     rubroEstudianteTmp.getId(), 
-                    (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem());
+                    (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem(),
+                    descuentoValor);
             controlador.setearValoresProducto(facturaDetalle);
             setFacturaDetalleSeleccionado(facturaDetalle);
         }
@@ -3532,9 +3537,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     @Override
-    public void cargarDatosDetalleVista(BigDecimal valorUnitario,String descripcion,String codigo) {
+    public void cargarDatosDetalleVista(BigDecimal valorUnitario,BigDecimal descuento,String descripcion,String codigo) {
         getTxtValorUnitario().setText(valorUnitario+"");
         getTxtDescripcion().setText(descripcion);
+        getTxtDescuento().setText(descuento.toString());
         //getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
         //getTxtDescripcion().setText(productoSeleccionado.getNombre());
         //Dar foco a la cantidad a ingresar

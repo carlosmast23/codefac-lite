@@ -28,12 +28,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlanti
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AplicarDescuentoAcademicoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.awt.event.ActionEvent;
@@ -275,9 +277,18 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                 getCmbTipoValor().addItem(tipo);
             }
             
+            //Cargar los descuentos para generar cada mes
+            UtilidadesComboBox.llenarComboBox(getCmbAplicarDescuentoMes(),ServiceFactory.getFactory().getDescuentoAcademicoServiceIf().obtenerDescuentoActivosPorPeriodoActivo(DescuentoAcademico.TipoEnum.GRUPAL));
+            getCmbAplicarDescuentoMes().addItem(DescuentoAcademico.descuentoCero);
+            getCmbAplicarDescuentoMes().setSelectedItem(DescuentoAcademico.descuentoCero);
+            
+            //Cargar las formas de aplicar los descuentos
+            UtilidadesComboBox.llenarComboBox(getCmbFormaAplicarDescuentoMes(),AplicarDescuentoAcademicoEnum.values());
             
         } catch (RemoteException ex) {
             Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -364,8 +375,9 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                     String nombreMes = getTxtNombreMes().getText();
                     if (!nombreMes.equals("")) {
                         try {
-
-                            rubroPlantilla = ServiceFactory.getFactory().getRubroEstudianteServiceIf().crearRubroEstudiantesDesdePlantila(rubroPlantilla, rubroPlantillaMes.getMesEnum(), nombreMes, rubroPlantillaMes.getAnio());
+                            DescuentoAcademico descuentoAcademico=(DescuentoAcademico) getCmbAplicarDescuentoMes().getSelectedItem();
+                            AplicarDescuentoAcademicoEnum aplicarDescuentoEnum=(AplicarDescuentoAcademicoEnum) getCmbFormaAplicarDescuentoMes().getSelectedItem();
+                            rubroPlantilla = ServiceFactory.getFactory().getRubroEstudianteServiceIf().crearRubroEstudiantesDesdePlantila(rubroPlantilla, rubroPlantillaMes.getMesEnum(), nombreMes, rubroPlantillaMes.getAnio(),descuentoAcademico,aplicarDescuentoEnum);
                             DialogoCodefac.mensaje("Correcto", "Las deudas para el mes " + rubroPlantillaMes.getMesEnum().getNombre() + " se generaron correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                             cargarDatos();
 
@@ -633,7 +645,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                             false,
                             estudianteInscrito.getEstudianteInscrito().getEstudiante().getNombreCompleto(),
                             estudianteInscrito.getValorPlantilla(),
-                            BigDecimal.ZERO
+                            estudianteInscrito.getDescuentoPlantilla()
                         }
                 );
             }
@@ -1041,6 +1053,9 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                     int filaSeleccionada=getTblDatosRegistrados().getSelectedRow();
                     DefaultTableModel modeloTabla=(DefaultTableModel) getTblDatosRegistrados().getModel();
                     modeloTabla.setValueAt(descuento.getPorcentaje(), filaSeleccionada,COLUMNA_DESCUENTO);
+                    RubroPlantillaEstudiante estudiantePlantilla=(RubroPlantillaEstudiante) modeloTabla.getValueAt(filaSeleccionada,0);
+                    estudiantePlantilla.setDescuentoPlantilla(descuento.getPorcentaje());
+                    
                 }
             }
         });
@@ -1048,6 +1063,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         menuOpcionesEstudiantesRegistrados.add(itemAgregarDescuento);
         getTblDatosRegistrados().setComponentPopupMenu(menuOpcionesEstudiantesRegistrados);
     }
+    
     
     
 }

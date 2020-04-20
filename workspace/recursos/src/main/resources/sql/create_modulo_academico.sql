@@ -95,6 +95,8 @@ create table RUBROS_NIVEL(
     CATALOGO_PRODUCTO_ID BIGINT,
     TIPO_RUBRO varchar(1),
     VALOR decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.2.8)*/
+    DESCUENTO_PORCENTAJE decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.3)*/
     ESTADO varchar(1),
     primary key (ID)
@@ -107,6 +109,8 @@ create table RUBRO_ESTUDIANTE(
     NOMBRE_DESCUENTO varchar(128),
     PORCENTAJE_DESCUENTO int,  
     SALDO decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.2.8)*/
+    VALOR_DESCUENTO decimal(13,2),
     ESTADO_FACTURA varchar(1),
     ESTADO varchar(1),
     FECHA_GENERADO date,
@@ -149,6 +153,8 @@ create table RUBRO_PLANTILLA_ESTUDIANTE(
     ESTUDIANTE_INSCRITO_ID BIGINT,
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.9.3)*/
     VALOR_PLANTILLA decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.2.8)*/
+    DESCUENTO_PLANTILLA decimal(13,2),
     primary key (ID)
 );
 

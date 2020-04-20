@@ -163,7 +163,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 productoSeleccionado.getCodigoPersonalizado(), 
                 productoSeleccionado.getCatalogoProducto(), 
                 productoSeleccionado.getIdProducto(), 
-                interfaz.obtenerTipoDocumentoSeleccionado());
+                interfaz.obtenerTipoDocumentoSeleccionado(),
+                BigDecimal.ZERO);
         
         //interfaz.setearValoresProducto(productoSeleccionado.getValorUnitario(),descripcion,productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
         interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
@@ -176,13 +177,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             String descripcion,
             String codigo,
             CatalogoProducto catalogoProducto,
-            Long referenciaId,
-            TipoDocumentoEnum tipoDocumentoReferencia)
+            Long referenciaId,            
+            TipoDocumentoEnum tipoDocumentoReferencia,
+            BigDecimal descuento)
     {
         FacturaDetalle facturaDetalle=new FacturaDetalle();
         facturaDetalle.setCantidad(BigDecimal.ONE);
         facturaDetalle.setDescripcion(descripcion);
-        facturaDetalle.setDescuento(BigDecimal.ZERO);
+        facturaDetalle.setDescuento(descuento);
         facturaDetalle.setPrecioUnitario(valorUnitario);
         facturaDetalle.setReferenciaId(referenciaId);
         facturaDetalle.setCodigoPrincipal(codigo);
@@ -250,6 +252,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     public  void setearValoresProducto(FacturaDetalle facturaDetalle) {
         interfaz.cargarDatosDetalleVista(
                 facturaDetalle.getPrecioUnitario(),
+                facturaDetalle.getDescuento(),
                 facturaDetalle.getDescripcion(),
                 facturaDetalle.getCodigoPrincipal());
         
@@ -317,7 +320,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         {
             case ACADEMICO:
                 //TODO: Analizar para el caso que tenga descuento
-                if (interfaz.obtenerRubroSeleccionado().getSaldo().compareTo(cantidad.multiply(valorUnitario)) == -1) {
+                if (interfaz.obtenerRubroSeleccionado().obtenerSaldoIncluidoDescuento().compareTo(cantidad.multiply(valorUnitario)) == -1) {
                     DialogoCodefac.mensaje("Validación", "El Total no puede exceder del valor " + interfaz.obtenerRubroSeleccionado().getSaldo() + " del rubro", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     return false;
                 }
@@ -663,7 +666,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         /**
          * Metodo que me permite cargar los detalle que necesito para mostrar en la vista los datos del cliente
          */
-        public void cargarDatosDetalleVista(BigDecimal valorUnitario,String descripcion,String codigo);
+        public void cargarDatosDetalleVista(BigDecimal valorUnitario,BigDecimal descuento,String descripcion,String codigo);
         
         public void habilitarComboIva(Boolean opcion);
         public void setComboIva(EnumSiNo enumSiNo);

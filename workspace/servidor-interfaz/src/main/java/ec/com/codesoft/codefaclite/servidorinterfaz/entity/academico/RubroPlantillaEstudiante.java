@@ -41,6 +41,9 @@ public class RubroPlantillaEstudiante implements Serializable{
     
     @Column(name = "VALOR_PLANTILLA")
     private BigDecimal valorPlantilla;
+    
+    @Column(name = "DESCUENTO_PLANTILLA")
+    private BigDecimal descuentoPlantilla;
 
     public Long getId() {
         return id;
@@ -72,6 +75,14 @@ public class RubroPlantillaEstudiante implements Serializable{
 
     public void setValorPlantilla(BigDecimal valorPlantilla) {
         this.valorPlantilla = valorPlantilla;
+    }
+
+    public BigDecimal getDescuentoPlantilla() {
+        return descuentoPlantilla;
+    }
+
+    public void setDescuentoPlantilla(BigDecimal descuentoPlantilla) {
+        this.descuentoPlantilla = descuentoPlantilla;
     }
     
     
