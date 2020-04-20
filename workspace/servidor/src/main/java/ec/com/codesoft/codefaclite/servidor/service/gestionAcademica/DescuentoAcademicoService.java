@@ -14,12 +14,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.DescuentoAcademicoServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class DescuentoAcademicoService extends ServiceAbstract<DescuentoAcademico,DescuentoAcademicoFacade> implements DescuentoAcademicoServiceIf{
+public class DescuentoAcademicoService extends ServiceAbstract<DescuentoAcademico, DescuentoAcademicoFacade> implements DescuentoAcademicoServiceIf {
 
     public DescuentoAcademicoService() throws RemoteException {
         super(DescuentoAcademicoFacade.class);
@@ -30,11 +33,11 @@ public class DescuentoAcademicoService extends ServiceAbstract<DescuentoAcademic
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                
+
                 //buscar el periodo actual activo pqara grabar
-                PeriodoService periodoService=new PeriodoService();
-                Periodo periodoActivo=periodoService.obtenerUnicoPeriodoActivo();
-                
+                PeriodoService periodoService = new PeriodoService();
+                Periodo periodoActivo = periodoService.obtenerUnicoPeriodoActivo();
+
                 entity.setPeriodo(periodoActivo);
                 entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 entityManager.persist(entity);
@@ -53,7 +56,28 @@ public class DescuentoAcademicoService extends ServiceAbstract<DescuentoAcademic
             }
         });
     }
+
+    public List<DescuentoAcademico> obtenerDescuentoActivosPorPeriodoActivo()throws ServicioCodefacException, RemoteException {
+        PeriodoService periodoService = new PeriodoService();
+        Periodo periodoActivo = periodoService.obtenerUnicoPeriodoActivo();
+        
+        Map<String,Object> mapParametros =new HashMap<String, Object>();
+        mapParametros.put("periodo",periodoActivo);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+    }
     
+    public List<DescuentoAcademico> obtenerDescuentoActivosPorPeriodoActivo(DescuentoAcademico.TipoEnum tipoEnum)throws ServicioCodefacException, RemoteException
+    {
+        PeriodoService periodoService = new PeriodoService();
+        Periodo periodoActivo = periodoService.obtenerUnicoPeriodoActivo();
+        
+        Map<String,Object> mapParametros =new HashMap<String, Object>();
+        mapParametros.put("periodo",periodoActivo);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("tipo",tipoEnum.getLetra());
+        return getFacade().findByMap(mapParametros);
     
-    
+    }
+
 }

@@ -13,8 +13,10 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EstudianteInscritoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.NivelBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.RubroPlantillaBusquedaDialog;
+import ec.com.codesoft.codefaclite.gestionacademica.panel.AgregarDescuentoDialog;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.RubroPlantillaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
@@ -68,6 +70,7 @@ import org.eclipse.persistence.sessions.factories.SessionFactory;
  */
 public class RubroPlantillaModel extends RubroPlantillaPanel{
     
+    private static final int COLUMNA_DESCUENTO=4;
     /**
      * Lista para cargar todos los estudiantes inscritos en cada nivel
      */
@@ -1029,7 +1032,16 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         itemAgregarDescuento.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DialogoCodefac.mensaje("EJEMPLO",DialogoCodefac.MENSAJE_CORRECTO);
+                AgregarDescuentoDialog dialogDescuento=new AgregarDescuentoDialog(null, true);
+                dialogDescuento.setVisible(true);
+                if(dialogDescuento.obtenerResultado()!=null)
+                {
+                    DescuentoAcademico descuento=dialogDescuento.obtenerResultado();
+                    // Obtener el dato para poder editar
+                    int filaSeleccionada=getTblDatosRegistrados().getSelectedRow();
+                    DefaultTableModel modeloTabla=(DefaultTableModel) getTblDatosRegistrados().getModel();
+                    modeloTabla.setValueAt(descuento.getPorcentaje(), filaSeleccionada,COLUMNA_DESCUENTO);
+                }
             }
         });
         

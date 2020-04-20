@@ -26,6 +26,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "DESCUENTO_ACADEMICO")
 public class DescuentoAcademico implements Serializable{
+    /**
+     * Variable temporal para poder trabajar cuando quiere cambiar descuento a 0
+     * o entras palabras no quiere aplicar descuento
+     */
+    public static final DescuentoAcademico descuentoCero=new DescuentoAcademico("Descuento Cero", BigDecimal.ZERO);
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)    
     @Column(name = "ID")
@@ -45,6 +51,12 @@ public class DescuentoAcademico implements Serializable{
     
     @JoinColumn(name = "PERIODO_ID")
     private Periodo periodo;
+
+    public DescuentoAcademico(String nombre, BigDecimal porcentaje) {
+        this.nombre = nombre;
+        this.porcentaje = porcentaje;
+    }    
+    
 
     public DescuentoAcademico() {
     }
@@ -117,7 +129,7 @@ public class DescuentoAcademico implements Serializable{
 
     @Override
     public String toString() {
-        return nombre;
+        return "["+porcentaje+"%] "+nombre;
     }
 
     @Override
