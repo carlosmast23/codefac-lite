@@ -8,8 +8,10 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -296,6 +298,11 @@ public class Estudiante implements Serializable {
     public String getNombreSimple()
     {
         return apellidos.split(" ")[0]+" "+nombres.split(" ")[0];
+    }
+    
+    public String obtenerTodosTelefonos()
+    {
+        return UtilidadesLista.castListToString(Arrays.asList(telefono,celular),"/");
     }
 
     @Override

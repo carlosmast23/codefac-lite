@@ -8,10 +8,12 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -588,6 +590,13 @@ public class Persona implements Serializable, Comparable<Persona> {
      *
      * @return
      */
+    
+        
+    public String obtenerTodosTelefonos()
+    {
+        return UtilidadesLista.castListToString(Arrays.asList(telefonoCelular,telefonoConvencional),"/");
+    }
+    
     public OperadorNegocioEnum getTipoEnum() {
         return OperadorNegocioEnum.getEnum(tipo);
     }

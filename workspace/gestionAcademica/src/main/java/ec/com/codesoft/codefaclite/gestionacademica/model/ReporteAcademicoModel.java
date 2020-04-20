@@ -100,7 +100,8 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             if(est.getEstudiante().getRepresentante()!=null)
                 nombreRepresentante=est.getEstudiante().getRepresentante().getNombresCompletos();
             
-            String telefono=(est.getEstudiante().getTelefono()!=null)?est.getEstudiante().getTelefono():"";
+            String telefono=(est.getEstudiante().getRepresentante()!=null)?est.getEstudiante().getRepresentante().getTelefonoCelular():"";
+            telefono=(telefono==null)?"":telefono;
             String email=(est.getEstudiante().getEmail()!=null)?est.getEstudiante().getEmail():"";
             
             data.add(new ReporteAcademicoData(
@@ -267,7 +268,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                         fila.add(est.getEstudiante().getApellidos());
                         fila.add(est.getEstudiante().getNombres());                        
                         fila.add(est.getEstudiante().getEmail());
-                        fila.add(est.getEstudiante().getTelefono());
+                        fila.add((est.getEstudiante().getRepresentante()!=null)?est.getEstudiante().getRepresentante().getTelefonoCelular():"");
                         if (est.getEstudiante().getRepresentante() != null) {
                             fila.add(est.getEstudiante().getRepresentante().getNombres() + " " + est.getEstudiante().getRepresentante().getApellidos());
                         } else {
