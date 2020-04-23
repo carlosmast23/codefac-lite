@@ -221,7 +221,7 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
         try {
             String queryString = "SELECT u FROM RubroEstudiante u WHERE (u.estado <> ?4 AND u.estado <> ?5 AND u.saldo > 0) AND " + academico + " AND " + qmes;
             Query query = getEntityManager().createQuery(queryString);
-            System.err.println("QUERY--->" + query.toString());
+            //System.err.println("QUERY--->" + query.toString());
             if (estudiante != null) {
                 query.setParameter(1, estudiante);
             }

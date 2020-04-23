@@ -205,6 +205,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      * Variable que almacena la forma de pago por defecto cuando no se selecciona ninguna
      */
     private SriFormaPago formaPagoDefecto;
+    
+    private SriFormaPago formaPagoConCartera;
     //private Empleado vendedor;
 
     /**
@@ -513,6 +515,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     try {
 
                         factura.addFormaPago(formaPago);
+                        agregarFormaPagoConCartera();
                         verificarSumaFormaPago();
 
                         cargarFormasPagoTabla();
@@ -857,6 +860,49 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         cargarCliente((PersonaEstablecimiento) buscarDialogoModel.getResultado());        
     }
     
+    //TODO: Ver si este metodo lo podemos unir con la parte web
+    public void agregarFormaPagoConCartera()
+    {        
+        //Si no esta activado el tema de pago con cartera con continua
+        if(!getChkPagoConCartera().isSelected())
+        {
+            return;
+        }
+        
+        try {                        
+            BigDecimal saldoDisponibleCartera=ServiceFactory.getFactory().getCarteraServiceIf().obtenerSaldoDisponibleCruzar(factura.getCliente(),session.getEmpresa());
+            
+            //Si el cliente no tiene saldo en cartera entonces ya no continua con el proceso
+            if(saldoDisponibleCartera==null || saldoDisponibleCartera.compareTo(BigDecimal.ZERO)==0)
+            {
+                return;
+            }
+            
+            BigDecimal totalFormasPago=factura.getTotalFormasPago();
+            
+            BigDecimal saldoDisponiblePagar=totalFormasPago.subtract(saldoDisponibleCartera);
+            
+            // Caso cuando el saldo en cartera es sufiente para pagar toda la venta
+            if(saldoDisponiblePagar.compareTo(BigDecimal.ZERO)<=0)
+            {
+                factura.getFormaPagos().clear(); //Quito todas las formas de pago preExistentes
+                FormaPago formaPagoCartera=new FormaPago(factura.getTotal(), formaPagoConCartera);
+                factura.addFormaPago(formaPagoCartera);
+            }else //Caso cuando el valor de cartera no completa el total para pagar
+            {
+                FormaPago formaPagoCartera=new FormaPago(saldoDisponibleCartera, formaPagoConCartera);
+                factura.restarValorFormaPago(saldoDisponibleCartera);
+                factura.addFormaPago(formaPagoCartera);
+                
+            }
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void cargarFormaPago()
     {
         if(factura.getFormaPagos()==null || factura.getFormaPagos().size()==0)
@@ -875,6 +921,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 formaPago.setUnidadTiempo(FormaPago.UnidadTiempoEnum.NINGUNO.getNombre());
 
                 factura.addFormaPago(formaPago);
+                agregarFormaPagoConCartera();
                 cargarFormasPagoTabla();
             }
         }
@@ -2551,11 +2598,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         } 
         else 
         {
-            if(res==1)
+            /*if(res==1)
             {
                 DialogoCodefac.mensaje("Advertencia", "La formas de pago es inferior a el valor a Facturar", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 return false;
-            }
+            }*/
             return true;
         }
     }
@@ -2722,6 +2769,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         try {
             //Obtener la forma de pago
             formaPagoDefecto=ServiceFactory.getFactory().getSriServiceIf().obtenerFormarPagoDefecto();
+            formaPagoConCartera=ServiceFactory.getFactory().getSriServiceIf().obtenerFormarPagoConCartera();
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -3433,6 +3481,32 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
         
+        getChkPagoConCartera().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listerChkPagoConCartera();
+            }
+        });
+    }
+    
+    private void listerChkPagoConCartera()
+    {
+        if(getChkPagoConCartera().isSelected())
+        {
+            try {
+                BigDecimal saldoDisponible=ServiceFactory.getFactory().getCarteraServiceIf().obtenerSaldoDisponibleCruzar(factura.getCliente(),session.getEmpresa());
+                System.out.println("Saldo Disponible: "+saldoDisponible);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        else
+        {
+        
+        }
     }
                 
     private void listenerChkFechaVencimiento()

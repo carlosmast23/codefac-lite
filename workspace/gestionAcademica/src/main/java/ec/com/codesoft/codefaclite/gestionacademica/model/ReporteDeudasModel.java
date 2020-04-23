@@ -65,13 +65,14 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
     private Periodo periodoActivo;
 
     private DefaultListModel<RubroPlantillaMes> modeloLista;
+    private List<ReporteDeudasData> data;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         modeloLista = new DefaultListModel();
         listener();
         try {
-            periodoActivo=ServiceFactory.getFactory().getPeriodoServiceIf().obtenerUnicoPeriodoActivo();
+            periodoActivo = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerUnicoPeriodoActivo();
             Periodo p1 = new Periodo();
             p1.setNombre("Seleccione:");
             List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerPeriodosSinEliminar();
@@ -173,37 +174,33 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void imprimir() {
+    private void generarConsulta() {
         try {
-            InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deudas.jrxml");
             Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
             CatalogoProducto catalogoProducto = (CatalogoProducto) getCmbTipoRubroPorMes().getSelectedItem();
             List<RubroPlantillaMes> mesesSeleccionados = obtenerMesesEnum();
             List<RubroEstudiante> dataRubro;
 
-            NivelAcademico nivelBuscar=null;
-            //if (banderaNiveles == false) {
+            NivelAcademico nivelBuscar = null;
+
             if (getChkTodosNiveles().isSelected() == false) {
-                nivelBuscar=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+                nivelBuscar = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
             }
             EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
-            List<EstudianteInscrito> dataEstudiante = na.buscarPorNivelAcademico(periodo,nivelBuscar);
+            List<EstudianteInscrito> dataEstudiante = na.buscarPorNivelAcademico(periodo, nivelBuscar);
+            data=new ArrayList<ReporteDeudasData>();
 
-            List<ReporteDeudasData> data = new ArrayList<ReporteDeudasData>();
             for (EstudianteInscrito estudiante : dataEstudiante) {
 
                 RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-                
+
                 if (getChkTodosRubros().isSelected() == false) {
-                //if (banderaRubros == false) {
+                    //if (banderaRubros == false) {
                     dataRubro = rs.buscarRubrosMes(estudiante, periodo, catalogoProducto, mesesSeleccionados);
                 } else {
-                    /*Map<String, Object> mapParametros2 = new HashMap<String, Object>();
-                    mapParametros2.put("estudianteInscrito", estudiante);
-                    dataRubro = rs.obtenerPorMap(mapParametros2);*/
                     dataRubro = rs.buscarRubrosMes(estudiante, periodo, null, mesesSeleccionados);
                 }
+                
                 // comparamos si el estudiante tiene rubros
                 if (!dataRubro.isEmpty()) {
                     for (RubroEstudiante re : dataRubro) {
@@ -218,52 +215,58 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                 }
 
             }
-//            List<ReporteDeudasEstudianteData> data = new ArrayList<ReporteDeudasEstudianteData>();
 
-            NivelAcademico nivela = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
-            if (periodo != null) {
-                parameters.put("periodo", periodo.getNombre());
-            } else {
-                parameters.put("periodo", "TODOS");
-            }
-
-            if (nivela != null) {
-                parameters.put("nivelacademico", nivela.getNombre());
-            } else {
-                parameters.put("nivelacademico", "TODOS");
-            }
-            
-            ///// Imprimir reporte de excel o pdf
-            DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
-                @Override
-                public void excel() {
-                    try {
-                        Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Identificación", "Estudiante", "Nivel Academico", "Rubro", "Valor"};
-                        excel.gestionarIngresoInformacionExcel(nombreCabeceras,data);
-                        excel.abrirDocumento();
-                    } catch (IOException ex) {
-                        Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalArgumentException ex) {
-                        Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalAccessException ex) {
-                        Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-                @Override
-                public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Deudas");
-                }
-            });
-                    
-
-            
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void imprimir() {
+
+        if (data == null || data.size() == 0) {
+            DialogoCodefac.mensaje("No existen datos para el reporte", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }
+
+        InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deudas.jrxml");
+        Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+
+        NivelAcademico nivela = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+        if (periodo != null) {
+            parameters.put("periodo", periodo.getNombre());
+        } else {
+            parameters.put("periodo", "TODOS");
+        }
+        if (nivela != null) {
+            parameters.put("nivelacademico", nivela.getNombre());
+        } else {
+            parameters.put("nivelacademico", "TODOS");
+        }
+        ///// Imprimir reporte de excel o pdf
+        DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+            @Override
+            public void excel() {
+                try {
+                    Excel excel = new Excel();
+                    String nombreCabeceras[] = {"Identificación", "Estudiante", "Nivel Academico", "Rubro", "Valor"};
+                    excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                    excel.abrirDocumento();
+                } catch (IOException ex) {
+                    Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void pdf() {
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Deudas");
+            }
+        });
 
     }
 
@@ -312,7 +315,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             //Map<String, Object> mapBusqueda = new HashMap<String, Object>();
             //mapBusqueda.put("periodo", periodo);
             //mapBusqueda.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-            
+
             List<NivelAcademico> resultados = servicio.obtenerTodosActivosPorPeriodo(periodo);
 
             comboNivel.removeAllItems();
@@ -382,62 +385,25 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
-                    CatalogoProducto catalogoProducto = (CatalogoProducto) getCmbTipoRubroPorMes().getSelectedItem();
-                    List<RubroPlantillaMes> mesesSeleccionados = obtenerMesesEnum();
-                    List<RubroEstudiante> dataRubro;
-                    Vector<String> titulo = new Vector<>();
-                    titulo.add("Identificación");
-                    titulo.add("Estudiante");
-                    titulo.add("Nivel Académico");
-                    titulo.add("Rubro");
-                    titulo.add("Valor");
+                generarConsulta();
+                Vector<String> titulo = new Vector<>();
+                titulo.add("Identificación");
+                titulo.add("Estudiante");
+                titulo.add("Nivel Académico");
+                titulo.add("Rubro");
+                titulo.add("Valor");
+                DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
+                for (ReporteDeudasData reporteDeudasData : data) {
+                    Vector<String> fila = new Vector<String>();
 
-                    DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
-                    //Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    NivelAcademico nivelBuscar=null;
-                    if (getChkTodosNiveles().isSelected() == false) {
-                    //if (banderaNiveles == false) {
-                        nivelBuscar=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
-                    }
-                    EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
-                    List<EstudianteInscrito> dataEstudiante = na.buscarPorNivelAcademico(periodo,nivelBuscar);
-                    for (EstudianteInscrito estudiante : dataEstudiante) {
-                        Vector<String> fila = new Vector<String>();
-                        RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-                        
-                        if (getChkTodosRubros().isSelected() == false) {
-                        //if (banderaRubros == false) {
-                            dataRubro = rs.buscarRubrosMes(estudiante, periodo, catalogoProducto, mesesSeleccionados);
-                        } else {
-                            dataRubro = rs.buscarRubrosMes(estudiante, periodo, null, mesesSeleccionados);
-                        }
-
-// comparamos si el estudiante tiene rubros
-                        if (!dataRubro.isEmpty()) {
-                            fila.add(estudiante.getEstudiante().getCedula());
-                            fila.add(estudiante.getEstudiante().getNombreCompleto());
-                            fila.add(estudiante.getNivelAcademico().getNombre());
-                            modeloTablaDeudas.addRow(fila);
-                            for (RubroEstudiante re : dataRubro) {
-                                Vector<String> fila2 = new Vector<String>();
-                                fila2.add("-");
-                                fila2.add("-");
-                                fila2.add("-");
-                                fila2.add(re.getRubroNivel().getNombre());
-                                fila2.add(re.getSaldo().toString());
-                                modeloTablaDeudas.addRow(fila2);
-                            }
-                        }
-                    }
-
-                    getTblDeudas().setModel(modeloTablaDeudas);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+                    fila.add(reporteDeudasData.getCedulaEstudiante());
+                    fila.add(reporteDeudasData.getEstudiante());
+                    fila.add(reporteDeudasData.getNivelAcademicoEstudiante());
+                    fila.add(reporteDeudasData.getRubro());
+                    fila.add(reporteDeudasData.getValor());
+                    modeloTablaDeudas.addRow(fila);
                 }
+                getTblDeudas().setModel(modeloTablaDeudas);
 
             }
         });
@@ -451,6 +417,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             }
         });
     }
+    
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {

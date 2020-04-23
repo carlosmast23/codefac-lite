@@ -17,6 +17,7 @@ import java.util.List;
 public interface SriServiceIf extends Remote
 {
     public SriFormaPago obtenerFormarPagoDefecto() throws java.rmi.RemoteException;
+    public SriFormaPago obtenerFormarPagoConCartera() throws java.rmi.RemoteException;
     public List<SriFormaPago> obtenerFormasPagoActivo() throws java.rmi.RemoteException;
     public List<SriIdentificacion> obtenerIdentificaciones(String tipo) throws java.rmi.RemoteException;
 }

@@ -585,6 +585,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         if (factura.getFormaPagos()!=null && factura.getFormaPagos().size() == 1) {
             FormaPago formaPago = factura.getFormaPagos().get(0);
             formaPago.setTotal(factura.getTotal());
+            interfaz.agregarFormaPagoConCartera();
             interfaz.cargarFormasPagoTabla();
         }
 
@@ -697,6 +698,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public Boolean getModoEdicionDetalle();
         public void setModoEdicionDetalle(Boolean modoEdicionDetalle);
         public void limpiarIngresoDetalleVista();
+        public void agregarFormaPagoConCartera();
+        
         
     }
     

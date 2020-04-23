@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_deudas2" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3613f18e-d7a7-49ca-8ff5-a65d0f82d855">
 	<property name="ireport.zoom" value="1.5026296018031866"/>
-	<property name="ireport.x" value="37"/>
-	<property name="ireport.y" value="17"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="periodo" class="java.lang.String"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
@@ -26,7 +26,6 @@
 	<field name="estudiante" class="java.lang.String"/>
 	<field name="rubro" class="java.lang.String"/>
 	<field name="valor" class="java.lang.String"/>
-	<sortField name="nivelAcademicoEstudiante" order="Descending"/>
 	<variable name="sumatoriaVariable" class="java.math.BigDecimal" resetType="Group" resetGroup="estudiante" calculation="Sum">
 		<variableExpression><![CDATA[new BigDecimal($F{valor})]]></variableExpression>
 	</variable>

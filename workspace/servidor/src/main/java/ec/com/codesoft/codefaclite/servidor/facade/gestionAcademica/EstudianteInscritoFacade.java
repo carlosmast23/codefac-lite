@@ -148,7 +148,11 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
     }
     
     public List<EstudianteInscrito> buscarPorNivelAcademicoFacade(Periodo periodo, NivelAcademico nivel) throws ServicioCodefacException, java.rmi.RemoteException {
-        //EstudianteInscrito ei;
+        /*EstudianteInscrito ei;
+        ei.getNivelAcademico().getNombre()t
+        ei.getEstudiante().getApellidos();
+        ei.getEstudiante().getNombres();
+        ei.getNivelAcademico().getNivel().getNombre();*/
         //ei.getNivelAcademico().getPeriodo();
         
         String wherePeriodo="";
@@ -160,10 +164,8 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
             wherePeriodo=" AND u.nivelAcademico.periodo=?2 ";
         }
         
-        String queryString = "SELECT u FROM EstudianteInscrito u WHERE u.estado=?1  " + wherePeriodo;
-        //Map<String, Object> mapParametros = new HashMap<String, Object>();
-        //mapParametros.put("nivelAcademico", nivel);
-        //mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        String queryString = "SELECT u FROM EstudianteInscrito u WHERE u.estado=?1  " + wherePeriodo +" ORDER BY u.nivelAcademico.nivel.orden asc ,u.nivelAcademico.nombre, u.estudiante.apellidos , u.estudiante.nombres ";
+        
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
          

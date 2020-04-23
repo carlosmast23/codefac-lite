@@ -55,6 +55,9 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
     private NivelAcademico defaultTodos;
     private DefaultTableModel modeloTablaEstudiantes;
     private List<EstudianteInscrito> dataEstudiantes;
+
+    List<ReporteAcademicoData> dataReporte;
+
     Map parameters = new HashMap();
 
     @Override
@@ -84,38 +87,52 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public void generarConsulta() {
+        try {
+
+            EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
+
+            NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+
+            Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+            dataEstudiantes = na.obtenerEstudiantesInscritos(nivelAcademico.getNombre().equals("TODOS") ? null : nivelAcademico, periodo);
+            
+            dataReporte=new ArrayList<ReporteAcademicoData>();
+            for (EstudianteInscrito est : dataEstudiantes) {
+                String nombreRepresentante = "s/n";
+
+                if (est.getEstudiante().getRepresentante() != null) {
+                    nombreRepresentante = est.getEstudiante().getRepresentante().getNombresCompletos();
+                }
+
+                String telefono = (est.getEstudiante().getRepresentante() != null) ? est.getEstudiante().getRepresentante().obtenerTodosTelefonos() : "";
+                telefono = (telefono == null) ? "" : telefono;
+                
+                String email = (est.getEstudiante().getRepresentante() != null) ? est.getEstudiante().getRepresentante().getCorreoElectronico() : "";
+                email=(email==null)?"":email;
+                
+                dataReporte.add(new ReporteAcademicoData(
+                        est.getEstudiante().getCedula(),
+                        est.getEstudiante().getNombres(),
+                        est.getEstudiante().getApellidos(),
+                        email,
+                        telefono,
+                        nombreRepresentante,
+                        est.getNivelAcademico().getNombre()
+                ));
+
+            }
+
+            getTblEstudiantes().setModel(modeloTablaEstudiantes);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     @Override
     public void imprimir() {
         InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporteMatriculados.jrxml");
-        //EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
-        //NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
-        Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();
-        //dataEstudiantes = na.obtenerEstudiantesInscritos(nivelAcademico.getNombre().equals("TODOS")?null:nivelAcademico,periodo);
-        
-        List<ReporteAcademicoData> data = new ArrayList<ReporteAcademicoData>();
-        for (EstudianteInscrito est : dataEstudiantes) {
-            
-            String nombreRepresentante="s/n";
-            
-            if(est.getEstudiante().getRepresentante()!=null)
-                nombreRepresentante=est.getEstudiante().getRepresentante().getNombresCompletos();
-            
-            String telefono=(est.getEstudiante().getRepresentante()!=null)?est.getEstudiante().getRepresentante().getTelefonoCelular():"";
-            telefono=(telefono==null)?"":telefono;
-            String email=(est.getEstudiante().getEmail()!=null)?est.getEstudiante().getEmail():"";
-            
-            data.add(new ReporteAcademicoData(
-                    est.getEstudiante().getCedula(),
-                    est.getEstudiante().getNombres(),
-                    est.getEstudiante().getApellidos(),
-                    email,
-                    telefono,
-                    nombreRepresentante,
-                    est.getNivelAcademico().getNombre()
-            ));
-            
-        }
-        
+        Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
         
         //Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
         NivelAcademico nivela = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
@@ -130,22 +147,15 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             parameters.put("nivelacademico", "TODOS");
         }
         //Ordenar Datos en base a un parametro establecido
-        /*Collections.sort(data, new Comparator<ReporteAcademicoData>(){
-        public int compare(ReporteAcademicoData obj1, ReporteAcademicoData obj2)
-        {
-        return obj1.getNombresEstudiante().compareTo(obj2.getNombresEstudiante());
-        }
-        });*/
-        //---
         
         DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
             @Override
             public void excel() {
                 try {
                     Excel excel = new Excel();
-                    String[] nombreCabeceras = {" Nivel "," Cédula ", " Apellidos "," Nombres "," Email "," Telefono "," Representante "};
+                    String[] nombreCabeceras = {" Nivel ", " Cédula ", " Apellidos ", " Nombres ", " Email ", " Telefono ", " Representante "};
                     //List<ReporteAcademicoData> dat = ordenarDetallesEnFuncionDeCliente(data);
-                    excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                    excel.gestionarIngresoInformacionExcel(nombreCabeceras, dataReporte);
                     excel.abrirDocumento();
                 } catch (IOException ex) {
                     Logger.getLogger(ReporteAcademicoData.class.getName()).log(Level.SEVERE, null, ex);
@@ -155,11 +165,11 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                     Logger.getLogger(ReporteAcademicoData.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             @Override
             public void pdf() {
-        
-                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Estudiantes Matriculados");
+
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, dataReporte, panelPadre, "Estudiantes Matriculados");
             }
         });
     }
@@ -181,7 +191,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
 //    @Override
     public String getNombre() {
-        return "Estudiantes Matriculados"; 
+        return "Estudiantes Matriculados";
     }
 
     @Override
@@ -204,15 +214,15 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
     private void cargarNivelesPeriodo(Periodo periodo, JComboBox<NivelAcademico> comboNivel) {
         try {
-            
+
             NivelAcademicoServiceIf servicio = ServiceFactory.getFactory().getNivelAcademicoServiceIf();
             //Map<String, Object> mapBusqueda = new HashMap<String, Object>();
             //mapBusqueda.put("periodo", periodo);
             //mapBusqueda.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-            
+
             List<NivelAcademico> resultados = servicio.buscarPorPeriodo(periodo);
             comboNivel.removeAllItems();
-            
+
             comboNivel.addItem(defaultTodos);
             for (NivelAcademico resultado : resultados) {
                 comboNivel.addItem(resultado);
@@ -243,53 +253,38 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    Vector<String> titulo = new Vector<>();
-                    titulo.add("Cedula");
-                    titulo.add("Apellidos");
-                    titulo.add("Nombres");
-                    titulo.add("Email");
-                    titulo.add("Telefono");
-                    titulo.add("Representante");
-                    titulo.add("Nivel Academico");
-
-                    modeloTablaEstudiantes = new DefaultTableModel(titulo, 0);
-
-                    EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
+                Vector<String> titulo = new Vector<>();
+                titulo.add("Cedula");
+                titulo.add("Apellidos");
+                titulo.add("Nombres");
+                titulo.add("Email");
+                titulo.add("Telefono");
+                titulo.add("Representante");
+                titulo.add("Nivel Academico");
+                modeloTablaEstudiantes = new DefaultTableModel(titulo, 0);
+                generarConsulta();
+                for (ReporteAcademicoData est : dataReporte) {
+                    Vector<String> fila = new Vector<String>();
                     
-                    NivelAcademico nivelAcademico=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+                    fila.add(est.getCedulaEstudiante());
+                    fila.add(est.getApellidosEstudiante());
+                    fila.add(est.getNombresEstudiante());
+                    fila.add(est.getEmailEstudiante());
+                    fila.add(est.getTelefonoEstudiante());
+                    fila.add(est.getRepresentanteEstudiante());
+                    fila.add(est.getNivelAcademicoEstudiante());
                     
-                    Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();                    
-                    dataEstudiantes = na.obtenerEstudiantesInscritos(nivelAcademico.getNombre().equals("TODOS")?null:nivelAcademico,periodo);
+                    modeloTablaEstudiantes.addRow(fila);
                     
-                    for (EstudianteInscrito est : dataEstudiantes) {
-                        Vector<String> fila = new Vector<String>();
-                        fila.add(est.getEstudiante().getCedula());
-                        fila.add(est.getEstudiante().getApellidos());
-                        fila.add(est.getEstudiante().getNombres());                        
-                        fila.add(est.getEstudiante().getEmail());
-                        fila.add((est.getEstudiante().getRepresentante()!=null)?est.getEstudiante().getRepresentante().getTelefonoCelular():"");
-                        if (est.getEstudiante().getRepresentante() != null) {
-                            fila.add(est.getEstudiante().getRepresentante().getNombres() + " " + est.getEstudiante().getRepresentante().getApellidos());
-                        } else {
-                            fila.add("s/n");
-                        }
-                        fila.add(est.getNivelAcademico().getNombre());
-                        modeloTablaEstudiantes.addRow(fila);
-
-                    }
-
-                    getTblEstudiantes().setModel(modeloTablaEstudiantes);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                getTblEstudiantes().setModel(modeloTablaEstudiantes);
 
             }
         });
     }
 
     private void cargarDefecto() {
-        
+
         try {
             List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerPeriodosSinEliminar();
             getCmbPeriodo().removeAllItems();
@@ -298,8 +293,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                 getCmbPeriodo().addItem(periodo);
             }
             getCmbPeriodo().setSelectedItem(periodoActivo);
-            
-            
+
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -307,38 +301,33 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
     private void iniciarValores() {
         try {
-            defaultTodos=new NivelAcademico();
+            defaultTodos = new NivelAcademico();
             defaultTodos.setNombre("TODOS");
-            
-            periodoActivo=ServiceFactory.getFactory().getPeriodoServiceIf().obtenerUnicoPeriodoActivo();
+
+            periodoActivo = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerUnicoPeriodoActivo();
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
-    public List<ReporteAcademicoData> ordenarDetallesEnFuncionDeCliente(List<ReporteAcademicoData> data)
-    {  
-        List<ReporteAcademicoData> dataTemp= new ArrayList<>();
-        Map <String, List<ReporteAcademicoData>> dataEstudiantesCurso;
+
+    public List<ReporteAcademicoData> ordenarDetallesEnFuncionDeCliente(List<ReporteAcademicoData> data) {
+        List<ReporteAcademicoData> dataTemp = new ArrayList<>();
+        Map<String, List<ReporteAcademicoData>> dataEstudiantesCurso;
         //Metodo que permite ordentar los maps por las proveedores
-        dataEstudiantesCurso = new TreeMap<String,List<ReporteAcademicoData>>(new Comparator<String>() {
+        dataEstudiantesCurso = new TreeMap<String, List<ReporteAcademicoData>>(new Comparator<String>() {
             @Override
             public int compare(String c1, String c2) {
                 return c1.compareTo(c2);
             }
         });
 
-        for(ReporteAcademicoData rd : data)
-        {
-            if(dataEstudiantesCurso.get(rd.getNivelAcademicoEstudiante()) == null)
-            {
+        for (ReporteAcademicoData rd : data) {
+            if (dataEstudiantesCurso.get(rd.getNivelAcademicoEstudiante()) == null) {
                 List<ReporteAcademicoData> estudiantesCurso = new ArrayList<ReporteAcademicoData>();
                 estudiantesCurso.add(rd); //Agrego el dato a la nueva lista
-                dataEstudiantesCurso.put(rd.getNivelAcademicoEstudiante(),estudiantesCurso); //Agredo el proveedor, con el detalle
-            }
-            else
-            {
+                dataEstudiantesCurso.put(rd.getNivelAcademicoEstudiante(), estudiantesCurso); //Agredo el proveedor, con el detalle
+            } else {
                 dataEstudiantesCurso.get(rd.getNivelAcademicoEstudiante()).add(rd);
             }
         }
@@ -346,13 +335,12 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
         for (Map.Entry<String, List<ReporteAcademicoData>> entry : dataEstudiantesCurso.entrySet()) {
             String key = entry.getKey();
             List<ReporteAcademicoData> value = entry.getValue();
-            for (ReporteAcademicoData reporteAcademicoData : value) 
-            {
+            for (ReporteAcademicoData reporteAcademicoData : value) {
                 dataTemp.add(reporteAcademicoData);
             }
             b = true;
         }
-        
+
         return dataTemp;
     }
 

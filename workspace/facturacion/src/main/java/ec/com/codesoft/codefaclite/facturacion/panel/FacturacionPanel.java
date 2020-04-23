@@ -126,6 +126,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnAgregarFormaPago = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblFormasPago = new javax.swing.JTable();
+        chkPagoConCartera = new javax.swing.JCheckBox();
         PanelDatosAdicionales = new javax.swing.JPanel();
         btnAgregarDatosAdicionales = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -498,6 +499,13 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         PanelFormasPago.add(jScrollPane3, gridBagConstraints);
+
+        chkPagoConCartera.setText("pago cartera");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        PanelFormasPago.add(chkPagoConCartera, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -1464,6 +1472,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkActivarFechaVencimiento;
     private javax.swing.JCheckBox chkActivarFinanciamiento;
     private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
+    private javax.swing.JCheckBox chkPagoConCartera;
     private javax.swing.JCheckBox cmbConsumidorFinal;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private org.jdesktop.swingx.JXDatePicker cmbFechaVencimiento;
@@ -2028,18 +2037,13 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setTxtFinanciamientoTarifa(JTextField txtFinanciamientoTarifa) {
         this.txtFinanciamientoTarifa = txtFinanciamientoTarifa;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+    public JCheckBox getChkPagoConCartera() {
+        return chkPagoConCartera;
+    }
+
+    public void setChkPagoConCartera(JCheckBox chkPagoConCartera) {
+        this.chkPagoConCartera = chkPagoConCartera;
+    }
     
 }

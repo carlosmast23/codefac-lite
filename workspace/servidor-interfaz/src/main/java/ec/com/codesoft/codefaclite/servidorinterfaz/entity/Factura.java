@@ -263,6 +263,17 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         
     }
     
+    public void restarValorFormaPago(BigDecimal total)
+    {
+        //TODO: Terminar de implementar para varias formas de pago
+        if(this.formaPagos!=null)
+        {
+            for (FormaPago formaPago : formaPagos) {
+                formaPago.setTotal(formaPago.getTotal().subtract(total));
+            }
+        }
+    }
+    
     public BigDecimal getTotalFormasPago()
     {
         BigDecimal totalFormasPago = BigDecimal.ZERO;

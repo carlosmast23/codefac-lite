@@ -16,6 +16,11 @@ import org.apache.commons.lang3.StringUtils;
 public abstract class UtilidadesLista {
     public static String castListToString(List lista,String caracter)
     {
+        if(lista==null || lista.size()==0)
+        {
+            return "";
+        }
+        
         return StringUtils.join(lista,caracter);
     }
     

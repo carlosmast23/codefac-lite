@@ -48,6 +48,22 @@ public class SriService extends UnicastRemoteObject implements SriServiceIf
         return null;
     }
     
+    public SriFormaPago obtenerFormarPagoConCartera() throws java.rmi.RemoteException
+    {
+    //Todo:Cambiar por algun parametro del sistema para que sepa cual forma de pago buscar
+        String aliasFormaPago="Cartera";
+        
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("alias",aliasFormaPago);
+        
+        List<SriFormaPago> formasPago=sriFormaPagoFacade.findByMap(mapParametros);
+        if(formasPago.size()>0)
+        {
+            return formasPago.get(0);
+        }
+        return null;
+    }
+    
     public List<SriFormaPago> obtenerFormasPagoActivo() throws java.rmi.RemoteException
     {
         java.util.Date fechaActual=new java.util.Date();

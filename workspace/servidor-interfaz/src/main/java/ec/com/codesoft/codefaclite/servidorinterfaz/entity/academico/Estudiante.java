@@ -276,12 +276,12 @@ public class Estudiante implements Serializable {
         ///Metodos personalizados 
 
     public String getNombreCompleto() {
-        return nombres + " " + apellidos;
+        return apellidos+" "+nombres;
     }
 
     @Override
     public String toString() {
-        return nombres + " " + apellidos;
+        return apellidos+" "+nombres;
     }
 
     @Override

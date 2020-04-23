@@ -45,6 +45,14 @@ public class FormaPago implements Serializable {
 
     public FormaPago() {
     }
+
+    public FormaPago(BigDecimal total, SriFormaPago sriFormaPago) {
+        this.total = total;
+        this.sriFormaPago = sriFormaPago;
+        this.plazo=0;
+        this.unidadTiempo="";
+    }
+    
     
     
     public Long getId() {

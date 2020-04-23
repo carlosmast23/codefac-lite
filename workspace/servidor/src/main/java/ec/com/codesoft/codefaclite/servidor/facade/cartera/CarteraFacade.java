@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.facade.cartera;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import java.sql.Date;
@@ -17,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Query;
@@ -172,5 +174,26 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         return new BigDecimal(sumatoria.toString());
     }
     
+    public List<Cartera> obtenerCarteraPorCobrarFacade(Persona cliente,Empresa empresa)
+    {
+        /*Cartera c;
+        c.getSaldo();*/
+        String queryString = "SELECT c FROM Cartera c WHERE c.persona=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0  ";
+        Query query=getEntityManager().createQuery(queryString);
+        query.setParameter(1,cliente);
+        query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
+        query.setParameter(3,empresa);
+        return query.getResultList();
+    }
+    
+    public BigDecimal obtenerSaldoDisponibleCruzarFacade(Persona cliente,Empresa empresa)
+    {
+        String queryString = "SELECT SUM(c.saldo) FROM Cartera c WHERE c.persona=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0  ";
+        Query query=getEntityManager().createQuery(queryString);
+        query.setParameter(1,cliente);
+        query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
+        query.setParameter(3,empresa);
+        return (BigDecimal) query.getSingleResult();
+    }
     
 }

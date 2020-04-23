@@ -1037,6 +1037,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         this.facturaDetalle.setCantidad(BigDecimal.ONE);
     }
 
+    public void agregarFormaPagoConCartera() {
+        
+    }
+
     /**
      * =============================================================
      *              TIPO PAGINA ENUMA

@@ -38,8 +38,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Persona implements Serializable, Comparable<Persona> {
 
-    public static final String IDENTIFICACION_CONSUMIDOR_FINAL="9999999999999";
-    
+    public static final String IDENTIFICACION_CONSUMIDOR_FINAL = "9999999999999";
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +54,7 @@ public class Persona implements Serializable, Comparable<Persona> {
     private String identificacion;
     @Column(name = "RAZON_SOCIAL")
     private String razonSocial;
-    
+
     @Deprecated
     @Column(name = "NOMBRE_LEGAL")
     private String nombreLegal;
@@ -62,23 +62,21 @@ public class Persona implements Serializable, Comparable<Persona> {
     //@Deprecated
     //@Column(name = "DIRECCION")
     //private String direccion;
-    
     @Deprecated
     @Column(name = "TELEFONO_CONVENCIONAL")
     private String telefonoConvencional;
-    
+
     @Deprecated
     @Column(name = "EXTENSION_TELEFONO")
     private String extensionTelefono;
-    
+
     @Deprecated
     @Column(name = "TELEFONO_CELULAR")
     private String telefonoCelular;
 
-    
     @Column(name = "TIPO_CLIENTE")
-    private String tipCliente;    
-    
+    private String tipCliente;
+
     @Column(name = "CORREO_ELECTRONICO")
     private String correoElectronico;
     @Column(name = "ESTADO")
@@ -89,7 +87,7 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     @Column(name = "OBLIGADO_LLEVAR_CONTABILIDAD")
     private String obligadoLlevarContabilidad;
-    
+
     @Column(name = "DIAS_CREDITO_CLIENTE")
     private Integer diasCreditoCliente;
 
@@ -99,7 +97,7 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     @JoinColumn(name = "SRI_FORMA_PAGO_ID")
     private SriFormaPago sriFormaPago;
-    
+
     /**
      * Variable para saber si el envia clientes recomendados
      */
@@ -117,17 +115,18 @@ public class Persona implements Serializable, Comparable<Persona> {
      */
     @Column(name = "TIPO_OPERADOR")
     private String tipo;
-    
+
     /**
-     * Este variable solo es informativa para saber el nombre de la persona que tenemos de contacto dentro de la empresa
+     * Este variable solo es informativa para saber el nombre de la persona que
+     * tenemos de contacto dentro de la empresa
      */
     @Column(name = "CONTACTO_CLIENTE_NOMBRE")
     private String contactoClienteNombre;
-    
+
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona",fetch = FetchType.EAGER)
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona", fetch = FetchType.EAGER)
     private List<PersonaEstablecimiento> establecimientos;
 
     public Long getIdCliente() {
@@ -154,7 +153,6 @@ public class Persona implements Serializable, Comparable<Persona> {
         this.razonSocial = razonSocial;
     }
 
-    
     public String getNombreLegal() {
         return nombreLegal;
     }
@@ -170,20 +168,17 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setTipCliente(String tipCliente) {
         this.tipCliente = tipCliente;
     }
-    
+
     public void setTipClienteEnum(TipoClienteEnum enumerador) {
         this.tipCliente = enumerador.nombre;
     }
 
-    
     //public String getDireccion() {
     //    return direccion;
     //}
-
     //public void setDireccion(String direccion) {
     //    this.direccion = direccion;
     //}
-
     public String getTelefonoConvencional() {
         return telefonoConvencional;
     }
@@ -223,7 +218,7 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-    
+
     public GeneralEnumEstado getEstadoEnum() {
         return GeneralEnumEstado.getEnum(estado);
     }
@@ -293,7 +288,7 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setTipoIdentificacion(String tipoIdentificacion) {
         this.tipoIdentificacion = tipoIdentificacion;
     }
-    
+
     public void setTipoIdentificacionEnum(TipoIdentificacionEnum enumerador) {
         this.tipoIdentificacion = enumerador.letra;
     }
@@ -305,7 +300,7 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setContactoCliente(String contactoCliente) {
         this.contactoCliente = contactoCliente;
     }
-    
+
     public void setContactoClienteEnum(EnumSiNo enumSiNO) {
         this.contactoCliente = enumSiNO.getLetra();
     }
@@ -317,11 +312,11 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setContactoClientePorcentaje(BigDecimal contactoClientePorcentaje) {
         this.contactoClientePorcentaje = contactoClientePorcentaje;
     }
-    
+
     public void setObligadoLlevarContabilidadEnum(EnumSiNo enumSiNo) {
         this.obligadoLlevarContabilidad = enumSiNo.getLetra();
     }
-    
+
     public Integer getDiasCreditoCliente() {
         return diasCreditoCliente;
     }
@@ -337,9 +332,7 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
-    
-    
-    
+
     public void addEstablecimiento(PersonaEstablecimiento establecimiento) {
         if (this.establecimientos == null) {
             this.establecimientos = new ArrayList<PersonaEstablecimiento>();
@@ -349,19 +342,14 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     }
 
-
     ///Metodos personalizados
-    
-    public boolean isClienteFinal()
-    {
-        if(identificacion.equals(IDENTIFICACION_CONSUMIDOR_FINAL))
-        {
+    public boolean isClienteFinal() {
+        if (identificacion.equals(IDENTIFICACION_CONSUMIDOR_FINAL)) {
             return true;
         }
         return false;
     }
-    
-    
+
     public String getNombresCompletos() {
         String nombresTmp = (nombres != null) ? nombres : "";
         String apellidosTmp = (apellidos != null) ? apellidos : "";
@@ -392,7 +380,6 @@ public class Persona implements Serializable, Comparable<Persona> {
         return telefonos;
 
     }*/
-
     public List<PersonaEstablecimiento> getEstablecimientos() {
         return establecimientos;
     }
@@ -400,7 +387,6 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setEstablecimientos(List<PersonaEstablecimiento> establecimientos) {
         this.establecimientos = establecimientos;
     }
-    
 
     public TipoIdentificacionEnum getTipoIdentificacionEnum() {
         return TipoIdentificacionEnum.obtenerPorLetra(tipoIdentificacion);
@@ -409,15 +395,13 @@ public class Persona implements Serializable, Comparable<Persona> {
     public EnumSiNo getObligadoLlevarContabilidadEnum() {
         return EnumSiNo.getEnumByLetra(obligadoLlevarContabilidad);
     }
-    
-    public EnumSiNo getContactoClientesEnum()
-    {
+
+    public EnumSiNo getContactoClientesEnum() {
         return EnumSiNo.getEnumByLetra(contactoCliente);
     }
-    
-    public void setTipoEnum(OperadorNegocioEnum operadorEnum)
-    {
-        this.tipo=operadorEnum.getLetra();
+
+    public void setTipoEnum(OperadorNegocioEnum operadorEnum) {
+        this.tipo = operadorEnum.getLetra();
     }
 
     public String getContactoClienteNombre() {
@@ -427,33 +411,29 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setContactoClienteNombre(String contactoClienteNombre) {
         this.contactoClienteNombre = contactoClienteNombre;
     }
-    
+
     /**
      * ==================> Metodos utilidaes <=====================
      */
-    public static String construirRazonSocial(String nombre, String apellido)
-    {
-        nombre=(nombre!=null)?nombre:"";
-        apellido=(apellido!=null)?apellido:"";
+    public static String construirRazonSocial(String nombre, String apellido) {
+        nombre = (nombre != null) ? nombre : "";
+        apellido = (apellido != null) ? apellido : "";
         return apellido + " " + nombre;
     }
-    
-    
-    
-    
-    /***
+
+    /**
+     * *
      * ==================> Validadores de los campos <======================
-     * TODO: Terminar de hacer la validacion para casos mas complicados
-     * @return 
+     * TODO: Terminar de hacer la validacion para casos mas complicados @return
      */
-    public boolean validarCedula()
-    {
+    public boolean validarCedula() {
         boolean verificador = false;
-        Persona.TipoIdentificacionEnum tipoIdentificacion=getTipoIdentificacionEnum();
-        
-        if(tipoIdentificacion==null)
+        Persona.TipoIdentificacionEnum tipoIdentificacion = getTipoIdentificacionEnum();
+
+        if (tipoIdentificacion == null) {
             return false;
-        
+        }
+
         switch (tipoIdentificacion) {
             case RUC:
                 verificador = UtilidadesJuridicas.validarTodosRuc(identificacion);
@@ -465,39 +445,32 @@ public class Persona implements Serializable, Comparable<Persona> {
                 verificador = true;
                 break;
             case CLIENTE_FINAL:
-                verificador=(identificacion.equals("9999999999999"))?true:false;
+                verificador = (identificacion.equals("9999999999999")) ? true : false;
                 break;
-            default :
+            default:
                 verificador = false;
                 break;
         }
         return verificador;
     }
-    
-    public void contruirRazonSocialConNombreYApellidos()
-    {
-        this.razonSocial=construirRazonSocial(nombres,apellidos);
+
+    public void contruirRazonSocialConNombreYApellidos() {
+        this.razonSocial = construirRazonSocial(nombres, apellidos);
     }
-    
-    public String imprimirDireccionPorDefecto()
-    {
-        if(establecimientos!=null)
-        {
+
+    public String imprimirDireccionPorDefecto() {
+        if (establecimientos != null) {
             for (PersonaEstablecimiento establecimiento : establecimientos) {
                 return establecimiento.getDireccion();
             }
         }
         return "";
     }
-    
-    public String imprimirTelefonoPorDefecto()
-    {
-        if(establecimientos!=null)
-        {
-            for (PersonaEstablecimiento establecimiento : establecimientos) 
-            {
-                if(establecimiento.getTelefonoCelular()!=null)
-                {
+
+    public String imprimirTelefonoPorDefecto() {
+        if (establecimientos != null) {
+            for (PersonaEstablecimiento establecimiento : establecimientos) {
+                if (establecimiento.getTelefonoCelular() != null) {
                     return establecimiento.getTelefonoCelular();
                 }
             }
@@ -505,53 +478,45 @@ public class Persona implements Serializable, Comparable<Persona> {
         return "";
     }
     
-    
-    public ValidacionCedulaEnum validarIdentificacion()
-    {
-        if(identificacion==null)
-        {
+
+    public ValidacionCedulaEnum validarIdentificacion() {
+        if (identificacion == null) {
             return ValidacionCedulaEnum.DATO_NO_INGRESADO;
         }
-        
-        if(identificacion.length()==0)
-        {
+
+        if (identificacion.length() == 0) {
             return ValidacionCedulaEnum.DATO_VACIO;
         }
-        
+
         //Hacer validaciones de tamanio y texto cuando es diferente de pasaporte
-        if(!getTipoIdentificacionEnum().equals(TipoIdentificacionEnum.PASAPORTE))
-        {        
-            if(identificacion.length()!=10 && identificacion.length()!=13)
-            {
+        if (!getTipoIdentificacionEnum().equals(TipoIdentificacionEnum.PASAPORTE)) {
+            if (identificacion.length() != 10 && identificacion.length() != 13) {
                 return ValidacionCedulaEnum.TAMANIO_INCORRECTO;
             }
 
-            try
-            {
+            try {
                 new BigDecimal(identificacion);
-            }catch(Exception e)
-            {
+            } catch (Exception e) {
                 return ValidacionCedulaEnum.FORMATO_INCORRECTO;
             }
         }
-        
+
         return ValidacionCedulaEnum.VALIDACION_CORRECTA;
     }
-    
-    public enum ValidacionCedulaEnum
-    {
+
+    public enum ValidacionCedulaEnum {
         DATO_NO_INGRESADO("Identificación sin ingresar"),
         DATO_VACIO("Identificación vacia"),
         TAMANIO_INCORRECTO("El tamaño de la Identificación es incorrecta"),
         FORMATO_INCORRECTO("La Identificación tiene caracteres no permitidos"),
         VALIDACION_CORRECTA;
-        
+
         private String mensaje;
 
         private ValidacionCedulaEnum() {
-            
+
         }
-        
+
         private ValidacionCedulaEnum(String mensaje) {
             this.mensaje = mensaje;
         }
@@ -559,11 +524,8 @@ public class Persona implements Serializable, Comparable<Persona> {
         public String getMensaje() {
             return mensaje;
         }
-        
-        
-        
+
     }
-    
 
     @Override
     public int hashCode() {
@@ -590,13 +552,27 @@ public class Persona implements Serializable, Comparable<Persona> {
      *
      * @return
      */
-    
-        
     public String obtenerTodosTelefonos()
     {
-        return UtilidadesLista.castListToString(Arrays.asList(telefonoCelular,telefonoConvencional),"/");
+        List<String> telefonos=new ArrayList<String>();
+        if(establecimientos!=null)
+        {
+            for (PersonaEstablecimiento establecimiento : establecimientos) {
+                if(establecimiento.getTelefonoCelular()!=null && !establecimiento.getTelefonoCelular().isEmpty())
+                {
+                    telefonos.add(establecimiento.getTelefonoCelular());
+                }
+                
+                if(establecimiento.getTelefonoConvencional()!=null && !establecimiento.getTelefonoConvencional().isEmpty())
+                {
+                    telefonos.add(establecimiento.getTelefonoConvencional());
+                }                
+            }
+        }
+        
+        return UtilidadesLista.castListToString(telefonos,"/");
     }
-    
+
     public OperadorNegocioEnum getTipoEnum() {
         return OperadorNegocioEnum.getEnum(tipo);
     }
@@ -611,13 +587,12 @@ public class Persona implements Serializable, Comparable<Persona> {
     public int compareTo(Persona o) {
         return this.getIdCliente().compareTo(o.getIdCliente());
     }
-    
+
     public static final String[] tiposClientes = {"CLIENTE",
         "SUJETO RETENIDO",
         "DESTINATARIO"};
-    
-    public enum TipoClienteEnum
-    {
+
+    public enum TipoClienteEnum {
         CLIENTE("CLIENTE"),
         SUJETO_RETENIDO("SUJETO RETENIDO"),
         DESTINATARIO("DESTINATARIO");
@@ -625,18 +600,16 @@ public class Persona implements Serializable, Comparable<Persona> {
         private TipoClienteEnum(String nombre) {
             this.nombre = nombre;
         }
-        
+
         public String nombre;
-        
+
     };
 
-    
-
     public enum TipoIdentificacionEnum {
-        RUC("R", "Ruc","04","01"),
-        CEDULA("C", "Cédula","05","02"),
-        PASAPORTE("P", "Pasaporte","06","03"),
-        CLIENTE_FINAL("F", "Consumidor Final","9999999999999",new BigDecimal("200"),"07","");
+        RUC("R", "Ruc", "04", "01"),
+        CEDULA("C", "Cédula", "05", "02"),
+        PASAPORTE("P", "Pasaporte", "06", "03"),
+        CLIENTE_FINAL("F", "Consumidor Final", "9999999999999", new BigDecimal("200"), "07", "");
 
         private String letra;
         private String nombre;
@@ -645,20 +618,18 @@ public class Persona implements Serializable, Comparable<Persona> {
         private String codigoSriVenta;
         private String codigoSriCompra;
 
-        private TipoIdentificacionEnum(String letra, String nombre,String codigoSriVenta,String codigoSriCompra) 
-        {
+        private TipoIdentificacionEnum(String letra, String nombre, String codigoSriVenta, String codigoSriCompra) {
             this.letra = letra;
             this.nombre = nombre;
-            this.codigoSriVenta=codigoSriVenta;
-            this.codigoSriCompra=codigoSriCompra;
+            this.codigoSriVenta = codigoSriVenta;
+            this.codigoSriCompra = codigoSriCompra;
         }
-        
-        private TipoIdentificacionEnum(String letra,String nombre,String identificacion,BigDecimal montoMaximo,String codigoSriVenta,String codigoSriCompra ) 
-        {
+
+        private TipoIdentificacionEnum(String letra, String nombre, String identificacion, BigDecimal montoMaximo, String codigoSriVenta, String codigoSriCompra) {
             this.letra = letra;
             this.nombre = nombre;
-            this.identificacion=identificacion;
-            this.montoMaximo=montoMaximo;
+            this.identificacion = identificacion;
+            this.montoMaximo = montoMaximo;
             this.codigoSriVenta = codigoSriVenta;
             this.codigoSriCompra = codigoSriCompra;
         }
@@ -686,12 +657,6 @@ public class Persona implements Serializable, Comparable<Persona> {
         public String getCodigoSriCompra() {
             return codigoSriCompra;
         }
-        
-        
-        
-        
-        
-        
 
         public static TipoIdentificacionEnum obtenerPorLetra(String letra) {
             for (Persona.TipoIdentificacionEnum tipoIdentificacion : TipoIdentificacionEnum.values()) {

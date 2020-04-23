@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.3286707500000068"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="3.79085271374473"/>
+	<property name="ireport.x" value="1010"/>
+	<property name="ireport.y" value="150"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -55,10 +55,10 @@
 					<reportElement x="403" y="19" width="152" height="13" uuid="9ec37148-1e2e-475a-bdc7-80b7f212d5d2"/>
 					<box>
 						<pen lineWidth="1.0"/>
-						<topPen lineWidth="1.0"/>
-						<leftPen lineWidth="1.0"/>
-						<bottomPen lineWidth="1.0"/>
-						<rightPen lineWidth="1.0"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
 					</box>
 					<textElement textAlignment="Center">
 						<font isBold="true"/>
@@ -66,13 +66,13 @@
 					<text><![CDATA[Representante]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="337" y="19" width="66" height="13" uuid="aabc8ffd-88ba-4ce4-aaba-9ac531d40d4b"/>
+					<reportElement x="333" y="19" width="70" height="13" uuid="aabc8ffd-88ba-4ce4-aaba-9ac531d40d4b"/>
 					<box>
 						<pen lineWidth="1.0"/>
-						<topPen lineWidth="1.0"/>
-						<leftPen lineWidth="1.0"/>
-						<bottomPen lineWidth="1.0"/>
-						<rightPen lineWidth="1.0"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
 					</box>
 					<textElement textAlignment="Center">
 						<font isBold="true"/>
@@ -80,13 +80,13 @@
 					<text><![CDATA[Telefono]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="19" width="69" height="13" uuid="9ece8626-73fe-4780-828f-d28f179d778f"/>
+					<reportElement x="0" y="19" width="50" height="13" uuid="9ece8626-73fe-4780-828f-d28f179d778f"/>
 					<box>
 						<pen lineWidth="1.0"/>
-						<topPen lineWidth="1.0"/>
-						<leftPen lineWidth="1.0"/>
-						<bottomPen lineWidth="1.0"/>
-						<rightPen lineWidth="1.0"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
 					</box>
 					<textElement textAlignment="Center">
 						<font isBold="true"/>
@@ -94,13 +94,13 @@
 					<text><![CDATA[Cedula]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="235" y="19" width="102" height="13" uuid="077152ea-fbb9-440c-8a8d-758380d71759"/>
+					<reportElement x="231" y="19" width="102" height="13" uuid="077152ea-fbb9-440c-8a8d-758380d71759"/>
 					<box>
 						<pen lineWidth="1.0"/>
-						<topPen lineWidth="1.0"/>
-						<leftPen lineWidth="1.0"/>
-						<bottomPen lineWidth="1.0"/>
-						<rightPen lineWidth="1.0"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
 					</box>
 					<textElement textAlignment="Center">
 						<font isBold="true"/>
@@ -108,13 +108,13 @@
 					<text><![CDATA[Email]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="153" y="19" width="82" height="13" uuid="ce832ccf-4064-40f9-8301-b721eca06f96"/>
+					<reportElement x="140" y="19" width="91" height="13" uuid="ce832ccf-4064-40f9-8301-b721eca06f96"/>
 					<box>
 						<pen lineWidth="1.0"/>
-						<topPen lineWidth="1.0"/>
-						<leftPen lineWidth="1.0"/>
-						<bottomPen lineWidth="1.0"/>
-						<rightPen lineWidth="1.0"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
 					</box>
 					<textElement textAlignment="Center">
 						<font isBold="true"/>
@@ -122,13 +122,13 @@
 					<text><![CDATA[Nombres]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="69" y="19" width="84" height="13" uuid="192adcff-f73e-44ee-a30a-cb8871535d80"/>
+					<reportElement x="50" y="19" width="90" height="13" uuid="192adcff-f73e-44ee-a30a-cb8871535d80"/>
 					<box>
 						<pen lineWidth="1.0"/>
-						<topPen lineWidth="1.0"/>
-						<leftPen lineWidth="1.0"/>
-						<bottomPen lineWidth="1.0"/>
-						<rightPen lineWidth="1.0"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
 					</box>
 					<textElement textAlignment="Center">
 						<font isBold="true"/>
@@ -191,8 +191,8 @@
 	</columnHeader>
 	<detail>
 		<band height="12" splitType="Stretch">
-			<textField>
-				<reportElement x="235" y="0" width="102" height="12" uuid="4dd8f966-dac6-44b8-88b3-5f486e541088"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="231" y="0" width="102" height="12" uuid="4dd8f966-dac6-44b8-88b3-5f486e541088"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -201,12 +201,12 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{emailEstudiante}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="337" y="0" width="66" height="12" uuid="e138482e-c75c-4867-aac5-ae4fa5deba9a"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="333" y="0" width="70" height="12" uuid="e138482e-c75c-4867-aac5-ae4fa5deba9a"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -215,12 +215,12 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{telefonoEstudiante}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="0" y="0" width="69" height="12" uuid="a396e3c2-26e4-45dd-bc1f-d9bffd13cacc"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="50" height="12" uuid="a396e3c2-26e4-45dd-bc1f-d9bffd13cacc"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -229,12 +229,12 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cedulaEstudiante}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="403" y="0" width="152" height="12" uuid="0d892033-d5a3-4505-8d65-d7758ea828a9"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="403" y="0" width="152" height="12" uuid="0d892033-d5a3-4505-8d65-d7758ea828a9"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -243,12 +243,12 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{representanteEstudiante}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="69" y="0" width="84" height="12" uuid="8053f16e-8c08-47fa-bba2-93b0d2c81f38"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="50" y="0" width="90" height="12" uuid="8053f16e-8c08-47fa-bba2-93b0d2c81f38"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -257,12 +257,12 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{apellidosEstudiante}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="153" y="0" width="82" height="12" uuid="5ccbb6f1-bf96-4a8b-891d-7b788d3d9172"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="140" y="0" width="91" height="12" uuid="5ccbb6f1-bf96-4a8b-891d-7b788d3d9172"/>
 				<box leftPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -271,7 +271,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombresEstudiante}]]></textFieldExpression>
 			</textField>
