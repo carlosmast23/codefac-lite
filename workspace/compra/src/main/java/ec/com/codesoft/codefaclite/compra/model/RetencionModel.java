@@ -135,8 +135,9 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
             RetencionImplCallBack ric=new RetencionImplCallBack(retencion, this);
             ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
             
-            ComprobanteDataRetencion comprobanteData = new ComprobanteDataRetencion(retencion);
-            comprobanteData.setMapInfoAdicional(getMapAdicional(retencion));
+            //ComprobanteDataRetencion comprobanteData = new ComprobanteDataRetencion(retencion);
+            //comprobanteData.setMapInfoAdicional(getMapAdicional(retencion));
+            ComprobanteDataRetencion comprobanteData =(ComprobanteDataRetencion) obtenerComprobanteData();
             
             comprobanteServiceIf.procesarComprobante(comprobanteData, retencion, session.getUsuario(), ric);
             
@@ -1174,7 +1175,9 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
 
     @Override
     public ComprobanteDataInterface obtenerComprobanteData() {
-        return new ComprobanteDataRetencion(retencion);
+        ComprobanteDataRetencion comprobanteData = new ComprobanteDataRetencion(retencion);
+        comprobanteData.setMapInfoAdicional(getMapAdicional(retencion));
+        return comprobanteData;
     }
     
 
