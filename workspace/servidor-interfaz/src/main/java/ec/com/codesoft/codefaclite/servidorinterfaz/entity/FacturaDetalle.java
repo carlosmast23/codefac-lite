@@ -122,4 +122,13 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract{
         return BigDecimal.ZERO;
     }
 
+    /**
+     * El total bruto se refiere al subtotal incluido el descuento
+     * @return 
+     */
+    /*public BigDecimal calcularTotalBruto()
+    {
+        return getCantidad().multiply(getPrecioUnitario()).add(getDescuento());
+    }*/
+    
 }

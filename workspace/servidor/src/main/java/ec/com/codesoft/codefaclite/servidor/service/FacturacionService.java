@@ -335,8 +335,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
         
             RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
+            
+            BigDecimal totalBruto=detalle.getSubtotalSinDescuentos();
             //El total es sin impuestos
-            BigDecimal saldoPendiente=rubroEstudiante.getSaldo().subtract(detalle.getTotal());
+            BigDecimal saldoPendiente=rubroEstudiante.getSaldo().subtract(totalBruto);
+            
+            if(detalle.getDescuento()!=null && detalle.getDescuento().compareTo(BigDecimal.ZERO)>0)
+            {
+                //Seteao los nuevos valores cuando tiene un descuento para no descuadrar reportes
+                rubroEstudiante.setProcentajeDescuento(null); //TODO: esto pongo de esta manera por que si estaba grabando un descuento anterior el calculo seria muy confuso
+                rubroEstudiante.setValorDescuento(detalle.getDescuento()); 
+                rubroEstudiante.setValor(detalle.getSubtotalRestadoDescuentos().add(saldoPendiente));
+            }            
             
             //Cuando el saldo es 0 la factura se factura en su totalidad
             if(saldoPendiente.compareTo(BigDecimal.ZERO)==0)
