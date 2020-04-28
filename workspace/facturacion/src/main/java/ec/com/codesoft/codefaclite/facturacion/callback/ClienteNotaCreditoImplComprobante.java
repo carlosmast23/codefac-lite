@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
@@ -48,7 +49,7 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
     private NotaCredito notaCreditoProcesando;
 
     public ClienteNotaCreditoImplComprobante(NotaCreditoModel notaCreditoModel, NotaCredito notaCreditoProcesando) throws RemoteException {
-        super(Registry.REGISTRY_PORT);
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         this.notaCreditoModel = notaCreditoModel;
         this.notaCreditoProcesando = notaCreditoProcesando;
     }

@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.EnvioMensajesCallBackInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
@@ -24,7 +25,7 @@ import java.util.logging.Logger;
 public class SmsService extends UnicastRemoteObject implements SmsServiceIf{ 
 
     public SmsService() throws RemoteException {
-        super(Registry.REGISTRY_PORT);
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
     }
     
     public void enviarMensajes(Map<String,String> mensajesMap,EnvioMensajesCallBackInterface callback) throws RemoteException,ServicioCodefacException

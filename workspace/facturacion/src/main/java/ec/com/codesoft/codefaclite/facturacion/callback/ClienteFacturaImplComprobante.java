@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -68,7 +69,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     private Boolean facturacionOffline;
 
     public ClienteFacturaImplComprobante(FacturacionModel facturacionModel, Factura facturaProcesando,Boolean facturacionOffline) throws RemoteException {
-        super(Registry.REGISTRY_PORT);
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         this.facturacionModel = facturacionModel;
         //this.servicio = servicio;
         this.facturaProcesando = facturaProcesando;

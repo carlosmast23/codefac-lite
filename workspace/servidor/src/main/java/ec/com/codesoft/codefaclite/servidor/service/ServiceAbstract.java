@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
@@ -42,7 +43,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     public Object tmp;
 
     public ServiceAbstract() throws RemoteException {
-        super(Registry.REGISTRY_PORT);
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         this.entityManager=AbstractFacade.entityManager;
     }
     
@@ -56,7 +57,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
  
     public ServiceAbstract(Class<Facade> clase) throws java.rmi.RemoteException
     {
-        super(Registry.REGISTRY_PORT);
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         try {
             this.facade =(AbstractFacade<Entity>) clase.newInstance();
             this.entityManager=AbstractFacade.entityManager;
@@ -202,6 +203,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             if (transaccion.isActive()) {
                 transaccion.rollback();
             }
+            e.printStackTrace();
             throw new ServicioCodefacException("Problema con variable nula \n\n"+e.getMessage());
         }catch(Exception e) //Hacer un RollBack si se produce cualquier error
         {

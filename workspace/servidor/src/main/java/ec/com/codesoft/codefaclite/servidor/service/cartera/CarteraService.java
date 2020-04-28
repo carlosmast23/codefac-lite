@@ -10,12 +10,14 @@ import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -42,6 +44,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -161,7 +165,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         //Grabar los cruces con al referencia de los nuevos detalles ya grabados
         for (CarteraCruce carteraCruce : cruces) {
             CarteraDetalle carteraDetalleGrabada = mapDetallesGrabados.get(carteraCruce.getCarteraDetalle().getId());
-            carteraCruce.setCarteraDetalle(carteraDetalleGrabada);
+            //Solo grabo una nueva referencia si es distinta de null porque puede ser que este enviando una cartera que ya estaba grabada
+            if(carteraDetalleGrabada!=null)
+            {
+                carteraCruce.setCarteraDetalle(carteraDetalleGrabada);
+            }
             
             if(carteraCruce.getId()==null)
             {
@@ -263,20 +271,22 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     {
         if(cruces.size()>0)
         {
-            //TODO: En los 2 casos asumo que los cruces siempre son con 2 carteras , pero analizar si pueden haber mas de 2 carteras que esten siendo afectadas
-            Cartera carteraAfectada=cruces.get(0).getCarteraAfectada(); //Solo busco el primer dato de la cartera que afecta porque en los demas debe apuntar al mismo
-            Cartera carteraQueAfecta= cruces.get(0).getCarteraDetalle().getCartera();
-            
-            ///Generar el valor del saldo 
-            BigDecimal valorCruzadoCarteraAfectada=  getFacade().obtenerValorCruceCarteraAfecta(carteraAfectada);
-            carteraAfectada.setSaldo(carteraAfectada.getTotal().subtract(valorCruzadoCarteraAfectada));            
-            entityManager.merge(carteraAfectada);
-            
-            //Generar el valor del saldo del documento que esta afectando
-            BigDecimal valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(carteraQueAfecta);
-            carteraQueAfecta.setSaldo(carteraQueAfecta.getTotal().subtract(valorCruzadoCarteraQueAfecta));            
-            entityManager.merge(carteraQueAfecta);
-            
+            for (CarteraCruce cruce : cruces) 
+            {
+                //TODO: En los 2 casos asumo que los cruces siempre son con 2 carteras , pero analizar si pueden haber mas de 2 carteras que esten siendo afectadas
+                Cartera carteraAfectada=cruce.getCarteraAfectada(); //Solo busco el primer dato de la cartera que afecta porque en los demas debe apuntar al mismo
+                Cartera carteraQueAfecta= cruce.getCarteraDetalle().getCartera();
+
+                ///Generar el valor del saldo 
+                BigDecimal valorCruzadoCarteraAfectada=  getFacade().obtenerValorCruceCarteraAfecta(carteraAfectada);
+                carteraAfectada.setSaldo(carteraAfectada.getTotal().subtract(valorCruzadoCarteraAfectada));            
+                entityManager.merge(carteraAfectada);
+
+                //Generar el valor del saldo del documento que esta afectando
+                BigDecimal valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(carteraQueAfecta);
+                carteraQueAfecta.setSaldo(carteraQueAfecta.getTotal().subtract(valorCruzadoCarteraQueAfecta));            
+                entityManager.merge(carteraQueAfecta);
+            }
             
             //Modificar los saldos de los detalles
             for (CarteraCruce cruce : cruces) 
@@ -287,6 +297,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 entityManager.merge(cruce.getCarteraDetalle());
                 
             }
+            
         }
         
     }
@@ -302,7 +313,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             return;
         }
         
-        
+        /**
+         * ====================================================================
+         *      CREANDO EL DOCUMENTO DE LA FACTURA EN LA CARTERA
+         * ====================================================================
+         */
         Cartera cartera = new Cartera();
         cartera.setCodigoDocumento(comprobante.getCodigoDocumento());
         cartera.setFechaCreacion(comprobante.getFechaCreacion());
@@ -322,165 +337,15 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             case NOTA_VENTA_INTERNA:
             case NOTA_VENTA:
             case FACTURA:
-                //TODO: Unir la misma logica tanto para facturas de venta como de compra
-                if(tipo.equals(tipo.CLIENTE))
-                {
-                    Factura factura = (Factura) comprobante;
-                    cartera.setPersona(factura.getCliente());
-                    cartera.setReferenciaID(factura.getId());
-                    cartera.setSaldo(factura.getTotal());
-                    cartera.setTotal(factura.getTotal());
-
-                    for (FacturaDetalle detalle : factura.getDetalles()) {
-                        CarteraDetalle carteraDetalle=new CarteraDetalle();
-                        carteraDetalle.setDescripcion(detalle.getDescripcion());
-                        carteraDetalle.setSaldo(detalle.getTotal());
-                        carteraDetalle.setTotal(detalle.getTotal());
-                        cartera.addDetalle(carteraDetalle);
-                    }
-                }else if(tipo.equals(tipo.PROVEEDORES))
-                {
-                    entityManager.flush();
-                    Compra compra = (Compra) comprobante;
-                    cartera.setPersona(compra.getProveedor());
-                    cartera.setReferenciaID(compra.getId());
-                    cartera.setSaldo(compra.getTotal());
-                    cartera.setTotal(compra.getTotal());
-
-                    for (CompraDetalle detalle : compra.getDetalles()) {
-                        CarteraDetalle carteraDetalle=new CarteraDetalle();
-                        carteraDetalle.setDescripcion(detalle.getDescripcion());
-                        carteraDetalle.setSaldo(detalle.getTotal());
-                        carteraDetalle.setTotal(detalle.getTotal());
-                        cartera.addDetalle(carteraDetalle);
-                    }
-                }
-                
+                crearCarteraFactura(comprobante, cartera, cruces, tipo);
                 break;
 
             case RETENCIONES:
-                
-                Retencion retencion = (Retencion) comprobante;
-                cartera.setPersona(retencion.getProveedor());
-                cartera.setReferenciaID(retencion.getId());
-                
-                BigDecimal retencionIva=retencion.getTotalValorRetenido(SriRetencionRenta.CODIGO_RETENCION_IVA);
-                BigDecimal retencionRenta=retencion.getTotalValorRetenido(SriRetencionRenta.CODIGO_RETENCION_RENTA);
-                cartera.setSaldo(retencionIva.add(retencionRenta));
-                cartera.setTotal(retencionIva.add(retencionRenta));
-                
-                /**
-                 * RETENCION DE LA RENTA
-                 */
-                CarteraDetalle carteraDetalleRenta = new CarteraDetalle();
-                carteraDetalleRenta.setDescripcion("Retención de la renta");
-                carteraDetalleRenta.setSaldo(retencionRenta);
-                carteraDetalleRenta.setTotal(retencionRenta);
-                cartera.addDetalle(carteraDetalleRenta);
-                
-                /**
-                 * RETENCION DEL IVA
-                 */
-                CarteraDetalle carteraDetallIva= new CarteraDetalle();
-                carteraDetallIva.setDescripcion("Retención del iva");
-                carteraDetallIva.setSaldo(retencionIva);
-                carteraDetallIva.setTotal(retencionIva);
-                cartera.addDetalle(carteraDetallIva);
-                
-                /**
-                 * CONSULTAR LA CARTERA QUE AFECTA DE UNA RETENCION
-                 */
-                if(retencion.getCompra()!=null)
-                {
-                    Cartera carteraCompra=buscarCarteraPorReferencia(
-                            retencion.getCompra().getId(),
-                            DocumentoEnum.FACTURA, 
-                            GeneralEnumEstado.ACTIVO,
-                            Cartera.TipoCarteraEnum.PROVEEDORES,
-                            cartera.getSucursal());
-                    
-
-                    if(carteraCompra!=null)
-                    {
-                        /**
-                         * Generar el cruce de la cartera con la renta
-                         */
-                        CarteraCruce carteraCruceRenta=new CarteraCruce();
-                        carteraCruceRenta.setCarteraAfectada(carteraCompra);
-                        carteraCruceRenta.setCarteraDetalle(carteraDetalleRenta);
-                        carteraCruceRenta.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-                        carteraCruceRenta.setFechaCruce(UtilidadesFecha.getFechaHoy());
-                        carteraCruceRenta.setValor(retencionRenta);
-                        cruces.add(carteraCruceRenta);
-
-                        /**
-                         * Generar el cruce de la cartera con el iva
-                         */
-                        CarteraCruce carteraCruceIva=new CarteraCruce();
-                        carteraCruceIva.setCarteraAfectada(carteraCompra);
-                        carteraCruceIva.setCarteraDetalle(carteraDetalleRenta);
-                        carteraCruceIva.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-                        carteraCruceIva.setFechaCruce(UtilidadesFecha.getFechaHoy());
-                        carteraCruceIva.setValor(retencionIva);
-                        cruces.add(carteraCruceIva);
-                    }
-                }
-                
+                crearCarteraRetencion(comprobante, cartera, cruces);                                
                 break;
 
             case NOTA_CREDITO:
-                NotaCredito notaCredito = (NotaCredito) comprobante;
-                cartera.setPersona(notaCredito.getCliente());
-                cartera.setReferenciaID(notaCredito.getId());
-                cartera.setSaldo(notaCredito.getTotal());
-                cartera.setTotal(notaCredito.getTotal());
-                
-                /**
-                 * ==========================================================================
-                 *          Buscar la factura de la cartera para poder hacer el cruce
-                 * ==========================================================================
-                 */
-                CarteraService carteraService=new CarteraService();
-                //carteraService.buscarCarteraPorReferencia(Long.MIN_VALUE, documentoEnum, GeneralEnumEstado.ACTIVO, tipo, sucursal)
-                Cartera carteraFactura=null;
-                if(notaCredito.getFactura()!=null)
-                {
-                    carteraFactura=carteraService.buscarCarteraPorReferencia(
-                            notaCredito.getFactura().getId(),
-                            notaCredito.getFactura().getCodigoDocumentoEnum(), 
-                            GeneralEnumEstado.ACTIVO, 
-                            Cartera.TipoCarteraEnum.CLIENTE, 
-                            notaCredito.getSucursalEmpresa());
-                }
-                
-                for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {
-                    CarteraDetalle carteraDetalle=new CarteraDetalle();
-                    carteraDetalle.setDescripcion(detalle.getDescripcion());
-                    carteraDetalle.setSaldo(detalle.getTotal());
-                    carteraDetalle.setTotal(detalle.getTotal());
-                    carteraDetalle.setId(carteraDetalle.hashCode()*-1l);
-                    cartera.addDetalle(carteraDetalle);
-                    
-                                        
-                    /**
-                     * ==========================================================================
-                     * CREAR EL CRUCE DE LA FACTURA
-                     * ==========================================================================
-                     * Solo hacer un cruce si existe la referencia de la factura en el sistema
-                     */
-                    if(carteraFactura!=null)
-                    {
-                        CarteraCruce carteraCruceRenta = new CarteraCruce();
-                        carteraCruceRenta.setCarteraAfectada(carteraFactura);
-                        carteraCruceRenta.setCarteraDetalle(carteraDetalle);
-                        carteraCruceRenta.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-                        carteraCruceRenta.setFechaCruce(UtilidadesFecha.getFechaHoy());
-                        carteraCruceRenta.setValor(detalle.calcularTotalFinal());
-                        cruces.add(carteraCruceRenta);
-                    }
-                }
-                
-                
+                crearCarteraNotaCredito(comprobante, cartera, cruces);
                 break;
         }
         
@@ -488,6 +353,271 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         grabarCarteraSinTransaccion(cartera, cruces);
 
     }
+    
+    private void crearCrucesFactura(Factura factura,Cartera carteraFactura,List<CarteraCruce> cruces) throws ServicioCodefacException, RemoteException
+    {
+        /**
+         * =====================================================================
+         * CREAR CRUCE DE LA FACTURA CUANDO SE PAGA CON CREDITO CARTERA
+         * =====================================================================
+         */
+        FormaPago formaPagoConCartera=factura.buscarFormaPagoConCartera();
+        if(formaPagoConCartera!=null)
+        {
+            try {
+                //Verificar que el cliente tiene el saldo disponible para cruzar
+                BigDecimal saldoDisponibleCliente=obtenerSaldoDisponibleCruzar(factura.getCliente(),factura.getEmpresa());
+                if(saldoDisponibleCliente.compareTo(formaPagoConCartera.getTotal())<0)
+                {
+                    new ServicioCodefacException("El cliente no tiene suficiente saldo para pagar con cartera");
+                }
+                
+                List<Cartera> carteraAbonos=obtenerCarteraPorCobrar(factura.getCliente(),factura.getEmpresa());
+                BigDecimal totalCruzado=BigDecimal.ZERO; //Acumulador para saber hasta cuantos cruces hacer de cartera
+                for (Cartera carteraAbono : carteraAbonos) {
+                    for (CarteraDetalle detalle : carteraAbono.getDetalles()) 
+                    {
+                        if(totalCruzado.compareTo(formaPagoConCartera.getTotal())<0)
+                        {
+                            //Obtener el valor que se puede cruzar
+                            BigDecimal valorCruzar=detalle.getSaldo();
+                            BigDecimal valorFaltaCruzar=formaPagoConCartera.getTotal().subtract(totalCruzado);
+                            if(valorCruzar.compareTo(valorFaltaCruzar)>0)
+                            {
+                                valorCruzar=valorFaltaCruzar;
+                            }
+                            
+                            //Crear los datos del cruce
+                            CarteraCruce cruce = new CarteraCruce();
+                            cruce.setCarteraAfectada(carteraFactura);
+                            cruce.setCarteraDetalle(detalle);
+                            cruce.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+                            cruce.setFechaCruce(UtilidadesFecha.getFechaHoy());
+                            cruce.setValor(valorCruzar);
+                            cruces.add(cruce);
+                            //Aumentar el contador del total que falta por cruzar
+                            totalCruzado=totalCruzado.add(valorCruzar);                            
+                        } else {
+                            break; //Si el total ya es igual o superio termino los cruces
+                        }
+                    }                   
+                    
+                }
+                
+                
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(CarteraService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(CarteraService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+        }    
+        
+        /**
+         * =================================================================
+         * CREAR CARTERA DEL RESTO DE FORMAS DE PAGO
+         * =================================================================
+         */
+        List<FormaPago> formasPagoOtros = factura.buscarListaFormasPagoDistintaDeCartera();
+        for (FormaPago formaPago : formasPagoOtros) {
+            //Verificar si no tiene asignado un plazo de deuda en la forma de pago entonces creo los cruces
+            if (formaPago.getPlazo() == null || formaPago.getPlazo().toString().isEmpty() || formaPago.getPlazo().toString().equals("0")) {
+                //Crear la cartera
+                Cartera carteraFormaPago = new Cartera(
+                        factura.getCliente(),
+                        formaPago.getTotal(),
+                        formaPago.getTotal(),
+                        factura.getPuntoEstablecimiento().toString(),
+                        factura.getPuntoEmision().toString(),
+                        DocumentoEnum.ABONOS.getCodigo(),
+                        Cartera.TipoCarteraEnum.CLIENTE.getLetra(),
+                        factura.getSucursalEmpresa(),
+                        factura.getUsuario(),
+                        GeneralEnumEstado.ACTIVO);
+
+                //Crear la cartera detalle
+                CarteraDetalle carteraDetalle = new CarteraDetalle();
+                carteraDetalle.setCartera(carteraFormaPago);
+                carteraDetalle.setCruces(new ArrayList<CarteraCruce>());
+                carteraDetalle.setDescripcion("cruce automatica");
+                carteraDetalle.setSaldo(formaPago.getTotal());
+                carteraDetalle.setTotal(formaPago.getTotal());
+                
+                carteraFormaPago.addDetalle(carteraDetalle);
+
+                grabarCarteraSinTransaccion(carteraFormaPago, new ArrayList<CarteraCruce>());
+                //entityManager.flush();
+
+                CarteraCruce cruce = new CarteraCruce(formaPago.getTotal(), carteraFactura, carteraDetalle);
+                cruces.add(cruce);
+            }
+        }
+    }
+    
+    private void crearCarteraFactura(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,Cartera.TipoCarteraEnum tipo) throws ServicioCodefacException, RemoteException
+    {
+        //TODO: Unir la misma logica tanto para facturas de venta como de compra
+        if (tipo.equals(tipo.CLIENTE)) {
+            
+            Factura factura = (Factura) comprobante;
+            cartera.setPersona(factura.getCliente());
+            cartera.setReferenciaID(factura.getId());
+            cartera.setSaldo(factura.getTotal());
+            cartera.setTotal(factura.getTotal());
+
+            for (FacturaDetalle detalle : factura.getDetalles()) {
+                CarteraDetalle carteraDetalle = new CarteraDetalle();
+                carteraDetalle.setDescripcion(detalle.getDescripcion());
+                carteraDetalle.setSaldo(detalle.getTotal());
+                carteraDetalle.setTotal(detalle.getTotal());
+                cartera.addDetalle(carteraDetalle);
+            }
+                
+            crearCrucesFactura(factura, cartera, cruces);
+            
+        } else if (tipo.equals(tipo.PROVEEDORES)) {
+            
+            entityManager.flush();
+            Compra compra = (Compra) comprobante;
+            cartera.setPersona(compra.getProveedor());
+            cartera.setReferenciaID(compra.getId());
+            cartera.setSaldo(compra.getTotal());
+            cartera.setTotal(compra.getTotal());
+
+            for (CompraDetalle detalle : compra.getDetalles()) {
+                CarteraDetalle carteraDetalle = new CarteraDetalle();
+                carteraDetalle.setDescripcion(detalle.getDescripcion());
+                carteraDetalle.setSaldo(detalle.getTotal());
+                carteraDetalle.setTotal(detalle.getTotal());
+                cartera.addDetalle(carteraDetalle);
+            }
+        }
+    }
+    
+    private void crearCarteraNotaCredito(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces)
+    {
+        try {
+            NotaCredito notaCredito = (NotaCredito) comprobante;
+            cartera.setPersona(notaCredito.getCliente());
+            cartera.setReferenciaID(notaCredito.getId());
+            cartera.setSaldo(notaCredito.getTotal());
+            cartera.setTotal(notaCredito.getTotal());
+            
+            /**
+             * ==========================================================================
+             * Buscar la factura de la cartera para poder hacer el cruce
+             * ==========================================================================
+             */
+            CarteraService carteraService = new CarteraService();
+            //carteraService.buscarCarteraPorReferencia(Long.MIN_VALUE, documentoEnum, GeneralEnumEstado.ACTIVO, tipo, sucursal)
+            Cartera carteraFactura = null;
+            if (notaCredito.getFactura() != null) {
+                carteraFactura = carteraService.buscarCarteraPorReferencia(
+                        notaCredito.getFactura().getId(),
+                        notaCredito.getFactura().getCodigoDocumentoEnum(),
+                        GeneralEnumEstado.ACTIVO,
+                        Cartera.TipoCarteraEnum.CLIENTE,
+                        notaCredito.getSucursalEmpresa());
+            }
+            
+            for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {
+                CarteraDetalle carteraDetalle = new CarteraDetalle();
+                carteraDetalle.setDescripcion(detalle.getDescripcion());
+                carteraDetalle.setSaldo(detalle.getTotal());
+                carteraDetalle.setTotal(detalle.getTotal());
+                carteraDetalle.setId(carteraDetalle.hashCode() * -1l);
+                cartera.addDetalle(carteraDetalle);
+                
+                /**
+                 * ==========================================================================
+                 * CREAR EL CRUCE DE LA FACTURA
+                 * ==========================================================================
+                 * Solo hacer un cruce si existe la referencia de la factura en el
+                 * sistema
+                 */
+                if (carteraFactura != null) {
+                    CarteraCruce carteraCruceRenta = new CarteraCruce();
+                    carteraCruceRenta.setCarteraAfectada(carteraFactura);
+                    carteraCruceRenta.setCarteraDetalle(carteraDetalle);
+                    carteraCruceRenta.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+                    carteraCruceRenta.setFechaCruce(UtilidadesFecha.getFechaHoy());
+                    carteraCruceRenta.setValor(detalle.calcularTotalFinal());
+                    cruces.add(carteraCruceRenta);
+                }
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(CarteraService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+    }
+    
+    
+    private void crearCarteraRetencion(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces)
+    {
+        Retencion retencion = (Retencion) comprobante;
+        cartera.setPersona(retencion.getProveedor());
+        cartera.setReferenciaID(retencion.getId());
+
+        BigDecimal retencionIva = retencion.getTotalValorRetenido(SriRetencionRenta.CODIGO_RETENCION_IVA);
+        BigDecimal retencionRenta = retencion.getTotalValorRetenido(SriRetencionRenta.CODIGO_RETENCION_RENTA);
+        cartera.setSaldo(retencionIva.add(retencionRenta));
+        cartera.setTotal(retencionIva.add(retencionRenta));
+
+        /**
+         * RETENCION DE LA RENTA
+         */
+        CarteraDetalle carteraDetalleRenta = new CarteraDetalle();
+        carteraDetalleRenta.setDescripcion("Retención de la renta");
+        carteraDetalleRenta.setSaldo(retencionRenta);
+        carteraDetalleRenta.setTotal(retencionRenta);
+        cartera.addDetalle(carteraDetalleRenta);
+
+        /**
+         * RETENCION DEL IVA
+         */
+        CarteraDetalle carteraDetallIva = new CarteraDetalle();
+        carteraDetallIva.setDescripcion("Retención del iva");
+        carteraDetallIva.setSaldo(retencionIva);
+        carteraDetallIva.setTotal(retencionIva);
+        cartera.addDetalle(carteraDetallIva);
+
+        /**
+         * CONSULTAR LA CARTERA QUE AFECTA DE UNA RETENCION
+         */
+        if (retencion.getCompra() != null) {
+            Cartera carteraCompra = buscarCarteraPorReferencia(
+                    retencion.getCompra().getId(),
+                    DocumentoEnum.FACTURA,
+                    GeneralEnumEstado.ACTIVO,
+                    Cartera.TipoCarteraEnum.PROVEEDORES,
+                    cartera.getSucursal());
+
+            if (carteraCompra != null) {
+                /**
+                 * Generar el cruce de la cartera con la renta
+                 */
+                CarteraCruce carteraCruceRenta = new CarteraCruce();
+                carteraCruceRenta.setCarteraAfectada(carteraCompra);
+                carteraCruceRenta.setCarteraDetalle(carteraDetalleRenta);
+                carteraCruceRenta.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+                carteraCruceRenta.setFechaCruce(UtilidadesFecha.getFechaHoy());
+                carteraCruceRenta.setValor(retencionRenta);
+                cruces.add(carteraCruceRenta);
+
+                /**
+                 * Generar el cruce de la cartera con el iva
+                 */
+                CarteraCruce carteraCruceIva = new CarteraCruce();
+                carteraCruceIva.setCarteraAfectada(carteraCompra);
+                carteraCruceIva.setCarteraDetalle(carteraDetalleRenta);
+                carteraCruceIva.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+                carteraCruceIva.setFechaCruce(UtilidadesFecha.getFechaHoy());
+                carteraCruceIva.setValor(retencionIva);
+                cruces.add(carteraCruceIva);
+            }
+        }
+    }
+            
     
     /**
      * Obtiene la cartera que esta pendiente de cancelar

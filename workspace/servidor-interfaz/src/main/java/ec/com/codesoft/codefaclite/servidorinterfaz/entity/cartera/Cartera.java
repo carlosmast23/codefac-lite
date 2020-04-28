@@ -12,7 +12,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -60,6 +62,27 @@ public class Cartera implements Serializable{
     
     @Column(name = "SALDO")
     private BigDecimal saldo;
+
+    public Cartera() {
+    }
+
+    public Cartera(Persona persona, BigDecimal total, BigDecimal saldo, String puntoEstablecimiento, String puntoEmision, String codigoDocumento, String tipoCartera, Sucursal sucursal, Usuario usuario,GeneralEnumEstado estadoEnum) {
+        this.persona = persona;
+        this.total = total;
+        this.saldo = saldo;
+        this.puntoEstablecimiento = puntoEstablecimiento;
+        this.puntoEmision = puntoEmision;
+        this.secuencial=0;
+        this.codigoDocumento = codigoDocumento;
+        this.tipoCartera = tipoCartera;
+        this.sucursal = sucursal;
+        this.usuario = usuario;
+        this.fechaCreacion=UtilidadesFecha.getFechaHoy();
+        this.fechaEmision=UtilidadesFecha.getFechaHoy();
+        this.estado=estadoEnum.getEstado();
+    }
+    
+    
     
     /**
      * Referencia que me permite grabar el id  de donde viene el documento y en conjunto con el

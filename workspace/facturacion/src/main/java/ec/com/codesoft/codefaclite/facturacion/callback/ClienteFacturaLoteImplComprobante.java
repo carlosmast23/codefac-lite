@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteMensaje;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -48,12 +49,12 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
     private ControladorCodefacInterface controlador;
 
     public ClienteFacturaLoteImplComprobante(ControladorCodefacInterface controlador) throws RemoteException {
-        super(Registry.REGISTRY_PORT);
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         this.controlador=controlador;
     }
     
     public ClienteFacturaLoteImplComprobante(ControladorCodefacInterface controlador,InterfaceCallbakClient listener) throws RemoteException {
-        super(Registry.REGISTRY_PORT);
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         this.controlador = controlador;
         this.listener=listener;
     }

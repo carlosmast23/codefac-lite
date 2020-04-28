@@ -287,6 +287,98 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         //totalFormasPago = totalFormasPago.add(valorTotalFormaDePago);
     
     }
+    
+    
+    public BigDecimal getTotalFormasPagoCartera()
+    {
+        BigDecimal totalFormasPago = BigDecimal.ZERO;
+        if (formaPagos!= null) {
+            for (FormaPago fp : formaPagos) {
+                if(fp.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS))
+                {
+                    totalFormasPago = totalFormasPago.add(fp.getTotal());
+                }
+            }
+        }
+        return totalFormasPago;
+    
+    }
+    
+    public BigDecimal getTotalFormasPagoSinCartera()
+    {
+        BigDecimal totalFormasPago = BigDecimal.ZERO;
+        if (formaPagos!= null) {
+            for (FormaPago fp : formaPagos) {
+                if(!fp.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS))
+                {
+                    totalFormasPago = totalFormasPago.add(fp.getTotal());
+                }
+            }
+        }
+        return totalFormasPago;
+        //totalFormasPago = totalFormasPago.add(valorTotalFormaDePago);
+    
+    }
+    
+    public FormaPago buscarFormaPagoSinGrabar(SriFormaPago sriFormaPago)
+    {
+        if(formaPagos!=null)
+        {
+            for (FormaPago formaPago : formaPagos) {
+                if(sriFormaPago.getAlias().equals(formaPago.getSriFormaPago().getAlias()))
+                {
+                    return formaPago;
+                }
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Obtiene una forma de pago que se distita de cartera
+     * @return 
+     */
+    public FormaPago buscarFormaPagoDistintaDeCartera()
+    {
+        if(formaPagos!=null)
+        {
+            for (FormaPago formaPago : formaPagos) {
+                if(!formaPago.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS))
+                {
+                    return formaPago;
+                }
+            }
+        }
+        return null;
+    }
+    
+    public List<FormaPago> buscarListaFormasPagoDistintaDeCartera()
+    {
+        List<FormaPago> formasPago=new ArrayList<FormaPago>();
+        if(formaPagos!=null)
+        {
+            for (FormaPago formaPago : formaPagos) {
+                if(!formaPago.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS))
+                {
+                    formasPago.add(formaPago);
+                }
+            }
+        }
+        return formasPago;
+    }
+    
+    public FormaPago buscarFormaPagoConCartera()
+    {
+        if (formaPagos!= null) {
+            for (FormaPago fp : formaPagos) {
+                if(fp.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS))
+                {
+                    return fp;
+                }
+            }
+        }
+        return null;
+    }
 
     public BigDecimal getTotalSubsidio() {
         return totalSubsidio;

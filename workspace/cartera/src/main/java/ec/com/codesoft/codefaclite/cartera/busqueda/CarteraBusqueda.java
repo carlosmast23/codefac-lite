@@ -161,7 +161,7 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
         dato.add(t.getCodigo());
         dato.add(t.getPreimpreso());
         dato.add((t.getCarteraDocumentoEnum()!=null)?t.getCarteraDocumentoEnum().getNombre():"");
-        dato.add(t.getEstadoEnum().getEstado());
+        dato.add((t.getEstado()!=null)?t.getEstadoEnum().getEstado():"sin especificar");
         dato.add(t.getPersona().getIdentificacion());
         dato.add(t.getPersona().getNombresCompletos());
         dato.add(t.getSaldo());

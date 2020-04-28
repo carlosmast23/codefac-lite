@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -49,13 +50,32 @@ import java.util.logging.Logger;
 public class FacturaModelControlador extends FacturaNotaCreditoModelControladorAbstract{
     
     private FacturaModelControlador.FacturaModelInterface interfaz;
+    
+        /**
+     * Variable que almacena la forma de pago por defecto cuando no se selecciona ninguna
+     */
+    private SriFormaPago formaPagoDefecto;
+    
+    private SriFormaPago formaPagoConCartera;
+    
 
     public FacturaModelControlador(SessionCodefacInterface session,FacturaModelInterface interfaz,MensajeVistaInterface mensajeVista) {
         super(mensajeVista);
         this.session=session;
         this.interfaz=interfaz;
+        iniciarValores();
     }
     
+    private void iniciarValores()
+    {
+        try {
+            //Obtener la forma de pago
+            formaPagoDefecto=ServiceFactory.getFactory().getSriServiceIf().obtenerFormarPagoDefecto();
+            formaPagoConCartera=ServiceFactory.getFactory().getSriServiceIf().obtenerFormarPagoConCartera();
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public Map<String,Object> getMapParametrosReporte(Factura facturaProcesando)
     {
@@ -582,13 +602,167 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         interfaz.cargarTotalesVista();
         
         //Verifico que solo exista una forma de pago y si cumple ese requesito actualizo el valor de la forma de pago
-        if (factura.getFormaPagos()!=null && factura.getFormaPagos().size() == 1) {
-            FormaPago formaPago = factura.getFormaPagos().get(0);
-            formaPago.setTotal(factura.getTotal());
-            interfaz.agregarFormaPagoConCartera();
-            interfaz.cargarFormasPagoTabla();
-        }
+        /*if(factura.getFormaPagos()!=null)
+        {
+            if(factura.getFormaPagos().size()==0)
+            {
+                a
+            }else if (factura.getFormaPagos().size() == 1) {
+                FormaPago formaPago = factura.getFormaPagos().get(0);
+                formaPago.setTotal(factura.getTotal());            
 
+            }else if( factura.getFormaPagos().size()>1)
+            {
+                //Si tengo varias formas de pago solo tengo que dejar una forma de pago
+               FormaPago formaPago=factura.getFormaPagos().get(0);
+               formaPago.setTotal(factura.getTotal());
+               factura.getFormaPagos().clear();
+               factura.addFormaPago(formaPago);   
+               
+            }
+        }*/
+        
+        this.cargarFormaPago();
+        //agregarFormaPagoConCartera();
+        interfaz.cargarFormasPagoTabla();
+
+    }
+    
+    
+    public void cargarFormaPago()
+    {
+        Factura factura=interfaz.obtenerFactura();
+                
+        //TODO: Caso cuando no exista ningun valor por pagar lipio las formas de pago
+        if(factura.getTotal().compareTo(BigDecimal.ZERO)==0)
+        {
+            if(factura.getFormaPagos()!=null)
+            {
+                factura.getFormaPagos().clear();
+            }
+            return;
+        }
+        
+        if(factura.getFormaPagos()==null || factura.getFormaPagos().size()==0)
+        {
+            if(factura.getCliente()!=null)
+            {
+                FormaPago formaPago=new FormaPago();
+                formaPago.setPlazo(0);
+                
+                if(factura.getCliente().getSriFormaPago()==null)
+                    formaPago.setSriFormaPago(formaPagoDefecto);
+                else
+                    formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
+                    
+                formaPago.setTotal(factura.getTotal());
+                formaPago.setUnidadTiempo(FormaPago.UnidadTiempoEnum.NINGUNO.getNombre());
+
+                factura.addFormaPago(formaPago);
+                agregarFormaPagoConCartera();                
+                interfaz.cargarFormasPagoTabla();
+            }
+        }
+        else
+        {
+            //TODO: Si exsiten varias formas de pago transformo en una sola forma de pago 
+            //TODO: buscar una manera que esto luego funcione cuando tengo varias formas de pago asignado y tomar en cuenta la cartera
+            if(factura.getFormaPagos().size()>1)
+            {
+                FormaPago formPagoDefecto=factura.buscarFormaPagoDistintaDeCartera();
+                factura.getFormaPagos().clear();
+                factura.addFormaPago(formPagoDefecto);
+            }
+            
+            //Si ya existe un dato ingresado solo edita el dato si se cambia de representante
+            if (factura.getFormaPagos().size() == 1)
+            {
+                FormaPago formaPago = factura.getFormaPagos().get(0);
+                //TODO: Optimizar para que se cambie la forma de pago solo si es un cliente distinto
+                if (factura.getCliente().getSriFormaPago() != null) 
+                {
+                    formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
+                } 
+                else //Si no esta grabado una forma de pago en el cliente asigno a forma de pago por defecto de las configuraciones
+                {
+                    if (formaPagoDefecto != null) 
+                    {
+                        formaPago.setSriFormaPago(formaPagoDefecto);
+                    }
+                }
+                formaPago.setTotal(factura.getTotal());
+                agregarFormaPagoConCartera();
+                interfaz.cargarFormasPagoTabla();
+            }
+        }
+    }
+    
+    //TODO: Ver si este metodo lo podemos unir con la parte web
+    public void agregarFormaPagoConCartera()
+    {        
+        //Primero verificar que esta activo el tema de manejar con cartera
+        try {            
+            if(!ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_CARTERA,EnumSiNo.SI))
+            {
+                return;
+            }            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        Factura factura=interfaz.obtenerFactura();
+        
+        //NOTA: Si la factura no tiene nada que pagar no agrego nada
+        if(factura.getTotal().compareTo(BigDecimal.ZERO)==0)
+        {
+            return;
+        }
+        
+        //Si no esta activado el tema de pago con cartera continua
+        if(!interfaz.isPagoConCartera())
+        {
+            return;
+        }
+        
+        try {                        
+            BigDecimal saldoDisponibleCartera=ServiceFactory.getFactory().getCarteraServiceIf().obtenerSaldoDisponibleCruzar(factura.getCliente(),session.getEmpresa());
+            
+            //Si el cliente no tiene saldo en cartera entonces ya no continua con el proceso
+            if(saldoDisponibleCartera==null || saldoDisponibleCartera.compareTo(BigDecimal.ZERO)==0)
+            {
+                return;
+            }
+            
+            //BigDecimal totalFormasPagoOtros=factura.getTotalFormasPagoSinCartera();
+            //BigDecimal totalFormaPagoCartera=factura.getTotalFormasPagoCartera();
+            
+            
+            BigDecimal valorFaltaPorPagarDistintoCartera=factura.getTotal().subtract(saldoDisponibleCartera);
+            
+            //Si el valor que se puede pagar es negativo significa que puedo pagar el total solo con cartera
+            if(valorFaltaPorPagarDistintoCartera.compareTo(BigDecimal.ZERO)<=0)
+            {
+                factura.getFormaPagos().clear(); //Quito todas las formas de pago preExistentes
+                FormaPago formaPagoCartera=new FormaPago(factura.getTotal(), formaPagoConCartera);
+                factura.addFormaPago(formaPagoCartera);
+            }
+            else //Si el valor a pagar es menor que el total hago cuadrar las 2 cuentas disponibles
+            {                
+                FormaPago formaPagoDefecto=factura.buscarFormaPagoDistintaDeCartera();
+                formaPagoDefecto.setTotal(valorFaltaPorPagarDistintoCartera);                
+                FormaPago formaPagoCartera=new FormaPago(saldoDisponibleCartera, formaPagoConCartera);
+                
+                factura.getFormaPagos().clear(); //Quito todas las formas de pago para en este paso cuadrar
+                factura.getFormaPagos().add(formaPagoDefecto);
+                factura.getFormaPagos().add(formaPagoCartera);
+            }
+                        
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -632,6 +806,23 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     public ComprobanteAdicional crearComprobanteAdicional(String correo, ComprobanteAdicional.Tipo tipoCorreo, ComprobanteAdicional.CampoDefectoEnum campoDefecto) {
         return new FacturaAdicional(correo, FacturaAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO);
     }
+
+    public SriFormaPago getFormaPagoDefecto() {
+        return formaPagoDefecto;
+    }
+
+    public void setFormaPagoDefecto(SriFormaPago formaPagoDefecto) {
+        this.formaPagoDefecto = formaPagoDefecto;
+    }
+
+    public SriFormaPago getFormaPagoConCartera() {
+        return formaPagoConCartera;
+    }
+
+    public void setFormaPagoConCartera(SriFormaPago formaPagoConCartera) {
+        this.formaPagoConCartera = formaPagoConCartera;
+    }
+    
     
     
     
@@ -698,7 +889,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public Boolean getModoEdicionDetalle();
         public void setModoEdicionDetalle(Boolean modoEdicionDetalle);
         public void limpiarIngresoDetalleVista();
-        public void agregarFormaPagoConCartera();
+        public Boolean isPagoConCartera();
         
         
     }

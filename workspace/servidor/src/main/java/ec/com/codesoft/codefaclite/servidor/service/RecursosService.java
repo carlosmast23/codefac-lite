@@ -40,7 +40,7 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
 {
 
     public RecursosService() throws RemoteException {
-        super(Registry.REGISTRY_PORT);
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
     }
 
     @Override

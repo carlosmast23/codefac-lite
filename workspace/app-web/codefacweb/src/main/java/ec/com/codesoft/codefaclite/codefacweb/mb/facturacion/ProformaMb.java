@@ -1041,6 +1041,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         
     }
 
+    public Boolean isPagoConCartera() {
+        return false; //TODO: Falta aumentar una opcion en la vista para habilitar es nueva funcion
+    }
+
     /**
      * =============================================================
      *              TIPO PAGINA ENUMA

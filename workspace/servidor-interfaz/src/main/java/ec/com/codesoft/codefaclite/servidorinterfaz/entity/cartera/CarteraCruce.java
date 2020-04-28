@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera;
 
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -43,6 +45,18 @@ public class CarteraCruce implements Serializable {
     
     @JoinColumn(name = "CARTERA_DETALLE_ID")
     private CarteraDetalle carteraDetalle;
+
+    public CarteraCruce() {
+    }
+
+    public CarteraCruce(BigDecimal valor, Cartera carteraAfectada, CarteraDetalle carteraDetalle) {
+        this.valor = valor;
+        this.carteraAfectada = carteraAfectada;
+        this.carteraDetalle = carteraDetalle;
+        this.fechaCreacion=UtilidadesFecha.getFechaHoy();
+        this.fechaCruce=UtilidadesFecha.getFechaHoy();
+    }
+    
     
     
 

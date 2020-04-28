@@ -255,8 +255,9 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
         getTxtObsDiscapacidad().setText(estudiante.getObsDiscapacidad());
         getTxtPorcentajeDiscapacidad().setText(String.valueOf(estudiante.getPorcentajeDiscapacidad()));
         
-
-        getCmbGenero().setSelectedItem(estudiante.getGenero());
+        GeneroEnum generoEnum=GeneroEnum.getEnum(estudiante.getGenero());
+        getCmbGenero().setSelectedItem(generoEnum);
+        
         getCmbNacionalidad().setSelectedItem((estudiante.getNacionalidad()!=null)?estudiante.getNacionalidad():null);
         getCmbEstado().setSelectedItem(estudiante.getEstado());
         getCmbDiscapacidad().setSelectedItem((estudiante.getDiscapacidad()!=null)?estudiante.getDiscapacidad():null);

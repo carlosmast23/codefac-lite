@@ -53,7 +53,7 @@ import java.util.logging.Logger;
 public class UtilidadesService extends UnicastRemoteObject implements UtilidadesServiceIf {
 
     public UtilidadesService() throws RemoteException {
-        super(Registry.REGISTRY_PORT);
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
     }
 
     //TODO: Verificar porque no esta funcionando este metodo

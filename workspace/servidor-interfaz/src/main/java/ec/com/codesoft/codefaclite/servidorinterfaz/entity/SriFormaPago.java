@@ -20,6 +20,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "SRI_FORMA_PAGO")
 public class SriFormaPago implements Serializable {
+    
+    public static final String FORMA_PAGO_CARTERA_ALIAS="Cartera";
 
     @Id
     @Column(name = "ID")

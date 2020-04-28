@@ -84,7 +84,7 @@ public enum VentanaEnum implements Serializable{
     RETENCIONES_PENDIENTES("ec.com.codesoft.codefaclite.compra.model.RetencionesPendienteModel", "RETP", "Retenciones Pendientes", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS,null),
     RETENCIONES("ec.com.codesoft.codefaclite.compra.model.RetencionModel", "RETC", "Retención", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     RETENCION_REPORTE("ec.com.codesoft.codefaclite.compra.model.RetencionReporteModel", "CRET", "Reporte Retenciones", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.REPORTES,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
-    CARTERA("ec.com.codesoft.codefaclite.cartera.model.CarteraModel", "CART", "Cartera", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.PROCESOS,null),
+    CARTERA("ec.com.codesoft.codefaclite.cartera.model.CarteraModel", "CART", "Cartera", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.PROCESOS,KeyEvent.VK_W),
     ORDEN_TRABAJO("ec.com.codesoft.codefaclite.servicios.model.OrdenTrabajoModel", "ORDT", "Orden de Trabajo", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.PROCESOS,KeyEvent.VK_O),
     PRESUPUESTO("ec.com.codesoft.codefaclite.servicios.model.PresupuestoModel", "PRES", "Presupuesto", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.PROCESOS,KeyEvent.VK_P),
     PRESUPUESTO_REPORTE("ec.com.codesoft.codefaclite.servicios.model.ReportePresupuestosModel", "PRES", "Presupuesto Reporte", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.REPORTES,null),

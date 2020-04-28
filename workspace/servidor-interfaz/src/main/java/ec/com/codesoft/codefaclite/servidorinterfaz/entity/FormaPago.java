@@ -50,7 +50,7 @@ public class FormaPago implements Serializable {
         this.total = total;
         this.sriFormaPago = sriFormaPago;
         this.plazo=0;
-        this.unidadTiempo="";
+        this.unidadTiempo=UnidadTiempoEnum.NINGUNO.getNombre();
     }
     
     

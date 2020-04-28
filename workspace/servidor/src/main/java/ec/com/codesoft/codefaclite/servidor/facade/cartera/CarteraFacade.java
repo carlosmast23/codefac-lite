@@ -167,7 +167,15 @@ public class CarteraFacade extends AbstractFacade<Cartera>
      */
     public BigDecimal obtenerValorCruceCarteraAfectados(Cartera cartera)
     {
-        String queryString = "SELECT SUM(u.valor) FROM CarteraCruce u WHERE u.carteraDetalle.cartera=?1 ";
+        String queryString2 = "SELECT distinct u FROM CarteraCruce u WHERE u.carteraDetalle.cartera=?1 ";
+        Query query2 = getEntityManager().createQuery(queryString2);
+        query2.setParameter(1, cartera);
+        List<CarteraCruce> carteras=query2.getResultList();
+        for (CarteraCruce carteraResult : carteras) {
+            System.out.println("cod: "+carteraResult.getId()+" ,valor= "+carteraResult.getValor());
+        }
+        
+        String queryString = "SELECT distinct SUM(u.valor) FROM CarteraCruce u WHERE u.carteraDetalle.cartera=?1 ";
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(1, cartera);
         Number sumatoria=(Number) query.getSingleResult();
@@ -178,21 +186,31 @@ public class CarteraFacade extends AbstractFacade<Cartera>
     {
         /*Cartera c;
         c.getSaldo();*/
-        String queryString = "SELECT c FROM Cartera c WHERE c.persona=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0  ";
+        String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,"c.codigoDocumento");
+        String queryString = "SELECT c FROM Cartera c WHERE c.persona=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0 and c.tipoCartera=?4 and ( "+whereDocumentos+" )";
         Query query=getEntityManager().createQuery(queryString);
         query.setParameter(1,cliente);
         query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3,empresa);
+        query.setParameter(4,Cartera.TipoCarteraEnum.CLIENTE.getLetra());
         return query.getResultList();
     }
     
     public BigDecimal obtenerSaldoDisponibleCruzarFacade(Persona cliente,Empresa empresa)
     {
-        String queryString = "SELECT SUM(c.saldo) FROM Cartera c WHERE c.persona=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0  ";
+        /*Cartera cartera;
+        cartera.getCarteraDocumentoEnum().getCategoria().COMPROBANTE_INGRESOS_EGRESOS;
+        cartera.getCodigoDocumento()
+        cartera.getTipoCarteraEnum().CLIENTE;
+        cartera.getTipoCartera()*/
+        String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,"c.codigoDocumento");
+        String queryString = "SELECT SUM(c.saldo) FROM Cartera c WHERE c.persona=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0 and c.tipoCartera=?4 and ( "+whereDocumentos+" )";
+        
         Query query=getEntityManager().createQuery(queryString);
         query.setParameter(1,cliente);
         query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3,empresa);
+        query.setParameter(4,Cartera.TipoCarteraEnum.CLIENTE.getLetra());
         return (BigDecimal) query.getSingleResult();
     }
     
