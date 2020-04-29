@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategori
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
@@ -301,7 +302,15 @@ public class Cartera implements Serializable{
         this.codigoAuxiliar = codigoAuxiliar;
     }
     
-    
+    public String obtenerDescripciones()
+    {
+        return UtilidadesLista.castListToString(detalles,",",new UtilidadesLista.CastListInterface<CarteraDetalle>() {
+            @Override
+            public String getString(CarteraDetalle dato) {
+                return dato.getDescripcion();
+            }
+        });
+    }
     
 
     @Override
@@ -397,6 +406,30 @@ public class Cartera implements Serializable{
     public BigDecimal calcularValorCobrado()
     {
         return this.total.subtract(saldo);
+    }
+    
+    public enum TipoSaldoCarteraEnum
+    {
+        SIN_SALDO("Sin Saldo"),
+        CON_SALDO("Con Saldo"),
+        TODOS("Todos");
+        
+        private String nombre;
+
+        private TipoSaldoCarteraEnum(String nombre) 
+        {
+            this.nombre = nombre;
+        }
+        
+        public String getNombre() {
+            return nombre;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
     }
     
     /**

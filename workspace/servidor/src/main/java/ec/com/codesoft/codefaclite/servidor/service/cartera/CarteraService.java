@@ -633,6 +633,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Boolean carteraConSaldo) throws ServicioCodefacException, RemoteException {
         return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera,carteraConSaldo);
     }
+    
+    /*public List<Cartera> listaCartera(Empresa empresa,Date fechaInicial,Date fechaFinal,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,)
+    {
+        
+    }*/
 
     
     public void editar(Cartera entity,List<CarteraCruce> cruces) throws ServicioCodefacException, RemoteException {

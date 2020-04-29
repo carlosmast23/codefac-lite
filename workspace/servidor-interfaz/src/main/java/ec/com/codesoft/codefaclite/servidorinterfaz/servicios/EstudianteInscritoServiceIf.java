@@ -50,4 +50,6 @@ public interface EstudianteInscritoServiceIf extends ServiceAbstractIf<Estudiant
     
     public EstudianteInscrito obtenerPorEstudianteYNivelYEstado(Estudiante estudiante,NivelAcademico nivel,GeneralEnumEstado estado ) throws RemoteException;
     
+    public EstudianteInscrito buscarEstudianteMatriculadoPeriodoActivo(Estudiante estudiante) throws ServicioCodefacException, java.rmi.RemoteException;
+    
 }

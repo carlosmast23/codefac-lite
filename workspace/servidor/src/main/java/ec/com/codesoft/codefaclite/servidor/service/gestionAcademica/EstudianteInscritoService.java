@@ -240,6 +240,25 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         return getFacade().findByMap(mapParametros);*/
         return getFacade().buscarPorNivelAcademicoFacade(periodo, nivel);
     }
+    
+    public EstudianteInscrito buscarEstudianteMatriculadoPeriodoActivo(Estudiante estudiante) throws ServicioCodefacException, java.rmi.RemoteException {
+        
+        PeriodoService servicePeriodo=new PeriodoService();
+        Periodo periodoActivo=servicePeriodo.obtenerUnicoPeriodoActivo();
+        
+        Map<String,Object> mapParametro=new HashMap<String,Object>();
+        mapParametro.put("estudiante", estudiante);
+        mapParametro.put("nivelAcademico.periodo",periodoActivo);
+        mapParametro.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        
+        List<EstudianteInscrito> resultados=getFacade().findByMap(mapParametro);
+        if(resultados.size()>0)
+        {
+            return resultados.get(0);
+        }
+        return null;
+    
+    }
 
    
     

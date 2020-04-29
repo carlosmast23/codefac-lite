@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
@@ -314,5 +315,19 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         
         return query.getResultList();
     }
+    
+    public List<Retencion> obtenerRetencionPorPreimpresoyProveedor(String preimpresoCompra, Persona persona)
+    {
+
+        String queryString = "SELECT r FROM Retencion r WHERE r.estado<>?1 and r.estado<>?2 and r.proveedor=?3 and r.preimpresoDocumento=?4 ";
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+        query.setParameter(2, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+        query.setParameter(3, persona);
+        query.setParameter(4, preimpresoCompra);
+        
+        return query.getResultList();
+    }
+    
 
 }

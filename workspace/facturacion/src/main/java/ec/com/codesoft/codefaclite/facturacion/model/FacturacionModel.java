@@ -2173,6 +2173,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudiante.getNombreCompleto(),ComprobanteAdicional.Tipo.TIPO_OTRO));
 
         factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante() + "",ComprobanteAdicional.Tipo.TIPO_OTRO));
+        
+        try {
+            EstudianteInscrito estudianteInscrito= ServiceFactory.getFactory().getEstudianteInscritoServiceIf().buscarEstudianteMatriculadoPeriodoActivo(estudiante);
+            factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.CURSO_ESTUDIANTE.getNombre(), estudianteInscrito.getNivelAcademico().getNombre(), ComprobanteAdicional.Tipo.TIPO_OTRO));
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
     
     

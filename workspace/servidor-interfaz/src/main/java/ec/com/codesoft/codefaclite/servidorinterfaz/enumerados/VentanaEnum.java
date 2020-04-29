@@ -104,6 +104,7 @@ public enum VentanaEnum implements Serializable{
     CARTERA_CUENTAS_X_PAGAR("ec.com.codesoft.codefaclite.cartera.model.CuentasPorPagarReporteModel", "CXPR", "Reporte Cuentas por Pagar", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.REPORTES,null),
     DEUDA_POR_RUBRO("ec.com.codesoft.codefaclite.gestionacademica.model.DeudaPorRubroModel", "DPRU", "Deuda por rubro", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.DEUDAS_ACADEMICOS,null),
     MOVIMIENTO_CARTERA("ec.com.codesoft.codefaclite.cartera.model.MovimientoCarteraModel", "MOCA", "Movimiento de Cartera", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.REPORTES,null),
+    REPORTE_CARTERA("ec.com.codesoft.codefaclite.cartera.model.ReporteCarteraModel", "RECA", "Reporte de Cartera", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.REPORTES,null),
     GESTION_INVENTARIO("ec.com.codesoft.codefaclite.inventario.model.GestionInventarioModel", "GIMO", "Gestión Inventario", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,null),
     PERIODO_CONTABILIDAD("ec.com.codesoft.codefaclite.contabilidad.model.PeriodoModel", "PECO", "Periodo", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.PROCESOS,null),
     BALANCE_GENERAL("ec.com.codesoft.codefaclite.contabilidad.model.BalanceGeneralModel", "BAGE", "Balance General", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.REPORTES,null),

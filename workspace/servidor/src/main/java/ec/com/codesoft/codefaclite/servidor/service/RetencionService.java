@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -130,6 +131,13 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
             throw new ServicioCodefacException("No se permite emitir retenciones a consumidor final");
         }
         
+        //Validar que no existan retenciones activas aplicadas a la misma compra+
+        Retencion retencionExistente=obtenerRetencionPorPreimpresoyProveedor(retencion.getPreimpresoDocumento(),retencion.getProveedor());
+        if(retencionExistente!=null)
+        {
+            throw new ServicioCodefacException("La compra ya fue aplicada la retención en el comprobante "+retencionExistente.getPreimpreso());
+        }
+        
         
         //TODO: Por el momento quito esta validacion porque ese problema de los duplicados puedo manejar en los ats agrupando nuevamente
         ///Validar que no existan codigos duplicados porque eso no permite el Sri
@@ -147,6 +155,8 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         }*/
         
     }
+    
+    
 
     @Override
     public void eliminar(Retencion entity) throws RemoteException {
@@ -202,5 +212,14 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         return getFacade().obtenerRetencionesPorCompraFacade(compra);
     }
 
+    public Retencion obtenerRetencionPorPreimpresoyProveedor(String preimpresoCompra, Persona persona)
+    {
+        List<Retencion> resultado= getFacade().obtenerRetencionPorPreimpresoyProveedor(preimpresoCompra, persona);
+        if(resultado.size()>0)
+        {
+            return resultado.get(0);
+        }
+        return null;
+    }
 
 }
