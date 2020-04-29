@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -70,6 +71,18 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         modeloLista = new DefaultListModel();
+        
+        getCmbPeriodo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+                if (periodo != null) {
+                    cargarNivelesPeriodo(periodo, getCmbNivelAcademico());
+                    cargarMesesPeriodo(periodo);
+                }
+            }
+
+        });
         listener();
         try {
             periodoActivo = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerUnicoPeriodoActivo();
@@ -88,6 +101,9 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             for (CatalogoProducto catalogo : tipoRubros) {
                 getCmbTipoRubroPorMes().addItem(catalogo);
             }
+            
+            UtilidadesComboBox.llenarComboBox(getCmbTipoReporte(),ReporteDeudasData.TipoReporteEnum.values());            
+            
 
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -130,18 +146,6 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
 
                 }
             }
-        });
-
-        getCmbPeriodo().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
-                if (periodo != null) {
-                    cargarNivelesPeriodo(periodo, getCmbNivelAcademico());
-                    cargarMesesPeriodo(periodo);
-                }
-            }
-
         });
 
     }
@@ -188,7 +192,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             }
             EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
             List<EstudianteInscrito> dataEstudiante = na.buscarPorNivelAcademico(periodo, nivelBuscar);
-            data=new ArrayList<ReporteDeudasData>();
+            data = new ArrayList<ReporteDeudasData>();
 
             for (EstudianteInscrito estudiante : dataEstudiante) {
 
@@ -200,7 +204,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                 } else {
                     dataRubro = rs.buscarRubrosMes(estudiante, periodo, null, mesesSeleccionados);
                 }
-                
+
                 // comparamos si el estudiante tiene rubros
                 if (!dataRubro.isEmpty()) {
                     for (RubroEstudiante re : dataRubro) {
@@ -230,7 +234,8 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             DialogoCodefac.mensaje("No existen datos para el reporte", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
 
-        InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deudas.jrxml");
+        ReporteDeudasData.TipoReporteEnum tipoReporteEnum=(ReporteDeudasData.TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
+        InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream(tipoReporteEnum.getNombreReporte());
         Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
 
         NivelAcademico nivela = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
@@ -417,7 +422,6 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             }
         });
     }
-    
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {

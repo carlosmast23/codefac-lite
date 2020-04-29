@@ -84,5 +84,23 @@ public class ReporteDeudasData implements ExcelDatosInterface{
         return tiposDatos;
     }
     
+    public enum TipoReporteEnum
+    {
+        DETALLADO("reporte_deudas.jrxml"),
+        RESUMIDO("reporte_deudas_resumido.jrxml");
+
+        private TipoReporteEnum(String nombreReporte) {
+            this.nombreReporte = nombreReporte;
+        }
+        
+        private String nombreReporte;
+
+        public String getNombreReporte() {
+            return nombreReporte;
+        }
+        
+        
+    }
+    
     
 }

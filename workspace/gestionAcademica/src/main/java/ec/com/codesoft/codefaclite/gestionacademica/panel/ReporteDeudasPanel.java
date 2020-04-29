@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteDeudasData.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
@@ -62,6 +63,8 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         cmbMesFiltro = new javax.swing.JComboBox<>();
         btnLimpiar = new javax.swing.JButton();
         lblEspacio = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        cmbTipoReporte = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -110,7 +113,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         btnBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
@@ -146,7 +149,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 10;
         gridBagConstraints.gridheight = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -175,10 +178,10 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         getContentPane().add(chkTodosRubros, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel4.setText("Tipo Rubro:");
+        jLabel4.setText("Tipo Reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
@@ -244,7 +247,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
         getContentPane().add(jPanel1, gridBagConstraints);
@@ -254,6 +257,22 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(lblEspacio, gridBagConstraints);
+
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel5.setText("Tipo Rubro:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel5, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbTipoReporte, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -269,9 +288,11 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<RubroPlantillaMes> cmbMesFiltro;
     private javax.swing.JComboBox<NivelAcademico> cmbNivelAcademico;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
+    private javax.swing.JComboBox<TipoReporteEnum> cmbTipoReporte;
     private javax.swing.JComboBox<CatalogoProducto> cmbTipoRubroPorMes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -378,6 +399,12 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
     public void setBtnLimpiar(JButton btnLimpiar) {
         this.btnLimpiar = btnLimpiar;
     }
+
+    public JComboBox<TipoReporteEnum> getCmbTipoReporte() {
+        return cmbTipoReporte;
+    }
+    
+    
     
     
     
