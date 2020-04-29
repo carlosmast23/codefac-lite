@@ -5,11 +5,17 @@
  */
 package ec.com.codesoft.codefaclite.cartera.reportdata;
 
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class CarteraDocumentoData {
+public class CarteraDocumentoData implements ExcelDatosInterface {
     private String codigo;
     private String descripcion;
     private String valor;
@@ -96,6 +102,31 @@ public class CarteraDocumentoData {
         this.documento = documento;
     }
 
+    @Override
+    public List<TipoDato> getDatos() {
+        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
+        
+        tiposDatos.add(new TipoDato(this.codigo,Excel.TipoDataEnum.TEXTO));        
+        tiposDatos.add(new TipoDato(this.documento, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.persona,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.descripcion, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.fechaEmision, Excel.TipoDataEnum.TEXTO));        
+        tiposDatos.add(new TipoDato(this.preimpreso,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.valor,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.saldo,Excel.TipoDataEnum.NUMERO));
+        return tiposDatos; 
+    }
+
+    public static final String[] TITULO_REPORTE={
+        "Código",
+        "Documento",
+        "Cliente/Proveedor",
+        "Descripción",
+        "Fecha",
+        "Preimpreso",
+        "Valor",
+        "Saldo"
+    };
     
     
     

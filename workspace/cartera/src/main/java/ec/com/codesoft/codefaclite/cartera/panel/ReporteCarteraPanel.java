@@ -10,8 +10,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.TipoCarteraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.TipoSaldoCarteraEnum;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import org.jdesktop.swingx.JXDatePicker;
 
 /**
@@ -52,9 +54,9 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
         tblDatos = new javax.swing.JTable();
         lblEspacio2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        txtClienteProveedor = new javax.swing.JTextField();
+        btnBuscarCliente = new javax.swing.JButton();
+        chkTodosClientes = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
         cmbTipoSaldo = new javax.swing.JComboBox<>();
 
@@ -97,6 +99,7 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbFechaFin, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -166,27 +169,30 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
+
+        txtClienteProveedor.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jTextField1, gridBagConstraints);
+        jPanel1.add(txtClienteProveedor, gridBagConstraints);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jButton2, gridBagConstraints);
+        jPanel1.add(btnBuscarCliente, gridBagConstraints);
 
-        jCheckBox1.setText("Todos");
+        chkTodosClientes.setSelected(true);
+        chkTodosClientes.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jCheckBox1, gridBagConstraints);
+        jPanel1.add(chkTodosClientes, gridBagConstraints);
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel11.setText("Categoria:");
@@ -212,13 +218,13 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnBuscarCliente;
+    private javax.swing.JCheckBox chkTodosClientes;
     private javax.swing.JComboBox<Cartera.CarteraCategoriaEnum > cmbDocumentoCategoriaCartera;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFin;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicio;
     private javax.swing.JComboBox<TipoCarteraEnum > cmbTipoCartera;
     private javax.swing.JComboBox<TipoSaldoCarteraEnum> cmbTipoSaldo;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -227,10 +233,10 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JTable tblDatos;
+    private javax.swing.JTextField txtClienteProveedor;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<Cartera.CarteraCategoriaEnum> getCmbDocumentoCategoriaCartera() {
@@ -271,6 +277,18 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
 
     public void setTblDatos(JTable tblDatos) {
         this.tblDatos = tblDatos;
+    }
+
+    public JTextField getTxtClienteProveedor() {
+        return txtClienteProveedor;
+    }
+
+    public JCheckBox getChkTodosClientes() {
+        return chkTodosClientes;
+    }
+
+    public JButton getBtnBuscarCliente() {
+        return btnBuscarCliente;
     }
     
     

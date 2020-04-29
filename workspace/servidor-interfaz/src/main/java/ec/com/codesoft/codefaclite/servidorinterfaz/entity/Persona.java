@@ -579,8 +579,8 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     @Override
     public String toString() {
-        return identificacion;
-        //return identificacion + " - " + getNombresCompletos();
+        //return identificacion;
+        return identificacion + " - " + getRazonSocial();
     }
 
     @Override
