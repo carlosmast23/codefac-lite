@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteDeudasCursoData.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -48,6 +49,8 @@ public abstract class DeudasAgrupadasPorCursoPanel extends ControladorCodefacInt
         dateFechaFin = new com.toedter.calendar.JDateChooser();
         btnLimpiarFechaFin = new javax.swing.JButton();
         lblEspacio12 = new javax.swing.JLabel();
+        lblperiodo1 = new javax.swing.JLabel();
+        cmbTipoReporte = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -57,10 +60,11 @@ public abstract class DeudasAgrupadasPorCursoPanel extends ControladorCodefacInt
         setToolTipText("");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        lblperiodo.setText("Periodo:");
+        lblperiodo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblperiodo.setText("Tipo de Reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblperiodo, gridBagConstraints);
@@ -77,7 +81,7 @@ public abstract class DeudasAgrupadasPorCursoPanel extends ControladorCodefacInt
         btnBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
@@ -97,7 +101,7 @@ public abstract class DeudasAgrupadasPorCursoPanel extends ControladorCodefacInt
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 28;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -105,6 +109,7 @@ public abstract class DeudasAgrupadasPorCursoPanel extends ControladorCodefacInt
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 30, 10);
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
+        lblFechaInicio.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblFechaInicio.setText("Fecha incial:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -131,6 +136,7 @@ public abstract class DeudasAgrupadasPorCursoPanel extends ControladorCodefacInt
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnLimpiarFechaInicio, gridBagConstraints);
 
+        lblFechaFin.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblFechaFin.setText("Fecha final:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -161,6 +167,22 @@ public abstract class DeudasAgrupadasPorCursoPanel extends ControladorCodefacInt
         gridBagConstraints.weightx = 0.8;
         getContentPane().add(lblEspacio12, gridBagConstraints);
 
+        lblperiodo1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblperiodo1.setText("Periodo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(lblperiodo1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbTipoReporte, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -170,6 +192,7 @@ public abstract class DeudasAgrupadasPorCursoPanel extends ControladorCodefacInt
     private javax.swing.JButton btnLimpiarFechaFin;
     private javax.swing.JButton btnLimpiarFechaInicio;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
+    private javax.swing.JComboBox<TipoReporteEnum> cmbTipoReporte;
     private com.toedter.calendar.JDateChooser dateFechaFin;
     private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JScrollPane jScrollPane1;
@@ -177,6 +200,7 @@ public abstract class DeudasAgrupadasPorCursoPanel extends ControladorCodefacInt
     private javax.swing.JLabel lblFechaFin;
     private javax.swing.JLabel lblFechaInicio;
     private javax.swing.JLabel lblperiodo;
+    private javax.swing.JLabel lblperiodo1;
     private javax.swing.JTable tblDeudas;
     // End of variables declaration//GEN-END:variables
 
@@ -235,6 +259,11 @@ public abstract class DeudasAgrupadasPorCursoPanel extends ControladorCodefacInt
     public void setDateFechaInicio(JDateChooser dateFechaInicio) {
         this.dateFechaInicio = dateFechaInicio;
     }
+
+    public JComboBox<TipoReporteEnum> getCmbTipoReporte() {
+        return cmbTipoReporte;
+    }
+    
     
 
 }

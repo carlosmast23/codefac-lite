@@ -24,6 +24,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
@@ -84,7 +86,8 @@ public class DeudasAgrupadasPorCursoModel extends DeudasAgrupadasPorCursoPanel {
     @Override
     public void imprimir() {
         try {
-            InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deudas_curso.jrxml");
+            ReporteDeudasCursoData.TipoReporteEnum tipoReporteEnum=(ReporteDeudasCursoData.TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
+            InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream(tipoReporteEnum.getNombreReporte());
 
             RubroEstudianteServiceIf na = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
 
@@ -188,6 +191,9 @@ public class DeudasAgrupadasPorCursoModel extends DeudasAgrupadasPorCursoPanel {
             for (Periodo periodo : periodos) {
                 getCmbPeriodo().addItem(periodo);
             }
+            
+            UtilidadesComboBox.llenarComboBox(getCmbTipoReporte(),ReporteDeudasCursoData.TipoReporteEnum.values());
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
