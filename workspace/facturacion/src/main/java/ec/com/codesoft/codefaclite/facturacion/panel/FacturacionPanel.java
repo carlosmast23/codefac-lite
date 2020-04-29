@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -1687,7 +1688,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Cantidad",grupo = "detalles")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = ExpresionRegular.NUMEROS_DECIMALES,nombre = "Cantidad",grupo = "detalles")
     public JTextField getTxtCantidad() {
         return txtCantidad;
     }
