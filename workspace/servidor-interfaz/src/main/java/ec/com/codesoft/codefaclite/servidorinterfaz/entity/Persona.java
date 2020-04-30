@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
@@ -128,6 +129,9 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona", fetch = FetchType.EAGER)
     private List<PersonaEstablecimiento> establecimientos;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "representante", fetch = FetchType.EAGER)
+    private List<Estudiante> estudiantes;
 
     public Long getIdCliente() {
         return idCliente;
@@ -411,6 +415,16 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setContactoClienteNombre(String contactoClienteNombre) {
         this.contactoClienteNombre = contactoClienteNombre;
     }
+
+    public List<Estudiante> getEstudiantes() {
+        return estudiantes;
+    }
+
+    public void setEstudiantes(List<Estudiante> estudiantes) {
+        this.estudiantes = estudiantes;
+    }
+    
+    
 
     /**
      * ==================> Metodos utilidaes <=====================

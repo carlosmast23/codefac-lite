@@ -168,7 +168,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite {
-        return new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession().getEmpresa());
+        return new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession());
     }
     
     
@@ -233,7 +233,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     // Abrir Dialogo Busqueda Cliente
     public void abrirDialogoBuscarCliente()
     {
-        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession().getEmpresa());   
+        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession());   
         //abrirDialogoBusqueda(clienteBusquedaDialogo);
         UtilidadesDialogo.abrirDialogoBusqueda(clienteBusquedaDialogo);
     }

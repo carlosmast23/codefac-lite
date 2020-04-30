@@ -201,7 +201,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite {
-        return new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession().getEmpresa());
+        return new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession());
     }
 
     public Persona getCliente() {

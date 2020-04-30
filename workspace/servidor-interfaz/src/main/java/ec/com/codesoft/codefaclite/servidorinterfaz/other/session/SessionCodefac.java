@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import java.io.Serializable;
@@ -166,6 +167,33 @@ public class SessionCodefac implements SessionCodefacInterface,Serializable{
     @Override
     public BigDecimal obtenerIvaActualDecimal() {
         return obtenerIvaActual().divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+    }
+
+    @Override
+    public Boolean verificarExisteModulo(ModuloCodefacEnum moduloBuscar) {
+        for (ModuloCodefacEnum modulo : getModulos()) {
+            //TODO:Esta comparacion la hago porque puede ser que cuando corran en diferentes maquinas virtuales no funcionen
+            if(modulo.equals(moduloBuscar))
+            {
+                //TODO: Dejo esta validacion por el momento por que la letra de Gestion Academica esta mesclada con la de transporte
+                if(modulo.equals(ModuloCodefacEnum.GESTIONA_ACADEMICA))
+                {
+                    try {
+                        List<Periodo> periodo=ServiceFactory.getFactory().getPeriodoServiceIf().obtenerTodos();
+                        if(periodo.size()>0)
+                        {
+                            return true;
+                        }                        
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(SessionCodefac.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    return false;
+                }
+                
+                return true;
+            }
+        }
+        return false;
     }
     
     

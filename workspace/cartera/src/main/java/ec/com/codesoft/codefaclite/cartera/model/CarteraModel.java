@@ -95,11 +95,12 @@ public class CarteraModel extends CarteraPanel{
         listenerBotones();
         listenerTablas();
         listenerTabs();
+        nuevo();
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        
+        getCmbDocumentoCategoriaCartera().setSelectedItem(CarteraCategoriaEnum.COMPROBANTE_INGRESO);
     }
 
     @Override
@@ -472,7 +473,7 @@ public class CarteraModel extends CarteraPanel{
     }
     
     private void btnListenerBuscarCliente() {
-        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo= new ClienteEstablecimientoBusquedaDialogo(session.getEmpresa());
+        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo= new ClienteEstablecimientoBusquedaDialogo(session);
         //ClienteBusquedaDialogo clienteBusquedaDialogo = new ClienteBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);

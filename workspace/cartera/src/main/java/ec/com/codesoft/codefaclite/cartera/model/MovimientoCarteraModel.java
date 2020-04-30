@@ -279,7 +279,7 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
     
     private void btnListenerBuscarCliente() {
         //ClienteBusquedaDialogo clienteBusquedaDialogo = new ClienteBusquedaDialogo();
-        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo= new ClienteEstablecimientoBusquedaDialogo(session.getEmpresa());
+        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo= new ClienteEstablecimientoBusquedaDialogo(session);
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         //factura.setCliente((Persona) buscarDialogoModel.getResultado());

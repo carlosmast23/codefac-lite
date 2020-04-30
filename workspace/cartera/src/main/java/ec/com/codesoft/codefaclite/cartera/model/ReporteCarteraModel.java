@@ -203,7 +203,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
     }
     
     private void btnListenerBuscarCliente() {
-        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo= new ClienteEstablecimientoBusquedaDialogo(session.getEmpresa());
+        ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo= new ClienteEstablecimientoBusquedaDialogo(session);
         //ClienteBusquedaDialogo clienteBusquedaDialogo = new ClienteBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);

@@ -82,4 +82,6 @@ public interface SessionCodefacInterface {
      * @return 
      */
     public BigDecimal obtenerIvaActualDecimal();
+    
+    public Boolean verificarExisteModulo(ModuloCodefacEnum moduloBuscar);
 }

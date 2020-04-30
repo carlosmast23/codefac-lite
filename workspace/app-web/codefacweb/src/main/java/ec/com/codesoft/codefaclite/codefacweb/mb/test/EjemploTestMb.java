@@ -78,7 +78,7 @@ public class EjemploTestMb  extends GeneralAbstractMb implements Serializable {
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite {
-        return new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession().getEmpresa());
+        return new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession());
     }
     
     
