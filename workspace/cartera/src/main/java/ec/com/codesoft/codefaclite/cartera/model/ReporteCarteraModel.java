@@ -105,7 +105,8 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
 
                 @Override
                 public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoData, panelPadre,"Reporte Cartera");
+                    Cartera.CarteraCategoriaEnum carteraCategoriaEnum =(Cartera.CarteraCategoriaEnum) getCmbDocumentoCategoriaCartera().getSelectedItem();
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoData, panelPadre,carteraCategoriaEnum.getNombre());
                     //dispose();
                     //setVisible(false);
                 }
@@ -169,7 +170,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                         dato.getSaldo().toString(),
                         dato.getPreimpreso(),
                         dato.getFechaEmision().toString(),
-                        dato.getPersona().getNombresCompletos(),
+                        dato.getPersona().getRazonSocial(),
                         dato.getCarteraDocumentoEnum().getNombre()));
             }
         }
@@ -244,7 +245,8 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                             fechaFin,
                             carteraCategoriaEnum.getDocumentoCategoriaEnum(),
                             (Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem(),
-                            saldoCarteraEnum);
+                            saldoCarteraEnum,
+                            Cartera.TipoOrdenamientoEnum.POR_RAZON_SOCIAL);
 
                     construirResultadoData(resultado);
                     mostrarDatosTabla();

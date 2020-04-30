@@ -482,6 +482,12 @@ public class Cartera implements Serializable{
         
     }
     
+    public enum TipoOrdenamientoEnum
+    {
+        POR_PREIMPRESO,
+        POR_RAZON_SOCIAL;
+    }
+    
     /**
      * Tipo de enum que me permie separar los mismo tipos de comprobante pero por ventas y compras
      */

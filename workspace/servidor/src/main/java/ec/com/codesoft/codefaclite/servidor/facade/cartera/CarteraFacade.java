@@ -34,7 +34,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         super(Cartera.class);
     }
       
-    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum)
+    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum)
     {
         String cliente = "", fecha = "", saldo = "";
         if (persona != null) {
@@ -64,19 +64,26 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         {
             saldo=" AND c.saldo>0 ";
         }
-        
-        
-        /*Cartera cartera=new Cartera();
-        cartera.getEstado();*/
-        
+      
+
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(categoriaMenuEnum,"c.codigoDocumento");
+        
+        String orderBy="";
+        if(tipoOrdenamientoEnum.equals(tipoOrdenamientoEnum.POR_PREIMPRESO))
+        {
+            orderBy=" ORDER BY CAST(c.puntoEmision AS BIGINT) ,CAST(c.puntoEstablecimiento AS BIGINT) ,CAST(c.secuencial AS BIGINT)  asc ";
+        }else if(tipoOrdenamientoEnum.equals(tipoOrdenamientoEnum.POR_RAZON_SOCIAL))
+        {
+            orderBy=" ORDER BY c.persona.razonSocial ";
+        }
         /*Cartera c;
         c.getPuntoEmision();
         c.getPuntoEstablecimiento();
-        c.getSecuencial();*/
+        c.getSecuencial();
+        c.getPersona().getRazonSocial();*/
         
         try {
-            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +" AND ("+whereDocumentos+") AND c.tipoCartera=?4 AND c.estado=?5  ORDER BY CAST(c.puntoEmision AS BIGINT) ,CAST(c.puntoEstablecimiento AS BIGINT) ,CAST(c.secuencial AS BIGINT)  asc";
+            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +" AND ("+whereDocumentos+") AND c.tipoCartera=?4 AND c.estado=?5  "+orderBy;            
             //System.out.println("QUERY==> "+queryString);
             Query query = getEntityManager().createQuery(queryString);
             if (persona != null) {
