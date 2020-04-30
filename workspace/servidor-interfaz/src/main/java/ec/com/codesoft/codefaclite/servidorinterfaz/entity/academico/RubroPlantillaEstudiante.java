@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -111,6 +112,26 @@ public class RubroPlantillaEstudiante implements Serializable{
         }
         return true;
     }
+    
+    /**
+     * ========================================================================
+     *                  METODOS ADICIONALES
+     * =======================================================================
+     */
+    public static Comparator<RubroPlantillaEstudiante> comparadorOrdenarAlfabeticamente=new Comparator<RubroPlantillaEstudiante>() {
+        @Override
+        public int compare(RubroPlantillaEstudiante o1, RubroPlantillaEstudiante o2) {
+            int comparacion=o1.getEstudianteInscrito().getEstudiante().getApellidos().compareTo(o2.getEstudianteInscrito().getEstudiante().getApellidos());
+            
+            //Si la comparacion es igual a 0 significa que los apellidos son iguales y me toca comparar por otro argumento
+            if(comparacion==0)
+            {
+                comparacion=o1.getEstudianteInscrito().getEstudiante().getNombres().compareTo(o2.getEstudianteInscrito().getEstudiante().getNombres());
+            }
+            
+            return comparacion;
+        }
+    };
     
     
     

@@ -290,7 +290,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public String getURLAyuda() {
-        return "https://docs.google.com/document/d/e/2PACX-1vRxHiHd5vpEu1In25BKtCXigpl4m1phGAZwNR7Rh2Jm-Xqe7ffQpivlYJsMAWHFBS0BOnYxj4dpUi7H/pub?embedded=true#h.usoq3prdpcrw";
+        return "https://docs.google.com/document/d/e/2PACX-1vRxHiHd5vpEu1In25BKtCXigpl4m1phGAZwNR7Rh2Jm-Xqe7ffQpivlYJsMAWHFBS0BOnYxj4dpUi7H/pub?embedded=true#h.k8fq3dy15zde";
     }
 
     @Override

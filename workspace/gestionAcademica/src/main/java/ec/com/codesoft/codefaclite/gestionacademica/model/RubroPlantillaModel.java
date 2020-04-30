@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
@@ -46,6 +47,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -235,7 +237,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
 
     @Override
     public String getURLAyuda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "https://docs.google.com/document/d/e/2PACX-1vRxHiHd5vpEu1In25BKtCXigpl4m1phGAZwNR7Rh2Jm-Xqe7ffQpivlYJsMAWHFBS0BOnYxj4dpUi7H/pub?embedded=true#h.k8fq3dy15zde";
     }
 
     @Override
@@ -553,17 +555,21 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         NivelAcademico nivelEstudiante=estudianteInscrito.getNivelAcademico();
         List<RubroPlantillaEstudiante> estudiantesInscritos= estudiantesRegistradosMap.get(nivelEstudiante);
         
+        
         //Si el estudiante inscrito esta sin crear lo crea
         if(estudiantesInscritos==null)
         {
             estudiantesInscritos=new ArrayList<RubroPlantillaEstudiante>();
             estudiantesInscritos.add(estudianteRubroPlantilla);
+            
             estudiantesRegistradosMap.put(nivelEstudiante,estudiantesInscritos);
         }
         else
         {
             estudiantesInscritos.add(estudianteRubroPlantilla);
-        }
+        }        
+        //Ordenar la lista para mostrar en orden alfabetico los estudiantes
+        UtilidadesLista.ordenarLista(estudiantesInscritos, RubroPlantillaEstudiante.comparadorOrdenarAlfabeticamente);
         
     }
     
@@ -799,6 +805,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             {
                 detalleInscritos.add(rubroPlantillaEstudiante);
             }            
+            UtilidadesLista.ordenarLista(detalleInscritos,RubroPlantillaEstudiante.comparadorOrdenarAlfabeticamente);
             
         }
         return mapEstudianteInscritos;

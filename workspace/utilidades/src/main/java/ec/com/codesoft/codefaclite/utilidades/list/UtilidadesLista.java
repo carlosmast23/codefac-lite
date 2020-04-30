@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.utilidades.list;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,6 +34,11 @@ public abstract class UtilidadesLista {
             datos.add(textoNuevo);
         }
         return StringUtils.join(datos,caracter);
+    }
+    
+    public static void ordenarLista(List lista,Comparator comparator)
+    {
+        Collections.sort(lista,comparator);
     }
     
     public interface CastListInterface<T>
