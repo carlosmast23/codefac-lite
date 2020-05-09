@@ -130,8 +130,15 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
         propiedades.add("persona.identificacion");
         propiedades.add("persona.razonSocial");
         propiedades.add("nombreComercial");//TODO: Ver como puedo hacer para establecer una propiedad personalizada
-        propiedades.add("telefonoConvencional");
-        propiedades.add("telefonoCelular");
+        if(!moduloAcademicoActivo)
+        {
+            propiedades.add("telefonoConvencional");
+            propiedades.add("telefonoCelular");
+        }
+        else
+        {
+            propiedades.add("telefonoConvencional");
+        }
         return propiedades;
     }
     
