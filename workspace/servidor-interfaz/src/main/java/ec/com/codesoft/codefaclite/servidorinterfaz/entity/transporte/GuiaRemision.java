@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import java.io.Serializable;
 import java.sql.Date;
@@ -294,8 +295,18 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
         return (List<ComprobanteAdicional>)(ArrayList<?>)getDatosAdicionales();
     }
 
+    /**
+     * TODO: Revisa si este codigo esta duplicado
+     * @param comprobanteAdicional 
+     */
     @Override
     public void addDatoAdicionalAbstract(ComprobanteAdicional comprobanteAdicional) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        GuiaRemisionAdicional datoAdicional=(GuiaRemisionAdicional) comprobanteAdicional;
+        if(this.datosAdicionales==null)
+        {
+            this.datosAdicionales=new ArrayList<GuiaRemisionAdicional>();
+        }
+        datoAdicional.setGuiaRemision(this);
+        this.datosAdicionales.add(datoAdicional);
     }
 } 

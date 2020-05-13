@@ -389,9 +389,19 @@ public class Retencion extends ComprobanteEntity implements Serializable {
         return (List<ComprobanteAdicional>)(ArrayList<?>)getDatosAdicionales();
     }
 
+    /**
+     * TODO: Revisa si este codigo esta duplicado
+     * @param comprobanteAdicional 
+     */
     @Override
     public void addDatoAdicionalAbstract(ComprobanteAdicional comprobanteAdicional) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        RetencionAdicional datoAdicional=(RetencionAdicional) comprobanteAdicional;
+        if(this.datosAdicionales==null)
+        {
+            this.datosAdicionales=new ArrayList<RetencionAdicional>();
+        }
+        datoAdicional.setRetencion(this);
+        this.datosAdicionales.add(datoAdicional);
     }
     
 
