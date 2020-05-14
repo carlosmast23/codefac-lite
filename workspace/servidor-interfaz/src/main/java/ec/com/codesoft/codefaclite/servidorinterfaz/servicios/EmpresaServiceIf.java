@@ -23,7 +23,7 @@ public interface EmpresaServiceIf extends ServiceAbstractIf<Empresa>
 {
     public Empresa grabar(Empresa p) throws ServicioCodefacException,java.rmi.RemoteException;
     //public void editar(Empresa p) throws java.rmi.RemoteException;
-    public void eliminar(Empresa p) throws java.rmi.RemoteException;   
+    public void eliminar(Empresa p) throws ServicioCodefacException,java.rmi.RemoteException;
     public List<Empresa> buscar() throws java.rmi.RemoteException;
     public Empresa buscarPorIdentificacion(String identificacion) throws RemoteException;
     public List<Empresa> obtenerTodosActivos() throws RemoteException;

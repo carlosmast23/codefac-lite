@@ -169,7 +169,18 @@ public class EmpresaModel extends EmpresaForm
     @Override
     public void eliminar() 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
+        {
+            try {
+                ServiceFactory.getFactory().getEmpresaServiceIf().eliminar(empresa);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+            } catch (RemoteException ex) {
+                Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);                
+            }
+        }
     }
 
     @Override

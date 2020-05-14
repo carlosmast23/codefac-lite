@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -61,6 +62,9 @@ public class Empresa implements Serializable {
     
     @Column(name = "CODIGO")
     private String codigo;
+    
+    @Column(name = "ESTADO")
+    private String estado;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa",fetch = FetchType.EAGER)
     private List<Sucursal> sucursales;
@@ -182,6 +186,23 @@ public class Empresa implements Serializable {
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
+    }
+
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
+    }
+    
     
     
 

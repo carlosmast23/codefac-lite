@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.EmpresaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -72,9 +73,19 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         
     }*/
     
-    public void eliminar(Empresa p)
+    public void eliminar(Empresa p) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        empresaFacade.remove(p);
+        //Empresa empresa;
+        //empresa.getEstado();
+        //p.setEstadoEnum(GeneralEnumEstado.);
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                p.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                entityManager.merge(p);
+            }
+        });
+        //empresaFacade.remove(p);
     }
     
     public List<Empresa> buscar()
@@ -97,8 +108,10 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     
     public List<Empresa> obtenerTodosActivos() throws RemoteException
     {
-        //TODO: Pendiente implementar esta busqueda
-        return null;
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        List<Empresa> empresas=getFacade().findByMap(mapParametros);
+        return empresas;
         
     }
         

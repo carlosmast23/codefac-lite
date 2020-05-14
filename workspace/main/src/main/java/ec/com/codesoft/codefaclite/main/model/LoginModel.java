@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.awt.Frame;
 import java.awt.Image;
@@ -241,12 +242,13 @@ public class LoginModel extends LoginFormDialog{
         getLblPiePagina().setText("Codefac software de facturación electrónica @ Codesoft "+anioActualStr);
         
         try {
+            UtilidadesComboBox.llenarComboBox(getCmbEmpresa(),ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodosActivos());
             //Setear valores de los combos
-            List<Empresa> empresas=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodos(); //Todo: Cambiar este metodo para solo obtener las empresas activas
+            /*List<Empresa> empresas=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodos(); //Todo: Cambiar este metodo para solo obtener las empresas activas
             getCmbEmpresa().removeAllItems();
             for (Empresa empresa : empresas) {
                 getCmbEmpresa().addItem(empresa);
-            }
+            }*/
         } catch (RemoteException ex) {
             Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
         }
