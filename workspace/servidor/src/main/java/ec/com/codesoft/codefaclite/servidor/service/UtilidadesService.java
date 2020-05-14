@@ -131,9 +131,16 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     }
     
 
+    /**
+     * TODO: Verificar por que no setear directamente la empresa
+     * @param empresa
+     * @return
+     * @throws RemoteException 
+     */
     @Override
     public SessionCodefac getSessionPreConstruido(Empresa empresa) throws RemoteException {
         SessionCodefac session = new SessionCodefac();
+        session.setEmpresa(empresa);
         
         if(empresa==null) //Si no tiene seleccionado construyo una session en blanco , esto es util para ingresar por primera vez al sistema
         {
@@ -144,17 +151,11 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             
             return session;
         }
-        //if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
-        //    session.setTipoLicenciaEnum(UtilidadesServidor.tipoLicenciaEnum);
-        //} else {
-        //UtilidadesServiceIf utilidadesServiceIf = ServiceFactory.getFactory().getUtilidadesServiceIf();
+       
+        
         TipoLicenciaEnum tipoLicencia = UtilidadesServidor.mapEmpresasLicencias.get(empresa).tipoLicencia;
-
         session.setTipoLicenciaEnum(tipoLicencia);
-
         session.setModulos(UtilidadesServidor.mapEmpresasLicencias.get(empresa).modulosSistema);
-
-        //}
         session.setUsuarioLicencia(UtilidadesServidor.mapEmpresasLicencias.get(empresa).usuarioLicencia);
         
         return session;

@@ -2923,7 +2923,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             session.setPerfiles(obtenerPerfilesUsuario(datosLogin.usuario));
             session.setSucursal(datosLogin.sucursal);
             session.setMatriz(datosLogin.matriz);
-            session.setEmpresa(datosLogin.empresa);
+            //session.setEmpresa(datosLogin.empresa);
             this.sessionCodefac=session;
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

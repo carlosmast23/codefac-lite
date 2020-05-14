@@ -95,7 +95,7 @@ public class LoginMb implements Serializable {
         try {
             SessionCodefac session = ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido(empresa);
 
-            session.setEmpresa(empresa);
+            //session.setEmpresa(empresa);
 
             session.setUsuario(usuario);
             session.setPerfiles(obtenerPerfilesUsuario(usuario));

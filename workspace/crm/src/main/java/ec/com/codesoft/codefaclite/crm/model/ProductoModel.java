@@ -346,7 +346,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getCmbGenerarCodigoBarras().setSelectedItem(EnumSiNo.NO);
         
         getChkTransportarGuiaRemision().setEnabled(true);
+        getChkTransportarGuiaRemision().setSelected(true);
+        
         getChkOcultarDetalleVenta().setEnabled(true);
+        
+        
 
 
     }

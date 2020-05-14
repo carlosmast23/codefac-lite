@@ -49,6 +49,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
@@ -453,14 +454,29 @@ public class CompraModel extends CompraPanel{
         
         getRdbEmisionFisica().setSelected(true);
         
-        //Seleccionar la opcion de enviar o no retenciones
-        if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
+        EnumSiNo habilitarRetensiones=null;
+        try {
+            habilitarRetensiones = ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.HABILITAR_RETENCION_COMPRAS,EnumSiNo.SI);
+        } catch (RemoteException ex) {
+            Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(habilitarRetensiones!=null)
         {
-            getCmbEmitirRetencion().setSelectedItem(EnumSiNo.SI);
+            this.getPanelRetencion().setVisible(habilitarRetensiones.getBool());
+            this.getCmbEmitirRetencion().setSelectedItem(habilitarRetensiones);
         }
         else
         {
-            getCmbEmitirRetencion().setSelectedItem(EnumSiNo.NO);
+            //Seleccionar la opcion de enviar o no retenciones
+            if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
+            {
+                getCmbEmitirRetencion().setSelectedItem(EnumSiNo.SI);
+            }
+            else
+            {
+                getCmbEmitirRetencion().setSelectedItem(EnumSiNo.NO);
+            }
         }
     }
     
@@ -541,7 +557,7 @@ public class CompraModel extends CompraPanel{
         getCmbEmitirRetencion().removeAllItems();
         getCmbEmitirRetencion().addItem(EnumSiNo.SI);
         getCmbEmitirRetencion().addItem(EnumSiNo.NO);
-        
+                
         
         //Agregar los tipos de retencion Iva
         getCmbRetencionIva().removeAllItems();
@@ -1153,17 +1169,25 @@ public class CompraModel extends CompraPanel{
         List<Empresa> listadoEmpresas = empresaService.obtenerTodos();
         Empresa empresa = session.getEmpresa();
         
-        if(empresa.getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
+        EnumSiNo habilitarRetensiones=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.HABILITAR_RETENCION_COMPRAS,EnumSiNo.SI);
+        
+        if(habilitarRetensiones!=null)
         {
-            this.getPanelRetencion().setVisible(true);
-            /*getCmbSustentoComprobante().setVisible(true);
-            getLblSustentoSri().setVisible(true);*/
+            this.getPanelRetencion().setVisible(habilitarRetensiones.getBool());
+            this.getCmbEmitirRetencion().setSelectedItem(habilitarRetensiones);
         }
         else
         {
-            this.getPanelRetencion().setVisible(false);
-            /*getCmbSustentoComprobante().setVisible(false);
-            getLblSustentoSri().setVisible(false);*/
+            if(empresa.getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
+            {
+                this.getPanelRetencion().setVisible(true);
+                this.getCmbEmitirRetencion().setSelectedItem(EnumSiNo.SI);
+            }
+            else
+            {
+                this.getPanelRetencion().setVisible(false);
+                this.getCmbEmitirRetencion().setSelectedItem(EnumSiNo.NO);
+            }
         }
     }
 

@@ -134,14 +134,12 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
     }
 
     private void iniciarVariables() {
+        
+        UtilidadesComboBox.llenarComboBox(getCmbHabilitarRetencionesEnCompras(),EnumSiNo.values());
 
         //Agregar los tipos de documentos disponibles
-        getCmbTipoDocumento().removeAllItems();
-        List<TipoDocumentoEnum> tipoDocumentos = TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION);
-        for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
-            getCmbTipoDocumento().addItem(tipoDocumento);
-        }
-
+        UtilidadesComboBox.llenarComboBox(getCmbTipoDocumento(), TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION));
+       
         //Agregar los tipos de documentos disponibles para las compras
         getCmbTipoDocumentoCompra().removeAllItems();
         List<TipoDocumentoEnum> tipoDocumentosCompra = TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
@@ -402,6 +400,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroDato= parametrosTodos.get(ParametroCodefac.ACTIVAR_NOTA_VENTA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroDato != null) ? parametroDato.getValor() : null);
             getCmbActivarNotaVenta().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
+            parametroDato= parametrosTodos.get(ParametroCodefac.HABILITAR_RETENCION_COMPRAS);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroDato != null) ? parametroDato.getValor() : null);
+            getCmbHabilitarRetencionesEnCompras().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
                         
             ParametroCodefac parametroFormaPago= parametrosTodos.get(ParametroCodefac.FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE);
             
@@ -483,6 +485,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbConstruirEnsamblesFacturar().getSelectedItem();
         agregarParametro(ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR);
+        
+        enumSiNo = (EnumSiNo) getCmbHabilitarRetencionesEnCompras().getSelectedItem();
+        agregarParametro(ParametroCodefac.HABILITAR_RETENCION_COMPRAS, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.HABILITAR_RETENCION_COMPRAS);
         
         /*ParametroCodefac parametroCodefac=parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)

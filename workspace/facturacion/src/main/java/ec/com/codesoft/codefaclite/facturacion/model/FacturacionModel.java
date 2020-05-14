@@ -242,7 +242,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
         initModelTablaDatoAdicional();
-        setearValoresVista();        
+           
         //setearVariablesIniciales();
 
     }
@@ -2356,6 +2356,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        setearValoresVista();     
         System.out.println("Ingresando a iniciar");
         
         controlador=new FacturaModelControlador(session,this,DialogoCodefac.intefaceMensaje);
@@ -2366,6 +2367,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         iniciarValoresIniciales();
+        
     }
 
     @Override
@@ -3215,6 +3217,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         UtilidadesSwingX.placeHolder("Código Producto", getTxtCodigoDetalle());
         UtilidadesSwingX.placeHolder("Descripción", getTxtDescripcion());
         
+        // Activar o desactivar la vista de pagar con cartera segun sea el caso
+        if(!session.verificarExisteModulo(ModuloCodefacEnum.CARTERA))
+        {
+            getChkPagoConCartera().setVisible(false);
+        }
         
     }
 

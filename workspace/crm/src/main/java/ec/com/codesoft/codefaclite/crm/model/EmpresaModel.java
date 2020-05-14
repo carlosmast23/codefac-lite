@@ -158,6 +158,12 @@ public class EmpresaModel extends EmpresaForm
             empresaService.editar(setDatosEmisor());
             moverArchivo();
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+            
+            //Si estoy editando la misma empresa que tengo la seccion actualizo la referencia
+            if(session.getEmpresa().getId().equals(empresa.getId()))
+            {
+                session.setEmpresa(empresa);
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {

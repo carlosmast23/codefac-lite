@@ -136,6 +136,7 @@ public class ParametroCodefac implements Serializable {
     public static final String FACTURACION_RIDE_RAZON_SOCIAL_EMPLEADO="facturacion_ride_razon_social_empleado";
     public static final String FACTURACION_RIDE_DIRECCION_EMPLEADO="facturacion_ride_direccion_empleado";
     public static final String FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO="facturacion_ride_punto_emision_empleado";
+    public static final String HABILITAR_RETENCION_COMPRAS="habilitar_retencion_compras";
     
     public static final String DIAS_ALERTA_PAGO="dias_alerta_pago";
     
@@ -147,6 +148,7 @@ public class ParametroCodefac implements Serializable {
     public static final String CONFIGURACION_IMPRESORA_FACTURA="config_impresora_factura";
     
     public static final String FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE="formal_pago_defecto_pantalla_cliente";
+    
     
     @Id
     @Column(name = "ID")

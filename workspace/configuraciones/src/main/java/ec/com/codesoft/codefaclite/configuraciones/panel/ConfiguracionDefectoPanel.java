@@ -31,6 +31,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
      */
     public ConfiguracionDefectoPanel() {
         initComponents();
+        
     }
 
     /**
@@ -112,6 +113,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         lblEspacio42 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         cmbRetencionRenta = new javax.swing.JComboBox<>();
+        jLabel32 = new javax.swing.JLabel();
+        cmbHabilitarRetencionesEnCompras = new javax.swing.JComboBox<>();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtCodigoHtml = new javax.swing.JTextArea();
@@ -586,10 +589,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel9.setText("Valor por defecto retención renta:");
+        jLabel9.setText("Habilitar retenciones en compras:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel6.add(jLabel9, gridBagConstraints);
 
@@ -601,7 +604,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel6.add(cmbRetencionIva, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -622,6 +625,22 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel6.add(cmbRetencionRenta, gridBagConstraints);
+
+        jLabel32.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel32.setText("Valor por defecto retención renta:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel6.add(jLabel32, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel6.add(cmbHabilitarRetencionesEnCompras, gridBagConstraints);
 
         jTabbedPane1.addTab("Retenciones", jPanel6);
 
@@ -779,6 +798,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbFacturarInventarioNegativo;
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<FormatoHojaEnum> cmbFormatoHojas;
+    private javax.swing.JComboBox<EnumSiNo> cmbHabilitarRetencionesEnCompras;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
@@ -809,6 +829,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1045,7 +1066,12 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbFormaPagoDefecto(JComboBox<SriFormaPago> cmbFormaPagoDefecto) {
         this.cmbFormaPagoDefecto = cmbFormaPagoDefecto;
     }
+
+    public JComboBox<EnumSiNo> getCmbHabilitarRetencionesEnCompras() {
+        return cmbHabilitarRetencionesEnCompras;
+    }
  
+    
     
     
     
