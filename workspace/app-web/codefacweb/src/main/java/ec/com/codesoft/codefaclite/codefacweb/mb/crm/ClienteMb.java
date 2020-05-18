@@ -62,7 +62,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
     private GeneralEnumEstado estadoSeleccionada;
     private OperadorNegocioEnum operadorNegocioSeleccionado;
     private SriFormaPago sriFormaPagoSeleccionada;
-    private String tituloPagina;
+    private String tituloPagina;   
 
     private Boolean identificacionPasaporte;
     private PersonaEstablecimiento establecimientoDefecto;
@@ -74,7 +74,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
     private Persona personaReturnDialog=null;
 
     @PostConstruct
-    private void init() {
+    private void init() { 
         
         if(tituloPagina==null)
         {

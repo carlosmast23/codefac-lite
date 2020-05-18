@@ -130,7 +130,18 @@
             </redirect>
         </navigation-case>
         
-       <navigation-case>
+        <navigation-case>
+            <from-outcome>producto</from-outcome>
+            <to-view-id>sistema/crm/producto.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        
+        <navigation-case>
             <from-outcome>datos_adicionales_dialogo</from-outcome>
             <to-view-id>sistema/dialog/datos_adicionales_dialogo.xhtml</to-view-id>
             <redirect>
@@ -146,7 +157,7 @@
                 ->REPORTES
                     ->FACTURA REPORTE        
         -->
-         <navigation-case>
+        <navigation-case>
             <from-outcome>factura_reporte</from-outcome>
             <to-view-id>sistema/facturacion/factura_reporte.xhtml</to-view-id>
             <redirect>

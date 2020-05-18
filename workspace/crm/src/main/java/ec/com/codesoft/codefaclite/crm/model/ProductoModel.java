@@ -7,9 +7,10 @@ package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador.ProductoModelControladorInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
@@ -31,7 +32,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -51,7 +51,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author PC
  */
-public class ProductoModel extends ProductoForm implements DialogInterfacePanel<Producto> , InterfazPostConstructPanel {
+public class ProductoModel extends ProductoForm implements DialogInterfacePanel<Producto> , InterfazPostConstructPanel,ProductoModelControladorInterface {
 
     private Producto producto;
     private Impuesto impuesto;
@@ -67,20 +67,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     Referencia sobre el producto seleccionado para el ensamble
      */
     private Producto productoEnsamble;
+    
+    private ProductoModelControlador controlador;
 
     public ProductoModel() {
-        listenerComboBox();
-        listenerBotones();
-        
-        mapDatosIngresadosDefault.put(getTextValorUnitario(),"0");
-        mapDatosIngresadosDefault.put(getTxtCantidadEnsamble(),"0");
-        mapDatosIngresadosDefault.put(getTxtCantidadEnsamble(),"0");
-        
-        mapDatosIngresadosDefault.put(getTxtCantidadMinima(),"0");
-        mapDatosIngresadosDefault.put(getTxtPrecioDistribuidor(),"0");
-        mapDatosIngresadosDefault.put(getTxtPrecioTarjeta(),"0");
-        //mapDatosIngresadosDefault.put(getTxtStockInicial(),"0");
-        
+                
     }
 
     @Override
@@ -100,23 +91,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     @Override
     public void editar() throws ExcepcionCodefacLite {
         try {
-            /*
-            producto.setCodigoPersonalizado(getTxtCodigoPersonalizado().getText());
-            producto.setCodigoEAN(getTxtCodigoEAN().getText());
-            producto.setCodigoUPC(getTxtCodigoUPC().getText());
-            if(getComboTipoProducto().getSelectedItem().equals("Bien"))
-            {
-            producto.setTipoProducto("B");
-            }
-            else
-            {
-            producto.setTipoProducto("S");
-            }
             
-            producto.setNombre(getTextNombre().getText());
-            d = new BigDecimal(getTextValorUnitario().getText());
-            producto.setValorUnitario(d);
-            */
             setearValoresProducto(producto);
             productoService.editarProducto(producto);
             DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
@@ -133,12 +108,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setCodigoUPC(getTxtCodigoUPC().getText());
         producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
 
-        ///CatalogoProducto catalogoProducto=(CatalogoProducto) getCmbCatalogoProducto().getSelectedItem();
-        //producto.setCatalogoProducto(catalogoProducto);
-        //TipoProductoEnum tipoProductoEnum = (TipoProductoEnum) getComboTipoProducto().getSelectedItem();
-        //producto.getCatalogoProducto().setTipoProducto(tipoProductoEnum.getLetra());
-        
-        
+          
         BigDecimal valorUnitario=BigDecimal.ZERO;
         producto.setNombre(getTextNombre().getText());
         valorUnitario = new BigDecimal(getTextValorUnitario().getText());
@@ -390,6 +360,19 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void iniciar() {
+        controlador=new ProductoModelControlador(DialogoCodefac.intefaceMensaje, session,this);
+        listenerComboBox();
+        listenerBotones();
+        
+        mapDatosIngresadosDefault.put(getTextValorUnitario(),"0");
+        mapDatosIngresadosDefault.put(getTxtCantidadEnsamble(),"0");
+        mapDatosIngresadosDefault.put(getTxtCantidadEnsamble(),"0");
+        
+        mapDatosIngresadosDefault.put(getTxtCantidadMinima(),"0");
+        mapDatosIngresadosDefault.put(getTxtPrecioDistribuidor(),"0");
+        mapDatosIngresadosDefault.put(getTxtPrecioTarjeta(),"0");
+        //mapDatosIngresadosDefault.put(getTxtStockInicial(),"0");
+        
         productoService = ServiceFactory.getFactory().getProductoServiceIf();
         impuestoService = ServiceFactory.getFactory().getImpuestoServiceIf();
         impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
@@ -409,87 +392,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     private void iniciarCombosBox() {
             
-        try {
-            //Agregar combo de garantia
-            getCmbGarantia().removeAllItems();
-            EnumSiNo[] garantias = EnumSiNo.values();
-            for (EnumSiNo garantia : garantias) {
-                getCmbGarantia().addItem(garantia);
-            }
-            
-            //Agregar las categorias disponibles
-            
-            getCmbCategoriaProducto().removeAllItems();
-            CategoriaProductoServiceIf catProdService=ServiceFactory.getFactory().getCategoriaProductoServiceIf();
-            List<CategoriaProducto> catProdList = catProdService.obtenerTodosPorEmpresa(session.getEmpresa());
-            UtilidadesComboBox.llenarComboBox(getCmbCategoriaProducto(), catProdList);
-            //for (CategoriaProducto cat : catProdList) {
-            //    getCmbCategoriaProducto().addItem(cat);
-            //}
-            
-            //Agregar los tipos de producto
-            getCmbTipoProducto().removeAllItems();
-            TipoProductoEnum[] tipoProductoList=TipoProductoEnum.values();            
-            for (TipoProductoEnum tipoProducto : tipoProductoList) {
-                getCmbTipoProducto().addItem(tipoProducto);
-            }
-            
-            //Agregar las opcoiones segun los modulos habilitados
-            getCmbManejaInventario().removeAllItems();
-                        
-            if(session.getModulos().contains(ModuloCodefacEnum.INVENTARIO) || ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO))
-            {
-                getCmbManejaInventario().addItem(EnumSiNo.SI);                
-            }
-            getCmbManejaInventario().addItem(EnumSiNo.NO);
-            
-            //Cargar los estados para generar los codigos de barras
-            getCmbGenerarCodigoBarras().removeAllItems();
-            getCmbGenerarCodigoBarras().addItem(EnumSiNo.NO);
-            getCmbGenerarCodigoBarras().addItem(EnumSiNo.SI);
-            
-             
-            getComboIva().removeAllItems();
-            getComboIce().removeAllItems();
-            getComboIrbpnr().removeAllItems();
-            
-            ImpuestoServiceIf impuestoService=ServiceFactory.getFactory().getImpuestoServiceIf();
-            ImpuestoDetalleServiceIf impuestoDetalleService=ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
-            
-            List<ImpuestoDetalle> impuestoDetalleList = impuestoDetalleService.obtenerIvaVigente();
-            ImpuestoDetalle impuestoDefault = null;
-            
-            String ivaDefecto =ParametrosSistemaCodefac.IVA_DEFECTO; //TODO: Analizar que configuracion vamos a usar por defecto agrego esto para poder usas cuando aun no se ha configurado un iva
-            ParametroCodefac parametroIva = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO);
-            if(parametroIva!=null)
-            {
-                ivaDefecto=parametroIva.valor;
-            }
-            
-            for (ImpuestoDetalle impuesto : impuestoDetalleList) {
-                if (impuesto.getTarifa().toString().equals(ivaDefecto)) {
-                    impuestoDefault = impuesto;
-                }
-                getComboIva().addItem(impuesto);
-            }
-            getComboIva().setSelectedItem(impuestoDefault);
-            
-            Impuesto ice = impuestoService.obtenerImpuestoPorCodigo(Impuesto.ICE);
-            for (ImpuestoDetalle impuesto : ice.getDetalleImpuestos()) {
-                getComboIce().addItem(impuesto);
-            }
-            getComboIce().setEditable(true);
-            getComboIce().setSelectedItem("Seleccione : ");
-            
-            Impuesto irbpnr = impuestoService.obtenerImpuestoPorCodigo(Impuesto.IRBPNR);
-            for (ImpuestoDetalle impuesto : irbpnr.getDetalleImpuestos()) {
-                getComboIrbpnr().addItem(impuesto);
-            }
-            getComboIrbpnr().setEditable(true);
-            getComboIrbpnr().setSelectedItem("Seleccione: ");
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        controlador.iniciarCombosBox();
     }
 
     private void listenerComboBox() {
@@ -512,14 +415,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 
             }
         });
-        /*
-        getComboTipoProducto().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                TipoProductoEnum tipoPorductoEnum = (TipoProductoEnum) getComboTipoProducto().getSelectedItem();
-                seleccionarTipoProducto(tipoPorductoEnum);
-            }
-        });*/
+        
 
     }
 
@@ -617,6 +513,51 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         //TODO: Mejorar esta parte porque solo va a funcionar para el codigo personalizado y si quieren manejar algunos codigos no funciona
         String codigoProducto=(String) parametros[1];
         getTxtCodigoPersonalizado().setText(codigoProducto);
+    }
+
+    @Override
+    public void llenarCmbManejaInventario(EnumSiNo[] datos) {
+        UtilidadesComboBox.llenarComboBox(getCmbManejaInventario(),datos);
+    }
+
+    @Override
+    public void llenarCmbGenerarCodigoBarras(EnumSiNo[] datos) {
+        UtilidadesComboBox.llenarComboBox(getCmbGenerarCodigoBarras(),datos);
+    }
+
+    @Override
+    public void llenarCmbTipoProducto(TipoProductoEnum[] tipoProductoList) {
+        UtilidadesComboBox.llenarComboBox(getCmbTipoProducto(),tipoProductoList);
+    }
+
+    @Override
+    public void llenarCmbCategoriaProducto(List<CategoriaProducto> catProdList) {
+        UtilidadesComboBox.llenarComboBox(getCmbCategoriaProducto(),catProdList);
+    }
+
+    @Override
+    public void llenarComboIva(List<ImpuestoDetalle> impuestos) {
+        UtilidadesComboBox.llenarComboBox(getComboIva(),impuestos);
+    }
+
+    @Override
+    public void llenarComboIce(List<ImpuestoDetalle> impuestos) {
+        UtilidadesComboBox.llenarComboBox(getComboIce(),impuestos);
+    }
+
+    @Override
+    public void llenarComboIrbpnr(List<ImpuestoDetalle> impuestos) {
+        UtilidadesComboBox.llenarComboBox(getComboIrbpnr(),impuestos);
+    }
+
+    @Override
+    public void seleccionarComboIva(ImpuestoDetalle impuesto) {
+        getComboIva().setSelectedItem(impuesto);
+    }
+
+    @Override
+    public void llenarCmbGarantia(EnumSiNo[] datos) {
+        UtilidadesComboBox.llenarComboBox(getCmbGarantia(),datos);
     }
     
     public enum IvaOpcionEnum

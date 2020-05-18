@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 
 
 /**
@@ -20,9 +21,16 @@ public abstract class ModelControladorAbstract
      * Interfaz me va a permitir mandar mensajes de forma estandar
      */
     protected MensajeVistaInterface mensajeVista;
+    
+    protected SessionCodefacInterface session;
 
     public ModelControladorAbstract(MensajeVistaInterface mensajeVista) {
         this.mensajeVista = mensajeVista;
+    }
+    
+    public ModelControladorAbstract(MensajeVistaInterface mensajeVista,SessionCodefacInterface session) {
+        this.mensajeVista = mensajeVista;
+        this.session=session;
     }
     
     
