@@ -3488,6 +3488,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getBtnAgregarCliente().setEnabled(true);
             getBtnBuscarCliente().setEnabled(true);
             getTxtCliente().setEnabled(true);
+            getjDateFechaEmision().setEnabled(true);
         }
     }
     
