@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
  *
  * @author CARLOS_CODESOFT
  */
-public abstract class ModelControladorAbstract 
+public abstract class ModelControladorAbstract <T>
 {
     protected TipoVista tipoVista;
     /**
@@ -23,6 +23,8 @@ public abstract class ModelControladorAbstract
     protected MensajeVistaInterface mensajeVista;
     
     protected SessionCodefacInterface session;
+    
+    protected T interfaz;
 
     public ModelControladorAbstract(MensajeVistaInterface mensajeVista) {
         this.mensajeVista = mensajeVista;
@@ -32,6 +34,14 @@ public abstract class ModelControladorAbstract
         this.mensajeVista = mensajeVista;
         this.session=session;
     }
+
+    public ModelControladorAbstract(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, T interfaz) {
+        this.mensajeVista = mensajeVista;
+        this.session = session;
+        this.interfaz = interfaz;
+    }
+
+    
     
     
     

@@ -152,6 +152,17 @@
             </redirect>
         </navigation-case>
         
+         <navigation-case>
+            <from-outcome>reenviar_comprobante</from-outcome>
+            <to-view-id>sistema/facturacion/reenviar_comprobante.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        
         <!---  
             FACTURACION
                 ->REPORTES
