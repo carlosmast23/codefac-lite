@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -34,6 +36,12 @@ public abstract class UtilidadesLista {
             datos.add(textoNuevo);
         }
         return StringUtils.join(datos,caracter);
+    }
+    
+    public static <T> List<T> eliminarReferenciaNulas(List<T> datos)
+    {
+        List<T> listWithoutNulls = datos.stream().filter(Objects::nonNull).collect(Collectors.toList());        
+        return listWithoutNulls;
     }
     
     public static void ordenarLista(List lista,Comparator comparator)

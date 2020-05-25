@@ -8,11 +8,17 @@ package ec.com.codesoft.codefaclite.codefacweb.mb.sistema;
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.io.Serializable;
-import java.util.UUID;
+import java.rmi.RemoteException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.mindmap.DefaultMindmapNode;
 import org.primefaces.model.mindmap.MindmapNode;
@@ -27,12 +33,38 @@ public class IndexSistemaMb  extends GeneralAbstractMb implements Serializable {
     
     private static final String CLIENTE_ETIQUETA="Cliente";
     private static final String PROFORMA_ETIQUETA="Proforma";
-    private static final String FACTURA_ETIQUETA="Factura";
+    private static final String FACTURA_ETIQUETA="Factura"; 
     
-
+    private Boolean detenerActualizarAlerta;
+    
     private MindmapNode root;
 
     private MindmapNode selectedNode;
+    
+    private List<AlertaResponse> alertasSistemas;
+    
+    @PostConstruct
+    private void init()
+    {
+        detenerActualizarAlerta=false;
+        //cargarAlertas();  
+    }
+    
+    public void cargarAlertas()
+    {
+        System.out.println("Cargando alertas del sistema");
+        try {
+             System.out.println("procesando ...");
+            alertasSistemas=ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaRapida(sessionMb.getSession().getEmpresa());
+            System.out.println("fin procesando ...");
+            detenerActualizarAlerta=true;
+        } catch (RemoteException ex) {
+            Logger.getLogger(IndexSistemaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(IndexSistemaMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Fin Cargar Alertas");
+    }
 
     public IndexSistemaMb() {
         root = new DefaultMindmapNode(FACTURA_ETIQUETA, "Google WebSite", "FFCC00", true);
@@ -123,4 +155,26 @@ public class IndexSistemaMb  extends GeneralAbstractMb implements Serializable {
     public InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public List<AlertaResponse> getAlertasSistemas() { 
+        return alertasSistemas;
+    }
+
+    public void setAlertasSistemas(List<AlertaResponse> alertasSistemas) {
+        this.alertasSistemas = alertasSistemas;
+    }
+
+    public Boolean getDetenerActualizarAlerta() {
+        return detenerActualizarAlerta;
+    }
+
+    public void setDetenerActualizarAlerta(Boolean detenerActualizarAlerta) {
+        this.detenerActualizarAlerta = detenerActualizarAlerta;
+    }
+
+    
+    
+    
+    
+    
 }

@@ -185,6 +185,7 @@ public abstract class WebServiceCodefac {
     {
         try
         {
+            long startTime = System.nanoTime();
             SOAPServer soapServer=new SOAPServer();
             SOAPServerPortType soapServerPort=soapServer.getSOAPServerPort();
             ObtenerDiasFechaPagoRequestType parametros=new ObtenerDiasFechaPagoRequestType();
@@ -207,6 +208,8 @@ public abstract class WebServiceCodefac {
                 }
 
             }
+            long endTime = System.nanoTime() - startTime; // tiempo en que se ejecuta su método
+            System.out.println("tiempo obtenerFechaLimitePago: "+endTime);
         }catch(com.sun.xml.ws.client.ClientTransportException e)
         {            
             e.printStackTrace();

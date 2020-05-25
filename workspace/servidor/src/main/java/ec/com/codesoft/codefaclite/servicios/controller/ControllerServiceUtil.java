@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servicios.controller;
 
 import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
 import ec.com.codesoft.codefaclite.servidor.service.ActualizarSistemaService;
+import ec.com.codesoft.codefaclite.servidor.service.AlertaService;
 import ec.com.codesoft.codefaclite.servidor.service.AtsService;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
 import ec.com.codesoft.codefaclite.servidor.service.CategoriaProductoService;
@@ -85,6 +86,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceController
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AlertaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -259,6 +261,8 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(PrestamoService.class,PrestamoServiceIf.class);
             mapRecursos.put(CajaService.class,CajaServiceIf.class);
             mapRecursos.put(DescuentoAcademicoService.class,DescuentoAcademicoServiceIf.class);
+            mapRecursos.put(AlertaService.class,AlertaServiceIf.class);
+            
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);
             LOG.log(Level.INFO,"Servidor Iniciado");

@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.controller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AlertaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -193,6 +194,7 @@ public abstract class ServiceFactory {
     public PrestamoCuotaServiceIf getPrestamoCuotaServiceIf(){return (PrestamoCuotaServiceIf) getRecursosRMI(PrestamoCuotaServiceIf.class);};
     public PrestamoServiceIf getPrestamoServiceIf(){return (PrestamoServiceIf) getRecursosRMI(PrestamoServiceIf.class);};
     public DescuentoAcademicoServiceIf getDescuentoAcademicoServiceIf(){return (DescuentoAcademicoServiceIf) getRecursosRMI(DescuentoAcademicoServiceIf.class);};
+    public AlertaServiceIf getAlertaServiceIf(){return (AlertaServiceIf) getRecursosRMI(AlertaServiceIf.class);};
     
     public CajaServiceIf getCajaServiceIf(){return (CajaServiceIf) getRecursosRMI(CajaServiceIf.class);};
     

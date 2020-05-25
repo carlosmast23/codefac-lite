@@ -2297,14 +2297,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             //Cargar el componente de publicidad para que siempre exista
             cargarPublicidad();
-            //URL url=null;
-            //Map<String,Object> mapBuscar;
-            AccesoDirectoServiceIf servicio=ServiceFactory.getFactory().getAccesoDirectoServiceIf();
             
-            /***
-             * Agregar el widget de virtualMall
-             */
-            //mapBuscar = new HashMap<>();
+            AccesoDirectoServiceIf servicio=ServiceFactory.getFactory().getAccesoDirectoServiceIf();            
+            
             //mapBuscar.put("nombre","WidgetVirtualMall");
             AccesoDirecto accesoDirecto=servicio.buscarPorNombre("WidgetVirtualMall");
             int x=accesoDirecto.x;
@@ -2348,7 +2343,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             widgetVentasDiarias = new VentasDiariasModel(getjDesktopPane1(),sessionCodefac.getEmpresa());
             widgetVentasDiarias.panelPadre=this;
             widgetVentasDiarias.setPreferredSize(new Dimension(xVd,yVd));
-            widgetVentasDiarias.setBounds(xVd,xVd,250,330);
+            widgetVentasDiarias.setBounds(xVd,yVd,250,330);
             
             widgetVentasDiarias.addListenerIcono(new IconoInterfaz() {
                 @Override
@@ -2382,16 +2377,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
              */
             
             /**
-             * WIDGET NOTIFICACIONES CODEFAC
+             * =================================================================
+             *              WIDGET NOTIFICACIONES CODEFAC
+             * =================================================================
              */
-                widgetNotificacionCodefac=new WidgetNotificacionCodefacModelo(getjDesktopPane1(),sessionCodefac.getEmpresa());
-                widgetNotificacionCodefac.panelPadre=this;
-                widgetNotificacionCodefac.setPreferredSize(new Dimension(500,200));
-                widgetNotificacionCodefac.setBounds(100,0,400,100);
-                //widgetVentasDiarias.addListenerIcono();/
-                getjDesktopPane1().add(widgetNotificacionCodefac);
-                //widgetNotificacionCodefac.setVisible(true);
-                
+            widgetNotificacionCodefac = new WidgetNotificacionCodefacModelo(getjDesktopPane1(), sessionCodefac.getEmpresa());
+            widgetNotificacionCodefac.panelPadre = this;
+            widgetNotificacionCodefac.setPreferredSize(new Dimension(500, 200));
+            widgetNotificacionCodefac.setBounds(100, 0, 400, 180);
+            //widgetVentasDiarias.addListenerIcono();/
+            getjDesktopPane1().add(widgetNotificacionCodefac);
+            //widgetNotificacionCodefac.setVisible(true);
+
             
             /**
              * ===============> FIN WIDGET NOTIFICACIONES CODEFAC <=============

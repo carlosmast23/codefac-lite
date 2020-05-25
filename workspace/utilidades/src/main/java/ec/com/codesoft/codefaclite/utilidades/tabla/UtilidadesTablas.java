@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.tabla;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -232,6 +233,62 @@ public abstract class UtilidadesTablas {
     {
         if (jtable.isEditing())
             jtable.getCellEditor().stopCellEditing();
+    }
+    
+    /**}
+     * Metodo que me permite crear una nueva tabla creado un modelo
+     * @param <T>
+     * @param jtable
+     * @param titulos
+     * @param datos
+     * @param interfaz 
+     */
+    public static <T> void  llenarTablasDatos(JTable jtable,String[] titulos,List<T> datos,LlenarDatoTablaIf<T> interfaz)
+    {
+        DefaultTableModel modeloTabla= new DefaultTableModel(titulos,0);
+        for (T dato : datos) {
+            
+            List<Object> datoNuevo=new ArrayList<Object>();
+            
+            //TODO: Agregar notificacion para mandar error cuando agregue mas datos de los necesarios
+            
+            interfaz.agregarDato(datoNuevo,dato);
+            modeloTabla.addRow(datoNuevo.toArray());
+        }
+        jtable.setModel(modeloTabla);
+        
+    }
+    
+    /**
+     * Metodo que me permite llenar datos usando el mismo modelo
+     * @param <T>
+     * @param jtable
+     * @param datos
+     * @param interfaz 
+     */
+    public static <T> void  llenarTablasDatos(JTable jtable,List<T> datos,LlenarDatoTablaIf<T> interfaz)
+    {
+        DefaultTableModel modeloTabla= (DefaultTableModel) jtable.getModel();        
+        for (T dato : datos) {
+            
+            List<Object> datoNuevo=new ArrayList<Object>();
+            
+            //TODO: Agregar notificacion para mandar error cuando agregue mas datos de los necesarios
+            
+            interfaz.agregarDato(datoNuevo,dato);
+            modeloTabla.addRow(datoNuevo.toArray());
+        }
+        jtable.setModel(modeloTabla);
+        
+    }
+    
+    /**
+     * DEFINICIONES DE CLASES E INTERFACES ADICIONALES 
+     */
+    public interface LlenarDatoTablaIf<T>
+    {
+        public void agregarDato(List<Object> fila,T dato);
+                
     }
    
 }

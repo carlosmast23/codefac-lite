@@ -11,6 +11,9 @@ import ec.com.codesoft.codefaclite.main.panel.WidgetNotificacionesCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse.TipoAdvertenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -37,9 +40,11 @@ import javax.swing.table.DefaultTableModel;
  */
 public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac{
 
+    private final static String TITULO_PAGINA="Notificaciones Codefac";
     private Empresa empresa;
     public WidgetNotificacionCodefacModelo(JDesktopPane parentPanel,Empresa empresa) {
         super(parentPanel); 
+        getLblNotificaciones().setText(TITULO_PAGINA);
         this.empresa=empresa;
         listenerBotones();
         actualizarNotificaciones();
@@ -52,98 +57,69 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public void actualizarNotificaciones()
-    {
-        String[] tituloTabla={"Tipo","Problema","Solución"};
-        DefaultTableModel modeloTabla=new DefaultTableModel(tituloTabla,0);
-        //Agregando notificacions de los comprobantes en el caso de que exista
-        Object[] fila=agregarNotificacionComprobantesElectronicos();
-        if(fila!=null)
-        {
-            modeloTabla.addRow(fila);
-        }
+    public void actualizarNotificaciones() {
+        //Eejcutar proceso de notrificaciones en segundo plano
+        limpiarDatos();
+        getLblNotificaciones().setText(TITULO_PAGINA+ " [ Cargando ... ]");
         
-        //Agregando noficaciones de la firma para avisar cuando ya va a caducar
-        fila=agregarNotificacionFechaLimiteFirma();        
-        if(fila!=null)
-        {
-            modeloTabla.addRow(fila);
-        }
-        
-        //Agregando notificacion de la firma con 1 mes de anticipación si esta próximo a cumplirse la fecha tope
-        //Metodo que permite visualizar o no el cuadro de notificaciones en el caso de que si exista
-        if(modeloTabla.getRowCount()==0)
-        {
-            setVisible(false);
-        }else
-        {
-            setVisible(true);
-        }
-        getTblNotificaciones().setModel(modeloTabla);
-        definirFormatoTabla();
-        
-        
-    }
-    
-    private Object[] agregarNotificacionFechaLimiteFirma()
-    {
-        
-        try {
-            String valorFechaEmision=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.FIRMA_FECHA_EMISION);
-            if(valorFechaEmision!=null && !valorFechaEmision.isEmpty())
-            {
-                Date fechaEmisionFirma=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.parse(valorFechaEmision);
-                
-                String duracionFirmaStr=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.FIRMA_TIEMPO_EXPIRACION_AÑOS);
-                if(duracionFirmaStr!=null && !duracionFirmaStr.isEmpty())
-                {
-                    Integer anios=Integer.parseInt(duracionFirmaStr);
-                    if(anios>0)
-                    {
-                        Date fechaLimite=UtilidadesFecha.sumarAniosFecha(fechaEmisionFirma,anios);
-                        Date fechaActual=UtilidadesFecha.getFechaHoy();
-                        Integer diasFaltantes=UtilidadesFecha.obtenerDistanciaDias(fechaActual, fechaLimite);
-                        if(diasFaltantes<30 && diasFaltantes>=0)
-                        {
-                            return new Object[]{TipoAdvertenciaEnum.ADVERTENCIA,"Faltan "+diasFaltantes+" días para caducar la firma","Tramitar la firma"};
-                        } else if(diasFaltantes<0)
-                        {
-                            return new Object[]{TipoAdvertenciaEnum.GRAVE,"Error "+Math.abs(diasFaltantes)+" días que la firma ya caduco","Tramitar la firma"};
-                        }
-                        
-                    }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<AlertaResponse> alertas = ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaRapida(empresa);
+                    String[] tituloTabla = {"Tipo", "Problema", "Solución"};
                     
+                    UtilidadesTablas.LlenarDatoTablaIf interfazLlenarDatos=new UtilidadesTablas.LlenarDatoTablaIf<AlertaResponse>() {
+                        @Override
+                        public void agregarDato(List<Object> fila, AlertaResponse dato) {
+                            fila.add(dato.tipoAdvertenciaEnum.toString());
+                            fila.add(dato.descripcion);
+                            fila.add(dato.solucion);
+                        }
+                    };
+                    
+                    //Cargar datos rapidos
+                    UtilidadesTablas.llenarTablasDatos(
+                            getTblNotificaciones(),
+                            tituloTabla,
+                            alertas,
+                            interfazLlenarDatos
+                    );
+                    
+                    definirFormatoTabla();
+                    
+                    //cargar datos lentos
+                    List<AlertaResponse> alertasLentas = ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaLenta(empresa);
+                    UtilidadesTablas.llenarTablasDatos(
+                            getTblNotificaciones(),
+                            alertasLentas, 
+                            interfazLlenarDatos);
+
+                    //DefaultTableModel modeloTabla=new DefaultTableModel(tituloTabla,0);
+                    //Agregando notificacions de los comprobantes en el caso de que exista            
+                    //Agregando notificacion de la firma con 1 mes de anticipación si esta próximo a cumplirse la fecha tope
+                    //Metodo que permite visualizar o no el cuadro de notificaciones en el caso de que si exista
+                    if (getTblNotificaciones().getRowCount() == 0) {
+                        setVisible(false);
+                    } else {
+                        setVisible(true);
+                    }
+                    //getTblNotificaciones().setModel(modeloTabla);
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(WidgetNotificacionCodefacModelo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(WidgetNotificacionCodefacModelo.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+                //Pongo nuevamente el titulo original
+                getLblNotificaciones().setText(TITULO_PAGINA);
+
             }
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(WidgetNotificacionCodefacModelo.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(WidgetNotificacionCodefacModelo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        }).start();
+
     }
     
-    private Object[] agregarNotificacionComprobantesElectronicos()
-    {
-        try {
-            ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
-            List<ComprobanteElectronico> comprobantesFirmadoSinEnviar = comprobanteServiceIf.getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa);
-            List<ComprobanteElectronico> comprobantesEnviadosSinRespuesta = comprobanteServiceIf.getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA, empresa);
-            
-            Integer totalComprobantesSinEnviar = comprobantesFirmadoSinEnviar.size() + comprobantesEnviadosSinRespuesta.size();
-            
-            if (totalComprobantesSinEnviar > 0) {
-                //modeloTabla.addRow(new Object[]{TipoAdvertenciaEnum.ADVERTENCIA,totalComprobantesSinEnviar+" Comprobantes de enviar al Sri","Utilizar herramienta enviar"});
-                return new Object[]{TipoAdvertenciaEnum.ADVERTENCIA, totalComprobantesSinEnviar + " Comprobantes de enviar al Sri", "Utilizar herramienta enviar"};
-            }       
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(WidgetNotificacionCodefacModelo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
+    
     
     /**
      * Metodo que se encarga de definir el tamañoa de las columnas y adicional el color de cada fila de la notificación
@@ -189,6 +165,11 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
             }
         });
     }
+    
+    private void limpiarDatos() 
+    {
+        getTblNotificaciones().setModel(new DefaultTableModel());
+    }
 
     public Empresa getEmpresa() {
         return empresa;
@@ -198,24 +179,6 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
         this.empresa = empresa;
     }
     
-    public enum TipoAdvertenciaEnum
-    {
-        INFORMATIVO("Info"),
-        ADVERTENCIA("Advertencia"),
-        GRAVE("Grave");
-        
-        private String grave;
-
-        private TipoAdvertenciaEnum(String grave) {
-            this.grave = grave;
-        }
-
-        @Override
-        public String toString() {
-            return grave;
-        }
-        
-        
-    }
+    
     
 }

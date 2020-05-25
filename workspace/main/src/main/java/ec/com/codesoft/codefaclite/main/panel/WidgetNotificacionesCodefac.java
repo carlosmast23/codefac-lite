@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.main.panel;
 import ec.com.codesoft.codefaclite.main.model.ObjetoEscritorioAbstract;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 
 /**
@@ -32,8 +33,8 @@ public abstract class WidgetNotificacionesCodefac extends ObjetoEscritorioAbstra
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        panelTitulo = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblTitulo = new javax.swing.JPanel();
+        lblNotificaciones = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblNotificaciones = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
@@ -42,16 +43,16 @@ public abstract class WidgetNotificacionesCodefac extends ObjetoEscritorioAbstra
 
         setLayout(new java.awt.BorderLayout());
 
-        panelTitulo.setBackground(new java.awt.Color(40, 161, 207));
-        panelTitulo.setForeground(new java.awt.Color(255, 255, 51));
-        panelTitulo.setLayout(new javax.swing.BoxLayout(panelTitulo, javax.swing.BoxLayout.LINE_AXIS));
+        lblTitulo.setBackground(new java.awt.Color(40, 161, 207));
+        lblTitulo.setForeground(new java.awt.Color(255, 255, 51));
+        lblTitulo.setLayout(new javax.swing.BoxLayout(lblTitulo, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Notificaciones Codefac");
-        panelTitulo.add(jLabel1);
+        lblNotificaciones.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lblNotificaciones.setForeground(new java.awt.Color(255, 255, 255));
+        lblNotificaciones.setText("Notificaciones Codefac");
+        lblTitulo.add(lblNotificaciones);
 
-        add(panelTitulo, java.awt.BorderLayout.PAGE_START);
+        add(lblTitulo, java.awt.BorderLayout.PAGE_START);
 
         jScrollPane1.setViewportView(tblNotificaciones);
 
@@ -80,11 +81,11 @@ public abstract class WidgetNotificacionesCodefac extends ObjetoEscritorioAbstra
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizarNotificaciones;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel panelTitulo;
+    private javax.swing.JLabel lblNotificaciones;
+    private javax.swing.JPanel lblTitulo;
     private javax.swing.JTable tblNotificaciones;
     // End of variables declaration//GEN-END:variables
 
@@ -95,6 +96,12 @@ public abstract class WidgetNotificacionesCodefac extends ObjetoEscritorioAbstra
     public JButton getBtnActualizarNotificaciones() {
         return btnActualizarNotificaciones;
     }
+
+    public JLabel getLblNotificaciones() {
+        return lblNotificaciones;
+    }
+    
+    
 
     
 }
