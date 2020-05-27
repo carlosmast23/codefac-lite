@@ -9,9 +9,11 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -29,6 +31,14 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     public EmpresaForm() {
         initComponents();
         this.jTextLogo.setEnabled(false);
+    }
+
+    public JComboBox<GeneralEnumEstado> getjComboEstado() {
+        return jComboEstado;
+    }
+
+    public void setjComboEstado(JComboBox<GeneralEnumEstado> jComboEstado) {
+        this.jComboEstado = jComboEstado;
     }
     
     /*@LimpiarAnotacion
@@ -149,6 +159,8 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         lblEspacio3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jTextCodigoEmpresa = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jComboEstado = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         lblCelular = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -281,7 +293,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jPanelConfiguracionEmisor.add(btnCargarImagen, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -307,6 +319,22 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanelConfiguracionEmisor.add(jTextCodigoEmpresa, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel7.setText("Estado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanelConfiguracionEmisor.add(jLabel7, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanelConfiguracionEmisor.add(jComboEstado, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos generales", jPanelConfiguracionEmisor);
 
@@ -412,6 +440,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargarImagen;
     private javax.swing.JCheckBox jCheckBLlevaContabilidad;
+    private javax.swing.JComboBox<GeneralEnumEstado> jComboEstado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -419,6 +448,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

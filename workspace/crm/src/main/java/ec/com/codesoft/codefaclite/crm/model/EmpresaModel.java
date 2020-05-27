@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.awt.event.ActionEvent;
@@ -72,7 +73,12 @@ public class EmpresaModel extends EmpresaForm
         //Todo: Por el momento oculto estos 2 campos porque se los va a coger de la sucursal matriz
         getLblCelular().setVisible(false); 
         getTxtCelular().setVisible(false);
- 
+        
+        //getjComboEstado().setSelectedItem(this.empresa.getEstadoEnum().);
+        getjComboEstado().removeAllItems();
+        for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
+            getjComboEstado().addItem(enumerador);
+        }
     }
     
     public Empresa obtenerDatosEmpresa()
@@ -257,6 +263,7 @@ public class EmpresaModel extends EmpresaForm
         }
         empresa.setImagenLogoPath(getjTextLogo().getText());
         //empresa.setContribuyenteEspecial("");
+        empresa.setEstado(((GeneralEnumEstado)getjComboEstado().getSelectedItem()).getEstado());
         return empresa;
     }
 
