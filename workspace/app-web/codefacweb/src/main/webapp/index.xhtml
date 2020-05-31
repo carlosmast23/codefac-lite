@@ -5,143 +5,206 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
-    <f:view contentType="text/html">
-        <h:head>
-            <f:facet name="first">
-                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <h:outputStylesheet library="css" name="estilo.css" />
-                <title>PrimeFaces</title>
-            </f:facet>
-        </h:head>
+    <ui:composition  template="/WEB-INF/plantilla_publica.xhtml">
 
-        <h:body style="font-size: 11px">
-            <h:form>
 
-                <p:layout fullPage="true">
+        <ui:define name="contenido">
 
-                    <p:layoutUnit position="north" resizable="true" closable="true" collapsible="true" >
-                        <p:growl id="messages"/>
+            <div class="p-grid p-nogutter"  >
+                        <div class="p-col-12"  >
+                            <!--    SECCION 1   -->
+                            <div class="p-grid" style="text-align: left;padding-top: 30px" >
+                                <div class="p-col-12 p-md-6 p-lg-6" style="text-align: center" >
+                                    <p:graphicImage library="img" name="logoCodefac.gif" />                             
+                                </div>
+                                <div class="p-col-12 p-md-6 p-lg-6" style="text-align: center" >
+                                    <h1>Ingeniería<br/><span>en Desarrollo</span><br/>de Software</h1>
+                                    <div>
+                                        <p:button value="Productos y Servicios" icon="pi pi-tag" style="margin-right:20px;"/>                                
+                                        <p:button value="Contáctanos" icon="pi pi-star" style="margin-right:20px;"/>                                                                
+                                    </div>
+                                </div>                        
+                            </div>
 
-                        <p:menubar style="z-index:1000 !important;">
-                            <p:submenu label="Archivo" icon="ui-icon-document">
-                                <p:submenu label="New" icon="ui-icon-contact">
-                                    <p:menuitem value="Project" url="#" />
-                                    <p:menuitem value="Other" url="#" />
-                                </p:submenu>
-                                <p:menuitem value="Open" url="#" />
-                                <p:separator />
-                                <p:menuitem value="Quit" url="#" />
-                            </p:submenu>
+                            <!--    SECCION 2   -->
+                            <div class="p-grid" style="text-align: left;padding-top: 30px;padding-bottom: 30px" >
+                                <div class="p-col-12 p-md-6 p-lg-3 "  >
+                                    <div class="cuadroInformativo" style="background-color: #0288D1">
+                                        <div class="titulo">
+                                            Consultar Facturas Electrónicas
+                                        </div>
+                                        <i class="pi pi-file icono"></i>
+                                        <div>
+                                            Nuestro clientes pueden consultar facturas electrónicas para descargar el Ride y Pdf 
+                                        </div>                                
+                                    </div>
+                                    <div style="text-align: center;border-width: 1px;border-style: solid;padding: 5px;margin: 10px;color: #607D8B">
+                                        <p:commandLink id="ajax" value="Ver Más" /> 
+                                    </div>
+                                </div>
 
-                            <p:submenu label="Control Empleado" icon="ui-icon-pencil">
-                                <p:menuitem value="Undo" url="#" icon="ui-icon-arrowreturnthick-1-w" />
-                                <p:menuitem value="Redo" url="#" icon="ui-icon-arrowreturnthick-1-e" />
-                            </p:submenu>
+                                <div class="p-col-12 p-md-6 p-lg-3 "  >
+                                    <div class="cuadroInformativo" style="background-color: #F57C00">
+                                        <div class="titulo">
+                                            Consultar Productos y Servicios
+                                        </div>
+                                        <i class="pi pi-shopping-cart icono"></i>
+                                        <div>
+                                            Busca productos y servicios fácilmente que ofrece nuestra empresa
+                                        </div>                                
+                                    </div>
+                                    <div style="text-align: center;border-width: 1px;border-style: solid;padding: 5px;margin: 10px;color: #607D8B">
+                                        <p:commandLink  value="Ver Más" /> 
+                                    </div>
+                                </div>
 
-                            <p:submenu label="Ayuda" icon="ui-icon-help">
-                                <p:menuitem value="Contents" url="#" />
-                                <p:submenu label="Search" icon="ui-icon-search">
-                                    <p:submenu label="Text">
-                                        <p:menuitem value="Workspace" url="#" />
-                                    </p:submenu>
-                                    <p:menuitem value="File" url="#" />
-                                </p:submenu>
-                            </p:submenu>
+                                <div class="p-col-12 p-md-6 p-lg-3 " >
+                                    <div class="cuadroInformativo" style="background-color: #009688" >
+                                        <div class="titulo">
+                                            Contactar con un Asesor de Venta
+                                        </div>
+                                        <i class="pi pi-user icono"></i>
+                                        <div>
+                                            Tienes dudas o preguntas , nuestros asesores están listos para ayudarte
+                                        </div>                                
+                                    </div>
+                                    <div style="text-align: center;border-width: 1px;border-style: solid;padding: 5px;margin: 10px;color: #607D8B">
+                                        <p:commandLink  value="Ver Más" /> 
+                                    </div>
+                                </div>
 
-                            <p:submenu label="Ventanas" icon="ui-icon-gear">
-                                <p:submenu label="Mensajes SMS" icon="ui-icon-refresh">
-                                    <p:menuitem value="Save" actionListener="#{menuView.save}" icon="ui-icon-disk" update="messages"/>
-                                    <p:menuitem value="Update" actionListener="#{menuView.update}" icon="ui-icon-arrowrefresh-1-w" update="messages"/>
-                                </p:submenu>
-                                <p:submenu label="Imprimir" icon="ui-icon-newwin">
-                                    <p:menuitem value="Delete" actionListener="#{menuView.delete}" icon="ui-icon-close" update="messages" ajax="false"/>
-                                </p:submenu>
-                            </p:submenu>
+                                <div class="p-col-12 p-md-6 p-lg-3 " >
+                                    <div class="cuadroInformativo" style="background-color: #303F9F" >
+                                        <div class="titulo">
+                                            Ingresar al Sistema
+                                        </div>
+                                        <i class="pi pi-lock icono"></i>
+                                        <div>
+                                            Gestionar , administra y controla tus recursos del Sistema Codefac
+                                        </div>                                
+                                    </div>
+                                    <div style="text-align: center;border-width: 1px;border-style: solid;padding: 5px;margin: 10px;color: #607D8B">
+                                        <p:commandLink  value="Ver Más" /> 
+                                    </div>
+                                </div>
 
-                            <p:menuitem value="Salir" url="http://www.primefaces.org" icon="ui-icon-close" />
 
-                            <f:facet name="options">
-                                <p:inputText style="margin-right:10px" placeholder="Buscar"/>
-                                <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
-                            </f:facet>
-                        </p:menubar>
-                    </p:layoutUnit>
+                            </div>
+                            
+                            <!-- Artificio temporal para dar un espacio en blnaco -->
+                            <div class="p-grid" style="height: 50px">                                
+                            </div>
+                            
 
-                    <p:layoutUnit position="south" size="30" closable="false" collapsible="true" style="padding: 0px;border: 0px;height: 0px">
-                        <div style="text-align: right;background-color: rgb(62,93,162);color: white;padding: 2px;height: 22px">
-                            Todos los derechos reservador Codefac 2018
-                        </div>
-                    </p:layoutUnit>
+                            <!--    FIN SECCION 2   -->
+                            <!-- SECCION DE CONTACTANOS -->
+                            <div class="p-grid seccion_contactanos">
+                                <div class="p-col-12 p-md-6 p-lg-6 " style="vertical-align: bottom" >
+                                    <img width="80%"  src="https://nunsys.com/wp-content/uploads/2013/11/IT-Outsourcing.png" />                            
+                                </div>
 
-                    <p:layoutUnit position="west" size="175" header="Barra Tareas" collapsible="true" style="height: auto">
-                        <h:graphicImage library="img" name="logoCodefac.gif" style="height: 30%" />
-                        <p:menu toggleable="true">
-                            <p:submenu label="Mensajeria">
-                                <p:menuitem value="Sms" actionListener="#{menuView.save}" update="messages" icon="ui-icon-disk" />
-                                <p:menuitem value="Correo" actionListener="#{menuView.update}" update="messages" icon="ui-icon-arrowrefresh-1-w"/>
-                            </p:submenu>
-                            <p:submenu label="Componente">
-                                <p:menuitem value="Accion" actionListener="#{menuView.delete}" update="messages" ajax="false" icon="ui-icon-close"/>
-                            </p:submenu>
-                            <p:submenu label="Componente 2">
-                                <p:menuitem value="Opción 1" url="http://www.primefaces.org" icon="ui-icon-home"/>
-                                <p:menuitem value="Opción 2" icon="ui-icon-star"/>
-                            </p:submenu>
-                        </p:menu>
-                    </p:layoutUnit>
+                                <div class="p-col-12 p-md-6 p-lg-6 " >
+                                    <div class="titulo">
+                                        Sobre Nosotros
+                                    </div>
+                                    <div class="contenido">
+                                        Somos una empresa multiservicios que está conformada por un grupo de profesionales de diferentes especialidades. Investigamos, y desarrollamos soluciones tecnológicas. Ofrecemos servicios de Ingeniería en sistemas, asesoría y soporte técnico. Estamos comprometidos en ofrecer un servicio de calidad marcado por la excelencia y el compromiso.
+                                    </div>
+                                </div>
 
-                    <p:layoutUnit position="east" size="270" header="Menu" collapsible="true" >
-                        <p:tabView dynamic="true" cache="true" effect="fold">
-                            <p:tab title="Panel">
-                                <h:panelGrid columns="2" cellpadding="10">
-                                    <h:outputText
-                                        value="Primer panel" />
-                                </h:panelGrid>
-                            </p:tab>
-                            <p:tab title="Ayuda">
-                                <h:panelGrid columns="2" cellpadding="10">
-                                    <h:outputText value="Segundo Panel" />
-                                </h:panelGrid>
-                            </p:tab>
-                            <p:tab title="Validacion">
-                                <h:panelGrid columns="2" cellpadding="10">
-                                    <h:outputText value="Tercer Panel" />
-                                </h:panelGrid>
-                            </p:tab>
-                        </p:tabView>
-                    </p:layoutUnit>
+                            </div>
 
-                    <p:layoutUnit position="center">
-                        <p:panel header="Crear un nuevo libro" style="margin-bottom:20px">
-                            <h:panelGrid columns="2" cellpadding="5">
-                                <h:outputLabel value="Titulo : *" for="txt_title"></h:outputLabel>
-                                <p:inputText id="txt_title" value="" required="true"/>
+                            <!-- FIN SECCION DE CONTACTANOS -->
 
-                                <h:outputLabel value="Libro : *" for="txt_author"></h:outputLabel>
-                                <p:inputText id="txt_author" value="" required="true"/>
+                            <!-- PRODUCTOS MAS POPULARES -->
+                            <div class="seccion_productos_mas_vendidos">
 
-                                <p:commandButton id="btn_reset" value="Enviar" type="reset"/>
-                            </h:panelGrid>
-                        </p:panel>
-                    </p:layoutUnit>
+                                <div class="titulo">
+                                    Productos Más Vendidos
+                                </div>
 
-                </p:layout>
-                
-                <p:dock position="bottom" proximity="160"  >
-                    <p:menuitem value="Home"  icon="/resources/img/iconos/menu/home-icon.png" url="#" style="color: rgb(62,93,162)" />
-                    <p:menuitem value="Nuevo"  icon="/resources/img/iconos/menu/new_icon.png" url="#" style="color: rgb(62,93,162)" />
-                    <p:menuitem value="Grabar"  icon="/resources/img/iconos/menu/save-icon.png" url="#" style="color: rgb(62,93,162)"/>
-                    <p:menuitem value="Imprimir"  icon="/resources/img/iconos/menu/print-icon.png" url="#" style="color: rgb(62,93,162)"/>
-                    <p:menuitem value="Buscar"  icon="/resources/img/iconos/menu/find_icon.png" url="#" style="color: rgb(62,93,162)"/>
-                    <p:menuitem value="Refrescar"  icon="/resources/img/iconos/menu/refresh_icon.png" url="#" style="color: rgb(62,93,162)"/>
-                    <p:menuitem value="Ayuda"  icon="/resources/img/iconos/menu/help_icon.png" url="#" style="color: rgb(62,93,162)"/>
-                    
-                    <!-- more menuitems -->
-                </p:dock>
-            </h:form>
+                                <img style="width: 30vh" src="https://4.bp.blogspot.com/-8ID5YEAS1N0/WWu15VJZ6WI/AAAAAAAAAPs/3ivxWZ7m03wUsYjScZdboGcqRAsS7SlygCLcBGAs/s1600/kpis.png" />
 
-        </h:body>
+                                <p:carousel value="#{paginaInformativaMb.listaProductosMasVendidos}" headerText="Listado de productos" var="producto" itemStyle="text-align:center" responsive="true">
+                                    <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+                                        <f:facet name="header">
+                                            <p:graphicImage  library="img" name="sinImagen.jpg" width="150px" /> 
+                                        </f:facet>
 
-    </f:view>
+                                        <h:outputText value="Id:" style="font-weight: bold" />
+                                        <h:outputText value="#{producto.idProducto}" />
+
+                                        <h:outputText value="Nombre" style="font-weight: bold" />
+                                        <h:outputText value="#{producto.nombre}" />
+
+                                        <h:outputText value="Precio" style="font-weight: bold" />
+                                        <h:outputText value="#{producto.valorUnitario}" style="color:#{car.color}"/>
+
+                                    </p:panelGrid>
+
+                                    <f:facet name="footer">
+                                        Productos Totales #{paginaInformativaMb.listaProductosMasVendidos.size()}
+                                    </f:facet>
+                                </p:carousel>
+                            </div>                    
+                            <!-- FIN PRODUCTOS MAS POPULARES -->
+
+                            <!-- SECCION REGISTRATE -->
+                            <div id="registrate" class="p-grid">
+                                <div class="p-col-12 p-md-6 p-lg-6 " >
+
+                                </div>
+
+                                <div class="p-col-12 p-md-6 p-lg-6 " >
+                                    <div class="formulario" >
+                                        <h1>Contáctanos</h1>
+                                        <div style="border: 2px;border-radius: 15px 0 15px 0;">
+                                            <div style="text-align: center"><h:graphicImage library="img" name="registro.png" height="100px" /></div>
+                                            <div style="padding: 5px;margin-right: 10px"><p:inputText id="txtNombre2" value="#{indexMb.nombres}" placeholder="Nombres" style="width: 100%" /></div>
+                                            <div style="padding: 5px;margin-right: 10px"><p:inputText id="txtApellido2" value="#{indexMb.apellidos}" placeholder="Apellidos" style="width: 100%" /></div>
+                                            <div style="padding: 5px;margin-right: 10px"><p:inputText id="txtNombreEmpresa2" value="#{indexMb.nombreEmpresa}" placeholder="Nombre de la empresa" style="width: 100%" /></div>
+                                            <div style="padding: 5px;margin-right: 10px"><p:inputText id="txtCelular2" value="#{indexMb.whatsapp}" placeholder="Celular" style="width: 100%" /></div>
+                                            <div style="padding: 5px;margin-right: 10px"><p:inputText id="txtCorreo2" value="#{indexMb.correo}" placeholder="Correo" style="width: 100%" /></div>
+                                            <div style="padding: 5px;margin-right: 15px">
+                                                <p:commandButton 
+                                                    process="txtNombre2,txtApellido2,txtNombreEmpresa2,txtCelular2,txtCorreo2,@this" 
+                                                    action="#{indexMb.registroProveedorRedirigir()}"
+                                                    value="Enviar" 
+                                                    style="width: 101%;height: 30px" />
+                                            </div>
+                                            <div style="padding: 5px;margin-right: 15px"><p:link value="Más Información" style="width: 105%" /></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- SECCION CONTACTANOS -->
+
+                            <div  id="contactanos" >
+                                <section id="section_contactanos">
+                                    <div class="p-grid " >
+                                        <div class="p-col-12 p-md-4 p-lg-4" style="background-color:rgba(56, 142, 60, 0.8) ;border-color: rgba(2, 136, 209, 1);color: white;text-align: center;font-size: 18px">
+                                            <h3>Celular</h3><h1>0981990638</h1></div>
+                                        <div class="p-col-12 p-md-4 p-lg-4" style="background-color:rgba(0, 121, 107, 0.8) ;border-color: rgba(2, 136, 209, 1);color: white;text-align: center;font-size: 18px">
+                                            <h3>Telefono</h3><h1>022339281</h1>
+                                        </div>
+                                        <div class="p-col-12 p-md-4 p-lg-4" style="background-color:rgba(255, 152, 0, 0.8) ;border-color: rgba(2, 136, 209, 1);color: white;text-align: center;font-size: 18px">
+                                            <h3>Facebook</h3><h1>/codesoft.ec</h1>
+                                        </div>
+                                        <div class="p-col-12 p-md-12 p-lg-12" style="background-color:rgba(0, 0, 0, 0.3) ;border-color: rgba(2, 136, 209, 1);color: black;text-align: center;font-size: 18px">
+
+                                            <h:graphicImage library="img" name="logoCodefac.png" height="40px"/>
+
+                                        </div>
+                                    </div>
+                                </section>
+                            </div> 
+
+                            <!-- FIN SECCION CONTACTANOS -->
+                        </div>                 
+                    </div>
+        </ui:define>
+    </ui:composition>
+
 </html>
-

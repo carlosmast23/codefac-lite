@@ -5,42 +5,41 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
-    <ui:composition  template="template/principal_template.xhtml">
+    <ui:composition  template="/WEB-INF/plantilla_publica.xhtml">
 
-        <ui:define name="titulo_contenido">
-            Login
-        </ui:define>
 
         <ui:define name="contenido">
+            <div style="text-align: center"><h2>Ingresar al Sistema</h2></div>
+            <div class="p-grid" style="padding: 20px" >
+                <div class="p-col-12 p-md-6 p-lg-4 p-lg-offset-4"  >
+                    <div><h:outputLabel for="username" value="Usuario:"  /></div>
+                    <p:inputText id="username"  required="true" label="username" value="#{loginMb.nick}" style="width: 100%" />
+                </div>
 
-            <div style="display:block; text-align:center;" >
+                <div class="p-col-12 p-md-6 p-lg-4 p-lg-offset-4"  >
+                    <div><h:outputLabel for="password" value="Contraseña:" /></div>
+                    <p:password id="password"  required="true" label="password" value="#{loginMb.clave}" style="width: 100%"  />
+                </div>
 
-                <h:panelGrid  columns="2" cellpadding="5" width="100" style="text-align: center" >
-                    <h:outputLabel for="username" value="Usuario:" />
-                    <p:inputText id="username"  required="true" label="username" value="#{loginMb.nick}"  />
-
-                    <h:outputLabel for="password" value="Constraseña:" />
-                    <p:password id="password"  required="true" label="password" value="#{loginMb.clave}"  />
-
-                    <h:outputLabel for="password" value="Empresa:" />
+                <div class="p-col-12 p-md-6 p-lg-4 p-lg-offset-4"  >
+                    <div><h:outputLabel for="password" value="Empresa:" /></div>
                     <p:selectOneMenu id="cmbEmpresa" value="#{loginMb.empresaSeleccionada}" style="width: 100%" converter="empresaConverter"  >
                         <f:selectItems value="#{loginMb.empresas}" var="empresa" itemValue="#{empresa.id.toString()}"/>                        
                         <p:ajax event="itemSelect" listener="#{loginMb.cargarSucursalEvento()}" update=":formulario:cmbSucursal"  />
                     </p:selectOneMenu> 
+                </div>
 
-                    
-                    <h:outputLabel for="password" value="Sucursales" />
+                <div class="p-col-12 p-md-6 p-lg-4 p-lg-offset-4"  >
+                    <div><h:outputLabel for="password" value="Sucursales" /></div>
                     <p:selectOneMenu id="cmbSucursal" value="#{loginMb.sucursalSeleccionada}" converter="sucursalConverter" style="width: 100%" >                        
                         <f:selectItems value="#{loginMb.sucursales}" var="sucursal" itemValue="#{sucursal.id.toString()}" />
-                    </p:selectOneMenu>
+                    </p:selectOneMenu>                    
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-lg-offset-4"  >
+                    <p:commandButton value="Ingresar" action="#{loginMb.login()}" />
+                </div>
+            </div>
 
-
-                    <f:facet name="footer">
-                        <p:commandButton value="Ingresar" action="#{loginMb.login()}" />
-                    </f:facet>  
-                </h:panelGrid>
-
-            </div> 
         </ui:define>
     </ui:composition>
 

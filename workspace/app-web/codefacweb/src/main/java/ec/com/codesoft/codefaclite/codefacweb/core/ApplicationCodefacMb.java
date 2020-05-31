@@ -41,7 +41,7 @@ public class ApplicationCodefacMb  implements Serializable{
      * para restablecer o establecer la comunicacion con el servidor
      */
     public void controladorConexionServidor()
-    {       
+    {        
         if(ServiceFactory.isActiveController())
         {
             return;

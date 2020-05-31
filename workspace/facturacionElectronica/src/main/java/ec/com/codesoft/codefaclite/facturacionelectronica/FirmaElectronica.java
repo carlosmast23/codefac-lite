@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
+import ec.com.codesoft.codefaclite.facturacionelectronica.util.X509Utils;
+import ec.com.codesoft.codefaclite.facturacionelectronica.util.sri.ValidacionBasica;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadTratarNodo;
 import es.mityc.firmaJava.libreria.xades.DataToSign;
 import es.mityc.firmaJava.libreria.xades.FirmaXML;
@@ -98,7 +100,6 @@ public class FirmaElectronica {
         return resultado;
     }
     
-    
     public Document firmar(String recursoParaFirmar)throws ComprobanteElectronicoException
     {
         try {
@@ -135,6 +136,15 @@ public class FirmaElectronica {
             
             FirmaXML firma = new FirmaXML();
             Document documentoFirmado = null;
+            
+            //===================================//
+            //          CODIGO TEMPORAL
+            //TODO: Terminar luego de implementar para evitar errores de rucs que no corresponden
+            // o firmas que tienen el campo de RUC vacio
+            //===================================//
+            //String ruc=X509Utils.getExtensionIdentifier(certificado);
+            
+            
             try {
                 Object[] resultado = firma.signFile(certificado, datosParaFirmar,
                         llavePrivada, proveedor);
@@ -285,6 +295,21 @@ public class FirmaElectronica {
         return null;
     }
     
+        /**
+     * Metodo para corregir problema con el certificado x509 correcto que exige el
+     * Sri desde el 08/01/2020
+     *
+     * @author CARLOS SANCHEZ
+     * @param storeManager
+     * @return
+     * @throws Exception
+     * @Referencia
+     * https://github.com/rolandopalermo/veronica-open-api/commit/8958028270e52359290e86902971bd062c2d9a9c
+     * Notas: Se debe comparar que la firma devuelta sea digitalSignature
+     * KeyUsage ::= BIT STRING { digitalSignature (0), nonRepudiation (1),
+     * keyEncipherment (2), dataEncipherment (3), keyAgreement (4), keyCertSign
+     * (5), cRLSign (6), encipherOnly (7), decipherOnly (8) }
+     */
     private X509Certificate getFirstCertificate(final IPKStoreManager storeManager) throws Exception {
         try {
             List<X509Certificate> certs = null;
@@ -293,7 +318,7 @@ public class FirmaElectronica {
                 throw new Exception("La lista de certificados se encuentra vacía.");
             }
             for (X509Certificate cert : certs) {
-                if (cert.getKeyUsage()[0]) {
+                if (cert.getKeyUsage()[0]) { //Compara con el campo 0 porque si esta en true entonces es digitalSignature
                     return cert;
                 }
             }
