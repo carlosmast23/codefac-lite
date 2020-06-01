@@ -36,7 +36,7 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public Factura grabar(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 
     public Factura grabar(Factura factura,Prestamo prestamo) throws RemoteException, ServicioCodefacException;
     public Factura grabar(Factura factura,Empleado empleado) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 
-    public List<Factura> obtenerFacturasPorIdentificacion(String identificacion) throws java.rmi.RemoteException;
+    public List<Factura> obtenerFacturasPorIdentificacion(String identificacion,Empresa empresa) throws java.rmi.RemoteException;
     public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo) throws java.rmi.RemoteException;
     //public void editar(Factura factura) throws java.rmi.RemoteException;
     public void editarFactura(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 

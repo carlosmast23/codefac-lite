@@ -28,6 +28,8 @@ import org.primefaces.PrimeFaces;
  * @author Carlos
  */
 public class UtilidadesWeb {
+    
+    public static final String FACES_REDIRECT="faces-redirect";
 
     /*
     public void exportarPDF(ActionEvent actionEvent) throws JRException, IOException{
@@ -135,6 +137,34 @@ public class UtilidadesWeb {
     public static void retornarResultadoDialogo(Object resultado)
     {
         PrimeFaces.current().dialog().closeDynamic(resultado);
+    }
+    
+    public static String agregarParametroGet(String url,Map<String,String> mapParametros,Boolean redirigir)
+    {
+        //Solo crear el parametro de faces redirect si no existe creado previamente
+        if(url.indexOf(FACES_REDIRECT)<0)
+        {
+            mapParametros.put(FACES_REDIRECT,redirigir.toString());
+        }
+        return agregarParametroGet(url, mapParametros);
+    }
+    
+    public static String agregarParametroGet(String url,Map<String,String> mapParametros)
+    {
+        String parametros="?";
+        //Si ya existe creados parametros en la url empiezo directamente con el simbolo de agregar nuevo parametro
+        if(url.indexOf("?")>=0)
+        {
+            parametros="&";
+        }
+        
+        for (Map.Entry<String, String> entry : mapParametros.entrySet()) {
+            String clave=entry.getKey();
+            String valor=entry.getValue();
+            parametros+=clave+"="+valor+"&";
+        }
+        parametros=parametros.substring(0,parametros.length()-1);
+        return url.concat(parametros);
     }
     
 }

@@ -5,7 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.mb;
 
+import ec.com.codesoft.codefaclite.codefacweb.core.GeneralPublicoAbstractMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -22,18 +25,15 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class PaginaInformativaMb implements Serializable{
+public class PaginaInformativaMb extends GeneralPublicoAbstractMb{
+    
     
     private List<Producto> listaProductosMasVendidos;
     
     @PostConstruct
     public void init()
-    {
-        try {
-            listaProductosMasVendidos=ServiceFactory.getFactory().getProductoServiceIf().obtenerTodos();
-        } catch (RemoteException ex) {
-            Logger.getLogger(PaginaInformativaMb.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    {        
+        System.out.println("init PaginaInformativaMb ... ");        
     }
 
     public List<Producto> getListaProductosMasVendidos() {
@@ -42,6 +42,15 @@ public class PaginaInformativaMb implements Serializable{
 
     public void setListaProductosMasVendidos(List<Producto> listaProductosMasVendidos) {
         this.listaProductosMasVendidos = listaProductosMasVendidos;
+    }
+
+    @Override
+    public void postAddController() {
+        try {
+            listaProductosMasVendidos=ServiceFactory.getFactory().getProductoServiceIf().obtenerTodosActivos(getControladorPlantilla().getEmpresaSeleccionada());
+        } catch (RemoteException ex) {
+            Logger.getLogger(PaginaInformativaMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     

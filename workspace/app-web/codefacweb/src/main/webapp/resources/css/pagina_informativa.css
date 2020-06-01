@@ -23,6 +23,17 @@ body .ui-panel .ui-panel-content {
     text-align: center;    
 }
 
+.tituloEmpresaInicio
+{
+    font-weight: bolder;
+    color: #0288D1;
+    border-style: dashed;
+    border-width: 1px;
+    padding: 5px;
+    margin: 12px;
+    border-radius: 5px 30px 45px 60px;
+}
+
 /* Correcion para poder centrar el slogan abajo del logo */
 /*body .ui-button.ui-button-text-only .ui-button-text {
     padding: 0;
@@ -37,6 +48,7 @@ body .ui-panel .ui-panel-content {
     margin: 10px;
     height: 150px;
     text-align: center;
+    border-radius: 20px;
 }
 
 .cuadroInformativo .titulo
@@ -58,6 +70,7 @@ body .ui-panel .ui-panel-content {
     font-size: 30px; 
     margin: 0px;
     padding: 0px;
+    border-radius: 5px 30px 45px 60px;
 }
 
 .seccion_contactanos

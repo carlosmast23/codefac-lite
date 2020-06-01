@@ -21,7 +21,10 @@
             </f:metadata>-->
         </h:head>
 
-        <h:body style="margin-bottom: 0px;"   >    
+        <h:body style="margin-bottom: 0px;"   > 
+            <ui:insert name="referenciaMb">
+            </ui:insert>
+
             <h:form id="formulario">
                 <!--    SECCION 1   -->
                 <div class="p-grid p-nogutter "   >
@@ -43,14 +46,14 @@
                                     </f:facet>   
                                     <f:facet name="right" >
                                         <div style="vertical-align: bottom;color: red;padding-top: 10px">
-                                            <p:commandButton id="btnNuevo" icon="fa fa-fw fa-home" value="Inicio" title="Nuevo" process="@this" action="index"   class="boton-principal"  />
-                                            <p:commandButton icon="fa fa-fw fa-child" value="Nosotros" title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}"   class="boton-principal"  />
-                                            <p:commandButton icon="fa fa-fw fa-cube" value=" Productos" title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}"   class="boton-principal"  />
-                                            <p:commandButton icon="fa fa-fw fa-star" value="Contactanos" title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}"   class="boton-principal"  />
+                                            <p:commandButton id="btnNuevo" icon="fa fa-fw fa-home" value="Inicio" title="#{controllerPublicoMb.empresaSeleccionada.nombreLegal}" process="@this" action="#{controllerPublicoMb.construirUrl(navigationMb.index)}"   class="boton-principal"  />
+                                            <p:linkButton icon="fa fa-fw fa-child" value="Nosotros" href="#{controllerPublicoMb.construirUrl(navigationMb.indexNosotros)}" />
+                                            <p:commandButton icon="fa fa-fw fa-cube" value=" Productos" title="Productos" process="@this" action="#{controllerPublicoMb.construirUrl(navigationMb.consultarProductos)}"   class="boton-principal"  />
+                                            <p:linkButton icon="fa fa-fw fa-star" value="Contactanos" title="Nuevo" href="#{controllerPublicoMb.construirUrl(navigationMb.indexContactanos)}"   class="boton-principal"  />
 
                                         <!--<p:commandButton icon="fa fa-fw fa-question-circle"  title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}"   class="boton-principal"  />                                        -->
                                             <p:commandButton icon="fa fa-fw fa-gear"  title="Nuevo" process="@this" actionListener="#{controllerCodefacMb.nuevo()}"   class="boton-principal"  />
-                                            <p:commandButton id="btnLogin" icon="fa fa-fw fa-sign-in"  title="Login" process="@this" action="login"   class="boton-principal"  />
+                                            <p:commandButton id="btnLogin" icon="fa fa-fw fa-sign-in"  title="Login" process="@this" action="#{controllerPublicoMb.construirUrl(navigationMb.login)}"   class="boton-principal"  />
 
                                         </div>
                                     </f:facet>
