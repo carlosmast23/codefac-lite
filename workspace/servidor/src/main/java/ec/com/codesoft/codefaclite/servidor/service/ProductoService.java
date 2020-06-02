@@ -46,8 +46,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         this.productoFacade = new ProductoFacade();
     }
     
-
-        
+       
     public Producto grabar(Producto p) throws ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -112,6 +111,15 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             //TODO: Queda pendiente en buscar la solución
         }
         
+        if(p.getCatalogoProducto()==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar el producto sin un catalago de producto");
+        }        
+        
+        if(p.getCatalogoProducto().getIva()==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar el producto sin especificar un porcentaje de Iva");
+        }
     }
     
     public void editarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException
