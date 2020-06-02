@@ -32,7 +32,7 @@ public class TestDialogoEspera {
         
         final JDialog loading = new JDialog(frame);
         JPanel p1 = new JPanel(new BorderLayout());
-        p1.add(new JLabel("ESPERE PORFAVOR ..."), BorderLayout.CENTER);
+        p1.add(new JLabel("ESPERE Por favor ..."), BorderLayout.CENTER);
         loading.setUndecorated(true);
         loading.getContentPane().add(p1);
         loading.pack();

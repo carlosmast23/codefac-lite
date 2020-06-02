@@ -90,7 +90,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         String claveRepetida=new String(getTxtClaveRepetir().getPassword());
         if (clave.toString().equals("")) 
         {
-            DialogoCodefac.mensaje("Advertencia", "Porfavor ingrese una clave valida para grabar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            DialogoCodefac.mensaje("Advertencia", "Por favor ingrese una clave valida para grabar", DialogoCodefac.MENSAJE_ADVERTENCIA);
             return false;
         }
         

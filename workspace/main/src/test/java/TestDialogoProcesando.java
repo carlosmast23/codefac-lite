@@ -84,7 +84,7 @@ public class TestDialogoProcesando {
             progressBar.setIndeterminate(true);
             JPanel panel = new JPanel(new BorderLayout());
             panel.add(progressBar, BorderLayout.CENTER);
-            panel.add(new JLabel("Espere porfavor......."), BorderLayout.PAGE_START);
+            panel.add(new JLabel("Espere Por favor......."), BorderLayout.PAGE_START);
             dialog.add(panel);
             dialog.pack();
             dialog.setLocationRelativeTo(win);

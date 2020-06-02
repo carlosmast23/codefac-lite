@@ -319,7 +319,7 @@ public class ServicioSri {
            }
            
            //Si sale del bucle sin retornar asumo que excedio el tiempo de espera
-           throw new ComprobanteElectronicoException("Se excedio el tiempo de espera para autorizar el documento , porfavor inténtelo mas tarde","Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+           throw new ComprobanteElectronicoException("Se excedio el tiempo de espera para autorizar el documento , Por favor inténtelo mas tarde","Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
        }
        else
        {
@@ -378,7 +378,7 @@ public class ServicioSri {
            }
            
            //Si sale del bucle sin retornar asumo que excedio el tiempo de espera
-           throw new ComprobanteElectronicoException("Se excedio el tiempo de espera para autorizar el documento , porfavor inténtelo mas tarde","Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+           throw new ComprobanteElectronicoException("Se excedio el tiempo de espera para autorizar el documento , Por favor inténtelo mas tarde","Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
            
        }
        else

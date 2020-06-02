@@ -58,7 +58,7 @@ public class ModoAplicativoDialog extends javax.swing.JDialog {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 102, 153));
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/codefac-nombre.PNG"))); // NOI18N
-        jLabel4.setText("  Porfavor seleccione el modo de ejecucion:");
+        jLabel4.setText("  Por favor seleccione el modo de ejecucion:");
         jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel2.add(jLabel4, java.awt.BorderLayout.CENTER);
 

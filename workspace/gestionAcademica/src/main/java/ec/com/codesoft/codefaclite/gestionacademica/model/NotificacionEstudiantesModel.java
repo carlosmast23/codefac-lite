@@ -251,12 +251,12 @@ public class NotificacionEstudiantesModel extends NotificacionEstudiantesPanel {
 
     private void enviarCorreos() {
         if (getTxtTitulo().getText().isEmpty()) {
-            DialogoCodefac.mensaje("Advertencia", "Porfavor ingrese un titulo para enviar el correo", DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Advertencia", "Por favor ingrese un titulo para enviar el correo", DialogoCodefac.MENSAJE_INCORRECTO);
             return;
         }
 
         if (getTxtMensaje().getText().isEmpty()) {
-            DialogoCodefac.mensaje("Advertencia", "Porfavor ingrese un mensaje para enviar el correo", DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Advertencia", "Por favor ingrese un mensaje para enviar el correo", DialogoCodefac.MENSAJE_INCORRECTO);
             return;
         }
 

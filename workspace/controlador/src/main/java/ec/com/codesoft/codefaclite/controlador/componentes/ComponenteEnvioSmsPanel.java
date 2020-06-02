@@ -176,7 +176,7 @@ public class ComponenteEnvioSmsPanel extends javax.swing.JPanel {
 
                     if(txtMensajeTexto.getText().isEmpty())
                     {
-                        DialogoCodefac.mensaje("Error","Porfavor ingrese un texto para enviar",DialogoCodefac.MENSAJE_INCORRECTO);
+                        DialogoCodefac.mensaje("Error","Por favor ingrese un texto para enviar",DialogoCodefac.MENSAJE_INCORRECTO);
                         return;                   
                     }
                     

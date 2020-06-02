@@ -418,7 +418,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             else //Si existe diferencias con la otra licencia lanza el dialogo para actualizar la licencia
             {                
                 
-                throw new ServicioCodefacException("Su licencia esta desactualizada o es incorrecta. \n Porfavor actualice su licencia para continuar");
+                throw new ServicioCodefacException("Su licencia esta desactualizada o es incorrecta. \n Por favor actualice su licencia para continuar");
                 /*ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, true);
                 licenciaDialog.setValidacionLicenciaCodefac(validacion);
                 if (validacion.verificarConexionInternet()) {

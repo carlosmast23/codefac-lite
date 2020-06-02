@@ -919,7 +919,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     @Override
     public boolean getValidacionEnvioSms() {
         if (!estadoFormulario.equals(ESTADO_EDITAR)) {
-            DialogoCodefac.mensaje("Error", "Porfavor seleccione un cliente para enviar el mensaje", DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error", "Por favor seleccione un cliente para enviar el mensaje", DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
         return true;

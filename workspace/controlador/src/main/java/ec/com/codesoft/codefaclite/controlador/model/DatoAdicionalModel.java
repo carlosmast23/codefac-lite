@@ -39,13 +39,13 @@ public class DatoAdicionalModel extends DatoAdicionalDialog{
             public void actionPerformed(ActionEvent e) {
                 if(getTxtDato().getText()==null || getTxtDato().getText().equals(""))
                 {
-                    DialogoCodefac.mensaje("Advertencia","Porfavor ingrese un datos para grabar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    DialogoCodefac.mensaje("Advertencia","Por favor ingrese un datos para grabar",DialogoCodefac.MENSAJE_ADVERTENCIA);
                     return;
                 }
                 
                 if(getTxtCampo().getText()==null || getTxtCampo().getText().equals(""))
                 {
-                    DialogoCodefac.mensaje("Advertencia","Porfavor ingrese un nombre de campo para grabar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    DialogoCodefac.mensaje("Advertencia","Por favor ingrese un nombre de campo para grabar",DialogoCodefac.MENSAJE_ADVERTENCIA);
                     return;
                 }
 

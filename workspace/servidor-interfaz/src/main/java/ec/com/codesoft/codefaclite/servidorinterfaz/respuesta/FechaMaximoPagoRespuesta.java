@@ -23,7 +23,7 @@ public class FechaMaximoPagoRespuesta implements Serializable{
     
     public String mensajeFechaPagoSuperada()
     {
-        return "El sistema detecta valores pendientes de pago y no se puede abrir\\n Porfavor cancele los valores pendientes para continuar con el servicio.";
+        return "El sistema detecta valores pendientes de pago y no se puede abrir\\n Por favor cancele los valores pendientes para continuar con el servicio.";
     }
     
     public enum EstadoEnum

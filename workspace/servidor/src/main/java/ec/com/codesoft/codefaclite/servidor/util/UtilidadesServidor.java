@@ -152,7 +152,7 @@ public class UtilidadesServidor {
                             pstm.close();
                         }
                     } catch (NullPointerException cpe) {
-                        System.out.println("Alerta al crear el sql, porfavor revise que los sql no tengan espacios en blanco al final, apesar de esta advertencia el proceso puede continuar sin ningun problema");
+                        System.out.println("Alerta al crear el sql, Por favor revise que los sql no tengan espacios en blanco al final, apesar de esta advertencia el proceso puede continuar sin ningun problema");
                     } catch (UnsupportedEncodingException ex) {
                         Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -271,7 +271,7 @@ public class UtilidadesServidor {
 
                         }
                     } catch (NullPointerException cpe) {
-                        System.out.println("Alerta al crear el sql, porfavor revise que los sql no tengan espacios en blanco al final, apesar de esta advertencia el proceso puede continuar sin ningun problema");
+                        System.out.println("Alerta al crear el sql, Por favor revise que los sql no tengan espacios en blanco al final, apesar de esta advertencia el proceso puede continuar sin ningun problema");
                     } catch (UnsupportedEncodingException ex) {
                         Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
                     }

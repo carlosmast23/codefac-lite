@@ -58,7 +58,7 @@ public class ConfiguracionesInicalesModel extends ConfiguracionesInicialesDialog
 
                 //Validaciones de que los campos no esten blanco
                 if (usuario.equals("") || clave.equals("")) {
-                    DialogoCodefac.mensaje("Advertencia", "Porfavor ingrese todos los campos para continuar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    DialogoCodefac.mensaje("Advertencia", "Por favor ingrese todos los campos para continuar", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     return;
                 }
                 
@@ -78,7 +78,7 @@ public class ConfiguracionesInicalesModel extends ConfiguracionesInicialesDialog
                 //Validaciones de que los campos no esten blanco
                 if(usuario.equals("") || clave.equals("") || claveRepetida.equals(""))
                 {
-                    DialogoCodefac.mensaje("Advertencia","Porfavor ingrese todos los campos para continuar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    DialogoCodefac.mensaje("Advertencia","Por favor ingrese todos los campos para continuar",DialogoCodefac.MENSAJE_ADVERTENCIA);
                     return;
                 }
                 

@@ -629,7 +629,7 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
         
         if(!estadoFormulario.equals(ESTADO_EDITAR))
         {
-            DialogoCodefac.mensaje("Error","Porfavor seleccione un cliente para enviar el mensaje",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error","Por favor seleccione un cliente para enviar el mensaje",DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
                 
