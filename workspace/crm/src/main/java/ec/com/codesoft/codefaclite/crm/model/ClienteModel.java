@@ -733,7 +733,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 //Seleccionar el tipo de identificacion de forma automatica
                 seleccionarTipoIdentificacion();
                 
-                 Persona persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(getjTextIdentificacion().getText(),session.getEmpresa());
+                Persona persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(getjTextIdentificacion().getText(),session.getEmpresa());
                 //Si no esta ingresado ninguna persona continuar con el proceso normal
                 if(persona==null)
                 {
