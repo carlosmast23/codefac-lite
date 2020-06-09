@@ -75,7 +75,7 @@ public class ComprobanteElectronicoComponente {
                 } 
                 else 
                 {
-                    respuesta = DialogoCodefac.dialogoPregunta("Alerta", "El comprobante electrónico se encuentra autorizada en el SRI , \nPorfavor elimine  solo si tambien esta anulado en el SRI\nDesea eliminar de todos modos?", DialogoCodefac.MENSAJE_INCORRECTO);
+                    respuesta = DialogoCodefac.dialogoPregunta("Alerta", "El comprobante electrónico se encuentra autorizada en el SRI , \nPor favor elimine  solo si tambien esta anulado en el SRI\nDesea eliminar de todos modos?", DialogoCodefac.MENSAJE_INCORRECTO);
                 }
 
                 //Eliminar la factura si eligen la respuesta si

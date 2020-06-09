@@ -127,19 +127,19 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     {
         if(guiaRemision.getTransportista()==null)
         {
-            DialogoCodefac.mensaje("Error Validación","Porfavor ingrese un transportista",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error Validación","Por favor ingrese un transportista",DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
         
         if(guiaRemision.getDestinatarios()==null || guiaRemision.getDestinatarios().size()==0)
         {
-            DialogoCodefac.mensaje("Error Validación","Porfavor ingrese detalles a la guía de remisión",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error Validación","Por favor ingrese detalles a la guía de remisión",DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
                 
         if(guiaRemision.getDireccionPartida()==null || guiaRemision.getDireccionPartida().isEmpty())
         {
-            DialogoCodefac.mensaje("Error Validación","Porfavor ingrese la dirección de partida",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error Validación","Por favor ingrese la dirección de partida",DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
         
@@ -646,12 +646,12 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     {
         if(destinatarioGuiaRemision.getMotivoTranslado().isEmpty())
         {
-            DialogoCodefac.mensaje("Error Validación","Porfavor ingrese un motivo de translado",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error Validación","Por favor ingrese un motivo de translado",DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
         
         if (destinatarioGuiaRemision.getCodigoEstablecimiento().isEmpty()) {
-            DialogoCodefac.mensaje("Error Validación", "Porfavor ingrese un código de establecimiento", DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error Validación", "Por favor ingrese un código de establecimiento", DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
         

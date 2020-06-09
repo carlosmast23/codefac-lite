@@ -16,7 +16,7 @@ public abstract class MensajeCodefacSistema {
     
     public static abstract class Impresiones {
 
-        public static final CodefacMsj IMPRESION_SECCION_INCORRECTA = new CodefacMsj(TITULO_ADVERTENCIA,"Porfavor cargue un registro para poder imprimir",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        public static final CodefacMsj IMPRESION_SECCION_INCORRECTA = new CodefacMsj(TITULO_ADVERTENCIA,"Por favor cargue un registro para poder imprimir",DialogoCodefac.MENSAJE_ADVERTENCIA);
     }
     
     public static abstract class AccionesFormulario {
@@ -34,7 +34,7 @@ public abstract class MensajeCodefacSistema {
     public static abstract class Preguntas
     {
         public static final CodefacMsj GUARDADO = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"Esta seguro que desea eliminar el registro? ",DialogoCodefac.MENSAJE_ADVERTENCIA);
-        public static final CodefacMsj ELIMINAR_COMPROBANTE_ELECTRONICO = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"El comprobante electronico se encuentra autorizada en el SRI , \nPorfavor elimine solo si tambien esta anulado en el SRI\nDesea eliminar el comprobante de todos modos?" ,DialogoCodefac.MENSAJE_INCORRECTO);
+        public static final CodefacMsj ELIMINAR_COMPROBANTE_ELECTRONICO = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"El comprobante electronico se encuentra autorizada en el SRI , \nPor favor elimine solo si tambien esta anulado en el SRI\nDesea eliminar el comprobante de todos modos?" ,DialogoCodefac.MENSAJE_INCORRECTO);
         public static final CodefacMsj ELIMINAR_REGISTRO = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"Esta seguro que desea eliminar el registro ?" ,DialogoCodefac.MENSAJE_INCORRECTO);
         public static final CodefacMsj CARGAR_DATOS = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"Esta seguro que desea cargar los registro ?" ,DialogoCodefac.MENSAJE_INCORRECTO);
     }

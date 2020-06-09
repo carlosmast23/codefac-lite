@@ -733,7 +733,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 //Seleccionar el tipo de identificacion de forma automatica
                 seleccionarTipoIdentificacion();
                 
-                 Persona persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(getjTextIdentificacion().getText(),session.getEmpresa());
+                Persona persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(getjTextIdentificacion().getText(),session.getEmpresa());
                 //Si no esta ingresado ninguna persona continuar con el proceso normal
                 if(persona==null)
                 {
@@ -919,7 +919,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     @Override
     public boolean getValidacionEnvioSms() {
         if (!estadoFormulario.equals(ESTADO_EDITAR)) {
-            DialogoCodefac.mensaje("Error", "Porfavor seleccione un cliente para enviar el mensaje", DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error", "Por favor seleccione un cliente para enviar el mensaje", DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
         return true;

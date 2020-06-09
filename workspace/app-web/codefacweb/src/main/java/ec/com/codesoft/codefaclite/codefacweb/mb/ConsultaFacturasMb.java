@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.mb;
 
+import ec.com.codesoft.codefaclite.codefacweb.core.GeneralPublicoAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -34,7 +35,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 @ManagedBean
 @ViewScoped
-public class ConsultaFacturasMb implements Serializable {
+public class ConsultaFacturasMb extends GeneralPublicoAbstractMb{
 
     private String identificacion;
 
@@ -55,21 +56,19 @@ public class ConsultaFacturasMb implements Serializable {
             //Map<String, Object> mapParametros = new HashMap<String, Object>();
             //mapParametros.put("identifacion", "1724218951001");
 
-            listaFacturas = facturaService.obtenerFacturasPorIdentificacion(identificacion);
+            listaFacturas = facturaService.obtenerFacturasPorIdentificacion(identificacion,getControladorPlantilla().getEmpresaSeleccionada());
 
             //Usuarios
             //mapParametros = new HashMap<String, Object>();
             //mapParametros.put("nick", "root");
-            UsuarioServicioIf usuarioServiceIf = ServiceFactory.getFactory().getUsuarioServicioIf();
+            //UsuarioServicioIf usuarioServiceIf = ServiceFactory.getFactory().getUsuarioServicioIf();
             
-            List<Usuario> usuarios = (List<Usuario>) usuarioServiceIf.consultarUsuarioActivoPorEmpresa("root",null); //Todo: Falta parametrizar para consultar las facturas por empresa
-            for (Usuario usuario : usuarios) {
-                System.out.println(usuario.getNick());
-            }
+            //List<Usuario> usuarios = (List<Usuario>) usuarioServiceIf.consultarUsuarioActivoPorEmpresa("root",null); //Todo: Falta parametrizar para consultar las facturas por empresa
+            //for (Usuario usuario : usuarios) {
+            //    System.out.println(usuario.getNick());
+            //}
 
         } catch (RemoteException ex) {
-            Logger.getLogger(ConsultaFacturasMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ConsultaFacturasMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -117,6 +116,11 @@ public class ConsultaFacturasMb implements Serializable {
 
     public void setListaFacturas(List<Factura> listaFacturas) {
         this.listaFacturas = listaFacturas;
+    }
+
+    @Override
+    public void postAddController() {
+        
     }
 
 }

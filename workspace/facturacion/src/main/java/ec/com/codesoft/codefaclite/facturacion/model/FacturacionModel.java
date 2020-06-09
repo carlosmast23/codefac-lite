@@ -1577,7 +1577,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 break;
                         }
                         
-                        //int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Porfavor seleccione una opción?", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
+                        //int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Por favor seleccione una opción?", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
 
                     } catch (RemoteException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);

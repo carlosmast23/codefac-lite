@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
@@ -49,6 +50,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                validarCliente(p, Boolean.TRUE,CrudEnum.EDITAR);
                 for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) {
                     if (establecimiento.getId() == null) {
                         entityManager.persist(establecimiento);
@@ -70,28 +72,8 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                /**
-                 * Validaciones previas de los datos
-                 */
-                if(validarCedula)
-                {
-                    if(!p.validarCedula())
-                    {
-                        throw new ServicioCodefacException("Error al validar la identificación");
-                    }
-                }
-                
-                if(p.getRazonSocial()==null || p.getRazonSocial().isEmpty())
-                {
-                    throw new ServicioCodefacException("La razón social no puede ser vacia");
-                }
-                
-                if(p.getEstablecimientos()==null || p.getEstablecimientos().size()==0)
-                {
-                    throw new ServicioCodefacException("No se puede crear el registro sin establecimientos");
-                }
-                
-
+                               
+                validarCliente(p,validarCedula,CrudEnum.CREAR);
                 /*if (p.getEstablecimientos() == null || p.getEstablecimientos().size() == 0) {
                     //Si no tiene un establecimiento lo creo automaticamente 
                     PersonaEstablecimiento personaEstablecimiento = PersonaEstablecimiento.buildFromPersona(p);
@@ -117,6 +99,43 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         });
         return p;
 
+    }
+    
+    private void validarCliente(Persona p,Boolean validarCedula,CrudEnum crudEnum) throws ServicioCodefacException, java.rmi.RemoteException
+    {
+        /**
+         * Validaciones previas de los datos
+         */
+        if (validarCedula) {
+            if (!p.validarCedula()) {
+                throw new ServicioCodefacException("Error al validar la identificación");
+            }
+        }
+
+        if (p.getRazonSocial() == null || p.getRazonSocial().isEmpty()) {
+            throw new ServicioCodefacException("La razón social no puede ser vacia");
+        }
+
+        if (p.getEstablecimientos() == null || p.getEstablecimientos().size() == 0) {
+            throw new ServicioCodefacException("No se puede crear el registro sin establecimientos");
+        }
+        
+        //NOTA: Esta validacion siempre debe ir al ultimo de este metodo
+        //Si es un crud verifico sin los datos editados y consultados son los mismos
+        if(crudEnum.equals(CrudEnum.EDITAR))
+        {
+            Persona personaTmp=getFacade().find(p.getIdCliente());
+            if(personaTmp.getIdentificacion().equals(p.getIdentificacion()))
+            {
+                return;
+            }
+        }
+        
+        if(buscarPorIdentificacion(p.getIdentificacion(),p.getEmpresa())!=null)
+        {
+            throw new ServicioCodefacException("Ya existe ingresado un cliente con la misma identificación");
+        }
+        
     }
 
     public void editar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {

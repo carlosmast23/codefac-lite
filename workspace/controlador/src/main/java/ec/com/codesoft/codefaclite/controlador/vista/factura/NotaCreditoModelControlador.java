@@ -257,13 +257,13 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
         NotaCredito notaCredito=interfaz.obtenerNotaCredito();
         if(notaCredito.getCliente()==null)
         {
-            mostrarMensaje(new CodefacMsj("Error Validación","Porfavor seleccione un cliente",DialogoCodefac.MENSAJE_INCORRECTO));            
+            mostrarMensaje(new CodefacMsj("Error Validación","Por favor seleccione un cliente",DialogoCodefac.MENSAJE_INCORRECTO));            
             return false;
         }
         
         if(notaCredito.getDetalles()==null || notaCredito.getDetalles().size()==0)
         {
-            mostrarMensaje(new CodefacMsj("Error Validación","Porfavor ingrese detalles al comprobante",DialogoCodefac.MENSAJE_INCORRECTO));            
+            mostrarMensaje(new CodefacMsj("Error Validación","Por favor ingrese detalles al comprobante",DialogoCodefac.MENSAJE_INCORRECTO));            
             return false;
         }
         
@@ -274,13 +274,13 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
         {
             if(notaCredito.getFechaEmisionDocSustento()==null)
             {
-                mostrarMensaje(new CodefacMsj("Error Validación","Porfavor seleccione la fecha de emisión",DialogoCodefac.MENSAJE_INCORRECTO));
+                mostrarMensaje(new CodefacMsj("Error Validación","Por favor seleccione la fecha de emisión",DialogoCodefac.MENSAJE_INCORRECTO));
                 return false;
             }
             
             if(notaCredito.getNumDocModificado().replaceAll("-","").replaceAll(" ","").isEmpty())
             {
-                mostrarMensaje(new CodefacMsj("Error Validación","Porfavor ingrese el preimpreso de la factura",DialogoCodefac.MENSAJE_INCORRECTO));
+                mostrarMensaje(new CodefacMsj("Error Validación","Por favor ingrese el preimpreso de la factura",DialogoCodefac.MENSAJE_INCORRECTO));
                 return false;
             }
         }

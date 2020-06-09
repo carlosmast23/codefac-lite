@@ -94,13 +94,13 @@ public class ComponenteEnvioCorreoPanel extends javax.swing.JPanel {
             public void actionPerformed(ActionEvent e) {
                 if(txtCorreoTitulo.getText().isEmpty())
                 {
-                    DialogoCodefac.mensaje("Error","Porfavor ingrese un titulo para enviar el correo",DialogoCodefac.MENSAJE_INCORRECTO);
+                    DialogoCodefac.mensaje("Error","Por favor ingrese un titulo para enviar el correo",DialogoCodefac.MENSAJE_INCORRECTO);
                     return ;
                 }
                 
                 if(txtCorreoMensaje.getText().isEmpty())
                 {
-                    DialogoCodefac.mensaje("Error","Porfavor ingrese un mensaje para enviar el correo",DialogoCodefac.MENSAJE_INCORRECTO);
+                    DialogoCodefac.mensaje("Error","Por favor ingrese un mensaje para enviar el correo",DialogoCodefac.MENSAJE_INCORRECTO);
                     return ;
                 }
                 

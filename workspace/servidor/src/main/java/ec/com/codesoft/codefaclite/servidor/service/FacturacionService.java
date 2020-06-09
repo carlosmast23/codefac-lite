@@ -613,12 +613,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     }
 */
 
+    //TODO: Falta programar que se puedan ver solo facturas activas
     @Override
-    public List<Factura> obtenerFacturasPorIdentificacion(String identificacion) throws RemoteException {
+    public List<Factura> obtenerFacturasPorIdentificacion(String identificacion,Empresa empresa) throws RemoteException {
         //Factura f;
         //f.getIdentificacion();
        Map<String,Object> mapParametros=new HashMap<String,Object>();
        mapParametros.put("identificacion",identificacion);
+       mapParametros.put("empresa",empresa);
        return getFacade().findByMap(mapParametros);
     }
     

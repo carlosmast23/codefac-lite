@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.mb;
 
+import ec.com.codesoft.codefaclite.codefacweb.core.GeneralPublicoAbstractMb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -26,19 +27,14 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class ConsultarProductosMb implements Serializable{
+public class ConsultarProductosMb extends GeneralPublicoAbstractMb{
     
     private List<Producto> productos;
     
     @PostConstruct
     public void init()  
     {
-        try {
-            ProductoServiceIf catalogosService=ServiceFactory.getFactory().getProductoServiceIf();
-            productos=catalogosService.obtenerTodos();
-        } catch (RemoteException ex) {
-            Logger.getLogger(ConsultarProductosMb.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
 
     public List<Producto> getProductos() {
@@ -47,6 +43,16 @@ public class ConsultarProductosMb implements Serializable{
 
     public void setProductos(List<Producto> productos) {
         this.productos = productos;
+    }
+
+    @Override
+    public void postAddController() {
+        try {
+            ProductoServiceIf catalogosService=ServiceFactory.getFactory().getProductoServiceIf();
+            productos=catalogosService.obtenerTodosActivos(getControladorPlantilla().getEmpresaSeleccionada());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ConsultarProductosMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     

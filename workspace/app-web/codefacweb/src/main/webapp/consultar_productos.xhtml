@@ -5,13 +5,19 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
-    <ui:composition  template="template/principal_template.xhtml">
+    <ui:composition  template="/WEB-INF/plantilla_publica.xhtml">
         
         <ui:define name="titulo_contenido">
             Consultar Productos
         </ui:define>
+        
+        <ui:define name="referenciaMb" >
+             <f:event listener="#{consultarProductosMb.agregarControlador(controllerPublicoMb)}" type="preRenderComponent" /> 
+        </ui:define>
 
         <ui:define name="contenido">
+            
+            <div style="text-align: center"><h2>Productos y Servicios</h2></div>
             <p:dataGrid var="producto" value="#{consultarProductosMb.productos}" columns="3" layout="grid"
                         rows="12" paginator="true" id="cars"
                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

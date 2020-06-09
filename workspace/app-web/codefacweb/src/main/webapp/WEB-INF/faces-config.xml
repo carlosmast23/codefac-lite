@@ -28,6 +28,16 @@
         </navigation-case>
         
         <navigation-case>
+            <from-outcome>consultarProductos</from-outcome>
+            <to-view-id>consultar_productos.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>consultarFacturas</from-outcome>
+            <to-view-id>consultar_facturas.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
             <from-outcome>indexCodefac</from-outcome>
             <to-view-id>sistema/index.xhtml</to-view-id>
             <redirect>
@@ -152,7 +162,7 @@
             </redirect>
         </navigation-case>
         
-         <navigation-case>
+        <navigation-case>
             <from-outcome>reenviar_comprobante</from-outcome>
             <to-view-id>sistema/facturacion/reenviar_comprobante.xhtml</to-view-id>
             <redirect>

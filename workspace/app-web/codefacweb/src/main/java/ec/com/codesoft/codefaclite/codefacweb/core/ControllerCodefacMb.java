@@ -202,15 +202,16 @@ public class ControllerCodefacMb implements Serializable {
     }
 
     public GeneralAbstractMb getGeneralAbstractMb() {
-        return generalAbstractMb;
+        return generalAbstractMb;   
     }
 
     public void setGeneralAbstractMb(GeneralAbstractMb generalAbstractMb) {
-        this.generalAbstractMb = generalAbstractMb;
+        this.generalAbstractMb = generalAbstractMb;  
     }
     
     public void mostrarPanelComprobantes()
     {
+        
         //System.out.println("Activando o desactivando el panel de los comprobantes");
         visiblePanelComprobantes=!visiblePanelComprobantes;
         //System.out.println(visiblePanelComprobantes);

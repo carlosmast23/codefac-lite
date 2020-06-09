@@ -360,7 +360,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void eventoCerrarSistema()
     {
         String[] opciones = {"Salir", "Cambiar usuario", "Cancelar"};
-        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Porfavor seleccione una opción?", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
+        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Por favor seleccione una opción?", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
         switch (opcionSeleccionada) {
             case 0: //opcion de salir
                 grabarDatosSalir();

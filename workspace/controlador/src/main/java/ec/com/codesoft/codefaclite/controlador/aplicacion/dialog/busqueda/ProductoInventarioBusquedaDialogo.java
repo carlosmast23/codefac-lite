@@ -103,15 +103,13 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Pro
     @Override
     public void agregarObjeto(Producto producto, Vector vector) {
         try {
-            //Producto producto=(Producto) objeto[0];
-            //Kardex kardex=(Kardex) objeto[1];
             KardexServiceIf servicio = ServiceFactory.getFactory().getKardexServiceIf();
             Kardex kardex = servicio.buscarKardexPorProductoyBodega(this.bodega, producto);
             vector.add(producto.getCodigoPersonalizado());
             vector.add(producto.getNombre());
             vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
             vector.add(producto.getValorUnitario());
-            vector.add(producto.getCatalogoProducto().getIva().toString());
+            vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().toString():"Sin Especificar");
             vector.add((kardex!=null)?kardex.getStock():"0");
         } catch (RemoteException ex) {
             Logger.getLogger(ProductoInventarioBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);

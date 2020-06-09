@@ -605,7 +605,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         
         //Validación previa 
         if (getTxtCorreoTitulo().getText().isEmpty()) {
-            DialogoCodefac.mensaje("Advertencia", "Porfavor ingrese un titulo para enviar el correo", DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Advertencia", "Por favor ingrese un titulo para enviar el correo", DialogoCodefac.MENSAJE_INCORRECTO);
             return;
         }
 

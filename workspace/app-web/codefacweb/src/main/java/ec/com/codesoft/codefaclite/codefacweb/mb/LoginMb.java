@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.mb;
 
+import ec.com.codesoft.codefaclite.codefacweb.core.GeneralPublicoAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.core.SessionMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -41,7 +42,7 @@ import org.primefaces.event.SelectEvent;
  */
 @ManagedBean
 @ViewScoped
-public class LoginMb implements Serializable {
+public class LoginMb extends GeneralPublicoAbstractMb{
     private static final String PAGINA_INICIO_ADMIN="indexCodefac";
     //private static final String PAGINA_INICIO_ADMIN="proforma";
 
@@ -58,15 +59,12 @@ public class LoginMb implements Serializable {
 
     @PostConstruct
     public void init() {
-        //nick="carlos";
-        //clave="123";
+        System.out.println("PostConstruct ...");
         iniciarDatos();
     }
 
     public String login() {
         try {
-            System.out.println("Login Empresa:" + empresaSeleccionada);
-            System.out.println("Login Sucursal:" + sucursalSeleccionada);
             
             LoginRespuesta loginRespuesta = ServiceFactory.getFactory().getUsuarioServicioIf().login(nick, clave,empresaSeleccionada);
             
@@ -217,6 +215,13 @@ public class LoginMb implements Serializable {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+     @Override
+    public void postAddController() {
+        System.out.println("postAddController ...");
+        empresaSeleccionada=getControladorPlantilla().getEmpresaSeleccionada();
+        cargarSucursales(empresaSeleccionada); 
+    }
 
     public Sucursal getSucursalSeleccionada() {
         return sucursalSeleccionada;
@@ -233,5 +238,7 @@ public class LoginMb implements Serializable {
     public void setEmpresaSeleccionada(Empresa empresaSeleccionada) {
         this.empresaSeleccionada = empresaSeleccionada;
     }
+
+   
 
 }

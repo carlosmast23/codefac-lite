@@ -405,7 +405,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
     public void agregarProducto() {
 
         if (notaCreditoDetale.getCantidad().compareTo(BigDecimal.ZERO) <= 0) {
-            MensajeMb.mostrarMensajeDialogo("Error", "Porfavor ingrese un valor valido", FacesMessage.SEVERITY_WARN);
+            MensajeMb.mostrarMensajeDialogo("Error", "Por favor ingrese un valor valido", FacesMessage.SEVERITY_WARN);
             return;
         }
         //facturaDetalle.        

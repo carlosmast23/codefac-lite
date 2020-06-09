@@ -543,6 +543,19 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             }
         }
         
+        
+          /***
+         * Validar que tenga seleccionado un porcentaje de iva para continuar}
+         * TODO: Talvez este codigo debe ir en una sección de validaciones pero
+         * por el momento le dejo en esta parte
+         * @Author 
+         */
+        if(facturaDetalle.getIvaPorcentaje()==null)
+        {
+            mostrarMensaje(new CodefacMsj("Advertencia","El producto no tiene definido un porcentaje de Iva",DialogoCodefac.MENSAJE_ADVERTENCIA));
+            return false;
+        }
+        
         calcularTotalesDetalles(facturaDetalle);
         /**
          * ========> VALIDACION QUE EL VALOR UNITARIO MENOS DESCUENTO NO SEA NEGATIVO <=============
@@ -587,6 +600,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         {
             facturaDetalle.calcularValorIce(facturaDetalle.getIcePorcentaje());
         }
+        
+             
         facturaDetalle.calculaIva();
     }
     

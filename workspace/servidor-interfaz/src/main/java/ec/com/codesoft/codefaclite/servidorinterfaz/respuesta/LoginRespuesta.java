@@ -65,7 +65,7 @@ public class LoginRespuesta implements Serializable{
         /**
          * Estado cuando el usuario se encuentra inactivo en el sistem
          */
-        INACTIVO_USUARIO("Usuario Inactivo en el sistema , porfavor consulte con el administrador"),        
+        INACTIVO_USUARIO("Usuario Inactivo en el sistema , Por favor consulte con el administrador"),        
         /**
          * El usuario fue eliminando del sistema 
          */
@@ -77,7 +77,7 @@ public class LoginRespuesta implements Serializable{
         /**
          * Estado que representa que la licencia se debe actualizar 
          */
-        LICENCIA_DESACTUALIZADA("Existe un problema con la licencia, porfavor actualice su licencia"),
+        LICENCIA_DESACTUALIZADA("Existe un problema con la licencia, Por favor actualice su licencia"),
         /**
          * Estado que me permite informar que el sistema tiene valores pendientes de pago
          */
@@ -101,7 +101,7 @@ public class LoginRespuesta implements Serializable{
         /**
          * Mensaje cuando el sistema detecta pagos pendientes
          */
-        PAGOS_PENDIENTES("El sistema detecta valores pendientes de pago y no se puede abrir\n Porfavor cancele los valores pendientes para continuar con el servicio."),
+        PAGOS_PENDIENTES("El sistema detecta valores pendientes de pago y no se puede abrir\n Por favor cancele los valores pendientes para continuar con el servicio."),
         
         /**
          * Estado cuando sucede algun problema pero no esta clasificado
