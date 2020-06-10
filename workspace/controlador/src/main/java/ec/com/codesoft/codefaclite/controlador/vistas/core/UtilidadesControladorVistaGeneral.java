@@ -18,20 +18,24 @@ import java.util.logging.Logger;
  */
 public class UtilidadesControladorVistaGeneral {
     
-    public static void ejecutarAccionVista(VistaCodefacIf vista,EjecutarVistaIf ejecutarVistaIf)
+    public static void ejecutarAccionVista(VistaCodefacIf vista,EjecutarVistaIf ejecutarVistaIf) throws ExcepcionCodefacLite
     {
         if(vista==null)
             return;
         
         try {
+            
             ejecutarVistaIf.ejecutar();//Metodo que se ejecuta despues de construir el objeto
+            
         } catch (java.lang.UnsupportedOperationException uoe) {
             Logger.getLogger(UtilidadesControladorVistaGeneral.class.getName()).log(Level.SEVERE, null, uoe);
             System.err.println("Metodo no implementado");
+            
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(UtilidadesControladorVistaGeneral.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("Cancelado metodo iniciar");
-            return;
+            //System.err.println("Cancelado metodo iniciar");
+            throw ex;
+            
         } catch (RemoteException ex) {
             Logger.getLogger(UtilidadesControladorVistaGeneral.class.getName()).log(Level.SEVERE, null, ex);
             FuncionesSistemaCodefac.servidorConexionPerdida();

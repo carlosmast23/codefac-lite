@@ -1249,7 +1249,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      * Interfaz que permite ejecutar de forma generica el metodo iniciar de las vistas
      * @param vistaCodefacIf 
      */
-    private void ejecutarIniciar(VistaCodefacIf vistaCodefacIf)
+    private void ejecutarIniciar(VistaCodefacIf vistaCodefacIf) throws ExcepcionCodefacLite
     {
         UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
             @Override
@@ -1261,22 +1261,30 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void ejecutarNuevo(VistaCodefacIf vistaCodefacIf)
     {
-        UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
-            @Override
-            public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {
-                vistaCodefacIf.nuevo();
-            }
-        });
+        try {
+            UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
+                @Override
+                public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {
+                    vistaCodefacIf.nuevo();
+                }
+            });
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void ejecutarLimpiar(VistaCodefacIf vistaCodefacIf)
     {
-        UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
-            @Override
-            public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {
-                vistaCodefacIf.limpiar();
-            }
-        });
+        try {
+            UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
+                @Override
+                public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {
+                    vistaCodefacIf.limpiar();
+                }
+            });
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -1345,10 +1353,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.panelPadre=generalPanelModel;
             panel.session=sessionCodefac;
             
-            //Ejecuta la vista por defecto
-            ejecutarIniciar(panel);
-            //Ejecuta el iniciar del controlador general si existe 
-            ejecutarIniciar(getControladorTodoVista(panel));          
+            try {
+                //Ejecuta la vista por defecto
+                ejecutarIniciar(panel);
+                //Ejecuta el iniciar del controlador general si existe 
+                ejecutarIniciar(getControladorTodoVista(panel));          
+            } catch (ExcepcionCodefacLite ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                //Si ocurre un problema al momento de iniciar cancelo la apertura
+                return ;
+            }
+            
             setControladorAVista(panel,getControladorTodoVista(panel));
             
             //Agregar el listener que controla las acciones del formulario (cerrar, maximar)

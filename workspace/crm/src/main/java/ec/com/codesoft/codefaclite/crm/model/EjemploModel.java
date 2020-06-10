@@ -37,6 +37,15 @@ public class EjemploModel extends EjemploForm implements ControladorVistaIf{
                 System.out.println("Valor Combo Seleccionado="+controlador.getDatoSeleccionado());
             }
         });
+        
+        getBtnSalir().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("salir ...");
+                formularioActual.dispose();
+                
+            }
+        });
     }
 
     @Override

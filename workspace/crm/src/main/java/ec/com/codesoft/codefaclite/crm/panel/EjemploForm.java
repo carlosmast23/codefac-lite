@@ -40,6 +40,7 @@ public abstract class EjemploForm extends ControladorCodefacInterface {
         btnEjemplo = new javax.swing.JButton();
         cmbSino = new javax.swing.JComboBox<>();
         BtnPrueba = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -49,6 +50,8 @@ public abstract class EjemploForm extends ControladorCodefacInterface {
         btnEjemplo.setText("presionar");
 
         BtnPrueba.setText("BotonAuto");
+
+        btnSalir.setText("Salir");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -64,7 +67,9 @@ public abstract class EjemploForm extends ControladorCodefacInterface {
                         .addGroup(layout.createSequentialGroup()
                             .addGap(114, 114, 114)
                             .addComponent(btnEjemplo))))
-                .addContainerGap(179, Short.MAX_VALUE))
+                .addGap(39, 39, 39)
+                .addComponent(btnSalir)
+                .addContainerGap(87, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(BtnPrueba)
@@ -78,7 +83,9 @@ public abstract class EjemploForm extends ControladorCodefacInterface {
                 .addGap(18, 18, 18)
                 .addComponent(txtCampoTexto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(42, 42, 42)
-                .addComponent(btnEjemplo)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEjemplo)
+                    .addComponent(btnSalir))
                 .addGap(54, 54, 54)
                 .addComponent(cmbSino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(62, Short.MAX_VALUE))
@@ -91,6 +98,7 @@ public abstract class EjemploForm extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnPrueba;
     private javax.swing.JButton btnEjemplo;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<EnumSiNo> cmbSino;
     private javax.swing.JTextField txtCampoTexto;
     // End of variables declaration//GEN-END:variables
@@ -130,6 +138,11 @@ public abstract class EjemploForm extends ControladorCodefacInterface {
         this.BtnPrueba = BtnPrueba;
     }
 
+    public JButton getBtnSalir() {
+        return btnSalir;
+    }
+
+    
     
     
     

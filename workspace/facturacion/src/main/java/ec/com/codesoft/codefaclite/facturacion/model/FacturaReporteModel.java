@@ -36,6 +36,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.*;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -468,6 +469,20 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getCmbDocumento().addItem(DocumentoEnum.NOTA_VENTA_INTERNA);
         getCmbDocumento().addItem(DocumentoEnum.NOTA_VENTA);
         getCmbDocumento().addItem(DocumentoEnum.NOTA_CREDITO);
+        
+        /**
+         * Seleccionar el documento por defecto configurado para facturar
+         */
+        try {
+            DocumentoEnum documentoEnum=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(),ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA,DocumentoEnum.FACTURA);
+            if(documentoEnum!=null)
+            {
+                getCmbDocumento().setSelectedItem(documentoEnum);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     protected void listenerBotones() {
