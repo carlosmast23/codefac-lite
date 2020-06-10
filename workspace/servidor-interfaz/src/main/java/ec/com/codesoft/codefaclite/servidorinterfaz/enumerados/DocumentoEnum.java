@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * TODO: Ver si aumentar un campo para saber cuales son documentos legales del Sri y cuales son documentos internos para otros procesos
  * @author Carlos
  */
-public enum DocumentoEnum {
+public enum DocumentoEnum implements ParametroUtilidades.ComparadorInterface{
 
     LIQUIDACION_COMPRA("Liquidación Compra",
             "LDC",
@@ -396,6 +397,11 @@ public enum DocumentoEnum {
             }
         }
         return null;
+    }
+
+    @Override
+    public Object consultarParametro(String nombreParametro) {
+        return obtenerDocumentoPorCodigo(nombreParametro);
     }
     
     /**

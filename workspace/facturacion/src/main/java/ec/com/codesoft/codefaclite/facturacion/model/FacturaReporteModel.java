@@ -383,7 +383,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     @Override
     public void nuevo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -464,8 +464,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
     {
         //Agregar la lista de los elementos disponibles para buscar
         getCmbDocumento().removeAllItems();
-        getCmbDocumento().addItem(DocumentoEnum.FACTURA);
+        getCmbDocumento().addItem(DocumentoEnum.FACTURA);        
         getCmbDocumento().addItem(DocumentoEnum.NOTA_VENTA_INTERNA);
+        getCmbDocumento().addItem(DocumentoEnum.NOTA_VENTA);
         getCmbDocumento().addItem(DocumentoEnum.NOTA_CREDITO);
     }
 

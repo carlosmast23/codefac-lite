@@ -33,6 +33,8 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
+Source: "prerequisitos/jre-8u251-windows-x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+
 Source: "recursos/codefac.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "recursos/icono_codefac.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "jar/codefac.jar"; DestDir: "{app}"; Flags: ignoreversion
@@ -44,5 +46,7 @@ Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}";IconFilename: "{app}\icono_codefac.ico"; Tasks: desktopicon
 
 [Run]
+Filename: "{tmp}\jre-8u251-windows-x64.exe"; StatusMsg: Installing JRE 8...
+
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: shellexec postinstall skipifsilent
 

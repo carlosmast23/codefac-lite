@@ -80,6 +80,8 @@ public abstract class ParametroUtilidades {
     
     /**
      * Mejorar este tema para poder retorar por plantilla el tipo de objeto directo
+     * TODO: Cambiar que reenviae la excepcion Remote Excepcion , deberia validar en este mismo metodo
+     * porque genera mucho codigo basura en las clases que lo usan
      * @param <T>
      * @param empresa
      * @param nombreParametro

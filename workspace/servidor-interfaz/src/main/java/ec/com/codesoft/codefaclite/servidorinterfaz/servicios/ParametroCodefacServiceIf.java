@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.Remote;
 import java.util.List;
 import java.util.Map;
@@ -33,4 +34,8 @@ public interface ParametroCodefacServiceIf extends ServiceAbstractIf<ParametroCo
     //public ParametroCodefac grabar(ParametroCodefac parametro) throws java.rmi.RemoteException;
     
     public List<ParametroCodefac> buscarParametrosPorMap(Map<String,Object> map) throws java.rmi.RemoteException;
+    
+    public void grabarOEditar(ParametroCodefac parametro) throws java.rmi.RemoteException,ServicioCodefacException;
+    
+    public void grabarOEditar(Empresa empresa,String parametroNombre,String valor) throws java.rmi.RemoteException,ServicioCodefacException;
 }

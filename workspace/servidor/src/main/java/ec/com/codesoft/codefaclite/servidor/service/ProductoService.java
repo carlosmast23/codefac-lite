@@ -92,25 +92,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         {
             throw new ServicioCodefacException("El valor unitario del producto no puede ser menor que cero");
         }
-        
-        /**
-         * =================================================================
-         *          VALIDAR QUE NO EXITAN PRODUCTOS DUPLICADOS
-         * =================================================================
-         */
-        Producto productoDuplicado=this.buscarProductoActivoPorCodigo(p.getCodigoPersonalizado(),p.getEmpresa());
-        if(estadoEnum.equals(CrudEnum.CREAR))
-        {            
-            if(productoDuplicado!=null)
-            {
-                throw new ServicioCodefacException("Ya existe un producto ingresado con el mismo código principal");
-            }
-        }else if(estadoEnum.equals(CrudEnum.EDITAR))
-        {
-            //TODO: Pensar en alguna validacion para no pueda editar un producto con un codigo que ya existe y generar problemas
-            //TODO: Queda pendiente en buscar la solución
-        }
-        
+                
         if(p.getCatalogoProducto()==null)
         {
             throw new ServicioCodefacException("No se puede grabar el producto sin un catalago de producto");
@@ -120,6 +102,30 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         {
             throw new ServicioCodefacException("No se puede grabar el producto sin especificar un porcentaje de Iva");
         }
+        
+        
+        /**
+         * TODO: Ver si este tipo de validacion se puede convertir en algo estandar para todos lo servicios
+         * =================================================================
+         *          VALIDAR QUE NO EXITAN PRODUCTOS DUPLICADOS
+         * =================================================================
+         */
+        if(estadoEnum.equals(CrudEnum.EDITAR))
+        {
+            Producto productoTmp=getFacade().find(p.getIdProducto());
+            if(productoTmp.getCodigoPersonalizado().equals(p.getCodigoPersonalizado()))
+            {
+                return ;
+            }
+        }
+        
+        Producto productoDuplicado=this.buscarProductoActivoPorCodigo(p.getCodigoPersonalizado(),p.getEmpresa());
+
+        if (productoDuplicado != null) {
+            throw new ServicioCodefacException("Ya existe un producto ingresado con el mismo código principal");
+        }
+
+        
     }
     
     public void editarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException

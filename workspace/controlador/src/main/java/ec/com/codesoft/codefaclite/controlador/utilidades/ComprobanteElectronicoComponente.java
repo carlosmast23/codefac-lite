@@ -35,24 +35,22 @@ import javax.swing.JLabel;
  * @author Carlos
  */
 public class ComprobanteElectronicoComponente {
-    
-    public static void eliminarComprobante(GeneralPanelInterface panel,ComprobanteEntity comprobante,JLabel labelEstado) throws ExcepcionCodefacLite
-    {
+
+    public static void eliminarComprobante(GeneralPanelInterface panel, ComprobanteEntity comprobante, JLabel labelEstado) throws ExcepcionCodefacLite {
         //TODO: Mejorar esta parte porque puede ser que se quiera cambiar entre estos tipos anulaciones pero por ahora no
         //Validacion para no eliminar facturas que estan anuladas en el Sri o eliminadas
-        if(comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado()) || comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()))
-        {
-            DialogoCodefac.mensaje("Advertencia","No se puede eliminar el comprobante porque ya esta eliminado o anulado",DialogoCodefac.MENSAJE_INCORRECTO);
+        if (comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado()) || comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado())) {
+            DialogoCodefac.mensaje("Advertencia", "No se puede eliminar el comprobante porque ya esta eliminado o anulado", DialogoCodefac.MENSAJE_INCORRECTO);
             return;
-            
+
         }
-        
+
         //Varible 
         boolean respuesta = false;
-        
+
         //Variable temporal cuando aun no se autoriza y el usuario quiere eliminar como si fuera desde el SRI
         //TODO: Ver como se puede modificar para mejorar esta parte
-        boolean eliminarComoAutorizado=false;
+        boolean eliminarComoAutorizado = false;
 
         //Eliminar solo si esta en modo editar
         if (panel.estadoFormulario.equals(panel.ESTADO_EDITAR)) {
@@ -60,98 +58,88 @@ public class ComprobanteElectronicoComponente {
 
                 //Eliminar solo si el estado esta en sin autorizar, o esta en el modo de facturacion normal y esta con estado facturado
                 if (comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado())
-                        || (comprobante.getTipoFacturacion().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()) && comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado()))) 
-                {
-                    String [] opciones={"Eliminar internamente","Eliminado desde el Sri"};
-                    int opcionSeleccionada=DialogoCodefac.dialogoPreguntaPersonalizada("Advertencia","Selecciona la opción para eliminar el comprobante : ",DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
-                    
-                    if(opcionSeleccionada==1)
-                    {
-                        eliminarComoAutorizado=true;
+                        || (comprobante.getTipoFacturacion().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()) && comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado()))) {
+                    String[] opciones = {"Eliminar internamente", "Eliminado desde el Sri"};
+                    int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Advertencia", "Selecciona la opción para eliminar el comprobante : ", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
+
+                    if (opcionSeleccionada == 1) {
+                        eliminarComoAutorizado = true;
                     }
-                    
-                    
+
                     respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar el comprobante electrónico? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                } 
-                else 
-                {
+                } else {
                     respuesta = DialogoCodefac.dialogoPregunta("Alerta", "El comprobante electrónico se encuentra autorizada en el SRI , \nPor favor elimine  solo si tambien esta anulado en el SRI\nDesea eliminar de todos modos?", DialogoCodefac.MENSAJE_INCORRECTO);
                 }
 
                 //Eliminar la factura si eligen la respuesta si
                 if (respuesta) {
                     try {
-                        
-                        switch(comprobante.getCodigoDocumentoEnum())
-                        {
+
+                        switch (comprobante.getCodigoDocumentoEnum()) {
+                            case NOTA_VENTA:
                             case FACTURA:
                                 ServiceFactory.getFactory().getFacturacionServiceIf().eliminarFactura((Factura) comprobante);
                                 break;
-                                
+
                             case RETENCIONES:
-                                ServiceFactory.getFactory().getRetencionServiceIf().eliminar((Retencion)comprobante);
+                                ServiceFactory.getFactory().getRetencionServiceIf().eliminar((Retencion) comprobante);
                                 break;
-                                
+
                             case GUIA_REMISION:
                                 ServiceFactory.getFactory().getGuiaRemisionServiceIf().eliminar((GuiaRemision) comprobante);
                                 break;
-                                
+
                             case NOTA_CREDITO:
-                                ServiceFactory.getFactory().getNotaCreditoServiceIf().eliminar((NotaCredito)comprobante);
-                                break;                                
+                                ServiceFactory.getFactory().getNotaCreditoServiceIf().eliminar((NotaCredito) comprobante);
+                                break;
+                                
                         }
-                        
+
                         //ServiceFactory.getFactory().getComprobanteServiceIf().eliminarComprobante(comprobante);
                         DialogoCodefac.mensaje("Exitoso", "El comprobante electrónico se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-                        
+
                         /// Opcion para tambien eliminar el comprobante fisico
-                        if (comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado()))
-                        {
-                            Boolean respuestaEliminar=DialogoCodefac.dialogoPregunta("Exitoso","Desea eliminar también el comprobante físico?",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                            if(respuestaEliminar)
-                            {
+                        if (comprobante.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado())) {
+                            Boolean respuestaEliminar = DialogoCodefac.dialogoPregunta("Exitoso", "Desea eliminar también el comprobante físico?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                            if (respuestaEliminar) {
                                 ServiceFactory.getFactory().getComprobanteServiceIf().eliminarComprobanteFisico(comprobante.getClaveAcceso());
                                 DialogoCodefac.mensaje("Exitoso", "El comprobante electrónico se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                                 panel.panelPadre.actualizarNotificacionesCodefac();
                             }
                         }
-                        
+
                         //TODO: Mejorar esta parte
                         if (eliminarComoAutorizado) {
                             comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
                             ServiceFactory.getFactory().getComprobanteServiceIf().editar(comprobante);
                         }
-                        
-                        
-                        if(labelEstado!=null)
-                        {
+
+                        if (labelEstado != null) {
                             labelEstado.setText(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre());
                         }
                     } catch (RemoteException ex) {
                         Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
-                        DialogoCodefac.mensaje("Error al eliminar",ex.getMessage(),DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        DialogoCodefac.mensaje("Error al eliminar", ex.getMessage(), DialogoCodefac.MENSAJE_ADVERTENCIA);
                     }
                 }
             }
         } else {
             throw new ExcepcionCodefacLite("Cancelar evento eliminar porque no esta en modo editar");
         }
-    
+
     }
-    
-    public static void cargarSecuencialConsulta(ComprobanteEntity comprobante,JComboBox<PuntoEmision> cmbPuntoEmision,JLabel lblEstablecimiento,JLabel lblSecuencial )
-    {        
-        
-        try {        
-            PuntoEmision puntoEmision=ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerPorCodigo(Integer.valueOf(comprobante.getPuntoEmision()),comprobante.getSucursalEmpresa());
-            
-            
-            cmbPuntoEmision.setSelectedItem((PuntoEmision)puntoEmision); //TODO: Analizar para todos los casos porque aveces no me va a permitir cargagar cuando pertenece a otra sucursal
+
+    public static void cargarSecuencialConsulta(ComprobanteEntity comprobante, JComboBox<PuntoEmision> cmbPuntoEmision, JLabel lblEstablecimiento, JLabel lblSecuencial) {
+
+        try {
+            PuntoEmision puntoEmision = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerPorCodigo(Integer.valueOf(comprobante.getPuntoEmision()), comprobante.getSucursalEmpresa());
+
+            cmbPuntoEmision.setSelectedItem((PuntoEmision) puntoEmision); //TODO: Analizar para todos los casos porque aveces no me va a permitir cargagar cuando pertenece a otra sucursal
         } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex); 
-            PuntoEmision puntoEmisionTmp=new PuntoEmision();
+            Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
+            PuntoEmision puntoEmisionTmp = new PuntoEmision();
             puntoEmisionTmp.setPuntoEmision(Integer.valueOf(comprobante.getPuntoEmision()));
             cmbPuntoEmision.addItem(puntoEmisionTmp); //TODO: Revisar que salga bien
         } catch (RemoteException ex) {
@@ -159,30 +147,25 @@ public class ComprobanteElectronicoComponente {
         }
         lblEstablecimiento.setText(ComprobantesUtilidades.formatoEstablecimiento(comprobante.getPuntoEstablecimiento().toString()));
         lblSecuencial.setText(ComprobantesUtilidades.formatoSecuencial(comprobante.getSecuencial().toString()));
-        
+
     }
-    
-    
-    public static void cargarSecuencial(Usuario usuario,DocumentoEnum documentoEnum, Sucursal sucursal,JComboBox<PuntoEmision> cmbPuntoEmision,JLabel lblEstablecimiento,JLabel lblSecuencial)
-    {
-        int indiceSeleccionado=cmbPuntoEmision.getSelectedIndex();
+
+    public static void cargarSecuencial(Usuario usuario, DocumentoEnum documentoEnum, Sucursal sucursal, JComboBox<PuntoEmision> cmbPuntoEmision, JLabel lblEstablecimiento, JLabel lblSecuencial) {
+        int indiceSeleccionado = cmbPuntoEmision.getSelectedIndex();
         //Cargar Puntos de Venta disponibles para la sucursal
 
         try {
-            List<PuntoEmisionUsuario> puntosEmisionUsuario=ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(usuario,sucursal);
+            List<PuntoEmisionUsuario> puntosEmisionUsuario = ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(usuario, sucursal);
             //List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sucursal);
             cmbPuntoEmision.removeAllItems();
             //Canfigurar un cell render para las sucursales
             //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
 
-            if(puntosEmisionUsuario!=null)
-            {
+            if (puntosEmisionUsuario != null) {
                 for (PuntoEmisionUsuario puntoUsuario : puntosEmisionUsuario) {
                     //Cargar solo los puntos de emision que estan relacionados con la sucursal
-                    if(puntoUsuario.getPuntoEmision().getSucursal()!=null)
-                    {
-                        if(puntoUsuario.getPuntoEmision().getSucursal().equals(sucursal))
-                        {
+                    if (puntoUsuario.getPuntoEmision().getSucursal() != null) {
+                        if (puntoUsuario.getPuntoEmision().getSucursal().equals(sucursal)) {
                             cmbPuntoEmision.addItem(puntoUsuario.getPuntoEmision());
                         }
                     }
@@ -194,60 +177,56 @@ public class ComprobanteElectronicoComponente {
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        if(indiceSeleccionado<0 && cmbPuntoEmision.getModel().getSize()>0 )
-        {
+
+        if (indiceSeleccionado < 0 && cmbPuntoEmision.getModel().getSize() > 0) {
             cmbPuntoEmision.setSelectedIndex(0); // Seleccionar el primero registro la primera vez
-        }
-        else
-        {
-            System.out.println("Cantidad Items: "+cmbPuntoEmision.getModel().getSize());
-            System.out.println("Item a seleccionar: "+indiceSeleccionado);
-            
-            if(cmbPuntoEmision.getModel().getSize()>0) //Solo seleccionar un indice cuanto tiene contenido
+        } else {
+            System.out.println("Cantidad Items: " + cmbPuntoEmision.getModel().getSize());
+            System.out.println("Item a seleccionar: " + indiceSeleccionado);
+
+            if (cmbPuntoEmision.getModel().getSize() > 0) //Solo seleccionar un indice cuanto tiene contenido
             {
                 cmbPuntoEmision.setSelectedIndex(indiceSeleccionado);
             }
         }
-        
-        
-        lblEstablecimiento.setText(sucursal.getCodigoSucursalFormatoTexto()+"-");
-        PuntoEmision puntoEmision=(PuntoEmision) cmbPuntoEmision.getSelectedItem();
-        if(puntoEmision!=null)
-        {
-            Integer secuencial=-1; 
-            switch(documentoEnum)
-            {
+
+        lblEstablecimiento.setText(sucursal.getCodigoSucursalFormatoTexto() + "-");
+        PuntoEmision puntoEmision = (PuntoEmision) cmbPuntoEmision.getSelectedItem();
+        if (puntoEmision != null) {
+            Integer secuencial = -1;
+            switch (documentoEnum) {
                 case RETENCIONES:
-                    secuencial=puntoEmision.getSecuencialRetenciones();
+                    secuencial = puntoEmision.getSecuencialRetenciones();
                     break;
-                    
+
                 case FACTURA:
-                    secuencial=puntoEmision.getSecuencialFactura();
+                    secuencial = puntoEmision.getSecuencialFactura();
                     break;
-                    
+
                 case NOTA_VENTA_INTERNA:
-                    secuencial=puntoEmision.getSecuencialNotaVentaInterna();
+                    secuencial = puntoEmision.getSecuencialNotaVentaInterna();
                     break;
-                
-                    
+
                 case GUIA_REMISION:
-                    secuencial=puntoEmision.getSecuencialGuiaRemision();
+                    secuencial = puntoEmision.getSecuencialGuiaRemision();
                     break;
-                    
+
                 case NOTA_CREDITO:
-                    secuencial=puntoEmision.getSecuencialNotaCredito();
-                    break;                    
-                
+                    secuencial = puntoEmision.getSecuencialNotaCredito();
+                    break;
+
                 case LIQUIDACION_COMPRA:
-                    secuencial=puntoEmision.getSecuencialLiquidacionCompra();
+                    secuencial = puntoEmision.getSecuencialLiquidacionCompra();
+                    break;
+
+                case NOTA_VENTA:
+                    secuencial = puntoEmision.getSecuencialNotaVenta();
                     break;
                 /*case NOTA_DEBITO:
                     secuencial=puntoEmision.getSecuencialNotaDebito();
                     break;*/
             }
-            lblSecuencial.setText("-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(), 8, "0"));
+            lblSecuencial.setText("-" + UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(), 8, "0"));
         }
     }
 }

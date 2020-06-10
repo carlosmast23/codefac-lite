@@ -8,10 +8,12 @@ package ec.com.codesoft.codefaclite.controlador.vista.factura;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.ControladorCampoTextoAnot;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesReflexion;
 
 
 /**
- *
+ *TODO: Hacer un metodo generico que me permita saber el estado si creando o editando
  * @author CARLOS_CODESOFT
  */
 public abstract class ModelControladorAbstract <T>
@@ -25,6 +27,8 @@ public abstract class ModelControladorAbstract <T>
     protected SessionCodefacInterface session;
     
     protected T interfaz;
+    
+    
 
     public ModelControladorAbstract(MensajeVistaInterface mensajeVista) {
         this.mensajeVista = mensajeVista;
@@ -58,8 +62,27 @@ public abstract class ModelControladorAbstract <T>
     }
     
     /**
-     * Enum que me permite clasificar con que vista estoy trabajando especialmente util para poder mostrar los mensajes
+     * Metodo que me permite funcionar de medio de comunicación para activar los listener de la pantalla
+     * @param value 
      */
+    public void setProperty(Object value,Object newValue)
+    {
+        if(value instanceof ControladorCampoTextoAnot)
+        {
+            value=newValue;
+            //Avisar al componente que sucedio una modificación en los datos
+            UtilidadesReflexion.ejecutarAnotacionEnPropiedades(Class.class,ControladorCampoTextoAnot.class,new UtilidadesReflexion.AnotacionIf<ControladorCampoTextoAnot>() {
+                @Override
+                public void ejecutar(ControladorCampoTextoAnot anotacion) {
+                    
+                }
+            });
+        }
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Enum que me permite clasificar con que vista estoy trabajando especialmente util para poder mostrar los mensajes
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public enum TipoVista
     {
         ESCRITORIO,

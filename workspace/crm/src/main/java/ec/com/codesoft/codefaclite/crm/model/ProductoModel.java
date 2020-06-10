@@ -99,6 +99,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Datos correctos", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         }
     }
 

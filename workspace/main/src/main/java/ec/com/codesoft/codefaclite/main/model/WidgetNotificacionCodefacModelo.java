@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse.TipoAdvertenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -47,7 +48,7 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
         getLblNotificaciones().setText(TITULO_PAGINA);
         this.empresa=empresa;
         listenerBotones();
-        actualizarNotificaciones();
+        actualizarNotificaciones(ModoProcesarEnum.NORMAL);
         
     }
 
@@ -55,9 +56,9 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
     @Override
     public JPanel getPanelMovimiento() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    public void actualizarNotificaciones() {
+    }    
+   
+    public void actualizarNotificaciones(ModoProcesarEnum modoEnum) {
         //Eejcutar proceso de notrificaciones en segundo plano
         limpiarDatos();
         getLblNotificaciones().setText(TITULO_PAGINA+ " [ Cargando ... ]");
@@ -89,7 +90,7 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
                     definirFormatoTabla();
                     
                     //cargar datos lentos
-                    List<AlertaResponse> alertasLentas = ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaLenta(empresa);
+                    List<AlertaResponse> alertasLentas = ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaLenta(empresa,modoEnum);
                     UtilidadesTablas.llenarTablasDatos(
                             getTblNotificaciones(),
                             alertasLentas, 
@@ -161,7 +162,7 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
         getBtnActualizarNotificaciones().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                actualizarNotificaciones();
+                actualizarNotificaciones(ModoProcesarEnum.FORZADO);
             }
         });
     }

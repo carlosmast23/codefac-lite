@@ -12,9 +12,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AlertaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
@@ -30,8 +30,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 
@@ -54,10 +52,10 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         return alertas;        
     }
     
-    public List<AlertaResponse> actualizarNotificacionesCargaLenta(Empresa empresa) throws RemoteException,ServicioCodefacException
+    public List<AlertaResponse> actualizarNotificacionesCargaLenta(Empresa empresa,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException
     {
         List<AlertaResponse> alertas=new ArrayList<AlertaResponse>();
-        alertas.add(verificarProblemasCorreo(empresa));
+        alertas.add(verificarProblemasCorreo(empresa,modoEnum));
         alertas.add(verificarConexionSri(empresa));
         
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
@@ -65,17 +63,35 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         return alertas;  
     }
     
-    public List<AlertaResponse> actualizarNotificaciones(Empresa empresa) throws RemoteException,ServicioCodefacException
+    public List<AlertaResponse> actualizarNotificaciones(Empresa empresa,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException
     {
         List<AlertaResponse> alertas=new ArrayList<AlertaResponse>();
         alertas.addAll(actualizarNotificacionesCargaRapida(empresa));
-        alertas.addAll(actualizarNotificacionesCargaLenta(empresa)); 
+        alertas.addAll(actualizarNotificacionesCargaLenta(empresa,modoEnum)); 
         
         return alertas;        
     }
     
-    private AlertaResponse verificarProblemasCorreo(Empresa empresa) throws RemoteException,ServicioCodefacException
+    private AlertaResponse verificarProblemasCorreo(Empresa empresa,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException
     {
+        ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.FECHA_VALIDACION_CORREO);
+        // Si el tipo de proceso es normal verifico que paso un día para volver a verificar el correo
+        if(modoEnum.equals(ModoProcesarEnum.NORMAL))
+        {
+            String fechaStr=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.FECHA_VALIDACION_CORREO);
+            if(fechaStr!=null && !fechaStr.isEmpty())
+            {
+                java.util.Date fechaUltimaVerificacion= UtilidadesFecha.castStringToDate(fechaStr,ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA);
+                int diasDiferencia=UtilidadesFecha.obtenerDistanciaConLaFechaActual(fechaUltimaVerificacion);
+                //Si la fecha corresponde al mismo día no hago el resto de la validación
+                if(diasDiferencia==0)
+                {
+                    return null;
+                }
+
+            }
+        }
+         
         String correo=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.CORREO_USUARIO);
         String clave=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.CORREO_CLAVE);
         String host=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.SMTP_HOST);
@@ -101,16 +117,18 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         PropiedadCorreo propiedadCorreo=new PropiedadCorreo(host, Integer.valueOf(puerto));
         
         
-        final String textoVerificacion="Mensaje de comprobación del sistema codefac, por favor no responder este correo";
+        final String textoVerificacion="Mensaje de comprobación del sistema codefac para verificar que esta sincronizado con su correo, por favor no responder este correo";
         try {
             List<String> correos = new ArrayList<String>();
-            correos.add(correo);
+            correos.add(ParametrosSistemaCodefac.CORREO_COMPROBACION_CORREOS);
             CorreoElectronico correoElectronico = new CorreoElectronico(correo, new String(clave),textoVerificacion, correos, "Validación Correo Codefac",propiedadCorreo);
             correoElectronico.sendMail();
-            //TODO: Verificar si se va a dar uso de esta funcionalidad
-            //TODO: Agregar una variable para la informacion del consumidor final
-            //configurarCorreoDeConsumidorFinal();
-            //DialogoCodefac.mensaje("Exito","El correo y la clave son correctos",DialogoCodefac.MENSAJE_CORRECTO);
+            //Grabar la fecha de la ultima validación correcta del correo
+            ServiceFactory.getFactory().getParametroCodefacServiceIf().grabarOEditar(
+                    empresa,
+                    ParametroCodefac.FECHA_VALIDACION_CORREO,
+                    UtilidadesFecha.formatDate(UtilidadesFecha.hoy(),ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA));
+            
         } catch (AuthenticationFailedException ex) {
             ex.printStackTrace();
             alertaRespuesta.descripcion="Las credenciales de su correo son incorrectas";

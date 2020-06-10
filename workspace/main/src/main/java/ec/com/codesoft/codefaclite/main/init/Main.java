@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecun
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
 import ec.com.codesoft.codefaclite.controlador.logs.LogControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
+import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio.TipoClienteSwingEnum;
 import ec.com.codesoft.codefaclite.main.actualizacion.ActualizacionSistemaUtil;
 import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
@@ -404,6 +405,12 @@ public class Main {
             try {
                 modoAplicativo = dialogAplicativo.getModo();
                 propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO, modoAplicativo + "");
+                if(dialogAplicativo.versionPrueba)
+                {
+                    propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR,ParametrosSistemaCodefac.IP_SERVIDOR_PRUEBA);
+                    propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE,TipoClienteSwingEnum.REMOTO.getNombre());
+                }   
+                
                 ArchivoConfiguracionesCodefac.getInstance().guardar();
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

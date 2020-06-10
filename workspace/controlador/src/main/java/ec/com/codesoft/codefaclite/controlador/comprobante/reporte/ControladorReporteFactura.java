@@ -158,6 +158,7 @@ public class ControladorReporteFactura {
             data = new ArrayList<ReporteFacturaData>();
             
             switch (documentoConsultaEnum) {
+                case NOTA_VENTA:
                 case LIQUIDACION_COMPRA:
                 case NOTA_VENTA_INTERNA:
                 case FACTURA:

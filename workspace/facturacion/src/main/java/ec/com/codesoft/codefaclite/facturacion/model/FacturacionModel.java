@@ -172,6 +172,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ItemEvent;
@@ -2690,11 +2691,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Buscar todos los documentos permitidos para facturar
         List<DocumentoEnum> tiposDocumento=controlador.buscarDocumentosFactura();
         
-        getCmbDocumento().removeAllItems();
-        for (DocumentoEnum tipoDocumentoEnum : tiposDocumento) {
-            getCmbDocumento().addItem(tipoDocumentoEnum);
+        UtilidadesComboBox.llenarComboBox(getCmbDocumento(),tiposDocumento);
+        //Setear valores por defecto
+        //TODO: Esta logica esta de unificar con la pantalla web
+        try {            
+            DocumentoEnum documentoSeleccionado=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(),ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA,DocumentoEnum.PROFORMA);
+            if(documentoSeleccionado!=null)
+            {
+                getCmbDocumento().setSelectedItem(documentoSeleccionado);
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         
         //Agregar los tipos de documentos disponibles
         getCmbTipoDocumento().removeAllItems();
