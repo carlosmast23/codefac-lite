@@ -607,6 +607,7 @@ public class ControladorReporteFactura {
         
        if(
                documentoConsultaEnum.equals(documentoConsultaEnum.FACTURA) || 
+               documentoConsultaEnum.equals(documentoConsultaEnum.NOTA_VENTA) || 
                documentoConsultaEnum.equals(documentoConsultaEnum.NOTA_VENTA_INTERNA) ||
                documentoConsultaEnum.equals(documentoConsultaEnum.LIQUIDACION_COMPRA))
        {
