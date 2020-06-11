@@ -1373,8 +1373,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //          CARGAR EL TITULO DE LA PANTALLA
             ////////////////////////////////////////////////////////////////////
             //String tituloOriginal=getTituloOriginal(panel.getTitle());
+            
+            //Por defecto intenta cargar los nombres declarados en el archivo que tiene las ventanas
             VentanaEnum ventanaEnum=VentanaEnum.getByClass(panel.getClass());
-            String tituloOriginal=ventanaEnum.getNombre();
+            String tituloOriginal="";
+            if(ventanaEnum!=null)
+            {
+                tituloOriginal=ventanaEnum.getNombre();
+            }
+            else //Si por algun motivo no logra cargar del archivo de vista obtiene el archivo de su propiedad de nombres
+            {
+                tituloOriginal=getTituloOriginal(panel.getTitle());
+            }
+            
             panel.setTitle(tituloOriginal+" [Nuevo]");
             try
             {
