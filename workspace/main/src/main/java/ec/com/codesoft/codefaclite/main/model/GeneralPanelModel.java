@@ -1287,17 +1287,37 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }
     
-    /**
-     * Metodo que permite establecer todos los cambios de variables de propiedades del controlador a las vistas
-     */
-    private void setControladorAVista(ControladorCodefacInterface panel,VistaCodefacIf controlador)
+    private void addbindingVista(VistaCodefacIf vista,VistaCodefacIf controlador)
     {
+        //Obtiene un mapa , con todos los compontBinding y sus implementaciones para buscar
+        for (Map.Entry<Class,ComponentBindingAbstract> entry : RoutingComponentBinding.routingMap.entrySet()) {
+            Class claseBindingControlador = entry.getKey();
+            ComponentBindingAbstract implementacion = entry.getValue();
+            
+            List<ResponseAnotacionMetodo> anotaciones=UtilidadesReflexion.buscarAnotacionEnMetodos(vista.getClass(),claseBindingControlador);
+            
+            for (ResponseAnotacionMetodo<TextFieldBinding> anotacion : anotaciones) {
+                implementacion.init(vista, controlador, anotacion);
+                implementacion.ejecutar();
+            }
+            
+        }
+    }
+    
+    /**
+     * Metodo que permite establecer todos los Bindings para manejar la arquitectura de software MMVC
+     */
+    private void setBindingVista(ControladorCodefacInterface panel,VistaCodefacIf controlador)
+    {
+        addbindingVista(panel, panel);        
         //validar que existe un controlador generals
         if(controlador==null)
             return;
         
+        addbindingVista(panel, controlador);
+        
         //Obtiene un mapa , con todos los compontBinding y sus implementaciones para buscar
-        for (Map.Entry<Class,ComponentBindingAbstract> entry : RoutingComponentBinding.routingMap.entrySet()) {
+        /*for (Map.Entry<Class,ComponentBindingAbstract> entry : RoutingComponentBinding.routingMap.entrySet()) {
             Class claseBindingControlador = entry.getKey();
             ComponentBindingAbstract implementacion = entry.getValue();
             
@@ -1308,7 +1328,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 implementacion.ejecutar();
             }
             
-        }
+        }*/
         
         
         /*List<ResponseAnotacionMetodo<TextFieldBinding>> anotaciones=UtilidadesReflexion.buscarAnotacionEnMetodos(panel.getClass(),TextFieldBinding.class);
@@ -1364,7 +1384,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 return ;
             }
             
-            setControladorAVista(panel,getControladorTodoVista(panel));
+            //================================================================//
+            //             AGREGAR EL CONTROLADO PARA MANEJAR EL MVVC
+            //================================================================//
+            setBindingVista(panel,getControladorTodoVista(panel));
             
             //Agregar el listener que controla las acciones del formulario (cerrar, maximar)
             panel.addInternalFrameListener(listenerFrame);

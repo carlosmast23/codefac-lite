@@ -50,7 +50,7 @@ public abstract class ComponentBindingAbstract<T,A> {
      */
     //public List<String> listaListenersCache=new ArrayList<String>();
     
-    public void init(ControladorCodefacInterface panel,VistaCodefacIf controlador,UtilidadesReflexion.ResponseAnotacionMetodo anotacion)
+    public void init(VistaCodefacIf panel,VistaCodefacIf controlador,UtilidadesReflexion.ResponseAnotacionMetodo anotacion)
     {
         //Obtengo el componente de la vista
         componenteVista=UtilidadesReflexion.obtenerValorDelMetodo(anotacion.metodo,panel,getClassComponente());  

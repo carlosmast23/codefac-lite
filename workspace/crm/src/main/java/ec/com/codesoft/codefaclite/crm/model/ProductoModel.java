@@ -39,6 +39,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ProductoModel extends ProductoForm implements DialogInterfacePanel<Producto> , InterfazPostConstructPanel,ProductoModelControladorInterface {
 
+    private List<EnumSiNo> imprimirCodigoBarrasList;
+    private EnumSiNo imprimirBarrasSeleccionado;
+        
+    /////////////////////////////////////////////
     private Producto producto;
     private Impuesto impuesto;
     private CategoriaProducto catProducto;
@@ -154,8 +159,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setManejarInventario(enumSiNo.getLetra());
         
         //Setear la opcion de si desea generar el codigo de barras
-        enumSiNo=(EnumSiNo) getCmbGenerarCodigoBarras().getSelectedItem();        
-        producto.setGenerarCodigoBarras(enumSiNo);
+        //enumSiNo=(EnumSiNo) getCmbGenerarCodigoBarras().getSelectedItem();        
+        producto.setGenerarCodigoBarras(imprimirBarrasSeleccionado);
         
         enumSiNo=enumSiNo.getEnumByBoolean(getChkTransportarGuiaRemision().isSelected());        
         producto.setTransportarEnGuiaRemisionEnum(enumSiNo);
@@ -289,7 +294,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         //Cargar si desea generar el codigo de los productos
         String letraGenerarCodBarras=(producto.getGenerarCodigoBarras()!=null)?producto.getGenerarCodigoBarras():EnumSiNo.NO.getLetra();        
         EnumSiNo enumGenerarCodigoBarras=EnumSiNo.getEnumByLetra(letraGenerarCodBarras);        
-        getCmbGenerarCodigoBarras().setSelectedItem(enumGenerarCodigoBarras);
+        imprimirBarrasSeleccionado=enumGenerarCodigoBarras;
+        //getCmbGenerarCodigoBarras().setSelectedItem(enumGenerarCodigoBarras);
+        
         
         getChkTransportarGuiaRemision().setSelected(producto.getTransportarEnGuiaRemisionEnum().getBool());
         getChkOcultarDetalleVenta().setSelected(producto.getOcultarDetalleVentaEnum().getBool());
@@ -315,7 +322,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         getCmbIvaOpcionPrecioVentaPublico().setSelectedItem(IvaOpcionEnum.SIN_IVA);
         
-        getCmbGenerarCodigoBarras().setSelectedItem(EnumSiNo.NO);
+        //getCmbGenerarCodigoBarras().setSelectedItem(EnumSiNo.NO);
+        imprimirBarrasSeleccionado=EnumSiNo.NO;
         
         getChkTransportarGuiaRemision().setEnabled(true);
         getChkTransportarGuiaRemision().setSelected(true);
@@ -362,6 +370,13 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void iniciar() {
+        
+        //Iniciar cmbLleva inventario
+        imprimirCodigoBarrasList=new ArrayList<EnumSiNo>();
+        imprimirCodigoBarrasList.add(EnumSiNo.NO);
+        imprimirCodigoBarrasList.add(EnumSiNo.SI);
+        
+        
         controlador=new ProductoModelControlador(DialogoCodefac.intefaceMensaje, session,this);
         listenerComboBox();
         listenerBotones();
@@ -522,10 +537,10 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         UtilidadesComboBox.llenarComboBox(getCmbManejaInventario(),datos);
     }
 
-    @Override
+    /*@Override
     public void llenarCmbGenerarCodigoBarras(EnumSiNo[] datos) {
         UtilidadesComboBox.llenarComboBox(getCmbGenerarCodigoBarras(),datos);
-    }
+    }*/
 
     @Override
     public void llenarCmbTipoProducto(TipoProductoEnum[] tipoProductoList) {
@@ -561,6 +576,25 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     public void llenarCmbGarantia(EnumSiNo[] datos) {
         UtilidadesComboBox.llenarComboBox(getCmbGarantia(),datos);
     }
+    
+    //==================== METODOS GET AND SET ==============================//
+
+    public List<EnumSiNo> getImprimirCodigoBarrasList() {
+        return imprimirCodigoBarrasList;
+    }
+
+    public void setImprimirCodigoBarrasList(List<EnumSiNo> imprimirCodigoBarrasList) {
+        this.imprimirCodigoBarrasList = imprimirCodigoBarrasList;
+    }
+
+    public EnumSiNo getImprimirBarrasSeleccionado() {
+        return imprimirBarrasSeleccionado;
+    }
+
+    public void setImprimirBarrasSeleccionado(EnumSiNo imprimirBarrasSeleccionado) {
+        this.imprimirBarrasSeleccionado = imprimirBarrasSeleccionado;
+    }
+    
     
     public enum IvaOpcionEnum
     {

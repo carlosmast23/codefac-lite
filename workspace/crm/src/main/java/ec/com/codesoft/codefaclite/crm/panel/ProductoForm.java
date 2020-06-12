@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.crm.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
@@ -1203,6 +1204,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.tabMenu = tabMenu;
     }
 
+    @ComboBoxBinding(source = "imprimirCodigoBarrasList",valueSelect = "imprimirBarrasSeleccionado")
     public JComboBox<EnumSiNo> getCmbGenerarCodigoBarras() {
         return cmbGenerarCodigoBarras;
     }

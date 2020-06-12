@@ -62,7 +62,7 @@ public class ProductoModelControlador extends ModelControladorAbstract {
             }
 
             //Cargar los estados para generar los codigos de barras
-            interfaz.llenarCmbGenerarCodigoBarras(new EnumSiNo[]{EnumSiNo.NO, EnumSiNo.SI});
+            //interfaz.llenarCmbGenerarCodigoBarras(new EnumSiNo[]{EnumSiNo.NO, EnumSiNo.SI});
             
             ImpuestoServiceIf impuestoService = ServiceFactory.getFactory().getImpuestoServiceIf();
             ImpuestoDetalleServiceIf impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
@@ -116,7 +116,7 @@ public class ProductoModelControlador extends ModelControladorAbstract {
     public interface ProductoModelControladorInterface
     {
         public void llenarCmbManejaInventario(EnumSiNo[] datos);
-        public void llenarCmbGenerarCodigoBarras(EnumSiNo[] datos);
+        //public void llenarCmbGenerarCodigoBarras(EnumSiNo[] datos);
         public void llenarCmbTipoProducto(TipoProductoEnum[] tipoProductoList);
         public void llenarCmbCategoriaProducto(List<CategoriaProducto> catProdList);
         public void llenarComboIva(List<ImpuestoDetalle> impuestos);
