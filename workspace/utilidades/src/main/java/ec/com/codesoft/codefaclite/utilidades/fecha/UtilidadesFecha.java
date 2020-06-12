@@ -102,12 +102,24 @@ public class UtilidadesFecha {
         int dias = (int) ((fechaMayor.getTime() - fechaMenor.getTime()) / 86400000);
         return dias;
     }
+    
+    public static int obtenerDistanciaConLaFechaActual(java.util.Date fecha)
+    {
+        return obtenerDistanciaDias(fecha,getFechaHoy());
+    }
 
     public static String formatDate(java.util.Date fecha, String formato) {
         //yyyy MMMMM dd
         //yyyy-MM-dd
         DateFormat dateFormat = new SimpleDateFormat(formato);
         return dateFormat.format(fecha);
+    }
+    
+    public static String formatDate(java.util.Date fecha, SimpleDateFormat simpleDateFormat) {
+        //yyyy MMMMM dd
+        //yyyy-MM-dd
+        //DateFormat dateFormat = new SimpleDateFormat(formato);
+        return simpleDateFormat.format(fecha);
     }
     
     public static String obtenerAnioStr(Date date) {
@@ -266,6 +278,16 @@ public class UtilidadesFecha {
             return null;
         
         return new java.sql.Date(fechaUtil.getTime());
+    }
+    
+    public static java.util.Date castStringToDate(String fechaStr,SimpleDateFormat simpleDateFormat)
+    {
+        try {
+            return simpleDateFormat.parse(fechaStr);
+        } catch (ParseException ex) {
+            Logger.getLogger(UtilidadesFecha.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
 }

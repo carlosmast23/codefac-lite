@@ -22,6 +22,7 @@ public class ModoAplicativoModel extends ModoAplicativoDialog{
     public static final Integer MODO_CLIENTE_SERVIDOR=3;
     
     private Integer modo;
+    public Boolean versionPrueba=false;
     
     public ModoAplicativoModel(Frame parent, boolean modal) {
         super(parent, modal);
@@ -50,6 +51,15 @@ public class ModoAplicativoModel extends ModoAplicativoDialog{
             @Override
             public void actionPerformed(ActionEvent e) {
                 modo=MODO_SERVIDOR;
+                dispose();
+            }
+        });
+        
+        getBtnIniciarModoPrueba().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modo=MODO_CLIENTE;
+                versionPrueba=true;
                 dispose();
             }
         });

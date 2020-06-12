@@ -83,6 +83,40 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         
     }
     
+    public void grabarOEditar(ParametroCodefac parametro) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                //TODO: Analizar si debo tener creado 2 metodos por separado para grabar y editar
+                if(parametro.getId()==null)
+                {
+                    entityManager.persist(parametro);
+                }
+                else
+                {
+                    entityManager.merge(parametro);
+                }
+            }
+        });
+        return ;
+    }
+    
+    public void grabarOEditar(Empresa empresa,String parametroNombre,String valor) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        ParametroCodefac parametroCodefac=getParametroByNombre(parametroNombre,empresa);
+        //Si no existe creando antes creo un nuevo parametroCodefac
+        if(parametroCodefac==null)
+        {
+            parametroCodefac=new ParametroCodefac();
+            parametroCodefac.setEmpresa(empresa);
+            parametroCodefac.setNombre(parametroNombre);
+        }
+        parametroCodefac.setValor(valor);
+        grabarOEditar(parametroCodefac);
+    }
+    
+    
     /**
      * Edita todos los parametros 
      * @param parametro 

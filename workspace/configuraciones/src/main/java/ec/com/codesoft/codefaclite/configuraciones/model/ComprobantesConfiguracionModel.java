@@ -714,11 +714,11 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             getTxtSmtpHost().setText(propiedadPorDefecto.getHost());
             getTxtSmtpPuerto().setValue(propiedadPorDefecto.getPort());
         }
-        else
-        {
-            getTxtSmtpHost().setText("");
-            getTxtSmtpPuerto().setValue("");        
-        }
+        //else
+        //{
+        //    getTxtSmtpHost().setText("");
+        //    getTxtSmtpPuerto().setValue("");        
+        //}
     }
     
     private void seleccionarDirectorioRecursos()

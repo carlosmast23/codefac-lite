@@ -68,9 +68,22 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         dato.add(t.getCodigoPersonalizado());
         dato.add(t.getNombre());
         dato.add(t.getValorUnitario());
-        dato.add(t.getCatalogoProducto().getIva().toString());
+        
+        if(t.getCatalogoProducto().getIva()!=null)
+        {
+            dato.add(t.getCatalogoProducto().getIva().toString());
+        }
+        else
+        {
+            dato.add("");
+        }
+        
         if(t.getCatalogoProducto().getIce() != null){
             dato.add(t.getCatalogoProducto().getIce().toString());
+        }
+        else
+        {
+            dato.add("");
         }
     }
 
@@ -120,7 +133,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         }
         
        
-        queryString+=" and ( LOWER(u.nombre) like ?2 OR u.codigoPersonalizado like ?2 ) ORDER BY u.codigoPersonalizado";
+        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 ) ORDER BY u.codigoPersonalizado";
 
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
@@ -145,7 +158,6 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         {
             queryDialog.agregarParametro(4,empresa);
         }
-        //queryDialog.agregarParametro(2,ProductoEnumEstado.INACTIVO.getEstado());
         return queryDialog;
     }
 

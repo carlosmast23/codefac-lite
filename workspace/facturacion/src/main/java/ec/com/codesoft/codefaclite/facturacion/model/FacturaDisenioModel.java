@@ -106,7 +106,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -135,7 +135,16 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
 
     @Override
     public void imprimir() {
-        InputStream reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
+        ComprobanteFisicoDisenio comprobanteDiseño= (ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem();
+        InputStream reporteOriginal =null;
+        if(comprobanteDiseño.getNombre().equals("Nota de Venta"))        
+        {
+            reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("nota_venta.jrxml");
+        }else if(comprobanteDiseño.getNombre().equals("Factura"))        
+        {
+            reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
+        }
+        //InputStream reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
         ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(reporteOriginal);
         ComprobanteFisicoDisenio documento = (ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem();
         manager.setearNuevosValores(documento);

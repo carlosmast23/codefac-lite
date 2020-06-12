@@ -241,6 +241,7 @@ public abstract class ServiceFactory {
                 //Naming.lookup(ipServidor);
                 //String ipServidorInterno="192.168.100.13";
                 //remote= registro.lookup("rmi://"+ipServidor+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+"/"+clase.getSimpleName());
+                System.out.println(clase.getName());
                 remote= registro.lookup(clase.getName());
                 //remote= registro.lookup("ec.com.codesoft.codefaclite.servidor.service.PersonaService");
                 mapRecursosRMI.put(clase,remote);

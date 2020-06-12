@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
@@ -214,6 +215,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbEditarPrecioUnitFactura(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbDatosCompartidosEmpresas(),EnumSiNo.values());
+        
+        UtilidadesComboBox.llenarComboBox(getCmbDocumentoDefectoVistaFactura(),new DocumentoEnum[]{DocumentoEnum.FACTURA,DocumentoEnum.NOTA_VENTA_INTERNA,DocumentoEnum.NOTA_VENTA});
 
         //Cargar los valores de las retenciones de la renta       
         try {
@@ -404,6 +407,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             parametroDato= parametrosTodos.get(ParametroCodefac.HABILITAR_RETENCION_COMPRAS);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroDato != null) ? parametroDato.getValor() : null);
             getCmbHabilitarRetencionesEnCompras().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
+            parametroDato= parametrosTodos.get(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA);
+            DocumentoEnum documentoEnumVistaFactura = DocumentoEnum.obtenerDocumentoPorCodigo((parametroDato != null) ? parametroDato.getValor() : null);
+            getCmbDocumentoDefectoVistaFactura().setSelectedItem((documentoEnumVistaFactura!=null)?documentoEnumVistaFactura:null);
                         
             ParametroCodefac parametroFormaPago= parametrosTodos.get(ParametroCodefac.FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE);
             
@@ -441,6 +448,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         ConfiguracionImpresoraEnum configuracionImpresoraEnum =(ConfiguracionImpresoraEnum) getCmbConfiguracionImpresora().getSelectedItem();
         agregarParametro(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,configuracionImpresoraEnum.getLetra());
         agregarParametroEditar(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA);
+        
+        DocumentoEnum documentoDefectoVistaFactura =(DocumentoEnum) getCmbDocumentoDefectoVistaFactura().getSelectedItem();
+        agregarParametro(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA,documentoDefectoVistaFactura.getCodigo());
+        agregarParametroEditar(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA);
+        
 
         //Agregar detalle para la orden de trabajo
         agregarParametro(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES, getTxtOrdenTrabajoReporte().getText());
@@ -566,6 +578,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbDatosCompartidosEmpresas().getSelectedItem();
         agregarParametro(ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA);
+        
+        
 
     }
     

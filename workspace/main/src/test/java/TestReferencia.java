@@ -11,31 +11,30 @@
 public class TestReferencia {
     
     public static void main(String[] args) {
-        Ejemplo otro=new Ejemplo("original");
-        crearNombre(otro);
-        System.out.println(otro);
+        Ejemplo dato=new Ejemplo(2,"a");
+        
+        cambiarDato(dato);
+        System.out.println(dato.numero+" "+dato.nombre);
     }
     
-       
-    public static void crearNombre(Ejemplo ejemplo)
+    public static void cambiarDato(Ejemplo dato)
     {
-        //ejemplo.nombre="edit";
-       ejemplo=new Ejemplo("creado");
+        
     }
+       
+    
     
     public static class Ejemplo {
 
+        public Integer numero;
         public String nombre;
 
-        public Ejemplo(String nombre) {
+        public Ejemplo(Integer numero,String nombre) {
+            this.numero = numero;
             this.nombre = nombre;
         }
 
-        @Override
-        public String toString() {
-            return "Ejemplo{" + "nombre=" + nombre + '}';
-        }
-        
+                
         
     }
 

@@ -46,6 +46,10 @@ public class ModoAplicativoDialog extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         btnIniciarCliente = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        btnIniciarModoPrueba = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -70,6 +74,7 @@ public class ModoAplicativoDialog extends javax.swing.JDialog {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Servidor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(153, 153, 153))); // NOI18N
         jPanel4.setLayout(new java.awt.BorderLayout());
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/servidor.png"))); // NOI18N
         jPanel4.add(jLabel1, java.awt.BorderLayout.CENTER);
 
@@ -90,6 +95,7 @@ public class ModoAplicativoDialog extends javax.swing.JDialog {
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Servidor y Cliente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(153, 153, 153))); // NOI18N
         jPanel5.setLayout(new java.awt.BorderLayout());
 
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/clienteServidor.png"))); // NOI18N
         jPanel5.add(jLabel2, java.awt.BorderLayout.CENTER);
 
@@ -111,6 +117,7 @@ public class ModoAplicativoDialog extends javax.swing.JDialog {
         jPanel6.setName(""); // NOI18N
         jPanel6.setLayout(new java.awt.BorderLayout());
 
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/cliente.png"))); // NOI18N
         jPanel6.add(jLabel3, java.awt.BorderLayout.CENTER);
 
@@ -126,6 +133,28 @@ public class ModoAplicativoDialog extends javax.swing.JDialog {
         jPanel6.add(btnIniciarCliente, java.awt.BorderLayout.PAGE_END);
 
         jPanel3.add(jPanel6);
+
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Modo Prueba", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(153, 153, 153))); // NOI18N
+        jPanel7.setName(""); // NOI18N
+        jPanel7.setLayout(new java.awt.BorderLayout());
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/pruebas.png"))); // NOI18N
+        jPanel7.add(jLabel8, java.awt.BorderLayout.CENTER);
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel9.setText("<html> <p align=\"justify\"> Versión de prueba del sistema Codefac <br> con datos e información configurados <br> para que el usuario pueda revisar <br> el funcionamiento del sistema. <br>  <b>Usuario: prueba y clave : 1234</b></p> </html>");
+        jPanel7.add(jLabel9, java.awt.BorderLayout.PAGE_START);
+
+        btnIniciarModoPrueba.setBackground(new java.awt.Color(255, 255, 255));
+        btnIniciarModoPrueba.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnIniciarModoPrueba.setForeground(new java.awt.Color(0, 102, 102));
+        btnIniciarModoPrueba.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/login.png"))); // NOI18N
+        btnIniciarModoPrueba.setText(" Iniciar Modo Prueba");
+        jPanel7.add(btnIniciarModoPrueba, java.awt.BorderLayout.PAGE_END);
+
+        jPanel3.add(jPanel7);
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.CENTER);
 
@@ -179,6 +208,7 @@ public class ModoAplicativoDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciarCliente;
     private javax.swing.JButton btnIniciarClienteServidor;
+    private javax.swing.JButton btnIniciarModoPrueba;
     private javax.swing.JButton btnIniciarServidor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -187,12 +217,15 @@ public class ModoAplicativoDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBtnIniciarCliente() {
@@ -218,6 +251,12 @@ public class ModoAplicativoDialog extends javax.swing.JDialog {
     public void setBtnIniciarServidor(JButton btnIniciarServidor) {
         this.btnIniciarServidor = btnIniciarServidor;
     }
+
+    public JButton getBtnIniciarModoPrueba() {
+        return btnIniciarModoPrueba;
+    }
+    
+    
 
     
 }

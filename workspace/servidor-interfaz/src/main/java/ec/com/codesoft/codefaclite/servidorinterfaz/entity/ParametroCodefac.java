@@ -149,6 +149,13 @@ public class ParametroCodefac implements Serializable {
     
     public static final String FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE="formal_pago_defecto_pantalla_cliente";
     
+    /**
+     * Esta variable me permite grabar cual fue la fecha de la ultima validación de las credenciales del correo
+     * Bastante util para no validar a cada momento el correo
+     */
+    public static final String FECHA_VALIDACION_CORREO="fecha_validacion_correo";
+    
+    public static final String DOCUMENTO_DEFECTO_VISTA_FACTURA="documento_defecto_vista_factura";
     
     @Id
     @Column(name = "ID")

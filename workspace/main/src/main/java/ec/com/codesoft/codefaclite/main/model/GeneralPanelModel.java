@@ -23,10 +23,18 @@ import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguraci
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioListener;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.BindingFactoryComponents;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.ControladorCampoTextoAnot;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.RoutingComponentBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.UtilidadesControladorVistaGeneral;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -34,6 +42,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CursorPorDefectoAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
@@ -73,6 +82,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
@@ -85,6 +95,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesReflexion;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesReflexion.ResponseAnotacion;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesReflexion.ResponseAnotacionMetodo;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -114,6 +127,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -542,63 +556,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     }
     
-    
-    /*private void cargarAyuda()
-    {
-        final String PAGINA_DEFECTO=ParametrosSistemaCodefac.PAGINA_DEFECTO_AYUDA;
-        
-        ControladorCodefacInterface panel=(ControladorCodefacInterface) getjDesktopPane1().getSelectedFrame();
-        String url="";
-        try
-        {
-            if(panel!=null)
-            {
-                url=panel.getURLAyuda();
-            }
-            else
-            {
-                url=PAGINA_DEFECTO;
-            }
-        }
-        catch (UnsupportedOperationException exception) {
-            System.out.println("metodo no implementado");
-            url=PAGINA_DEFECTO;
-            //return ; //Si no esta implementado la ayuda no abre nada
-        }
-        
-        
-        PanelSecundarioAbstract panelSecundario = panelesSecundariosMap.get(PanelSecundarioAbstract.PANEL_AYUDA);
-        JPanel jpanel = (JPanel) panelSecundario;
-        
-        int ancho=getjPanelSeleccion().getWidth()-1;
-        int alto=getjPanelSeleccion().getHeight()-1;
-
-        if(browser!=null && url!=null && browser.getUrl()!=null)
-        {
-            //Verificar si la url cargada no es la misma cargo la nueva url
-            if(!browser.getUrl().equals(url))
-            {
-                browser = new SwingBrowser();
-                browser.loadURL(url);
-                browser.setBounds(1, 1,ancho,alto);
-            }            
-            jpanel.removeAll();
-            jpanel.add(browser);
-        }
-        else //Si no existe creado el recurso browser que se muestra en la ayuda la creo desde 0
-        {
-            browser = new SwingBrowser();
-            
-            browser.loadURL(url);
-            browser.setBounds(1, 1, ancho, alto);
-            jpanel.removeAll();
-            jpanel.add(browser);            
-
-        }
-        //getjSplitPanelVerticalSecundario().setLeftComponent(getJPanelContenidoAuxiliar());
-            
-    }*/
-    
     /**
      * Carga toda la ayuda por defecto sin importar el panel
      */
@@ -649,25 +606,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //PROPORCION_VERTICAL=PROPORCION_VERTICAL_DEFAULT;
             //getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
     }
-    
-    
-    /*private void agregarListenerMenu(List<VentanaEnum> ventanas)
-    {
-        for (VentanaEnum menuControlador : ventanas) {
-            
-            if(menuControlador.getJmenuItem()==null)
-                continue; //Si no tiene asiganod un jmenu item continua al siguiente menu
-            
-            menuControlador.getJmenuItem().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {                                           
-                        abrirVentanaCodefac((ControladorCodefacInterface)menuControlador.getInstance(),menuControlador);
-                }
-            });
-        }
-        
-
-    }*/
     
     /**
      * Todo: Revisar si no existe alguna mejora en este metodo
@@ -810,136 +748,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getBtnGuardar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
-                ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
-                /**
-                 * Verificar si el proceso es normal o la ventan funciona como dialogo
-                 */
-                if(frameInterface.modoDialogo)
-                {
-                    if(validarFormulario(frameInterface,ValidacionCodefacAnotacion.GRUPO_FORMULARIO))
-                    {
-                        try {
-                            DialogInterfacePanel interfaz = (DialogInterfacePanel) frame;
-                            Object resultado = interfaz.getResult();
-                            frame.dispose();
-                            mostrarPanelSecundario(false);
-                            //Setear el focus al formulario que abrio el dialogo
-                            frameInterface.formOwnerFocus.moveToFront();
-                            frameInterface.formOwnerFocus.setSelected(true);
-                            
-                            frameInterface.formOwner.updateInterface(resultado);
-                            
-
-                            
-                        } catch (ExcepcionCodefacLite ex) {
-                            System.out.println("Error al grabar en modo dialogo");
-                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (PropertyVetoException ex) {
-                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    else
-                    {
-                        mostrarPanelSecundario(true);
-                    }
-                    return;
-                    
-                }
-                
-                
-                try
-                {
-                    boolean procesoTerminado=false;
-                    
-                    if(frameInterface.estadoFormulario.equals(ControladorCodefacInterface.ESTADO_GRABAR))
-                    {
-                        
-                        if(validarFormulario(frameInterface,ValidacionCodefacAnotacion.GRUPO_FORMULARIO))
-                        {
-                            try {
-                                frameInterface.grabar();
-                                
-                                /////==========> AGREGAR VALIDACION SI POR ALGUN MOTIVO NO ESTA IMPLEMENTADO LLAMAR AL METODO NUEVO =========////
-                                try
-                                {
-                                    frameInterface.nuevo(); //TODO: Ver si despues de grabar si se debe llamar al evento nuevo
-                                }
-                                catch(UnsupportedOperationException ex)
-                                {
-                                    LOG.log(Level.WARNING,"Metodo nuevo no implementeado en ventana "+frameInterface.getName());
-                                }
-                                
-                                procesoTerminado=true;                                
-                            } catch (ExcepcionCodefacLite ex) {
-                                //ex.printStackTrace();
-                                System.err.println(ex.getMessage());
-                                //JOptionPane.showMessageDialog(null,ex.getMessage());
-                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (RemoteException ex) {
-                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                                FuncionesSistemaCodefac.servidorConexionPerdida();
-                            }
-                            
-                        }
-                        else
-                        {
-                            mostrarConsola(frameInterface.consola,true);
-                            //JOptionPane.showMessageDialog(null,"Error de validacion Nuevo");
-                        }
-                    }
-                    else
-                    {
-                        if(validarFormulario(frameInterface,ValidacionCodefacAnotacion.GRUPO_FORMULARIO))
-                        {
-                            try {
-                                frameInterface.editar();
-                                procesoTerminado=true;
-                            } catch (ExcepcionCodefacLite ex) {
-                                 //ex.printStackTrace();
-                                LOG.log(Level.WARNING,ex.getMessage());
-                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (RemoteException ex) {
-                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                                FuncionesSistemaCodefac.servidorConexionPerdida();
-                            }
-                            
-                        }
-                        else
-                        {
-                            mostrarConsola(frameInterface.consola,true);
-                            //JOptionPane.showMessageDialog(null,"Error de validacion Editar");
-                        }
-                    
-                    }
-
-                    /**
-                     * Si ciclo de vida esta desactivado controlo manualmente el
-                     * ciclo de vida
-                     */
-                    if (!frameInterface.cicloVida) {
-                        //frameInterface.limpiar();
-                        return;
-                    }
-                    
-                    if(procesoTerminado)
-                    {
-                        String tituloOriginal=getTituloOriginal(frame.getTitle());
-                        frame.setTitle(tituloOriginal+" [Nuevo]");
-                        frameInterface.estadoFormulario=ControladorCodefacInterface.ESTADO_GRABAR;
-                        frameInterface.eventoCambiarEstado();
-                        limpiarAnotaciones(frameInterface);
-                        frameInterface.limpiar();
-                        limpiarCamposValidacion(frameInterface);
-                    }
-                }
-                catch (UnsupportedOperationException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    System.err.println("Metodo no implementado boton editar");
-                    //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    //getjButton4().setEnabled(false);
-                }
-                               
+                listenerBotonGuardar();
             }
         });
         
@@ -1114,6 +923,118 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             });
         
     }
+    
+    private void listenerBotonGuardar() {
+
+        JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
+        ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
+        /**
+         * Verificar si el proceso es normal o la ventan funciona como dialogo
+         */
+        if (frameInterface.modoDialogo) {
+            if (validarFormulario(frameInterface, ValidacionCodefacAnotacion.GRUPO_FORMULARIO)) {
+                try {
+                    DialogInterfacePanel interfaz = (DialogInterfacePanel) frame;
+                    Object resultado = interfaz.getResult();
+                    frame.dispose();
+                    mostrarPanelSecundario(false);
+                    //Setear el focus al formulario que abrio el dialogo
+                    frameInterface.formOwnerFocus.moveToFront();
+                    frameInterface.formOwnerFocus.setSelected(true);
+
+                    frameInterface.formOwner.updateInterface(resultado);
+
+                } catch (ExcepcionCodefacLite ex) {
+                    System.out.println("Error al grabar en modo dialogo");
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (PropertyVetoException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                mostrarPanelSecundario(true);
+            }
+            return;
+
+        }
+
+        try {
+            boolean procesoTerminado = false;
+
+            if (frameInterface.estadoFormulario.equals(ControladorCodefacInterface.ESTADO_GRABAR)) {
+
+                if (validarFormulario(frameInterface, ValidacionCodefacAnotacion.GRUPO_FORMULARIO)) {
+                    try {
+                        frameInterface.grabar();
+
+                        /////==========> AGREGAR VALIDACION SI POR ALGUN MOTIVO NO ESTA IMPLEMENTADO LLAMAR AL METODO NUEVO =========////
+                        try {
+                            frameInterface.nuevo(); //TODO: Ver si despues de grabar si se debe llamar al evento nuevo
+                        } catch (UnsupportedOperationException ex) {
+                            LOG.log(Level.WARNING, "Metodo nuevo no implementeado en ventana " + frameInterface.getName());
+                        }
+
+                        procesoTerminado = true;
+                    } catch (ExcepcionCodefacLite ex) {
+                        //ex.printStackTrace();
+                        System.err.println(ex.getMessage());
+                        //JOptionPane.showMessageDialog(null,ex.getMessage());
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                        FuncionesSistemaCodefac.servidorConexionPerdida();
+                    }
+
+                } else {
+                    mostrarConsola(frameInterface.consola, true);
+                    //JOptionPane.showMessageDialog(null,"Error de validacion Nuevo");
+                }
+            } else {
+                if (validarFormulario(frameInterface, ValidacionCodefacAnotacion.GRUPO_FORMULARIO)) {
+                    try {
+                        frameInterface.editar();
+                        procesoTerminado = true;
+                    } catch (ExcepcionCodefacLite ex) {
+                        //ex.printStackTrace();
+                        LOG.log(Level.WARNING, ex.getMessage());
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                        FuncionesSistemaCodefac.servidorConexionPerdida();
+                    }
+
+                } else {
+                    mostrarConsola(frameInterface.consola, true);
+                    //JOptionPane.showMessageDialog(null,"Error de validacion Editar");
+                }
+
+            }
+
+            /**
+             * Si ciclo de vida esta desactivado controlo manualmente el ciclo
+             * de vida
+             */
+            if (!frameInterface.cicloVida) {
+                //frameInterface.limpiar();
+                return;
+            }
+
+            if (procesoTerminado) {
+                String tituloOriginal = getTituloOriginal(frame.getTitle());
+                frame.setTitle(tituloOriginal + " [Nuevo]");
+                frameInterface.estadoFormulario = ControladorCodefacInterface.ESTADO_GRABAR;
+                frameInterface.eventoCambiarEstado();
+                limpiarAnotaciones(frameInterface);
+                frameInterface.limpiar();
+                limpiarCamposValidacion(frameInterface);
+            }
+        } catch (UnsupportedOperationException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Metodo no implementado boton editar");
+            //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            //getjButton4().setEnabled(false);
+        }
+    }
+            
     
     private void abrirPanelSecundario()
     {
@@ -1307,40 +1228,164 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     }
    
+    
+    /**
+     * Metodo que devuelve una contralador de la vista en el caso que exista
+     * @param panel
+     * @return 
+     */
+    private VistaCodefacIf getControladorTodoVista(ControladorCodefacInterface panel)
+    {
+        if(panel instanceof ControladorVistaIf)
+        {
+            ControladorVistaIf vistaTemp=(ControladorVistaIf) panel;
+            if(vistaTemp instanceof VistaCodefacIf)
+            return (VistaCodefacIf) vistaTemp.getControladorVista();
+        }
+        return null;
+    }
+    
+    /**
+     * Interfaz que permite ejecutar de forma generica el metodo iniciar de las vistas
+     * @param vistaCodefacIf 
+     */
+    private void ejecutarIniciar(VistaCodefacIf vistaCodefacIf) throws ExcepcionCodefacLite
+    {
+        UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
+            @Override
+            public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {
+                vistaCodefacIf.iniciar();
+            }
+        });
+    }
+    
+    private void ejecutarNuevo(VistaCodefacIf vistaCodefacIf)
+    {
+        try {
+            UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
+                @Override
+                public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {
+                    vistaCodefacIf.nuevo();
+                }
+            });
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void ejecutarLimpiar(VistaCodefacIf vistaCodefacIf)
+    {
+        try {
+            UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
+                @Override
+                public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {
+                    vistaCodefacIf.limpiar();
+                }
+            });
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Metodo que permite establecer todos los cambios de variables de propiedades del controlador a las vistas
+     */
+    private void setControladorAVista(ControladorCodefacInterface panel,VistaCodefacIf controlador)
+    {
+        //validar que existe un controlador generals
+        if(controlador==null)
+            return;
+        
+        //Obtiene un mapa , con todos los compontBinding y sus implementaciones para buscar
+        for (Map.Entry<Class,ComponentBindingAbstract> entry : RoutingComponentBinding.routingMap.entrySet()) {
+            Class claseBindingControlador = entry.getKey();
+            ComponentBindingAbstract implementacion = entry.getValue();
+            
+            List<ResponseAnotacionMetodo> anotaciones=UtilidadesReflexion.buscarAnotacionEnMetodos(panel.getClass(),claseBindingControlador);
+            
+            for (ResponseAnotacionMetodo<TextFieldBinding> anotacion : anotaciones) {
+                implementacion.init(panel, controlador, anotacion);
+                implementacion.ejecutar();
+            }
+            
+        }
+        
+        
+        /*List<ResponseAnotacionMetodo<TextFieldBinding>> anotaciones=UtilidadesReflexion.buscarAnotacionEnMetodos(panel.getClass(),TextFieldBinding.class);
+        
+        for (ResponseAnotacionMetodo<TextFieldBinding> anotacion : anotaciones) {
+            
+            JTextField jtextField=UtilidadesReflexion.obtenerValorDelMetodo(anotacion.metodo,panel,JTextField.class);                        
+            String nombrePropiedadControlador=anotacion.anotacion.value();
+            
+            String valorPropiedad= UtilidadesReflexion.buscarComponentePorNombrePropiedad(controlador, nombrePropiedadControlador,String.class);
+            jtextField.setText(valorPropiedad);
+            
+            ////TODO: Agregar una referencia de ejemplo a la vista
+            jtextField.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {}
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    //String nombreMetodoSet=UtilidadesReflexion.castNameMethodGetOrSet(anotacion.metodo.getName(),UtilidadesReflexion.GetSetEnum.SET);
+                    String nombreMetodoSet=UtilidadesReflexion.castNameMethodGetOrSet(nombrePropiedadControlador,UtilidadesReflexion.GetSetEnum.SET);;
+                    Method metodoSetPropiedad=UtilidadesReflexion.buscarMetodoPorNombre(controlador.getClass(),nombreMetodoSet);
+                    UtilidadesReflexion.setearValorDelMetodo(metodoSetPropiedad, controlador, jtextField.getText());
+                    //UtilidadesReflexion.setearValorDelMetodo(metodoSet,panel,jtextField.getText());
+                }
+            });
+            
+        }*/
+    }
+    
     private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado,Integer ancho ,Integer alto)
     {
         try {
             //Anular el metodo de cierre automatico para controlar manualmente
             panel.setDefaultCloseOperation(JInternalFrame.DO_NOTHING_ON_CLOSE);
-            /**
-             * Agregar variables de session a la pantalla
-             */
-           
+            
+            ////////////////////////////////////////////////////////////////////
+            //          INYECCION DE DEPENDENDIAS DE LAS REFERENCIAS
+            ////////////////////////////////////////////////////////////////////           
             panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             panel.eventoCambiarEstado();
             panel.panelPadre=generalPanelModel;
             panel.session=sessionCodefac;
-            //panel.reconstruirPantalla(); //Metodo adicional que construye las pantallas laterales
             
-            try
-            {
-                panel.iniciar();//Metodo que se ejecuta despues de construir el objeto
-            }
-            catch(java.lang.UnsupportedOperationException uoe)
-            {
-                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, uoe);
-                System.err.println("Metodo no implementado");
+            try {
+                //Ejecuta la vista por defecto
+                ejecutarIniciar(panel);
+                //Ejecuta el iniciar del controlador general si existe 
+                ejecutarIniciar(getControladorTodoVista(panel));          
             } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                System.err.println("Cancelado metodo iniciar");
-                return;
-            } catch (RemoteException ex) {
-                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                FuncionesSistemaCodefac.servidorConexionPerdida();
+                //Si ocurre un problema al momento de iniciar cancelo la apertura
+                return ;
             }
             
+            setControladorAVista(panel,getControladorTodoVista(panel));
+            
+            //Agregar el listener que controla las acciones del formulario (cerrar, maximar)
             panel.addInternalFrameListener(listenerFrame);
-            String tituloOriginal=getTituloOriginal(panel.getTitle());
+            
+            ////////////////////////////////////////////////////////////////////
+            //          CARGAR EL TITULO DE LA PANTALLA
+            ////////////////////////////////////////////////////////////////////
+            //String tituloOriginal=getTituloOriginal(panel.getTitle());
+            
+            //Por defecto intenta cargar los nombres declarados en el archivo que tiene las ventanas
+            VentanaEnum ventanaEnum=VentanaEnum.getByClass(panel.getClass());
+            String tituloOriginal="";
+            if(ventanaEnum!=null)
+            {
+                tituloOriginal=ventanaEnum.getNombre();
+            }
+            else //Si por algun motivo no logra cargar del archivo de vista obtiene el archivo de su propiedad de nombres
+            {
+                tituloOriginal=getTituloOriginal(panel.getTitle());
+            }
+            
             panel.setTitle(tituloOriginal+" [Nuevo]");
             try
             {
@@ -1356,22 +1401,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.setMaximum(maximisado);
             panel.show();
             getBtnNuevo().requestFocus();
-            agregarValidadores(panel); //Agregar validadores para los campos
+            agregarValidadores(panel); //Agregar validadores para los campos de ingreso
             agregarAyudas(panel);
             
-            try
-            {                
-                panel.limpiar();
-                panel.nuevo();
-            }catch(java.lang.UnsupportedOperationException uoe)
-            {
-                
-            } catch (ExcepcionCodefacLite ex) {
-                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (RemoteException ex) {
-                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                FuncionesSistemaCodefac.servidorConexionPerdida();
-            }
+            ////////////////////////////////////////////////////////////////////
+            //          EJECUTAR LOS METODOS DE LIMPIAR Y NUEVO
+            ////////////////////////////////////////////////////////////////////
+
+            ejecutarLimpiar(panel);
+            ejecutarLimpiar(getControladorTodoVista(panel));
+            
+            ejecutarNuevo(panel);
+            ejecutarNuevo(getControladorTodoVista(panel));
+            
             
             /**
              * Mostrar la pantalla centrada cuando no se muestra maximisado
@@ -1399,8 +1441,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             
             panel.consola=new ConsolaGeneral();
-            mostrarConsola(panel.consola,true);
-            
+            mostrarConsola(panel.consola,true);            
             //Agregar ventana al combo de ventanas abiertas
             agregarVentanaAbierta(panel,false);
             
@@ -1497,6 +1538,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }
     
+    /**
+     * Metodo que cargaba las ayudar como una especie de código en cada campo
+     * Metodo en desuso por que las ayudas se cargan de otro firma directa
+     * TODO: En todo caso revisar si no se puede rehusar
+     * @param panel
+     * @deprecated
+     */
+    @Deprecated 
     private void agregarAyudas(ControladorCodefacInterface panel)
     {
         Class classVentana=panel.getClass();
@@ -3419,7 +3468,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     @Override
     public void actualizarNotificacionesCodefac() {
         this.widgetNotificacionCodefac.setEmpresa(sessionCodefac.getEmpresa()); //Actualizo este dato porque puede ser que esta cambiando de empresa
-        this.widgetNotificacionCodefac.actualizarNotificaciones();
+        this.widgetNotificacionCodefac.actualizarNotificaciones(ModoProcesarEnum.NORMAL);
     }
 
        
@@ -3512,7 +3561,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         frame.setTitle(tituloOriginal + " [Nuevo]");
         frame.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
     }
-
-
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //              CLASES E INTERFACES ADICIONALES
+    ////////////////////////////////////////////////////////////////////////////
+    
    
 }

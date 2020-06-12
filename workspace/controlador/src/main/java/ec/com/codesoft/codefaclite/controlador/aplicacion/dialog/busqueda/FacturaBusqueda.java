@@ -128,13 +128,14 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
     
     public String getQueryDocumentos()
     {
-        return " AND (u.codigoDocumento=?3 OR  u.codigoDocumento=?4) ";
+        return " AND (u.codigoDocumento=?3 OR  u.codigoDocumento=?4 OR  u.codigoDocumento=?5 ) ";
     }
     
     public void setParameterQuery(QueryDialog queryDialog)
     {
         queryDialog.agregarParametro(3,DocumentoEnum.FACTURA.getCodigo());
         queryDialog.agregarParametro(4,DocumentoEnum.NOTA_VENTA_INTERNA.getCodigo());
+        queryDialog.agregarParametro(5,DocumentoEnum.NOTA_VENTA.getCodigo());
     }
 
     @Override
