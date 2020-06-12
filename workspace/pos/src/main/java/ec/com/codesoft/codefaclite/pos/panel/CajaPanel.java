@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacA
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
@@ -139,14 +140,16 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
 
         jLabel8.setText("        ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
         getContentPane().add(jLabel8, gridBagConstraints);
 
         jLabel9.setText("          ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
         getContentPane().add(jLabel9, gridBagConstraints);
 
@@ -171,7 +174,7 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<GeneralEnumEstado> jComboEstado;
+    private javax.swing.JComboBox<CajaEnum> jComboEstado;
     private javax.swing.JComboBox<PuntoEmision> jComboPuntoEmision;
     private javax.swing.JComboBox<Sucursal> jComboSucursal;
     private javax.swing.JLabel jLabel1;
@@ -186,11 +189,11 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField jTextNombre;
     // End of variables declaration//GEN-END:variables
 
-    public JComboBox<GeneralEnumEstado> getjComboEstado() {
+    public JComboBox<CajaEnum> getjComboEstado() {
         return jComboEstado;
     }
 
-    public void setjComboEstado(JComboBox<GeneralEnumEstado> jComboEstado) {
+    public void setjComboEstado(JComboBox<CajaEnum> jComboEstado) {
         this.jComboEstado = jComboEstado;
     }
     

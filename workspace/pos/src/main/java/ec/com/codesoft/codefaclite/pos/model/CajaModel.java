@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
@@ -38,7 +39,7 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
     private CajaModelControlador controlador;
     private Caja caja;
     
-    private GeneralEnumEstado estado;
+    private CajaEnum estado;
     private Sucursal sucursal;
     private PuntoEmision puntoEmision;
     private String nombre;
@@ -197,12 +198,12 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
     }
 
     @Override
-    public GeneralEnumEstado getEnumEstado() {
+    public CajaEnum getEnumEstado() {
         return this.estado;
     }
   
     @Override
-    public void setEnumEstado(GeneralEnumEstado generalEnumEstado) {
+    public void setEnumEstado(CajaEnum generalEnumEstado) {
         this.estado = generalEnumEstado;
     }
     
@@ -210,7 +211,7 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
         getjComboEstado().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                estado = (GeneralEnumEstado) getjComboEstado().getSelectedItem();
+                estado = (CajaEnum) getjComboEstado().getSelectedItem();
             }
         });
         getjComboSucursal().addActionListener(new ActionListener() {
@@ -249,7 +250,7 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
     }
     
     public void valoresIniciales(){
-        this.estado = (GeneralEnumEstado) getjComboEstado().getSelectedItem();
+        this.estado = (CajaEnum) getjComboEstado().getSelectedItem();
         valoresSinSeleccionCombo();
     }
     

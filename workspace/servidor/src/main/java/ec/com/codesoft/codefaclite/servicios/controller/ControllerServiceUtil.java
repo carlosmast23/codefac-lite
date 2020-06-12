@@ -77,13 +77,14 @@ import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlanti
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlantillaService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubrosNivelService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaService;
+import ec.com.codesoft.codefaclite.servidor.service.pos.CajaSesionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.DestinatarioGuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.DetalleProductoGuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionAdicionalService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.TransportistaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AlertaServiceIf;
@@ -165,7 +166,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCu
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoTablaInteresServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.DescuentoAcademicoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.ArqueoCajaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaSesionServiceIf;
 
 /**
  *
@@ -260,6 +263,8 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(PrestamoCuotaService.class,PrestamoCuotaServiceIf.class);
             mapRecursos.put(PrestamoService.class,PrestamoServiceIf.class);
             mapRecursos.put(CajaService.class,CajaServiceIf.class);
+            mapRecursos.put(CajaSesionService.class, CajaSesionServiceIf.class);
+            mapRecursos.put(ArqueoCaja.class, ArqueoCajaServiceIf.class);
             mapRecursos.put(DescuentoAcademicoService.class,DescuentoAcademicoServiceIf.class);
             mapRecursos.put(AlertaService.class,AlertaServiceIf.class);
             

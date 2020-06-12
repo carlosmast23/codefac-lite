@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
@@ -45,7 +46,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
      * Metodo iniciar
      * @throws java.rmi.RemoteException
      * @throws ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException
-     */
+     */ 
     public void iniciar() throws RemoteException, ServicioCodefacException{
         interfaz.setCaja(new Caja());
         GeneralEnumEstado[] estadoGeneralesLista = GeneralEnumEstado.values();
@@ -133,8 +134,8 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
         
         public PuntoEmision getPuntoEmision();
         public void setPuntoEmision(PuntoEmision puntoEmision);
-        public GeneralEnumEstado getEnumEstado();
-        public void setEnumEstado(GeneralEnumEstado generalEnumEstado);
+        public CajaEnum getEnumEstado();
+        public void setEnumEstado(CajaEnum generalEnumEstado);
         public Sucursal getSucursal();
         public void setSucursal(Sucursal sucursal);
         public String getNombre();

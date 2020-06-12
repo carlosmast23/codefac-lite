@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -86,11 +86,11 @@ public class Caja implements Serializable {
         this.estado = estado;
     }
     
-    public GeneralEnumEstado getEstadoEnum() {
-        return GeneralEnumEstado.getEnum(estado);
+    public CajaEnum getEstadoEnum() {
+        return CajaEnum.getEnum(estado);
     }
 
-    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+    public void setEstadoEnum(CajaEnum estadoEnum) {
         this.estado = estadoEnum.getEstado();
     }
 

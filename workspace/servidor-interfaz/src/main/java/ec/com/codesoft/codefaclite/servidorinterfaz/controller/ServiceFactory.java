@@ -92,7 +92,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCu
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoTablaInteresServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.DescuentoAcademicoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.ArqueoCajaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaSesionServiceIf;
 
 /**
  *
@@ -197,6 +199,8 @@ public abstract class ServiceFactory {
     public AlertaServiceIf getAlertaServiceIf(){return (AlertaServiceIf) getRecursosRMI(AlertaServiceIf.class);};
     
     public CajaServiceIf getCajaServiceIf(){return (CajaServiceIf) getRecursosRMI(CajaServiceIf.class);};
+    public CajaSesionServiceIf getCajaSesionServiceIf(){return (CajaSesionServiceIf) getRecursosRMI(CajaSesionServiceIf.class);};
+    public ArqueoCajaServiceIf getArqueoCajaServiceIf(){return (ArqueoCajaServiceIf) getRecursosRMI(ArqueoCajaServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente
