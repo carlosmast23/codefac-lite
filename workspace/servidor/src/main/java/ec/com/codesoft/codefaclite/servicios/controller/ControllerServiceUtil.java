@@ -76,6 +76,7 @@ import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudi
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlantillaEstudianteService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlantillaService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubrosNivelService;
+import ec.com.codesoft.codefaclite.servidor.service.pos.ArqueoCajaService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaSesionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.DestinatarioGuiaRemisionService;
@@ -264,7 +265,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(PrestamoService.class,PrestamoServiceIf.class);
             mapRecursos.put(CajaService.class,CajaServiceIf.class);
             mapRecursos.put(CajaSesionService.class, CajaSesionServiceIf.class);
-            mapRecursos.put(ArqueoCaja.class, ArqueoCajaServiceIf.class);
+            mapRecursos.put(ArqueoCajaService.class, ArqueoCajaServiceIf.class);
             mapRecursos.put(DescuentoAcademicoService.class,DescuentoAcademicoServiceIf.class);
             mapRecursos.put(AlertaService.class,AlertaServiceIf.class);
             
