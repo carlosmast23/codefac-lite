@@ -304,7 +304,10 @@ public class Producto implements Serializable, Comparable<Producto> {
     }
 
     public void setManejarInventarioEnum(EnumSiNo manejarInventarioEnum) {
-        this.manejarInventario = manejarInventarioEnum.getLetra();
+        if(manejarInventarioEnum!=null)
+            this.manejarInventario = manejarInventarioEnum.getLetra();
+        else
+            this.manejarInventario=null;
     }
     
 
@@ -316,8 +319,15 @@ public class Producto implements Serializable, Comparable<Producto> {
         return EnumSiNo.getEnumByLetra(generarCodigoBarras);
     }
 
-    public void setGenerarCodigoBarras(EnumSiNo generarCodigoBarrasEnum) {
-        this.generarCodigoBarras = generarCodigoBarrasEnum.getLetra();
+    public void setGenerarCodigoBarrasEnum(EnumSiNo generarCodigoBarrasEnum) {
+        if(generarCodigoBarrasEnum==null)
+        {
+            this.generarCodigoBarras=null;
+        }
+        else
+        {
+            this.generarCodigoBarras = generarCodigoBarrasEnum.getLetra();
+        }
     }
 
     public String getTransportarEnGuiaRemision() {
@@ -422,6 +432,14 @@ public class Producto implements Serializable, Comparable<Producto> {
         return EnumSiNo.getEnumByLetra(garantia);
     }
     
+    public void setGarantiaEnum(EnumSiNo enumSiNo) {
+        
+        if(enumSiNo!=null)
+            this.garantia=enumSiNo.getLetra();
+        else
+            this.garantia=null;
+    }
+    
     /*public EnumSiNo getManejarInventarioEnum()
     {
         return EnumSiNo.getEnumByLetra(manejarInventario);
@@ -445,6 +463,14 @@ public class Producto implements Serializable, Comparable<Producto> {
     {
         return TipoProductoEnum.getEnumByLetra(tipoProductoCodigo);
     }   
+    
+    public void setTipoProductoEnum(TipoProductoEnum tipoProductoEnum)
+    {
+        if(tipoProductoEnum!=null)
+            tipoProductoCodigo=tipoProductoEnum.getLetra();
+        else
+            tipoProductoCodigo=null;
+    } 
 
     @Override
     public String toString() {

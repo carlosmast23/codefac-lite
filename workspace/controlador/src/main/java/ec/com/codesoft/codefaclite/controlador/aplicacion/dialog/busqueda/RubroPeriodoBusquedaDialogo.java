@@ -54,5 +54,10 @@ public class RubroPeriodoBusquedaDialogo implements InterfaceModelFind<RubrosNiv
         dato.add(t.getPeriodo().getNombre());
         dato.add(t.getValor().toString());
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

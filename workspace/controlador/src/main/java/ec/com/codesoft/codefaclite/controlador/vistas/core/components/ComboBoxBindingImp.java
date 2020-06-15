@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vistas.core.components;
 
+import ec.com.codesoft.codefaclite.controlador.vistas.core.ConverterSwingMvvc;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
@@ -21,46 +22,69 @@ import javax.swing.JTextField;
 public class ComboBoxBindingImp extends ComponentBindingAbstract<JComboBox,ComboBoxBinding>{
 
     private ComponentBindingIf source=new ComponentBindingIf<List,ComboBoxBinding>() {
+        //Todo: Variable temporal para evitar que remplacen la misma fuente de datos sin son iguales
+        public List valueTemp;
         @Override
-        public void getAccion(String nombrePropiedadControlador) {
+        public void getAccion(String nombrePropiedadControlador,ConverterSwingMvvc converter) {
             
         }
 
         @Override
         public void setAccion(List value) {
+            if(valueTemp==value)
+                return;
+                
             UtilidadesComboBox.llenarComboBox(getComponente(), value);
+            
+            valueTemp=value;
+            
         }
 
         @Override
         public String getNombrePropiedadControlador(ComboBoxBinding componente) {
             return componente.source();
         }
+
+        @Override
+        public Class getConverterClass(ComboBoxBinding anotacion) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+
        
             
     };
     
     
     private ComponentBindingIf valueSelect=new ComponentBindingIf<Object,ComboBoxBinding>() {
+        
         @Override
-        public void getAccion(String nombrePropiedadControlador) {
+        public void getAccion(String nombrePropiedadControlador,ConverterSwingMvvc converter) {
             getComponente().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    setValoresAlControlador(getComponente().getSelectedItem(), nombrePropiedadControlador);
+                    setValoresAlControlador(getComponente().getSelectedItem(), nombrePropiedadControlador,converter);
                 }
             });
         }
 
         @Override
         public void setAccion(Object value) {
-            //UtilidadesComboBox.llenarComboBox(getComponente(), value);
+            Object componente=getComponente();
+            getComponente().setSelectedItem(value);
         }
 
         @Override
         public String getNombrePropiedadControlador(ComboBoxBinding componente) {
             return componente.valueSelect();
         }
-       
+
+        @Override
+        public Class getConverterClass(ComboBoxBinding anotacion) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+
             
     };
     

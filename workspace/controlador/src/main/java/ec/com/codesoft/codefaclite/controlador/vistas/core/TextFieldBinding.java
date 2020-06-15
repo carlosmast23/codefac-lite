@@ -21,4 +21,5 @@ public @interface TextFieldBinding {
     String visible() default "";
     String editable() default "";
     String actionListener() default "";
+    Class converter() default ConverterSwingMvvc.Error.class;
 }

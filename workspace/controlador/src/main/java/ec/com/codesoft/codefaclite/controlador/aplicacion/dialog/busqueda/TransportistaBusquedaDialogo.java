@@ -55,6 +55,11 @@ public class TransportistaBusquedaDialogo implements InterfaceModelFind<Transpor
         dato.add(t.getNombres());
         dato.add(t.getPlacaVehiculo());       
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
 }

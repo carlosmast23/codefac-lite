@@ -7,9 +7,12 @@ package ec.com.codesoft.codefaclite.codefacweb.core;
 
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesCoreCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -31,6 +34,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 
 /**
  *
@@ -78,6 +82,26 @@ public class ControllerCodefacMb implements Serializable {
           }
           
           
+          
+    }
+    
+    public void iniciar()
+    {
+        System.out.println("ejecutando metodo iniciar()");    
+        try {
+            UtilidadesCoreCodefac.ejecutarIniciar(generalAbstractMb);
+            UtilidadesCoreCodefac.ejecutarIniciar(UtilidadesCoreCodefac.getControladorTodoVista(generalAbstractMb));    
+            limpiar();
+            
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void limpiar()
+    {
+        UtilidadesCoreCodefac.ejecutarLimpiar(generalAbstractMb);
+        UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(generalAbstractMb));
     }
     
     public void aceptar()
@@ -89,11 +113,20 @@ public class ControllerCodefacMb implements Serializable {
         System.out.println("presionado boton nuevo");
         try {
             generalAbstractMb.nuevo();
+            VistaCodefacIf controladorVista=UtilidadesCoreCodefac.getControladorTodoVista(generalAbstractMb);
+            if(controladorVista!=null)
+            {
+                controladorVista.nuevo();
+            }
+            generalAbstractMb.mostrarResultadoGrabar=false;
+            limpiar();            
             estadoEnum = EstadoFormEnum.GRABAR;
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedOperationException ex) {
             MensajeMb.mensaje(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -105,7 +138,15 @@ public class ControllerCodefacMb implements Serializable {
         //Metodo save desde el controlador
         if (estadoEnum.equals(EstadoFormEnum.GRABAR)) {
             try {
-                generalAbstractMb.grabar();
+                VistaCodefacIf vistaControlador=UtilidadesCoreCodefac.getControladorTodoVista(generalAbstractMb);
+                if(vistaControlador!=null)
+                {
+                    vistaControlador.grabar();
+                }
+                else
+                {
+                    generalAbstractMb.grabar();
+                }
                 //generalAbstractMb.nuevo();
                 
                 //Programacion para retornar el valor cuando se seleccione un dialogo
@@ -115,24 +156,46 @@ public class ControllerCodefacMb implements Serializable {
                     {
                         DialogoWeb dialogoWeb=(DialogoWeb) generalAbstractMb;
                         PrimeFaces.current().dialog().closeDynamic(dialogoWeb.getResultDialogo());
+                        limpiar();
                     }
                     
                 }
-                
+                else
+                {                
+                    //Solo limpiar si no va a mostrar un dialogo de resultado por que en ese caso
+                    //todavia necesita las variables temporales
+                    if(!generalAbstractMb.mostrarResultadoGrabar)
+                    {
+                        limpiar();
+                    }
+                }
                 
             } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
             } catch (UnsupportedOperationException ex) {
                 MensajeMb.mensaje(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (estadoEnum.equals(EstadoFormEnum.EDITAR)) {
             try {
-                generalAbstractMb.editar();
+                VistaCodefacIf vistaControlador=UtilidadesCoreCodefac.getControladorTodoVista(generalAbstractMb);
+                if(vistaControlador!=null)
+                {
+                    vistaControlador.editar();
+                }
+                else
+                {
+                    generalAbstractMb.editar();
+                }
+                limpiar();
                 estadoEnum = EstadoFormEnum.GRABAR;
             } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
             } catch (UnsupportedOperationException ex) {
                 MensajeMb.mensaje(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
@@ -164,11 +227,20 @@ public class ControllerCodefacMb implements Serializable {
     public void abrirDialogoBusqueda() {
         try {
             System.out.println("ejecutar abrir dialogo controlador");
-            UtilidadesDialogo.abrirDialogoBusqueda(generalAbstractMb.obtenerDialogoBusqueda());
+            
+            VistaCodefacIf vistaControlador = UtilidadesCoreCodefac.getControladorTodoVista(generalAbstractMb);
+            if (vistaControlador != null) {
+               UtilidadesDialogo.abrirDialogoBusqueda(vistaControlador.obtenerDialogoBusqueda());
+            }
+            else
+            {
+                UtilidadesDialogo.abrirDialogoBusqueda(generalAbstractMb.obtenerDialogoBusqueda());
+            }
             //abrirDialogoBusqueda(generalAbstractMb.obtenerDialogoBusqueda());
-        } catch (ExcepcionCodefacLite ex) {
-            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedOperationException ex) {
+        //} catch (ExcepcionCodefacLite ex) {
+        //    Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (UnsupportedOperationException ex) {
             MensajeMb.mensaje(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
         }
     }
@@ -177,15 +249,27 @@ public class ControllerCodefacMb implements Serializable {
 
     //Metodo que permite recibir el dato seleccionado
     public void onObjectChosen(SelectEvent event) {
-        try {
-            Object objetoSeleccionado = (Object) event.getObject();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Dato Seleccionado", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            generalAbstractMb.cargarBusqueda(objetoSeleccionado);
-            estadoEnum = EstadoFormEnum.EDITAR;
-        } catch (ExcepcionCodefacLite ex) {
-            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+        Object objetoSeleccionado = (Object) event.getObject();
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Dato Seleccionado", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        VistaCodefacIf vistaControlador = UtilidadesCoreCodefac.getControladorTodoVista(generalAbstractMb);
+        if(vistaControlador!=null)
+        {
+            try
+            {
+                vistaControlador.cargarDatosPantalla(objetoSeleccionado);
+                //System.out.println("catrgando datos pantalla controlador ...");
+            }catch(java.lang.UnsupportedOperationException u){}
         }
+        
+        try
+        {
+            generalAbstractMb.cargarDatosPantalla(objetoSeleccionado);   
+            //System.out.println("catrgando datos pantalla controlador normal ...");
+        }catch(java.lang.UnsupportedOperationException u){}
+        
+        estadoEnum = EstadoFormEnum.EDITAR;
     }
 
     public String getIndiceTabSecundario() {
@@ -225,12 +309,11 @@ public class ControllerCodefacMb implements Serializable {
 
     public void agregarVista(GeneralAbstractMb vista) {
         try {
-            generalAbstractMb = vista;   
-            System.out.println("Agregando al Controlador la Vista "+vista.titulo());
+            generalAbstractMb = vista;     
+            System.out.println("===== >AGREGANDO EL CONTROLADOR A LA VISTA  ");
             PrimeFaces.current().ajax().update("formulario:pnlDatos"); //Actualizar un componente desde la vista
             //System.out.println("actualizando el titulo en la pagina:"+titulo);
-        } catch (ExcepcionCodefacLite ex) {
-            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+            iniciar();
         } catch (UnsupportedOperationException ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -260,6 +343,8 @@ public class ControllerCodefacMb implements Serializable {
         current.executeScript("PF('dialogResultado').hide();"); //Todo: Parametrizar y poner en una funcion aparte este dialogo        
     
     }
+    
+   
 
     /*
     public String setTituloPagina(String titulo) {

@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.model;
 
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import java.util.ArrayList;
 import java.util.List;
 

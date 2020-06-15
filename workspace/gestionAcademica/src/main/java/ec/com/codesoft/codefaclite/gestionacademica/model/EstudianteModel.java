@@ -12,10 +12,11 @@ import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.EstudiantePanel;
 import ec.com.codesoft.codefaclite.gestionacademica.reportdata.EstudianteData;
@@ -391,12 +392,12 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         EstudianteBusquedaDialogo aulaBusquedaDialogo = new EstudianteBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(aulaBusquedaDialogo);
-        buscarDialogoModel.setNormalizarTextoBusqueda(true); //Activo que al buscar no se active los acentos
+        //BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(aulaBusquedaDialogo);
+        //buscarDialogoModel.setNormalizarTextoBusqueda(true); //Activo que al buscar no se active los acentos
         
-        return buscarDialogoModel;
+        return aulaBusquedaDialogo;
     }
 
     @Override

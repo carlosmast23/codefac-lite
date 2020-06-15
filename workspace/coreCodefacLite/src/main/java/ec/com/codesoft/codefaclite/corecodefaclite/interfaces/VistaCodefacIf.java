@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.corecodefaclite.interfaces;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -70,7 +71,7 @@ public interface VistaCodefacIf {
      *
      * @return
      */
-    public abstract BuscarDialogoModel obtenerDialogoBusqueda();
+    public abstract InterfaceModelFind obtenerDialogoBusqueda();
 
     /**
      * Metodo donde se establece como se van a cargar los datos en pantalla

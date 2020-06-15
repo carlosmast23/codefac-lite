@@ -22,7 +22,7 @@ import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FacturaModelInterface;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.InformacionAdicionalData;
@@ -72,7 +72,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
-import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
+import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
@@ -330,11 +330,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     }
 
-    @Override
-    public void cargarBusqueda(Object obj) {
-        factura = (Factura) obj;
-        fechaEmision = new java.sql.Date(factura.getFechaEmision().getTime());
-    }
+    
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
@@ -360,7 +356,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         proforma.setId(null); 
         //cargarDatosCliente(clienteOficina);
         //cargarDatosAdicionalesCliente();
-        cargarBusqueda(proforma);
+        cargarDatosPantalla(proforma);
         
     }
 
@@ -1043,6 +1039,31 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public Boolean isPagoConCartera() {
         return false; //TODO: Falta aumentar una opcion en la vista para habilitar es nueva funcion
+    }
+
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String getURLAyuda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void cargarDatosPantalla(Object entidad) {
+        factura = (Factura) entidad;
+        fechaEmision = new java.sql.Date(factura.getFechaEmision().getTime());
+    }
+
+    public Map<Integer, Boolean> permisosFormulario() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**

@@ -7,12 +7,16 @@ package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador;
-import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador.ProductoModelControladorInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador.IvaOpcionEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.crm.panel.ProductoForm;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
@@ -52,13 +56,11 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author PC
  */
-public class ProductoModel extends ProductoForm implements DialogInterfacePanel<Producto> , InterfazPostConstructPanel,ProductoModelControladorInterface {
+public class ProductoModel extends ProductoForm implements DialogInterfacePanel<Producto> , InterfazPostConstructPanel,ProductoModelControlador.SwingIf ,ControladorVistaIf {
 
-    private List<EnumSiNo> imprimirCodigoBarrasList;
-    private EnumSiNo imprimirBarrasSeleccionado;
+    //private EnumSiNo imprimirBarrasSeleccionado;
         
-    /////////////////////////////////////////////
-    private Producto producto;
+    /////////////////////////////////////////////    
     private Impuesto impuesto;
     private CategoriaProducto catProducto;
 
@@ -81,24 +83,25 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        try {
-            setearValoresProducto(producto);
-            producto=productoService.grabar(producto);
+        /*try {
+            setearValoresProducto(controlador.producto);
+            controlador.producto=productoService.grabar(controlador.producto);
             DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar");
         } catch (RemoteException ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        try {
+        /*try {
             
-            setearValoresProducto(producto);
-            productoService.editarProducto(producto);
+            setearValoresProducto(controlador.producto);
+            productoService.editarProducto(controlador.producto);
             DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -106,34 +109,33 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Datos correctos", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite(ex.getMessage());
-        }
+        }*/
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private void setearValoresProducto(Producto producto) {
-        producto.setCodigoPersonalizado(getTxtCodigoPersonalizado().getText());
+    public void setearValoresProducto(Producto producto) {
         producto.setCodigoEAN(getTxtCodigoEAN().getText());
         producto.setCodigoUPC(getTxtCodigoUPC().getText());
-        producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        //producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
 
           
-        BigDecimal valorUnitario=BigDecimal.ZERO;
-        producto.setNombre(getTextNombre().getText());
-        valorUnitario = new BigDecimal(getTextValorUnitario().getText());
+        //BigDecimal valorUnitario=BigDecimal.ZERO;
+        //valorUnitario = new BigDecimal(getTextValorUnitario().getText());
 
         //Si el valor esta incluido el iva calculo el valor sin iva
-        if(getCmbIvaOpcionPrecioVentaPublico().getSelectedItem().equals(IvaOpcionEnum.CON_IVA))
+        /*if(controlador.getIvaOpcionSeleccionado().equals(IvaOpcionEnum.CON_IVA))
         {            
             BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
             BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
             valorUnitario=valorUnitario.divide(ivaTmp,3,BigDecimal.ROUND_HALF_UP);
             
         }
-        producto.setValorUnitario(valorUnitario);
+        producto.setValorUnitario(valorUnitario);*/
         /**
          * Setear valores adicionales
          */
         producto.setUbicacion(getTxtUbicacion().getText());
-        producto.setGarantia(((EnumSiNo) getCmbGarantia().getSelectedItem()).getLetra());
+        //producto.setGarantia(((EnumSiNo) getCmbGarantia().getSelectedItem()).getLetra());
         producto.setCantidadMinima(Integer.parseInt(getTxtCantidadMinima().getText()));
         producto.setPrecioDistribuidor(new BigDecimal(getTxtPrecioDistribuidor().getText()));
         producto.setPrecioTarjeta(new BigDecimal(getTxtPrecioTarjeta().getText()));
@@ -147,22 +149,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setCaracteristicas(getTxtCaracteristica().getText());
         producto.setObservaciones(getTxtObservaciones().getText());
         
-        TipoProductoEnum tipoProductoEnum=(TipoProductoEnum) getCmbTipoProducto().getSelectedItem();
-        producto.setTipoProductoCodigo(tipoProductoEnum.getLetra());
+        //TipoProductoEnum tipoProductoEnum=(TipoProductoEnum) getCmbTipoProducto().getSelectedItem();
+        //producto.setTipoProductoCodigo(tipoProductoEnum.getLetra());
         /**
          * AGREGAR LOS DATOS ADICIONALES DEL CATALOGO PRODUCTO
          */
-        CatalogoProducto catalogoProducto=crearCatalogoProducto();
-        producto.setCatalogoProducto(catalogoProducto);
+        //CatalogoProducto catalogoProducto=crearCatalogoProducto();
+        //producto.setCatalogoProducto(catalogoProducto);
         
-        EnumSiNo enumSiNo=(EnumSiNo) getCmbManejaInventario().getSelectedItem();
-        producto.setManejarInventario(enumSiNo.getLetra());
         
-        //Setear la opcion de si desea generar el codigo de barras
-        //enumSiNo=(EnumSiNo) getCmbGenerarCodigoBarras().getSelectedItem();        
-        producto.setGenerarCodigoBarras(imprimirBarrasSeleccionado);
-        
-        enumSiNo=enumSiNo.getEnumByBoolean(getChkTransportarGuiaRemision().isSelected());        
+        EnumSiNo enumSiNo=EnumSiNo.getEnumByBoolean(getChkTransportarGuiaRemision().isSelected());        
         producto.setTransportarEnGuiaRemisionEnum(enumSiNo);
         
         enumSiNo=enumSiNo.getEnumByBoolean(getChkOcultarDetalleVenta().isSelected());        
@@ -173,32 +169,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     }
     
-    private CatalogoProducto crearCatalogoProducto()
-    {
-        CatalogoProducto catalogoProducto=new CatalogoProducto();
-        CategoriaProducto categoriaProducto=(CategoriaProducto) getCmbCategoriaProducto().getSelectedItem();
-        catalogoProducto.setCategoriaProducto(categoriaProducto);
-        if(getComboIce().getSelectedItem()!=null && !getComboIce().getSelectedItem().getClass().equals(String.class))
-        {
-            ImpuestoDetalle ice= (ImpuestoDetalle) getComboIce().getSelectedItem();
-            catalogoProducto.setIce(ice);
-        }
-        
-        if( getComboIrbpnr().getSelectedItem()!=null && !getComboIrbpnr().getSelectedItem().getClass().equals(String.class))
-        {
-            ImpuestoDetalle ibpnr=(ImpuestoDetalle) getComboIrbpnr().getSelectedItem();
-            catalogoProducto.setIrbpnr(ibpnr);
-        }
-        
-        ImpuestoDetalle iva= (ImpuestoDetalle) getComboIva().getSelectedItem();
-        catalogoProducto.setIva(iva);
-        
-        catalogoProducto.setNombre(getTextNombre().getText());
-        
-        TipoProductoEnum tipoProductoEnum=TipoProductoEnum.PRODUCTO;
-        catalogoProducto.setModuloCod(ModuloCodefacEnum.INVENTARIO.getCodigo());
-        return catalogoProducto;
-    }
+    
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
@@ -209,7 +180,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 if (!respuesta) {
                     throw new ExcepcionCodefacLite("Cancelacion usuario");
                 }
-                productoService.eliminarProducto(producto);
+                productoService.eliminarProducto(controlador.producto);
                 DialogoCodefac.mensaje("Datos correctos", "El producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             } catch (RemoteException ex) {
                 Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -234,7 +205,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+        /*ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         Producto productoTmp = (Producto) buscarDialogoModel.getResultado();
@@ -244,86 +215,35 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         }
         else
         {
-            this.producto=productoTmp;
+            controlador.producto=productoTmp;
             cargarProducto();
-        }
-
+        }*/
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    private void cargarProducto()
-    {
-        getTxtCodigoPersonalizado().setText(producto.getCodigoPersonalizado());
-        getTxtCodigoEAN().setText(producto.getCodigoEAN());
-        getTxtCodigoUPC().setText(producto.getCodigoUPC());
-        getTextNombre().setText(producto.getNombre());
-        getTextValorUnitario().setText(producto.getValorUnitario().toString());
-        getCmbIvaOpcionPrecioVentaPublico().setSelectedItem(IvaOpcionEnum.SIN_IVA); //Seleccciona esta opcion porque por defecto los precios en la base de datos estan grabados sin Iva
-
-
-        /**
-         * Cargar datos adicionales
-         */
-        getTxtUbicacion().setText((producto.getUbicacion() != null) ? producto.getUbicacion() : "");
-        getCmbGarantia().setSelectedItem(EnumSiNo.getEnumByLetra(producto.getGarantia()));
-        //get().setText((producto.getUbicacion()!=null)?producto.getUbicacion():"");
-        getTxtCantidadMinima().setText((producto.getCantidadMinima() != null) ? producto.getCantidadMinima() + "" : "");
-        getTxtPrecioDistribuidor().setText((producto.getPrecioDistribuidor() != null) ? producto.getPrecioDistribuidor() + "" : "");
-        getTxtPrecioTarjeta().setText((producto.getPrecioTarjeta() != null) ? producto.getPrecioTarjeta() + "" : "");
-        //getTxtStockInicial().setText((producto.getStockInicial() != null) ? producto.getStockInicial() + "" : "");
-        getTxtMarca().setText((producto.getMarca() != null) ? producto.getMarca() + "" : "");
-        getTxtImagenProducto().setText((producto.getImagen() != null) ? producto.getImagen() + "" : "");
-        //getCmbCategoriaProducto().setSelectedItem(producto.getCatalogoProducto().getCategoriaProducto());
-        getTxtCaracteristica().setText((producto.getCaracteristicas() != null) ? producto.getCaracteristicas() + "" : "");
-        getTxtObservaciones().setText((producto.getObservaciones() != null) ? producto.getObservaciones() + "" : "");
-        getCmbTipoProducto().setSelectedItem(producto.getTipoProductoEnum());
-        
-        /**
-         * Cargar datos de la entidad catalogo producto
-         */
-        getCmbCategoriaProducto().setSelectedItem(producto.getCatalogoProducto().getCategoriaProducto());
-        getComboIva().setSelectedItem(producto.getCatalogoProducto().getIva());
-        getComboIrbpnr().setSelectedItem(producto.getCatalogoProducto().getIrbpnr());
-        getComboIce().setSelectedItem(producto.getCatalogoProducto().getIce()); 
-        getTxtPrecio1SinSubsidio().setText((producto.getPrecioSinSubsidio()!=null)?producto.getPrecioSinSubsidio().toString():"0");
-        
-        //Setear la opcion de inventario y si no esta escogida ninguna opcion de si maneja inventario por defecte seteo en no
-        String letraInventario=(producto.getManejarInventario()!=null)?producto.getManejarInventario():EnumSiNo.NO.getLetra();        
-        EnumSiNo enumInventario=EnumSiNo.getEnumByLetra(letraInventario);        
-        getCmbManejaInventario().setSelectedItem(enumInventario);
-        
-        //Cargar si desea generar el codigo de los productos
-        String letraGenerarCodBarras=(producto.getGenerarCodigoBarras()!=null)?producto.getGenerarCodigoBarras():EnumSiNo.NO.getLetra();        
-        EnumSiNo enumGenerarCodigoBarras=EnumSiNo.getEnumByLetra(letraGenerarCodBarras);        
-        imprimirBarrasSeleccionado=enumGenerarCodigoBarras;
-        //getCmbGenerarCodigoBarras().setSelectedItem(enumGenerarCodigoBarras);
-        
-        
-        getChkTransportarGuiaRemision().setSelected(producto.getTransportarEnGuiaRemisionEnum().getBool());
-        getChkOcultarDetalleVenta().setSelected(producto.getOcultarDetalleVentaEnum().getBool());
-        
-        actualizarTablaEnsamble();
     
-    }
     
 
     @Override
     public void limpiar() {
-
-        this.producto = new Producto();
+        //controlador.producto=new Producto();
+        //controlador.producto.setGenerarCodigoBarrasEnum(EnumSiNo.NO);
+        //this.producto = new Producto();
 
         initModelTablaDatosEnsamble();
         setearValoresIniciales();
 
-        getComboIce().setEditable(true);
-        getComboIce().setSelectedItem("Seleccione : ");
+        //getComboIce().setEditable(true);
+        //getComboIce().setSelectedItem("Seleccione : ");
 
-        getComboIrbpnr().setEditable(true);
-        getComboIrbpnr().setSelectedItem("Seleccione: ");
+        //getComboIrbpnr().setEditable(true);
+        //getComboIrbpnr().setSelectedItem("Seleccione: ");
         
-        getCmbIvaOpcionPrecioVentaPublico().setSelectedItem(IvaOpcionEnum.SIN_IVA);
+        //getCmbIvaOpcionPrecioVentaPublico().setSelectedItem(IvaOpcionEnum.SIN_IVA);
         
         //getCmbGenerarCodigoBarras().setSelectedItem(EnumSiNo.NO);
-        imprimirBarrasSeleccionado=EnumSiNo.NO;
+        //producto.setGenerarCodigoBarras(EnumSiNo.NO);
+        //imprimirBarrasSeleccionado=EnumSiNo.NO;
         
         getChkTransportarGuiaRemision().setEnabled(true);
         getChkTransportarGuiaRemision().setSelected(true);
@@ -361,7 +281,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     public Producto getResult() throws ExcepcionCodefacLite {
         try {
             grabar();
-            return producto;
+            return controlador.producto;
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
@@ -370,18 +290,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void iniciar() {
+        controlador=new ProductoModelControlador(DialogoCodefac.intefaceMensaje, session,this,ModelControladorAbstract.TipoVista.ESCRITORIO);
         
+        //controlador.producto=new Producto();
+        //controlador.producto.setGenerarCodigoBarrasEnum(EnumSiNo.NO);
         //Iniciar cmbLleva inventario
-        imprimirCodigoBarrasList=new ArrayList<EnumSiNo>();
-        imprimirCodigoBarrasList.add(EnumSiNo.NO);
-        imprimirCodigoBarrasList.add(EnumSiNo.SI);
         
-        
-        controlador=new ProductoModelControlador(DialogoCodefac.intefaceMensaje, session,this);
         listenerComboBox();
         listenerBotones();
         
-        mapDatosIngresadosDefault.put(getTextValorUnitario(),"0");
+        //mapDatosIngresadosDefault.put(getTextValorUnitario(),"0");
         mapDatosIngresadosDefault.put(getTxtCantidadEnsamble(),"0");
         mapDatosIngresadosDefault.put(getTxtCantidadEnsamble(),"0");
         
@@ -395,6 +313,13 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
         catProdService = ServiceFactory.getFactory().getCategoriaProductoServiceIf();
         iniciarCombosBox();
+        
+        getBtnTemporal().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DialogoCodefac.mensaje(new CodefacMsj("Enum:"+controlador.getProducto().getManejarInventarioEnum(), CodefacMsj.TipoMensajeEnum.CORRECTO));
+            }
+        });
     }
 
     @Override
@@ -413,8 +338,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     }
 
     private void listenerComboBox() {
-
-        getCmbManejaInventario().addActionListener(new ActionListener() {
+        //TODO: Terminar de implementar este listener
+        /*getCmbManejaInventario().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
@@ -431,7 +356,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
                 
             }
-        });
+        });*/
         
 
     }
@@ -469,7 +394,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 ProductoEnsamble componenteEnsamble = new ProductoEnsamble();
                 componenteEnsamble.setCantidad(Integer.parseInt(getTxtCantidadEnsamble().getText()));
                 componenteEnsamble.setComponenteEnsamble(productoEnsamble);
-                producto.addProductoEnsamble(componenteEnsamble);
+                controlador.producto.addProductoEnsamble(componenteEnsamble);
                 actualizarTablaEnsamble();
             }
         });
@@ -480,9 +405,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         String[] titulo = {"Cantidad", "Nombre", "Precio Venta"};
         DefaultTableModel tableModel = new DefaultTableModel(titulo, 0);
 
-        if(producto.getDetallesEnsamble()!=null)
+        if(controlador.producto.getDetallesEnsamble()!=null)
         {
-            for (ProductoEnsamble productoEnsamble : producto.getDetallesEnsamble()) {
+            for (ProductoEnsamble productoEnsamble : controlador.producto.getDetallesEnsamble()) {
                 Vector<String> fila = new Vector<String>();
                 fila.add(productoEnsamble.getCantidad() + "");
                 fila.add(productoEnsamble.getComponenteEnsamble().getNombre());
@@ -495,7 +420,6 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     
     private void setearValoresIniciales()
     {
-        getTextValorUnitario().setText("0");
         getTxtCantidadEnsamble().setText("0");
         getTxtCantidadMinima().setText("0");
         getTxtPrecioDistribuidor().setText("0");
@@ -512,105 +436,139 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        controlador.producto=(Producto) entidad;
+        //getTxtCodigoPersonalizado().setText(controlador.producto.getCodigoPersonalizado());
+        getTxtCodigoEAN().setText(controlador.producto.getCodigoEAN());
+        getTxtCodigoUPC().setText(controlador.producto.getCodigoUPC());
+        //getTextNombre().setText(controlador.producto.getNombre());
+        //getTextValorUnitario().setText(controlador.producto.getValorUnitario().toString());
+        //getCmbIvaOpcionPrecioVentaPublico().setSelectedItem(IvaOpcionEnum.SIN_IVA); //Seleccciona esta opcion porque por defecto los precios en la base de datos estan grabados sin Iva
+
+
+        /**
+         * Cargar datos adicionales
+         */
+        getTxtUbicacion().setText((controlador.producto.getUbicacion() != null) ? controlador.producto.getUbicacion() : "");
+        //getCmbGarantia().setSelectedItem(EnumSiNo.getEnumByLetra(controlador.producto.getGarantia()));
+        //get().setText((producto.getUbicacion()!=null)?producto.getUbicacion():"");
+        getTxtCantidadMinima().setText((controlador.producto.getCantidadMinima() != null) ? controlador.producto.getCantidadMinima() + "" : "");
+        getTxtPrecioDistribuidor().setText((controlador.producto.getPrecioDistribuidor() != null) ? controlador.producto.getPrecioDistribuidor() + "" : "");
+        getTxtPrecioTarjeta().setText((controlador.producto.getPrecioTarjeta() != null) ? controlador.producto.getPrecioTarjeta() + "" : "");
+        //getTxtStockInicial().setText((producto.getStockInicial() != null) ? producto.getStockInicial() + "" : "");
+        getTxtMarca().setText((controlador.producto.getMarca() != null) ? controlador.producto.getMarca() + "" : "");
+        getTxtImagenProducto().setText((controlador.producto.getImagen() != null) ? controlador.producto.getImagen() + "" : "");
+        //getCmbCategoriaProducto().setSelectedItem(producto.getCatalogoProducto().getCategoriaProducto());
+        getTxtCaracteristica().setText((controlador.producto.getCaracteristicas() != null) ? controlador.producto.getCaracteristicas() + "" : "");
+        getTxtObservaciones().setText((controlador.producto.getObservaciones() != null) ? controlador.producto.getObservaciones() + "" : "");
+        //getCmbTipoProducto().setSelectedItem(controlador.producto.getTipoProductoEnum());
+        
+        /**
+         * Cargar datos de la entidad catalogo producto
+         */
+        //getCmbCategoriaProducto().setSelectedItem(controlador.producto.getCatalogoProducto().getCategoriaProducto());
+        //getComboIva().setSelectedItem(controlador.producto.getCatalogoProducto().getIva());
+        //getComboIrbpnr().setSelectedItem(controlador.producto.getCatalogoProducto().getIrbpnr());
+        //getComboIce().setSelectedItem(controlador.producto.getCatalogoProducto().getIce()); 
+        getTxtPrecio1SinSubsidio().setText((controlador.producto.getPrecioSinSubsidio()!=null)?controlador.producto.getPrecioSinSubsidio().toString():"0");
+        
+        //Setear la opcion de inventario y si no esta escogida ninguna opcion de si maneja inventario por defecte seteo en no
+        //String letraInventario=(controlador.producto.getManejarInventario()!=null)?controlador.producto.getManejarInventario():EnumSiNo.NO.getLetra();        
+        //EnumSiNo enumInventario=EnumSiNo.getEnumByLetra(letraInventario);        
+        //getCmbManejaInventario().setSelectedItem(enumInventario);
+        
+        //Cargar si desea generar el codigo de los productos
+        //String letraGenerarCodBarras=(controlador.producto.getGenerarCodigoBarras()!=null)?controlador.producto.getGenerarCodigoBarras():EnumSiNo.NO.getLetra();        
+        //EnumSiNo enumGenerarCodigoBarras=EnumSiNo.getEnumByLetra(letraGenerarCodBarras);        
+        //imprimirBarrasSeleccionado=enumGenerarCodigoBarras;
+        //getCmbGenerarCodigoBarras().setSelectedItem(enumGenerarCodigoBarras);
+        
+        
+        getChkTransportarGuiaRemision().setSelected(controlador.producto.getTransportarEnGuiaRemisionEnum().getBool());
+        getChkOcultarDetalleVenta().setSelected(controlador.producto.getOcultarDetalleVentaEnum().getBool());
+        
+        actualizarTablaEnsamble();
     }
 
     @Override
     public void postConstructorExterno(Object[] parametros) {
       
         EnumSiNo enumSiNo=(EnumSiNo) parametros[0];
-        getCmbManejaInventario().setSelectedItem(enumSiNo);
+        //getCmbManejaInventario().setSelectedItem(enumSiNo);
         
         //TODO: Mejorar esta parte porque solo va a funcionar para el codigo personalizado y si quieren manejar algunos codigos no funciona
         String codigoProducto=(String) parametros[1];
         getTxtCodigoPersonalizado().setText(codigoProducto);
     }
 
-    @Override
-    public void llenarCmbManejaInventario(EnumSiNo[] datos) {
-        UtilidadesComboBox.llenarComboBox(getCmbManejaInventario(),datos);
-    }
-
+   
     /*@Override
     public void llenarCmbGenerarCodigoBarras(EnumSiNo[] datos) {
         UtilidadesComboBox.llenarComboBox(getCmbGenerarCodigoBarras(),datos);
     }*/
 
-    @Override
-    public void llenarCmbTipoProducto(TipoProductoEnum[] tipoProductoList) {
-        UtilidadesComboBox.llenarComboBox(getCmbTipoProducto(),tipoProductoList);
-    }
+   
 
-    @Override
+    /*@Override
     public void llenarCmbCategoriaProducto(List<CategoriaProducto> catProdList) {
         UtilidadesComboBox.llenarComboBox(getCmbCategoriaProducto(),catProdList);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void llenarComboIva(List<ImpuestoDetalle> impuestos) {
         UtilidadesComboBox.llenarComboBox(getComboIva(),impuestos);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void llenarComboIce(List<ImpuestoDetalle> impuestos) {
         UtilidadesComboBox.llenarComboBox(getComboIce(),impuestos);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void llenarComboIrbpnr(List<ImpuestoDetalle> impuestos) {
         UtilidadesComboBox.llenarComboBox(getComboIrbpnr(),impuestos);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void seleccionarComboIva(ImpuestoDetalle impuesto) {
         getComboIva().setSelectedItem(impuesto);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void llenarCmbGarantia(EnumSiNo[] datos) {
         UtilidadesComboBox.llenarComboBox(getCmbGarantia(),datos);
-    }
+    }*/
     
     //==================== METODOS GET AND SET ==============================//
+    
 
-    public List<EnumSiNo> getImprimirCodigoBarrasList() {
-        return imprimirCodigoBarrasList;
-    }
-
-    public void setImprimirCodigoBarrasList(List<EnumSiNo> imprimirCodigoBarrasList) {
-        this.imprimirCodigoBarrasList = imprimirCodigoBarrasList;
-    }
-
-    public EnumSiNo getImprimirBarrasSeleccionado() {
+    /*public EnumSiNo getImprimirBarrasSeleccionado() {
         return imprimirBarrasSeleccionado;
     }
 
     public void setImprimirBarrasSeleccionado(EnumSiNo imprimirBarrasSeleccionado) {
         this.imprimirBarrasSeleccionado = imprimirBarrasSeleccionado;
+    }*/
+
+    @Override
+    public ModelControladorAbstract getControladorVista() {
+        return controlador;
+    }
+
+    public ProductoModelControlador getControlador() {
+        return controlador;
+    }
+
+    public void setControlador(ProductoModelControlador controlador) {
+        this.controlador = controlador;
     }
     
     
-    public enum IvaOpcionEnum
-    {
-        SIN_IVA("Sin Iva"),
-        CON_IVA("Con Iva");
-        
-        private String nombre;
-
-        private IvaOpcionEnum(String nombre) {
-            this.nombre = nombre;
-        }
-
-        @Override
-        public String toString() {
-            return nombre;
-        }
-        
-    }
+    
+    
 }

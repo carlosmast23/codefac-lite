@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vistas.core.components;
 
+import ec.com.codesoft.codefaclite.controlador.vistas.core.ConverterSwingMvvc;
+
 /**
  *
  * @author CARLOS_CODESOFT
@@ -13,7 +15,7 @@ public interface ComponentBindingIf<T,C> {
     /**
      * Este metodo me permite establecer los valor que van de la VISTA al CONTROLADOR
      */
-    public void getAccion(String nombrePropiedadControlador);
+    public void getAccion(String nombrePropiedadControlador,ConverterSwingMvvc converter);
     /**
      * Este metodo me permite establecer elos valores que van del CONTROLADOR a la VISTA
      */
@@ -24,4 +26,6 @@ public interface ComponentBindingIf<T,C> {
      * @return 
      */
     public String getNombrePropiedadControlador(C componente);
+    
+    public Class getConverterClass(C anotacion);
 }

@@ -167,5 +167,10 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
         dato.add(t.getSaldo());
         dato.add(t.getTotal());
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

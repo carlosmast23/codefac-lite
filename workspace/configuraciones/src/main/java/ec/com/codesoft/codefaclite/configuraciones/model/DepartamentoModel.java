@@ -9,8 +9,9 @@ import ec.com.codesoft.codefaclite.configuraciones.busqueda.DepartamentoBusqueda
 import ec.com.codesoft.codefaclite.configuraciones.panel.DepartamentoPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
@@ -158,10 +159,10 @@ public class DepartamentoModel extends DepartamentoPanel
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         DepartamentoBusquedaDialogo busquedaDialogo = new DepartamentoBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
-        return buscarDialogoModel;  
+        //BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
+        return busquedaDialogo;  
     }
 
     @Override

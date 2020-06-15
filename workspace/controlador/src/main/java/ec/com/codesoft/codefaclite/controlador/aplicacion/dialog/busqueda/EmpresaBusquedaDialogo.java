@@ -61,5 +61,10 @@ public class EmpresaBusquedaDialogo implements InterfaceModelFind<Empresa>
         queryDialog.agregarParametro(2,GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

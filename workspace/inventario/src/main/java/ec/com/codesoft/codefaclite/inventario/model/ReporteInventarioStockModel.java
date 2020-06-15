@@ -8,8 +8,9 @@ package ec.com.codesoft.codefaclite.inventario.model;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CatalogoProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.ProveedorBusquedaDialogo;
@@ -121,25 +122,28 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         BuscarDialogoModel buscarDialogoModel = null;
         String opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
         switch(opcionReporte)
         {
             case "Producto":
                 ProductoBusquedaDialogo busquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
-                buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
-            break;
+                return busquedaDialogo;
+                //buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
+            //break;
             case "Proveedor":
                 ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
-                buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
-            break;
+                return proveedorBusquedaDialogo;
+                //buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
+            //break;
             case "Categoria":
                 CategoriaProductoBusquedaDialogo categoriaProductoBusquedaDialogo = new CategoriaProductoBusquedaDialogo(session.getEmpresa());
-                buscarDialogoModel = new BuscarDialogoModel(categoriaProductoBusquedaDialogo);
-            break;
+                return categoriaProductoBusquedaDialogo;
+                //buscarDialogoModel = new BuscarDialogoModel(categoriaProductoBusquedaDialogo);
+            //break;
         }
-        return buscarDialogoModel;
+        return null;
     }
 
     @Override

@@ -6,17 +6,19 @@
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import java.io.Serializable;
 import org.primefaces.PrimeFaces;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import javax.faces.bean.ManagedProperty;
 
 /**
  *
  * @author Carlos
  */
-public abstract class GeneralAbstractMb implements Serializable {
+public abstract class GeneralAbstractMb implements Serializable,VistaCodefacIf {
 
     public abstract void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException;
 
@@ -30,13 +32,20 @@ public abstract class GeneralAbstractMb implements Serializable {
 
     public abstract void buscar() throws ExcepcionCodefacLite, UnsupportedOperationException;
 
-    public abstract void cargarBusqueda(Object obj) throws ExcepcionCodefacLite, UnsupportedOperationException;
+    //public abstract void cargarBusqueda(Object obj) throws ExcepcionCodefacLite, UnsupportedOperationException;
 
     public abstract String titulo() throws ExcepcionCodefacLite, UnsupportedOperationException;
 
-    public abstract InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite;
+    public abstract InterfaceModelFind obtenerDialogoBusqueda();
+    //public abstract BuscarDialogoModel obtenerDialogoBusqueda() throws ExcepcionCodefacLite;
 
-    private ResultadoDialogo resultadoDialogo = new ResultadoDialogo();
+    public ResultadoDialogo resultadoDialogo = new ResultadoDialogo();
+   
+    /**
+     * variable que me permite saber si se tiene que mostrar un resultado despues de grabra
+     * variable util para saber si tengo que limpiar despues de grabar
+     */
+    public Boolean mostrarResultadoGrabar=false;
     
     @ManagedProperty(value = "#{sessionMb}")
     protected SessionMb sessionMb;
@@ -59,6 +68,7 @@ public abstract class GeneralAbstractMb implements Serializable {
         resultadoDialogo.setTitulo(codefacMensaje.titulo);
         PrimeFaces current = PrimeFaces.current();
         current.executeScript("PF('dialogResultado').show();"); //Todo: Parametrizar y poner en una funcion aparte este dialogo
+        mostrarResultadoGrabar=true; 
     }
     
     public void aceptarResultado()
@@ -74,6 +84,15 @@ public abstract class GeneralAbstractMb implements Serializable {
     public void setSessionMb(SessionMb sessionMb) {
         this.sessionMb = sessionMb;
     }
+
+    public Boolean getMostrarResultadoGrabar() {
+        return mostrarResultadoGrabar;
+    }
+
+    public void setMostrarResultadoGrabar(Boolean mostrarResultadoGrabar) {
+        this.mostrarResultadoGrabar = mostrarResultadoGrabar;
+    }
+    
     
     
     

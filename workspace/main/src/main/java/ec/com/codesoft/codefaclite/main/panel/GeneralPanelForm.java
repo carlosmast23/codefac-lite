@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.main.panel;
 
 
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.BorderLayout;
 import java.awt.Dimension;

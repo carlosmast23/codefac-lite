@@ -62,5 +62,10 @@ public class RetencionBusquedaDialogo implements InterfaceModelFind<Retencion> {
         dato.add(t.getProveedor().getNombresCompletos());
         dato.add(FechaFormatoEnum.ANIO_MES_DIA.getFecha(t.getFechaEmision()));
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

@@ -21,6 +21,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -66,10 +68,6 @@ public class EmpleadoMb extends GeneralAbstractMb implements Serializable {
 
     }
 
-    @Override
-    public void cargarBusqueda(Object obj) {
-        this.empleado = (Empleado) obj;
-    }
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
@@ -111,6 +109,34 @@ public class EmpleadoMb extends GeneralAbstractMb implements Serializable {
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void limpiar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String getURLAyuda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void cargarDatosPantalla(Object entidad) {
+        this.empleado = (Empleado) entidad;
+    }
+
+    public Map<Integer, Boolean> permisosFormulario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -73,5 +73,10 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
     public Boolean buscarObjeto(Compra t, Object valor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }*/
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

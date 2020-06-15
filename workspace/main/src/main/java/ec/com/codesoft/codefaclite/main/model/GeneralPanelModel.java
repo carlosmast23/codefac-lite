@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.Direct
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioListener;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesCoreCodefac;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.BindingFactoryComponents;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.ControladorCampoTextoAnot;
@@ -39,6 +40,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -49,8 +51,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
@@ -683,7 +685,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                  */
                 if(!frameInterface.cicloVida)
                 {
-                    frameInterface.limpiar();
+                    UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
+                    UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));                    
+                    //frameInterface.limpiar();
                     return;
                 }
                 
@@ -701,7 +705,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     //Solo si la respuesta es grabar ejecuta el metodo
                     if(respuesta)
                     {
-                        frameInterface.nuevo();
+                        frameInterface.nuevo();                        
                     }
                     else
                     {
@@ -732,12 +736,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
                 try
                 {
-                    frameInterface.limpiar();
+                    UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);                    
+                    UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));
+                    //frameInterface.limpiar();
                 }
                 catch(UnsupportedOperationException exception)
                 {
                     System.out.println("metodo no implementado"); 
                 }
+                frameInterface.actualizarBindingComponent(false,true);
                     
                 limpiarCamposValidacion(frameInterface);
                 frameInterface.consola=new ConsolaGeneral();
@@ -767,9 +774,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         try {
                             //Si existe implementado el metodo buscar por defecto se ejecuta este metodo
                             frameInterface.buscar();
+                            frameInterface.actualizarBindingComponent(false,true);
                         } catch (UnsupportedOperationException ex) {
                             //Este metodo se ejecuta si no existe implementacion del metodo buscar
-                            ejectutarDialogoBusqueda(frameInterface.obtenerDialogoBusqueda(),true,frameInterface,false);
+                            /////////////////////////////////////////////////////////////////////////////////////////
+                            //              BUSCAR EL DIALOGO PRIMERO EN EL CONTROLADOR
+                            /////////////////////////////////////////////////////////////////////////////////////////
+                            BuscarDialogoModel buscarDialogoModel = null;
+                            VistaCodefacIf frameControlador = UtilidadesCoreCodefac.getControladorTodoVista(frameInterface);
+                            if (frameControlador != null) {
+                                buscarDialogoModel = new BuscarDialogoModel(frameControlador.obtenerDialogoBusqueda());
+                            } else {
+                                buscarDialogoModel = new BuscarDialogoModel(frameInterface.obtenerDialogoBusqueda());
+                            }               
+                            
+                            //BuscarDialogoModel buscarDialogoModel=new BuscarDialogoModel(frameInterface.obtenerDialogoBusqueda());
+                            ejectutarDialogoBusqueda(buscarDialogoModel,true,frameInterface,false);
+                            frameInterface.actualizarBindingComponent(false,true);
+                            
                         }catch (ExcepcionCodefacLite ex) {
                             LOG.log(Level.SEVERE,"Mensaje:"+ex.getMessage());
                             //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -842,7 +864,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
                     frameInterface.eventoCambiarEstado();
                     limpiarAnotaciones(frameInterface);
-                    frameInterface.limpiar();
+                    
+                    UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
+                    UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));
+                    //frameInterface.limpiar();
+                    
                     limpiarCamposValidacion(frameInterface);
                     
                     frameInterface.consola=new ConsolaGeneral();
@@ -964,7 +990,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                 if (validarFormulario(frameInterface, ValidacionCodefacAnotacion.GRUPO_FORMULARIO)) {
                     try {
-                        frameInterface.grabar();
+                        frameInterface.actualizarBindingComponent(false,true);
+                        
+                        VistaCodefacIf frameControlador= UtilidadesCoreCodefac.getControladorTodoVista(frameInterface);
+                        if(frameControlador!=null)
+                        {
+                            frameControlador.grabar();
+                        }
+                        else
+                        {
+                            frameInterface.grabar();
+                        }
 
                         /////==========> AGREGAR VALIDACION SI POR ALGUN MOTIVO NO ESTA IMPLEMENTADO LLAMAR AL METODO NUEVO =========////
                         try {
@@ -991,7 +1027,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             } else {
                 if (validarFormulario(frameInterface, ValidacionCodefacAnotacion.GRUPO_FORMULARIO)) {
                     try {
-                        frameInterface.editar();
+                        //Logica para alternar entre controlador y vista model
+                        VistaCodefacIf frameControlador= UtilidadesCoreCodefac.getControladorTodoVista(frameInterface);
+                        if(frameControlador!=null)
+                        {
+                            frameControlador.editar();
+                        }else
+                        {                        
+                            frameInterface.editar();
+                        }
                         procesoTerminado = true;
                     } catch (ExcepcionCodefacLite ex) {
                         //ex.printStackTrace();
@@ -1014,6 +1058,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
              * de vida
              */
             if (!frameInterface.cicloVida) {
+                UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
+                UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));
+                
                 //frameInterface.limpiar();
                 return;
             }
@@ -1023,9 +1070,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 frame.setTitle(tituloOriginal + " [Nuevo]");
                 frameInterface.estadoFormulario = ControladorCodefacInterface.ESTADO_GRABAR;
                 frameInterface.eventoCambiarEstado();
-                limpiarAnotaciones(frameInterface);
-                frameInterface.limpiar();
+                limpiarAnotaciones(frameInterface);                
+                
+                UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
+                UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));
+                                
                 limpiarCamposValidacion(frameInterface);
+                frameInterface.actualizarBindingComponent(false,true);
             }
         } catch (UnsupportedOperationException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1069,6 +1120,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                      */
                     if (!frameInterface.cicloVida) {
                        busquedaInterface.buscar();
+                       frameInterface.actualizarBindingComponent(false,true);
                         return;
                     }
 
@@ -1076,6 +1128,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR; 
                     frameInterface.eventoCambiarEstado();
                     busquedaInterface.buscar();
+                    frameInterface.actualizarBindingComponent(false,true);
                     
                     
                     limpiarCamposValidacion(frameInterface);
@@ -1120,6 +1173,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 //Preguntar si desea cargar los datos perdiendo los datos ingresados
                 if(preguntarCargarDatosBuscar(validacionDatosIngresados,frameInterface))
                 {
+                    //Cargar datos desde el controlador en caso de que exista
+                    VistaCodefacIf frameControlador = UtilidadesCoreCodefac.getControladorTodoVista(frameInterface);
+                    if (frameControlador != null) {
+                        frameControlador.cargarDatosPantalla(resultado);
+                    }
                     frameInterface.cargarDatosPantalla(resultado);
                     
                 }
@@ -1135,6 +1193,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //Preguntar si desea cargar los datos perdiendo los datos ingresados
             if(preguntarCargarDatosBuscar(validacionDatosIngresados,frameInterface))
             {
+                //Cargar datos desde el controlador en caso de que exista
+                VistaCodefacIf frameControlador = UtilidadesCoreCodefac.getControladorTodoVista(frameInterface);
+                if (frameControlador != null) {
+                    frameControlador.cargarDatosPantalla(resultado);
+                }
                 frameInterface.cargarDatosPantalla(resultado);
             }
             else
@@ -1229,135 +1292,40 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     }
    
     
-    /**
-     * Metodo que devuelve una contralador de la vista en el caso que exista
-     * @param panel
-     * @return 
-     */
-    private VistaCodefacIf getControladorTodoVista(ControladorCodefacInterface panel)
-    {
-        if(panel instanceof ControladorVistaIf)
-        {
-            ControladorVistaIf vistaTemp=(ControladorVistaIf) panel;
-            if(vistaTemp instanceof VistaCodefacIf)
-            return (VistaCodefacIf) vistaTemp.getControladorVista();
-        }
-        return null;
-    }
     
-    /**
-     * Interfaz que permite ejecutar de forma generica el metodo iniciar de las vistas
-     * @param vistaCodefacIf 
-     */
-    private void ejecutarIniciar(VistaCodefacIf vistaCodefacIf) throws ExcepcionCodefacLite
-    {
-        UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
-            @Override
-            public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {
-                vistaCodefacIf.iniciar();
-            }
-        });
-    }
     
-    private void ejecutarNuevo(VistaCodefacIf vistaCodefacIf)
-    {
-        try {
-            UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
-                @Override
-                public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {
-                    vistaCodefacIf.nuevo();
-                }
-            });
-        } catch (ExcepcionCodefacLite ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private void ejecutarLimpiar(VistaCodefacIf vistaCodefacIf)
-    {
-        try {
-            UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
-                @Override
-                public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {
-                    vistaCodefacIf.limpiar();
-                }
-            });
-        } catch (ExcepcionCodefacLite ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private void addbindingVista(VistaCodefacIf vista,VistaCodefacIf controlador)
+   
+    private void addbindingVista(ControladorCodefacInterface vista,Boolean get,Boolean set)
     {
         //Obtiene un mapa , con todos los compontBinding y sus implementaciones para buscar
-        for (Map.Entry<Class,ComponentBindingAbstract> entry : RoutingComponentBinding.routingMap.entrySet()) {
+        for (Map.Entry<Class,Class> entry : RoutingComponentBinding.routingMap.entrySet()) {
             Class claseBindingControlador = entry.getKey();
-            ComponentBindingAbstract implementacion = entry.getValue();
+            Class componentBindingAbstractClass=entry.getValue();
             
             List<ResponseAnotacionMetodo> anotaciones=UtilidadesReflexion.buscarAnotacionEnMetodos(vista.getClass(),claseBindingControlador);
             
             for (ResponseAnotacionMetodo<TextFieldBinding> anotacion : anotaciones) {
-                implementacion.init(vista, controlador, anotacion);
-                implementacion.ejecutar();
+                try {
+                    ComponentBindingAbstract implementacion = (ComponentBindingAbstract) componentBindingAbstractClass.newInstance();
+                    implementacion.init(vista, anotacion);
+                    implementacion.ejecutar(get,set);
+                    //Agregar a la vista los nuevos binding en cada vista
+                    vista.agregarBindingComponent(implementacion);
+                    
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
             }
             
         }
     }
     
-    /**
-     * Metodo que permite establecer todos los Bindings para manejar la arquitectura de software MMVC
-     */
-    private void setBindingVista(ControladorCodefacInterface panel,VistaCodefacIf controlador)
-    {
-        addbindingVista(panel, panel);        
-        //validar que existe un controlador generals
-        if(controlador==null)
-            return;
-        
-        addbindingVista(panel, controlador);
-        
-        //Obtiene un mapa , con todos los compontBinding y sus implementaciones para buscar
-        /*for (Map.Entry<Class,ComponentBindingAbstract> entry : RoutingComponentBinding.routingMap.entrySet()) {
-            Class claseBindingControlador = entry.getKey();
-            ComponentBindingAbstract implementacion = entry.getValue();
-            
-            List<ResponseAnotacionMetodo> anotaciones=UtilidadesReflexion.buscarAnotacionEnMetodos(panel.getClass(),claseBindingControlador);
-            
-            for (ResponseAnotacionMetodo<TextFieldBinding> anotacion : anotaciones) {
-                implementacion.init(panel, controlador, anotacion);
-                implementacion.ejecutar();
-            }
-            
-        }*/
-        
-        
-        /*List<ResponseAnotacionMetodo<TextFieldBinding>> anotaciones=UtilidadesReflexion.buscarAnotacionEnMetodos(panel.getClass(),TextFieldBinding.class);
-        
-        for (ResponseAnotacionMetodo<TextFieldBinding> anotacion : anotaciones) {
-            
-            JTextField jtextField=UtilidadesReflexion.obtenerValorDelMetodo(anotacion.metodo,panel,JTextField.class);                        
-            String nombrePropiedadControlador=anotacion.anotacion.value();
-            
-            String valorPropiedad= UtilidadesReflexion.buscarComponentePorNombrePropiedad(controlador, nombrePropiedadControlador,String.class);
-            jtextField.setText(valorPropiedad);
-            
-            ////TODO: Agregar una referencia de ejemplo a la vista
-            jtextField.addFocusListener(new FocusListener() {
-                @Override
-                public void focusGained(FocusEvent e) {}
 
-                @Override
-                public void focusLost(FocusEvent e) {
-                    //String nombreMetodoSet=UtilidadesReflexion.castNameMethodGetOrSet(anotacion.metodo.getName(),UtilidadesReflexion.GetSetEnum.SET);
-                    String nombreMetodoSet=UtilidadesReflexion.castNameMethodGetOrSet(nombrePropiedadControlador,UtilidadesReflexion.GetSetEnum.SET);;
-                    Method metodoSetPropiedad=UtilidadesReflexion.buscarMetodoPorNombre(controlador.getClass(),nombreMetodoSet);
-                    UtilidadesReflexion.setearValorDelMetodo(metodoSetPropiedad, controlador, jtextField.getText());
-                    //UtilidadesReflexion.setearValorDelMetodo(metodoSet,panel,jtextField.getText());
-                }
-            });
-            
-        }*/
-    }
+    
+    
     
     private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado,Integer ancho ,Integer alto)
     {
@@ -1375,19 +1343,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             try {
                 //Ejecuta la vista por defecto
-                ejecutarIniciar(panel);
+                UtilidadesCoreCodefac.ejecutarIniciar(panel);
                 //Ejecuta el iniciar del controlador general si existe 
-                ejecutarIniciar(getControladorTodoVista(panel));          
+                UtilidadesCoreCodefac.ejecutarIniciar(UtilidadesCoreCodefac.getControladorTodoVista(panel));          
             } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 //Si ocurre un problema al momento de iniciar cancelo la apertura
                 return ;
             }
-            
-            //================================================================//
-            //             AGREGAR EL CONTROLADO PARA MANEJAR EL MVVC
-            //================================================================//
-            setBindingVista(panel,getControladorTodoVista(panel));
+                        
             
             //Agregar el listener que controla las acciones del formulario (cerrar, maximar)
             panel.addInternalFrameListener(listenerFrame);
@@ -1431,12 +1395,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //          EJECUTAR LOS METODOS DE LIMPIAR Y NUEVO
             ////////////////////////////////////////////////////////////////////
 
-            ejecutarLimpiar(panel);
-            ejecutarLimpiar(getControladorTodoVista(panel));
+            UtilidadesCoreCodefac.ejecutarLimpiar(panel);
+            UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(panel));
             
-            ejecutarNuevo(panel);
-            ejecutarNuevo(getControladorTodoVista(panel));
+            UtilidadesCoreCodefac.ejecutarNuevo(panel);
+            UtilidadesCoreCodefac.ejecutarNuevo(UtilidadesCoreCodefac.getControladorTodoVista(panel));
             
+            //================================================================//
+            //         CONSTRUIR LOS CONTROLADORES PARA MANEJAR EL MVVC
+            //================================================================//
+            addbindingVista(panel,true,true);
             
             /**
              * Mostrar la pantalla centrada cuando no se muestra maximisado
@@ -2063,7 +2031,20 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                                         try
                                         {
-                                            BuscarDialogoModel dialogBuscar=panel.obtenerDialogoBusqueda();
+                                            /////////////////////////////////////////////////////////////////////////////////////////
+                                            //              BUSCAR EL DIALOGO PRIMERO EN EL CONTROLADOR
+                                            /////////////////////////////////////////////////////////////////////////////////////////
+                                            BuscarDialogoModel dialogBuscar=null;
+                                            VistaCodefacIf frameControlador = UtilidadesCoreCodefac.getControladorTodoVista(panel);
+                                            if (frameControlador != null) {
+                                                dialogBuscar=new BuscarDialogoModel(frameControlador.obtenerDialogoBusqueda());
+                                            }
+                                            else
+                                            {
+                                                dialogBuscar=new BuscarDialogoModel(panel.obtenerDialogoBusqueda());
+                                            }
+                                            
+                                            
                                             //Ejecutar la pantalla de dialogo solo si hay algo de texto
                                             if (!componente.getText().equals("")) {
                                                 try {
@@ -2620,7 +2601,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
 
             @Override
-            public BuscarDialogoModel obtenerDialogoBusqueda() {
+            public InterfaceModelFind obtenerDialogoBusqueda() {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 

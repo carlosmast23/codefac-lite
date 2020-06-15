@@ -65,5 +65,10 @@ public class RubroEstudianteBusqueda implements InterfaceModelFind<RubroEstudian
     public Boolean buscarObjeto(RubroEstudiante t, Object valor) {
         return t.getRubroNivel().getNombre().equals(t);   
     }*/
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

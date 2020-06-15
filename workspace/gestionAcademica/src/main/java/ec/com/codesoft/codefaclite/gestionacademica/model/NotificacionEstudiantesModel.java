@@ -9,8 +9,9 @@ import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteDa
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteInscritoDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.NivelAcademicoDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.NotificacionEstudiantesPanel;
@@ -110,7 +111,7 @@ public class NotificacionEstudiantesModel extends NotificacionEstudiantesPanel {
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vistas.core.components;
 
+import ec.com.codesoft.codefaclite.controlador.vistas.core.ConverterSwingMvvc;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,8 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -27,17 +30,29 @@ public class TextFieldBindingImp extends ComponentBindingAbstract<JTextField,Tex
     public ComponentBindingIf value=new ComponentBindingIf<String,TextFieldBinding>() 
     {
         @Override
-        public void getAccion(String nombrePropiedadControlador) {
-            getComponente().addFocusListener(new FocusListener() {
+        public void getAccion(String nombrePropiedadControlador,ConverterSwingMvvc converter) {
+            
+            getComponente().getDocument().addDocumentListener(new DocumentListener() {
                 @Override
-                public void focusGained(FocusEvent e) {}
+                public void insertUpdate(DocumentEvent e) {
+                    update();
+                }
 
                 @Override
-                public void focusLost(FocusEvent e) {
-                    setValoresAlControlador(getComponente().getText(),nombrePropiedadControlador);
+                public void removeUpdate(DocumentEvent e) {
+                    update();
                 }
-            });
-            
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    update();
+                }
+                
+                private void update()
+                {
+                    setValoresAlControlador(getComponente().getText(),nombrePropiedadControlador,converter);
+                }
+            });                        
         }
 
         @Override
@@ -49,18 +64,23 @@ public class TextFieldBindingImp extends ComponentBindingAbstract<JTextField,Tex
         public String getNombrePropiedadControlador(TextFieldBinding anotacion) {
             return anotacion.value();
         }
-        
+
+        @Override
+        public Class getConverterClass(TextFieldBinding anotacion) {
+            return anotacion.converter();
+        }
+
     };
     
     
     
     public ComponentBindingIf editable=new ComponentBindingIf<Boolean,TextFieldBinding>() {
         @Override
-        public void getAccion(String nombrePropiedadControlador) {
+        public void getAccion(String nombrePropiedadControlador,ConverterSwingMvvc converter) {
             getComponente().addPropertyChangeListener("editable",new PropertyChangeListener() {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
-                    setValoresAlControlador(getComponente().isEditable(),nombrePropiedadControlador);
+                    setValoresAlControlador(getComponente().isEditable(),nombrePropiedadControlador,converter);
                 }
             });
         }
@@ -74,13 +94,20 @@ public class TextFieldBindingImp extends ComponentBindingAbstract<JTextField,Tex
         public String getNombrePropiedadControlador(TextFieldBinding componente) {
             return componente.editable();
         }
+
+        @Override
+        public Class getConverterClass(TextFieldBinding anotacion) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+
             
     };
     
     
     public ComponentBindingIf actionListener=new ComponentBindingIf<Boolean,TextFieldBinding>() {
         @Override
-        public void getAccion(String nombreMetodo) {
+        public void getAccion(String nombreMetodo,ConverterSwingMvvc converter) {
             getComponente().addPropertyChangeListener("editable",new PropertyChangeListener() {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
@@ -98,7 +125,13 @@ public class TextFieldBindingImp extends ComponentBindingAbstract<JTextField,Tex
         public String getNombrePropiedadControlador(TextFieldBinding componente) {
             return componente.actionListener();
         }
-            
+
+        @Override
+        public Class getConverterClass(TextFieldBinding anotacion) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+
     }; 
     
     

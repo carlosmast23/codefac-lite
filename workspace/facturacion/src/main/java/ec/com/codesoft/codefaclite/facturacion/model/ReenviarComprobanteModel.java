@@ -7,8 +7,10 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ReenviarComprobanteModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.facturacion.panel.ReenviarComprobantePanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
@@ -22,13 +24,13 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author CARLOS_CODESOFT
  */
-public class ReenviarComprobanteModel extends ReenviarComprobantePanel implements ReenviarComprobanteModelControlador.InterfazModelControlador{
+public class ReenviarComprobanteModel extends ReenviarComprobantePanel implements ReenviarComprobanteModelControlador.CommonIf{
 
     private ReenviarComprobanteModelControlador controlador;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        controlador=new ReenviarComprobanteModelControlador(DialogoCodefac.intefaceMensaje,session,this);        
+        controlador=new ReenviarComprobanteModelControlador(DialogoCodefac.intefaceMensaje,session,this,ModelControladorAbstract.TipoVista.ESCRITORIO);        
         controlador.iniciar();
     }
 
@@ -83,7 +85,7 @@ public class ReenviarComprobanteModel extends ReenviarComprobantePanel implement
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

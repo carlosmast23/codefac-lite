@@ -7,16 +7,22 @@ package ec.com.codesoft.codefaclite.codefacweb.mb.crm;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -27,29 +33,22 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class ProductoMb extends GeneralAbstractMb implements Serializable,ProductoModelControlador.ProductoModelControladorInterface{
+public class ProductoMb extends GeneralAbstractMb implements Serializable,ProductoModelControlador.WebIf,ControladorVistaIf{
 
-    private EnumSiNo[] listaManejaInventario;
-    private EnumSiNo[] listaGenerarCodigoBarras;
-    private TipoProductoEnum[] listaTipoProducto;
-    private List<CategoriaProducto> listaCategoriaProducto;
-    private List<ImpuestoDetalle> listaImpuestoDetalleIva;
-    private List<ImpuestoDetalle> listaImpuestoDetalleIce;
-    private List<ImpuestoDetalle> listaImpuestoDetalleIrbpnr;
     
     private ProductoModelControlador controlador;
     
     @PostConstruct
     private void init()
     {
-        controlador=new ProductoModelControlador(MensajeMb.intefaceMensaje,sessionMb.getSession(), this);
-        controlador.iniciarCombosBox();
+        controlador=new ProductoModelControlador(MensajeMb.intefaceMensaje,sessionMb.getSession(), this,ModelControladorAbstract.TipoVista.WEB);
+        //controlador.iniciarCombosBox();
     }
     
     
     @Override
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -77,7 +76,7 @@ public class ProductoMb extends GeneralAbstractMb implements Serializable,Produc
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
+    //@Override
     public void cargarBusqueda(Object obj) throws ExcepcionCodefacLite, UnsupportedOperationException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -88,65 +87,21 @@ public class ProductoMb extends GeneralAbstractMb implements Serializable,Produc
     }
 
     @Override
-    public InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public EnumSiNo[] getListaManejaInventario() {
-        return listaManejaInventario;
+    
+
+    public ProductoModelControlador getControlador() {
+        return controlador;
     }
 
-    public void setListaManejaInventario(EnumSiNo[] listaManejaInventario) {
-        this.listaManejaInventario = listaManejaInventario;
+    public void setControlador(ProductoModelControlador controlador) {
+        this.controlador = controlador;
     }
-
-    public EnumSiNo[] getListaGenerarCodigoBarras() {
-        return listaGenerarCodigoBarras;
-    }
-
-    public void setListaGenerarCodigoBarras(EnumSiNo[] listaGenerarCodigoBarras) {
-        this.listaGenerarCodigoBarras = listaGenerarCodigoBarras;
-    }
-
-    public TipoProductoEnum[] getListaTipoProducto() {
-        return listaTipoProducto;
-    }
-
-    public void setListaTipoProducto(TipoProductoEnum[] listaTipoProducto) {
-        this.listaTipoProducto = listaTipoProducto;
-    }
-
-    public List<CategoriaProducto> getListaCategoriaProducto() {
-        return listaCategoriaProducto;
-    }
-
-    public void setListaCategoriaProducto(List<CategoriaProducto> listaCategoriaProducto) {
-        this.listaCategoriaProducto = listaCategoriaProducto;
-    }
-
-    public List<ImpuestoDetalle> getListaImpuestoDetalleIva() {
-        return listaImpuestoDetalleIva;
-    }
-
-    public void setListaImpuestoDetalleIva(List<ImpuestoDetalle> listaImpuestoDetalleIva) {
-        this.listaImpuestoDetalleIva = listaImpuestoDetalleIva;
-    }
-
-    public List<ImpuestoDetalle> getListaImpuestoDetalleIce() {
-        return listaImpuestoDetalleIce;
-    }
-
-    public void setListaImpuestoDetalleIce(List<ImpuestoDetalle> listaImpuestoDetalleIce) {
-        this.listaImpuestoDetalleIce = listaImpuestoDetalleIce;
-    }
-
-    public List<ImpuestoDetalle> getListaImpuestoDetalleIrbpnr() {
-        return listaImpuestoDetalleIrbpnr;
-    }
-
-    public void setListaImpuestoDetalleIrbpnr(List<ImpuestoDetalle> listaImpuestoDetalleIrbpnr) {
-        this.listaImpuestoDetalleIrbpnr = listaImpuestoDetalleIrbpnr;
-    }
+    
+    
     
     /**
      * ========================================================================
@@ -158,34 +113,6 @@ public class ProductoMb extends GeneralAbstractMb implements Serializable,Produc
     
     
 
-    public void llenarCmbManejaInventario(EnumSiNo[] datos) {
-        this.listaManejaInventario=datos;
-    }
-
-    public void llenarCmbGenerarCodigoBarras(EnumSiNo[] datos) {
-        this.listaGenerarCodigoBarras=datos;
-    }
-
-    public void llenarCmbTipoProducto(TipoProductoEnum[] tipoProductoList) {
-        this.listaTipoProducto=tipoProductoList;
-    }
-
-    public void llenarCmbCategoriaProducto(List<CategoriaProducto> catProdList) {
-        this.listaCategoriaProducto=catProdList;
-    }
-
-    public void llenarComboIva(List<ImpuestoDetalle> impuestos) {
-        this.listaImpuestoDetalleIva=impuestos;
-    }
-
-    public void llenarComboIce(List<ImpuestoDetalle> impuestos) {
-        this.listaImpuestoDetalleIce=impuestos;
-    }
-
-    public void llenarComboIrbpnr(List<ImpuestoDetalle> impuestos) {
-        this.listaImpuestoDetalleIrbpnr=impuestos;
-    }
-
     public void seleccionarComboIva(ImpuestoDetalle impuesto) {
         //TODO: Falta implementar
     }
@@ -193,5 +120,40 @@ public class ProductoMb extends GeneralAbstractMb implements Serializable,Produc
     public void llenarCmbGarantia(EnumSiNo[] datos) {
         //TODO: Falta implementar
     }
+
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        System.out.println("Iniciando metodo iniciar ProductoMB ...");
+    }
+
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void limpiar() {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String getURLAyuda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void cargarDatosPantalla(Object entidad) {
+        controlador.producto=(Producto) entidad; 
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Map<Integer, Boolean> permisosFormulario() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public ModelControladorAbstract getControladorVista() {
+        return controlador;
+    }
+    
+    
     
 }

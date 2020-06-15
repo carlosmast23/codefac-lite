@@ -10,13 +10,17 @@ import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.ControladorCampoTextoAnot;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesReflexion;
+import java.io.Serializable;
 
 
 /**
  *TODO: Hacer un metodo generico que me permita saber el estado si creando o editando
  * @author CARLOS_CODESOFT
+ * T= interfaz base
+ * E= interfaz de escririo
+ * W= interaz web
  */
-public abstract class ModelControladorAbstract <T>
+public abstract class ModelControladorAbstract <T,E extends  T,W extends T> implements Serializable
 {
     protected TipoVista tipoVista;
     /**
@@ -26,27 +30,45 @@ public abstract class ModelControladorAbstract <T>
     
     protected SessionCodefacInterface session;
     
-    protected T interfaz;
-    
+    private T interfaz;    
     
 
+    @Deprecated
     public ModelControladorAbstract(MensajeVistaInterface mensajeVista) {
         this.mensajeVista = mensajeVista;
     }
     
+    @Deprecated
     public ModelControladorAbstract(MensajeVistaInterface mensajeVista,SessionCodefacInterface session) {
         this.mensajeVista = mensajeVista;
         this.session=session;
     }
 
-    public ModelControladorAbstract(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, T interfaz) {
+    public ModelControladorAbstract(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, T interfaz,TipoVista tipoVista) {
         this.mensajeVista = mensajeVista;
         this.session = session;
         this.interfaz = interfaz;
+        this.tipoVista=tipoVista;
     }
 
+    /**
+     * Devuelve la interfaz general para todas las vistas
+     * @return 
+     */
+    public T getInterfaz()
+    {
+        return interfaz;
+    }
     
+    public E getInterazEscritorio()
+    {
+        return  (E) interfaz;
+    }
     
+    public W getInterazWeb()
+    {
+        return  (W) interfaz;
+    }
     
     
     /**

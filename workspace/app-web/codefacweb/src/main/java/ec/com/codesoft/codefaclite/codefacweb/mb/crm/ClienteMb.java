@@ -39,6 +39,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import java.util.Map;
 
 /**
  *
@@ -163,36 +164,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
 
     }
 
-    @Override
-    public void cargarBusqueda(Object obj) throws ExcepcionCodefacLite, UnsupportedOperationException {
-        cliente = ((PersonaEstablecimiento) (obj)).getPersona();
-
-        ///Setear si es pasaporte o no
-        identificacionPasaporte = false;
-        if (cliente.getTipoIdentificacionEnum().equals(Persona.TipoIdentificacionEnum.PASAPORTE)) {
-            identificacionPasaporte = true;
-        }
-
-        //Setear la nacionalidad
-        nacionalidadSeleccionada = cliente.getNacionalidad();
-
-        //Setear el estado
-        estadoSeleccionada = cliente.getEstadoEnum();
-
-        //Setear el tipo de cliente
-        operadorNegocioSeleccionado = cliente.getTipoEnum();
-
-        //Setear al forma de defecto
-        sriFormaPagoSeleccionada = cliente.getSriFormaPago();
-        
-        //Setear el primer establecimiento para editar
-        if(cliente.getEstablecimientos()!=null && cliente.getEstablecimientos().size()>0)
-            establecimientoDefecto=cliente.getEstablecimientos().get(0);
-        else
-            establecimientoDefecto=new PersonaEstablecimiento();
-        
-
-    }
+    
 
     @Override
     public String titulo() throws ExcepcionCodefacLite, UnsupportedOperationException {
@@ -200,7 +172,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
     }
 
     @Override
-    public InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         return new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession());
     }
 
@@ -397,6 +369,58 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
 
     public void setEstablecimientoDefecto(PersonaEstablecimiento establecimientoDefecto) {
         this.establecimientoDefecto = establecimientoDefecto;
+    }
+
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void limpiar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String getURLAyuda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void cargarDatosPantalla(Object entidad) {
+        cliente = ((PersonaEstablecimiento) (entidad)).getPersona();
+
+        ///Setear si es pasaporte o no
+        identificacionPasaporte = false;
+        if (cliente.getTipoIdentificacionEnum().equals(Persona.TipoIdentificacionEnum.PASAPORTE)) {
+            identificacionPasaporte = true;
+        }
+
+        //Setear la nacionalidad
+        nacionalidadSeleccionada = cliente.getNacionalidad();
+
+        //Setear el estado
+        estadoSeleccionada = cliente.getEstadoEnum();
+
+        //Setear el tipo de cliente
+        operadorNegocioSeleccionado = cliente.getTipoEnum();
+
+        //Setear al forma de defecto
+        sriFormaPagoSeleccionada = cliente.getSriFormaPago();
+        
+        //Setear el primer establecimiento para editar
+        if(cliente.getEstablecimientos()!=null && cliente.getEstablecimientos().size()>0)
+            establecimientoDefecto=cliente.getEstablecimientos().get(0);
+        else
+            establecimientoDefecto=new PersonaEstablecimiento();
+    }
+
+    public Map<Integer, Boolean> permisosFormulario() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 

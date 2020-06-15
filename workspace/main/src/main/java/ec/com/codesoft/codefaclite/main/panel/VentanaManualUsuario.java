@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.main.panel;
 import static com.lowagie.text.pdf.PdfFileSpecification.url;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.main.model.SwingBrowser;
 import java.awt.event.ComponentEvent;
@@ -167,7 +168,7 @@ public class VentanaManualUsuario extends ControladorCodefacInterface {
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -24,7 +24,7 @@ import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.NotaCreditoModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.NotaCreditoModelControlador.NotaCreditoModelInterface;
@@ -75,7 +75,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
-import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
+import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaNotaCredito;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.NotaCreditoBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
@@ -267,12 +267,8 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
 
     }
 
-    @Override
-    public void cargarBusqueda(Object obj) {
-        notaCredito = (NotaCredito) obj;
-        fechaEmision = new java.sql.Date(notaCredito.getFechaEmision().getTime());
-    }
 
+    
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
         return new NotaCreditoBusqueda(sessionMb.getSession().getEmpresa());
@@ -293,7 +289,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
         proforma.setId(null); 
         //cargarDatosCliente(clienteOficina);
         //cargarDatosAdicionalesCliente();
-        cargarBusqueda(proforma);
+        cargarDatosPantalla(proforma);
         
     }
 
@@ -779,6 +775,31 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(NotaCreditoMb.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String getURLAyuda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void cargarDatosPantalla(Object entidad) {
+        notaCredito = (NotaCredito) entidad;
+        fechaEmision = new java.sql.Date(notaCredito.getFechaEmision().getTime());
+    }
+
+    public Map<Integer, Boolean> permisosFormulario() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 

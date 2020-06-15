@@ -20,12 +20,12 @@ import java.util.Map;
  */
 public class RoutingComponentBinding {
     
-    public static Map<Class,ComponentBindingAbstract> routingMap=new HashMap<Class, ComponentBindingAbstract>();
+    public static Map<Class,Class> routingMap=new HashMap<Class, Class>();
     static
     {
-        routingMap.put(TextFieldBinding.class,new TextFieldBindingImp());
-        routingMap.put(ComboBoxBinding.class,new ComboBoxBindingImp());
-        routingMap.put(ButtonBinding.class,new ButtonBindingImp());        
+        routingMap.put(TextFieldBinding.class,TextFieldBindingImp.class);
+        routingMap.put(ComboBoxBinding.class,ComboBoxBindingImp.class);
+        routingMap.put(ButtonBinding.class,ButtonBindingImp.class);        
     }
     
 }

@@ -7,8 +7,9 @@ package ec.com.codesoft.codefaclite.prestamos.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.PrestamoDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.prestamos.panel.PrestamoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
@@ -93,8 +94,8 @@ public class PrestamoModel extends PrestamoPanel{
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
-        return new BuscarDialogoModel(new PrestamoDialogo());
+    public InterfaceModelFind obtenerDialogoBusqueda() {
+        return new PrestamoDialogo();
     }
 
     @Override

@@ -54,6 +54,11 @@
         </navigation-case>
         
         <navigation-case>
+            <from-outcome>ejemplo</from-outcome>
+            <to-view-id>sistema/crm/ejemplo.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
             <from-outcome>dialogo_busqueda</from-outcome>
             <to-view-id>template/dialogo_busqueda.xhtml</to-view-id>
         </navigation-case>

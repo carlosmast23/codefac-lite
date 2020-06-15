@@ -53,4 +53,9 @@ public class PeriodoBusquedaDialogo implements InterfaceModelFind<Periodo> {
         return p.getNombre().equals(valor.toString());
     }*/
 
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

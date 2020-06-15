@@ -116,7 +116,7 @@ public class UtilidadesReflexion {
     public static <T> T obtenerValorDelMetodo(Method metodo, Object context, Class<T> tipoClase) {
                 
         try {
-            //metodo.setAccessible(true);
+            metodo.setAccessible(true);
             return (T)metodo.invoke(context);
             //
         } catch (IllegalArgumentException ex) {

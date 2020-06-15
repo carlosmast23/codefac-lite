@@ -7,8 +7,13 @@ package ec.com.codesoft.codefaclite.controlador.vista.crm;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.EjemploModelControlador.CommonIf;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.EjemploModelControlador.SwingIf;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.EjemploModelControlador.WebIf;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract.MensajeVistaInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
@@ -23,7 +28,7 @@ import javax.swing.JOptionPane;
  *
  * @author CARLOS_CODESOFT
  */
-public class EjemploModelControlador extends ModelControladorAbstract<EjemploModelControlador.CommonIf> implements VistaCodefacIf{
+public class EjemploModelControlador extends ModelControladorAbstract<CommonIf,SwingIf,WebIf> implements VistaCodefacIf{
     
     //@ControladorCampoTextoAnot(nombre = "txtCampoTexto")
     private String saludo="texto sin modificar";
@@ -33,8 +38,8 @@ public class EjemploModelControlador extends ModelControladorAbstract<EjemploMod
     
     private EnumSiNo datoSeleccionado;
         
-    public EjemploModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz) {
-        super(mensajeVista, session, interfaz);
+    public EjemploModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz,TipoVista tipoVista) {
+        super(mensajeVista, session, interfaz,tipoVista);
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -112,7 +117,7 @@ public class EjemploModelControlador extends ModelControladorAbstract<EjemploMod
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

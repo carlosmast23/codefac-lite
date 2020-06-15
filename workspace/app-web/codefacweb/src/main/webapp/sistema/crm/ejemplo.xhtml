@@ -11,12 +11,13 @@
         <ui:define name="opciones" >
             <p:menuitem oncomplete="PF('btnCargarProforma').jq.click();" value="Cargar desde la proforma"  icon="pi pi-clone"  />
         </ui:define>
+        
+        <ui:define name="vistaControlador" >
+            <f:event listener="#{controllerCodefacMb.agregarVista(ejemploMb)}" type="preRenderComponent" /> 
+        </ui:define>
 
         <ui:define name="contenido" >
-
-            <f:event listener="#{controllerCodefacMb.agregarVista(productoMb)}" type="preRenderComponent" /> 
-            
-            
+            Contenido de Ejemplo            
         </ui:define>
     </ui:composition>
 

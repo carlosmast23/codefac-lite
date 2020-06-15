@@ -8,12 +8,15 @@ package ec.com.codesoft.codefaclite.codefacweb.mb.facturacion;
 import autorizacion.ws.sri.gob.ec.Mensaje;
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ReenviarComprobanteModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -24,7 +27,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class ReenviarComprobanteMb extends GeneralAbstractMb implements ReenviarComprobanteModelControlador.InterfazModelControlador{
+public class ReenviarComprobanteMb extends GeneralAbstractMb implements ReenviarComprobanteModelControlador.CommonIf{
 
     private ReenviarComprobanteModelControlador controlador;
     private List<ComprobanteElectronico> comprobantesPendientes;
@@ -33,7 +36,7 @@ public class ReenviarComprobanteMb extends GeneralAbstractMb implements Reenviar
     @PostConstruct
     public void init()
     {
-        controlador=new ReenviarComprobanteModelControlador(MensajeMb.intefaceMensaje,sessionMb.getSession(), this);
+        controlador=new ReenviarComprobanteModelControlador(MensajeMb.intefaceMensaje,sessionMb.getSession(), this, ModelControladorAbstract.TipoVista.WEB);
         controlador.iniciar();
     }
     
@@ -67,10 +70,6 @@ public class ReenviarComprobanteMb extends GeneralAbstractMb implements Reenviar
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void cargarBusqueda(Object obj) throws ExcepcionCodefacLite, UnsupportedOperationException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public String titulo() throws ExcepcionCodefacLite, UnsupportedOperationException {
@@ -78,7 +77,7 @@ public class ReenviarComprobanteMb extends GeneralAbstractMb implements Reenviar
     }
 
     @Override
-    public InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite {
+    public InterfaceModelFind obtenerDialogoBusqueda(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -100,6 +99,34 @@ public class ReenviarComprobanteMb extends GeneralAbstractMb implements Reenviar
 
     public void setComprobantesPendientesSeleccionados(List<ComprobanteElectronico> comprobantesPendientesSeleccionados) {
         this.comprobantesPendientesSeleccionados = comprobantesPendientesSeleccionados;
+    }
+
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void limpiar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String getURLAyuda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Map<Integer, Boolean> permisosFormulario() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     

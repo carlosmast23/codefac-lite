@@ -11,17 +11,19 @@
         <ui:define name="opciones" >
             <p:menuitem oncomplete="PF('btnCargarProforma').jq.click();" value="Cargar desde la proforma"  icon="pi pi-clone"  />
         </ui:define>
+        
+        <ui:define name="vistaControlador" >
+            <f:event listener="#{controllerCodefacMb.agregarVista(productoMb)}" type="preRenderComponent" /> 
+        </ui:define>
 
         <ui:define name="contenido" >
-
-            <f:event listener="#{controllerCodefacMb.agregarVista(productoMb)}" type="preRenderComponent" /> 
 
             <div class="p-grid" style="text-align: left" >
                 <div class="p-col-12" >
                     <h:outputLabel   value="Código Personalizado:" class="componente-responsive"/>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-3">                            
-                    <h:inputText required="false"  />
+                    <h:inputText value="#{productoMb.controlador.producto.codigoPersonalizado}" required="false"  />
                 </div> 
             </div>
 
@@ -30,7 +32,7 @@
                     <h:outputLabel   value="Nombres:"/>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">                            
-                    <h:inputText required="false"  class="componente-responsive" />
+                    <h:inputText value="#{productoMb.controlador.producto.nombre}" required="false"  class="componente-responsive" />
                 </div> 
             </div>
 
@@ -39,11 +41,11 @@
                     <h:outputLabel   value="Precio Venta al publico (PV1):"/>
                 </div>
                 <div class="p-col-6 p-md-2 p-lg-1">                            
-                    <h:inputText required="false"  class="componente-responsive" />
+                    <h:inputText value="#{productoMb.controlador.producto.valorUnitario}" required="false"  class="componente-responsive" />
                 </div>
                 <div class="p-col-6 p-md-10 p-lg-2">
-                     <p:selectOneMenu   value="#" converter="siNoEnumConverter" >
-                        <f:selectItems value="#{productoMb.listaManejaInventario}" var="opcion" itemValue="#{opcion.letra}" />
+                    <p:selectOneMenu   value="#{productoMb.controlador.ivaOpcionSeleccionado}" converter="ivaOpcionEnumConverter" >
+                        <f:selectItems value="#{productoMb.controlador.ivaOpcionList}" var="opcion" itemValue="#{opcion.toString()}" />
                     </p:selectOneMenu>
                 </div>
             </div>
@@ -53,8 +55,8 @@
                     <h:outputLabel   value="Maneja Inventario? :"/>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">                            
-                    <p:selectOneMenu   value="#" converter="siNoEnumConverter" >
-                        <f:selectItems value="#{productoMb.listaManejaInventario}" var="opcion" itemValue="#{opcion.letra}" />
+                    <p:selectOneMenu   value="#{productoMb.controlador.producto.manejarInventarioEnum}" converter="siNoEnumConverter" >
+                        <f:selectItems value="#{productoMb.controlador.llevaInventarioList}" var="opcion" itemValue="#{opcion.letra}" />
                     </p:selectOneMenu>
                 </div> 
             </div>
@@ -64,8 +66,8 @@
                     <h:outputLabel   value="Generar Código de Barras :"/>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">                            
-                     <p:selectOneMenu   value="#" converter="siNoEnumConverter" >
-                         <f:selectItems value="#{productoMb.listaGenerarCodigoBarras}" var="opcion" itemValue="#{opcion.letra}" />
+                    <p:selectOneMenu   value="#{productoMb.controlador.producto.generarCodigoBarrasEnum}" converter="siNoEnumConverter" >
+                         <f:selectItems value="#{productoMb.controlador.imprimirCodigoBarrasList}" var="opcion" itemValue="#{opcion.letra}" />
                     </p:selectOneMenu>
                 </div> 
             </div>
@@ -75,8 +77,8 @@
                     <h:outputLabel   value="Tipo :"/>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">                            
-                     <p:selectOneMenu   value="#" converter="tipoProductoConverter" >
-                         <f:selectItems value="#{productoMb.listaTipoProducto}" var="opcion" itemValue="#{opcion.letra}" />
+                    <p:selectOneMenu   value="#{productoMb.controlador.producto.tipoProductoEnum}" converter="tipoProductoConverter" >
+                         <f:selectItems value="#{productoMb.controlador.tipoProductosList}" var="opcion" itemValue="#{opcion.letra}" />
                     </p:selectOneMenu>
                 </div> 
             </div>
@@ -86,8 +88,8 @@
                     <h:outputLabel   value="Categoria :"/>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">                            
-                     <p:selectOneMenu   value="#" converter="categoriaProductoConverter" >
-                         <f:selectItems value="#{productoMb.listaCategoriaProducto}" var="opcion" itemValue="#{opcion.idCatProducto}" />
+                    <p:selectOneMenu   value="#{productoMb.controlador.categoriaSeleccionada}" converter="categoriaProductoConverter" >
+                        <f:selectItems value="#{productoMb.controlador.categoriaProductosList}" var="categoria" itemValue="#{categoria.idCatProducto.toString()}" />
                     </p:selectOneMenu>
                 </div> 
             </div>
@@ -97,8 +99,8 @@
                     <h:outputLabel   value="Iva :"/>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">                            
-                     <p:selectOneMenu   value="#" converter="impuestoDetalleConverter" >
-                         <f:selectItems value="#{productoMb.listaImpuestoDetalleIva}" var="opcion" itemValue="#{opcion.idImpuestoDetalle}" />
+                    <p:selectOneMenu   value="#{productoMb.controlador.ivaSeleccionado}" converter="impuestoDetalleConverter" >
+                        <f:selectItems value="#{productoMb.controlador.ivaList}" var="iva" itemValue="#{iva.idImpuestoDetalle.toString()}" />
                     </p:selectOneMenu>
                 </div> 
             </div>
@@ -108,8 +110,8 @@
                     <h:outputLabel   value="Ice :"/>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">                            
-                     <p:selectOneMenu   value="#" converter="impuestoDetalleConverter" >
-                         <f:selectItems value="#{productoMb.listaImpuestoDetalleIce}" var="opcion" itemValue="#{opcion.idImpuestoDetalle}" />
+                    <p:selectOneMenu   value="#{productoMb.controlador.iceSeleccionado}" converter="impuestoDetalleConverter" >
+                        <f:selectItems value="#{productoMb.controlador.iceList}" var="opcion" itemValue="#{opcion.idImpuestoDetalle.toString()}" />
                     </p:selectOneMenu>
                 </div> 
             </div>
@@ -119,8 +121,8 @@
                     <h:outputLabel   value="IRBPNR :"/>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">                            
-                     <p:selectOneMenu   value="#" converter="impuestoDetalleConverter" >
-                         <f:selectItems value="#{productoMb.listaImpuestoDetalleIrbpnr}" var="opcion" itemValue="#{opcion.idImpuestoDetalle}" />
+                    <p:selectOneMenu   value="#{productoMb.controlador.irbpnrSeleccionado}" converter="impuestoDetalleConverter" >
+                        <f:selectItems value="#{productoMb.controlador.irbpnrList}" var="opcion" itemValue="#{opcion.idImpuestoDetalle.toString()}" />
                     </p:selectOneMenu>
                 </div> 
             </div>

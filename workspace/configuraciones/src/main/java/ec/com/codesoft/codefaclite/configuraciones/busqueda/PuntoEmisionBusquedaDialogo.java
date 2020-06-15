@@ -59,5 +59,10 @@ public class PuntoEmisionBusquedaDialogo implements InterfaceModelFind<PuntoEmis
         dato.add(t.getPuntoEmision());
         //dato.add(t.getPuntoEmision());
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

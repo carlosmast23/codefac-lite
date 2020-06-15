@@ -60,5 +60,10 @@ public class SucursalBusquedaDialogo implements InterfaceModelFind<Sucursal> {
         dato.add(t.getDirecccion());
         dato.add(t.getTelefono());
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
