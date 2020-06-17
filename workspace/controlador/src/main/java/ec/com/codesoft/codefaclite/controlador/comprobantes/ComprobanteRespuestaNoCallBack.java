@@ -38,7 +38,7 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
     public abstract void imprimirComprobante();
     
     //Esta variable identifica cuanto tiempo esperar la autorizacion del documento expresado en segundos
-    private static final Integer TIEMPO_ESPERA=10;
+    private static final Integer TIEMPO_ESPERA=40;
     
     protected ComprobanteEntity comprobante;
     

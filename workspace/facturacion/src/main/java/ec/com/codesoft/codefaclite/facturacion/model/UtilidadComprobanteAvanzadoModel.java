@@ -357,12 +357,15 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                     }
                 });
                 
+                //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
+                Boolean procesoSincronico=false;
                 if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
                 {
                     cic=null; //Si es un cliente remoto el que ejecuta la accion no puede hacer callback para veriicar
+                    procesoSincronico=true;
                 }
                 
-                ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, session.getEmpresa().getIdentificacion(),cic,getChkEnvioCorreo().isSelected(),session.getEmpresa());
+                ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, session.getEmpresa().getIdentificacion(),cic,getChkEnvioCorreo().isSelected(),session.getEmpresa(),procesoSincronico);
                 if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
                 {
                     estadoNormal();

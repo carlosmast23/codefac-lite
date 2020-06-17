@@ -184,7 +184,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         return false;
     }
     
-    public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,String ruc,ClienteInterfaceComprobanteLote callbackClientObject,Boolean enviarCorreo,Empresa empresa) throws RemoteException
+    public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,String ruc,ClienteInterfaceComprobanteLote callbackClientObject,Boolean enviarCorreo,Empresa empresa,Boolean sincrono) throws RemoteException
     {
         //Empresa empresa=obtenerEmpresaPorClaveAcceso(clavesAcceso.get(0));
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
@@ -285,8 +285,15 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             }
         });        
         
-        //comprobanteElectronico
-        comprobanteElectronico.procesar(true);
+        //TODO: Este artificio se usa para esperar que se procesen los comprobantes cuando es remoto un cliente
+        if(sincrono)
+        {
+            comprobanteElectronico.procesarSincronico(true);
+        }
+        else
+        {
+            comprobanteElectronico.procesar(true);
+        }
         return true;
     }
     

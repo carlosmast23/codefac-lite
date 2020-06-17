@@ -250,6 +250,11 @@ public class ComprobanteElectronicoService implements Runnable {
         thread.start();
     }
     
+    public void procesarSincronico(Boolean enviarPorLotes) {
+        this.enviarPorLotes=enviarPorLotes;
+        run();
+    }
+    
 
     public void procesarComprobante() {
         alertas.clear(); //Limpiar todoas las alertas anteriores para empezar el nuevo proceso

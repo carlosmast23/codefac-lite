@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.compra.model;
 import ec.com.codesoft.codefaclite.compra.busqueda.CompraBusquedaDialogo;
 import ec.com.codesoft.codefaclite.compra.busqueda.RetencionBusquedaDialogo;
 import ec.com.codesoft.codefaclite.compra.callback.RetencionImplCallBack;
+import ec.com.codesoft.codefaclite.compra.callback.RetencionImplNoCallBack;
 import ec.com.codesoft.codefaclite.compra.panel.RetencionPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
@@ -22,6 +23,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_EDITAR;
 import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_GRABAR;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
@@ -134,6 +136,13 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                     
             RetencionImplCallBack ric=new RetencionImplCallBack(retencion, this);
+            //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
+            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+                RetencionImplNoCallBack noCallBack=new RetencionImplNoCallBack(retencion,this);
+                noCallBack.iniciar();
+                ric=null;
+            }
+            
             ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
             
             //ComprobanteDataRetencion comprobanteData = new ComprobanteDataRetencion(retencion);
