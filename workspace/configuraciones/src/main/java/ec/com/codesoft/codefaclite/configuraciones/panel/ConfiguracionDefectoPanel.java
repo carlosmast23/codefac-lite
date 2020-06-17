@@ -137,6 +137,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         lblEspacio637 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         txtDiasAlertaPago = new javax.swing.JSpinner();
+        jLabel34 = new javax.swing.JLabel();
+        jComboFiltrarFacturaPorUsuario = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -778,7 +780,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel9.add(cmbDatosCompartidosEmpresas, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel9.add(lblEspacio637, gridBagConstraints);
@@ -799,12 +801,38 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(txtDiasAlertaPago, gridBagConstraints);
 
+        jLabel34.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel34.setText("Filtrar por usuario:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jLabel34, gridBagConstraints);
+
+        jComboFiltrarFacturaPorUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboFiltrarFacturaPorUsuarioActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jComboFiltrarFacturaPorUsuario, gridBagConstraints);
+
         jTabbedPane1.addTab("General", jPanel9);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jComboFiltrarFacturaPorUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboFiltrarFacturaPorUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboFiltrarFacturaPorUsuarioActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -833,6 +861,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumentoCompra;
+    private javax.swing.JComboBox<EnumSiNo> jComboFiltrarFacturaPorUsuario;
     private javax.swing.JEditorPane jEditorPanelVistaPrevia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -861,6 +890,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1105,7 +1135,13 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public JComboBox<DocumentoEnum> getCmbDocumentoDefectoVistaFactura() {
         return cmbDocumentoDefectoVistaFactura;
     }
- 
-    
+
+    public JComboBox<EnumSiNo> getjComboFiltrarFacturaPorUsuario() {
+        return jComboFiltrarFacturaPorUsuario;
+    }
+
+    public void setjComboFiltrarFacturaPorUsuario(JComboBox<EnumSiNo> jComboFiltrarFacturaPorUsuario) {
+        this.jComboFiltrarFacturaPorUsuario = jComboFiltrarFacturaPorUsuario;
+    }
     
 }

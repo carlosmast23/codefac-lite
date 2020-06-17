@@ -157,6 +157,11 @@ public class ParametroCodefac implements Serializable {
     
     public static final String DOCUMENTO_DEFECTO_VISTA_FACTURA="documento_defecto_vista_factura";
     
+    /**
+     * Esta variable me permite filtrar las facturas por el usuario ingresado
+     */
+    public static final String FILTRAR_FACTURAS_POR_USUARIO="filtar_facturas_por_usuario" ;
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

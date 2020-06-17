@@ -245,6 +245,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        /**
+        * Filtrar factura por usuario
+        */
+        UtilidadesComboBox.llenarComboBox(getjComboFiltrarFacturaPorUsuario(), EnumSiNo.values());
 
     }
 
@@ -427,6 +432,12 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
                 getCmbFormaPagoDefecto().setSelectedItem(null);
             }
             
+            /**
+             * Filtrar factura por usuario
+             */
+            ParametroCodefac parametroFiltrarFacturaPorUsuario = parametrosTodos.get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroFiltrarFacturaPorUsuario != null) ? parametroFiltrarFacturaPorUsuario.getValor() : null);
+            getjComboFiltrarFacturaPorUsuario().setSelectedItem((enumSiNo != null) ? enumSiNo:null);
             
 
         } catch (RemoteException ex) {
@@ -579,7 +590,12 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA);
         
-        
+        /**
+         * Filtrar factura por usuario
+         */
+        enumSiNo = (EnumSiNo) getjComboFiltrarFacturaPorUsuario().getSelectedItem();
+        agregarParametro(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO);
 
     }
     

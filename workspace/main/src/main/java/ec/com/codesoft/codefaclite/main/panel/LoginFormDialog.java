@@ -5,12 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.main.panel;
 
+import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -65,6 +67,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         cmbSucursal = new javax.swing.JComboBox<>();
+        jButtonModoAplicativo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -254,6 +257,19 @@ public class LoginFormDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         panelPrincipal.add(cmbSucursal, gridBagConstraints);
 
+        jButtonModoAplicativo.setFont(new java.awt.Font("Arial", 0, 9)); // NOI18N
+        jButtonModoAplicativo.setText("Modo");
+        jButtonModoAplicativo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonModoAplicativoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        panelPrincipal.add(jButtonModoAplicativo, gridBagConstraints);
+
         getContentPane().add(panelPrincipal, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -266,6 +282,14 @@ public class LoginFormDialog extends javax.swing.JDialog {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         System.exit(0);
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void jButtonModoAplicativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModoAplicativoActionPerformed
+        // TODO add your handling code here:
+        Main.iniciarModoAplicativo(false);
+        JOptionPane.showMessageDialog(null, "Para completar la configuración necesita cerrar el aplicativo y volver abrir");
+        System.exit(0);
+        
+    }//GEN-LAST:event_jButtonModoAplicativoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -314,6 +338,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<Empresa> cmbEmpresa;
     private javax.swing.JComboBox<Sucursal> cmbSucursal;
+    private javax.swing.JButton jButtonModoAplicativo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

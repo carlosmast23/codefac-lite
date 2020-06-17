@@ -49,7 +49,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
      */ 
     public void iniciar() throws RemoteException, ServicioCodefacException{
         interfaz.setCaja(new Caja());
-        GeneralEnumEstado[] estadoGeneralesLista = GeneralEnumEstado.values();
+        CajaEnum[] estadoGeneralesLista = CajaEnum.values();
         List<Sucursal> sucursalLista = ServiceFactory.getFactory().getSucursalServiceIf().obtenerTodos();
         List<PuntoEmision> puntosEmisionLista = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerTodos();
         this.interfaz.setEstadosGeneralesVista(estadoGeneralesLista);
@@ -128,7 +128,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     public interface Interface
     {
         //Cargar información necesaria
-        public void setEstadosGeneralesVista(GeneralEnumEstado[] estadoGeneralesLista);
+        public void setEstadosGeneralesVista(CajaEnum[] estadoGeneralesLista);
         public void setSucursalesVista(List<Sucursal> sucursalLista);
         public void setPuntosEmisionVista(List<PuntoEmision> puntosEmisionLista);
         

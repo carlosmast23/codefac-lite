@@ -160,5 +160,9 @@ public class CajaMb extends GeneralAbstractMb implements CajaModelControlador.In
     public CajaEnum getEnumEstado() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public void setEstadosGeneralesVista(CajaEnum[] estadoGeneralesLista) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

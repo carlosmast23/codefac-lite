@@ -8,12 +8,14 @@ package ec.com.codesoft.codefaclite.pos.model;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.ArqueoCajaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.pos.panel.ArqueoCajaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +23,8 @@ import java.util.Map;
  *
  * @author Robert
  */
-public class ArqueoCajaModel extends ArqueoCajaPanel implements ArqueoCajaModelControlador.Interface
+//public class ArqueoCajaModel extends ArqueoCajaPanel implements ArqueoCajaModelControlador.Interface
+public class ArqueoCajaModel extends ArqueoCajaPanel
 {
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -70,7 +73,14 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ArqueoCajaModelC
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -88,7 +98,7 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ArqueoCajaModelC
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
+    /*@Override
     public ArqueoCaja getArqueoCaja() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -146,6 +156,6 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ArqueoCajaModelC
     @Override
     public void setEstado(GeneralEnumEstado estado) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }*/
     
 }

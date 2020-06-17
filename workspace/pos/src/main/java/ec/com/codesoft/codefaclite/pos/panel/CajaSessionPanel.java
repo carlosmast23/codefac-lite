@@ -64,7 +64,10 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         jComboBox1 = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
 
+        setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
+        setMaximizable(true);
         setTitle("Sesión Caja");
         setName(""); // NOI18N
         setPreferredSize(new java.awt.Dimension(416, 250));

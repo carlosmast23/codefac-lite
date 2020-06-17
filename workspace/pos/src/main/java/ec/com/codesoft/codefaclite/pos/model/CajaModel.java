@@ -153,7 +153,7 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
     }
 
     @Override
-    public void setEstadosGeneralesVista(GeneralEnumEstado[] estadoGeneralesLista) {
+    public void setEstadosGeneralesVista(CajaEnum[] estadoGeneralesLista) {
         UtilidadesComboBox.llenarComboBox(getjComboEstado(), estadoGeneralesLista);
     }
 

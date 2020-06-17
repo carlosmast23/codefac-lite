@@ -9,12 +9,14 @@ import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaSesionModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.pos.panel.CajaSessionPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +24,8 @@ import java.util.Map;
  *
  * @author Robert
  */
-public class CajaSessionModel extends CajaSessionPanel implements CajaSesionModelControlador.Interface
+//public class CajaSessionModel extends CajaSessionPanel implements CajaSesionModelControlador.Interface
+public class CajaSessionModel extends CajaSessionPanel
 {
 
     @Override
@@ -72,7 +75,14 @@ public class CajaSessionModel extends CajaSessionPanel implements CajaSesionMode
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -90,7 +100,7 @@ public class CajaSessionModel extends CajaSessionPanel implements CajaSesionMode
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
+    /*@Override
     public CajaSession getCajaSession() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -178,6 +188,6 @@ public class CajaSessionModel extends CajaSessionPanel implements CajaSesionMode
     @Override
     public void setEstadoCierreCajaSesion(CajaSessionEnum cajaSessionEnum) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }*/
     
 }
