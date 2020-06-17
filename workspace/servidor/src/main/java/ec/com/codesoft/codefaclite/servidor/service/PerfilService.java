@@ -298,6 +298,11 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
         for (Perfil perfil : perfiles) {
             //Verificar si tiene permisos dentro de cada perfil asignado al usuario
             for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
+                
+                if(permisoVentana.getNombreClase().equals("ARQUEO_CAJA"))
+                {
+                    System.out.println("ERRO VENTANA:" + permisoVentana.getNombreClase());    
+                }
                 if(permisoVentana.getVentanaEnum().equals(ventanaEnum))
                 {
                     return true;
