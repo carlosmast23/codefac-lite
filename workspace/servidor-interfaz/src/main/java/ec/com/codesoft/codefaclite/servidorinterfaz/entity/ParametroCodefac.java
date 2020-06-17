@@ -157,6 +157,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String DOCUMENTO_DEFECTO_VISTA_FACTURA="documento_defecto_vista_factura";
     
+    public static final String REPORTE_DEFECTO_VENTA="reporte_defecto_venta";
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

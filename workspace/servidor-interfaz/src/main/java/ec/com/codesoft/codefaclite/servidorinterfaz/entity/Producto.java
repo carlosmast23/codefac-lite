@@ -506,6 +506,10 @@ public class Producto implements Serializable, Comparable<Producto> {
         }
         return true;
     }
+
+    public void setCantidadMinima(Double stockMinimo) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public static class PrecioVenta {
         public static final String PV1="pv1";

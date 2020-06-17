@@ -34,7 +34,7 @@ public class TestBaseDatos {
     public static void main(String[] args) {
         try {
             AbstractFacade.usuarioDb = "root";
-            AbstractFacade.claveDb = "root";
+            AbstractFacade.claveDb = "1234";
             AbstractFacade.cargarEntityManager();
             
             EntityManager em= AbstractFacade.entityManager;

@@ -108,6 +108,9 @@ public class MigrarProductoModel extends MigrarModel {
                      *             CREA DATOS ADICIONALES EN EL INVENTARIO
                      * ===================================================================
                      */
+                    Double stockMinimo=(Double) fila.getByEnum(ExcelMigrarProductos.Enum.STOCK_MINIMO).valor;
+                    String marca=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MARCA).valor;
+                    
                     String manejaInventario=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MANEJA_INVENTARIO).valor;
                     EnumSiNo manejaInventarioEnumSiNo=EnumSiNo.getEnumByLetra(manejaInventario.substring(0,1));
                     if(manejaInventarioEnumSiNo!=null && manejaInventarioEnumSiNo.equals(EnumSiNo.SI)) // Si cumple esta condicion vamos a grabar el resto de datos para el inventario
@@ -118,26 +121,29 @@ public class MigrarProductoModel extends MigrarModel {
                         {
                             Double stock=(Double) fila.getByEnum(ExcelMigrarProductos.Enum.STOCK).valor;
                             
-                            kardexDetalle = new KardexDetalle();
-                            kardexDetalle.setCantidad(stock.intValue());
-                            kardexDetalle.setPrecioUnitario(BigDecimal.ZERO);
-                            kardexDetalle.recalcularTotalSinGarantia();
-
-                            //Setear el documento que esta usando el usuario 
-                            kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.STOCK_INICIAL.getCodigo());
-
-                            //Fecha de ingreso                             
-                            kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
-
-                            Kardex kardex = new Kardex();
-                            kardex.setBodega(bodega);
-                            if(precioVentaPublico>0)
+                            if(stock>0)
                             {
-                                kardex.setPrecioPromedio(new BigDecimal(precioVentaPublico.toString()));
+                                kardexDetalle = new KardexDetalle();
+                                kardexDetalle.setCantidad(stock.intValue());
+                                kardexDetalle.setPrecioUnitario(BigDecimal.ZERO);
+                                kardexDetalle.recalcularTotalSinGarantia();
+
+                                //Setear el documento que esta usando el usuario 
+                                kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.STOCK_INICIAL.getCodigo());
+
+                                //Fecha de ingreso                             
+                                kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
+
+                                Kardex kardex = new Kardex();
+                                kardex.setBodega(bodega);
+                                if(precioVentaPublico>0)
+                                {
+                                    kardex.setPrecioPromedio(new BigDecimal(precioVentaPublico.toString()));
+                                }
+
+                                kardex.setProducto(producto);
+                                kardexDetalle.setKardex(kardex);
                             }
-                            
-                            kardex.setProducto(producto);
-                            kardexDetalle.setKardex(kardex);
                             
                         }
                         else
@@ -175,7 +181,10 @@ public class MigrarProductoModel extends MigrarModel {
                         if(manejaInventarioEnumSiNo.equals(EnumSiNo.SI))
                         {
                             producto=productoTmp;
-                            kardexDetalle.getKardex().setProducto(producto);
+                            if(kardexDetalle!=null)
+                            {
+                                kardexDetalle.getKardex().setProducto(producto);
+                            }
                         }
                         else
                         {
@@ -189,8 +198,9 @@ public class MigrarProductoModel extends MigrarModel {
                          *          SI NO TIENE CREADO PREVIAMENTE EL PRODUCTO CREO LOS DATOS
                          * =====================================================
                          */
-                        producto.setCantidadMinima(0);
+                        producto.setCantidadMinima(stockMinimo.intValue());
                         producto.setStockInicial(0l);
+                        producto.setMarca(marca);
                         //producto.setPrecioDistribuidor(BigDecimal.ZERO);
                         producto.setPrecioTarjeta(BigDecimal.ZERO);
                         producto.setGarantia(EnumSiNo.NO.getLetra());

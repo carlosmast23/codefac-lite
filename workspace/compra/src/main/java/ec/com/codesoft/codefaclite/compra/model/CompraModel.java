@@ -456,11 +456,7 @@ public class CompraModel extends CompraPanel{
         getRdbEmisionFisica().setSelected(true);
         
         EnumSiNo habilitarRetensiones=null;
-        try {
-            habilitarRetensiones = ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.HABILITAR_RETENCION_COMPRAS,EnumSiNo.SI);
-        } catch (RemoteException ex) {
-            Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        habilitarRetensiones = ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.HABILITAR_RETENCION_COMPRAS,EnumSiNo.SI);
         
         if(habilitarRetensiones!=null)
         {

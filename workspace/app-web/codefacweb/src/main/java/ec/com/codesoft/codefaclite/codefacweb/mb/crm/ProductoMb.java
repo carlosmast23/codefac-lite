@@ -42,7 +42,7 @@ public class ProductoMb extends GeneralAbstractMb implements Serializable,Produc
     private void init()
     {
         controlador=new ProductoModelControlador(MensajeMb.intefaceMensaje,sessionMb.getSession(), this,ModelControladorAbstract.TipoVista.WEB);
-        //controlador.iniciarCombosBox();
+        //controlador.iniciarCombosBox(); 
     }
     
     
@@ -83,7 +83,7 @@ public class ProductoMb extends GeneralAbstractMb implements Serializable,Produc
 
     @Override
     public String titulo() throws ExcepcionCodefacLite, UnsupportedOperationException {
-        return VentanaEnum.PRODUCTO.getNombre();
+        return VentanaEnum.PRODUCTO.getNombre(); 
     }
 
     @Override

@@ -453,14 +453,10 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             respuesta.estadoEnum=FechaMaximoPagoRespuesta.EstadoEnum.VALORES_PENDIENTES;
 
             Integer diasPreviosAlerta=7; //Por defecto si no tienen algun valor se muestran las fechas de pago con 7 dias
-            try {
-                String diasPagoParametro=ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.DIAS_ALERTA_PAGO);
-                if(diasPagoParametro!=null && !diasPagoParametro.isEmpty())
-                {
-                    diasPreviosAlerta=Integer.parseInt(diasPagoParametro);
-                }
-            } catch (RemoteException ex) {
-                Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
+            String diasPagoParametro=ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.DIAS_ALERTA_PAGO);
+            if(diasPagoParametro!=null && !diasPagoParametro.isEmpty())
+            {
+                diasPreviosAlerta=Integer.parseInt(diasPagoParametro);
             }
             
             //diasFaltantes=diasFaltantes+1; //Le sumo un digito porqe la distancia me devuelve con un numero menos TODO: revisar esta parte

@@ -234,7 +234,8 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             //DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
-            DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+            mostrarMensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+            //DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar");
         } catch (RemoteException ex) {
             Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -453,7 +454,8 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         {            
             BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
             BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
-            valorUnitario=valorUnitario.divide(ivaTmp,3,BigDecimal.ROUND_HALF_UP);
+            //TODO: Ver si el tema de los decimales se puede hacer configurable
+            valorUnitario=valorUnitario.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
             
         }
         producto.setValorUnitario(valorUnitario);
@@ -463,7 +465,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         
         producto.setEmpresa(session.getEmpresa());
         
-        //Si el tipo que contrala es de escritorio termino de implementar las vistas
+        //Si el tipo que contralo es de escritorio termino de implementar las vistas
         if(tipoVista.equals(TipoVista.ESCRITORIO))
         {
             getInterazEscritorio().setearValoresProducto(producto);

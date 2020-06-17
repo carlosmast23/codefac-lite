@@ -203,3 +203,8 @@ body .ui-panel .ui-panel-content {
      width: 100% !important;
 }  
 
+.etiqueta_titulo
+{
+    font-weight: bold;
+}
+

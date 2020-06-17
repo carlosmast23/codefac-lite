@@ -43,6 +43,7 @@ import ec.com.codesoft.codefaclite.facturacion.other.RenderPersonalizadoCombo;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FacturaModelInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
@@ -1445,26 +1446,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private Map<String,Object> getMapFormaPagoReporteFacturaFisica(Factura venta)
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
+        
         if(venta.getFormaPagos()!=null && venta.getFormaPagos().size()>0)
         {
-            FormaPago formaPago=venta.getFormaPagos().get(0);
-            if(formaPago.getSriFormaPago().getAlias().equals("Efectivo"))
+            for (FormaPago formaPago : venta.getFormaPagos()) 
             {
-                parametros.put("formaPagoEfectivo","X");
-            
-            }else if(formaPago.getSriFormaPago().getAlias().equals("Otros"))
-            {
-                parametros.put("formaPagoCheque","X");
-                
-            }else if(formaPago.getSriFormaPago().getAlias().equals("Dinero electrónico"))
-            {
-                parametros.put("formaPagoDineroElec","X");
-            }else if(formaPago.getSriFormaPago().getAlias().equals("Tarjeta crédito"))
-            {
-                parametros.put("formaPagoTarjetaCred","X");
-            }else
-            {
-                parametros.put("formaPagoOtros","X");
+                //FormaPago formaPago=venta.getFormaPagos().get(0);
+                if(formaPago.getSriFormaPago().getAlias().equals("Efectivo"))
+                {
+                    parametros.put("formaPagoEfectivo","X");
+
+                }else if(formaPago.getSriFormaPago().getAlias().equals("Otros"))
+                {
+                    //parametros.put("formaPagoCheque","X");
+                    parametros.put("formaPagoOtros","X");
+
+                }else if(formaPago.getSriFormaPago().getAlias().equals("Dinero electrónico"))
+                {
+                    parametros.put("formaPagoDineroElec","X");
+                }else if(formaPago.getSriFormaPago().getAlias().equals("Tarjeta crédito"))
+                {
+                    parametros.put("formaPagoTarjetaCred","X");
+                }else
+                {
+                    parametros.put("formaPagoOtros","X");
+                }
             }
             
         }
@@ -1608,12 +1614,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private ConfiguracionImpresoraEnum obtenerConfiguracionImpresora()
     {
-        try {
-            return ParametroUtilidades.<ConfiguracionImpresoraEnum>obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,ConfiguracionImpresoraEnum.NINGUNA);
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        return ParametroUtilidades.<ConfiguracionImpresoraEnum>obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,ConfiguracionImpresoraEnum.NINGUNA);
+        //return null;
     }
 
     @Override
@@ -3315,6 +3317,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     formatoEnum=FormatoHojaEnum.TICKET;
                     //nombreReporte = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
                     nombreReporte = "comprobante_venta_ticket.jrxml";
+                    //TODO:Terminar de implementar para los demas comprobantes
+                    TipoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, TipoReporteEnum.A2);
+                    if(tipoReporteEnum!=null)
+                    {
+                        nombreReporte=tipoReporteEnum.getReporteJasperNombre();
+                    }
+                    
                 }
             }
         }
