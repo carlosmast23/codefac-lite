@@ -25,9 +25,9 @@ import java.util.Map;
  * @author Robert
  */
 //public class ArqueoCajaModel extends ArqueoCajaPanel implements ArqueoCajaModelControlador.Interface
-public class ArqueoCajaModel
+public class ArqueoCajaModel extends ArqueoCajaPanel
 {
-    /*
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -153,11 +153,13 @@ public class ArqueoCajaModel
     @Override
     public void setEstado(GeneralEnumEstado estado) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+    }*/
+
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    */
+    
+
+    
 }

@@ -26,9 +26,9 @@ import java.util.Map;
  * @author Robert
  */
 //public class CajaSessionModel extends CajaSessionPanel implements CajaSesionModelControlador.Interface
-public class CajaSessionModel
+public class CajaSessionModel extends CajaSessionPanel
 {
-/*
+
     @Override
     public void iniciar() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -184,11 +184,13 @@ public class CajaSessionModel
     @Override
     public void setEstadoCierreCajaSesion(CajaSessionEnum cajaSessionEnum) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }*/
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    */
+
+
+    
 }
