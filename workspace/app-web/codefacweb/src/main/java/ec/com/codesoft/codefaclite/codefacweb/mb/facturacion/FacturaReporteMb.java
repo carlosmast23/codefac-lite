@@ -32,7 +32,7 @@ import org.primefaces.PrimeFaces;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
-import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -155,10 +155,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         
     }
 
-    @Override
-    public void cargarBusqueda(Object obj) throws ExcepcionCodefacLite {
-        
-    }
+
 
     @Override
     public String titulo() throws ExcepcionCodefacLite,UnsupportedOperationException{
@@ -167,7 +164,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     }
 
     @Override
-    public InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite {
+    public InterfaceModelFind obtenerDialogoBusqueda()  {
         return new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession());
     }
     
@@ -653,6 +650,34 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
 
     public void setSucursalCheck(Boolean sucursalCheck) {
         this.sucursalCheck = sucursalCheck;
+    }
+
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void limpiar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String getURLAyuda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Map<Integer, Boolean> permisosFormulario() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

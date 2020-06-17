@@ -15,10 +15,11 @@ import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -288,9 +289,9 @@ public class CarteraModel extends CarteraPanel{
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         CarteraBusqueda carteraBusqueda=new CarteraBusqueda();
-        return new BuscarDialogoModel(carteraBusqueda);
+        return carteraBusqueda;
     }
 
     @Override

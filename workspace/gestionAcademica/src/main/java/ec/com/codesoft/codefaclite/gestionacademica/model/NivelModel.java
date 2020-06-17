@@ -7,8 +7,9 @@ package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.NivelBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.NivelPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -179,10 +180,10 @@ public class NivelModel extends NivelPanel {
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         NivelBusquedaDialogo nivelBusquedaDialogo = new NivelBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(nivelBusquedaDialogo);
-        return buscarDialogoModel;
+        //BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(nivelBusquedaDialogo);
+        return nivelBusquedaDialogo;
     }
 
     @Override

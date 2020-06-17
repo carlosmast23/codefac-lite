@@ -909,4 +909,45 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
     }
     
+    public enum TipoReporteEnum implements ParametroUtilidades.ComparadorInterface
+    {
+        A4("A4",""),
+        A2("A2",""),
+        POS_80("POS 80","comprobante_venta_ticket.jrxml"),
+        POS_50("POS 50","comprobante_venta_ticket_50.jrxml");
+
+        private TipoReporteEnum(String nombre,String reporteJasperNombre) {
+            this.nombre = nombre;
+            this.reporteJasperNombre=reporteJasperNombre;
+        }
+            
+        private String nombre;
+        private String reporteJasperNombre;
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public String getReporteJasperNombre() {
+            return reporteJasperNombre;
+        }
+        
+        public static TipoReporteEnum findByName(String nombre)
+        {
+            for (TipoReporteEnum enumerador : TipoReporteEnum.values()) {
+                if(enumerador.getNombre().equals(nombre))
+                {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public Object consultarParametro(String nombreParametro) {
+            return TipoReporteEnum.findByName(nombreParametro);
+        }
+        
+    }
+    
 }

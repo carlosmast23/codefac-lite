@@ -53,5 +53,10 @@ public class PresupuestoBusqueda implements InterfaceModelFind<Presupuesto>
         dato.add(p.getFechaPresupuesto());
         dato.add(p.getFechaValidez());
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

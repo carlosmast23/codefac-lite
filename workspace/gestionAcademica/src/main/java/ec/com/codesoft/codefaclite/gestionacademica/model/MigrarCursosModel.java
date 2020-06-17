@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
 import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarCursos;
 import ec.com.codesoft.codefaclite.controlador.model.MigrarModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
@@ -140,7 +141,7 @@ public class MigrarCursosModel extends MigrarModel {
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

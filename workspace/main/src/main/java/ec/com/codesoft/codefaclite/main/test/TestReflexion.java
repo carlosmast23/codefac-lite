@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.test;
 
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -61,6 +61,11 @@ public class PrestamoDialogo implements InterfaceModelFind<Prestamo> {
         dato.add(t.getCuotaInicial());
         dato.add(t.getPlazo());
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
 }

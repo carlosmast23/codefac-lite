@@ -64,16 +64,21 @@ public abstract class ParametroUtilidades {
      * @return Si no encuentra nada devuelve null
      * @throws RemoteException 
      */
-    public static String obtenerValorParametro(Empresa empresa , String nombreParametro) throws RemoteException
+    public static String obtenerValorParametro(Empresa empresa , String nombreParametro) 
     {
-        ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(nombreParametro,empresa);
-        if (parametroCodefac != null) {
-            //Solo si tiene parametro positivo intento construir el ensamble
-            if(parametroCodefac.getValor()!=null)
-            {
-                return parametroCodefac.getValor();
+        try {
+            ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(nombreParametro,empresa);
+            if (parametroCodefac != null) {
+                //Solo si tiene parametro positivo intento construir el ensamble
+                if(parametroCodefac.getValor()!=null)
+                {
+                    return parametroCodefac.getValor();
+                }
+                
             }
-            
+               
+        } catch (RemoteException ex) {
+            Logger.getLogger(ParametroUtilidades.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -99,7 +104,7 @@ public abstract class ParametroUtilidades {
         return null;
     }
     
-    public static <T extends ComparadorInterface> T obtenerValorParametroEnum(Empresa empresa , String nombreParametro,T instancia) throws RemoteException
+    public static <T extends ComparadorInterface> T obtenerValorParametroEnum(Empresa empresa , String nombreParametro,T instancia) 
     {
         String valor = obtenerValorParametro(empresa, nombreParametro);
         if (valor != null) {

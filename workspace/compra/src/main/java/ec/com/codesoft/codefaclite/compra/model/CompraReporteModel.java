@@ -11,14 +11,15 @@ import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.compra.panel.CompraReportePanel;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.CompraAgrupadoCategoriaData;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.CompraDataReporte;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteCompra;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
@@ -443,7 +444,7 @@ public class CompraReporteModel extends CompraReportePanel {
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

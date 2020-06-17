@@ -8,8 +8,11 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 import ec.com.codesoft.codefaclite.configuraciones.panel.ConfiguracionDefectoPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
@@ -250,7 +253,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         * Filtrar factura por usuario
         */
         UtilidadesComboBox.llenarComboBox(getjComboFiltrarFacturaPorUsuario(), EnumSiNo.values());
-
+        
+        UtilidadesComboBox.llenarComboBox(getCmbReporteDefectoVenta(),TipoReporteEnum.values());
     }
 
     private void cargarDatos() {
@@ -288,6 +292,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             //Cargar datos del tipo de reporte de las ordenes de trabajo
             ParametroCodefac parametroFormtaOrdenTrabajo = parametrosTodos.get(ParametroCodefac.FORMATO_ORDEN_TRABAJO);
             getCmbFormatoHojas().setSelectedItem((parametroFormtaOrdenTrabajo != null) ? parametroFormtaOrdenTrabajo.getValor() : null);
+            
+            ParametroCodefac parametroReporteDefectoVenta = parametrosTodos.get(ParametroCodefac.REPORTE_DEFECTO_VENTA);
+            TipoReporteEnum reporteEnum=TipoReporteEnum.findByName((parametroReporteDefectoVenta != null) ? parametroReporteDefectoVenta.getValor() : null);
+            getCmbReporteDefectoVenta().setSelectedItem(reporteEnum);
 
             ParametroCodefac parametroActivarCarteras = parametrosTodos.get(ParametroCodefac.ACTIVAR_CARTERA);
             EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((parametroActivarCarteras != null) ? parametroActivarCarteras.getValor() : null);
@@ -464,6 +472,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA,documentoDefectoVistaFactura.getCodigo());
         agregarParametroEditar(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA);
         
+        TipoReporteEnum reporteDefectoVenta =(TipoReporteEnum) getCmbReporteDefectoVenta().getSelectedItem();
+        agregarParametro(ParametroCodefac.REPORTE_DEFECTO_VENTA,(reporteDefectoVenta!=null)?reporteDefectoVenta.getNombre():null);
+        agregarParametroEditar(ParametroCodefac.REPORTE_DEFECTO_VENTA);
 
         //Agregar detalle para la orden de trabajo
         agregarParametro(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES, getTxtOrdenTrabajoReporte().getText());
@@ -623,7 +634,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

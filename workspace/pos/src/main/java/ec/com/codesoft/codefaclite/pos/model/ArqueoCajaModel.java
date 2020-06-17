@@ -5,10 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.pos.model;
 
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.ArqueoCajaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.pos.panel.ArqueoCajaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -24,8 +25,9 @@ import java.util.Map;
  * @author Robert
  */
 //public class ArqueoCajaModel extends ArqueoCajaPanel implements ArqueoCajaModelControlador.Interface
-public class ArqueoCajaModel extends ArqueoCajaPanel
+public class ArqueoCajaModel
 {
+    /*
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -85,11 +87,6 @@ public class ArqueoCajaModel extends ArqueoCajaPanel
 
     @Override
     public List<String> getPerfilesPermisos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -156,6 +153,11 @@ public class ArqueoCajaModel extends ArqueoCajaPanel
     @Override
     public void setEstado(GeneralEnumEstado estado) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
+    }
     
+    @Override
+    public BuscarDialogoModel obtenerDialogoBusqueda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    */
 }

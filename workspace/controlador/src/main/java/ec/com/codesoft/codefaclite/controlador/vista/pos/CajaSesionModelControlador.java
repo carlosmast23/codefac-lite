@@ -24,27 +24,27 @@ import java.sql.Date;
  *
  * @author Robert
  */
-public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSesionModelControlador.Interface>
+public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSesionModelControlador.Interface, CajaSesionModelControlador.Interface, CajaSesionModelControlador.Interface>
 {
 
-    public CajaSesionModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, Interface interfaz) 
+    public CajaSesionModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, Interface interfaz, TipoVista tipoVista) 
     {
-        super(mensajeVista, session, interfaz);
+        super(mensajeVista, session, interfaz, tipoVista);
     }
    public void iniciar() throws RemoteException, ServicioCodefacException{
-        interfaz.setCajaSession(new CajaSession());
+        getInterfaz().setCajaSession(new CajaSession());
         CajaEnum[] estadosCaja = CajaEnum.values();
         
     }
     
     public void nuevo(){
-        interfaz.setCajaSession(new CajaSession());
+        getInterfaz().setCajaSession(new CajaSession());
     }
     
     public void grabar() throws ServicioCodefacException, RemoteException{ 
         try
         {
-            if(interfaz.getCajaSession()== null){
+            if(getInterfaz().getCajaSession()== null){
                 throw new ServicioCodefacException("Caja sesión nula");
             }         
             //Datos
@@ -117,12 +117,12 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     public void obtenerDatos(){
         //this.interfaz.getCajaSession().setArqueoCaja();
         //this.interfaz.getCajaSession().setCaja();
-        this.interfaz.getCajaSession().setEstado(this.interfaz.getCajaSession().getEstado());
-        this.interfaz.getCajaSession().setEstadoCierreCaja(this.interfaz.getCajaSession().getEstadoCierreCaja());
+        this.getInterfaz().getCajaSession().setEstado(this.getInterfaz().getCajaSession().getEstado());
+        this.getInterfaz().getCajaSession().setEstadoCierreCaja(this.getInterfaz().getCajaSession().getEstadoCierreCaja());
         //this.interfaz.getCajaSession().setFechaHoraApertura();
         //this.interfaz.getCajaSession().setUsuario(usuario);
-        this.interfaz.getCajaSession().setValorApertura(this.interfaz.getValorApertura());
-        this.interfaz.getCajaSession().setValorCierre(this.interfaz.getValorCierre());
+        this.getInterfaz().getCajaSession().setValorApertura(this.getInterfaz().getValorApertura());
+        this.getInterfaz().getCajaSession().setValorCierre(this.getInterfaz().getValorCierre());
     }
     
 }

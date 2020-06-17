@@ -47,5 +47,10 @@ public class OrdenTrabajoBusqueda implements InterfaceModelFind<OrdenTrabajo>
         dato.add(o.getEstado());
         dato.add(o.getFechaIngreso());
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

@@ -65,4 +65,9 @@ public class ProductoProveedorBusquedaDialogo implements InterfaceModelFind<Prod
         //queryDialog.agregarParametro(2,ProductoEnumEstado.INACTIVO.getEstado());
         return queryDialog;
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -11,6 +11,7 @@ import java.util.Vector;
  *
  * @author Carlos
  */
+@Deprecated 
 public interface InterfacesPropertisFindWeb {
     public abstract Vector<String> getNamePropertysObject();
 }

@@ -28,7 +28,7 @@ public class UtilidadesControladorVistaGeneral {
             ejecutarVistaIf.ejecutar();//Metodo que se ejecuta despues de construir el objeto
             
         } catch (java.lang.UnsupportedOperationException uoe) {
-            Logger.getLogger(UtilidadesControladorVistaGeneral.class.getName()).log(Level.SEVERE, null, uoe);
+            //Logger.getLogger(UtilidadesControladorVistaGeneral.class.getName()).log(Level.SEVERE, null, uoe);
             System.err.println("Metodo no implementado");
             
         } catch (ExcepcionCodefacLite ex) {

@@ -40,6 +40,7 @@ public class ExcelMigrarClientes extends ExcelMigrar {
             this.nombre = nombre;
             this.posicion=posicion;
             this.tipoDato=tipoDato;
+            this.requerido=false;
         }
         
         public String nombre;

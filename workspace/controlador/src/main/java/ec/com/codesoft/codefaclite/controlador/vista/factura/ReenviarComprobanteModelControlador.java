@@ -5,7 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
-import ec.com.codesoft.codefaclite.controlador.vista.factura.ReenviarComprobanteModelControlador.InterfazModelControlador;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.EjemploModelControlador;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ReenviarComprobanteModelControlador.CommonIf;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -20,10 +21,10 @@ import java.util.logging.Logger;
  *
  * @author CARLOS_CODESOFT
  */
-public class ReenviarComprobanteModelControlador extends ModelControladorAbstract<InterfazModelControlador> {
+public class ReenviarComprobanteModelControlador extends ModelControladorAbstract<CommonIf,CommonIf,CommonIf> {
 
-    public ReenviarComprobanteModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, InterfazModelControlador interfaz) {
-        super(mensajeVista, session, interfaz);
+    public ReenviarComprobanteModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, ReenviarComprobanteModelControlador.CommonIf interfaz,TipoVista tipoVista) {
+        super(mensajeVista, session, interfaz,tipoVista);
     }
 
     
@@ -37,7 +38,7 @@ public class ReenviarComprobanteModelControlador extends ModelControladorAbstrac
         try {
             //Carlos todos los comprobantes pendientes de enviar de la carpeta "sin autorizar y no enviados"
             List<ComprobanteElectronico> comprobantesPendientesAutorizar=ServiceFactory.getFactory().getComprobanteServiceIf().getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_GENERADOS,session.getEmpresa());
-            interfaz.cargarVistaTabla(comprobantesPendientesAutorizar);                      
+            getInterfaz().cargarVistaTabla(comprobantesPendientesAutorizar);                      
             
             
         } catch (RemoteException ex) {
@@ -47,7 +48,7 @@ public class ReenviarComprobanteModelControlador extends ModelControladorAbstrac
     }
    
 
-    public interface InterfazModelControlador
+    public interface CommonIf
     {
         public void cargarVistaTabla(List<ComprobanteElectronico> comprobantes);
     }

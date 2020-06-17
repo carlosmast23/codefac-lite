@@ -23,6 +23,7 @@
         </h:head>
 
         <h:body style="font-size: 11px;margin: 0px">
+            <ui:insert name="vistaControlador"></ui:insert>
 
             <h:form id="formulario" onkeypress="if (event.keyCode == 13) {
                         return false;
@@ -247,13 +248,25 @@
                 </p:confirmDialog>
 
                 <!-- DIALOGO DE RESULTADOS -->
-                <p:dialog id="idDialogResultado" header="#{controllerCodefacMb.generalAbstractMb.resultadoDialogo.titulo}" widgetVar="dialogResultado" modal="true" height="100" style="text-align: center">
+                <p:dialog 
+                    id="idDialogResultado" 
+                    header="#{controllerCodefacMb.generalAbstractMb.resultadoDialogo.titulo}" 
+                    widgetVar="dialogResultado" 
+                    modal="true" 
+                    height="100" 
+                    style="text-align: center">
+                    
                     <h:graphicImage library="img" name="logoCodefac.gif" style="height: 50%" />
                     <p:separator />
                     <p:outputLabel value="#{controllerCodefacMb.generalAbstractMb.resultadoDialogo.mensaje}" />
                     <f:facet name="footer"  >
                         <div style="text-align: center">
-                            <p:commandButton value="Aceptar" process="@form" actionListener="#{controllerCodefacMb.nuevo()}" update="messages,idDialogResultado,formulario:panelSecundario,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
+                            <p:commandButton 
+                                value="Aceptar" 
+                                process="@form" 
+                                actionListener="#{controllerCodefacMb.nuevo()}" 
+                                update="messages,idDialogResultado,formulario:panelSecundario,panelContenido"  onclick="PF('dialogConfirmarGrabar').hide();"  />
+                            
                             <p:commandButton 
                                 value="Imprimir" 
                                 process="@this" 

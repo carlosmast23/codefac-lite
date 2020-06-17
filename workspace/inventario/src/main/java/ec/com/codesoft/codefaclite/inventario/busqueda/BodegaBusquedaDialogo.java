@@ -81,4 +81,9 @@ public class BodegaBusquedaDialogo implements InterfaceModelFind<Bodega> {
     }
 */
 
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

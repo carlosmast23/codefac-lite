@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.comprobantes;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -38,7 +38,7 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
     public abstract void imprimirComprobante();
     
     //Esta variable identifica cuanto tiempo esperar la autorizacion del documento expresado en segundos
-    private static final Integer TIEMPO_ESPERA=10;
+    private static final Integer TIEMPO_ESPERA=40;
     
     protected ComprobanteEntity comprobante;
     

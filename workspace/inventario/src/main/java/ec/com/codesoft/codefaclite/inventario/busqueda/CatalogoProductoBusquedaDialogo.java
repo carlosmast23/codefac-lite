@@ -53,5 +53,10 @@ public class CatalogoProductoBusquedaDialogo implements InterfaceModelFind<Catal
         dato.add(t.getModuloCodefacEnum().getNombre());
         dato.add(t.getIva().getTarifa());
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

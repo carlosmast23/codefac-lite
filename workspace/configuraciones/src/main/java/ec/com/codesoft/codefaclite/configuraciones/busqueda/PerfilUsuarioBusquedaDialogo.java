@@ -55,5 +55,10 @@ public class PerfilUsuarioBusquedaDialogo implements InterfaceModelFind<Usuario>
     public Boolean buscarObjeto(Usuario t, Object valor) {
         return t.getNick().equals(valor.toString());
     }*/
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

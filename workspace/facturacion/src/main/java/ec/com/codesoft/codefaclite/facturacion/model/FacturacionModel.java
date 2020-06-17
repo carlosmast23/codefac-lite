@@ -16,8 +16,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
@@ -33,8 +33,8 @@ import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
-import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
+import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_EDITAR;
+import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
@@ -43,6 +43,7 @@ import ec.com.codesoft.codefaclite.facturacion.other.RenderPersonalizadoCombo;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FacturaModelInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
@@ -1316,21 +1317,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
             }
 
-        /*} else { //Si el servidor del sri no esta disponible solo existe un camino
-            DialogoCodefac.mensaje("Advertencia", "El servidor del Sri no esta disponible\n El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_ADVERTENCIA);
-
-            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
-                cic = null;
-            }
-
-            comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(), cic);
-
-            //TODO: Ver si se une esta parte con la parte superior porque se repite
-            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
-                FacturaRespuestaNoCallBack respuestaNoCallBack = new FacturaRespuestaNoCallBack(factura, this, false);
-                respuestaNoCallBack.iniciar();
-            }
-        }*/
+        
 
         //=====================> Imprimir comprobante de venta <==============================//
         //imprimirComprobanteVenta(factura);
@@ -1445,26 +1432,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private Map<String,Object> getMapFormaPagoReporteFacturaFisica(Factura venta)
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
+        
         if(venta.getFormaPagos()!=null && venta.getFormaPagos().size()>0)
         {
-            FormaPago formaPago=venta.getFormaPagos().get(0);
-            if(formaPago.getSriFormaPago().getAlias().equals("Efectivo"))
+            for (FormaPago formaPago : venta.getFormaPagos()) 
             {
-                parametros.put("formaPagoEfectivo","X");
-            
-            }else if(formaPago.getSriFormaPago().getAlias().equals("Otros"))
-            {
-                parametros.put("formaPagoCheque","X");
-                
-            }else if(formaPago.getSriFormaPago().getAlias().equals("Dinero electrónico"))
-            {
-                parametros.put("formaPagoDineroElec","X");
-            }else if(formaPago.getSriFormaPago().getAlias().equals("Tarjeta crédito"))
-            {
-                parametros.put("formaPagoTarjetaCred","X");
-            }else
-            {
-                parametros.put("formaPagoOtros","X");
+                //FormaPago formaPago=venta.getFormaPagos().get(0);
+                if(formaPago.getSriFormaPago().getAlias().equals("Efectivo"))
+                {
+                    parametros.put("formaPagoEfectivo","X");
+
+                }else if(formaPago.getSriFormaPago().getAlias().equals("Otros"))
+                {
+                    //parametros.put("formaPagoCheque","X");
+                    parametros.put("formaPagoOtros","X");
+
+                }else if(formaPago.getSriFormaPago().getAlias().equals("Dinero electrónico"))
+                {
+                    parametros.put("formaPagoDineroElec","X");
+                }else if(formaPago.getSriFormaPago().getAlias().equals("Tarjeta crédito"))
+                {
+                    parametros.put("formaPagoTarjetaCred","X");
+                }else
+                {
+                    parametros.put("formaPagoOtros","X");
+                }
             }
             
         }
@@ -1608,12 +1600,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private ConfiguracionImpresoraEnum obtenerConfiguracionImpresora()
     {
-        try {
-            return ParametroUtilidades.<ConfiguracionImpresoraEnum>obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,ConfiguracionImpresoraEnum.NINGUNA);
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        return ParametroUtilidades.<ConfiguracionImpresoraEnum>obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,ConfiguracionImpresoraEnum.NINGUNA);
+        //return null;
     }
 
     @Override
@@ -3047,7 +3035,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -3315,6 +3303,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     formatoEnum=FormatoHojaEnum.TICKET;
                     //nombreReporte = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
                     nombreReporte = "comprobante_venta_ticket.jrxml";
+                    //TODO:Terminar de implementar para los demas comprobantes
+                    TipoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, TipoReporteEnum.A2);
+                    if(tipoReporteEnum!=null)
+                    {
+                        nombreReporte=tipoReporteEnum.getReporteJasperNombre();
+                    }
+                    
                 }
             }
         }

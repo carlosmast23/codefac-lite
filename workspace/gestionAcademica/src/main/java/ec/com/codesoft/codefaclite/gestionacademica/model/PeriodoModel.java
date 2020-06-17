@@ -8,9 +8,10 @@ package ec.com.codesoft.codefaclite.gestionacademica.model;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
-import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_GRABAR;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_GRABAR;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.PeriodoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.PeriodoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -237,10 +238,10 @@ public class PeriodoModel extends PeriodoPanel {
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         PeriodoBusquedaDialogo periodoBusquedaDialogo = new PeriodoBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(periodoBusquedaDialogo);
-        return buscarDialogoModel;
+        //BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(periodoBusquedaDialogo);
+        return periodoBusquedaDialogo;
     }
 
     @Override

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.codefacweb.mb.pos;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -18,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -31,14 +33,15 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class CajaMb extends GeneralAbstractMb implements CajaModelControlador.Interface
+public class CajaMb
 {
+    /*
     private CajaModelControlador controlador;
     private GeneralEnumEstado[] estadosLista;
     
     @PostConstruct
     public void init(){
-        this.controlador = new CajaModelControlador(MensajeMb.intefaceMensaje, sessionMb.getSession(), this);
+        this.controlador = new CajaModelControlador(MensajeMb.intefaceMensaje, sessionMb.getSession(), this, ModelControladorAbstract.TipoVista.WEB);
         try {
             this.controlador.iniciar();
         } catch (RemoteException ex) {
@@ -89,7 +92,7 @@ public class CajaMb extends GeneralAbstractMb implements CajaModelControlador.In
     }
 
     @Override
-    public InterfaceModelFind obtenerDialogoBusqueda() throws ExcepcionCodefacLite {
+    public InterfaceModelFind obtenerDialogoBusqueda(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -164,5 +167,29 @@ public class CajaMb extends GeneralAbstractMb implements CajaModelControlador.In
     public void setEstadosGeneralesVista(CajaEnum[] estadoGeneralesLista) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void limpiar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String getURLAyuda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Map<Integer, Boolean> permisosFormulario() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+ */   
 }

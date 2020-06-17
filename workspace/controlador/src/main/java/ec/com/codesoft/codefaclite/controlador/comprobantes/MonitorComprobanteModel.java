@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.comprobantes;
 
 import ec.com.codesoft.codefaclite.controlador.panel.MonitorComprobantesPanel;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.BorderLayout;
 import java.awt.Color;

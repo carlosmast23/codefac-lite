@@ -7,9 +7,10 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaLoteImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteUtilidadImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.interfaz.InterfaceCallbakClient;
@@ -356,12 +357,15 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                     }
                 });
                 
+                //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
+                Boolean procesoSincronico=false;
                 if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
                 {
                     cic=null; //Si es un cliente remoto el que ejecuta la accion no puede hacer callback para veriicar
+                    procesoSincronico=true;
                 }
                 
-                ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, session.getEmpresa().getIdentificacion(),cic,getChkEnvioCorreo().isSelected(),session.getEmpresa());
+                ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, session.getEmpresa().getIdentificacion(),cic,getChkEnvioCorreo().isSelected(),session.getEmpresa(),procesoSincronico);
                 if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
                 {
                     estadoNormal();
@@ -521,7 +525,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

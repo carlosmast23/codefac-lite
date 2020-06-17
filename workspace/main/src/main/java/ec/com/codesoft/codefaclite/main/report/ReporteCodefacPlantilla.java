@@ -5,8 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.main.report;
 
-import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.text.SimpleDateFormat;
 import java.util.Collection;

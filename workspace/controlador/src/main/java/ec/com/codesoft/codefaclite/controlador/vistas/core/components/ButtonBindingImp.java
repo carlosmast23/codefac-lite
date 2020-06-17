@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vistas.core.components;
 
+import ec.com.codesoft.codefaclite.controlador.vistas.core.ConverterSwingMvvc;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -19,7 +20,7 @@ public class ButtonBindingImp extends ComponentBindingAbstract<JButton,ButtonBin
 
     private ComponentBindingIf actionListener=new ComponentBindingIf<Object,ButtonBinding>() {
         @Override
-        public void getAccion(String nombreMetodo) {
+        public void getAccion(String nombreMetodo,ConverterSwingMvvc converter) {
             getComponente().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -37,6 +38,13 @@ public class ButtonBindingImp extends ComponentBindingAbstract<JButton,ButtonBin
         public String getNombrePropiedadControlador(ButtonBinding componente) {
             return componente.actionListener();
         }
+
+        @Override
+        public Class getConverterClass(ButtonBinding anotacion) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+
     };
     
     @Override

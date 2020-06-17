@@ -14,8 +14,9 @@ import ec.com.codesoft.codefaclite.compra.reportdata.InformacionProductoProveedo
 import ec.com.codesoft.codefaclite.compra.reportdata.ReporteProductoProveedor;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
-import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
@@ -178,21 +179,23 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
     }
     
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         BuscarDialogoModel buscarDialogoModel = null;
         opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
         switch(opcionReporte)
         {
             case "Producto":
                 ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
-                buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
-            break;
+                //buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+                return productoBusquedaDialogo;
+            //break;
             case "Proveedor":
                 ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo(session.getEmpresa());
                 buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
-            break;
+                return proveedorBusquedaDialogo;
+            //break;
         }
-        return buscarDialogoModel;
+        return null;
     }
 
     @Override

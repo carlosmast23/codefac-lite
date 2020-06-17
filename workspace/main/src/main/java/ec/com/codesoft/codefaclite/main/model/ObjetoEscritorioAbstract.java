@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.model;
 
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;

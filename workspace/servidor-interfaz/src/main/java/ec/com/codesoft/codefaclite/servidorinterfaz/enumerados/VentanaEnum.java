@@ -42,7 +42,7 @@ public enum VentanaEnum implements Serializable{
     CLIENTE_REPORTE("ec.com.codesoft.codefaclite.crm.model.ClienteReporte", "CLIR", "Cliente Reporte", ModuloCodefacEnum.CRM, CategoriaMenuEnum.REPORTES, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
     PROVEEDOR_REPORTE("ec.com.codesoft.codefaclite.crm.model.ProveedorReporte", "PVOR", "Proveedor Reporte", ModuloCodefacEnum.CRM, CategoriaMenuEnum.REPORTES, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
     PRODUCTO_REPORTE("ec.com.codesoft.codefaclite.crm.model.ProductoReporte", "PROR", "Producto Reporte", ModuloCodefacEnum.CRM, CategoriaMenuEnum.REPORTES, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
-    FACTURA_DISENIO("ec.com.codesoft.codefaclite.facturacion.model.FacturaDisenioModel", "FACD", "Factura Diseño", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.GRATIS,null,false),
+    FACTURA_DISENIO("ec.com.codesoft.codefaclite.facturacion.model.FacturaDisenioModel", "FACD", "Factura Diseño", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.GRATIS,null,true),
     COMPRA("ec.com.codesoft.codefaclite.compra.model.CompraModel", "COMP", "Compra", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,KeyEvent.VK_B,null),
     COMPRA_REPORTE("ec.com.codesoft.codefaclite.compra.model.CompraReporteModel", "CMPR", "Compra Reporte", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.REPORTES,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     COMPRA_REPORTE_PRODUCTO("ec.com.codesoft.codefaclite.compra.model.CompraReporteProductoModel", "CRPM", "Compra Reporte Producto", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.REPORTES,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
@@ -123,8 +123,6 @@ public enum VentanaEnum implements Serializable{
     PRESTAMO_MODEL("ec.com.codesoft.codefaclite.prestamos.model.PrestamoModel", "PRST", "Prestamo", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.PRO,null,true),
     ATS("ec.com.codesoft.codefaclite.impuestos.model.AtsModel", "ATSM", "ATS", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.PRO,null),
     CAJA("ec.com.codesoft.codefaclite.pos.model.CajaModel", "CAJA", "CAJA", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.PRO,null),
-    //CAJA_SESSION("ec.com.codesoft.codefaclite.pos.model.CajaSessionModel", "CJSN", "Caja Sesión",ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
-    //ARQUEO_CAJA("ec.com.codesoft.codefaclite.pos.model.ArqueoCajaModel", "AQCJ", "Arqueo Caja", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
     DESCUENTO_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.DescuentoAcademicoModel", "DSAC", "Descuento Académico", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR,null);
 
     

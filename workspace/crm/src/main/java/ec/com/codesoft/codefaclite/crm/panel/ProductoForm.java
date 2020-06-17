@@ -6,11 +6,14 @@
 package ec.com.codesoft.codefaclite.crm.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.crm.model.ProductoModel.IvaOpcionEnum;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador.IvaOpcionEnum;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecimalConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -34,6 +37,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(min = 1,max = 300,requerido = true, expresionRegular = ExpresionRegular.textoSinSaltosLinea, nombre = "Nombre", expresionRegularMensaje = "No se permiten saltos de linea")
+    @TextFieldBinding(value = "controlador.producto.nombre")
     public JTextField getTextNombre() {
         return textNombre;
     }
@@ -44,6 +48,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+([.][0-9]+)?$", expresionRegularMensaje = "Solo se permite numeros enteros y decimales")
+    @TextFieldBinding(value = "controlador.producto.valorUnitario",converter = StringToBigDecimalConverter.class)
     public JTextField getTextValorUnitario() {
         return textValorUnitario;
     }
@@ -99,6 +104,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel29 = new javax.swing.JLabel();
         cmbGenerarCodigoBarras = new javax.swing.JComboBox<>();
         lblEspacioBlanco = new javax.swing.JLabel();
+        btnTemporal = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         txtMarca = new javax.swing.JTextField();
@@ -351,7 +357,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbTipoProducto, gridBagConstraints);
 
-        cmbIvaOpcionPrecioVentaPublico.setModel(new javax.swing.DefaultComboBoxModel<>(new IvaOpcionEnum[] {IvaOpcionEnum.CON_IVA,IvaOpcionEnum.SIN_IVA }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -397,6 +402,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacioBlanco, gridBagConstraints);
+
+        btnTemporal.setText("Verificar");
+        jPanel1.add(btnTemporal, new java.awt.GridBagConstraints());
 
         jPanel3.add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -852,6 +860,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarProductoEnsamble;
     private javax.swing.JButton btnEditarEnsamble;
     private javax.swing.JButton btnEliminarEnsamble;
+    private javax.swing.JButton btnTemporal;
     private javax.swing.JCheckBox chkOcultarDetalleVenta;
     private javax.swing.JCheckBox chkTransportarGuiaRemision;
     private javax.swing.JComboBox<CategoriaProducto> cmbCategoriaProducto;
@@ -947,6 +956,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = true,max = 25,min=1, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Personalizado", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @TextFieldBinding(value = "controlador.producto.codigoPersonalizado")
     public JTextField getTxtCodigoPersonalizado() {
         return txtCodigoPersonalizado;
     }
@@ -965,6 +975,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.txtCodigoUPC = txtCodigoUPC;
     }
 
+    @ComboBoxBinding(source ="controlador.garantiaList" , valueSelect ="controlador.producto.garantiaEnum" )
     public JComboBox<EnumSiNo> getCmbGarantia() {
         return cmbGarantia;
     }
@@ -1139,6 +1150,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.txtProductoEnsamble = txtProductoEnsamble;
     }
 
+    @ComboBoxBinding(source = "controlador.categoriaProductosList",valueSelect = "controlador.categoriaSeleccionada")
     public JComboBox<CategoriaProducto> getCmbCategoriaProducto() {
         return cmbCategoriaProducto;
     }
@@ -1147,6 +1159,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.cmbCategoriaProducto = cmbCategoriaProducto;
     }
 
+    @ComboBoxBinding(source = "controlador.iceList",valueSelect = "controlador.iceSeleccionado")
     public JComboBox<ImpuestoDetalle> getComboIce() {
         return comboIce;
     }
@@ -1155,6 +1168,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.comboIce = comboIce;
     }
 
+    @ComboBoxBinding(source = "controlador.irbpnrList",valueSelect = "controlador.irbpnrSeleccionado")
     public JComboBox<ImpuestoDetalle> getComboIrbpnr() {
         return comboIrbpnr;
     }
@@ -1163,6 +1177,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.comboIrbpnr = comboIrbpnr;
     }
 
+    @ComboBoxBinding(source = "controlador.ivaList",valueSelect = "controlador.ivaSeleccionado")
     public JComboBox<ImpuestoDetalle> getComboIva() {
         return comboIva;
     }
@@ -1171,6 +1186,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.comboIva = comboIva;
     }
 
+    @ComboBoxBinding(source = "controlador.tipoProductosList",valueSelect = "controlador.producto.tipoProductoEnum")
     public JComboBox<TipoProductoEnum> getCmbTipoProducto() {
         return cmbTipoProducto;
     }
@@ -1179,6 +1195,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.cmbTipoProducto = cmbTipoProducto;
     }
 
+    @ComboBoxBinding(source = "controlador.ivaOpcionList",valueSelect = "controlador.ivaOpcionSeleccionado")
     public JComboBox<IvaOpcionEnum> getCmbIvaOpcionPrecioVentaPublico() {
         return cmbIvaOpcionPrecioVentaPublico;
     }
@@ -1187,6 +1204,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.cmbIvaOpcionPrecioVentaPublico = cmbIvaOpcionPrecioVentaPublico;
     }
 
+    @ComboBoxBinding(source = "controlador.llevaInventarioList",valueSelect = "controlador.producto.manejarInventarioEnum")
     public JComboBox<EnumSiNo> getCmbManejaInventario() {
         return cmbManejaInventario;
     }
@@ -1203,6 +1221,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.tabMenu = tabMenu;
     }
 
+    @ComboBoxBinding(source = "controlador.imprimirCodigoBarrasList",valueSelect = "controlador.producto.generarCodigoBarrasEnum")
     public JComboBox<EnumSiNo> getCmbGenerarCodigoBarras() {
         return cmbGenerarCodigoBarras;
     }
@@ -1229,6 +1248,10 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public void setTxtPrecio1SinSubsidio(JTextField txtPrecio1SinSubsidio) {
         this.txtPrecio1SinSubsidio = txtPrecio1SinSubsidio;
+    }
+
+    public JButton getBtnTemporal() {
+        return btnTemporal;
     }
 
         

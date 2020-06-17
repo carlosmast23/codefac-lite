@@ -11,7 +11,9 @@ import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract.MensajeVistaInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
@@ -33,13 +35,13 @@ import java.util.logging.Logger;
  *
  * @author Robert
  */
-public class CajaModelControlador extends ModelControladorAbstract<CajaModelControlador.Interface>
+public class CajaModelControlador extends ModelControladorAbstract<CajaModelControlador.Interface, CajaModelControlador.Interface, CajaModelControlador.Interface>
 {
     /**
      * Controlador Generico
      */
-    public CajaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, Interface interfaz) {
-        super(mensajeVista, session, interfaz);
+    public CajaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CajaModelControlador.Interface interfaz, TipoVista tipoVista) {
+        super(mensajeVista, session, interfaz,tipoVista);
     }
     
     /**
@@ -48,39 +50,39 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
      * @throws ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException
      */ 
     public void iniciar() throws RemoteException, ServicioCodefacException{
-        interfaz.setCaja(new Caja());
+        getInterfaz().setCaja(new Caja());
         CajaEnum[] estadoGeneralesLista = CajaEnum.values();
         List<Sucursal> sucursalLista = ServiceFactory.getFactory().getSucursalServiceIf().obtenerTodos();
         List<PuntoEmision> puntosEmisionLista = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerTodos();
-        this.interfaz.setEstadosGeneralesVista(estadoGeneralesLista);
-        this.interfaz.setSucursalesVista(sucursalLista);
-        this.interfaz.setDescripcion("");
-        this.interfaz.setNombre("");
+        this.getInterfaz().setEstadosGeneralesVista(estadoGeneralesLista);
+        this.getInterfaz().setSucursalesVista(sucursalLista);
+        this.getInterfaz().setDescripcion("");
+        this.getInterfaz().setNombre("");
     }
     
     public void nuevo(){
-        interfaz.setCaja(new Caja());
+        getInterfaz().setCaja(new Caja());
     }
     
     public void grabar() throws ServicioCodefacException, RemoteException{ 
         try
         {
-            if(interfaz.getCaja() == null){
+            if(getInterfaz().getCaja() == null){
                 throw new ServicioCodefacException("Caja nula");
             }        
-            if(interfaz.getEnumEstado() == null){
+            if(getInterfaz().getEnumEstado() == null){
                 throw new ServicioCodefacException("Estado null");
             }
-            if(interfaz.getSucursal() == null){
+            if(getInterfaz().getSucursal() == null){
                 throw new ServicioCodefacException("Sucursal null");
             }
-            if(interfaz.getPuntoEmision() == null){
+            if(getInterfaz().getPuntoEmision() == null){
                 throw new ServicioCodefacException("Punto de Emisión null");
             }
             //Datos
             obtenerDatos();
             //Grabar
-            ServiceFactory.getFactory().getCajaServiceIf().grabar(interfaz.getCaja());
+            ServiceFactory.getFactory().getCajaServiceIf().grabar(getInterfaz().getCaja());
             //Mensaje
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         }
@@ -97,7 +99,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
             //Datos
             obtenerDatos();
             //Editar
-            ServiceFactory.getFactory().getCajaServiceIf().editar(interfaz.getCaja());
+            ServiceFactory.getFactory().getCajaServiceIf().editar(getInterfaz().getCaja());
             //Mensaje
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
         } catch (RemoteException e) {
@@ -109,16 +111,15 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
         try
         {
             //DialogoCodefac.dialogoPregunta("Alerta", "Está seguro que desea eliminar el cliente?", DialogoCodefac.MENSAJE_ADVERTENCIA);          
-            ServiceFactory.getFactory().getCajaServiceIf().eliminar(interfaz.getCaja());
+            ServiceFactory.getFactory().getCajaServiceIf().eliminar(getInterfaz().getCaja());
         } catch(RemoteException e){
             mostrarMensaje(new CodefacMsj("Error", e.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));
         }
     }
     
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         CajaBusquedaDialogo cajaBusquedaDialogo = new CajaBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(cajaBusquedaDialogo);
-        return buscarDialogoModel;
+        return cajaBusquedaDialogo;
     }
     
     
@@ -153,10 +154,10 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     }
     
     public void obtenerDatos(){
-        interfaz.getCaja().setEstado(interfaz.getEnumEstado().getEstado());
-        interfaz.getCaja().setSucursal(interfaz.getSucursal());
-        interfaz.getCaja().setPuntoEmision(interfaz.getPuntoEmision());
-        interfaz.getCaja().setNombre(interfaz.getNombre());
-        interfaz.getCaja().setDescripcion(interfaz.getDescripcion());
+        getInterfaz().getCaja().setEstado(getInterfaz().getEnumEstado().getEstado());
+        getInterfaz().getCaja().setSucursal(getInterfaz().getSucursal());
+        getInterfaz().getCaja().setPuntoEmision(getInterfaz().getPuntoEmision());
+        getInterfaz().getCaja().setNombre(getInterfaz().getNombre());
+        getInterfaz().getCaja().setDescripcion(getInterfaz().getDescripcion());
     }
 }

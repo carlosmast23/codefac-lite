@@ -16,12 +16,12 @@ import java.sql.Date;
  *
  * @author Robert
  */
-public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoCajaModelControlador.Interface>
+public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoCajaModelControlador.Interface, ArqueoCajaModelControlador.Interface, ArqueoCajaModelControlador.Interface>
 {
 
-    public ArqueoCajaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, Interface interfaz) 
+    public ArqueoCajaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, Interface interfaz, TipoVista tipoVista) 
     {
-        super(mensajeVista, session, interfaz);
+        super(mensajeVista, session, interfaz, tipoVista);
     }
     
     

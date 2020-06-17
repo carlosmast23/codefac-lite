@@ -8,8 +8,10 @@ package ec.com.codesoft.codefaclite.pos.model;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.pos.panel.CajaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
@@ -49,7 +51,7 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        this.controlador = new CajaModelControlador(DialogoCodefac.intefaceMensaje, session,this);
+        this.controlador = new CajaModelControlador(DialogoCodefac.intefaceMensaje, session,this, ModelControladorAbstract.TipoVista.ESCRITORIO);
         try {
             this.controlador.iniciar();
             listenerCombos();
@@ -136,7 +138,7 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         return this.controlador.obtenerDialogoBusqueda();
     }
 

@@ -11,8 +11,9 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
@@ -132,8 +133,8 @@ public class SucursalModel extends SucursalPanel {
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
-        return new BuscarDialogoModel(new SucursalBusquedaDialogo(session.getEmpresa()));
+    public InterfaceModelFind obtenerDialogoBusqueda() {
+        return new SucursalBusquedaDialogo(session.getEmpresa());
     }
 
     @Override

@@ -83,11 +83,6 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        //Persona p;
-        //p.getEstudiantes();
-        //p.getEmpresa();
-        //PersonaEstablecimiento pe;
-        //pe.getPersona();
         
         String queryFiltroEmpresa=" AND u.persona.empresa=?2 ";
         Boolean datosCompartidosEmpresas=false;
@@ -102,23 +97,31 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
             //Si los datos son compratidos entre empresas entoces no hago ningun filtro
             queryFiltroEmpresa = "";
         }
-        /*Estudiante e;
-        e.getNombres();
-        e.getApellidos();*/
-
-        String queryString = "SELECT DISTINCT  u FROM PersonaEstablecimiento u LEFT JOIN u.persona.estudiantes e  WHERE ";
-        queryString+=" u.persona.estado=?3 "+queryFiltroEmpresa+" AND ( LOWER(u.persona.razonSocial) like ?1 OR u.persona.identificacion like ?1 OR LOWER(u.nombreComercial) like ?1 OR LOWER(e.apellidos) like ?1 OR LOWER(e.nombres) like ?1 )";
+        
+        String leftJoinEstudiante="";
+        if(moduloAcademicoActivo)
+        {
+            leftJoinEstudiante+=" LEFT JOIN u.persona.estudiantes e ";
+        }
+        
+        String queryString = "SELECT DISTINCT  u FROM PersonaEstablecimiento u "+leftJoinEstudiante+"  WHERE ";
+        queryString+=" u.persona.estado=?3 "+queryFiltroEmpresa+" AND ( LOWER(u.persona.razonSocial) like ?1 OR u.persona.identificacion like ?1 OR LOWER(u.nombreComercial) like ?1 ";
+        
+        //Agregar Where para modulo academico
+        if(moduloAcademicoActivo)
+        {
+            queryString+=" OR LOWER(e.apellidos) like ?1 OR LOWER(e.nombres) like ?1 ";
+        }
+        queryString+=" )";
+        
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter.toLowerCase());
-        
-        //Estudiante estudiante=new Estudiante();
-        //estudiante.getRepresentante().getEstablecimientos();
+
         
         if(!datosCompartidosEmpresas)
         {
             queryDialog.agregarParametro(2,empresa);
-        }
-        
+        }        
         
         queryDialog.agregarParametro(3,GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;

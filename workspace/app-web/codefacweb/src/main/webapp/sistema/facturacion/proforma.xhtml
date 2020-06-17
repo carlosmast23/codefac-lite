@@ -11,6 +11,11 @@
         <ui:define name="opciones" >
             <p:menuitem oncomplete="PF('btnCargarProforma').jq.click();" value="Cargar desde la proforma"  icon="pi pi-clone"  />
         </ui:define>
+        
+        <ui:define name="vistaControlador" >
+            <f:event listener="#{controllerCodefacMb.agregarVista(proformaMb)}" type="preRenderComponent" /> 
+        </ui:define>
+
 
         <ui:define name="contenido" >
             <!--<p:commandButton type="button" onclick="rc()" value="Execute" icon="pi pi-refresh" />-->
@@ -19,9 +24,7 @@
             <!--<p:remoteCommand name="rc" update="panelContenido" action="#{remoteCommandView.execute}" >
                 <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProforma}" update="panelContenido"  />
             </p:remoteCommand>-->
-            
-            <f:event listener="#{controllerCodefacMb.agregarVista(proformaMb)}" type="preRenderComponent" /> 
-            
+                       
             <f:metadata>
                 <!--<f:viewParam name="tipo" value="#{proformaMb.tipoPagina}"/>-->
                 <f:event type="preRenderView" listener="#{proformaMb.verificarPagina()}"/>

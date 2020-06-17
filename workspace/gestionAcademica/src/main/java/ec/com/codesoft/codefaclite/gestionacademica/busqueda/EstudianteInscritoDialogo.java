@@ -59,5 +59,10 @@ public class EstudianteInscritoDialogo implements InterfaceModelFind<EstudianteI
        dato.add(t.getEstudiante().getApellidos());
        dato.add(t.getNivelAcademico().getNombre());
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

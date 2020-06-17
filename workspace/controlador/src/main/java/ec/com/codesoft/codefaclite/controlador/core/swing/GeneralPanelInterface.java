@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.corecodefaclite.views;
+package ec.com.codesoft.codefaclite.controlador.core.swing;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -53,6 +55,11 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
     public static final int BOTON_NUEVO = 5;
     public static final int BOTON_REFRESCAR = 6;
     public static final int BOTON_BUSCAR = 7;
+    
+    /**
+     * Lista que me permite almacenar la lista de componentes binding
+     */
+    public List<ComponentBindingAbstract> bindingComponentList;
     
     /**
      * Rererencia que va a almacenar cual es el dialogo principal  de la aplicacion para interfacturar con los campos de busqueda
@@ -129,7 +136,8 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
         this.mapComponentesLaterales=new HashMap<String,List<Component>>();
         this.mapComponentesLateralesVisibles=new HashMap<String,Boolean>();
         
-        this.validacionDatosIngresados=true;       
+        this.validacionDatosIngresados=true;     
+        this.bindingComponentList=new ArrayList<ComponentBindingAbstract>();
     }
     
     
@@ -396,6 +404,20 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
             }
         }
     }
+    
+    public void agregarBindingComponent(ComponentBindingAbstract bindingAbstract)
+    {
+        this.bindingComponentList.add(bindingAbstract);
+    }
+    
+    public void actualizarBindingComponent(Boolean get,Boolean set)
+    {
+        for (ComponentBindingAbstract componentBindingAbstract : this.bindingComponentList) {
+            componentBindingAbstract.ejecutar(get, set);
+        }
+    }
+    
+    
     
     /**
      * Evento que se activa cuando se realiza al cambio de estado en el formulario

@@ -44,5 +44,10 @@ public class DepartamentoBusquedaDialogo implements InterfaceModelFind<Departame
         dato.add(t.getCodigo());
         dato.add(t.getNombre());
     }
+
+    @Override
+    public Vector<String> getNamePropertysObject() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

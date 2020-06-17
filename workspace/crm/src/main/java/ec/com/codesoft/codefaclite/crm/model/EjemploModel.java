@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.EjemploModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.crm.panel.EjemploForm;
 import java.awt.event.ActionEvent;
@@ -24,7 +25,7 @@ import java.util.Map;
  */
 public class EjemploModel extends EjemploForm implements ControladorVistaIf{
 
-    private EjemploModelControlador controlador=new EjemploModelControlador(DialogoCodefac.intefaceMensaje, session, null);
+    private EjemploModelControlador controlador=new EjemploModelControlador(DialogoCodefac.intefaceMensaje, session, null,ModelControladorAbstract.TipoVista.ESCRITORIO);
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -94,7 +95,7 @@ public class EjemploModel extends EjemploForm implements ControladorVistaIf{
     }
 
     @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
