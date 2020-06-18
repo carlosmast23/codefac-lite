@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -52,10 +53,14 @@ public class CarteraDetalle implements Serializable,Cloneable {
     
     @Column(name = "DESCRIPCION")
     private String descripcion;    
+    
+    @Column(name = "CODIGO_DETALLE_DOCUMENTO")
+    private String codigoDetalleDocumento;
         
     @JoinColumn(name="CARTERA_ID")
     @ManyToOne(optional = false)
     private Cartera cartera;
+    
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "carteraDetalle", fetch = FetchType.EAGER)
     private List<CarteraCruce> cruces;
@@ -123,6 +128,30 @@ public class CarteraDetalle implements Serializable,Cloneable {
 
     public void setCruces(List<CarteraCruce> cruces) {
         this.cruces = cruces;
+    }
+
+    public String getCodigoDetalleDocumento() {
+        return codigoDetalleDocumento;
+    }
+
+    public void setCodigoDetalleDocumento(String codigoDetalleDocumento) {
+        this.codigoDetalleDocumento = codigoDetalleDocumento;
+    }
+    
+    
+    public DocumentoDetalleEnum getCodigoDetalleDocumentoEnum() {
+        return DocumentoDetalleEnum.findByCodigo(codigoDetalleDocumento);
+    }
+
+    public void setCodigoDetalleDocumentoEnum(DocumentoDetalleEnum codigoDetalleDocumentoEnum) {
+        if(codigoDetalleDocumentoEnum!=null)
+        {
+            this.codigoDetalleDocumento = codigoDetalleDocumentoEnum.getCodigo();
+        }
+        else
+        {
+            this.codigoDetalleDocumento=null;
+        }
     }
     
     

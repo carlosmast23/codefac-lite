@@ -22,8 +22,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -32,6 +34,8 @@ import java.awt.event.ActionListener;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +50,7 @@ import javax.swing.table.DefaultTableModel;
 public class ReporteCarteraModel extends ReporteCarteraPanel {
 
     private List<CarteraDocumentoData> resultadoData;
+    private List<CarteraDocumentoData> resultadoDataDetalle;
     private Persona personaBusqueda;
 
     @Override
@@ -81,7 +86,6 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
 
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        InputStream path=RecursoCodefac.JASPER_INVENTARIO.JASPER_CARTERA.getResourceInputStream("reporte_cartera.jrxml");
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         
         
@@ -106,15 +110,24 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
 
                 @Override
                 public void pdf() {
+                    TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
                     Cartera.CarteraCategoriaEnum carteraCategoriaEnum =(Cartera.CarteraCategoriaEnum) getCmbDocumentoCategoriaCartera().getSelectedItem();
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoData, panelPadre,carteraCategoriaEnum.getNombre());
-                    //dispose();
-                    //setVisible(false);
+                    if(TipoReporteEnum.GENERAL.equals(tipoReporteEnum))
+                    {
+                        InputStream path=RecursoCodefac.JASPER_INVENTARIO.JASPER_CARTERA.getResourceInputStream("reporte_cartera.jrxml");
+                        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoData, panelPadre,carteraCategoriaEnum.getNombre());
+                    }
+                    else if(TipoReporteEnum.DETALLADO.equals(tipoReporteEnum))
+                    {
+                        InputStream path=RecursoCodefac.JASPER_INVENTARIO.JASPER_CARTERA.getResourceInputStream("reporte_cartera_detallado.jrxml");
+                        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoDataDetalle, panelPadre,carteraCategoriaEnum.getNombre());
+                    }
+                                        
                 }
             });
         }
     }
-
+    
     @Override
     public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -157,6 +170,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
 
         UtilidadesComboBox.llenarComboBox(getCmbTipoCartera(), Cartera.TipoCarteraEnum.values());
         UtilidadesComboBox.llenarComboBox(getCmbTipoSaldo(), Cartera.TipoSaldoCarteraEnum.values());
+        UtilidadesComboBox.llenarComboBox(getCmbTipoReporte(),TipoReporteEnum.values());
     }
 
     private void construirResultadoData(List<Cartera> datos) {
@@ -172,9 +186,67 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                         dato.getPreimpreso(),
                         dato.getFechaEmision().toString(),
                         dato.getPersona().getRazonSocial(),
-                        dato.getCarteraDocumentoEnum().getNombre()));
+                        dato.getCarteraDocumentoEnum().getNombre(),
+                        "",
+                        "",
+                        "",
+                        ""
+                ));
             }
         }
+    }
+    
+    private void construirResultadoDataDetalle(List<Cartera> datos) {
+        if (datos != null) {
+            resultadoDataDetalle = new ArrayList<CarteraDocumentoData>();
+
+            for (Cartera dato : datos) 
+            {
+                for (CarteraDetalle detalle : dato.getDetalles()) 
+                {
+                    String codigoDetalleDocumento="";
+                    String nombreDetalleDocumento="";
+                    String valorDetalle=detalle.getTotal().toString();
+                    String saldoDetalle=detalle.getSaldo().toString();
+                    
+                    DocumentoDetalleEnum documentoDetalle=detalle.getCodigoDetalleDocumentoEnum();
+                    if(documentoDetalle!=null)
+                    {
+                        codigoDetalleDocumento=documentoDetalle.getCodigo();
+                        nombreDetalleDocumento=documentoDetalle.getNombre();
+                    }
+                    
+                    resultadoDataDetalle.add(new CarteraDocumentoData(
+                        dato.getCodigo(),
+                        dato.obtenerDescripciones(),
+                        dato.getTotal().toString(),
+                        dato.getSaldo().toString(),
+                        dato.getPreimpreso(),
+                        dato.getFechaEmision().toString(),
+                        dato.getPersona().getRazonSocial(),
+                        dato.getCarteraDocumentoEnum().getNombre(),
+                        codigoDetalleDocumento,
+                        nombreDetalleDocumento,
+                        valorDetalle,
+                        saldoDetalle
+                    ));
+                }
+                
+            }
+        }
+        ordenarPorDocumentoDetalle(resultadoDataDetalle);
+    }
+    
+    private void ordenarPorDocumentoDetalle(List<CarteraDocumentoData> detalles)
+    {
+        Collections.sort(detalles, new Comparator<CarteraDocumentoData>() {
+            public int compare(CarteraDocumentoData o1, CarteraDocumentoData o2) {
+                // TODO Auto-generated method stub
+                
+                return o1.getCodigoDetalleDocumento().compareTo(o2.getCodigoDetalleDocumento());
+            }
+        });
+        
     }
 
     private void mostrarDatosTabla() {
@@ -250,6 +322,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                             Cartera.TipoOrdenamientoEnum.POR_RAZON_SOCIAL);
 
                     construirResultadoData(resultado);
+                    construirResultadoDataDetalle(resultado);
                     mostrarDatosTabla();
 
                 } catch (ServicioCodefacException ex) {
@@ -303,4 +376,9 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
         }
     }
 
+    public enum TipoReporteEnum
+    {
+        GENERAL,
+        DETALLADO;
+    }
 }
