@@ -24,8 +24,13 @@ public class CarteraDocumentoData implements ExcelDatosInterface {
     private String fechaEmision;
     private String persona;
     private String documento;
-
-    public CarteraDocumentoData(String codigo, String descripcion, String valor, String saldo, String preimpreso, String fechaEmision, String persona, String documento) {
+    
+    private String codigoDetalleDocumento;
+    private String nombreDetalleDocumento;
+    private String subtotalDetalle;
+    private String saldoDetalle;
+    
+    public CarteraDocumentoData(String codigo, String descripcion, String valor, String saldo, String preimpreso, String fechaEmision, String persona, String documento, String codigoDetalleDocumento, String nombreDetalleDocumento, String subtotalDetalle, String saldoDetalle) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.valor = valor;
@@ -34,7 +39,15 @@ public class CarteraDocumentoData implements ExcelDatosInterface {
         this.fechaEmision = fechaEmision;
         this.persona = persona;
         this.documento = documento;
+        this.codigoDetalleDocumento = codigoDetalleDocumento;
+        this.nombreDetalleDocumento = nombreDetalleDocumento;
+        this.subtotalDetalle = subtotalDetalle;
+        this.saldoDetalle = saldoDetalle;
     }
+    
+    
+    
+    
 
     
 
@@ -101,6 +114,40 @@ public class CarteraDocumentoData implements ExcelDatosInterface {
     public void setDocumento(String documento) {
         this.documento = documento;
     }
+
+    public String getCodigoDetalleDocumento() {
+        return codigoDetalleDocumento;
+    }
+
+    public void setCodigoDetalleDocumento(String codigoDetalleDocumento) {
+        this.codigoDetalleDocumento = codigoDetalleDocumento;
+    }
+
+    public String getNombreDetalleDocumento() {
+        return nombreDetalleDocumento;
+    }
+
+    public void setNombreDetalleDocumento(String nombreDetalleDocumento) {
+        this.nombreDetalleDocumento = nombreDetalleDocumento;
+    }
+
+    public String getSubtotalDetalle() {
+        return subtotalDetalle;
+    }
+
+    public void setSubtotalDetalle(String subtotalDetalle) {
+        this.subtotalDetalle = subtotalDetalle;
+    }
+
+    public String getSaldoDetalle() {
+        return saldoDetalle;
+    }
+
+    public void setSaldoDetalle(String saldoDetalle) {
+        this.saldoDetalle = saldoDetalle;
+    }
+    
+    
 
     @Override
     public List<TipoDato> getDatos() {

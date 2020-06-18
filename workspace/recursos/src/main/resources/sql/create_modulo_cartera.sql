@@ -52,7 +52,9 @@ create table CARTERA_DETALLE(
     DESCRIPCION varchar(300),
     TOTAL decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.6)*/
-    SALDO decimal(13,2),  
+    SALDO decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.3.4)*/
+    CODIGO_DETALLE_DOCUMENTO varchar(3),
     primary key (ID)
 );
 

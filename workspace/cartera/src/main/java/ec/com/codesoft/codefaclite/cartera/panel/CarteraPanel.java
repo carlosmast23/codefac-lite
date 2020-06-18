@@ -9,6 +9,7 @@ import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.TipoCarteraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -82,7 +83,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jLabel1 = new javax.swing.JLabel();
         txtValorDetalle = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        cmbTipoDocumentoCartera = new javax.swing.JComboBox<>();
+        cmbDetalleDocumento = new javax.swing.JComboBox<>();
         jToolBar2 = new javax.swing.JToolBar();
         btnAgregarDetalle = new javax.swing.JButton();
         btnEditarDetalle = new javax.swing.JButton();
@@ -392,7 +393,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jPanel4.add(txtValorDetalle, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Tipo Documento:");
+        jLabel5.setText("Detalle Documento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -405,7 +406,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(cmbTipoDocumentoCartera, gridBagConstraints);
+        jPanel4.add(cmbDetalleDocumento, gridBagConstraints);
 
         jToolBar2.setBorder(null);
         jToolBar2.setRollover(true);
@@ -632,12 +633,12 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnEditarDetalle;
     private javax.swing.JButton btnEliminarCruce;
     private javax.swing.JButton btnEliminarDetalle;
+    private javax.swing.JComboBox<DocumentoDetalleEnum > cmbDetalleDocumento;
     private javax.swing.JComboBox<DocumentoEnum > cmbDocumentoCartera;
     private javax.swing.JComboBox<Cartera.CarteraCategoriaEnum > cmbDocumentoCategoriaCartera;
     private com.toedter.calendar.JDateChooser cmbFechaCruzar;
     private com.toedter.calendar.JDateChooser cmbFechaEmision;
     private javax.swing.JComboBox<TipoCarteraEnum > cmbTipoCartera;
-    private javax.swing.JComboBox<String > cmbTipoDocumentoCartera;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -905,6 +906,14 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
 
     public JTextField getTxtReferenciaManual() {
         return txtReferenciaManual;
+    }
+
+    public JComboBox<DocumentoDetalleEnum> getCmbDetalleDocumento() {
+        return cmbDetalleDocumento;
+    }
+
+    public void setCmbDetalleDocumento(JComboBox<DocumentoDetalleEnum> cmbDetalleDocumento) {
+        this.cmbDetalleDocumento = cmbDetalleDocumento;
     }
 
     

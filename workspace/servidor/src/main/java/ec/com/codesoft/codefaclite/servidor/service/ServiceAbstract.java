@@ -31,7 +31,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject implements Serializable
 {
 
-    private static final Logger LOG = Logger.getLogger(ServiceAbstract.class.getName());
+    //private static final Logger LOG = Logger.getLogger(ServiceAbstract.class.getName());
     
     
     protected AbstractFacade<Entity> facade;
@@ -119,10 +119,12 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             ex.printStackTrace();
             throw new ServicioCodefacException("Error de conexión con el servidor");
         } catch (ServicioCodefacException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            //ex.printStackTrace();
             throw ex;
         }catch (PersistenceException ex) { //Hacer un RoolBack cuando es un error relacionado con la persistencia
-            ex.printStackTrace();
+            //ex.printStackTrace();
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
             
             ExcepcionDataBaseEnum excepcionEnum=UtilidadesExcepciones.analizarExcepcionDataBase(ex);
             //Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,8 +142,9 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             }  
         }catch(Exception e)
         {
-            e.printStackTrace();
-            LOG.log(Level.SEVERE,e.getMessage()); //Todo: Mejorar esta parte porque deberia imprimir toda la pila de error y ademas deberia poder comunicar el error a la capa superior
+            //e.printStackTrace();
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, e);
+            //LOG.log(Level.SEVERE,e.getMessage()); //Todo: Mejorar esta parte porque deberia imprimir toda la pila de error y ademas deberia poder comunicar el error a la capa superior
             throw new ServicioCodefacException(e.getMessage());
         }
         
@@ -165,16 +168,19 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             if (transaccion.isActive()) {
                 transaccion.rollback();
             }
-            ex.printStackTrace();
+            //ex.printStackTrace();
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServicioCodefacException("Error de conexión con el servidor");
         }catch (ServicioCodefacException ex) { //Hacer un RoolBack cuando sea un error personalizado
             if (transaccion.isActive()) {
                 transaccion.rollback();
             }
-            ex.printStackTrace();
+            //ex.printStackTrace();
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
         }catch (PersistenceException ex) { //Hacer un RoolBack cuando es un error relacionado con la persistencia
-            ex.printStackTrace();
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            //ex.printStackTrace();
             //verifica que la transaccion esta activa para hacer un rollback
             //Nota: Algunas veces el commit automaticamente hace un rollback es decir no es necesario hacer rollback y la sesion ya no esta activa
             if(transaccion.isActive())
@@ -203,15 +209,17 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             if (transaccion.isActive()) {
                 transaccion.rollback();
             }
-            e.printStackTrace();
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, e);
+            //e.printStackTrace();
             throw new ServicioCodefacException("Problema con variable nula \n\n"+e.getMessage());
         }catch(Exception e) //Hacer un RollBack si se produce cualquier error
         {
             if (transaccion.isActive()) {
                 transaccion.rollback();
             }
-            e.printStackTrace();
-            LOG.log(Level.SEVERE,e.getMessage()); //Todo: Mejorar esta parte porque deberia imprimir toda la pila de error y ademas deberia poder comunicar el error a la capa superior
+            //e.printStackTrace();
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, e);
+            //LOG.log(Level.SEVERE,e.getMessage()); //Todo: Mejorar esta parte porque deberia imprimir toda la pila de error y ademas deberia poder comunicar el error a la capa superior
             throw new ServicioCodefacException(e.getMessage());
             //throw e;
         }

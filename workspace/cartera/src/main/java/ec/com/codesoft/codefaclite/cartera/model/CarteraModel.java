@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
@@ -37,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraCruceServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -410,6 +412,16 @@ public class CarteraModel extends CarteraPanel{
                 }
             }
         });
+        
+        getCmbDocumentoCartera().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DocumentoEnum documentoSeleccionado= (DocumentoEnum) getCmbDocumentoCartera().getSelectedItem();
+                UtilidadesComboBox.llenarComboBox(getCmbDetalleDocumento(), DocumentoDetalleEnum.findListByDocumentoEnum(documentoSeleccionado));
+                
+            }
+        });
+        
     }
 
     private void listenerTextos() {
@@ -725,6 +737,12 @@ public class CarteraModel extends CarteraPanel{
         carteraDetalle.setTotal(total);
         carteraDetalle.setDescripcion(descripcion);
         
+        DocumentoDetalleEnum documentoDetalleEnum=(DocumentoDetalleEnum) getCmbDetalleDocumento().getSelectedItem();
+        if(documentoDetalleEnum!=null)
+        {
+            carteraDetalle.setCodigoDetalleDocumentoEnum(documentoDetalleEnum);
+        }
+        
         if(!editar)
         {
             carteraDetalle.setSaldo(total);
@@ -910,6 +928,11 @@ public class CarteraModel extends CarteraPanel{
                     detalleEditar=(CarteraDetalle) getTblDetalles().getModel().getValueAt(filaSeleccionada,0);
                     getTxtDescripcionDetalle().setText(detalleEditar.getDescripcion());
                     getTxtValorDetalle().setText(detalleEditar.getTotal().toString());
+                    DocumentoDetalleEnum documentoDetalleEnum=detalleEditar.getCodigoDetalleDocumentoEnum();
+                    if(documentoDetalleEnum!=null)
+                    {
+                        getCmbDetalleDocumento().setSelectedItem(documentoDetalleEnum);
+                    }
                 }
             }
 
