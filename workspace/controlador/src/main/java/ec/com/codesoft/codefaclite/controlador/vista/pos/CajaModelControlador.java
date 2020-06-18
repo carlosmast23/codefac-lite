@@ -131,10 +131,18 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         try
         {
+            Boolean respuesta = dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO);
+            if(!respuesta){
+                System.out.println("Ingresa a respuesta");
+                throw new ServicioCodefacException("Error elimando Caja");
+            }
+            System.out.println("No ingresa a respuesta");
             //DialogoCodefac.dialogoPregunta("Alerta", "Está seguro que desea eliminar el cliente?", DialogoCodefac.MENSAJE_ADVERTENCIA);          
             ServiceFactory.getFactory().getCajaServiceIf().eliminar(getInterfaz().getCaja());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
-             mostrarMensaje(new CodefacMsj("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));
+            Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

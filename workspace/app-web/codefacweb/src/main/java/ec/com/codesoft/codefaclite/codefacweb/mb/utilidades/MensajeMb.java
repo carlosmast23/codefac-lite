@@ -25,6 +25,10 @@ public class MensajeMb implements Serializable{
         public void mensaje(CodefacMsj codefacMensaje) {
             MensajeMb.mensaje(codefacMensaje);
         }
+
+        public boolean dialogoPregunta(CodefacMsj codefacMensaje) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
     };
 
     //public static final String ID_MENSAJE_DIALOGO = "messages";

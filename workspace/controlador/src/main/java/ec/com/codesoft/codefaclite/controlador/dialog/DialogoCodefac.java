@@ -25,6 +25,12 @@ public abstract class DialogoCodefac {
         public void mensaje(CodefacMsj codefacMensaje) {
             DialogoCodefac.mensaje(codefacMensaje);
         }
+
+        @Override
+        public boolean dialogoPregunta(CodefacMsj codefacMensaje) {
+           return DialogoCodefac.dialogoPregunta(codefacMensaje);
+        }
+
     };
     
     public static final Integer MENSAJE_CORRECTO=1;

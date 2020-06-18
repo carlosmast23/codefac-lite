@@ -132,7 +132,14 @@ public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaMode
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
