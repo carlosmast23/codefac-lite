@@ -9,11 +9,14 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CajaBu
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.EjemploModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract.MensajeVistaInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
@@ -28,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,21 +39,30 @@ import java.util.logging.Logger;
  *
  * @author Robert
  */
-public class CajaModelControlador extends ModelControladorAbstract<CajaModelControlador.Interface, CajaModelControlador.Interface, CajaModelControlador.Interface>
+public class CajaModelControlador extends ModelControladorAbstract<CajaModelControlador.CommonIf, CajaModelControlador.SwingIf, CajaModelControlador.WebIf> implements VistaCodefacIf
 {
+    
+//    private Caja caja;
+//    private CajaEnum estado;
+//    private Sucursal sucursal;
+//    private PuntoEmision puntoEmision;
+//    private String nombre;
+//    private String descripcion;
+//    
     /**
      * Controlador Generico
      */
-    public CajaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CajaModelControlador.Interface interfaz, TipoVista tipoVista) {
-        super(mensajeVista, session, interfaz,tipoVista);
+    public CajaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CajaModelControlador.CommonIf interfaz, TipoVista tipoVista) {
+        super(mensajeVista, session, interfaz, tipoVista);
     }
     
     /**
-     * Metodo iniciar
-     * @throws java.rmi.RemoteException
-     * @throws ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException
-     */ 
-    public void iniciar() throws RemoteException, ServicioCodefacException{
+    * Metodo iniciar
+    * @throws java.rmi.RemoteException
+    * @throws ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException
+    */ 
+    @Override
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         getInterfaz().setCaja(new Caja());
         CajaEnum[] estadoGeneralesLista = CajaEnum.values();
         List<Sucursal> sucursalLista = ServiceFactory.getFactory().getSucursalServiceIf().obtenerTodos();
@@ -59,12 +72,14 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
         this.getInterfaz().setDescripcion("");
         this.getInterfaz().setNombre("");
     }
-    
-    public void nuevo(){
+
+    @Override
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         getInterfaz().setCaja(new Caja());
     }
-    
-    public void grabar() throws ServicioCodefacException, RemoteException{ 
+
+    @Override
+    public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try
         {
             if(getInterfaz().getCaja() == null){
@@ -89,44 +104,84 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
         catch(ServicioCodefacException e)
         {
             mostrarMensaje(new CodefacMsj("Error", e.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));
-            throw e;
+            try {
+                throw e;
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }   
     }
-    
-    public void editar() throws ServicioCodefacException{
-        try 
-        {
-            //Datos
+
+    @Override
+    public void editar() throws ExcepcionCodefacLite, RemoteException {
+        //Datos
+        try {
             obtenerDatos();
             //Editar
             ServiceFactory.getFactory().getCajaServiceIf().editar(getInterfaz().getCaja());
-            //Mensaje
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
-        } catch (RemoteException e) {
-            mostrarMensaje(new CodefacMsj("Error", e.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //Mensaje
+        
     }
-    
-    public void eliminar() throws ServicioCodefacException{
+
+    @Override
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         try
         {
             //DialogoCodefac.dialogoPregunta("Alerta", "Está seguro que desea eliminar el cliente?", DialogoCodefac.MENSAJE_ADVERTENCIA);          
             ServiceFactory.getFactory().getCajaServiceIf().eliminar(getInterfaz().getCaja());
-        } catch(RemoteException e){
-            mostrarMensaje(new CodefacMsj("Error", e.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));
+        } catch (ServicioCodefacException ex) {
+             mostrarMensaje(new CodefacMsj("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));
         }
     }
-    
+
+    @Override
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void limpiar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getURLAyuda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
         CajaBusquedaDialogo cajaBusquedaDialogo = new CajaBusquedaDialogo();
         return cajaBusquedaDialogo;
     }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        Caja cajatemp = (Caja) entidad;
+        getInterfaz().setCaja(cajatemp); 
+
+    }
+
+    @Override
+    public Map<Integer, Boolean> permisosFormulario() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
-    
-    /**
-     * Interface para metodos genericos
-     */
-    public interface Interface
+    public interface CommonIf
     {
         //Cargar información necesaria
         public void setEstadosGeneralesVista(CajaEnum[] estadoGeneralesLista);
@@ -151,6 +206,16 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
         public Caja getCaja();
         public void setCaja(Caja caja);
         
+    }
+    
+    public interface SwingIf extends CajaModelControlador.CommonIf
+    {
+        //TODO: Implementacion de las interfaces solo necesarias para Swing
+    }
+    
+    public interface WebIf extends CajaModelControlador.CommonIf
+    {
+        //TODO: Implementacion de las interafaces solo para la web
     }
     
     public void obtenerDatos(){

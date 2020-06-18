@@ -11,6 +11,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.EjemploModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.pos.panel.CajaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -34,33 +36,30 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author CARLOS_CODESOFT
+ * @author Robert
  */
-public class CajaModel extends CajaPanel implements CajaModelControlador.Interface{
+public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaModelControlador.SwingIf{
     
-    private CajaModelControlador controlador;
     private Caja caja;
-    
+
     private CajaEnum estado;
     private Sucursal sucursal;
     private PuntoEmision puntoEmision;
     private String nombre;
     private String descripcion;
-    
+
     private List<PuntoEmision> puntosEmisionLista;
+    
+    
+    private CajaModelControlador controlador=new CajaModelControlador(DialogoCodefac.intefaceMensaje, session, this,ModelControladorAbstract.TipoVista.ESCRITORIO);
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        this.controlador = new CajaModelControlador(DialogoCodefac.intefaceMensaje, session,this, ModelControladorAbstract.TipoVista.ESCRITORIO);
-        try {
-            this.controlador.iniciar();
-            listenerCombos();
-            valoresIniciales();
-        } catch (ServicioCodefacException ex) {
-            throw  new ExcepcionCodefacLite(ex.getMessage());
-        }
+        this.controlador.iniciar();
+        listenerCombos();
+        valoresIniciales();
     }
-    
+
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         this.controlador.nuevo();
@@ -68,30 +67,21 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        try {
-            this.controlador.grabar();
-        } catch (ServicioCodefacException ex) {
-            throw  new ExcepcionCodefacLite(ex.getMessage());
-        }
+        this.controlador.grabar();
+        this.setearDatos();
+        this.enviarControlador();
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
-        try{
-            this.controlador.editar();
-        }catch(ServicioCodefacException ex){
-            throw new ExcepcionCodefacLite(ex.getMessage());
-        }
-        
+        this.controlador.editar();
+        this.setearDatos();
+        this.enviarControlador();
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        try{
-            this.controlador.eliminar();
-        }catch(ServicioCodefacException e){
-            throw new ExcepcionCodefacLite(e.getMessage());
-        }
+        this.controlador.eliminar();
     }
 
     @Override
@@ -105,12 +95,12 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
     }
 
     @Override
-    public void limpiar(){
+    public void limpiar() {
         try {
             this.controlador.iniciar();
-        } catch (RemoteException ex) {
+        } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(CajaModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(CajaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -118,18 +108,6 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
     @Override
     public String getURLAyuda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Map<Integer, Boolean> permisosFormulario() {
-        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
-        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
-        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
-        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
-        return permisos;
     }
 
     @Override
@@ -144,20 +122,80 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        this.caja = (Caja) entidad;
-        getjTextNombre().setText(this.caja.getNombre());
-        getjTextAreaDescripcion().setText(this.caja.getDescripcion());
-        getjComboSucursal().setSelectedItem(this.caja.getSucursal());
-        getjComboPuntoEmision().setSelectedItem(this.caja.getPuntoEmision());
-        String descripcionTemp = (this.caja.getDescripcion() != null)? this.caja.getDescripcion() : "";
+        this.controlador.cargarDatosPantalla(entidad);
+        getjTextNombre().setText(this.controlador.getInterfaz().getCaja().getNombre());
+        getjComboSucursal().setSelectedItem(this.controlador.getInterfaz().getCaja().getSucursal());
+        getjComboPuntoEmision().setSelectedItem(this.controlador.getInterfaz().getCaja().getPuntoEmision());
+        String descripcionTemp = (this.controlador.getInterfaz().getCaja().getDescripcion() != null)? this.controlador.getInterfaz().getCaja().getDescripcion() : "";
         getjTextAreaDescripcion().setText(descripcionTemp);
-        
     }
 
     @Override
-    public void setEstadosGeneralesVista(CajaEnum[] estadoGeneralesLista) {
-        UtilidadesComboBox.llenarComboBox(getjComboEstado(), estadoGeneralesLista);
+    public Map<Integer, Boolean> permisosFormulario() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public ModelControladorAbstract getControladorVista() {
+        return controlador;
+    }
+    
+     public void valoresIniciales(){
+        this.estado = (CajaEnum) getjComboEstado().getSelectedItem();
+        valoresSinSeleccionCombo();
+    }
+       
+    public void listenerCombos(){
+        getjComboEstado().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                estado = (CajaEnum) getjComboEstado().getSelectedItem();
+            }
+        });
+        getjComboSucursal().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                valoresSinSeleccionCombo();
+            }
+        });
+        getjComboPuntoEmision().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                puntoEmision = (PuntoEmision) getjComboPuntoEmision().getSelectedItem();    
+            }
+        });
+    }
+     
+    public void valoresSinSeleccionCombo(){
+        try {
+            sucursal = (Sucursal) getjComboSucursal().getSelectedItem();
+            List<PuntoEmision> puntoEmisionLista;
+            puntoEmisionLista = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sucursal);
+            UtilidadesComboBox.llenarComboBox(getjComboPuntoEmision(), puntoEmisionLista);
+            puntoEmision = (PuntoEmision) getjComboPuntoEmision().getSelectedItem();    
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(CajaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void setearDatos(){
+        this.estado = ((CajaEnum) getjComboEstado().getSelectedItem() != null ) ? (CajaEnum) getjComboEstado().getSelectedItem() : null ;
+        this.sucursal = ((Sucursal) getjComboSucursal().getSelectedItem() != null ) ? (Sucursal) getjComboSucursal().getSelectedItem() : null ;
+        this.puntoEmision = ((PuntoEmision) getjComboSucursal().getSelectedItem() != null ) ? (PuntoEmision) getjComboSucursal().getSelectedItem() : null ;
+        this.nombre = (getjTextNombre().getText() != null) ? getjTextNombre().getText() : "";
+        this.descripcion = (getjTextAreaDescripcion().getText() != null) ? getjTextAreaDescripcion().getText() : "";
+    }
+    
+    public void enviarControlador(){
+        this.controlador.getInterfaz().setEnumEstado(this.estado);
+        this.controlador.getInterfaz().setSucursal(this.sucursal);
+        this.controlador.getInterfaz().setPuntoEmision(this.puntoEmision);
+        this.controlador.getInterfaz().setNombre(this.nombre);
+        this.controlador.getInterfaz().setDescripcion(this.descripcion);
+    }
+
 
     @Override
     public Caja getCaja() {
@@ -193,7 +231,7 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
     public PuntoEmision getPuntoEmision() {
         return this.puntoEmision;
     }
-    
+
     @Override
     public void setPuntoEmision(PuntoEmision puntoEmision) {
         this.puntoEmision = puntoEmision;
@@ -203,32 +241,10 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
     public CajaEnum getEnumEstado() {
         return this.estado;
     }
-  
+
     @Override
     public void setEnumEstado(CajaEnum generalEnumEstado) {
         this.estado = generalEnumEstado;
-    }
-    
-    public void listenerCombos(){
-        getjComboEstado().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                estado = (CajaEnum) getjComboEstado().getSelectedItem();
-            }
-        });
-        getjComboSucursal().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                valoresSinSeleccionCombo();
-            }
-        });
-        getjComboPuntoEmision().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                puntoEmision = (PuntoEmision) getjComboPuntoEmision().getSelectedItem();    
-            }
-        });
-        
     }
 
     @Override
@@ -250,24 +266,9 @@ public class CajaModel extends CajaPanel implements CajaModelControlador.Interfa
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
-    public void valoresIniciales(){
-        this.estado = (CajaEnum) getjComboEstado().getSelectedItem();
-        valoresSinSeleccionCombo();
+   
+    @Override
+    public void setEstadosGeneralesVista(CajaEnum[] estadoGeneralesLista) {
+        UtilidadesComboBox.llenarComboBox(getjComboEstado(), estadoGeneralesLista);
     }
-    
-    public void valoresSinSeleccionCombo(){
-        try {
-            sucursal = (Sucursal) getjComboSucursal().getSelectedItem();
-            List<PuntoEmision> puntoEmisionLista;
-            puntoEmisionLista = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sucursal);
-            UtilidadesComboBox.llenarComboBox(getjComboPuntoEmision(), puntoEmisionLista);
-            puntoEmision = (PuntoEmision) getjComboPuntoEmision().getSelectedItem();    
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(CajaModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(CajaModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
 }
