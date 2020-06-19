@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import static ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac.dialogoPregunta;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.ControladorCampoTextoAnot;
@@ -84,6 +85,20 @@ public abstract class ModelControladorAbstract <T,E extends  T,W extends T> impl
     }
     
     /**
+     * Metodo que me permite confirmar la accion y enviar un mensaje para mostrar en las vistas dependiendo cada caso
+     * @param mensaje 
+     * @return  
+     */
+    public boolean dialogoPregunta(CodefacMsj mensaje)
+    {
+        Boolean respuesta = null;
+        if(mensajeVista != null){
+            respuesta = mensajeVista.dialogoPregunta(mensaje);
+        }
+        return respuesta;
+    }
+    
+    /**
      * Metodo que me permite funcionar de medio de comunicación para activar los listener de la pantalla
      * @param value 
      */
@@ -114,5 +129,6 @@ public abstract class ModelControladorAbstract <T,E extends  T,W extends T> impl
     public interface MensajeVistaInterface
     {
         public void mensaje(CodefacMsj codefacMensaje);
+        public boolean dialogoPregunta(CodefacMsj codefacMensaje);
     }
 }
