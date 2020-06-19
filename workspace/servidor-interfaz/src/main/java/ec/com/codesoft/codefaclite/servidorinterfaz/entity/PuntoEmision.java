@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
@@ -241,7 +242,63 @@ public class PuntoEmision implements Serializable{
         return ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(tipoFacturacion);
     }
     
+    /**
+     * ========================================================================
+     *                      METODO PERSONALIZADO
+     * ========================================================================
+     */
+    
+    public Integer getSecuencialPorDocumento(DocumentoEnum documentoEnum)
+    {
+        switch (documentoEnum) {
+            case FACTURA:
+                return getSecuencialFactura();
 
+            case NOTA_VENTA:
+                return getSecuencialNotaVenta();
+                
+            case NOTA_VENTA_INTERNA:
+                return getSecuencialNotaVentaInterna();
+
+            case RETENCIONES:
+                return getSecuencialRetenciones();
+
+            case NOTA_CREDITO:
+                return getSecuencialNotaCredito();
+
+            case GUIA_REMISION:
+                return getSecuencialGuiaRemision();
+                
+            case LIQUIDACION_COMPRA:
+                return getSecuencialLiquidacionCompra();
+        }
+        return null;
+    }
+    public void setSecuencialPorDocumento(DocumentoEnum documentoEnum,Integer secuencial)
+    {
+        switch (documentoEnum) {
+            case FACTURA:
+                setSecuencialFactura(secuencial);
+
+            case NOTA_VENTA:
+                setSecuencialNotaVenta(secuencial);
+                
+            case NOTA_VENTA_INTERNA:
+                setSecuencialNotaVentaInterna(secuencial);
+
+            case RETENCIONES:
+                setSecuencialRetenciones(secuencial);
+
+            case NOTA_CREDITO:
+                setSecuencialNotaCredito(secuencial);
+
+            case GUIA_REMISION:
+                setSecuencialGuiaRemision(secuencial);
+                
+            case LIQUIDACION_COMPRA:
+                setSecuencialLiquidacionCompra(secuencial);
+        }
+    }
     
     
     

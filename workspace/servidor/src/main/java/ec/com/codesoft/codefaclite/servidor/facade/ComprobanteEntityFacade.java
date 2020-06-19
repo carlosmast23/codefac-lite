@@ -32,6 +32,62 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
     public List<ComprobanteEntity> validarSecuencialRepetidoComprobanteFacade(Empresa empresa,DocumentoEnum documentoEnum,BigDecimal puntoEstablecimiento,Integer puntoEmision,Integer Secuencial)
     {
 
+        String nombreTabla=getNameTableByDocument(documentoEnum);
+        
+        /*Factura f;
+        f.getCodigoDocumento()
+        //f.getEmpresa();
+        f.getPuntoEstablecimiento();
+        f.getPuntoEmision();
+        f.getSecuencial();*/
+        
+        String queryString = "SELECT f FROM "+nombreTabla+" f WHERE f.estado<>?1 AND f.empresa=?2 AND f.puntoEstablecimiento=?3 AND f.puntoEmision=?4 AND f.secuencial=?5 AND f.codigoDocumento=?6 ";
+        Query query = getEntityManager().createQuery(queryString);
+        
+        query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //TODO: Buscar cualquier 
+        query.setParameter(2, empresa);
+        query.setParameter(3, puntoEstablecimiento);
+        query.setParameter(4, puntoEmision);
+        query.setParameter(5, Secuencial);
+        query.setParameter(6, documentoEnum.getCodigo());
+        return query.getResultList();
+        //return (Usuario) query.getSingleResult();
+        
+    }
+    
+    /**
+     * TODO: Unificar logica con el metodo de arriba
+     * @param empresa
+     * @param documentoEnum
+     * @param puntoEstablecimiento
+     * @param puntoEmision
+     * @param Secuencial
+     * @return 
+     */
+    public Integer getSecuencialUltimoFacade(Empresa empresa,DocumentoEnum documentoEnum,BigDecimal puntoEstablecimiento,Integer puntoEmision)
+    {
+        String nombreTabla=getNameTableByDocument(documentoEnum);
+        
+        /*Factura f;
+        f.getCodigoDocumento()
+        //f.getEmpresa();
+        f.getPuntoEstablecimiento();
+        f.getPuntoEmision();
+        f.getSecuencial();*/
+        
+        String queryString = "SELECT max( CAST(f.secuencial as INT) ) FROM "+nombreTabla+" f WHERE f.estado<>?1 AND f.empresa=?2 AND f.puntoEstablecimiento=?3 AND f.puntoEmision=?4  AND f.codigoDocumento=?6 ";
+        Query query = getEntityManager().createQuery(queryString);
+        
+        query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //TODO: Buscar cualquier 
+        query.setParameter(2, empresa);
+        query.setParameter(3, puntoEstablecimiento);
+        query.setParameter(4, puntoEmision);
+        query.setParameter(6, documentoEnum.getCodigo());
+        return (Integer) query.getSingleResult();
+    }
+    
+    private String getNameTableByDocument(DocumentoEnum documentoEnum)
+    {
         String nombreTabla="";
         switch(documentoEnum)
         {
@@ -64,25 +120,6 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
                  nombreTabla="Factura";
                 break;
         }
-        
-        /*Factura f;
-        f.getCodigoDocumento()
-        //f.getEmpresa();
-        f.getPuntoEstablecimiento();
-        f.getPuntoEmision();
-        f.getSecuencial();*/
-        
-        String queryString = "SELECT f FROM "+nombreTabla+" f WHERE f.estado<>?1 AND f.empresa=?2 AND f.puntoEstablecimiento=?3 AND f.puntoEmision=?4 AND f.secuencial=?5 AND f.codigoDocumento=?6 ";
-        Query query = getEntityManager().createQuery(queryString);
-        
-        query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //TODO: Buscar cualquier 
-        query.setParameter(2, empresa);
-        query.setParameter(3, puntoEstablecimiento);
-        query.setParameter(4, puntoEmision);
-        query.setParameter(5, Secuencial);
-        query.setParameter(6, documentoEnum.getCodigo());
-        return query.getResultList();
-        //return (Usuario) query.getSingleResult();
-        
+        return nombreTabla;
     }
 }

@@ -1929,53 +1929,9 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         //Obtiene los secuenciales eletronicos
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
-        Integer secuencial=null;
-        
-        switch (documentoEnum) {
-            case FACTURA:
-                secuencial = puntoEmision.getSecuencialFactura();
-                validarSecuencial(secuencial);
-                puntoEmision.setSecuencialFactura(secuencial+1);
-                break;
-
-            case NOTA_VENTA:
-                secuencial = puntoEmision.getSecuencialNotaVenta();
-                validarSecuencial(secuencial);
-                puntoEmision.setSecuencialNotaVenta(secuencial+1);
-                break;
-                
-            case NOTA_VENTA_INTERNA:
-                secuencial = puntoEmision.getSecuencialNotaVentaInterna();
-                validarSecuencial(secuencial);
-                puntoEmision.setSecuencialNotaVentaInterna(secuencial+1);
-                break;
-
-
-            case RETENCIONES:
-                secuencial = puntoEmision.getSecuencialRetenciones();
-                validarSecuencial(secuencial);
-                puntoEmision.setSecuencialRetenciones(secuencial+1);
-                break;
-
-            case NOTA_CREDITO:
-                secuencial = puntoEmision.getSecuencialNotaCredito();
-                validarSecuencial(secuencial);
-                puntoEmision.setSecuencialNotaCredito(secuencial+1);
-                break;
-
-            case GUIA_REMISION:
-                secuencial = puntoEmision.getSecuencialGuiaRemision();
-                validarSecuencial(secuencial);
-                puntoEmision.setSecuencialGuiaRemision(secuencial+1);
-                break;
-                
-            case LIQUIDACION_COMPRA:
-                secuencial = puntoEmision.getSecuencialLiquidacionCompra();
-                validarSecuencial(secuencial);
-                puntoEmision.setSecuencialLiquidacionCompra(secuencial+1);
-                break;
-        }
-        
+        Integer secuencial=puntoEmision.getSecuencialPorDocumento(documentoEnum);
+        validarSecuencial(secuencial);
+        puntoEmision.setSecuencialPorDocumento(documentoEnum, secuencial+1);        
              
         /**
          * Aumentar el código de la numeración en los parametros
@@ -1990,7 +1946,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
           /**
          * Validacion para evitar ingresar comprobantes repetidos
          */
-        validarSecuencialRepetidoComprobante(comprobante);
+        validarSecuencialRepetidoComprobante(comprobante,puntoEmision,true);
         
         /**
          * Agregado datos adicionales de configuracion general
@@ -2101,7 +2057,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
      * @param comprobante
      * @return Boolean retorar true cuando existe un registro y false cuando no existe
      */
-    private void validarSecuencialRepetidoComprobante(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
+    private void validarSecuencialRepetidoComprobante(ComprobanteEntity comprobante,PuntoEmision puntoEmisionOriginal,Boolean forzarCorregir) throws RemoteException, ServicioCodefacException
     {
         Empresa empresa=comprobante.getEmpresa();
         DocumentoEnum documentoEnum=comprobante.getCodigoDocumentoEnum();
@@ -2119,8 +2075,55 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         if(resultado.size()>0)
         {
-            throw new ServicioCodefacException("Ya existe un comprobante con el preimpreso "+comprobante.getPreimpreso()+" ingresado");
+            ///////////////////////////////////////////////////////////////////
+            //  CORRECION TEMPORAL PARA PROBLEMAS DE DESFAZ DE LOS SECUENCIALES
+            //  TODO: Esta solución debe esar de forma temporal hasta ver poruqe
+            //        se desfazan los puntos de emision
+            ///////////////////////////////////////////////////////////////////
+            if(forzarCorregir)
+            {
+                Integer secuencialCorregido=facadeEntity.getSecuencialUltimoFacade(
+                        empresa, 
+                        documentoEnum, 
+                        puntoEstablecimiento, 
+                        puntoEmision);
+
+                //Aumentar secuencial corregido
+                secuencialCorregido++;
+                        
+                puntoEmisionOriginal.setSecuencialPorDocumento(documentoEnum, secuencialCorregido);
+                comprobante.setSecuencial(secuencialCorregido);            
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.WARNING, null,"Corregido secuencial "+secuencial+" del Documento +"+documentoEnum.getNombre());
+                validarSecuencialRepetidoComprobante(comprobante, puntoEmisionOriginal, false);
+            }
+            else
+            {
+                throw new ServicioCodefacException("Ya existe un comprobante con el preimpreso "+comprobante.getPreimpreso()+" ingresado");
+            }
         }
+        //return false;
+    }
+    
+    public Integer getSecuencialUltimo(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
+    {
+        Empresa empresa=comprobante.getEmpresa();
+        DocumentoEnum documentoEnum=comprobante.getCodigoDocumentoEnum();
+        BigDecimal puntoEstablecimiento=comprobante.getPuntoEstablecimiento();
+        Integer puntoEmision=comprobante.getPuntoEmision();
+        Integer secuencial=comprobante.getSecuencial();
+        ComprobanteEntityFacade facadeEntity=new ComprobanteEntityFacade();
+        
+        Integer resultado=facadeEntity.getSecuencialUltimoFacade(
+                empresa,
+                documentoEnum, 
+                puntoEstablecimiento, 
+                puntoEmision);
+        
+        if(resultado==0)
+        {
+            resultado=1;
+        }
+        return resultado;
         //return false;
     }
     
