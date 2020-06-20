@@ -168,6 +168,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.Tip
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
@@ -1205,7 +1206,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
             else
             {
-                factura=servicio.grabar(factura,crearDatosPrestamo());
+                CarteraParametro carteraParametro=new CarteraParametro(
+                        getChkHabilitarCredito().isSelected(), 
+                        (Integer) getTxtDiasCredito().getValue());
+                
+                factura=servicio.grabar(factura,crearDatosPrestamo(),carteraParametro);
             }
             
             facturaProcesando = factura;
@@ -1777,6 +1782,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         
         habilitarPermisosEdicionFactura();
+        
+        EnumSiNo habilitarCredito=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.CREDITO_DEFECTO_VENTAS,EnumSiNo.NO);
+        if(habilitarCredito==null)
+        {
+            habilitarCredito=EnumSiNo.NO; //Si no existe ningun dato dejo por defecto en no
+        }
+                    
+        getChkHabilitarCredito().setSelected(habilitarCredito.getBool());
 
     }
     
@@ -3219,6 +3232,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         {
             getChkPagoConCartera().setVisible(false);
         }
+        
+        
         
     }
 

@@ -16,15 +16,18 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,7 +64,10 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
         initDatosTabla();
         getDateFechaInicio().setDate(new java.util.Date());
         getDateFechaFin().setDate(new java.util.Date());
+        UtilidadesComboBox.llenarComboBox(getCmbTipoReporteCartera(),CarteraEstadoReporteEnum.values());
     }
+    
+    
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
@@ -127,7 +133,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
 
                 @Override
                 public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoReporte, panelPadre,obtenerTituloReporte());
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoReporte, panelPadre,obtenerTituloReporte(),OrientacionReporteEnum.HORIZONTAL);
                     //dispose();
                     //setVisible(false);
                 }
@@ -207,7 +213,15 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                     }else{
                         List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()));
                     }*/
-                    List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()),DocumentoCategoriaEnum.COMPROBANTES_VENTA,getTipoCarteraEnum(),Cartera.TipoSaldoCarteraEnum.CON_SALDO,Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO);
+                    List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, 
+                            new Date(getDateFechaInicio().getDate().getTime()), 
+                            new Date(getDateFechaFin().getDate().getTime()),
+                            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+                            getTipoCarteraEnum(),
+                            Cartera.TipoSaldoCarteraEnum.CON_SALDO,
+                            Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO, 
+                            (CarteraEstadoReporteEnum) getCmbTipoReporteCartera().getSelectedItem());
+                    
                     carteraResultado=carteras;
                     mostrarDatosTabla(carteras);
                 } catch (ServicioCodefacException ex) {
@@ -284,6 +298,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
         getTableCuentasPorCobrar().setModel(defaultTableModel);
         
     }
-    
+     
+
     
 }

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 public interface  CarteraServiceIf extends ServiceAbstractIf<Cartera>{
     public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException;
-    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum) throws ServicioCodefacException, RemoteException;
+    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum) throws ServicioCodefacException, RemoteException;
     public List<CarteraCruce> consultarMovimientoCartera(Persona persona) throws java.rmi.RemoteException;
     public void eliminar(Cartera entity,ModoProcesarEnum modo) throws ServicioCodefacException, RemoteException;
     public void editar(Cartera entity,List<CarteraCruce> cruces) throws ServicioCodefacException, RemoteException;

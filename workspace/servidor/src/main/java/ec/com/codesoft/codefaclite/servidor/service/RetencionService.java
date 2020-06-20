@@ -115,7 +115,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(retencion, Cartera.TipoCarteraEnum.PROVEEDORES);
+        carteraService.grabarDocumentoCartera(retencion, Cartera.TipoCarteraEnum.PROVEEDORES,null);
     }
     
     private void validarRetencion(Retencion retencion) throws ServicioCodefacException, RemoteException

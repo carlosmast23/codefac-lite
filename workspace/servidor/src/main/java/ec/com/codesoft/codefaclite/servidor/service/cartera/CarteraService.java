@@ -30,11 +30,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.TipoO
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -306,7 +308,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     /**
      * Metodo que me permite almacenar los documentos en la tabla de cartera
      */
-    public void grabarDocumentoCartera(ComprobanteEntity comprobante,Cartera.TipoCarteraEnum tipo) throws RemoteException, ServicioCodefacException 
+    public void grabarDocumentoCartera(ComprobanteEntity comprobante,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException 
     {
         //Si no esta activo el modulo de cartera no continua
         if(!ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.ACTIVAR_CARTERA, EnumSiNo.SI))
@@ -329,6 +331,15 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         cartera.setTipoCartera(tipo.getLetra());
         cartera.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
         cartera.setSucursal(comprobante.getSucursalEmpresa());
+        cartera.setDíasCredito((carteraParametro!=null)?carteraParametro.diasCredito:null);
+        if(carteraParametro.diasCredito!=null)
+        {
+            java.util.Date fechaFinCredito=UtilidadesFecha.sumarDiasFecha(
+                    cartera.getFechaEmision(),
+                    carteraParametro.diasCredito);            
+            cartera.setFechaFinCredito(UtilidadesFecha.castDateUtilToSql(fechaFinCredito));
+        }
+        
         
 
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
@@ -338,7 +349,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             case NOTA_VENTA_INTERNA:
             case NOTA_VENTA:
             case FACTURA:
-                crearCarteraFactura(comprobante, cartera, cruces, tipo);
+                crearCarteraFactura(comprobante, cartera, cruces, tipo,carteraParametro);
                 break;
 
             case RETENCIONES:
@@ -355,13 +366,15 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
 
     }
     
-    private void crearCrucesFactura(Factura factura,Cartera carteraFactura,List<CarteraCruce> cruces) throws ServicioCodefacException, RemoteException
+    private void crearCrucesFactura(Factura factura,Cartera carteraFactura,List<CarteraCruce> cruces,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
         /**
          * =====================================================================
          * CREAR CRUCE DE LA FACTURA CUANDO SE PAGA CON CREDITO CARTERA
+         * Esto aplica cuando se quiere pagar con algun abono de los clientes
          * =====================================================================
          */
+        
         FormaPago formaPagoConCartera=factura.buscarFormaPagoConCartera();
         if(formaPagoConCartera!=null)
         {
@@ -418,11 +431,16 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
          * =================================================================
          * CREAR CARTERA DEL RESTO DE FORMAS DE PAGO
          * =================================================================
-         */
+         * Si esta habilitado el tema de credito no hago ningun cruce
+         */        
+        if(carteraParametro!=null && carteraParametro.habilitarCredito)
+            return;
+        
+        
         List<FormaPago> formasPagoOtros = factura.buscarListaFormasPagoDistintaDeCartera();
         for (FormaPago formaPago : formasPagoOtros) {
             //Verificar si no tiene asignado un plazo de deuda en la forma de pago entonces creo los cruces
-            if (formaPago.getPlazo() == null || formaPago.getPlazo().toString().isEmpty() || formaPago.getPlazo().toString().equals("0")) {
+            //if (formaPago.getPlazo() == null || formaPago.getPlazo().toString().isEmpty() || formaPago.getPlazo().toString().equals("0")) {
                 //Crear la cartera
                 Cartera carteraFormaPago = new Cartera(
                         factura.getCliente(),
@@ -451,11 +469,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
 
                 CarteraCruce cruce = new CarteraCruce(formaPago.getTotal(), carteraFactura, carteraDetalle);
                 cruces.add(cruce);
-            }
+            //}
         }
     }
     
-    private void crearCarteraFactura(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,Cartera.TipoCarteraEnum tipo) throws ServicioCodefacException, RemoteException
+    private void crearCarteraFactura(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
         //TODO: Unir la misma logica tanto para facturas de venta como de compra
         if (tipo.equals(tipo.CLIENTE)) {
@@ -474,7 +492,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 cartera.addDetalle(carteraDetalle);
             }
                 
-            crearCrucesFactura(factura, cartera, cruces);
+            crearCrucesFactura(factura, cartera, cruces,carteraParametro);
             
         } else if (tipo.equals(tipo.PROVEEDORES)) {
             
@@ -631,8 +649,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      * @throws ServicioCodefacException
      * @throws RemoteException 
      */
-    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,TipoOrdenamientoEnum tipoOrdenamientoEnum) throws ServicioCodefacException, RemoteException {
-        return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum);
+    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum) throws ServicioCodefacException, RemoteException {
+        return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum);
     }
     
     /*public List<Cartera> listaCartera(Empresa empresa,Date fechaInicial,Date fechaFinal,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,)

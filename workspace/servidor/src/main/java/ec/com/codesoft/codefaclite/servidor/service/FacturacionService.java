@@ -39,6 +39,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -180,11 +181,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    public Factura grabar(Factura factura,Prestamo prestamo) throws RemoteException, ServicioCodefacException {
+    public Factura grabar(Factura factura,Prestamo prestamo,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(factura);
+                grabarSinTransaccion(factura,carteraParametro);
                 
                 /**
                  * ============================================================
@@ -206,7 +207,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(factura);
+                grabarSinTransaccion(factura,null);
                 
             }
         });
@@ -214,7 +215,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }
     
-    public void grabarSinTransaccion(Factura factura) throws ServicioCodefacException, RemoteException
+    public void grabarSinTransaccion(Factura factura,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
         //TODO:Este codigo de documento ya no debo setear porque desde la factura ya mando el documento
         //factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
@@ -230,7 +231,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ComprobantesService servicioComprobante = new ComprobantesService();
         servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);
         grabarDetallesFacturaSinTransaccion(factura);
-        grabarCarteraSinTransaccion(factura);
+        grabarCarteraSinTransaccion(factura,carteraParametro);
     }
     
     /**
@@ -299,16 +300,16 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarCarteraSinTransaccion(factura);
+                grabarCarteraSinTransaccion(factura,null);
             }
         });
     }
     
-    private void grabarCarteraSinTransaccion(Factura factura) throws RemoteException, ServicioCodefacException
+    private void grabarCarteraSinTransaccion(Factura factura,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(factura, Cartera.TipoCarteraEnum.CLIENTE);
+        carteraService.grabarDocumentoCartera(factura, Cartera.TipoCarteraEnum.CLIENTE,carteraParametro);
     }
     
     private void afectarPresupuesto(FacturaDetalle detalle) throws RemoteException

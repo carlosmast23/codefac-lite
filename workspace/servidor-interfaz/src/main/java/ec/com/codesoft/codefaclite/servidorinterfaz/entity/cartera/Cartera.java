@@ -63,6 +63,12 @@ public class Cartera implements Serializable{
     
     @Column(name = "SALDO")
     private BigDecimal saldo;
+    
+    @Column(name = "DIAS_CREDITO")
+    private Integer diasCredito;
+    
+    @Column(name = "FECHA_CREDITO_FIN")
+    private Date fechaFinCredito;
 
     public Cartera() {
     }
@@ -292,7 +298,13 @@ public class Cartera implements Serializable{
         this.referenciaManual = referenciaManual;
     }
 
-    
+    public Integer getDíasCredito() {
+        return diasCredito;
+    }
+
+    public void setDíasCredito(Integer díasCredito) {
+        this.diasCredito = díasCredito;
+    }
 
     public String getCodigoAuxiliar() {
         return codigoAuxiliar;
@@ -301,6 +313,16 @@ public class Cartera implements Serializable{
     public void setCodigoAuxiliar(String codigoAuxiliar) {
         this.codigoAuxiliar = codigoAuxiliar;
     }
+
+    public Date getFechaFinCredito() {
+        return fechaFinCredito;
+    }
+
+    public void setFechaFinCredito(Date fechaFinCredito) {
+        this.fechaFinCredito = fechaFinCredito;
+    }
+    
+    
     
     public String obtenerDescripciones()
     {
@@ -400,8 +422,25 @@ public class Cartera implements Serializable{
     }
     
     /**
-     * Metodos Personalizados
+     * =====================================================================
+     *              METODOS PERSONALIZADOS
+     * =====================================================================
      */
+    
+    public Integer calcularDiasFaltaPorVenderCredito()
+    {
+        if(diasCredito!=null )
+        {       
+            //TODO: Codigo para tener retrocompatibilidad cuando no este grabado este dato
+            if(fechaFinCredito==null)
+            {
+                fechaFinCredito=UtilidadesFecha.castDateUtilToSql(UtilidadesFecha.sumarDiasFecha(fechaEmision,diasCredito));
+            }
+            int diasCredito=UtilidadesFecha.obtenerDistanciaConLaFechaActual(fechaFinCredito);
+            return diasCredito*-1;
+        }
+        return null; //Si no encuentra por defecto en los días de credito dejo null
+    }
     
     public BigDecimal calcularValorCobrado()
     {

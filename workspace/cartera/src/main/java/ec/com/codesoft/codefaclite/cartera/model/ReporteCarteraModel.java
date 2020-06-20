@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -319,7 +320,8 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                             carteraCategoriaEnum.getDocumentoCategoriaEnum(),
                             (Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem(),
                             saldoCarteraEnum,
-                            Cartera.TipoOrdenamientoEnum.POR_RAZON_SOCIAL);
+                            Cartera.TipoOrdenamientoEnum.POR_RAZON_SOCIAL,
+                            CarteraEstadoReporteEnum.TODO);
 
                     construirResultadoData(resultado);
                     construirResultadoDataDetalle(resultado);

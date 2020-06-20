@@ -139,7 +139,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(compra, Cartera.TipoCarteraEnum.PROVEEDORES);
+        carteraService.grabarDocumentoCartera(compra, Cartera.TipoCarteraEnum.PROVEEDORES,null);
     }
 
     public void eliminarCompra(Compra compra) throws ServicioCodefacException,RemoteException

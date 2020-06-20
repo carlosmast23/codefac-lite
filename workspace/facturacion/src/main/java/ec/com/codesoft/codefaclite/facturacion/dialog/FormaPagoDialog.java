@@ -75,6 +75,7 @@ public class FormaPagoDialog extends javax.swing.JDialog {
         jPanel1.add(cmbFormaPagoSri, gridBagConstraints);
 
         txtPlazo.setText("jTextField1");
+        txtPlazo.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -100,6 +101,7 @@ public class FormaPagoDialog extends javax.swing.JDialog {
         jPanel1.add(jLabel3, gridBagConstraints);
 
         cmbTiempo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbTiempo.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;

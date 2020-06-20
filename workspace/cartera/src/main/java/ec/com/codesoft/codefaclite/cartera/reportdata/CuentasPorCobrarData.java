@@ -28,6 +28,9 @@ public class CuentasPorCobrarData implements ExcelDatosInterface {
     private String saldo;
     private String cobrado;
     
+    private String diasCredito;
+    private String diasFaltantesVencerCartera;
+    
 
     public CuentasPorCobrarData() {
     }
@@ -111,6 +114,22 @@ public class CuentasPorCobrarData implements ExcelDatosInterface {
     public void setCobrado(String cobrado) {
         this.cobrado = cobrado;
     }
+
+    public String getDiasCredito() {
+        return diasCredito;
+    }
+
+    public void setDiasCredito(String diasCredito) {
+        this.diasCredito = diasCredito;
+    }
+
+    public String getDiasFaltantesVencerCartera() {
+        return diasFaltantesVencerCartera;
+    }
+
+    public void setDiasFaltantesVencerCartera(String diasFaltantesVencerCartera) {
+        this.diasFaltantesVencerCartera = diasFaltantesVencerCartera;
+    }
     
     
 
@@ -162,6 +181,9 @@ public class CuentasPorCobrarData implements ExcelDatosInterface {
             data.setSaldo(cartera.getSaldo().toString());
             data.setCobrado(cartera.calcularValorCobrado().toString());
             data.setTotal(cartera.getTotal().toString());
+            data.setDiasCredito((cartera.getDíasCredito()!=null)?cartera.getDíasCredito().toString():"");
+            Integer diasFaltaPorVenderCredito=cartera.calcularDiasFaltaPorVenderCredito();
+            data.setDiasFaltantesVencerCartera((diasFaltaPorVenderCredito!=null)?diasFaltaPorVenderCredito.toString():"");
             dataReport.add(data);
             
         }

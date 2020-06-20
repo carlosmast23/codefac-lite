@@ -118,7 +118,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(notaCredito, Cartera.TipoCarteraEnum.CLIENTE);
+        carteraService.grabarDocumentoCartera(notaCredito, Cartera.TipoCarteraEnum.CLIENTE,null);
     }
     
     private void anularRubroEstudiante(Long referenciaId,BigDecimal total) throws RemoteException

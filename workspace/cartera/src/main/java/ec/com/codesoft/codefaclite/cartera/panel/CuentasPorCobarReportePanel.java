@@ -7,8 +7,10 @@ package ec.com.codesoft.codefaclite.cartera.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -119,6 +121,8 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         jLabel5 = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
         lblEspaciosBlancos12 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        cmbTipoReporteCartera = new javax.swing.JComboBox<>();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -174,10 +178,10 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(checkTodos, gridBagConstraints);
 
-        jLabel2.setText("Fecha Inicio:");
+        jLabel2.setText("Tipo Cartera:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel2, gridBagConstraints);
@@ -215,7 +219,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -233,7 +237,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         btnBuscar.setText("Consultar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
 
@@ -241,7 +245,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         jLabel5.setText("Saldo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel5, gridBagConstraints);
@@ -250,7 +254,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         lblTotal.setText("                ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -262,6 +266,21 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         gridBagConstraints.weightx = 0.2;
         getContentPane().add(lblEspaciosBlancos12, gridBagConstraints);
 
+        jLabel6.setText("Fecha Inicio:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbTipoReporteCartera, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -269,6 +288,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JCheckBox checkTodos;
+    private javax.swing.JComboBox<CarteraEstadoReporteEnum> cmbTipoReporteCartera;
     private com.toedter.calendar.JDateChooser dateFechaFin;
     private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JLabel jLabel1;
@@ -276,6 +296,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
@@ -284,4 +305,14 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
     private javax.swing.JTable tableCuentasPorCobrar;
     private javax.swing.JTextField txtCliente;
     // End of variables declaration//GEN-END:variables
+
+    public JComboBox<CarteraEstadoReporteEnum> getCmbTipoReporteCartera() {
+        return cmbTipoReporteCartera;
+    }
+
+    public void setCmbTipoReporteCartera(JComboBox<CarteraEstadoReporteEnum> cmbTipoReporteCartera) {
+        this.cmbTipoReporteCartera = cmbTipoReporteCartera;
+    }
+
+    
 }

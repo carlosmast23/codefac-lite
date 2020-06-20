@@ -191,7 +191,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         cmbRepresentante = new javax.swing.JComboBox<>();
         panelDatosPresupuestos = new javax.swing.JPanel();
         chkFiltroPresupuestoCliente = new javax.swing.JCheckBox();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jTabCartera = new javax.swing.JTabbedPane();
         panelDatosEmpresa = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -228,6 +228,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel39 = new javax.swing.JLabel();
         chkActivarFinanciamiento = new javax.swing.JCheckBox();
         txtFinanciamientoNumeroCuotas = new javax.swing.JSpinner();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txtDiasCredito = new javax.swing.JSpinner();
+        chkHabilitarCredito = new javax.swing.JCheckBox();
         pnlVuelto = new javax.swing.JPanel();
         txtValorRecibido = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
@@ -1186,7 +1191,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         panelDatosEmpresa.add(cmbConsumidorFinal, gridBagConstraints);
 
-        jTabbedPane1.addTab("Datos del Cliente", panelDatosEmpresa);
+        jTabCartera.addTab("Datos del Cliente", panelDatosEmpresa);
 
         lblEspacioVertical.setLayout(new java.awt.GridBagLayout());
 
@@ -1270,7 +1275,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         lblEspacioVertical.add(btnBuscarVendedor, gridBagConstraints);
 
-        jTabbedPane1.addTab("Datos Adicionales", lblEspacioVertical);
+        jTabCartera.addTab("Datos Adicionales", lblEspacioVertical);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
@@ -1360,7 +1365,40 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel2.add(txtFinanciamientoNumeroCuotas, gridBagConstraints);
 
-        jTabbedPane1.addTab("Financiamiento", jPanel2);
+        jTabCartera.addTab("Financiamiento", jPanel2);
+
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel1.setText("Días Credito:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel4.add(jLabel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel4.add(jLabel2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 50;
+        jPanel4.add(txtDiasCredito, gridBagConstraints);
+
+        chkHabilitarCredito.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkHabilitarCredito.setText("Habiitar Crédito Al Cliente");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel4.add(chkHabilitarCredito, gridBagConstraints);
+
+        jTabCartera.addTab("Cartera", jPanel4);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1368,7 +1406,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.weighty = 0.1;
-        jPanel3.add(jTabbedPane1, gridBagConstraints);
+        jPanel3.add(jTabCartera, gridBagConstraints);
 
         pnlVuelto.setLayout(new java.awt.GridBagLayout());
 
@@ -1473,6 +1511,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkActivarFechaVencimiento;
     private javax.swing.JCheckBox chkActivarFinanciamiento;
     private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
+    private javax.swing.JCheckBox chkHabilitarCredito;
     private javax.swing.JCheckBox chkPagoConCartera;
     private javax.swing.JCheckBox cmbConsumidorFinal;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
@@ -1484,6 +1523,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JCheckBox jCheckBox1;
     private org.jdesktop.swingx.JXDatePicker jDateFechaEmision;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1494,6 +1534,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
@@ -1527,10 +1568,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabCartera;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
@@ -1577,6 +1619,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtCodigoDetalle;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtDescuento;
+    private javax.swing.JSpinner txtDiasCredito;
     private javax.swing.JTextField txtEstudiante;
     private javax.swing.JSpinner txtFinanciamientoDiaPago;
     private javax.swing.JTextField txtFinanciamientoEntrada;
@@ -2046,5 +2089,23 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setChkPagoConCartera(JCheckBox chkPagoConCartera) {
         this.chkPagoConCartera = chkPagoConCartera;
     }
+
+    public JSpinner getTxtDiasCredito() {
+        return txtDiasCredito;
+    }
+
+    public void setTxtDiasCredito(JSpinner txtDiasCredito) {
+        this.txtDiasCredito = txtDiasCredito;
+    }
+
+    public JCheckBox getChkHabilitarCredito() {
+        return chkHabilitarCredito;
+    }
+
+    public void setChkHabilitarCredito(JCheckBox chkHabilitarCredito) {
+        this.chkHabilitarCredito = chkHabilitarCredito;
+    }
+    
+    
     
 }

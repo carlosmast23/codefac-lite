@@ -25,32 +25,23 @@ public class UtilidadesFecha {
     
     public static java.util.Date getPrimerDiaMes(int anio, int mes)
     {
-        /*
-        int anio = obtenerAnio(anio);
-        int mes = obtenerMes(fecha);*/
         Calendar calendario = Calendar.getInstance();
         calendario.set(anio,mes, 1);
         return calendario.getTime();
-        //int ultimoDiaMes = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
     
     public static java.util.Date getUltimoDiaMes(int anio, int mes)
     {
-        /*
-        int anio = obtenerAnio(fecha);
-        int mes = obtenerMes(fecha);*/
         Calendar calendario = Calendar.getInstance();
         calendario.set(anio,mes, 1);
         calendario.set(anio, mes, calendario.getActualMaximum(Calendar.DAY_OF_MONTH));
         return calendario.getTime();
-        //int ultimoDiaMes = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
     
     
     public static java.util.Date getFechaNTP() throws Exception
     {
         //Generamos un objeto de la clase ObtenerFecha. 
- 
         ObtenerFecha objFecha=new ObtenerFecha(); 
         //Generamos otro objeto de la clase SimpleDateFormat para darle formato a la fecha 
  

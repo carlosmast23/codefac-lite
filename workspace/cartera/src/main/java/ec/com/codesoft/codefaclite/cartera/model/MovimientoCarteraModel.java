@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -210,7 +211,7 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
             }
                         
             //List<CarteraCruce> cruces=ServiceFactory.getFactory().getCarteraServiceIf().consultarMovimientoCartera(personaFiltro);
-            carteraResultado= carteraServiceIf.listaCarteraSaldoCero(personaFiltro,fechaInicial, fechaFinal,DocumentoCategoriaEnum.COMPROBANTES_VENTA, (Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem(),Cartera.TipoSaldoCarteraEnum.TODOS,Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO);
+            carteraResultado= carteraServiceIf.listaCarteraSaldoCero(personaFiltro,fechaInicial, fechaFinal,DocumentoCategoriaEnum.COMPROBANTES_VENTA, (Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem(),Cartera.TipoSaldoCarteraEnum.TODOS,Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO,CarteraEstadoReporteEnum.TODO);
             //mapMovimientoCartera=convertirCrucesEnMap(cruces);
             construirTablaMovimientoCartera();
             

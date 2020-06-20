@@ -14,6 +14,7 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
@@ -34,9 +35,13 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         super(Cartera.class);
     }
       
-    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum)
+    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum)
     {
-        String cliente = "", fecha = "", saldo = "";
+        String cliente = "";
+        String fecha = "";
+        String saldo = "";
+        String whereTipoCarteraVencida="";
+        
         if (persona != null) {
             cliente = "c.persona=?1";
         } else {
@@ -52,9 +57,10 @@ public class CarteraFacade extends AbstractFacade<Cartera>
             fecha = " AND (c.fechaEmision BETWEEN ?2 AND ?3)";
         }
         
-        /*Cartera cartera;
-        DocumentoCategoriaEnum doc;
-        cartera.getCarteraDocumentoEnum().getCategoria();*/
+        Cartera cartera;
+        //DocumentoCategoriaEnum doc;
+        //cartera.getFechaEmision();
+        //cartera.getFechaFinCredito();
         
         if(tipoSaldoEnum.equals(Cartera.TipoSaldoCarteraEnum.SIN_SALDO))
         {
@@ -65,6 +71,16 @@ public class CarteraFacade extends AbstractFacade<Cartera>
             saldo=" AND c.saldo>0 ";
         }
       
+        ////////////////////////////////////////////
+        //FILTRAR POR EL TIPO DE CARTERA VENCIDA  //
+        ////////////////////////////////////////////
+        if(carteraEstadoReporteEnum.equals(CarteraEstadoReporteEnum.VENCIDA))
+        {
+            whereTipoCarteraVencida=" AND c.fechaFinCredito < c.fechaEmision ";
+        }else if(carteraEstadoReporteEnum.equals(CarteraEstadoReporteEnum.SIN_VENCER))
+        {
+            whereTipoCarteraVencida=" AND c.fechaFinCredito >= c.fechaEmision ";
+        }
 
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(categoriaMenuEnum,"c.codigoDocumento");
         
@@ -83,7 +99,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         c.getPersona().getRazonSocial();*/
         
         try {
-            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +" AND ("+whereDocumentos+") AND c.tipoCartera=?4 AND c.estado=?5  "+orderBy;            
+            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +whereTipoCarteraVencida+" AND ("+whereDocumentos+") AND c.tipoCartera=?4 AND c.estado=?5  "+orderBy;            
             //System.out.println("QUERY==> "+queryString);
             Query query = getEntityManager().createQuery(queryString);
             if (persona != null) {
