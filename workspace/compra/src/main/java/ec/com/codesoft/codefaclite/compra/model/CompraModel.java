@@ -46,6 +46,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
@@ -164,7 +165,10 @@ public class CompraModel extends CompraPanel{
             
             CompraServiceIf servicio=ServiceFactory.getFactory().getCompraServiceIf();
             setearValores();
-            servicio.grabarCompra(compra);
+            CarteraParametro carteraParametro=new CarteraParametro(
+                    Boolean.TRUE, 
+                    (Integer)getTxtDiasCredito().getValue());
+            servicio.grabarCompra(compra,carteraParametro);
             DialogoCodefac.mensaje("Correcto","La compra fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error al grabar la compra",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
@@ -475,6 +479,8 @@ public class CompraModel extends CompraPanel{
                 getCmbEmitirRetencion().setSelectedItem(EnumSiNo.NO);
             }
         }
+        
+        getTxtDiasCredito().setValue(0);
     }
     
     private void cargarCatalogoRetencionesDefecto()
@@ -699,6 +705,15 @@ public class CompraModel extends CompraPanel{
                     getTxtProveedor().setText(identificacion+" - "+nombre);
                     desbloquearIngresoDetalleProducto();
                     getTxtProductoItem().requestFocus();
+                    
+                    //Cargar los días de crédito en el caso que tenga creado
+                    Integer diasCredito=0;
+                    if(proveedor.getDiasCreditoProveedor()!=null)
+                    {
+                        diasCredito=proveedor.getDiasCreditoProveedor();
+                    }
+                    getTxtDiasCredito().setValue(diasCredito);
+                    
                 }
             }
         });

@@ -23,6 +23,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -174,15 +175,21 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         cmbEmitirRetencion = new javax.swing.JComboBox<>();
         btnAgregarProveedor = new javax.swing.JButton();
         lblEspacio2 = new javax.swing.JLabel();
-        txtSecuencialCompra = new javax.swing.JTextField();
-        jLabel23 = new javax.swing.JLabel();
-        txtPuntoEmisionCompra = new javax.swing.JTextField();
-        jLabel25 = new javax.swing.JLabel();
-        txtEstablecimientoCompra = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         rdbEmisionFisica = new javax.swing.JRadioButton();
         rdbEmisionElectronica = new javax.swing.JRadioButton();
         jLabel8 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel3 = new javax.swing.JPanel();
+        txtDiasCredito = new javax.swing.JSpinner();
+        jLabel27 = new javax.swing.JLabel();
+        lblEspacio2324 = new javax.swing.JLabel();
+        jToolBar2 = new javax.swing.JToolBar();
+        txtEstablecimientoCompra = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        txtPuntoEmisionCompra = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        txtSecuencialCompra = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -205,16 +212,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.weightx = 0.4;
         getContentPane().add(txtProveedor, gridBagConstraints);
 
         btnProveedorBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/Zoom.png"))); // NOI18N
-        btnProveedorBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 13;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -233,15 +238,13 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(txtOrdenCompra, gridBagConstraints);
 
         btnOrdenCompraBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/Zoom.png"))); // NOI18N
-        btnOrdenCompraBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -258,7 +261,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 13;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(txtObservacion, gridBagConstraints);
@@ -283,7 +286,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(txtAutorizacion, gridBagConstraints);
@@ -787,7 +790,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         btnAgregarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/persona-ico.png"))); // NOI18N
         btnAgregarProveedor.setToolTipText("Agregar Proveedor");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -798,43 +801,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         getContentPane().add(lblEspacio2, gridBagConstraints);
-
-        txtSecuencialCompra.setColumns(9);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.ipadx = 80;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(txtSecuencialCompra, gridBagConstraints);
-
-        jLabel23.setText(" - ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 5;
-        getContentPane().add(jLabel23, gridBagConstraints);
-
-        txtPuntoEmisionCompra.setColumns(3);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.ipadx = 30;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(txtPuntoEmisionCompra, gridBagConstraints);
-
-        jLabel25.setText(" - ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
-        getContentPane().add(jLabel25, gridBagConstraints);
-
-        txtEstablecimientoCompra.setColumns(3);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.ipadx = 30;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(txtEstablecimientoCompra, gridBagConstraints);
 
         jLabel17.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel17.setText("Documento:");
@@ -869,8 +835,74 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel8, gridBagConstraints);
 
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(txtDiasCredito, gridBagConstraints);
+
+        jLabel27.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel27.setText("Días Credito:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jLabel27, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel3.add(lblEspacio2324, gridBagConstraints);
+
+        jTabbedPane1.addTab("Cartera", jPanel3);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
+        getContentPane().add(jTabbedPane1, gridBagConstraints);
+
+        jToolBar2.setRollover(true);
+
+        txtEstablecimientoCompra.setColumns(3);
+        jToolBar2.add(txtEstablecimientoCompra);
+
+        jLabel25.setText(" - ");
+        jToolBar2.add(jLabel25);
+
+        txtPuntoEmisionCompra.setColumns(3);
+        jToolBar2.add(txtPuntoEmisionCompra);
+
+        jLabel23.setText(" - ");
+        jToolBar2.add(jLabel23);
+
+        txtSecuencialCompra.setColumns(9);
+        txtSecuencialCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSecuencialCompraActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(txtSecuencialCompra);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        getContentPane().add(jToolBar2, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtSecuencialCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSecuencialCompraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSecuencialCompraActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -909,6 +941,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -918,12 +951,16 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JLabel lblEspacio10;
     private javax.swing.JLabel lblEspacio12;
     private javax.swing.JLabel lblEspacio15;
     private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JLabel lblEspacio2324;
     private javax.swing.JLabel lblIva;
     private javax.swing.JLabel lblSubtotalImpuestoSinDescuento;
     private javax.swing.JLabel lblSubtotalImpuestos;
@@ -941,6 +978,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtDescripcionItem;
     private javax.swing.JTextField txtDescuentoImpuestos;
     private javax.swing.JTextField txtDescuentoSinImpuestos;
+    private javax.swing.JSpinner txtDiasCredito;
     private javax.swing.JTextField txtEstablecimientoCompra;
     private javax.swing.JTextField txtIce;
     private javax.swing.JTextField txtObservacion;
@@ -1257,6 +1295,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
     public JComboBox<EnumSiNo> getCmbEmitirRetencion() {
         return cmbEmitirRetencion;
+    }
+
+    public JSpinner getTxtDiasCredito() {
+        return txtDiasCredito;
+    }
+
+    public void setTxtDiasCredito(JSpinner txtDiasCredito) {
+        this.txtDiasCredito = txtDiasCredito;
     }
 
     

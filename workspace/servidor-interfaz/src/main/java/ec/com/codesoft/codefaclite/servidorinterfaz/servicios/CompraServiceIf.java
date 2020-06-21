@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 public interface CompraServiceIf extends ServiceAbstractIf<Compra>
 {
-    public void grabarCompra(Compra compra) throws ServicioCodefacException,java.rmi.RemoteException;
+    public void grabarCompra(Compra compra,CarteraParametro carteraParametro) throws ServicioCodefacException,java.rmi.RemoteException;
     public void editarCompra(Compra compra) throws ServicioCodefacException,java.rmi.RemoteException;
     public List<Compra> obtenerTodos() throws java.rmi.RemoteException;
     public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum de, TipoDocumentoEnum tde,GeneralEnumEstado estadoEnum,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException;

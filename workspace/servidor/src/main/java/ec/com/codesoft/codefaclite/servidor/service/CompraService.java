@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.sri.ComprobantesElectronicosParametros;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -68,7 +69,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     
     
     @Override
-    public void grabarCompra(Compra compra) throws ServicioCodefacException, RemoteException
+    public void grabarCompra(Compra compra,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
         validarDatosCompra(compra);
         
@@ -86,7 +87,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                     }
                 }
                 entityManager.persist(compra);
-                grabarCartera(compra); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera
+                grabarCartera(compra,carteraParametro); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera
                 
             }
         });
@@ -135,11 +136,11 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         
     }
     
-    private void grabarCartera(Compra compra) throws RemoteException, ServicioCodefacException
+    private void grabarCartera(Compra compra,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(compra, Cartera.TipoCarteraEnum.PROVEEDORES,null);
+        carteraService.grabarDocumentoCartera(compra, Cartera.TipoCarteraEnum.PROVEEDORES,carteraParametro);
     }
 
     public void eliminarCompra(Compra compra) throws ServicioCodefacException,RemoteException
