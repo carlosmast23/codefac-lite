@@ -2223,10 +2223,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
 
         factura.setCliente(factura.getCliente());
-        //factura.setRazonSocial(factura.getCliente().getRazonSocial());
-        //factura.setIdentificacion(factura.getCliente().getIdentificacion());
-        //factura.setDireccion(factura.getSucursal().getDireccion());
-        //factura.setTelefono(factura.getSucursal().getTelefonoConvencional());
 
         //Cargar la fecha de vencimiento de la factura si existe ingresado una fecha
         if(estadoFormulario.equals(ESTADO_GRABAR))
@@ -2254,6 +2250,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     factura.getDatosAdicionales().remove(datoAdicional);
                 }
             }
+        }
+        
+        //Agregar datos adicionales de los días de credito si tienen asignado
+        if(factura.getCliente().getDiasCreditoCliente()!=null)
+        {
+            getTxtDiasCredito().setValue(factura.getCliente().getDiasCreditoCliente());
         }
         
     }

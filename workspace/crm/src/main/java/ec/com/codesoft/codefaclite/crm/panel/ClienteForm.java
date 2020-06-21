@@ -107,6 +107,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         lblEspacio4 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         txtDiasCredito = new javax.swing.JSpinner();
+        jLabel28 = new javax.swing.JLabel();
+        txtDiasCreditoProveedor = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         chkContacto = new javax.swing.JCheckBox();
@@ -433,10 +435,10 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanel1.add(cmbTipoOperador, gridBagConstraints);
 
         jLabel16.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel16.setText("Días de Credito Cobro:");
+        jLabel16.setText("Días de Credito Proveedor:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel16, gridBagConstraints);
@@ -451,17 +453,17 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         lblOligadoLlevarContabilidad.setText("Obligado a Llevar Contabilidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(lblOligadoLlevarContabilidad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(chkObligadoLlevarContabilidad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio7, gridBagConstraints);
@@ -486,6 +488,21 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(txtDiasCredito, gridBagConstraints);
+
+        jLabel28.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel28.setText("Días de Credito Cliente:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel28, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(txtDiasCreditoProveedor, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Adicionales", jPanel1);
 
@@ -730,6 +747,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
@@ -772,6 +790,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JTable tblEstablecimientos;
     private javax.swing.JSpinner txtCodigoEstablecimiento;
     private javax.swing.JSpinner txtDiasCredito;
+    private javax.swing.JSpinner txtDiasCreditoProveedor;
     private javax.swing.JTextField txtNombreContacto;
     private javax.swing.JTextField txtNombreLegal;
     private javax.swing.JTextField txtNombreLegalEstablecimiento;
@@ -1015,6 +1034,14 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     @LimpiarAnotacion
     public JTextField getTxtNombreContacto() {
         return txtNombreContacto;
+    }
+
+    public JSpinner getTxtDiasCreditoProveedor() {
+        return txtDiasCreditoProveedor;
+    }
+
+    public void setTxtDiasCreditoProveedor(JSpinner txtDiasCreditoProveedor) {
+        this.txtDiasCreditoProveedor = txtDiasCreditoProveedor;
     }
     
     

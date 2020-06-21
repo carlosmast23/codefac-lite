@@ -76,10 +76,10 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         ////////////////////////////////////////////
         if(carteraEstadoReporteEnum.equals(CarteraEstadoReporteEnum.VENCIDA))
         {
-            whereTipoCarteraVencida=" AND c.fechaFinCredito < c.fechaEmision ";
+            whereTipoCarteraVencida=" AND c.fechaFinCredito < CURRENT_DATE ";
         }else if(carteraEstadoReporteEnum.equals(CarteraEstadoReporteEnum.SIN_VENCER))
         {
-            whereTipoCarteraVencida=" AND c.fechaFinCredito >= c.fechaEmision ";
+            whereTipoCarteraVencida=" AND c.fechaFinCredito >= CURRENT_DATE ";
         }
 
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(categoriaMenuEnum,"c.codigoDocumento");

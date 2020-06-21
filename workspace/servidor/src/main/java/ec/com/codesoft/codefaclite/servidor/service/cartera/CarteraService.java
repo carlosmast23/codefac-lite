@@ -332,7 +332,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         cartera.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
         cartera.setSucursal(comprobante.getSucursalEmpresa());
         cartera.setDíasCredito((carteraParametro!=null)?carteraParametro.diasCredito:null);
-        if(carteraParametro.diasCredito!=null)
+        if(carteraParametro!=null && carteraParametro.diasCredito!=null)
         {
             java.util.Date fechaFinCredito=UtilidadesFecha.sumarDiasFecha(
                     cartera.getFechaEmision(),

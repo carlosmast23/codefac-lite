@@ -279,24 +279,31 @@ public class PuntoEmision implements Serializable{
         switch (documentoEnum) {
             case FACTURA:
                 setSecuencialFactura(secuencial);
+                break;
 
             case NOTA_VENTA:
                 setSecuencialNotaVenta(secuencial);
+                break;
                 
             case NOTA_VENTA_INTERNA:
                 setSecuencialNotaVentaInterna(secuencial);
+                break;
 
             case RETENCIONES:
                 setSecuencialRetenciones(secuencial);
+                break;
 
             case NOTA_CREDITO:
                 setSecuencialNotaCredito(secuencial);
+                break;
 
             case GUIA_REMISION:
                 setSecuencialGuiaRemision(secuencial);
+                break;
                 
             case LIQUIDACION_COMPRA:
                 setSecuencialLiquidacionCompra(secuencial);
+                break;
         }
     }
     

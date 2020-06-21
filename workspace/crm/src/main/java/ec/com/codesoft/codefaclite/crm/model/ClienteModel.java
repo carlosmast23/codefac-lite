@@ -182,6 +182,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
         persona.setSriFormaPago((SriFormaPago) getCmbFormaPagoDefecto().getSelectedItem());
         persona.setDiasCreditoCliente((Integer) getTxtDiasCredito().getValue());
+        persona.setDiasCreditoProveedor((Integer)getTxtDiasCreditoProveedor().getValue());
         persona.setContactoClienteNombre(getTxtNombreContacto().getText());
         persona.setEmpresa(session.getEmpresa());
         
@@ -373,6 +374,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         if(persona.getDiasCreditoCliente()!=null)
             getTxtDiasCredito().setValue(persona.getDiasCreditoCliente());
         
+        if (persona.getDiasCreditoProveedor()!= null)
+            getTxtDiasCreditoProveedor().setValue(persona.getDiasCreditoProveedor());
+        
         //Seleccionar si es obligado a llevar contabilidad
         if(persona.getObligadoLlevarContabilidadEnum()!=null)
         {
@@ -445,6 +449,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             getTxtPorcentajeComision().setText("0");
             getChkContacto().setSelected(false);
             getTxtDiasCredito().setValue(0);
+            getTxtDiasCreditoProveedor().setValue(0);
             getTxtNombreLegal().setText("");
             this.razonSocial = "";
             limpiarCrearEstablecimiento();

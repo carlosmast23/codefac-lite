@@ -91,6 +91,9 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     @Column(name = "DIAS_CREDITO_CLIENTE")
     private Integer diasCreditoCliente;
+    
+    @Column(name = "DIAS_CREDITO_PROVEEDOR")
+    private Integer diasCreditoProveedor;
 
     @JoinColumn(name = "NACIONALIDAD_ID")
     @ManyToOne
@@ -423,6 +426,15 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setEstudiantes(List<Estudiante> estudiantes) {
         this.estudiantes = estudiantes;
     }
+
+    public Integer getDiasCreditoProveedor() {
+        return diasCreditoProveedor;
+    }
+
+    public void setDiasCreditoProveedor(Integer diasCreditoProveedor) {
+        this.diasCreditoProveedor = diasCreditoProveedor;
+    }
+    
     
     
 

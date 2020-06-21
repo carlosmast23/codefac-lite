@@ -2091,7 +2091,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 //Aumentar secuencial corregido
                 secuencialCorregido++;
                         
-                puntoEmisionOriginal.setSecuencialPorDocumento(documentoEnum, secuencialCorregido);
+                puntoEmisionOriginal.setSecuencialPorDocumento(documentoEnum, secuencialCorregido+1);
                 comprobante.setSecuencial(secuencialCorregido);            
                 Logger.getLogger(ComprobantesService.class.getName()).log(Level.WARNING, null,"Corregido secuencial "+secuencial+" del Documento +"+documentoEnum.getNombre());
                 validarSecuencialRepetidoComprobante(comprobante, puntoEmisionOriginal, false);
