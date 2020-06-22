@@ -279,6 +279,43 @@
                         </div>
                     </f:facet>
                 </p:dialog>
+                
+                <!-- DIALOGO DE REPORTES -->
+                <p:dialog 
+                    id="idDialogReporte" 
+                    header="Imprimir Reporte" 
+                    widgetVar="dialogReporte" 
+                    modal="true" 
+                    height="100" 
+                    style="text-align: center">
+                    
+                    <h:graphicImage library="img" name="logoCodefac.gif" style="height: 50%" />
+                    <p:separator />
+                    <p:outputLabel value="Seleccione el reporte que desea imprimir" />
+                    <f:facet name="footer"  >
+                        <div style="text-align: center">
+                            <p:commandButton 
+                                value="Pdf" 
+                                process="@form" 
+                                actionListener="#{controllerCodefacMb.imprimirPdf()}" 
+                                ajax="false" 
+                                onclick="this.form.target='_blank'"  
+                                onblur="this.form.target='_self'"
+                                update="messages,idDialogResultado,formulario:panelSecundario,panelContenido"  
+                                  />
+                            
+                            <p:commandButton 
+                                value="Excel" 
+                                process="@this" 
+                                ajax="false" 
+                                actionListener="#{controllerCodefacMb.imprimirExcel()}" 
+                                icon="ui-icon-print" 
+                                onclick="this.form.target='_blank'"  
+                                onblur="this.form.target='_self'"
+                                />
+                        </div>
+                    </f:facet>
+                </p:dialog>
 
                 <!-- DIALOGO PARA CONFIRMAR ELIMINAR -->
                 <p:confirmDialog message="Esta seguro que desea eliminar el  registro?" header="Alerta" severity="alert" widgetVar="dialogConfirmarEliminar">
