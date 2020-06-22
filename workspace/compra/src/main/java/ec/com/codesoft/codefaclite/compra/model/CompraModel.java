@@ -354,6 +354,8 @@ public class CompraModel extends CompraPanel{
         this.getCmbTipoDocumento().setSelectedItem(compra.getCodigoTipoDocumentoEnum());
         
         
+        
+        
         //Cargar la orden de compra si existe referencia
         if(this.compra.getOrdenCompra()!=null)
         {

@@ -7,23 +7,13 @@ package ec.com.codesoft.codefaclite.codefacweb.core;
 
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesDialogo;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
-import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
-import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesCoreCodefac;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstadoFormEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -33,7 +23,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 
 /**
@@ -47,6 +36,7 @@ public class ControllerCodefacMb implements Serializable {
     private String indiceTabSecundario;
     private GeneralAbstractMb generalAbstractMb;
     private EstadoFormEnum estadoEnum;
+
     /**
      * Variable para saber si la vista que se esta controlando fue abierta en modo dialogo
      */
@@ -376,6 +366,19 @@ public class ControllerCodefacMb implements Serializable {
         this.visiblePanelComprobantes = visiblePanelComprobantes;
     }
     
+    public void imprimirPdf()
+    {
+        generalAbstractMb.getDialogoReporte().pdf();
+    }
+    
+    public void imprimirExcel()
+    {
+        generalAbstractMb.getDialogoReporte().excel();
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    //              CLASES E INTERFACES ADICIONALES 
+    ///////////////////////////////////////////////////////////////////////////
     
     
     

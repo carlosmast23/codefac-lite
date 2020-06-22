@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import java.io.Serializable;
@@ -47,6 +48,8 @@ public abstract class GeneralAbstractMb implements Serializable,VistaCodefacIf {
      */
     public Boolean mostrarResultadoGrabar=false;
     
+    private ReporteDialogListener dialogoReporte;
+    
     @ManagedProperty(value = "#{sessionMb}")
     protected SessionMb sessionMb;
 
@@ -71,6 +74,17 @@ public abstract class GeneralAbstractMb implements Serializable,VistaCodefacIf {
         mostrarResultadoGrabar=true; 
     }
     
+    /**
+     * Permite Mostrar un dialogo para generar reportes
+     */
+    protected void mostrarDialogoReporte(ReporteDialogListener listenerReporte)
+    {
+        this.dialogoReporte=listenerReporte;
+        PrimeFaces current = PrimeFaces.current();
+        current.executeScript("PF('dialogReporte').show();"); //Todo: Parametrizar y poner en una funcion aparte este dialogo
+        System.out.println("mostrarDialogoReporte()");
+    }
+    
     public void aceptarResultado()
     {
         PrimeFaces current = PrimeFaces.current();
@@ -92,6 +106,11 @@ public abstract class GeneralAbstractMb implements Serializable,VistaCodefacIf {
     public void setMostrarResultadoGrabar(Boolean mostrarResultadoGrabar) {
         this.mostrarResultadoGrabar = mostrarResultadoGrabar;
     }
+
+    public ReporteDialogListener getDialogoReporte() {
+        return dialogoReporte;
+    }
+    
     
     
     
