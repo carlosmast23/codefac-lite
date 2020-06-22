@@ -69,14 +69,12 @@ public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaMode
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         this.controlador.grabar();
         this.setearDatos();
-        this.enviarControlador();
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
         this.controlador.editar();
         this.setearDatos();
-        this.enviarControlador();
     }
 
     @Override
@@ -195,15 +193,6 @@ public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaMode
         this.descripcion = (getjTextAreaDescripcion().getText() != null) ? getjTextAreaDescripcion().getText() : "";
     }
     
-    public void enviarControlador(){
-        this.controlador.getInterfaz().setEnumEstado(this.estado);
-        this.controlador.getInterfaz().setSucursal(this.sucursal);
-        this.controlador.getInterfaz().setPuntoEmision(this.puntoEmision);
-        this.controlador.getInterfaz().setNombre(this.nombre);
-        this.controlador.getInterfaz().setDescripcion(this.descripcion);
-    }
-
-
     @Override
     public Caja getCaja() {
         return this.caja;

@@ -21,7 +21,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 
 /**
  *
- * @author CARLOS_CODESOFT
+ * @author Robert
  */
 public abstract class CajaPanel extends ControladorCodefacInterface {
 

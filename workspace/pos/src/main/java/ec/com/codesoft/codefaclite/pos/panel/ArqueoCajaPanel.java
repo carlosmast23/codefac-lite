@@ -6,8 +6,9 @@
 package ec.com.codesoft.codefaclite.pos.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
-import java.util.Calendar;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Date;
+import java.util.Calendar;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -21,7 +22,7 @@ import org.jdesktop.swingx.JXDatePicker;
 public abstract class ArqueoCajaPanel extends ControladorCodefacInterface {
 
     /**
-     * Creates new form NewJFrame
+     * Creates new form ArqueoCajaPanel
      */
     public ArqueoCajaPanel() {
         initComponents();
@@ -37,7 +38,6 @@ public abstract class ArqueoCajaPanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jDateFechaRevision = new org.jdesktop.swingx.JXDatePicker();
         Date dateHoraApertura = new Date();
         SpinnerDateModel sm1 = new SpinnerDateModel(dateHoraApertura, null, null, Calendar.HOUR_OF_DAY);
         jTimeHoraRevision = new javax.swing.JSpinner(sm1);
@@ -50,20 +50,14 @@ public abstract class ArqueoCajaPanel extends ControladorCodefacInterface {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        jDateFechaRevision = new org.jdesktop.swingx.JXDatePicker();
 
         setClosable(true);
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
         setTitle("Arqueo Caja");
         getContentPane().setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 50;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jDateFechaRevision, gridBagConstraints);
 
         JSpinner.DateEditor de1 = new javax.swing.JSpinner.DateEditor(jTimeHoraRevision, "HH:mm:ss");
         jTimeHoraRevision.setEditor(de1);
@@ -91,6 +85,11 @@ public abstract class ArqueoCajaPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jTextValorFisico, gridBagConstraints);
 
+        jComboEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboEstadoActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -152,18 +151,25 @@ public abstract class ArqueoCajaPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         getContentPane().add(jLabel6, gridBagConstraints);
-
-        jLabel7.setText("jLabel7");
-        getContentPane().add(jLabel7, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jDateFechaRevision, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    public JComboBox<String> getjComboEstado() {
+
+    private void jComboEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboEstadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboEstadoActionPerformed
+
+    public JComboBox<GeneralEnumEstado> getjComboEstado() {
         return jComboEstado;
     }
 
-    public void setjComboEstado(JComboBox<String> jComboEstado) {
+    public void setjComboEstado(JComboBox<GeneralEnumEstado> jComboEstado) {
         this.jComboEstado = jComboEstado;
     }
 
@@ -200,7 +206,7 @@ public abstract class ArqueoCajaPanel extends ControladorCodefacInterface {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboEstado;
+    private javax.swing.JComboBox<GeneralEnumEstado> jComboEstado;
     private org.jdesktop.swingx.JXDatePicker jDateFechaRevision;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -208,7 +214,6 @@ public abstract class ArqueoCajaPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField jTextValorFisico;
     private javax.swing.JTextField jTextValorTeorico;
     private javax.swing.JSpinner jTimeHoraRevision;

@@ -41,14 +41,6 @@ import java.util.logging.Logger;
  */
 public class CajaModelControlador extends ModelControladorAbstract<CajaModelControlador.CommonIf, CajaModelControlador.SwingIf, CajaModelControlador.WebIf> implements VistaCodefacIf
 {
-    
-//    private Caja caja;
-//    private CajaEnum estado;
-//    private Sucursal sucursal;
-//    private PuntoEmision puntoEmision;
-//    private String nombre;
-//    private String descripcion;
-//    
     /**
      * Controlador Generico
      */
@@ -66,7 +58,6 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
         getInterfaz().setCaja(new Caja());
         CajaEnum[] estadoGeneralesLista = CajaEnum.values();
         List<Sucursal> sucursalLista = ServiceFactory.getFactory().getSucursalServiceIf().obtenerTodos();
-        List<PuntoEmision> puntosEmisionLista = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerTodos();
         this.getInterfaz().setEstadosGeneralesVista(estadoGeneralesLista);
         this.getInterfaz().setSucursalesVista(sucursalLista);
         this.getInterfaz().setDescripcion("");
@@ -114,8 +105,9 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
-        //Datos
+        
         try {
+            //Datos
             obtenerDatos();
             //Editar
             ServiceFactory.getFactory().getCajaServiceIf().editar(getInterfaz().getCaja());
@@ -133,11 +125,8 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
         {
             Boolean respuesta = dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO);
             if(!respuesta){
-                System.out.println("Ingresa a respuesta");
                 throw new ServicioCodefacException("Error elimando Caja");
-            }
-            System.out.println("No ingresa a respuesta");
-            //DialogoCodefac.dialogoPregunta("Alerta", "Está seguro que desea eliminar el cliente?", DialogoCodefac.MENSAJE_ADVERTENCIA);          
+            }            
             ServiceFactory.getFactory().getCajaServiceIf().eliminar(getInterfaz().getCaja());
         } catch (RemoteException ex) {
             Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -227,7 +216,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     }
     
     public void obtenerDatos(){
-        getInterfaz().getCaja().setEstado(getInterfaz().getEnumEstado().getEstado());
+        getInterfaz().getCaja().setEstadoEnum(getInterfaz().getEnumEstado());
         getInterfaz().getCaja().setSucursal(getInterfaz().getSucursal());
         getInterfaz().getCaja().setPuntoEmision(getInterfaz().getPuntoEmision());
         getInterfaz().getCaja().setNombre(getInterfaz().getNombre());

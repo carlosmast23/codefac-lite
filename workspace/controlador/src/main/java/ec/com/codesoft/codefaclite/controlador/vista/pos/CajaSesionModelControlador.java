@@ -9,6 +9,9 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
@@ -19,30 +22,37 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Robert
  */
-public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSesionModelControlador.Interface, CajaSesionModelControlador.Interface, CajaSesionModelControlador.Interface>
+public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSesionModelControlador.CommonIf, CajaSesionModelControlador.SwingIf, CajaSesionModelControlador.WebIf> implements VistaCodefacIf
 {
 
-    public CajaSesionModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, Interface interfaz, TipoVista tipoVista) 
+    public CajaSesionModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CajaSesionModelControlador.CommonIf interfaz, TipoVista tipoVista) 
     {
         super(mensajeVista, session, interfaz, tipoVista);
     }
-   public void iniciar() throws RemoteException, ServicioCodefacException{
+
+    @Override
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         getInterfaz().setCajaSession(new CajaSession());
         CajaEnum[] estadosCaja = CajaEnum.values();
-        
     }
-    
-    public void nuevo(){
+
+    @Override
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         getInterfaz().setCajaSession(new CajaSession());
     }
-    
-    public void grabar() throws ServicioCodefacException, RemoteException{ 
-        try
+
+    @Override
+    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+         try
         {
             if(getInterfaz().getCajaSession()== null){
                 throw new ServicioCodefacException("Caja sesión nula");
@@ -50,44 +60,102 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
             //Datos
             obtenerDatos();
             //Grabar
-            //ServiceFactory.getFactory().getAr
-            //ServiceFactory.getFactory().getCajaServiceIf().grabar(interfaz.getCajaSession());
+            ServiceFactory.getFactory().getCajaSesionServiceIf().grabar(getInterfaz().getCajaSession());
             //Mensaje
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         }
         catch(ServicioCodefacException e)
         {
             mostrarMensaje(new CodefacMsj("Error", e.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));
-            throw e;
+            try {
+                throw e;
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }   
     }
-    
-    public void editar() throws ServicioCodefacException{
-        //Datos
-        obtenerDatos();
-        //Editar
-        //ServiceFactory.getFactory().getCajaServiceIf().editar(interfaz.getCaja());
+
+    @Override
+    public void editar() throws ExcepcionCodefacLite, RemoteException {
+        try {
+            //Datos
+            obtenerDatos();
+            //Editar
+            ServiceFactory.getFactory().getCajaSesionServiceIf().editar(getInterfaz().getCajaSession());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaSesionModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //Mensaje
         mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
     }
-    
-    public void eliminar() throws ServicioCodefacException{
-        /*try
-        {
-            //DialogoCodefac.dialogoPregunta("Alerta", "Está seguro que desea eliminar el cliente?", DialogoCodefac.MENSAJE_ADVERTENCIA);          
-            ServiceFactory.getFactory().getCajaServiceIf().eliminar(interfaz.getCaja());
-        } catch(RemoteException e){
-            mostrarMensaje(new CodefacMsj("Error", e.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));
-        }*/
+
+    @Override
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+        try {
+            ServiceFactory.getFactory().getCajaSesionServiceIf().eliminar(getInterfaz().getCajaSession());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaSesionModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void limpiar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getURLAyuda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public InterfaceModelFind obtenerDialogoBusqueda() {
+        //CajaBusquedaDialogo cajaBusquedaDialogo = new CajaBusquedaDialogo();
+        //return cajaBusquedaDialogo;
+        return null;
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Map<Integer, Boolean> permisosFormulario() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    /*public BuscarDialogoModel obtenerDialogoBusqueda() {
-        CajaBusquedaDialogo cajaBusquedaDialogo = new CajaBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(cajaBusquedaDialogo);
-        return buscarDialogoModel;
-    }*/
+    public void obtenerDatos(){
+        //this.interfaz.getCajaSession().setArqueoCaja();
+        //this.interfaz.getCajaSession().setCaja();
+        this.getInterfaz().getCajaSession().setEstado(this.getInterfaz().getCajaSession().getEstado());
+        this.getInterfaz().getCajaSession().setEstadoCierreCaja(this.getInterfaz().getCajaSession().getEstadoCierreCaja());
+        //this.interfaz.getCajaSession().setFechaHoraApertura();
+        //this.interfaz.getCajaSession().setUsuario(usuario);
+        this.getInterfaz().getCajaSession().setValorApertura(this.getInterfaz().getValorApertura());
+        this.getInterfaz().getCajaSession().setValorCierre(this.getInterfaz().getValorCierre());
+    }
     
-    public interface Interface{
+    /**
+     * Agregado interfaces 
+     */
+    public interface CommonIf
+    {
         public void iniciar();
         
         public CajaSession getCajaSession();
@@ -114,15 +182,14 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
         
     }
     
-    public void obtenerDatos(){
-        //this.interfaz.getCajaSession().setArqueoCaja();
-        //this.interfaz.getCajaSession().setCaja();
-        this.getInterfaz().getCajaSession().setEstado(this.getInterfaz().getCajaSession().getEstado());
-        this.getInterfaz().getCajaSession().setEstadoCierreCaja(this.getInterfaz().getCajaSession().getEstadoCierreCaja());
-        //this.interfaz.getCajaSession().setFechaHoraApertura();
-        //this.interfaz.getCajaSession().setUsuario(usuario);
-        this.getInterfaz().getCajaSession().setValorApertura(this.getInterfaz().getValorApertura());
-        this.getInterfaz().getCajaSession().setValorCierre(this.getInterfaz().getValorCierre());
+    public interface SwingIf extends CajaSesionModelControlador.CommonIf
+    {
+        
+    }
+    
+    public interface WebIf extends CajaSesionModelControlador.CommonIf
+    {
+        
     }
     
 }

@@ -21,8 +21,8 @@ import java.util.Vector;
  */
 public class CajaBusquedaDialogo implements InterfaceModelFind<Caja>, InterfacesPropertisFindWeb
 {
-    private Sucursal sucursal;
-    private PuntoEmision puntoEmision;
+    //private Sucursal sucursal;
+    //private PuntoEmision puntoEmision;
     
     @Override
     public Vector<ColumnaDialogo> getColumnas() {

@@ -8,10 +8,10 @@ package ec.com.codesoft.codefaclite.pos.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
-import static org.apache.poi.hssf.usermodel.HeaderFooter.date;
 import org.jdesktop.swingx.JXDatePicker;
 
 /**
@@ -26,7 +26,7 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     public CajaSessionPanel() {
         initComponents();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,10 +37,6 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jDayChooser1 = new com.toedter.calendar.JDayChooser();
-        jLocaleChooser1 = new com.toedter.components.JLocaleChooser();
-        jCalendar2 = new com.toedter.calendar.JCalendar();
         jDateFechaCierre = new org.jdesktop.swingx.JXDatePicker();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -61,16 +57,14 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBoxEstadoCierre = new javax.swing.JComboBox<>();
+        jComboBoxEstado = new javax.swing.JComboBox<>();
 
         setClosable(true);
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setIconifiable(true);
         setMaximizable(true);
-        setTitle("Sesión Caja");
-        setName(""); // NOI18N
-        setPreferredSize(new java.awt.Dimension(416, 250));
+        setResizable(true);
+        setTitle("Caja Sesión");
         getContentPane().setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -213,17 +207,33 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jComboBox1, gridBagConstraints);
+        getContentPane().add(jComboBoxEstadoCierre, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jComboBox2, gridBagConstraints);
+        getContentPane().add(jComboBoxEstado, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public JComboBox<String> getjComboBoxEstado() {
+        return jComboBoxEstado;
+    }
+
+    public void setjComboBoxEstado(JComboBox<String> jComboBoxEstado) {
+        this.jComboBoxEstado = jComboBoxEstado;
+    }
+
+    public JComboBox<String> getjComboBoxEstadoCierre() {
+        return jComboBoxEstadoCierre;
+    }
+
+    public void setjComboBoxEstadoCierre(JComboBox<String> jComboBoxEstadoCierre) {
+        this.jComboBoxEstadoCierre = jComboBoxEstadoCierre;
+    }
 
     public JXDatePicker getjDateFechaApertura() {
         return jDateFechaApertura;
@@ -274,13 +284,10 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.toedter.calendar.JCalendar jCalendar2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JComboBox<String> jComboBoxEstado;
+    private javax.swing.JComboBox<String> jComboBoxEstadoCierre;
     private org.jdesktop.swingx.JXDatePicker jDateFechaApertura;
     private org.jdesktop.swingx.JXDatePicker jDateFechaCierre;
-    private com.toedter.calendar.JDayChooser jDayChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -291,7 +298,6 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private com.toedter.components.JLocaleChooser jLocaleChooser1;
     private javax.swing.JTextField jTextValorApertura;
     private javax.swing.JTextField jTextValorCierre;
     private javax.swing.JSpinner jTimeHoraApertura;
