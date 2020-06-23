@@ -19,11 +19,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -35,6 +37,9 @@ import java.util.logging.Logger;
  */
 public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoCajaModelControlador.CommonIf, ArqueoCajaModelControlador.SwingIf, ArqueoCajaModelControlador.WebIf> implements VistaCodefacIf
 {
+    private ArqueoCaja arqueoCaja;
+    private List<GeneralEnumEstado> estadosList;
+        
 
     public ArqueoCajaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, ArqueoCajaModelControlador.CommonIf interfaz, TipoVista tipoVista) 
     {
@@ -48,45 +53,60 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         
-        getInterfaz().setArqueoCaja(new ArqueoCaja());
-        getInterfaz().getArqueoCaja().setEstado("aaa");
-        System.out.println("Arqueo caja iniciar: " + getInterfaz().getArqueoCaja().getEstado());
+        arqueoCaja=new ArqueoCaja();
+        arqueoCaja.setEstado("a");
+        arqueoCaja.setValorFisico(BigDecimal.ZERO);
+        arqueoCaja.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        
+        System.out.println("Arqueo caja iniciar: " + arqueoCaja.getEstado());
+        
         long date = new java.util.Date().getTime();
         getInterfaz().setFechaRevision(new Date(date));
-        getInterfaz().setEstadosGeneralesVista(GeneralEnumEstado.values());
-        getInterfaz().setValorFisico(BigDecimal.ZERO);
+        //getInterfaz().setEstadosGeneralesVista(GeneralEnumEstado.values());
         getInterfaz().setValorTeorico("");
+                
+        estadosList=new ArrayList<GeneralEnumEstado>()
+        {
+            {
+                add(GeneralEnumEstado.ACTIVO);
+                add(GeneralEnumEstado.ANULADO);
+                add(GeneralEnumEstado.ELIMINADO);
+                add(GeneralEnumEstado.INACTIVO);
+                
+            }
+        };
+        
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
-        getInterfaz().setArqueoCaja(new ArqueoCaja());
+        //setArqueoCaja(new ArqueoCaja());
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        System.out.println("Arqueo caja guardar: " + getInterfaz().getArqueoCaja().getEstado());
+        System.out.println("Arqueo caja guardar: " + arqueoCaja.getEstado());
         try
         {
-            if(getInterfaz().getArqueoCaja() != null){
+            if(arqueoCaja != null){
                 throw new ServicioCodefacException("Arqueo caja error");
             }
-            if(getInterfaz().getValorFisico()!=null ){
+            if(arqueoCaja.getValorFisico()!=null ){
                 throw new ServicioCodefacException("Valor fisico error");
             }
-            if(getInterfaz().getValorTeorico() != null){
+            if(arqueoCaja.getValorTeorico() != null){
                 throw new ServicioCodefacException("Valor Teorico error");
             }
             if(getInterfaz().getHoraRevision() != null){
                 throw new ServicioCodefacException("Fecha y Hora Revision error");
             }
-            if(getInterfaz().getEstado() != null){
+            if(arqueoCaja.getEstado() != null){
                 throw new ServicioCodefacException("Estado error");
             }
             //Obtener datos
             obtenerDatos();
             //Grabar
-            ServiceFactory.getFactory().getArqueoCajaServiceIf().grabar(getInterfaz().getArqueoCaja());
+            ServiceFactory.getFactory().getArqueoCajaServiceIf().grabar(getArqueoCaja());
             //Mensaje
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             
@@ -108,7 +128,7 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
             //Datos
             obtenerDatos();
             //Editar
-            ServiceFactory.getFactory().getArqueoCajaServiceIf().editar(getInterfaz().getArqueoCaja());
+            ServiceFactory.getFactory().getArqueoCajaServiceIf().editar(getArqueoCaja());
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ArqueoCajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -122,7 +142,7 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
             if(!respuesta){
                 throw new ServicioCodefacException("Error eliminando Arqueo Caja");
             }
-            ServiceFactory.getFactory().getArqueoCajaServiceIf().eliminar(getInterfaz().getArqueoCaja());
+            ServiceFactory.getFactory().getArqueoCajaServiceIf().eliminar(getArqueoCaja());
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ArqueoCajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -162,14 +182,40 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
     @Override
     public void cargarDatosPantalla(Object entidad) {
         ArqueoCaja arqueoCaja = (ArqueoCaja) entidad;
-        getInterfaz().setArqueoCaja(arqueoCaja);
+        setArqueoCaja(arqueoCaja);
     }
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-       
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //                      GET AND SET
+    ////////////////////////////////////////////////////////////////////////////
+
+    public ArqueoCaja getArqueoCaja() {
+        return arqueoCaja;
+    }
+
+    public void setArqueoCaja(ArqueoCaja arqueoCaja) {
+        this.arqueoCaja = arqueoCaja;
+    }
+
+    public List<GeneralEnumEstado> getEstadosList() {
+        return estadosList;
+    }
+
+    public void setEstadosList(List<GeneralEnumEstado> estadosList) {
+        this.estadosList = estadosList;
+    }
+    
+    
+        
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //                      INTERFACES Y CLASES
+    ////////////////////////////////////////////////////////////////////////////
     public interface CommonIf
     {
         public Date getFechaRevision();
@@ -181,17 +227,11 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
         
         public String getValorTeorico();
         public void setValorTeorico(String valorTeorico);
-        public BigDecimal getValorFisico();
-        public void setValorFisico(BigDecimal valorFisico);
         
-        public GeneralEnumEstado getEstado();
-        public void setEstado(GeneralEnumEstado estado);
+        //public GeneralEnumEstado getEstado();
         
         //Cargar Informacion necesaria
-        public void setEstadosGeneralesVista(GeneralEnumEstado[] estados);
-        
-        public ArqueoCaja getArqueoCaja();
-        public void setArqueoCaja(ArqueoCaja arqueoCaja);
+        //public void setEstadosGeneralesVista(GeneralEnumEstado[] estados);
         
     }
     
@@ -216,10 +256,9 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
         
         Timestamp fechaHora = new Timestamp(fecha.getTime());
         
-        getInterfaz().getArqueoCaja().setEstadoEnum(getInterfaz().getEstado());
-        getInterfaz().getArqueoCaja().setFechaHora(fechaHora);
-        getInterfaz().getArqueoCaja().setValorFisico(getInterfaz().getValorFisico());
-        getInterfaz().getArqueoCaja().setValorTeorico(getInterfaz().getValorTeorico());
-        getInterfaz().getArqueoCaja().setFechaHora(fechaHora);
+        //getArqueoCaja().setEstadoEnum(getInterfaz().getEstado());
+        getArqueoCaja().setFechaHora(fechaHora);
+        getArqueoCaja().setValorTeorico(getInterfaz().getValorTeorico());
+        getArqueoCaja().setFechaHora(fechaHora);
     }
 }

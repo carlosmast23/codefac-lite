@@ -6,6 +6,9 @@
 package ec.com.codesoft.codefaclite.pos.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecimalConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Date;
 import java.util.Calendar;
@@ -165,6 +168,7 @@ public abstract class ArqueoCajaPanel extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboEstadoActionPerformed
 
+    @ComboBoxBinding(source = "controlador.estadosList",valueSelect ="controlador.arqueoCaja.estadoEnum" )
     public JComboBox<GeneralEnumEstado> getjComboEstado() {
         return jComboEstado;
     }
@@ -181,6 +185,7 @@ public abstract class ArqueoCajaPanel extends ControladorCodefacInterface {
         this.jDateFechaRevision = jDateFechaRevision;
     }
 
+    @TextFieldBinding(value = "controlador.arqueoCaja.valorFisico" ,converter=StringToBigDecimalConverter.class)
     public JTextField getjTextValorFisico() {
         return jTextValorFisico;
     }

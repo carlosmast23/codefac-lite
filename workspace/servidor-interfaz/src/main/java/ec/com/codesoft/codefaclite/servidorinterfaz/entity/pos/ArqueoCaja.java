@@ -95,7 +95,14 @@ public class ArqueoCaja implements Serializable
     }
 
     public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
-        this.estado = estadoEnum.getEstado();
+        if(estadoEnum==null)
+        {
+            this.estado=null;
+        }
+        else
+        {
+            this.estado = estadoEnum.getEstado();
+        }
     }
     
     public String getEstado() {

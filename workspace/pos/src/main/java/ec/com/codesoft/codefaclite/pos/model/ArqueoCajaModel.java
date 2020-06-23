@@ -37,11 +37,10 @@ import javax.swing.event.ChangeListener;
  * @author Robert
  */
 public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVistaIf, ArqueoCajaModelControlador.SwingIf
-{
-    private ArqueoCaja arqueoCaja;
-    private GeneralEnumEstado estado;
+{    
+    //private GeneralEnumEstado estado;
     private String valorTeorico;
-    private BigDecimal valorFisico;
+    //private BigDecimal valorFisico;
     private Date fechaRevision;
     private Date horaRevision;
     
@@ -49,7 +48,7 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
             
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        this.controlador.iniciar();
+        //this.controlador.iniciar();
         listenerCombos();
         listenerFecha();
         listenerHora();
@@ -63,7 +62,7 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        this.controlador.grabar();
+        //this.controlador.grabar();
         this.setearDatos();
         
     }
@@ -125,8 +124,8 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
     @Override
     public void cargarDatosPantalla(Object entidad) {
         this.controlador.cargarDatosPantalla(entidad);
-        getjComboEstado().setSelectedItem(this.controlador.getInterfaz().getEstado());
-        getjTextValorFisico().setText(this.controlador.getInterfaz().getValorFisico().toString());
+        //getjComboEstado().setSelectedItem(this.controlador.getArqueoCaja().getEstado());
+        //getjTextValorFisico().setText(this.controlador.getInterfaz().getValorFisico().toString());
         getjTextValorTeorico().setText(this.controlador.getInterfaz().getValorTeorico());
         
     }
@@ -146,19 +145,19 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
      */
     
     public void valoresIniciales(){
-        this.getjComboEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
+        //this.getjComboEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
         this.getjDateFechaRevision().setDate(new java.util.Date());
-        this.getjTextValorFisico().setText(BigDecimal.ZERO.toString());
+        //this.getjTextValorFisico().setText(BigDecimal.ZERO.toString());
         this.getjTextValorTeorico().setText("");
     }
     
     public void setearDatos(){
-        this.estado = (GeneralEnumEstado) this.getjComboEstado().getSelectedItem();
+        //this.estado = (GeneralEnumEstado) this.getjComboEstado().getSelectedItem();
         java.util.Date dateTemp = (Date) getjDateFechaRevision().getDate();
         this.fechaRevision = new Date(dateTemp.getTime());
         java.util.Date timeTemp = (Date) getjDateFechaRevision().getDate();
         this.horaRevision = new Date(timeTemp.getTime());
-        this.valorFisico = new BigDecimal(this.getjTextValorFisico().getText());
+        //this.valorFisico = new BigDecimal(this.getjTextValorFisico().getText());
         this.valorTeorico = this.getjTextValorTeorico().getText();
     }
     
@@ -174,12 +173,7 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
     
     public void listenerCombos()
     {
-        getjComboEstado().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                estado = (GeneralEnumEstado) getjComboEstado().getSelectedItem();
-            }
-        });
+        
     }
     
     public void listenerFecha(){
@@ -193,20 +187,21 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
             }
         });
     }
+
     
+    
+    
+
+    public ArqueoCajaModelControlador getControlador() {
+        return controlador;
+    }
+
     /**
      * Get and Setter
      * @return 
      */
-    
-    @Override
-    public ArqueoCaja getArqueoCaja() {
-        return this.arqueoCaja;
-    }
-
-    @Override
-    public void setArqueoCaja(ArqueoCaja arqueoCaja) {
-        this.arqueoCaja = arqueoCaja;
+    public void setControlador(ArqueoCajaModelControlador controlador) {
+        this.controlador = controlador;
     }
 
     @Override
@@ -239,30 +234,12 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
         this.valorTeorico = valorTeorico;        
     }
 
-    @Override
-    public BigDecimal getValorFisico() {
-        return this.valorFisico;
-    }
 
-    @Override
-    public void setValorFisico(BigDecimal valorFisico) {
-        this.valorFisico = valorFisico;
-    }
 
-    @Override
-    public GeneralEnumEstado getEstado() {
-        return estado;
-    }
-
-    @Override
-    public void setEstado(GeneralEnumEstado estado) {
-        this.estado = estado;
-    }
-
-    @Override
-    public void setEstadosGeneralesVista(GeneralEnumEstado[] estados) {
-        UtilidadesComboBox.llenarComboBox(getjComboEstado(), estados);
-    }
+    //@Override
+    //public void setEstadosGeneralesVista(GeneralEnumEstado[] estados) {
+    //    UtilidadesComboBox.llenarComboBox(getjComboEstado(), estados);
+    //}
 
     
 }
