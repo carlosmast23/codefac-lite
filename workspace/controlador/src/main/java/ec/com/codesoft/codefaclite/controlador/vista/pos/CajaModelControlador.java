@@ -28,6 +28,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,9 @@ import java.util.logging.Logger;
  */
 public class CajaModelControlador extends ModelControladorAbstract<CajaModelControlador.CommonIf, CajaModelControlador.SwingIf, CajaModelControlador.WebIf> implements VistaCodefacIf
 {
+    private Caja caja;
+    private List<CajaEnum> estadosList;
+    private List<Sucursal> sucursalList;
     /**
      * Controlador Generico
      */
@@ -55,40 +60,31 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     */ 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        getInterfaz().setCaja(new Caja());
-        CajaEnum[] estadoGeneralesLista = CajaEnum.values();
-        List<Sucursal> sucursalLista = ServiceFactory.getFactory().getSucursalServiceIf().obtenerTodos();
-        this.getInterfaz().setEstadosGeneralesVista(estadoGeneralesLista);
-        this.getInterfaz().setSucursalesVista(sucursalLista);
-        this.getInterfaz().setDescripcion("");
-        this.getInterfaz().setNombre("");
+        caja = new Caja();
+        
+        caja.setNombre("");
+        caja.setDescripcion("");
+        caja.setEstadoEnum(CajaEnum.ACTIVO);
+        
+        sucursalList = ServiceFactory.getFactory().getSucursalServiceIf().obtenerTodos();
+        estadosList = UtilidadesLista.arrayToList(CajaEnum.values());
+        
+        getInterfaz().listenerCombos();
+        getInterfaz().valoresSinSeleccionCombo();
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
-        getInterfaz().setCaja(new Caja());
+       iniciar();
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try
         {
-            if(getInterfaz().getCaja() == null){
-                throw new ServicioCodefacException("Caja nula");
-            }        
-            if(getInterfaz().getEnumEstado() == null){
-                throw new ServicioCodefacException("Estado null");
-            }
-            if(getInterfaz().getSucursal() == null){
-                throw new ServicioCodefacException("Sucursal null");
-            }
-            if(getInterfaz().getPuntoEmision() == null){
-                throw new ServicioCodefacException("Punto de Emisión null");
-            }
-            //Datos
-            obtenerDatos();
             //Grabar
-            ServiceFactory.getFactory().getCajaServiceIf().grabar(getInterfaz().getCaja());
+            setearDatos();
+            ServiceFactory.getFactory().getCajaServiceIf().grabar(caja);
             //Mensaje
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         }
@@ -105,18 +101,12 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
-        
         try {
-            //Datos
-            obtenerDatos();
-            //Editar
-            ServiceFactory.getFactory().getCajaServiceIf().editar(getInterfaz().getCaja());
+            ServiceFactory.getFactory().getCajaServiceIf().editar(caja);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //Mensaje
-        
     }
 
     @Override
@@ -127,9 +117,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
             if(!respuesta){
                 throw new ServicioCodefacException("Error elimando Caja");
             }            
-            ServiceFactory.getFactory().getCajaServiceIf().eliminar(getInterfaz().getCaja());
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            ServiceFactory.getFactory().getCajaServiceIf().eliminar(caja);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -168,9 +156,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        Caja cajatemp = (Caja) entidad;
-        getInterfaz().setCaja(cajatemp); 
-
+        caja = (Caja) entidad;
     }
 
     @Override
@@ -179,30 +165,11 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     }
     
     public interface CommonIf
-    {
-        //Cargar información necesaria
-        public void setEstadosGeneralesVista(CajaEnum[] estadoGeneralesLista);
-        public void setSucursalesVista(List<Sucursal> sucursalLista);
-        public void setPuntosEmisionVista(List<PuntoEmision> puntosEmisionLista);
-        
+    {        
         public PuntoEmision getPuntoEmision();
-        public void setPuntoEmision(PuntoEmision puntoEmision);
-        public CajaEnum getEnumEstado();
-        public void setEnumEstado(CajaEnum generalEnumEstado);
-        public Sucursal getSucursal();
-        public void setSucursal(Sucursal sucursal);
-        public String getNombre();
-        public void setNombre(String nombre);
         public String getDescripcion();
-        public void setDescripcion(String descripcion);
-        
-        public void cargarDatosPantalla(Object entidad);
-       
-        
-        //Iniciar valores de caja
-        public Caja getCaja();
-        public void setCaja(Caja caja);
-        
+        public void listenerCombos();
+        public void valoresSinSeleccionCombo();
     }
     
     public interface SwingIf extends CajaModelControlador.CommonIf
@@ -215,11 +182,41 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
         //TODO: Implementacion de las interafaces solo para la web
     }
     
-    public void obtenerDatos(){
-        getInterfaz().getCaja().setEstadoEnum(getInterfaz().getEnumEstado());
-        getInterfaz().getCaja().setSucursal(getInterfaz().getSucursal());
-        getInterfaz().getCaja().setPuntoEmision(getInterfaz().getPuntoEmision());
-        getInterfaz().getCaja().setNombre(getInterfaz().getNombre());
-        getInterfaz().getCaja().setDescripcion(getInterfaz().getDescripcion());
+    ////////////////////////////////////////////////////////////////////////////
+    //                      GET AND SET
+    ////////////////////////////////////////////////////////////////////////////
+
+    public Caja getCaja() {
+        return caja;
     }
-}
+
+    public void setCaja(Caja caja) {
+        this.caja = caja;
+    }
+
+    public List<CajaEnum> getEstadosList() {
+        return estadosList;
+    }
+
+    public void setEstadosList(List<CajaEnum> estadosList) {
+        this.estadosList = estadosList;
+    }
+
+    public List<Sucursal> getSucursalList() {
+        return sucursalList;
+    }
+
+    public void setSucursalList(List<Sucursal> sucursalList) {
+        this.sucursalList = sucursalList;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // Funciones
+    ////////////////////////////////////////////////////////////////////////////
+    public void setearDatos(){
+        caja.setDescripcion(getInterfaz().getDescripcion());
+        if(getInterfaz().getPuntoEmision()!=null){
+            caja.setPuntoEmision(getInterfaz().getPuntoEmision());
+        }
+    }
+}   

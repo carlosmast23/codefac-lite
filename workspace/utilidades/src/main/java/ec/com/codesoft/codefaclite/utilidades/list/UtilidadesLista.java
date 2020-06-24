@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.utilidades.list;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -52,5 +53,10 @@ public abstract class UtilidadesLista {
     public interface CastListInterface<T>
     {
         public String getString(T dato);
+    }
+    
+    public static <T> List<T> arrayToList(T[] array){
+        List<T> lista = Arrays.asList(array);
+        return lista;
     }
 }

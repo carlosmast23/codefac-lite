@@ -91,7 +91,14 @@ public class Caja implements Serializable {
     }
 
     public void setEstadoEnum(CajaEnum estadoEnum) {
-        this.estado = estadoEnum.getEstado();
+        if(estadoEnum==null)
+        {
+            this.estado=null;
+        }
+        else
+        {
+            this.estado = estadoEnum.getEstado();
+        }
     }
 
     public Sucursal getSucursal() {
