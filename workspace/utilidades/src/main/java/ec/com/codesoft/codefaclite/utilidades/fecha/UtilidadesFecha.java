@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.utilidades.fecha;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -279,6 +280,64 @@ public class UtilidadesFecha {
             Logger.getLogger(UtilidadesFecha.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public static Timestamp castDateSqlToTimeStampSql(Date date){
+        if(date == null){
+            return null;
+        }
+        return new Timestamp(date.getTime());
+    }
+    
+    public static Date FechaHoraPorUnion(Date date, Date time){
+        //Date tipo SQL
+        GregorianCalendar dateCal = new GregorianCalendar();
+        GregorianCalendar timeCal = new GregorianCalendar();    
+        dateCal.setTime(date);
+        timeCal.setTime(time);
+        
+        int año = dateCal.get(Calendar.YEAR);
+        int mes = dateCal.get(Calendar.MONTH);
+        int dia = dateCal.get(Calendar.DAY_OF_MONTH);
+
+        int hora = timeCal.get(Calendar.HOUR_OF_DAY);
+        int minutos = timeCal.get(Calendar.MINUTE);
+        int segundos = timeCal.get(Calendar.SECOND);
+        
+        GregorianCalendar dateTime = new GregorianCalendar(año, mes, dia, hora, minutos, segundos);
+        java.util.Date dateTimeUitl = dateTime.getTime();
+        return UtilidadesFecha.castDateUtilToSql(dateTimeUitl);
+    }
+    
+    public static Date getFechaDeTimeStamp(Timestamp date)
+    {
+        
+        GregorianCalendar dateCal = new GregorianCalendar();
+        dateCal.setTime(date);
+        
+        int año = dateCal.get(Calendar.YEAR);
+        int mes = dateCal.get(Calendar.MONTH);
+        int dia = dateCal.get(Calendar.DAY_OF_MONTH);
+        
+        GregorianCalendar onlyDate = new GregorianCalendar(año, mes, dia);
+        java.util.Date dateUtil = onlyDate.getTime();
+        
+        return UtilidadesFecha.castDateUtilToSql(dateUtil);
+    }
+    
+    public static Date getHoraDeTimeStamp(Timestamp date)
+    {
+        GregorianCalendar timeCal = new GregorianCalendar();
+        timeCal.setTime(date);
+        
+        int horas = timeCal.get(Calendar.HOUR_OF_DAY);
+        int minutos = timeCal.get(Calendar.MINUTE);
+        int segundos = timeCal.get(Calendar.SECOND);
+        
+        GregorianCalendar onlyTime = new GregorianCalendar(0,0,0,horas,minutos,segundos);
+        java.util.Date dateUtil = onlyTime.getTime();
+        
+        return UtilidadesFecha.castDateUtilToSql(dateUtil);
     }
 
 }

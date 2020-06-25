@@ -54,7 +54,7 @@ public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaMode
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
-        //this.controlador.eliminar();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

@@ -18,6 +18,8 @@ import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 
 /**
  *
@@ -189,6 +191,7 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField jTextNombre;
     // End of variables declaration//GEN-END:variables
 
+    @ComboBoxBinding(source = "controlador.EstadosList", valueSelect = "controlador.Caja.EstadoEnum")
     public JComboBox<CajaEnum> getjComboEstado() {
         return jComboEstado;
     }
@@ -207,8 +210,9 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
         this.jTextAreaDescripcion = jTextAreaDescripcion;
     }
     
-    @LimpiarAnotacion
+    @LimpiarAnotacion   
     @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @TextFieldBinding(value = "controlador.Caja.Nombre")
     public JTextField getjTextNombre() {
         return jTextNombre;
     }
@@ -216,7 +220,8 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
     public void setjTextNombre(JTextField jTextNombre) {
         this.jTextNombre = jTextNombre;
     }
-
+    
+    //@ComboBoxBinding(source = "", valueSelect = "controlador.Caja.PuntoEmision")
     public JComboBox<PuntoEmision> getjComboPuntoEmision() {
         return jComboPuntoEmision;
     }
@@ -224,7 +229,8 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
     public void setjComboPuntoEmision(JComboBox<PuntoEmision> jComboPuntoEmision) {
         this.jComboPuntoEmision = jComboPuntoEmision;
     }
-
+    
+    @ComboBoxBinding(source = "controlador.SucursalList", valueSelect = "controlador.Caja.Sucursal" )
     public JComboBox<Sucursal> getjComboSucursal() {
         return jComboSucursal;
     }

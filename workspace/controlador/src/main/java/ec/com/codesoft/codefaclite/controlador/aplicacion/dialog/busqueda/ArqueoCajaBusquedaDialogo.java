@@ -23,19 +23,17 @@ public class ArqueoCajaBusquedaDialogo implements InterfaceModelFind<ArqueoCaja>
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> columnasTitulo = new Vector<>();
         columnasTitulo.add(new ColumnaDialogo("Tiempo", 0.2d));
-        columnasTitulo.add(new ColumnaDialogo("Valor ", 0.2d));
-        columnasTitulo.add(new ColumnaDialogo("Valor letras ", 0.2d));
+        columnasTitulo.add(new ColumnaDialogo("Valor Teorico", 0.2d));
+        columnasTitulo.add(new ColumnaDialogo("Valor Fisico", 0.2d));
         return columnasTitulo;
     }
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT ac FROM Arqueo_Caja c WHERE ";
-        //queryString+=" ( LOWER(c.nombre) like ?1 and (c.estado) like ?2 )";
-        //queryString+=" ((c.estado) like ?2 )";
+        String queryString = "SELECT ac FROM ArqueoCaja ac WHERE";
+        queryString+=" ((ac.estado) like ?1 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
-        //queryDialog.agregarParametro(1,filter);
-        queryDialog.agregarParametro(2,GeneralEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 

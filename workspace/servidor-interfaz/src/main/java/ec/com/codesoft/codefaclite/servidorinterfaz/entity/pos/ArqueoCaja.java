@@ -5,12 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -42,7 +39,7 @@ public class ArqueoCaja implements Serializable
     @Column(name = "FECHA_HORA")
     private Timestamp fechaHora;
     @Column(name = "VALOR_TEORICO")
-    private String valorTeorico;
+    private BigDecimal valorTeorico;
     @Column(name = "VALOR_FISICO")
     private BigDecimal valorFisico;
     @Column(name = "ESTADO")
@@ -74,11 +71,11 @@ public class ArqueoCaja implements Serializable
         this.fechaHora = fechaHora;
     }
 
-    public String getValorTeorico() {
+    public BigDecimal getValorTeorico() {
         return valorTeorico;
     }
 
-    public void setValorTeorico(String valorTeorico) {
+    public void setValorTeorico(BigDecimal valorTeorico) {
         this.valorTeorico = valorTeorico;
     }
 
