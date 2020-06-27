@@ -95,6 +95,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.D
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.ArqueoCajaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaSesionServiceIf;
+import java.io.IOException;
+import net.sf.lipermi.handler.CallHandler;
+import net.sf.lipermi.net.Client;
 
 /**
  *
@@ -233,7 +236,7 @@ public abstract class ServiceFactory {
         if(remote==null)
         {
             try {
-                Registry registro= LocateRegistry.getRegistry(ipServidor,ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);    
+                //Registry registro= LocateRegistry.getRegistry(ipServidor,ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);    
                 //for (String object : registro.list()) {
                 //    System.out.println("Algo==>"+object);
                 //}
@@ -241,9 +244,13 @@ public abstract class ServiceFactory {
                 //Naming.lookup(ipServidor);
                 //String ipServidorInterno="192.168.100.13";
                 //remote= registro.lookup("rmi://"+ipServidor+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+"/"+clase.getSimpleName());
-                System.out.println(clase.getName());
-                remote= registro.lookup(clase.getName());
+                //System.out.println(clase.getName());
+                //remote= registro.lookup(clase.getName());
                 //remote= registro.lookup("ec.com.codesoft.codefaclite.servidor.service.PersonaService");
+                
+                CallHandler managerObjetosRemotos=new CallHandler();
+                Client clienteRmi=new Client(ipServidor,10000, managerObjetosRemotos);
+                 clienteRmi.getGlobal(clase);
                 mapRecursosRMI.put(clase,remote);
                 
                 
@@ -251,7 +258,7 @@ public abstract class ServiceFactory {
                 JOptionPane.showMessageDialog(null,"Error de conexión con el servidor","Error",JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
                 System.exit(0);
-            } catch (NotBoundException ex) {
+            } catch (IOException ex) {
                 Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

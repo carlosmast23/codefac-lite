@@ -29,7 +29,8 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Puerto por defecto para configurar las conexiones en red no es final porque puedo modificar al momento de leer el archivo de configuraciones
      */
-    public static  int PUERTO_COMUNICACION_RED=1099;
+    //public static  int PUERTO_COMUNICACION_RED=1099;
+    public static  int PUERTO_COMUNICACION_RED=10540;
     /**2.8.
      * Nombre de la base de datosv1
      */

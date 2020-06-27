@@ -79,7 +79,7 @@ public class TestPruebaRMI {
         try {
             //try {
             AbstractFacade.usuarioDb="root";
-            AbstractFacade.claveDb="1234";
+            AbstractFacade.claveDb="123";
             AbstractFacade.cargarEntityManager();
             //PersonaServiceIf servicioIf;
             /*
@@ -110,8 +110,8 @@ public class TestPruebaRMI {
             mapRecursos.put(UsuarioServicio.class, UsuarioServicioIf.class);
             mapRecursos.put(UtilidadesService.class,UtilidadesServiceIf.class);
             */
-            System.setProperty("java.rmi.server.hostname","186.4.212.15");
-            ControllerServiceUtil.cargarRecursosServidor("192.168.100.2");
+            //System.setProperty("java.rmi.server.hostname","186.4.212.15");
+            ControllerServiceUtil.cargarRecursosServidor("192.168.1.5");
             //ServiceControllerServer.cargarRecursos(mapRecursos,"1099");
             System.out.println("servidor iniciado");
             /*
