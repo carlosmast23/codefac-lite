@@ -79,7 +79,7 @@ public class TestPruebaRMI {
         try {
             //try {
             AbstractFacade.usuarioDb="root";
-            AbstractFacade.claveDb="123";
+            AbstractFacade.claveDb="1234";
             AbstractFacade.cargarEntityManager();
             //PersonaServiceIf servicioIf;
             /*

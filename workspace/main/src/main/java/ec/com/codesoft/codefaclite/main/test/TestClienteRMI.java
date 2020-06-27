@@ -10,6 +10,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -32,12 +34,14 @@ public class TestClienteRMI {
             //ServiceFactory.newController("192.168.100.13");
             
             PersonaServiceIf personaServiceIf= ServiceFactory.getFactory().getPersonaServiceIf();
-            List<Persona> buscarList= personaServiceIf.buscar();
+            //List<Persona> buscarList= personaServiceIf.obtenerTodos();
+            Persona persona=personaServiceIf.getEjemplo();
+            System.out.println(persona);
             
-            for (Persona persona : buscarList) {
+            /*for (Persona persona : buscarList) {
                System.out.println(persona.getNombres()); 
                System.out.println(persona.getIdentificacion());
-            }
+            }*/
             
             /*
             try {

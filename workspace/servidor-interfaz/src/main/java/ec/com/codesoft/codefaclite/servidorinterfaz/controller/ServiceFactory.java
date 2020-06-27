@@ -215,12 +215,12 @@ public abstract class ServiceFactory {
     }
     
     
-    private Map<Class,Remote> mapRecursosRMI;
+    private Map<Class,Object> mapRecursosRMI;
 
     private ServiceFactory(String ipServidor) 
     {
         this.ipServidor=ipServidor;
-        this.mapRecursosRMI=new HashMap<Class,Remote>();
+        this.mapRecursosRMI=new HashMap<Class,Object>();
     }
     
     
@@ -229,9 +229,9 @@ public abstract class ServiceFactory {
      * @param clase
      * @return 
      */
-    public Remote getRecursosRMI(Class clase)
+    public Object getRecursosRMI(Class clase)
     {
-        Remote remote= mapRecursosRMI.get(clase);
+        Object remote= mapRecursosRMI.get(clase);
         
         if(remote==null)
         {
@@ -250,7 +250,7 @@ public abstract class ServiceFactory {
                 
                 CallHandler managerObjetosRemotos=new CallHandler();
                 Client clienteRmi=new Client(ipServidor,10000, managerObjetosRemotos);
-                 clienteRmi.getGlobal(clase);
+                remote=clienteRmi.getGlobal(clase);
                 mapRecursosRMI.put(clase,remote);
                 
                 

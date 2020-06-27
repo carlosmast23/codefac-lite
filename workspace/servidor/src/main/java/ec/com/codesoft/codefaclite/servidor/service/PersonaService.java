@@ -248,4 +248,13 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         return buscarConsumidorFinal(empresa);
     }
 
+    @Override
+    public List<Persona> obtenerTodos() throws java.rmi.RemoteException {
+        return getFacade().findAll();
+    }
+
+    public Persona getEjemplo() throws java.rmi.RemoteException
+    {
+        return getFacade().findAll().get(0);
+    }
 }
