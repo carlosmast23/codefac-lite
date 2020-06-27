@@ -71,7 +71,17 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     //private T t;
     public List<Entity> obtenerTodos()
     {
-        return this.facade.findAll();
+        try {
+            return (List<Entity>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+                @Override
+                public Object consulta() throws ServicioCodefacException, RemoteException {
+                    return facade.findAll();
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public Entity grabar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException
@@ -87,7 +97,18 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
    
     public Entity buscarPorId(Object primaryKey) throws java.rmi.RemoteException
     {
-        return this.facade.find(primaryKey);
+        try {
+            return (Entity) ejecutarConsulta(new MetodoInterfaceConsulta() {
+                @Override
+                public Object consulta() throws ServicioCodefacException, RemoteException {
+                    return facade.find(primaryKey);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+        
     }
     
     public void editar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException
@@ -158,6 +179,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
      */
     protected void ejecutarTransaccion(MetodoInterfaceTransaccion interfaz) throws ServicioCodefacException
    {
+       
         EntityTransaction transaccion = entityManager.getTransaction();
         try {            
             transaccion.begin();

@@ -255,8 +255,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     {
         getjPanelSeleccion().setVisible(false);//Asumo que cuando se abre por primera vez la pantalla esta oculta
         mapPantallaAbiertas=new HashMap<GeneralPanelInterface, JMenuItem>();
+       
+        
     }
     
+        
     /**
      * Iniciar todos los componentes de la aplicacion de escritorio
      */
@@ -2960,12 +2963,27 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         this.sessionCodefac = sessionCodefac;
     }
     
+    private void buscarParametros()
+    {
+        try {
+            /**
+             * Agrear un subproceso que se encarga siempre de leer datos para pruebas
+             */
+            //Thread.sleep(10);
+            ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametrosMap(sessionCodefac.getEmpresa());
+            //System.out.println("COnsultando parametros");
+        } catch (RemoteException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * construir la session con los datos del login
      * @param datosLogin 
      */
     public void setSessionCodefac(LoginModel.DatosLogin  datosLogin) {
         try {
+            
             SessionCodefac session = ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido(datosLogin.empresa);
             //panel.setSessionCodefac(session);
             
@@ -2978,6 +2996,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        //TODO: METODO DE PRUEBA PARA HACER PRUEBAS DE CONCURRENCIA
+        /*new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    buscarParametros();
+                }
+            }
+        }).start();*/
         
     }
     
