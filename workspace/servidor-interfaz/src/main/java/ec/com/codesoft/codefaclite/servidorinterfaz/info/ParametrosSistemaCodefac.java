@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.info;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -39,7 +40,8 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Icono por defecto para usar en todo el sistema
      */
-    public static final Image iconoSistema=new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage();
+    //public static final Image iconoSistema=new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage();
+    //public static final Image iconoSistema=Toolkit.getDefaultToolkit().createImage(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png"));
 
     /**
      * Cadena que contiene la clave para encriptar o desencriptar los datos en codefac

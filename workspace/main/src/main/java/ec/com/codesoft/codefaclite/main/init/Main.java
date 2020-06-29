@@ -39,6 +39,7 @@ import ec.com.codesoft.codefaclite.main.model.LoginModel;
 import ec.com.codesoft.codefaclite.main.model.ModoAplicativoModel;
 import ec.com.codesoft.codefaclite.main.model.ServidorMonitorModel;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
+import static ec.com.codesoft.codefaclite.main.model.SplashScreenModel.ICONO_SISTEMA;
 import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
 import ec.com.codesoft.codefaclite.main.other.ArchivoDescarga;
 import ec.com.codesoft.codefaclite.main.other.BaseDatosCredenciales;
@@ -129,7 +130,7 @@ public class Main {
     public static void main(String[] args) {
         //Desabilito para que no se veo nada de la pantalla que contiene el proceso de inicio
         frameAplicacion.setUndecorated(true);
-        frameAplicacion.setIconImage(ParametrosSistemaCodefac.iconoSistema);
+        frameAplicacion.setIconImage(ICONO_SISTEMA);
         frameAplicacion.setVisible(true);
         
         System.setProperty("sun.net.client.defaultConnectTimeout", "2000"); //Establece el tiempo de espera para las conexiones con el servidor
@@ -653,7 +654,7 @@ public class Main {
             /**
              * Establecer propiedades del formulario principal
              */
-            panel.setIconImage(ParametrosSistemaCodefac.iconoSistema); // NOI18N
+            panel.setIconImage(ICONO_SISTEMA); // NOI18N
             panel.setExtendedState(MAXIMIZED_BOTH);
             splashScren.siguiente();
             splashScren.termino();
