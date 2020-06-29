@@ -31,7 +31,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +53,7 @@ public class StockReporteModel extends StockMinimoPanel{
     
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         listenerBotones();
         listenerCheckBox();
         valoresIniciales();
@@ -72,35 +72,33 @@ public class StockReporteModel extends StockMinimoPanel{
             //Por defecto aparece desctiva para que buque todas las categorias
             getChkTodasCategoria().setSelected(true);
             getBtnBuscarCategoria().setEnabled(false);
-        } catch (RemoteException ex) {
-            Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(StockMinimoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         
         InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream("stockMinimo.jrxml");
         
@@ -131,7 +129,7 @@ public class StockReporteModel extends StockMinimoPanel{
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -242,7 +240,7 @@ public class StockReporteModel extends StockMinimoPanel{
                     
 
                     
-                } catch (RemoteException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(StockReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 

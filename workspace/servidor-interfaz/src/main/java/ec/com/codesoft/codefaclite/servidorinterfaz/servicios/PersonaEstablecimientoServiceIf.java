@@ -16,5 +16,5 @@ import java.util.List;
  * @author Carlos
  */
 public interface PersonaEstablecimientoServiceIf  extends ServiceAbstractIf<PersonaEstablecimiento>{
-    public List<PersonaEstablecimiento>  buscarActivoPorIdentificacion(String identificacion,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException;
+    public List<PersonaEstablecimiento>  buscarActivoPorIdentificacion(String identificacion,Empresa empresa) throws ServicioCodefacException   ;
 }

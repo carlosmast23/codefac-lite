@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +41,7 @@ public class ReenviarComprobanteModelControlador extends ModelControladorAbstrac
             getInterfaz().cargarVistaTabla(comprobantesPendientesAutorizar);                      
             
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ReenviarComprobanteModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
         

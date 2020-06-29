@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.codefaclite.utilidades.email.PropiedadCorreo;
 import ec.com.codesoft.codefaclite.utilidades.email.SmtpNoExisteException;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -83,10 +83,7 @@ public abstract class CorreoCodefac {
             }
             
             
-        }catch(RemoteException ex)
-        {
-            Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        }catch (Exception ex) {
             Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCorreoCodefac(ex.getMessage());
         }

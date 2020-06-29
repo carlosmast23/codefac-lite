@@ -31,7 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -138,7 +138,7 @@ public class DeudasAgrupadasPorCursoModel extends DeudasAgrupadasPorCursoPanel {
                 }
             });
 
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(DeudasAgrupadasPorCursoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -195,7 +195,7 @@ public class DeudasAgrupadasPorCursoModel extends DeudasAgrupadasPorCursoPanel {
             
             UtilidadesComboBox.llenarComboBox(getCmbTipoReporte(),ReporteDeudasCursoData.TipoReporteEnum.values());
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -252,7 +252,7 @@ public class DeudasAgrupadasPorCursoModel extends DeudasAgrupadasPorCursoPanel {
                     }
 
                     getTblDeudas().setModel(modeloTablaDeudas);
-                } catch (RemoteException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(DeudasAgrupadasPorCursoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
 

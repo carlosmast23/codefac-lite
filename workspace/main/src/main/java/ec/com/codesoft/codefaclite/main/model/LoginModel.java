@@ -32,7 +32,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,7 +132,7 @@ public class LoginModel extends LoginFormDialog{
                 matriz = ServiceFactory.getFactory().getSucursalServiceIf().obtenerMatrizPorSucursal(sucursal.getEmpresa());
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -205,10 +205,7 @@ public class LoginModel extends LoginFormDialog{
                 }
                 
                
-            } catch (RemoteException ex) {
-                Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
-                DialogoCodefac.mensaje("Error Login", "Datos Incorrectos", DialogoCodefac.MENSAJE_INCORRECTO);
-            } catch (ServicioCodefacException ex) {
+            }catch (ServicioCodefacException ex) {
                 Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -249,7 +246,7 @@ public class LoginModel extends LoginFormDialog{
             for (Empresa empresa : empresas) {
                 getCmbEmpresa().addItem(empresa);
             }*/
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -267,8 +264,6 @@ public class LoginModel extends LoginFormDialog{
             for (Sucursal sucursal : sucursales) {
                 getCmbSucursal().addItem(sucursal);
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
         }catch (ServicioCodefacException ex) {
             Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
         }

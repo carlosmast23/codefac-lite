@@ -20,7 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,7 +64,7 @@ public class TestBaseDatos {
             Logger.getLogger(TestBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PersistenciaDuplicadaException ex) {
             Logger.getLogger(TestBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(TestBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -17,7 +17,7 @@ import java.io.IOException;
 import javax.mail.Session;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.rmi.RemoteException;
+ ;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +48,7 @@ public enum DirectorioCodefac {
     }
     
     /*
-    public String getDirectorio() throws RemoteException
+    public String getDirectorio()   
     {
         ParametroCodefacServiceIf service=ServiceFactory.getFactory().getParametroCodefacServiceIf();
         Map<String,ParametroCodefac> parametrosMap= service.getParametrosMap();
@@ -56,7 +56,7 @@ public enum DirectorioCodefac {
         return path_raiz+"/"+nombre;
     }
     
-    public String getArchivo(String archivo) throws RemoteException
+    public String getArchivo(String archivo)   
     {
         ParametroCodefacServiceIf service = ServiceFactory.getFactory().getParametroCodefacServiceIf();
         Map<String, ParametroCodefac> parametrosMap = service.getParametrosMap();
@@ -64,7 +64,7 @@ public enum DirectorioCodefac {
         return path_raiz+"/"+nombre+"/"+archivo;
     }
     
-    public BufferedImage getArchivoStream(String archivo) throws RemoteException
+    public BufferedImage getArchivoStream(String archivo)   
     {
         ParametroCodefacServiceIf service = ServiceFactory.getFactory().getParametroCodefacServiceIf();
         Map<String, ParametroCodefac> parametrosMap = service.getParametrosMap();

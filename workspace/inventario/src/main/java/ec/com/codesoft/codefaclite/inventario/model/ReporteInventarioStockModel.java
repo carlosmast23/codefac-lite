@@ -29,7 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -51,7 +51,7 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
     private Boolean todos;
     
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         iniciarValores();
         addListenerBotones();
         addCheckListener();
@@ -59,32 +59,32 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -179,9 +179,7 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
             for (Bodega bodega : bodegas) {
                 getCmbBodega().addItem(bodega);
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(ReporteInventarioStockModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(ReporteInventarioStockModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -320,7 +318,7 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
         });
     }
     
-    public List<ProductoProveedor> buscarProducto() throws RemoteException, ServicioCodefacException
+    public List<ProductoProveedor> buscarProducto() throws    ServicioCodefacException
     {
         ProductoProveedorServiceIf serviceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
         //Map<String,Object> parametros = new HashMap<>();
@@ -329,7 +327,7 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
         return productos;
     }
     
-    public List<ProductoProveedor> buscarTodosProducto() throws RemoteException, RemoteException
+    public List<ProductoProveedor> buscarTodosProducto()
     {
         ProductoProveedorServiceIf serviceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
         List<ProductoProveedor> productos = serviceIf.obtenerTodos();

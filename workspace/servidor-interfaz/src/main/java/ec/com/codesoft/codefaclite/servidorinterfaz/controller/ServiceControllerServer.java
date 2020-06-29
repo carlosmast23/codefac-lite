@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.rmi.RemoteException;
+ ;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.RemoteServer;
@@ -63,10 +63,10 @@ public class ServiceControllerServer {
                 
                 
             }
-            servidorRmi.bind(10000, objetoEnRed);
+            servidorRmi.bind(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED, objetoEnRed);
             
             
-       /* } catch (RemoteException ex) {
+       /* } catch (Exception ex) {
             Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
             System.exit(0);*/

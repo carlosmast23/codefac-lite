@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaEstudianteServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 
 /**
@@ -22,12 +22,12 @@ public class RubroPlantillaEstudianteService extends ServiceAbstract<RubroPlanti
 
     private RubroPlantillaEstudianteFacade rubroPlantillaEstudianteFacade;
             
-    public RubroPlantillaEstudianteService() throws RemoteException {
+    public RubroPlantillaEstudianteService()    {
         super(RubroPlantillaEstudianteFacade.class);
         this.rubroPlantillaEstudianteFacade=new RubroPlantillaEstudianteFacade();
     }
     
-    public List<EstudianteInscrito> obtenerEstudiantesSinRegistrar(RubroPlantilla rubroPlantilla) throws RemoteException
+    public List<EstudianteInscrito> obtenerEstudiantesSinRegistrar(RubroPlantilla rubroPlantilla)   
     {        
         return this.rubroPlantillaEstudianteFacade.getEstudiantesSinRegistrar(rubroPlantilla);
     }

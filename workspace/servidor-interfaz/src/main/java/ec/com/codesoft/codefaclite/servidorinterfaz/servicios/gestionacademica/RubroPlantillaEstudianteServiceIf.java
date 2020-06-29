@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 
 /**
@@ -17,5 +17,5 @@ import java.util.List;
  * @author Carlos
  */
 public interface RubroPlantillaEstudianteServiceIf extends ServiceAbstractIf<RubroPlantillaEstudiante>{
-    public List<EstudianteInscrito> obtenerEstudiantesSinRegistrar(RubroPlantilla rubroPlantilla) throws RemoteException;
+    public List<EstudianteInscrito> obtenerEstudiantesSinRegistrar(RubroPlantilla rubroPlantilla);    
 }

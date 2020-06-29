@@ -30,7 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceI
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesCodigos;
-import java.rmi.RemoteException;
+ ;
 import java.rmi.registry.Registry;
 import java.rmi.server.RemoteServer;
 import java.rmi.server.ServerNotActiveException;
@@ -50,26 +50,26 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class UtilidadesService extends UnicastRemoteObject implements UtilidadesServiceIf {
+public class UtilidadesService   implements UtilidadesServiceIf {
 
-    public UtilidadesService() throws RemoteException {
-        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
+    public UtilidadesService()    {
+         
     }
 
     //TODO: Verificar porque no esta funcionando este metodo
-    public Object mergeEntity(Object entity) throws java.rmi.RemoteException {
+    public Object mergeEntity(Object entity)    {
         return AbstractFacade.entityManager.merge(entity);
     }
 
-    public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException {
+    public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo)    {
         return AbstractFacade.findStaticDialog(query, map, limiteMinimo, limiteMaximo);
     }
 
-    public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException {
+    public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map)    {
         return AbstractFacade.findCountStaticDialog(query, map);
     }
     
-    public Properties crearLicencia(Empresa empresa,Licencia licencia) throws RemoteException,ServicioCodefacException
+    public Properties crearLicencia(Empresa empresa,Licencia licencia) throws   ServicioCodefacException
     {
         ParametroCodefacService servicio=new ParametroCodefacService();
         String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS, empresa).getValor();
@@ -77,7 +77,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         return validacion.crearLicenciaMaquina(licencia);
     }
     
-    public Properties crearLicenciaDescargada(Empresa empresa,Licencia licencia) throws RemoteException,ServicioCodefacException
+    public Properties crearLicenciaDescargada(Empresa empresa,Licencia licencia) throws   ServicioCodefacException
     {
         ParametroCodefacService servicio=new ParametroCodefacService();
         String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS, empresa).getValor();
@@ -87,7 +87,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     
 
     @Override
-    public boolean verificarConexionesServidor(Empresa empresa) throws RemoteException {
+    public boolean verificarConexionesServidor(Empresa empresa)    {
         int numeroConexionesPermitidas = 1;
 
         //Solo verificar los numero se conexiones para usuarios preimun , cuando es gratis siempre solo va a permitir 1 conexion
@@ -121,12 +121,12 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     }
 
     @Override
-    public TipoLicenciaEnum getTipoLicencia(Empresa empresa) throws RemoteException {
+    public TipoLicenciaEnum getTipoLicencia(Empresa empresa)    {
         return UtilidadesServidor.mapEmpresasLicencias.get(empresa).tipoLicencia;
     }
 
     @Override
-    public List<ModuloCodefacEnum> getModulosSistema(Empresa empresa) throws RemoteException {
+    public List<ModuloCodefacEnum> getModulosSistema(Empresa empresa)    {
         return UtilidadesServidor.mapEmpresasLicencias.get(empresa).modulosSistema;
     }
     
@@ -135,10 +135,10 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
      * TODO: Verificar por que no setear directamente la empresa
      * @param empresa
      * @return
-     * @throws RemoteException 
+     * @   
      */
     @Override
-    public SessionCodefac getSessionPreConstruido(Empresa empresa) throws RemoteException {
+    public SessionCodefac getSessionPreConstruido(Empresa empresa)    {
         SessionCodefac session = new SessionCodefac();
         session.setEmpresa(empresa);
         
@@ -161,7 +161,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         return session;
     }
     
-    public EmpresaLicencia obtenerLicenciaEmpresa(Empresa empresa) throws RemoteException,ServicioCodefacException
+    public EmpresaLicencia obtenerLicenciaEmpresa(Empresa empresa) throws   ServicioCodefacException
     {
         //Verificar si tengo que validar la licencia o solo devolver los datos grabados en memoria
         if(UtilidadesServidor.mapEmpresasLicencias.get(empresa)!=null)
@@ -376,9 +376,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                 }
 
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        }catch (Exception ex) {
             Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
 
         }
@@ -473,14 +471,12 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             } else {
                 servicio.editar(parametroFechaValidacion);
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public String crearCodigoPorEmpresaYSucursalSinTransaccion(Sucursal sucursal,String codigoDocumento,String nombreTabla) throws RemoteException,ServicioCodefacException
+    public String crearCodigoPorEmpresaYSucursalSinTransaccion(Sucursal sucursal,String codigoDocumento,String nombreTabla) throws   ServicioCodefacException
     {
        // final String SEPARADOR_CODIGO="-";
         

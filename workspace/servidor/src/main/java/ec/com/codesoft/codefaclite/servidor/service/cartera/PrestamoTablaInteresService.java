@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoTablaInteresServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 
 /**
  *
@@ -23,17 +23,17 @@ import java.rmi.RemoteException;
 public class PrestamoTablaInteresService extends ServiceAbstract<PrestamoTablaInteres,PrestamoTablaInteresFacade> implements PrestamoTablaInteresServiceIf
 {
 
-    public PrestamoTablaInteresService() throws RemoteException {
+    public PrestamoTablaInteresService()    {
         super(PrestamoTablaInteresFacade.class);
     }
 
     @Override
-    public PrestamoTablaInteres grabar(PrestamoTablaInteres entity) throws ServicioCodefacException, RemoteException {
+    public PrestamoTablaInteres grabar(PrestamoTablaInteres entity) throws ServicioCodefacException   {
         
         validar(entity);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 entity.setFechaCreacion(UtilidadesFecha.getFechaHoy());
                 entityManager.persist(entity);
@@ -43,11 +43,11 @@ public class PrestamoTablaInteresService extends ServiceAbstract<PrestamoTablaIn
     }
 
     @Override
-    public void editar(PrestamoTablaInteres entity) throws ServicioCodefacException, RemoteException {
+    public void editar(PrestamoTablaInteres entity) throws ServicioCodefacException   {
         validar(entity);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 //entity.setFechaCreacion(UtilidadesFecha.getFechaHoy());
                 entityManager.merge(entity);
             }
@@ -56,10 +56,10 @@ public class PrestamoTablaInteresService extends ServiceAbstract<PrestamoTablaIn
     }
 
     @Override
-    public void eliminar(PrestamoTablaInteres entity) throws ServicioCodefacException, RemoteException {
+    public void eliminar(PrestamoTablaInteres entity) throws ServicioCodefacException   {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);
             }
@@ -73,9 +73,9 @@ public class PrestamoTablaInteresService extends ServiceAbstract<PrestamoTablaIn
      * TODO: Ver si se puede hacer una funcion global en los metodos para validar cuando sean nulos
      * @param entity
      * @throws ServicioCodefacException
-     * @throws RemoteException 
+     * @   
      */
-    private void validar(PrestamoTablaInteres entity) throws ServicioCodefacException, RemoteException
+    private void validar(PrestamoTablaInteres entity) throws ServicioCodefacException  
     {
         if(entity.getMeses()==null)
         {

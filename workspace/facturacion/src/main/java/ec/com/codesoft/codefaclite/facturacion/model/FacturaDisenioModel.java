@@ -45,7 +45,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -117,8 +117,6 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
             ComprobanteFisicoDisenio comprobante= (ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem();
             servicio.editar(comprobante);
             DialogoCodefac.mensaje("Correcto","Los datos fueron grabados correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -568,7 +566,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
                 getCmbDocumento().addItem(documento);
             }
             //System.exit(0);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

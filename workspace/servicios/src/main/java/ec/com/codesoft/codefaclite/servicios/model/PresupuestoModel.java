@@ -72,7 +72,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.net.URL;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -209,7 +209,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 Logger.getLogger(Presupuesto.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_ADVERTENCIA);
                 throw new ExcepcionCodefacLite(ex.getMessage());
-            }catch (RemoteException ex) {
+            }catch (Exception ex) {
                 Logger.getLogger(Presupuesto.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
@@ -228,11 +228,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 DialogoCodefac.mensaje("Advertencia", "El estado del presupuesto es incorrecto", DialogoCodefac.MENSAJE_ADVERTENCIA);
             }
       } 
-      catch (RemoteException ex) 
-      {
-            Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje("Error","Error de comunicacion con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
-      } catch (ServicioCodefacException ex) {
+      catch (ServicioCodefacException ex) {
             Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -282,7 +278,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 ServiceFactory.getFactory().getPresupuestoServiceIf().eliminar(presupuesto);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -458,7 +454,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             for (CatalogoProducto listaCatalogo : listaCatalogos) {
                 getCmbTipoPresupuesto().addItem(listaCatalogo);
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -1338,9 +1334,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     getTxtPrecioCompra().setText("0.00"); //Seteo con el valor de 0 porque no existe el costo grabado
                     //getCmbCobraIva().setSelectedItem(EnumSiNo.SI); //Seteo por defecto el valor de SI cuando no existe en la base de datos
                 }
-            } catch (RemoteException ex) {
-                Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
+            }catch (ServicioCodefacException ex) {
                 Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -1564,7 +1558,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             servicioOrden.editar(ordenTrabajo);
             
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

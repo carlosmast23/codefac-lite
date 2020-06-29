@@ -15,7 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.MenuCodefacRespuesta;
 import java.io.Serializable;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -131,9 +131,7 @@ public class SessionMb implements Serializable{
             for (ModuloCodefacEnum modulosDisponible : menuCodefacRespuesta.getModulosDisponibles()) {
                 System.out.println("---->"+modulosDisponible.getNombre());
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(SessionMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(SessionMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

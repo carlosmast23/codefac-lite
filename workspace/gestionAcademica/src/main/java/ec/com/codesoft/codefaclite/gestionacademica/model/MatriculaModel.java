@@ -30,7 +30,7 @@ import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -107,7 +107,7 @@ public class MatriculaModel extends MatriculaPanel {
             }
      
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             DialogoCodefac.mensaje("Error", "No existe comunicación con el servidor", DialogoCodefac.MENSAJE_ADVERTENCIA);
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -325,7 +325,7 @@ public class MatriculaModel extends MatriculaPanel {
             {
                 return rubros;
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -473,9 +473,7 @@ public class MatriculaModel extends MatriculaPanel {
                 comboNivel.addItem(resultado);
             }
 
-        } catch (RemoteException ex) {
-            Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -572,7 +570,7 @@ public class MatriculaModel extends MatriculaPanel {
                 getCmbNivelMatricula().addItem(nivel);
             }
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
                 
@@ -625,7 +623,7 @@ public class MatriculaModel extends MatriculaPanel {
             getTblAlumnosSinMatricula().setModel(modeloTabla);
             
 
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -689,7 +687,7 @@ public class MatriculaModel extends MatriculaPanel {
                 }
             }
 
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -700,7 +698,7 @@ public class MatriculaModel extends MatriculaPanel {
             estudiantesInscritosMap=castListToMap(estudiantesInscritos);
             //Crear los combos de los niveles seleccionados segun el nivel
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         

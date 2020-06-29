@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
+ ;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
@@ -34,14 +34,14 @@ public class TestClienteRMI {
             //ServiceFactory.newController("192.168.100.13");
             
             PersonaServiceIf personaServiceIf= ServiceFactory.getFactory().getPersonaServiceIf();
-            //List<Persona> buscarList= personaServiceIf.obtenerTodos();
-            Persona persona=personaServiceIf.getEjemplo();
-            System.out.println(persona);
+            List<Persona> buscarList= personaServiceIf.obtenerTodos();
+            //Persona persona=personaServiceIf.getEjemplo();
+            //System.out.println(persona);
             
-            /*for (Persona persona : buscarList) {
+            for (Persona persona : buscarList) {
                System.out.println(persona.getNombres()); 
                System.out.println(persona.getIdentificacion());
-            }*/
+            }
             
             /*
             try {
@@ -59,7 +59,7 @@ public class TestClienteRMI {
             System.out.println(persona.getIdentificacion());
             }
             
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
             Logger.getLogger(TestClienteRMI.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NotBoundException ex) {
             Logger.getLogger(TestClienteRMI.class.getName()).log(Level.SEVERE, null, ex);
@@ -67,7 +67,7 @@ public class TestClienteRMI {
             Logger.getLogger(TestClienteRMI.class.getName()).log(Level.SEVERE, null, ex);
             }*/
         
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(TestClienteRMI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

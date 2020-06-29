@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.MenuCodefacRespuesta;
 import java.io.Serializable;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -52,7 +52,7 @@ public class EjemploMenu implements Serializable {
             session.setMatriz(sucursal);//TODO: Falta buscar la matriz de esa sucursal
             return session;
 
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -115,9 +115,7 @@ public class EjemploMenu implements Serializable {
             
             
             model.getElements().add(secondSubmenu);
-        } catch (RemoteException ex) {
-            Logger.getLogger(EjemploMenu.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(EjemploMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

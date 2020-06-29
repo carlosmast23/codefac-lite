@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
-import java.rmi.RemoteException;
+ ;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
@@ -36,15 +36,15 @@ import java.util.logging.Logger;
  *
  * @author CodesoftDesarrollo 1
  */
-public class RecursosService extends UnicastRemoteObject implements RecursosServiceIf
+public class RecursosService   implements RecursosServiceIf
 {
 
-    public RecursosService() throws RemoteException {
-        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
+    public RecursosService()    {
+         
     }
 
     @Override
-    public RemoteInputStream getResourceInputStream(RecursoCodefac recurso, String file) throws RemoteException {
+    public RemoteInputStream getResourceInputStream(RecursoCodefac recurso, String file)    {
         try {
             InputStream input= recurso.getResourceInputStream(file);
             RemoteInputStreamServer istream =new SimpleRemoteInputStream(input);
@@ -57,7 +57,7 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
         return null; //Si falla el servidor devuelve null
     }
 
-    public RemoteInputStream getResourceInputStreamByFile(Empresa empresa,DirectorioCodefac directorio,String nameFile) throws RemoteException
+    public RemoteInputStream getResourceInputStreamByFile(Empresa empresa,DirectorioCodefac directorio,String nameFile)   
     {
         try {
             File file=new File(UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa+"/"+directorio.getNombre()+"/"+nameFile);
@@ -72,7 +72,7 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
         return null; //Si falla el servidor devuelve null        
     }
     
-    public RemoteInputStream getDataBaseResources() throws RemoteException
+    public RemoteInputStream getDataBaseResources()   
     {
         try {
             String nombreBaseDatos=ParametrosSistemaCodefac.NOMBRE_BASE_DATOS;
@@ -88,7 +88,7 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
         return null; //Si falla el servidor devuelve null    
     }
     
-    public void uploadFileServer(String pathServidor,DirectorioCodefac directorio,RemoteInputStream recurso,String nombre) throws RemoteException
+    public void uploadFileServer(String pathServidor,DirectorioCodefac directorio,RemoteInputStream recurso,String nombre)   
     {
         try {
             File fileDestino=new File(pathServidor+"/"+directorio.getNombre()+"/"+nombre);
@@ -120,7 +120,7 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
     /**
      * Agregar recursos al servidor
      */
-    public void uploadFileServer(DirectorioCodefac directorio,RemoteInputStream recurso,String nombre,Empresa empresa) throws RemoteException
+    public void uploadFileServer(DirectorioCodefac directorio,RemoteInputStream recurso,String nombre,Empresa empresa)   
     {
         //uploadFileServer(UtilidadesServidor.pathRecursos,directorio,recurso,nombre);
         uploadFileServer(UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa,directorio,recurso,nombre);

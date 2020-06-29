@@ -40,7 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -331,7 +331,7 @@ public class CompraReporteModel extends CompraReportePanel {
                     //encerarValoresTotales();
                     setearValores();
                     visualizarTotalesComprasIndividuales();
-                } catch (RemoteException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(CompraReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -340,7 +340,7 @@ public class CompraReporteModel extends CompraReportePanel {
     }
 
 
-    public void setearValores() throws RemoteException {
+    public void setearValores()    {
         //Obtener valores de combos
         DocumentoEnum documentoEnum=null;
         if (!getChkDocumento().isSelected()) {

@@ -39,7 +39,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -124,9 +124,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 throw new ExcepcionCodefacLite("Cancelado guardar por el usuario");
             }
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             ex.printStackTrace();
             DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Cancelado guardar por el usuario");
@@ -599,9 +597,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             //No seleccionar ninguna opcion del combo box por defecto
             crearCabeceraComboBox();
 
-        } catch (RemoteException ex) {
-            Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         

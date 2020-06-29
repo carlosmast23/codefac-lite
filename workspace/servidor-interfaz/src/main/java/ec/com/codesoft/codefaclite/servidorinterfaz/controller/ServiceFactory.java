@@ -59,8 +59,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaServiceIf;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+ 
+ ;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.HashMap;
@@ -214,13 +214,16 @@ public abstract class ServiceFactory {
         serviceController=new ServiceFactory(ipServidor) {};        
     }
     
+    private CallHandler managerObjetosRemotos;
+    private Client clienteRmi;
     
-    private Map<Class,Object> mapRecursosRMI;
+    //private Map<Class,Client> mapRecursosRMI;
 
     private ServiceFactory(String ipServidor) 
     {
         this.ipServidor=ipServidor;
-        this.mapRecursosRMI=new HashMap<Class,Object>();
+        this.managerObjetosRemotos=new CallHandler();
+        //this.mapRecursosRMI=new HashMap<Class,Client>();
     }
     
     
@@ -230,40 +233,44 @@ public abstract class ServiceFactory {
      * @return 
      */
     public Object getRecursosRMI(Class clase)
-    {
-        Object remote= mapRecursosRMI.get(clase);
-        
-        if(remote==null)
+    {   
+        try {
+            //Client cliente= mapRecursosRMI.get(clase);
+            //if(cliente==null)
+            //{
+            //Registry registro= LocateRegistry.getRegistry(ipServidor,ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
+            //for (String object : registro.list()) {
+            //    System.out.println("Algo==>"+object);
+            //}
+            //Naming.lookup(ipServidor);
+            //String ipServidorInterno="192.168.100.13";
+            //remote= registro.lookup("rmi://"+ipServidor+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+"/"+clase.getSimpleName());
+            //System.out.println(clase.getName());
+            //remote= registro.lookup(clase.getName());
+            //remote= registro.lookup("ec.com.codesoft.codefaclite.servidor.service.PersonaService");
+            //CallHandler managerObjetosRemotos=new CallHandler();
+            //Client clienteRmi=new Client(ipServidor,ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED, managerObjetosRemotos);
+            //remote=clienteRmi.getGlobal(clase);
+            //return clienteRmi.getGlobal(clase);
+            //mapRecursosRMI.put(clase,clienteRmi);
+            /*catch (Exception ex) {
+        JOptionPane.showMessageDialog(null,"Error de conexión con el servidor","Error",JOptionPane.ERROR_MESSAGE);
+        Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
+        System.exit(0);
+        }*/
+            //}
+
+            //return remote;
+            this.clienteRmi = new Client(ipServidor, ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED, managerObjetosRemotos);
+            return clienteRmi.getGlobal(clase);
+        } catch (IOException ex) {
+            Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }catch(Exception ex)
         {
-            try {
-                //Registry registro= LocateRegistry.getRegistry(ipServidor,ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);    
-                //for (String object : registro.list()) {
-                //    System.out.println("Algo==>"+object);
-                //}
-                
-                //Naming.lookup(ipServidor);
-                //String ipServidorInterno="192.168.100.13";
-                //remote= registro.lookup("rmi://"+ipServidor+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+"/"+clase.getSimpleName());
-                //System.out.println(clase.getName());
-                //remote= registro.lookup(clase.getName());
-                //remote= registro.lookup("ec.com.codesoft.codefaclite.servidor.service.PersonaService");
-                
-                CallHandler managerObjetosRemotos=new CallHandler();
-                Client clienteRmi=new Client(ipServidor,10000, managerObjetosRemotos);
-                remote=clienteRmi.getGlobal(clase);
-                mapRecursosRMI.put(clase,remote);
-                
-                
-            } catch (RemoteException ex) {
-                JOptionPane.showMessageDialog(null,"Error de conexión con el servidor","Error",JOptionPane.ERROR_MESSAGE);
-                Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
-                System.exit(0);
-            } catch (IOException ex) {
-                Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            ex.printStackTrace();
+            Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        return remote;
+        return null;
     }
     
     /**

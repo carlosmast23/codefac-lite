@@ -30,7 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteService
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -178,7 +178,7 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
             Logger.getLogger(NotaCreditoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             mostrarMensaje(new CodefacMsj("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));            
             throw new ExcepcionCodefacLite(ex.getMessage());
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(NotaCreditoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

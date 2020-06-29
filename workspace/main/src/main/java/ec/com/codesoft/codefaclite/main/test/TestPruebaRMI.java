@@ -59,7 +59,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.rmi.RemoteException;
+ ;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.HashMap;
@@ -124,7 +124,7 @@ public class TestPruebaRMI {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
             } catch (PersistenciaDuplicadaException ex) {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
             } catch (UnknownHostException ex) {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);

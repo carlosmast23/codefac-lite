@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.converter;
 
-import java.rmi.RemoteException;
+ ;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.component.UIComponent;

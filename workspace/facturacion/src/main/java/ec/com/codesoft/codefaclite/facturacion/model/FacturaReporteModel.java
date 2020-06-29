@@ -53,7 +53,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.net.URL;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -427,7 +427,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -480,7 +480,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             {
                 getCmbDocumento().setSelectedItem(documentoEnum);
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -603,9 +603,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,session.getEmpresa()); //TODO: Revisar si es correcto buscar con el nombre de la empresa
                         JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                         panelPadre.crearReportePantalla(jasperPrint,controladorReporte.getData().get(filaSeleccionada).getNumeroFactura());
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
+                    }catch (IOException ex) {
                         Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);

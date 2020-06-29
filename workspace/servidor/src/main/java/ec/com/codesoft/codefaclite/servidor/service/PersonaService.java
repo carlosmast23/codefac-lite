@@ -21,7 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,15 +41,15 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
     private PersonaFacade personaFacade;
 
-    public PersonaService() throws RemoteException {
+    public PersonaService()    {
         super(PersonaFacade.class);
         this.personaFacade = new PersonaFacade();
     }
 
-    public void editarPersona(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
+    public void editarPersona(Persona p) throws ServicioCodefacException  {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 validarCliente(p, Boolean.TRUE,CrudEnum.EDITAR);
                 for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) {
                     if (establecimiento.getId() == null) {
@@ -63,15 +63,15 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         });
     }
     
-    public Persona grabar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
+    public Persona grabar(Persona p) throws ServicioCodefacException  {
         return grabar(p,true);
     }
     
 
-    public Persona grabar(Persona p,Boolean validarCedula) throws ServicioCodefacException, java.rmi.RemoteException {
+    public Persona grabar(Persona p,Boolean validarCedula) throws ServicioCodefacException  {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                                
                 validarCliente(p,validarCedula,CrudEnum.CREAR);
                 /*if (p.getEstablecimientos() == null || p.getEstablecimientos().size() == 0) {
@@ -101,7 +101,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
     }
     
-    private void validarCliente(Persona p,Boolean validarCedula,CrudEnum crudEnum) throws ServicioCodefacException, java.rmi.RemoteException
+    private void validarCliente(Persona p,Boolean validarCedula,CrudEnum crudEnum) throws ServicioCodefacException 
     {
         /**
          * Validaciones previas de los datos
@@ -138,12 +138,12 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         
     }
 
-    public void editar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
+    public void editar(Persona p) throws ServicioCodefacException  {
         personaFacade.edit(p);
 
     }
 
-    public void eliminar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
+    public void eliminar(Persona p) throws ServicioCodefacException  {
         //personaFacade.remove(p);
         p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
         editar(p);
@@ -153,7 +153,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         return personaFacade.findAll();
     }
 
-    public Persona buscarPorIdentificacionYestado(String identificacion, GeneralEnumEstado estado) throws ServicioCodefacException, java.rmi.RemoteException {
+    public Persona buscarPorIdentificacionYestado(String identificacion, GeneralEnumEstado estado) throws ServicioCodefacException  {
 
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("identificacion", identificacion);
@@ -169,12 +169,12 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     }
 
     @Override
-    public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum, GeneralEnumEstado estado,Empresa empresa) throws java.rmi.RemoteException {
+    public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum, GeneralEnumEstado estado,Empresa empresa)    {
         return getFacade().buscarPorTipoFacade(tipoEnum, estado,empresa);
     }
 
     @Override
-    public Persona buscarPorIdentificacion(String identificacion,Empresa empresa) throws java.rmi.RemoteException {
+    public Persona buscarPorIdentificacion(String identificacion,Empresa empresa)    {
         //Persona p;
         //p.getIdentificacion();
         Map<String, Object> mapParametros = new HashMap<String, Object>();
@@ -192,7 +192,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     }
     
     @Override
-    public Persona buscarConsumidorFinal(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
+    public Persona buscarConsumidorFinal(Empresa empresa) throws ServicioCodefacException 
     {
         PersonaServiceIf cliente = ServiceFactory.getFactory().getPersonaServiceIf();
         Map<String, Object> clienteMap = new HashMap<String, Object>();
@@ -235,11 +235,11 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         return persona;
     }
     
-    public Persona crearConsumidorFinal(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
+    public Persona crearConsumidorFinal(Empresa empresa) throws ServicioCodefacException 
     {
         MetodoInterfaceTransaccion transaccion=new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 crearConsumidorFinalSinTransaccion(empresa);
             }
         };
@@ -248,12 +248,8 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         return buscarConsumidorFinal(empresa);
     }
 
-    @Override
-    public List<Persona> obtenerTodos() throws java.rmi.RemoteException {
-        return getFacade().findAll();
-    }
 
-    public Persona getEjemplo() throws java.rmi.RemoteException
+    public Persona getEjemplo()   
     {
         return getFacade().findAll().get(0);
     }

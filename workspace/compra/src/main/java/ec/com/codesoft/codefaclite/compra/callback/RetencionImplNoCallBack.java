@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.io.IOException;
-import java.rmi.RemoteException;
+ ;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -45,9 +45,7 @@ public class RetencionImplNoCallBack extends ComprobanteRespuestaNoCallBack {
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
             panel.panelPadre.crearReportePantalla(jasperPrint, clave);
             //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
-        } catch (RemoteException ex) {
-            Logger.getLogger(RetencionImplCallBack.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        }catch (IOException ex) {
             Logger.getLogger(RetencionImplCallBack.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(RetencionImplCallBack.class.getName()).log(Level.SEVERE, null, ex);

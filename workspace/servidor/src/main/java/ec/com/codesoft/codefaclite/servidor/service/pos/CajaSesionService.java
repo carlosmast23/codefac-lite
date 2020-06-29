@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.pos.CajaSesionFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaSesionServiceIf;
-import java.rmi.RemoteException;
+ ;
 
 /**
  *
@@ -18,7 +18,7 @@ import java.rmi.RemoteException;
 public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFacade> implements CajaSesionServiceIf
 {
 
-    public CajaSesionService() throws RemoteException {
+    public CajaSesionService()    {
         super(CajaSesionFacade.class);
     }
     

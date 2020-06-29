@@ -23,7 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -117,8 +117,6 @@ public class ComprobanteElectronicoComponente {
                         if (labelEstado != null) {
                             labelEstado.setText(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre());
                         }
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
                         DialogoCodefac.mensaje("Error al eliminar", ex.getMessage(), DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -142,7 +140,7 @@ public class ComprobanteElectronicoComponente {
             PuntoEmision puntoEmisionTmp = new PuntoEmision();
             puntoEmisionTmp.setPuntoEmision(Integer.valueOf(comprobante.getPuntoEmision()));
             cmbPuntoEmision.addItem(puntoEmisionTmp); //TODO: Revisar que salga bien
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
         }
         lblEstablecimiento.setText(ComprobantesUtilidades.formatoEstablecimiento(comprobante.getPuntoEstablecimiento().toString()));
@@ -174,7 +172,7 @@ public class ComprobanteElectronicoComponente {
 
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
         }
 

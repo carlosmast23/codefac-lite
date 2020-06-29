@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.transporte.DetalleProductoGui
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.DetalleProductoGuiaRemisionServiceIf;
-import java.rmi.RemoteException;
+ ;
 
 /**
  *
@@ -17,7 +17,7 @@ import java.rmi.RemoteException;
  */
 public class DetalleProductoGuiaRemisionService extends ServiceAbstract<DetalleProductoGuiaRemision,DetalleProductoGuiaRemisionFacade> implements DetalleProductoGuiaRemisionServiceIf{
 
-    public DetalleProductoGuiaRemisionService() throws RemoteException {
+    public DetalleProductoGuiaRemisionService()    {
         super(DetalleProductoGuiaRemisionFacade.class);
     }
     

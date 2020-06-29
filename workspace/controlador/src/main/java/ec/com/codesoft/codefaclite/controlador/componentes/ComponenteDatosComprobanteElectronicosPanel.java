@@ -40,7 +40,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -175,7 +175,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                             ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobante(comprobante.obtenerComprobanteData(),comprobante.getComprobante(),comprobante.getComprobante().getUsuario(), cic);
                             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_EN_CURSO);
                             btnReProcesarComprobante.setEnabled(false);
-                        } catch (RemoteException ex) {
+                        } catch (Exception ex) {
                             Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
                         }
                          
@@ -196,8 +196,6 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                     try {
                         ServiceFactory.getFactory().getComprobanteServiceIf().editar(comprobanteEntidad);
                         DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
                         DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
@@ -219,8 +217,6 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                             ServiceFactory.getFactory().getComprobanteServiceIf().autorizarComprobante(comprobante.getComprobante());
                             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
                             btnAutorizarDocumento.setEnabled(false);
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (ServicioCodefacException ex) {
                             Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -296,9 +292,6 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                             DialogoCodefac.mensaje(MensajeCodefacSistema.CorreoElectronico.CORREO_ENVIADO);
                         }
                         comprobante.getPanelPadre().cambiarCursorNormal();
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
-                        DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
                         DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
@@ -329,9 +322,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                     UtilidadesSistema.abrirDocumento(fileDestino);
                     
                     
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
+                }catch (ServicioCodefacException ex) {
                     Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
                     DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                 } catch (FileNotFoundException ex) {

@@ -8,7 +8,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Persisten
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,9 +71,7 @@ public class TestGrabarFechaValidacion {
             Logger.getLogger(TestGrabarFechaValidacion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PersistenciaDuplicadaException ex) {
             Logger.getLogger(TestGrabarFechaValidacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(TestGrabarFechaValidacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(TestGrabarFechaValidacion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

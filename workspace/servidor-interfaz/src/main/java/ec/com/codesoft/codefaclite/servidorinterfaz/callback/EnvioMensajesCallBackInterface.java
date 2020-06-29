@@ -5,13 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.callback;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+ 
+ ;
 
 /**
  *
  * @author Carlos
  */
-public interface EnvioMensajesCallBackInterface extends Remote {
-    public void procesando(Integer porcentaje) throws RemoteException;
+public interface EnvioMensajesCallBackInterface    {
+    public void procesando(Integer porcentaje);    
 }

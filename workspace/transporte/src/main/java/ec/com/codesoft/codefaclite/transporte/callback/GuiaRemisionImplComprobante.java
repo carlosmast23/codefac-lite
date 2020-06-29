@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.transporte.callback;
 
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -17,39 +18,48 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.transporte.data.ComprobanteGuiaTransporteData;
 import ec.com.codesoft.codefaclite.transporte.model.GuiaRemisionModel;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.rmi.RemoteException;
+import java.io.Serializable;
+ ;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.eclipse.persistence.sessions.Session;
 
 /**
  *
  * @author Carlos
  */
-public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements ClienteInterfaceComprobante {
+public class GuiaRemisionImplComprobante   implements ClienteInterfaceComprobante ,Serializable{
 
 
-    private GuiaRemisionModel guiaRemisionModel;
+    //private GuiaRemisionModel guiaRemisionModel;
     private MonitorComprobanteData monitorData;
     private GuiaRemision guiaRemision;
+    private SessionCodefacInterface sesionCodefac;
+    private ParametroGuiaRemision parametroGuiaRemision;
 
-    public GuiaRemisionImplComprobante(GuiaRemisionModel guiaRemisionModel, GuiaRemision guiaRemision) throws RemoteException {
-        this.guiaRemisionModel = guiaRemisionModel;
+    public GuiaRemisionImplComprobante(GuiaRemisionModel guiaRemisionModel, GuiaRemision guiaRemision,SessionCodefacInterface sesionCodefac,ParametroGuiaRemision parametroGuiaRemision)    {
+        //this.guiaRemisionModel = guiaRemisionModel;
         this.guiaRemision = guiaRemision;
+        this.sesionCodefac=sesionCodefac;
+        this.parametroGuiaRemision=parametroGuiaRemision;
     }
 
     @Override
-    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas) throws RemoteException {
+    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas)    {
 
         try {
             
@@ -63,8 +73,8 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
 
                     guiaRemisionModel.panelPadre.crearReportePantalla(jasperPrint, guiaRemision.getPreimpreso());
                 }
-            });*/
-            guiaRemisionModel.panelPadre.actualizarNotificacionesCodefac();
+            });*/            
+            GeneralPanelInterface.panelPadreStatic.actualizarNotificacionesCodefac();
         } catch (IOException ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -87,7 +97,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
     }
 
     @Override
-    public void procesando(int etapa, ClaveAcceso clave) throws RemoteException {
+    public void procesando(int etapa, ClaveAcceso clave)    {
         if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
             monitorData.getBarraProgreso().setValue(20);
             guiaRemision.setClaveAcceso(clave.clave);
@@ -104,7 +114,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
         if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
             //solo cuando este en el proceso normal seteo el 65 % porque para el proceso autorizado se supone que ya esta con el 100%
             //TODO: Ver un forma estar con las demas pantallas que hacen lo mismo
-            if(ParametroUtilidades.comparar(guiaRemisionModel.getEmpresa(),ParametroCodefac.TIPO_ENVIO_COMPROBANTE, ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_FIRMADO))
+            if(ParametroUtilidades.comparar(sesionCodefac.getEmpresa(),ParametroCodefac.TIPO_ENVIO_COMPROBANTE, ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_FIRMADO))
             {
                 monitorData.getBarraProgreso().setValue(65);
             }
@@ -137,7 +147,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
     }
 
     @Override
-    public void error(ComprobanteElectronicoException cee,String claveAcceso) throws RemoteException {
+    public void error(ComprobanteElectronicoException cee,String claveAcceso)    {
         try {
             byte[] resporteSerializado = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,guiaRemision.getEmpresa());
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(resporteSerializado);
@@ -167,14 +177,12 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
             }
 
             //servicio.editar(facturaProcesando);
-        } catch (RemoteException ex) {
-            Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        }catch (IOException ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
-        guiaRemisionModel.panelPadre.actualizarNotificacionesCodefac();
+        GeneralPanelInterface.panelPadreStatic.actualizarNotificacionesCodefac();
     }
 
     private void generarReportePdf(String clave) {
@@ -183,7 +191,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
                 byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
                 guiaRemisionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
@@ -195,18 +203,17 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
             
             if(verificarImprimirComprobante())
             {
-                guiaRemisionModel.imprimirComprobanteGuiaRemision(guiaRemision); //TODO:Verificar si este metodo no funciona
+                GuiaRemisionModel.imprimirComprobanteGuiaRemisionStatic(guiaRemision,parametroGuiaRemision.dataReporte,parametroGuiaRemision.mapParametros,GeneralPanelInterface.panelPadreStatic);
+                //guiaRemisionModel.imprimirComprobanteGuiaRemision(guiaRemision); //TODO:Verificar si este metodo no funciona
             }
             else
             {            
                 byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave,guiaRemision.getEmpresa());
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
-                guiaRemisionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
+                GeneralPanelInterface.panelPadreStatic.crearReportePantalla(jasperPrint, clave);
             }
             //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
-        } catch (RemoteException ex) {
-            Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        }catch (IOException ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
@@ -216,7 +223,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
     
     
     private boolean verificarImprimirComprobante() {
-        ParametroCodefac parametroCodefac = guiaRemisionModel.session.getParametrosCodefac().get(ParametroCodefac.COMPROBANTE_GUIA_REMISION_ACTIVAR);
+        ParametroCodefac parametroCodefac = sesionCodefac.getParametrosCodefac().get(ParametroCodefac.COMPROBANTE_GUIA_REMISION_ACTIVAR);
         if (parametroCodefac == null) {
             //Si no esta tiene ningun dato por defecto no habilito la opcion de comprobante de venta
             return false;
@@ -227,5 +234,11 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
             }
         }
         return true;
+    }
+    
+    public static class ParametroGuiaRemision implements Serializable
+    {
+        public List<ComprobanteGuiaTransporteData> dataReporte;
+        public Map<String,Object> mapParametros;
     }
 }

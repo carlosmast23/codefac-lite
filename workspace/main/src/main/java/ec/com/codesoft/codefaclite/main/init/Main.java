@@ -73,7 +73,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.rmi.RemoteException;
+ ;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -713,9 +713,7 @@ public class Main {
             panel.setVisible(true);
             
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnknownHostException ex) {
+        }catch (UnknownHostException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -735,7 +733,7 @@ public class Main {
             session.setMatriz(datosLogin.matriz);
             session.setEmpresa(datosLogin.empresa);
             return session;
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -786,9 +784,7 @@ public class Main {
             //TODO: Ver si esta validacion se la hace antes , la unica razon porque se lo hace en esta parte es porque la variable global del usuario esta en el metodo verificarLicencia
             //verificarFechaMaximaPago(UtilidadesServidor.mapEmpresasLicencias.get(empresa).usuarioLicencia);
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
                 
@@ -820,9 +816,7 @@ public class Main {
                 ServiceFactory.getFactory().getParametroCodefacServiceIf().editar(parametroDirectorioRecursos);
             }
 
-        } catch (RemoteException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -862,7 +856,7 @@ public class Main {
                 DialogoCodefac.mensaje("Error", "Excedio el numero de clientes permitidos", DialogoCodefac.MENSAJE_INCORRECTO);
                 System.exit(0);
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -1034,7 +1028,7 @@ public class Main {
         try {
             PerfilServiceIf servicio = ServiceFactory.getFactory().getPerfilServicioIf();
             return servicio.obtenerPerfilesPorUsuario(usuario);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -1126,9 +1120,7 @@ public class Main {
                      LOG.log(Level.WARNING,"El metodo no se encontro para actualizar con el nombre :"+nombreMetodo);
                  }
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        }catch (IllegalAccessException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

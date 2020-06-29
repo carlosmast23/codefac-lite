@@ -43,7 +43,7 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -100,7 +100,7 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar aula modelo");
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             DialogoCodefac.mensaje("Error", "Error de comunicación con el servidor , estudiantes", DialogoCodefac.MENSAJE_ADVERTENCIA);
             Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -154,9 +154,7 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
             setearValoresEstudiante(estudiante);
             estudianteService.editar(estudiante);
             DialogoCodefac.mensaje("Datos correctos", "El estudiante se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (RemoteException ex) {
-            Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -171,9 +169,7 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
                 }
                 estudianteService.eliminarEstudiante(estudiante);
                 DialogoCodefac.mensaje("Datos correctos", "El estudiante se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            } catch (RemoteException ex) {
-                Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
+            }catch (ServicioCodefacException ex) {
                 DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                 Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -540,7 +536,7 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
                                
                 }
             });
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -606,7 +602,7 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
             });
             
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

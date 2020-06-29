@@ -18,7 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 public class MigrarProveedorModel extends MigrarClientesModel{
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         super.iniciar(); //To change body of generated methods, choose Tools | Templates.
         setTitle("Migrar Proveedor");
     }

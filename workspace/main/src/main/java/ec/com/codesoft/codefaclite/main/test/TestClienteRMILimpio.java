@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import java.rmi.Naming;
 import java.rmi.Remote;
+ 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 

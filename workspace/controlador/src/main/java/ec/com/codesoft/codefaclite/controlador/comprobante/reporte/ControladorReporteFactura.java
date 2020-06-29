@@ -32,7 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -361,8 +361,6 @@ public class ControladorReporteFactura {
                     break;
                     
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
         }

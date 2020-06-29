@@ -42,7 +42,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -90,7 +90,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar");
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }*/
         throw new UnsupportedOperationException("Not supported yet."); 
@@ -103,7 +103,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             setearValoresProducto(controlador.producto);
             productoService.editarProducto(controlador.producto);
             DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -182,8 +182,6 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 }
                 productoService.eliminarProducto(controlador.producto);
                 DialogoCodefac.mensaje("Datos correctos", "El producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            } catch (RemoteException ex) {
-                Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
                 DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                 Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);

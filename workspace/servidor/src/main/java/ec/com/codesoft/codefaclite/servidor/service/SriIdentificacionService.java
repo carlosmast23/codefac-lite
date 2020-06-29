@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.SriIdentificacionFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +23,11 @@ import java.util.Map;
 public class SriIdentificacionService extends ServiceAbstract<SriIdentificacion,SriIdentificacionFacade> implements  SriIdentificacionServiceIf
 {
     
-    public SriIdentificacionService() throws RemoteException {
+    public SriIdentificacionService()    {
         super(SriIdentificacionFacade.class);
     }
     
-    public SriIdentificacion buscarPorCodigo(String codigo) throws ServicioCodefacException, java.rmi.RemoteException
+    public SriIdentificacion buscarPorCodigo(String codigo) throws ServicioCodefacException 
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("codigo",codigo);
@@ -45,7 +45,7 @@ public class SriIdentificacionService extends ServiceAbstract<SriIdentificacion,
      * @param tipoTransaccion
      * @return 
      */
-    public SriIdentificacion obtenerPorTransaccionEIdentificacion(Persona.TipoIdentificacionEnum tipoIdentificacion,SriIdentificacion.tipoTransaccionEnum tipoTransaccion) throws java.rmi.RemoteException
+    public SriIdentificacion obtenerPorTransaccionEIdentificacion(Persona.TipoIdentificacionEnum tipoIdentificacion,SriIdentificacion.tipoTransaccionEnum tipoTransaccion)   
     {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("tipoIdentificacion",tipoIdentificacion.getLetra());

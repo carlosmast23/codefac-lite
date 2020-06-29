@@ -53,7 +53,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -165,9 +165,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
             
             parametros.put("subreporte_datos",reportPiePagina);
             ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, notificacionesDeudaImprimir, panelPadre, "Reporte Academico Deudas");           
-        } catch (RemoteException ex) {
-            Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        }catch (IOException ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -316,7 +314,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                 getCmbTipoRubroPorRubro().addItem(catalogo);
             }
 
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -354,9 +352,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                         getCmbRubro().addItem(rubro);
                     }
 
-                } catch (RemoteException ex) {
-                    Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
+                }catch (ServicioCodefacException ex) {
                     Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -416,7 +412,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
             agregarRubroLista(listaRubros);
             construirTablaRubros();
 
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -436,9 +432,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
             agregarRubroLista(rubros);
             construirTablaRubros();
 
-        } catch (RemoteException ex) {
-            Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -455,7 +449,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         try {
             List<RubroEstudiante> rubrosEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosEstudiantesPorRubros(listaRubros);
             mapRubrosEstudiante = convertirMapRubrosEstudiante(rubrosEstudiante);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -878,7 +872,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     public EnvioMensajesCallBackInterface getInterfaceCallback() {
         try {
             return new EnvioMensajesCallBack();
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

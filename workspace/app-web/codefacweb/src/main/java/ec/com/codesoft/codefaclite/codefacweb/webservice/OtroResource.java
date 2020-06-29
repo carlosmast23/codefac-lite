@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.codefacweb.webservice;
 import ec.com.codesoft.codefaclite.codefacweb.webservice.response.UsuarioResponse;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -54,7 +54,7 @@ public class OtroResource {
             for (Usuario usuario : usuarios) {
                 respuesta.add(UsuarioResponse.factory(usuario));
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(OtroResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         return Response.ok().entity(respuesta).build();

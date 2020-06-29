@@ -21,7 +21,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -47,7 +47,7 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
     private ArqueoCajaModelControlador controlador = new ArqueoCajaModelControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
             
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         //this.controlador.iniciar();
         listenerCombos();
         listenerFecha();
@@ -56,35 +56,35 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         this.controlador.nuevo();
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         //this.controlador.grabar();
         this.setearDatos();
         
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         this.controlador.editar();
         this.setearDatos();
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         this.controlador.eliminar();
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -94,7 +94,7 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
             this.controlador.iniciar();
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ArqueoCajaModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ArqueoCajaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

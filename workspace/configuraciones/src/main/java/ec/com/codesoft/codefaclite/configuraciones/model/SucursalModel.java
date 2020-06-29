@@ -19,7 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,18 +36,18 @@ public class SucursalModel extends SucursalPanel {
     private Sucursal sucursal;
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         cargarValoresIniciales();
         
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
        cargarValoresIniciales();
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         
         try {
             setearDatos();
@@ -60,7 +60,7 @@ public class SucursalModel extends SucursalPanel {
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
          try {
             setearDatos();
             ServiceFactory.getFactory().getSucursalServiceIf().editar(sucursal);
@@ -73,7 +73,7 @@ public class SucursalModel extends SucursalPanel {
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         //setearDatos();
         if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
         {            
@@ -93,12 +93,12 @@ public class SucursalModel extends SucursalPanel {
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -189,7 +189,7 @@ public class SucursalModel extends SucursalPanel {
             UtilidadesComboBox.llenarComboBox(getCmbEmpresa(),empresas);
             getCmbEmpresa().setSelectedItem(session.getEmpresa());
             //getCmbEmpresa().addItem(session.getEmpresa());
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(SucursalModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

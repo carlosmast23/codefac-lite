@@ -6,7 +6,6 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import java.rmi.Remote;
 import java.util.List;
 import java.util.Map;
 /**
@@ -14,17 +13,17 @@ import java.util.Map;
  * @author Carlos
  * @param <Entity>
  */
-public interface ServiceAbstractIf<Entity> extends Remote {
+public interface ServiceAbstractIf<Entity> {
         //private T t;
-    public List<Entity> obtenerTodos() throws java.rmi.RemoteException;
+    public List<Entity> obtenerTodos();
     
-    public Entity grabar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException;
+    public Entity grabar(Entity entity) throws ServicioCodefacException;
     
-    public void editar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException;
+    public void editar(Entity entity) throws ServicioCodefacException;
     
-    public void eliminar(Entity entity) throws ServicioCodefacException, java.rmi.RemoteException;
+    public void eliminar(Entity entity) throws ServicioCodefacException;
     
-    public Entity buscarPorId(Object primaryKey) throws java.rmi.RemoteException;
+    public Entity buscarPorId(Object primaryKey) ;
     
-    //public List<Entity> obtenerPorMap(Map<String,Object> parametros) throws java.rmi.RemoteException,ServicioCodefacException;
+    //public List<Entity> obtenerPorMap(Map<String,Object> parametros)   ,ServicioCodefacException;
 }

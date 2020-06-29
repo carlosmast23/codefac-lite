@@ -24,7 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +59,7 @@ public class AulaModel extends AulaPanel {
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         try {
             setearValoresAula(aula);
             aula = aulaService.grabar(aula);
@@ -78,7 +78,7 @@ public class AulaModel extends AulaPanel {
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         try {
             setearValoresAula(aula);
             aulaService.editar(aula);
@@ -102,9 +102,7 @@ public class AulaModel extends AulaPanel {
                 }
                 aulaService.eliminar(aula);
                 DialogoCodefac.mensaje("Datos correctos", "El aula se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            } catch (RemoteException ex) {
-                Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
+            }catch (ServicioCodefacException ex) {
                 Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
 
                 DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);

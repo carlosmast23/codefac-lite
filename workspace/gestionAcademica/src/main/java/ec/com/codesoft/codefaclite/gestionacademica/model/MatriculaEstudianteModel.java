@@ -34,7 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,9 +104,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 panelPadre.crearVentanaCodefac(VentanaEnum.FACTURACION, true, paramPostConstruct);
             }
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite(ex.getMessage());
         }
@@ -121,9 +119,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
             setearValores();
             ServiceFactory.getFactory().getEstudianteInscritoServiceIf().editar(estudianteInscrito);
             DialogoCodefac.mensaje("Correcto","La matricula fue editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (RemoteException ex) {
-            Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -136,9 +132,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 //Eliminar el estudiantes
                 ServiceFactory.getFactory().getEstudianteInscritoServiceIf().eliminar(estudianteInscrito);        
                 DialogoCodefac.mensaje("Correcto","El estudiante matriculado fue eliminado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-            } catch (RemoteException ex) {
-                Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
+            }catch (ServicioCodefacException ex) {
                 Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
                 
                 DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
@@ -172,7 +166,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 }
                 //return false;
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
@@ -211,7 +205,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 {
                     rubroMatricula=matriculas.get(0);
                 }
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
             }
             
@@ -294,7 +288,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 getCmbEstudianteTieneBeca().addItem(enumSiNo);
             }
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -326,7 +320,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                         }
                     }
                     
-                } catch (RemoteException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -344,7 +338,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
             for (NivelAcademico curso : cursos) {
                 getCmbCursoAsignar().addItem(curso);
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -452,7 +446,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 return false;
             }
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     

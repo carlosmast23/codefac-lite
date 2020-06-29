@@ -22,7 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +40,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
 {
     private ProductoFacade productoFacade;
     
-    public ProductoService() throws RemoteException
+    public ProductoService()   
     {
         super(ProductoFacade.class);
         this.productoFacade = new ProductoFacade();
@@ -51,14 +51,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 grabarSinTransaccion(p);
             }
         });        
         return p;
     }
     
-    private void grabarSinTransaccion(Producto p) throws java.rmi.RemoteException,ServicioCodefacException{
+    private void grabarSinTransaccion(Producto p)  throws ServicioCodefacException{
         validarGrabarProducto(p,CrudEnum.CREAR);
         
         //Si el catalogo producto no esta creado primero crea la entidad
@@ -85,7 +85,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         entityManager.persist(p);
     }
     
-    private void validarGrabarProducto(Producto p,CrudEnum estadoEnum) throws java.rmi.RemoteException,ServicioCodefacException    
+    private void validarGrabarProducto(Producto p,CrudEnum estadoEnum) throws ServicioCodefacException    
     {
         //TODO: Analizar porque el Sri supuestamente si deja mandar productos con valor 0 , por el momento solo pongo los menores que 0
         if(p.getValorUnitario().compareTo(BigDecimal.ZERO)<0)
@@ -128,24 +128,24 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
-    public void editarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException
+    public void editarProducto(Producto p)  throws ServicioCodefacException
     {
         validarGrabarProducto(p,CrudEnum.EDITAR);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 entityManager.merge(p);
             }
         });
 
     }
     
-    public void eliminarProducto(Producto p) throws ServicioCodefacException, RemoteException
+    public void eliminarProducto(Producto p) throws ServicioCodefacException  
     {
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
 
                 //Si el producto no maneja inventario lo puede eliminar directamente
                 KardexService kardexService = new KardexService();
@@ -201,7 +201,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         //return productoFacade.findAll();
     }
     
-    public Producto buscarPorNombreyEstado(String nombre,GeneralEnumEstado estadoEnum,Empresa empresa) throws RemoteException
+    public Producto buscarPorNombreyEstado(String nombre,GeneralEnumEstado estadoEnum,Empresa empresa)   
     {
 
         Map<String,Object> mapParametros=new HashMap<String,Object>();
@@ -218,7 +218,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
-    public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws ServicioCodefacException, RemoteException
+    public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws ServicioCodefacException  
     {
         //Producto p;
         //p.getCodigoPersonalizado();
@@ -237,7 +237,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
             
-    public List<Producto> obtenerTodosActivos(Empresa empresa) throws java.rmi.RemoteException
+    public List<Producto> obtenerTodosActivos(Empresa empresa)   
     {
         //Producto producto;
         //producto.getEstado()
@@ -248,7 +248,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return resultados;
     }
     
-    public Producto buscarGenerarCodigoBarras(EnumSiNo enumSiNo,Empresa empresa ) throws ServicioCodefacException,RemoteException
+    public Producto buscarGenerarCodigoBarras(EnumSiNo enumSiNo,Empresa empresa ) throws ServicioCodefacException   
     {
         //Producto p;
         //p.getEmpresa();
@@ -266,11 +266,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return null;
     }
     
-    public void grabarConInventario(Producto p,KardexDetalle kardexDetalle) throws ServicioCodefacException,java.rmi.RemoteException
+    public void grabarConInventario(Producto p,KardexDetalle kardexDetalle) throws ServicioCodefacException   
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 
                 //Solo grabo el producto cuando no esta creado previamente
                 if(p.getIdProducto()==null)

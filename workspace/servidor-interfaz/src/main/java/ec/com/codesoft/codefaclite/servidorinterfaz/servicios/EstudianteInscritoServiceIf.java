@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.Map;
 
@@ -26,30 +26,30 @@ public interface EstudianteInscritoServiceIf extends ServiceAbstractIf<Estudiant
     /**
      * Obtiene los estudiantes inscritos que pertenescan a ese Estudiante y a el periodo
      */
-    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodoYEstudiante(Periodo periodo,Estudiante estudiante) throws RemoteException ;
+    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodoYEstudiante(Periodo periodo,Estudiante estudiante)    ;
     /**
      * Metodo que permite registrar un estudiante y crea el rubro de matricula para que pueda facturar posteriormente
      */
-    public EstudianteInscrito matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException,ServicioCodefacException;
+    public EstudianteInscrito matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws   ServicioCodefacException;
     
-    public void matriculaEstudianteByList(List<EstudianteInscrito> estudiantesPorMatricular) throws RemoteException;
+    public void matriculaEstudianteByList(List<EstudianteInscrito> estudiantesPorMatricular);    
     
-    public void matricularEstudiantesByMap(Map<NivelAcademico,List<Estudiante>> mapEstudiantes) throws RemoteException;
+    public void matricularEstudiantesByMap(Map<NivelAcademico,List<Estudiante>> mapEstudiantes);    
     
-    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel,Periodo periodo) throws java.rmi.RemoteException;
+    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel,Periodo periodo)   ;
     
-    public List<EstudianteInscrito> buscarPorNivelAcademico(Periodo periodo,NivelAcademico nivel) throws ServicioCodefacException, java.rmi.RemoteException;
+    public List<EstudianteInscrito> buscarPorNivelAcademico(Periodo periodo,NivelAcademico nivel) throws ServicioCodefacException ;
     
-    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodo(Periodo periodo) throws RemoteException;
+    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodo(Periodo periodo);    
     
-    public void eliminarEstudiantesInscrito(List<EstudianteInscrito> estudiantesEliminar) throws RemoteException;
+    public void eliminarEstudiantesInscrito(List<EstudianteInscrito> estudiantesEliminar);    
     
-    public Long obtenerTamanioEstudiatesInscritosPorCurso(NivelAcademico nivelAcademico) throws RemoteException;
+    public Long obtenerTamanioEstudiatesInscritosPorCurso(NivelAcademico nivelAcademico);    
     
-    public List<Object[]> consultarRepresentanteConEstudiantesYCursos() throws RemoteException;
+    public List<Object[]> consultarRepresentanteConEstudiantesYCursos();    
     
-    public EstudianteInscrito obtenerPorEstudianteYNivelYEstado(Estudiante estudiante,NivelAcademico nivel,GeneralEnumEstado estado ) throws RemoteException;
+    public EstudianteInscrito obtenerPorEstudianteYNivelYEstado(Estudiante estudiante,NivelAcademico nivel,GeneralEnumEstado estado );    
     
-    public EstudianteInscrito buscarEstudianteMatriculadoPeriodoActivo(Estudiante estudiante) throws ServicioCodefacException, java.rmi.RemoteException;
+    public EstudianteInscrito buscarEstudianteMatriculadoPeriodoActivo(Estudiante estudiante) throws ServicioCodefacException ;
     
 }

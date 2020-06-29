@@ -32,7 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoService
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +53,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     NotaCreditoDetalleFacade notaCreditoDetalleFacade;
     ParametroCodefacService parametroCodefacService;
 
-    public NotaCreditoService() throws RemoteException {
+    public NotaCreditoService()    {
         super(NotaCreditoFacade.class);
         this.notaCreditoFacade = new NotaCreditoFacade();
         this.notaCreditoDetalleFacade = new NotaCreditoDetalleFacade();
@@ -64,7 +64,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
 
                    //Validacion para evitar hacer notas de credito al consumidor final lo que no permite el Sri
                 if (notaCredito.getCliente().isClienteFinal()) {
@@ -114,14 +114,14 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         return notaCredito;
     }
     
-    private void grabarCarteraSinTransaccion(NotaCredito notaCredito) throws RemoteException, ServicioCodefacException
+    private void grabarCarteraSinTransaccion(NotaCredito notaCredito) throws    ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
         carteraService.grabarDocumentoCartera(notaCredito, Cartera.TipoCarteraEnum.CLIENTE,null);
     }
     
-    private void anularRubroEstudiante(Long referenciaId,BigDecimal total) throws RemoteException
+    private void anularRubroEstudiante(Long referenciaId,BigDecimal total)   
     {
         RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(referenciaId);
         rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
@@ -129,7 +129,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         entityManager.merge(rubroEstudiante);
     }
     
-    private void anularPresupuesto(Long referenciaId) throws RemoteException
+    private void anularPresupuesto(Long referenciaId)   
     {
         PresupuestoService presupuestoServicio = new PresupuestoService();
         Presupuesto presupuesto = presupuestoServicio.buscarPorId(referenciaId);
@@ -141,9 +141,9 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
      * @param tipoDocumento
      * @param referenciaId
      * @param total
-     * @throws RemoteException 
+     * @   
      */
-    public void anularProcesoFactura(FacturaDetalle facturaDetalle) throws RemoteException, ServicioCodefacException
+    public void anularProcesoFactura(FacturaDetalle facturaDetalle) throws    ServicioCodefacException
     {
         //TipoDocumentoEnum tipoDocumento,Long referenciaId,BigDecimal total
         switch (facturaDetalle.getTipoDocumentoEnum()) {
@@ -178,10 +178,10 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
      * TODO:Unir este metodo con Factura Service porque utilizo 2 veces
      * @param comprobante
      * @return
-     * @throws RemoteException
+     * @  
      * @throws ServicioCodefacException 
      */
-    private Bodega obtenerBodegaAfecta(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
+    private Bodega obtenerBodegaAfecta(ComprobanteEntity comprobante) throws    ServicioCodefacException
     {
         BodegaService bodegaService = new BodegaService();
         Bodega bodegaVenta = bodegaService.obtenerBodegaVenta(comprobante.getSucursalEmpresa());
@@ -191,7 +191,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         return bodegaVenta;
     }
     
-    public void anularProcesoNotCredito(NotaCreditoDetalle notaDetalle) throws RemoteException, ServicioCodefacException
+    public void anularProcesoNotCredito(NotaCreditoDetalle notaDetalle) throws    ServicioCodefacException
     {
         switch (notaDetalle.getTipoDocumentoEnum()) {
             case ACADEMICO:
@@ -264,7 +264,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 
                 entityManager.merge(kardex);
             //}
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }
     
@@ -278,7 +278,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             String establecimiento = parametroCodefacService.getParametroByNombre(ParametroCodefac.ESTABLECIMIENTO).valor;
             String puntoEmision = parametroCodefacService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
             return  establecimiento + "-" + puntoEmision + "-" + secuencial;
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
@@ -292,16 +292,16 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         return notaCreditoFacade.findAll();
     }
 
-    public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa) throws RemoteException {
+    public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa)    {
         return notaCreditoFacade.lista(persona, fi, ff,estado,empresa);
     }
 
     @Override
-    public void eliminar(NotaCredito entity) throws RemoteException {
+    public void eliminar(NotaCredito entity)    {
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
+                public void transaccion() throws ServicioCodefacException   {
                    
                     entity.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());
                     entityManager.merge(entity.getFactura());

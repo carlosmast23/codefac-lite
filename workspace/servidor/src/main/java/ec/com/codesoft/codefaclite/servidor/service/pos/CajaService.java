@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
-import java.rmi.RemoteException;
+ ;
 
 /**
  *
@@ -21,15 +21,15 @@ import java.rmi.RemoteException;
  */
 public class CajaService extends ServiceAbstract<Caja,CajaFacade> implements CajaServiceIf{
 
-    public CajaService() throws RemoteException {
+    public CajaService()    {
         super(CajaFacade.class);
     }
 
     @Override
-    public void eliminar(Caja entity) throws ServicioCodefacException, RemoteException {
+    public void eliminar(Caja entity) throws ServicioCodefacException   {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 CajaEnum estado = CajaEnum.ELIMINADO;
                 entity.setEstadoEnum(estado);
                 entityManager.merge(entity);

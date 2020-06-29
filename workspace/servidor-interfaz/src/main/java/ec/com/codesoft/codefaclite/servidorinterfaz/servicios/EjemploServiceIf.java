@@ -5,13 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
-import java.rmi.Remote;
+ 
 
 /**
  *
  * @author CodesoftDesarrollo 1
  */
-public interface EjemploServiceIf extends Remote
+public interface EjemploServiceIf   
 {
     
 }

@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +25,7 @@ public class DepartamentoService extends ServiceAbstract<Departamento, Departame
 {
     private DepartamentoFacade departamentoFacade;
     
-    public DepartamentoService() throws RemoteException
+    public DepartamentoService()   
     {
         super(DepartamentoFacade.class);
         this.departamentoFacade = new DepartamentoFacade();

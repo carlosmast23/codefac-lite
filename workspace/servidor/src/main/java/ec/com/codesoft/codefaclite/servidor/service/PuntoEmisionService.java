@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,15 +25,15 @@ import java.util.logging.Logger;
  */
 public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisionFacade> implements PuntoEmisionServiceIf
 {
-    public PuntoEmisionService() throws RemoteException {
+    public PuntoEmisionService()    {
         super(PuntoEmisionFacade.class);
     }
 
     @Override
-    public void editar(PuntoEmision entity) throws ServicioCodefacException, RemoteException {
+    public void editar(PuntoEmision entity) throws ServicioCodefacException   {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 validarPuntoEmisionSinTransaccion(entity);
                 entityManager.merge(entity);
             }
@@ -43,10 +43,10 @@ public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisi
     
 
     @Override
-    public PuntoEmision grabar(PuntoEmision entity) throws ServicioCodefacException, RemoteException {
+    public PuntoEmision grabar(PuntoEmision entity) throws ServicioCodefacException   {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 validarPuntoEmisionSinTransaccion(entity);
                 entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                 entityManager.persist(entity);
@@ -60,9 +60,9 @@ public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisi
      * @param puntoEmision
      * @return
      * @throws ServicioCodefacException
-     * @throws RemoteException 
+     * @   
      */
-    private void validarPuntoEmisionSinTransaccion(PuntoEmision puntoEmision)throws ServicioCodefacException, RemoteException
+    private void validarPuntoEmisionSinTransaccion(PuntoEmision puntoEmision)throws ServicioCodefacException  
     {
         puntoEmision.getSucursal();
         puntoEmision.getPuntoEmision();
@@ -81,13 +81,13 @@ public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisi
     }
     
     @Override
-    public List<PuntoEmision> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException, RemoteException {
+    public List<PuntoEmision> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException   {
        // ejecutarTransaccion(new MetodoInterfaceTransaccion() {
        //PuntoEmision pv;
        //pv.getS7
         return (List<PuntoEmision>) ejecutarConsulta(new MetodoInterfaceConsulta() {
            @Override
-           public Object consulta() throws ServicioCodefacException, RemoteException {
+           public Object consulta() throws ServicioCodefacException   {
                Map<String, Object> mapParametros = new HashMap<String, Object>();
                mapParametros.put("sucursal", sucursal);
                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
@@ -99,11 +99,11 @@ public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisi
     }
 
     @Override
-    public void eliminar(PuntoEmision entity) throws RemoteException {
+    public void eliminar(PuntoEmision entity)    {
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
+                public void transaccion() throws ServicioCodefacException   {
                     entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                     entityManager.merge(entity);
                 }
@@ -115,7 +115,7 @@ public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisi
 
 
     @Override
-    public PuntoEmision obtenerPorCodigo(Integer codigo,Sucursal sucursal) throws ServicioCodefacException, RemoteException {
+    public PuntoEmision obtenerPorCodigo(Integer codigo,Sucursal sucursal) throws ServicioCodefacException   {
        Map<String,Object> mapParametros=new HashMap<String,Object>();
        //PuntoEmision p;
        //p.getSucursal()
@@ -133,13 +133,13 @@ public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisi
     }
     
     @Override
-    public List<PuntoEmision> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException
+    public List<PuntoEmision> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException  
     {
         /*PuntoEmision p;
         p.getSucursal().getEmpresa();*/
         return (List<PuntoEmision>)ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta() throws ServicioCodefacException   {
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
 
                 mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());

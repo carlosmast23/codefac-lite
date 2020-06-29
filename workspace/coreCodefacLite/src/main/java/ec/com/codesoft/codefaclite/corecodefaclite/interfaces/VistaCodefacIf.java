@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.corecodefaclite.interfaces;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.Map;
 
@@ -21,16 +21,16 @@ public interface VistaCodefacIf {
      * Este metodo tiene el objetivo de funcionar despues de construir el objeto para interactuar con las variables inyectadas en el formulario
      * por ejemplo con las variables de session , o con funcionalidades del formulario padre
      */
-    public abstract void iniciar() throws ExcepcionCodefacLite,RemoteException;
+    public abstract void iniciar() throws ExcepcionCodefacLite   ;
     /**
      * Metodo que se debe implementar si se desea controlar el proceso del boton nuevo
      */
-    public abstract void nuevo() throws ExcepcionCodefacLite,RemoteException;
-    public abstract void grabar() throws ExcepcionCodefacLite,RemoteException;
-    public abstract void editar() throws ExcepcionCodefacLite,RemoteException;
-    public abstract void eliminar() throws ExcepcionCodefacLite,RemoteException;
-    public abstract void imprimir() throws ExcepcionCodefacLite,RemoteException;
-    public abstract void actualizar() throws ExcepcionCodefacLite,RemoteException;
+    public abstract void nuevo() throws ExcepcionCodefacLite   ;
+    public abstract void grabar() throws ExcepcionCodefacLite   ;
+    public abstract void editar() throws ExcepcionCodefacLite   ;
+    public abstract void eliminar() throws ExcepcionCodefacLite   ;
+    public abstract void imprimir() throws ExcepcionCodefacLite   ;
+    public abstract void actualizar() throws ExcepcionCodefacLite   ;
         /**
      * Este metodo se ejecutara despues de grabar o borrar los datos
      * Se deben programar solo metodos personalizados que no se puedan

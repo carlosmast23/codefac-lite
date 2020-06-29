@@ -7,17 +7,17 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
-import java.rmi.Remote;
+ 
 import java.util.List;
 
 /**
  *
  * @author CodesoftDesarrollo 1
  */
-public interface SriServiceIf extends Remote
+public interface SriServiceIf   
 {
-    public SriFormaPago obtenerFormarPagoDefecto() throws java.rmi.RemoteException;
-    public SriFormaPago obtenerFormarPagoConCartera() throws java.rmi.RemoteException;
-    public List<SriFormaPago> obtenerFormasPagoActivo() throws java.rmi.RemoteException;
-    public List<SriIdentificacion> obtenerIdentificaciones(String tipo) throws java.rmi.RemoteException;
+    public SriFormaPago obtenerFormarPagoDefecto()   ;
+    public SriFormaPago obtenerFormarPagoConCartera()   ;
+    public List<SriFormaPago> obtenerFormasPagoActivo()   ;
+    public List<SriIdentificacion> obtenerIdentificaciones(String tipo)   ;
 }

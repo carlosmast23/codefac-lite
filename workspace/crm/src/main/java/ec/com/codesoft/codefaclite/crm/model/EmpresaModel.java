@@ -36,7 +36,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -139,7 +139,7 @@ public class EmpresaModel extends EmpresaForm
                 Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                 throw  new ExcepcionCodefacLite(ex.getMessage());
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         /*}
@@ -150,7 +150,7 @@ public class EmpresaModel extends EmpresaForm
                 session.setEmpresa(empresa);
                 moverArchivo();
                 DialogoCodefac.mensaje("Exito","Empresa editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -171,8 +171,6 @@ public class EmpresaModel extends EmpresaForm
             {
                 session.setEmpresa(empresa);
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -189,7 +187,7 @@ public class EmpresaModel extends EmpresaForm
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);                
             }
@@ -363,7 +361,7 @@ public class EmpresaModel extends EmpresaForm
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
