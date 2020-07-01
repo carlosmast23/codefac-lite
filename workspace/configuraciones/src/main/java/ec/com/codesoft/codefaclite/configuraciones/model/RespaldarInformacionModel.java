@@ -33,7 +33,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.rmi.RemoteException;
+ ;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -118,10 +118,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                     DialogoCodefac.mensaje("Advertencia", "Necesita establecer una ruta para los respaldos", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 }
             }
-            catch(RemoteException exc)
-            {
-                System.out.println("Error guardando parametro de path respaldo");
-            } catch (ServicioCodefacException ex) {
+            catch (ServicioCodefacException ex) {
             Logger.getLogger(RespaldarInformacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     } 
@@ -300,7 +297,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
             {
                 getTxtUbicacionRespaldo().setText("");
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(RespaldarInformacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

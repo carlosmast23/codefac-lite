@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.pos.ArqueoCajaFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.ArqueoCajaServiceIf;
-import java.rmi.RemoteException;
+ ;
 
 /**
  *
@@ -18,7 +18,7 @@ import java.rmi.RemoteException;
 public class ArqueoCajaService extends ServiceAbstract<ArqueoCaja, ArqueoCajaFacade> implements ArqueoCajaServiceIf
 {
 
-    public ArqueoCajaService() throws RemoteException {
+    public ArqueoCajaService()    {
         super(ArqueoCajaFacade.class);
     }
     

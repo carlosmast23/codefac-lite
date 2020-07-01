@@ -28,7 +28,7 @@ import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,7 +56,7 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
     private Empleado empleado;
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         listenerCheck();
         listenerBotones();
         valoresIniciales();
@@ -64,27 +64,27 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
                 //Si no existen datos no continu el proceso
         if(listaResultado==null)
         {
@@ -125,7 +125,7 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -191,10 +191,7 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
                     OrdenTrabajoDetalle.EstadoEnum estado=(OrdenTrabajoDetalle.EstadoEnum) getCmbEstado().getSelectedItem();
                     listaResultado=serviceOrdenTrabajo.consultarReporte(fechaInicial, fechaDateFinal,departamento,empleado,estado);
                     imprimir();
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ReporteOrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
-                    DialogoCodefac.mensaje("Error","No existe comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
-                } catch (ExcepcionCodefacLite ex) {
+                }catch (ExcepcionCodefacLite ex) {
                     Logger.getLogger(ReporteOrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -265,7 +262,7 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
             }
             
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ReporteOrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         

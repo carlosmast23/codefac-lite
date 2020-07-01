@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +26,7 @@ public class ImpuestoService extends ServiceAbstract<Impuesto, ImpuestoFacade> i
     private ImpuestoFacade impuestoFacade;
     private ImpuestoDetalleFacade impuestoDetalleFacade;
 
-    public ImpuestoService() throws RemoteException
+    public ImpuestoService()   
     {
         super(ImpuestoFacade.class);
         impuestoFacade = new ImpuestoFacade();
@@ -55,7 +55,7 @@ public class ImpuestoService extends ServiceAbstract<Impuesto, ImpuestoFacade> i
         impuestoFacade.remove(i);
     }
     
-    public Impuesto obtenerImpuestoPorCodigo(String nombre)
+    public Impuesto obtenerImpuestoPorCodigo(String nombre)   
     {
         return impuestoFacade.getByName(nombre);
     }

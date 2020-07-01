@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.EmpresaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +27,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
 {
     private EmpresaFacade empresaFacade;
     
-    public EmpresaService() throws RemoteException 
+    public EmpresaService()    
     {        
         super(EmpresaFacade.class);
         this.empresaFacade = new EmpresaFacade();
@@ -37,7 +37,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 //Grabar la empresa
                 entityManager.persist(p);
                 
@@ -73,14 +73,14 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         
     }*/
     
-    public void eliminar(Empresa p) throws ServicioCodefacException,java.rmi.RemoteException
+    public void eliminar(Empresa p) throws ServicioCodefacException   
     {
         //Empresa empresa;
         //empresa.getEstado();
         //p.setEstadoEnum(GeneralEnumEstado.);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 p.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(p);
             }
@@ -93,7 +93,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         return empresaFacade.findAll();
     } 
     
-    public Empresa buscarPorIdentificacion(String identificacion) throws RemoteException 
+    public Empresa buscarPorIdentificacion(String identificacion)    
     {
         //Empresa empresa;       
         Map<String,Object> mapParametros=new HashMap<String, Object>();
@@ -106,7 +106,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         return null;
     }
     
-    public List<Empresa> obtenerTodosActivos() throws RemoteException
+    public List<Empresa> obtenerTodosActivos()   
     {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());

@@ -15,10 +15,12 @@ import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.PresupuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
-import java.rmi.RemoteException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
+ ;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +36,7 @@ public class TestBaseDatos {
     public static void main(String[] args) {
         try {
             AbstractFacade.usuarioDb = "root";
-            AbstractFacade.claveDb = "1234";
+            AbstractFacade.claveDb = "123";
             AbstractFacade.cargarEntityManager();
             
             EntityManager em= AbstractFacade.entityManager;
@@ -50,41 +52,11 @@ public class TestBaseDatos {
 //            for (Persona persona : personas) {
 //                System.out.println(" - " + persona);
 //            }
-            OrdenTrabajoService service = new OrdenTrabajoService();
-            OrdenTrabajo ordenTrabajo = (OrdenTrabajo) service.obtenerTodos().get(0);
-            System.out.println("Número de ordenes de trabajo: " + ordenTrabajo.getDetalles().size()); 
-            PresupuestoService servicio1 = new PresupuestoService();
-            List <OrdenTrabajoDetalle> ordenesTrabajoDetalles = servicio1.listarOrdenesTrabajo(ordenTrabajo);
-            for (OrdenTrabajoDetalle ordenTrabajoDetalle : ordenesTrabajoDetalles) {
-                System.out.println("-> " + ordenTrabajo.toString());
+            
+            PersonaServiceIf service = ServiceFactory.getFactory().getPersonaServiceIf();
+            for (Persona persona : service.obtenerTodos()) {
+                System.out.println(persona);
             }
-                    
-            
-            /*
-            //et.begin();
-            //Usuario usuario=em.find(Usuario.class,"admin");
-            //usuario.setClave("12345");
-            //System.out.println(usuario);em.detach(et);            
-            ComprobanteFisicoDisenioService servicio = new ComprobanteFisicoDisenioService();
-            List<ComprobanteFisicoDisenio> documentos = servicio.obtenerTodos();
-            ComprobanteFisicoDisenio comprobante=documentos.get(0);
-            comprobante.setNombre("vvvvv");
-            ServiceAbstract.desasociarEntidadPersistencia(comprobante);
-            //em.detach(comprobante);
-            
-            ComprobanteFisicoDisenio c2=servicio.obtenerTodos().get(0);
-            System.out.println(c2.getNombre());
-            //em.merge(comprobante);
-            //et.commit();
-            
-            et= em.getTransaction();
-
-            //et.commit();
-            et.begin();
-            Usuario usuario=em.find(Usuario.class,"admin");
-            usuario.setClave("12345");
-            et.commit();
-            //System.out.println(usuario);*/
             em.close();
             System.exit(0);
             
@@ -92,7 +64,7 @@ public class TestBaseDatos {
             Logger.getLogger(TestBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PersistenciaDuplicadaException ex) {
             Logger.getLogger(TestBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(TestBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

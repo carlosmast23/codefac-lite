@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidor.facade.SriFormaPagoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServiceIf;
-import java.rmi.RemoteException;
+ ;
 
 /**
  *
@@ -17,7 +17,7 @@ import java.rmi.RemoteException;
 public class SriFormaPagoService extends ServiceAbstract<SriFormaPago, SriFormaPagoFacade> implements SriFormaPagoServiceIf
 {
 
-    public SriFormaPagoService() throws RemoteException {
+    public SriFormaPagoService()    {
         super(SriFormaPagoFacade.class);
     }
     

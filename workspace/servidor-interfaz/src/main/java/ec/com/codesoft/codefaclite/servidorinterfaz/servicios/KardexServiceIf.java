@@ -17,7 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.math.BigDecimal;
-import java.rmi.Remote;
+ 
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,36 +29,36 @@ import java.util.Map;
  */
 public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
 {
-    public Kardex buscarKardexPorProductoyBodega(Bodega bodega,Producto producto) throws java.rmi.RemoteException;
-    public void ingresoEgresoInventarioEnsamble(Bodega bodega, Producto productoEnsamble,Integer cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException;
-    public void ingresarInventario(Map<KardexDetalle,CompraDetalle> detalles,Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException;
-    public void ingresarInventario(List<KardexDetalle> detalles) throws java.rmi.RemoteException,ServicioCodefacException;
-    public void ingresarInventario(KardexDetalle detalle) throws java.rmi.RemoteException,ServicioCodefacException;
-    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Integer cantidadMovimientos) throws java.rmi.RemoteException;
-    public List<Object[]> consultarStockMinimo(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException;    
-    public List<Kardex> buscarPorProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException;
-    public List<Kardex> buscarPorBodega(Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException;
-    public List<Object[]> consultarStock(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException;
-    public List<Kardex> buscarPorProductoYBodega(Producto producto,Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException;
-    public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,Integer cantidad,BigDecimal precio,Date fechaTransaccion) throws java.rmi.RemoteException,ServicioCodefacException;
-    public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,Integer cantidad) throws java.rmi.RemoteException,ServicioCodefacException;
-    public void recalcularValoresKardex(Kardex kardex,KardexDetalle kardexDetalle) throws java.rmi.RemoteException,ServicioCodefacException;
-    public boolean obtenerSiNoExisteStockProducto(Bodega bodega, Producto producto, int cantidad) throws java.rmi.RemoteException;
+    public Kardex buscarKardexPorProductoyBodega(Bodega bodega,Producto producto)   ;
+    public void ingresoEgresoInventarioEnsamble(Bodega bodega, Producto productoEnsamble,Integer cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws ServicioCodefacException;
+    public void ingresarInventario(Map<KardexDetalle,CompraDetalle> detalles,Bodega bodega) throws  ServicioCodefacException;
+    public void ingresarInventario(List<KardexDetalle> detalles)   throws ServicioCodefacException;
+    public void ingresarInventario(KardexDetalle detalle)    throws ServicioCodefacException;
+    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Integer cantidadMovimientos)   ;
+    public List<Object[]> consultarStockMinimo(Bodega bodega,CategoriaProducto categoria)   ;    
+    public List<Kardex> buscarPorProducto(Producto producto)   throws ServicioCodefacException;
+    public List<Kardex> buscarPorBodega(Bodega bodega)   throws ServicioCodefacException;
+    public List<Object[]> consultarStock(Bodega bodega,CategoriaProducto categoria)   ;
+    public List<Kardex> buscarPorProductoYBodega(Producto producto,Bodega bodega)   throws ServicioCodefacException;
+    public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,Integer cantidad,BigDecimal precio,Date fechaTransaccion)   throws ServicioCodefacException;
+    public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,Integer cantidad)   throws ServicioCodefacException;
+    public void recalcularValoresKardex(Kardex kardex,KardexDetalle kardexDetalle)   throws ServicioCodefacException;
+    public boolean obtenerSiNoExisteStockProducto(Bodega bodega, Producto producto, int cantidad)   ;
     
-    public List<Kardex> getKardexModificados(Producto productoEnsamble,Integer cantidadEnsamble,Bodega bodega,ProductoEnsamble.EnsambleAccionEnum accion) throws java.rmi.RemoteException,ServicioCodefacException;
-    public void ingresoEgresoInventarioEnsambleSinTransaccion(Bodega bodega, Producto productoEnsamble,Integer cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException;
+    public List<Kardex> getKardexModificados(Producto productoEnsamble,Integer cantidadEnsamble,Bodega bodega,ProductoEnsamble.EnsambleAccionEnum accion)   throws ServicioCodefacException;
+    public void ingresoEgresoInventarioEnsambleSinTransaccion(Bodega bodega, Producto productoEnsamble,Integer cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes)   throws ServicioCodefacException;
     
-    public Kardex construirKardexVacioSinPersistencia() throws java.rmi.RemoteException,ServicioCodefacException;
+    public Kardex construirKardexVacioSinPersistencia()   throws ServicioCodefacException;
     
-    public List<Kardex> buscarPorProducto(Producto producto,GeneralEnumEstado generalEnumEstado) throws java.rmi.RemoteException,ServicioCodefacException;
+    public List<Kardex> buscarPorProducto(Producto producto,GeneralEnumEstado generalEnumEstado)   throws ServicioCodefacException;
     /**
      * Este metodo permite crear un movimiento que permite dejar en 0 el Stock actual
      * @param kardex
-     * @throws java.rmi.RemoteException
+     * @  
      * @throws ServicioCodefacException 
      */
-    public void anularInventario(Kardex kardex) throws java.rmi.RemoteException,ServicioCodefacException;
+    public void anularInventario(Kardex kardex)    throws ServicioCodefacException;
     
-    public Kardex buscarKardexPorProducto(Producto producto) throws java.rmi.RemoteException;
+    public Kardex buscarKardexPorProducto(Producto producto)   ;
     
 }

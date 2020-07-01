@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.codefacweb.converter;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
-import java.rmi.RemoteException;
+ ;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
@@ -28,7 +28,7 @@ public class EjemploConverter implements Converter{
         {
             try {
                 empresa= ServiceFactory.getFactory().getEmpresaServiceIf().buscarPorId(Long.parseLong(value));
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(EjemploConverter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

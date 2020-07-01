@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturaDetalleServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,12 +24,12 @@ import java.util.logging.Logger;
  */
 public class FacturaDetalleService extends ServiceAbstract<FacturaDetalle, FacturaDetalleFacade> implements FacturaDetalleServiceIf {
 
-    public FacturaDetalleService() throws RemoteException {
+    public FacturaDetalleService()    {
         super(FacturaDetalleFacade.class);
     }
     
     
-    public Object getReferenciaDetalle(FacturaDetalle facturaDetalle) throws ServicioCodefacException,java.rmi.RemoteException
+    public Object getReferenciaDetalle(FacturaDetalle facturaDetalle) throws ServicioCodefacException   
     {
         try {
             TipoDocumentoEnum tipoReferenciaEnum=facturaDetalle.getTipoDocumentoEnum();
@@ -48,7 +48,7 @@ public class FacturaDetalleService extends ServiceAbstract<FacturaDetalle, Factu
                     return producto;
                     
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FacturaDetalleService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

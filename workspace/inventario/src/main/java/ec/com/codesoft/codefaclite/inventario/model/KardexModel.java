@@ -47,7 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,10 +119,7 @@ public class KardexModel extends KardexPanel {
                 try {
                     ServiceFactory.getFactory().getKardexServiceIf().anularInventario(kardex);
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
-                    throw new ExcepcionCodefacLite("Cancelar eliminar");
-                } catch (ServicioCodefacException ex) {
+                }catch (ServicioCodefacException ex) {
                     Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
                     DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                     throw new ExcepcionCodefacLite("Cancelar eliminar");
@@ -270,10 +267,7 @@ public class KardexModel extends KardexPanel {
                         kardex=kardexService.construirKardexVacioSinPersistencia();
                         cargarTablaKardex();
                     }
-                } catch (RemoteException ex) {
-                    Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
-                    DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
-                } catch (ServicioCodefacException ex) {
+                }catch (ServicioCodefacException ex) {
                     Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -518,9 +512,7 @@ public class KardexModel extends KardexPanel {
             for (Bodega bodega : bodegas) {
                 getCmbBodega().addItem(bodega);
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 

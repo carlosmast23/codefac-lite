@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.DescuentoAcademicoServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,15 +24,15 @@ import java.util.Map;
  */
 public class DescuentoAcademicoService extends ServiceAbstract<DescuentoAcademico, DescuentoAcademicoFacade> implements DescuentoAcademicoServiceIf {
 
-    public DescuentoAcademicoService() throws RemoteException {
+    public DescuentoAcademicoService()    {
         super(DescuentoAcademicoFacade.class);
     }
 
     @Override
-    public DescuentoAcademico grabar(DescuentoAcademico entity) throws ServicioCodefacException, RemoteException {
+    public DescuentoAcademico grabar(DescuentoAcademico entity) throws ServicioCodefacException   {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
 
                 //buscar el periodo actual activo pqara grabar
                 PeriodoService periodoService = new PeriodoService();
@@ -47,17 +47,17 @@ public class DescuentoAcademicoService extends ServiceAbstract<DescuentoAcademic
     }
 
     @Override
-    public void eliminar(DescuentoAcademico entity) throws ServicioCodefacException, RemoteException {
+    public void eliminar(DescuentoAcademico entity) throws ServicioCodefacException   {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);
             }
         });
     }
 
-    public List<DescuentoAcademico> obtenerDescuentoActivosPorPeriodoActivo()throws ServicioCodefacException, RemoteException {
+    public List<DescuentoAcademico> obtenerDescuentoActivosPorPeriodoActivo()throws ServicioCodefacException   {
         PeriodoService periodoService = new PeriodoService();
         Periodo periodoActivo = periodoService.obtenerUnicoPeriodoActivo();
         
@@ -67,7 +67,7 @@ public class DescuentoAcademicoService extends ServiceAbstract<DescuentoAcademic
         return getFacade().findByMap(mapParametros);
     }
     
-    public List<DescuentoAcademico> obtenerDescuentoActivosPorPeriodoActivo(DescuentoAcademico.TipoEnum tipoEnum)throws ServicioCodefacException, RemoteException
+    public List<DescuentoAcademico> obtenerDescuentoActivosPorPeriodoActivo(DescuentoAcademico.TipoEnum tipoEnum)throws ServicioCodefacException  
     {
         PeriodoService periodoService = new PeriodoService();
         Periodo periodoActivo = periodoService.obtenerUnicoPeriodoActivo();

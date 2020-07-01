@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,18 +21,18 @@ import java.util.Map;
  */
 public class CatalogoProductoService extends ServiceAbstract<CatalogoProducto,CatalogoProductoFacade> implements CatalogoProductoServiceIf{
             
-    public CatalogoProductoService() throws RemoteException {
+    public CatalogoProductoService()    {
         super(CatalogoProductoFacade.class);
     }
     
-    public List<CatalogoProducto> obtenerPorModulo(ModuloCodefacEnum modulo) throws RemoteException
+    public List<CatalogoProducto> obtenerPorModulo(ModuloCodefacEnum modulo)   
     {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("moduloCod",modulo.getCodigo());
         return getFacade().findByMap(mapParametros);
     }
     
-    public CatalogoProducto obtenerPorNombre(String nombre) throws RemoteException {
+    public CatalogoProducto obtenerPorNombre(String nombre)    {
         CatalogoProducto cp;
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("nombre",nombre);

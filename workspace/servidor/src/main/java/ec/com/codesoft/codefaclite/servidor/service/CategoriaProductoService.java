@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.CategoriaProductoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
 
     private CategoriaProductoFacade categoriaProductoFacade;
 
-    public CategoriaProductoService() throws RemoteException {
+    public CategoriaProductoService()    {
         super(CategoriaProductoFacade.class);
         this.categoriaProductoFacade = new CategoriaProductoFacade();
     }
@@ -55,7 +55,7 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
         categoriaProductoFacade.edit(c);
     }
 
-    public List<CategoriaProducto> obtenerTodosPorEmpresa(Empresa empresa) throws java.rmi.RemoteException
+    public List<CategoriaProducto> obtenerTodosPorEmpresa(Empresa empresa)   
     {
         //CategoriaProducto categoria;
         //categoria.getEmpresa();
@@ -66,7 +66,7 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
         return getFacade().findByMap(mapParametros);
     }
     
-    public CategoriaProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException
+    public CategoriaProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException   
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());

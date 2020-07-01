@@ -9,8 +9,8 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElect
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+ 
+ ;
 import java.util.List;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -18,14 +18,14 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public interface ClienteInterfaceComprobante extends Remote{
+public interface ClienteInterfaceComprobante {
     
-    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas) throws RemoteException;
+    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas);    
     
-    public void iniciado() throws RemoteException;
+    public void iniciado();    
     
-    public void procesando(int etapa, ClaveAcceso clave) throws RemoteException;
+    public void procesando(int etapa, ClaveAcceso clave);    
     
-    public void error(ComprobanteElectronicoException cee,String claveAcceso) throws RemoteException;
+    public void error(ComprobanteElectronicoException cee,String claveAcceso);    
     
 }

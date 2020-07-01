@@ -23,7 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +64,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
             RubrosNivel rubroNivel=(RubrosNivel) getCmbRubrosNivel().getSelectedItem();            
             ServiceFactory.getFactory().getRubroEstudianteServiceIf().crearRubrosEstudiantes(lista,rubroNivel);
             DialogoCodefac.mensaje("Correcto","Los estudiantes se grabaron correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (RemoteException ex) {      
+        } catch (Exception ex) {      
             DialogoCodefac.mensaje("Error","No existe comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite("Cancelar grabar");
@@ -159,7 +159,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
             for (Periodo periodo : periodos) {
                 getCmbPeriodo().addItem(periodo);
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -183,9 +183,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
                     for (NivelAcademico nivel : niveles) {
                         getCmbNivelAcademico().addItem(nivel);
                     }
-                } catch (RemoteException ex) {
-                    Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
+                }catch (ServicioCodefacException ex) {
                     Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
                
@@ -222,9 +220,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
                         }
                     }                    
                     
-                } catch (RemoteException ex) {
-                    Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
+                }catch (ServicioCodefacException ex) {
                     Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -289,9 +285,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
                 }
                 
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         getTblEstudiantes().setModel(modeloTabla);

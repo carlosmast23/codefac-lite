@@ -20,7 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.util.List;
 
@@ -30,22 +30,22 @@ import java.util.List;
  */
 public class PrestamoService extends ServiceAbstract<Prestamo,PrestamoFacade> implements PrestamoServiceIf  {
 
-    public PrestamoService() throws RemoteException {
+    public PrestamoService()    {
         super(PrestamoFacade.class);
     }
     
-    public List<PrestamoCuota> buscarCuotasPorPrestamo(Prestamo prestamo) throws RemoteException ,ServicioCodefacException
+    public List<PrestamoCuota> buscarCuotasPorPrestamo(Prestamo prestamo)  throws ServicioCodefacException
     {
         return (List<PrestamoCuota>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta() throws ServicioCodefacException   {
                 return getFacade().buscarCuotasPorPrestamo(prestamo);
             }
         });
     }
     
     
-    public void grabarSinTransaccion(Prestamo prestamo,Factura factura) throws RemoteException, ServicioCodefacException
+    public void grabarSinTransaccion(Prestamo prestamo,Factura factura) throws    ServicioCodefacException
     {
         /**
          * ===========================================

@@ -12,8 +12,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+ 
+ ;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -22,32 +22,32 @@ import java.util.Properties;
  *
  * @author Carlos
  */
-public interface UtilidadesServiceIf extends Remote
+public interface UtilidadesServiceIf   
 {
     /**
      * Metodo que me permite sincronizar con la persistencia el objecto actual
      * @param entity
      * @return
-     * @throws java.rmi.RemoteException 
+     * @   
      */
-    public Object mergeEntity(Object entity) throws java.rmi.RemoteException;
-    public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException;
-    public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException;
-    public boolean verificarConexionesServidor(Empresa empresa) throws java.rmi.RemoteException;
-    public TipoLicenciaEnum getTipoLicencia(Empresa empresa) throws java.rmi.RemoteException;
-    public List<ModuloCodefacEnum> getModulosSistema(Empresa empresa)  throws RemoteException;
+    public Object mergeEntity(Object entity)   ;
+    public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo)   ;
+    public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map)   ;
+    public boolean verificarConexionesServidor(Empresa empresa)   ;
+    public TipoLicenciaEnum getTipoLicencia(Empresa empresa)   ;
+    public List<ModuloCodefacEnum> getModulosSistema(Empresa empresa);     
     /**
      * Me devuelve un objeto session con algunos datos preconstruidos
      * @return
-     * @throws RemoteException 
+     * @   
      */
-    public SessionCodefac getSessionPreConstruido(Empresa empresa)  throws RemoteException;
+    public SessionCodefac getSessionPreConstruido(Empresa empresa) ;    
     
-    public EmpresaLicencia obtenerLicenciaEmpresa(Empresa empresa) throws RemoteException,ServicioCodefacException;
+    public EmpresaLicencia obtenerLicenciaEmpresa(Empresa empresa) throws   ServicioCodefacException;
     
-    public Properties crearLicencia(Empresa empresa,Licencia licencia) throws RemoteException,ServicioCodefacException;
+    public Properties crearLicencia(Empresa empresa,Licencia licencia) throws   ServicioCodefacException;
     
-    public Properties crearLicenciaDescargada(Empresa empresa,Licencia licencia) throws RemoteException,ServicioCodefacException;
+    public Properties crearLicenciaDescargada(Empresa empresa,Licencia licencia) throws   ServicioCodefacException;
     
     
     

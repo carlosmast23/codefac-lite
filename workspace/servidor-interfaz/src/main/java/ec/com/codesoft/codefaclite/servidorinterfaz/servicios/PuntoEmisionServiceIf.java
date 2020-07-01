@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 
 /**
@@ -17,8 +17,8 @@ import java.util.List;
  * @author Carlos
  */
 public interface PuntoEmisionServiceIf extends ServiceAbstractIf<PuntoEmision>{
-    public abstract List<PuntoEmision> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException;
-    public abstract List<PuntoEmision> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException, RemoteException;
-    public abstract PuntoEmision obtenerPorCodigo(Integer codigo,Sucursal sucursal) throws ServicioCodefacException, RemoteException;
-    //public abstract Boolean validarPuntoEmisionSinTransaccion(PuntoEmision puntoEmision) throws ServicioCodefacException, RemoteException;
+    public abstract List<PuntoEmision> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException  ;
+    public abstract List<PuntoEmision> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException  ;
+    public abstract PuntoEmision obtenerPorCodigo(Integer codigo,Sucursal sucursal) throws ServicioCodefacException  ;
+    //public abstract Boolean validarPuntoEmisionSinTransaccion(PuntoEmision puntoEmision) throws ServicioCodefacException  ;
 }

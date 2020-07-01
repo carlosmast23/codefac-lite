@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import java.io.Serializable;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -54,7 +54,7 @@ public class ControllerPublicoMb implements Serializable {
                 empresaSeleccionada = ServiceFactory.getFactory().getEmpresaServiceIf().buscarPorId(Long.parseLong(idEmpresaStr));
 
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ControllerPublicoMb.class.getName()).log(Level.SEVERE, null, ex);
         }
 

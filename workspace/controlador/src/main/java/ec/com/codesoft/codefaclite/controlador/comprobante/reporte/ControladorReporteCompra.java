@@ -28,7 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -88,8 +88,6 @@ public class ControladorReporteCompra {
             compras = compraServiceIf.obtenerCompraReporte(proveedor, fechaInicio, fechaFinal, documentoEnum, tipoDocumentoEnum, estadoEnum,empresa);
             sumarTotalesComprasIndividuales(compras);
 
-        } catch (RemoteException ex) {
-            Logger.getLogger(ControladorReporteCompra.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ControladorReporteCompra.class.getName()).log(Level.SEVERE, null, ex);
         }

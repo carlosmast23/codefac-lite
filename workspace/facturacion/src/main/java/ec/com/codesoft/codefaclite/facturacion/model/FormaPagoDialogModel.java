@@ -15,7 +15,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,7 +54,7 @@ public class FormaPagoDialogModel extends FormaPagoDialog{
             
             getTxtPlazo().setText("");
             getTxtValor().setText("");
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FormaPagoDialogModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         

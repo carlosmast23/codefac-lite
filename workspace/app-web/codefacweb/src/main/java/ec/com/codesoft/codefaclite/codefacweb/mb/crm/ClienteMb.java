@@ -29,7 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import java.io.Serializable;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -123,7 +123,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
                 MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
                 Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
                 throw new ExcepcionCodefacLite(ex.getMessage());
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
                 throw new ExcepcionCodefacLite(ex.getMessage());
             }
@@ -142,7 +142,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
             } catch (ServicioCodefacException ex) {
                 MensajeMb.mensaje(new CodefacMsj("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO));
                 Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -230,7 +230,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
             estadosEnumList = GeneralEnumEstado.values();
             operadoresNegocio = OperadorNegocioEnum.values();
             sriFormaPagoList = ServiceFactory.getFactory().getSriServiceIf().obtenerFormasPagoActivo();
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -329,7 +329,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
             nacionalidadSeleccionada = ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerDefaultEcuador();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -371,11 +371,11 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         this.establecimientoDefecto = establecimientoDefecto;
     }
 
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

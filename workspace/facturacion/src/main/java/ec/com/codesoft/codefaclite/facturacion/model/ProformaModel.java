@@ -34,7 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import java.io.IOException;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -90,7 +90,7 @@ public class ProformaModel extends FacturacionModel{
             //Obtener los secuenciales para las proformas
             Long secuencial = ServiceFactory.getFactory().getFacturacionServiceIf().obtenerSecuencialProformas(session.getEmpresa());
             getLblSecuencial().setText(secuencial.toString());
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -123,10 +123,7 @@ public class ProformaModel extends FacturacionModel{
             DialogoCodefac.mensaje("Correcto","Proforma generada correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             imprimirProforma();
         
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
-            
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
         }        
@@ -149,7 +146,7 @@ public class ProformaModel extends FacturacionModel{
                 this.factura = facturaTemp;
                 imprimirProforma();
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
                       
@@ -200,8 +197,6 @@ public class ProformaModel extends FacturacionModel{
             inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionales.jrxml"));
             reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
             mapParametros.put("SUBREPORT_INFO_ADICIONAL",reportDatosAdicionales);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
@@ -231,7 +226,7 @@ public class ProformaModel extends FacturacionModel{
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         try {
             
             if(!estadoFormulario.equals(ESTADO_EDITAR))

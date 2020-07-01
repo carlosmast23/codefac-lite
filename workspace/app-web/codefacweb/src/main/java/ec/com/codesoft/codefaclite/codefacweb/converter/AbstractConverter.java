@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.codefacweb.converter;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
-import java.rmi.RemoteException;
+ ;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
@@ -21,7 +21,7 @@ import javax.faces.convert.FacesConverter;
  */
 public abstract class AbstractConverter {
 
-    public abstract Object buscarObjetoPorId(String valor) throws RemoteException ;
+    public abstract Object buscarObjetoPorId(String valor)    ;
     
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         
@@ -30,7 +30,7 @@ public abstract class AbstractConverter {
             try {
                 return buscarObjetoPorId(value);
                 //empresa= ServiceFactory.getFactory().getEmpresaServiceIf().buscarPorId(Long.parseLong(value));
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(AbstractConverter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

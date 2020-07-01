@@ -30,7 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,11 +55,11 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     
     /**
     * Metodo iniciar
-    * @throws java.rmi.RemoteException
+    * @  
     * @throws ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException
     */ 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         caja = new Caja();
         
         caja.setNombre("");
@@ -74,12 +74,12 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
        iniciar();
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         try
         {
             //Grabar
@@ -100,7 +100,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         try {
             ServiceFactory.getFactory().getCajaServiceIf().editar(caja);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
@@ -110,7 +110,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         try
         {
             Boolean respuesta = dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO);
@@ -124,12 +124,12 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

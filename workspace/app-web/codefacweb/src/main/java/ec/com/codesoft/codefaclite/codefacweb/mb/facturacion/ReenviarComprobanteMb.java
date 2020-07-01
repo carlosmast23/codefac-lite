@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -101,11 +101,11 @@ public class ReenviarComprobanteMb extends GeneralAbstractMb implements Reenviar
         this.comprobantesPendientesSeleccionados = comprobantesPendientesSeleccionados;
     }
 
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

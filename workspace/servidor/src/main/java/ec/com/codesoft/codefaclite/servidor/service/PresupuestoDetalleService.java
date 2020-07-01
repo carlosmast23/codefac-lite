@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +28,7 @@ public class PresupuestoDetalleService extends ServiceAbstract<PresupuestoDetall
 {
     private PresupuestoDetalleFacade presupuestoDetalleFacade;
 
-    public PresupuestoDetalleService() throws RemoteException 
+    public PresupuestoDetalleService()    
     {
         super(PresupuestoDetalleFacade.class);
         this.presupuestoDetalleFacade = new PresupuestoDetalleFacade();        

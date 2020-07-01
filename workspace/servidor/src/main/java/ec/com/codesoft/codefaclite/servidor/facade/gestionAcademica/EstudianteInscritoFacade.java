@@ -147,7 +147,7 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         
     }
     
-    public List<EstudianteInscrito> buscarPorNivelAcademicoFacade(Periodo periodo, NivelAcademico nivel) throws ServicioCodefacException, java.rmi.RemoteException {
+    public List<EstudianteInscrito> buscarPorNivelAcademicoFacade(Periodo periodo, NivelAcademico nivel) throws ServicioCodefacException  {
         /*EstudianteInscrito ei;
         ei.getNivelAcademico().getNombre()t
         ei.getEstudiante().getApellidos();

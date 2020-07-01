@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlanti
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,15 +26,15 @@ import javax.persistence.EntityTransaction;
  */
 public class RubroPlantillaService extends ServiceAbstract<RubroPlantilla,RubroPlantillaFacade> implements RubroPlantillaServiceIf{
 
-    public RubroPlantillaService() throws RemoteException {
+    public RubroPlantillaService()    {
         super(RubroPlantillaFacade.class);
     }
 
     @Override
-    public RubroPlantilla grabar(RubroPlantilla entity) throws ServicioCodefacException, RemoteException {
+    public RubroPlantilla grabar(RubroPlantilla entity) throws ServicioCodefacException   {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                 entityManager.persist(entity);
             }
@@ -44,7 +44,7 @@ public class RubroPlantillaService extends ServiceAbstract<RubroPlantilla,RubroP
     
     
     
-    public void grabarConDetalles(RubroPlantilla rubroPlantilla) throws RemoteException
+    public void grabarConDetalles(RubroPlantilla rubroPlantilla)   
     {
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
@@ -66,7 +66,7 @@ public class RubroPlantillaService extends ServiceAbstract<RubroPlantilla,RubroP
     }
     
     
-    public void editarConDetalles(RubroPlantilla entity,List<RubroPlantillaEstudiante> detallesEliminar) throws java.rmi.RemoteException
+    public void editarConDetalles(RubroPlantilla entity,List<RubroPlantillaEstudiante> detallesEliminar)   
     {
         EntityTransaction transaccion=getTransaccion();
         transaccion.begin();
@@ -103,11 +103,11 @@ public class RubroPlantillaService extends ServiceAbstract<RubroPlantilla,RubroP
     }
 
     @Override
-    public void eliminar(RubroPlantilla entity) throws RemoteException {
+    public void eliminar(RubroPlantilla entity)    {
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
+                public void transaccion() throws ServicioCodefacException   {
                     entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                     entityManager.merge(entity);
                 }

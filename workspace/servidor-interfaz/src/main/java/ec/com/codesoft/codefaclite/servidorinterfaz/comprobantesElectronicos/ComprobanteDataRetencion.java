@@ -24,7 +24,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +101,7 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
         SriIdentificacion sriIdentificacion=null;
         try {
             sriIdentificacion=servicioSri.obtenerPorTransaccionEIdentificacion(retencion.getProveedor().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
         }
 

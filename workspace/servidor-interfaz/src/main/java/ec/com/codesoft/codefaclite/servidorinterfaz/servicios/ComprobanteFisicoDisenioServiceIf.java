@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteFisicoDisenio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import java.rmi.Remote;
+ 
 
 /**
  *
@@ -15,5 +15,5 @@ import java.rmi.Remote;
  */
 public interface ComprobanteFisicoDisenioServiceIf extends ServiceAbstractIf<ComprobanteFisicoDisenio>
 {
-    public ComprobanteFisicoDisenio buscarPorCodigoDocumento(String codigo) throws ServicioCodefacException,java.rmi.RemoteException;
+    public ComprobanteFisicoDisenio buscarPorCodigoDocumento(String codigo) throws ServicioCodefacException   ;
 }

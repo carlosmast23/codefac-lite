@@ -23,7 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,7 +120,7 @@ public class ClienteReporteMb extends GeneralAbstractMb  {
         
     }
     
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         
         //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, getNombreReporte());
     }
@@ -133,13 +133,13 @@ public class ClienteReporteMb extends GeneralAbstractMb  {
             persona.getTipoEnum().*/
             PersonaServiceIf service=ServiceFactory.getFactory().getPersonaServiceIf();
             return service.buscarPorTipo(OperadorNegocioEnum.CLIENTE,GeneralEnumEstado.ACTIVO,sessionMb.getSession().getEmpresa()); //Todo: Obtener filtrar solo por clientes
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ClienteReporteMb.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

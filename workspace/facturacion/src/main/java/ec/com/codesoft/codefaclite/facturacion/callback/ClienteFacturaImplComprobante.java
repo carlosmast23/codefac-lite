@@ -7,12 +7,17 @@ package ec.com.codesoft.codefaclite.facturacion.callback;
 
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
-import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
-import static ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel.NOMBRE_REPORTE_FACTURA_ELECTRONICA;
+//import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
+//import static ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel.NOMBRE_REPORTE_FACTURA_ELECTRONICA;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
+import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel.TipoReporteEnum;
+import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -24,12 +29,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceCom
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -40,7 +48,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.rmi.RemoteException;
+import java.io.Serializable;
+ ;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -56,28 +65,32 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class ClienteFacturaImplComprobante extends UnicastRemoteObject implements ClienteInterfaceComprobante {
+public class ClienteFacturaImplComprobante  implements ClienteInterfaceComprobante,Serializable {
 
-    private FacturacionModel facturacionModel;
+    //private FacturacionModel facturacionModel;
     private MonitorComprobanteData monitorData;
     //private FacturacionServiceIf servicio;
     private Factura facturaProcesando;
+
     
     /**
      * Opcion para saber si se se va a mandar a autorizar o solo se va a firmar el comprobante electronica
      */
     private Boolean facturacionOffline;
+    
+    private ParametroPanel parametroPanel;
 
-    public ClienteFacturaImplComprobante(FacturacionModel facturacionModel, Factura facturaProcesando,Boolean facturacionOffline) throws RemoteException {
-        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
-        this.facturacionModel = facturacionModel;
+    public ClienteFacturaImplComprobante(Factura facturaProcesando,Boolean facturacionOffline,ParametroPanel parametroPanel)    {
+        // 
+        //this.facturacionModel = facturacionModel;
         //this.servicio = servicio;
         this.facturaProcesando = facturaProcesando;
         this.facturacionOffline=facturacionOffline;
+        this.parametroPanel=parametroPanel;
     }
 
     @Override
-    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas) throws RemoteException {
+    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas)    {
 
         try {
             
@@ -117,7 +130,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
                         DialogoCodefac.mensaje("Advertencia","Recuerde Autorizar el comprobante en el SRI, \n Si esta sin internet mandar por correo el RIDE", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     }
                 });
-                facturacionModel.panelPadre.actualizarNotificacionesCodefac(); //todo: Ver alguna otra forma mejor para actualizar la pantalla de comprobantes                
+                GeneralPanelInterface.panelPadreStatic.actualizarNotificacionesCodefac(); //todo: Ver alguna otra forma mejor para actualizar la pantalla de comprobantes                
                 
             }
             
@@ -145,7 +158,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     }
 
     @Override
-    public void procesando(int etapa, ClaveAcceso clave) throws RemoteException {
+    public void procesando(int etapa, ClaveAcceso clave)    {
         if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
             monitorData.getBarraProgreso().setValue(20);
             facturaProcesando.setClaveAcceso(clave.clave);
@@ -163,7 +176,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             
             //solo cuando este en el proceso normal seteo el 65 % porque para el proceso autorizado se supone que ya esta con el 100%
             //TODO: Ver un forma estar con las demas pantallas que hacen lo mismo
-            if(ParametroUtilidades.comparar(facturacionModel.getEmpresa(),ParametroCodefac.TIPO_ENVIO_COMPROBANTE, ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_FIRMADO))
+            if(ParametroUtilidades.comparar(parametroPanel.empresa,ParametroCodefac.TIPO_ENVIO_COMPROBANTE, ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_FIRMADO))
             {
                 monitorData.getBarraProgreso().setValue(65);
             }
@@ -208,7 +221,17 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         }
         
         if (verificarImprimirComprobanteVenta()) {
-            facturacionModel.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA,true);
+            FacturacionModel.imprimirComprobanteVenta(
+                    facturaProcesando, 
+                     FacturacionModel.NOMBRE_REPORTE_FACTURA_ELECTRONICA, 
+                     true, 
+                     parametroPanel.dataReporte, 
+                     parametroPanel.mapParametros, 
+                     parametroPanel.parametroCodefac, 
+                     parametroPanel.tipoReporteEnum, 
+                     parametroPanel.configuracion, 
+                     null);
+                        
             //imprimirComprobanteVenta();
         } else {
             generarReportePdf(clave.clave);
@@ -218,7 +241,18 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     private void generarReportePdf(String clave) {
         if(verificarImprimirComprobanteVenta())
         {
-            facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
+            FacturacionModel.imprimirComprobanteVenta(
+                    facturaProcesando,
+                    FacturacionModel.NOMBRE_REPORTE_FACTURA_ELECTRONICA,
+                    true,
+                    parametroPanel.dataReporte,
+                    parametroPanel.mapParametros,
+                    parametroPanel.parametroCodefac,
+                    parametroPanel.tipoReporteEnum,
+                    parametroPanel.configuracion,
+                    GeneralPanelInterface.panelPadreStatic);
+            
+            //FacturacionModel.imprimirComprobanteVenta(facturaProcesando,FacturacionModel.NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
         }
         else
         {
@@ -236,9 +270,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         try {
             byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave, facturaProcesando.getEmpresa());
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
-            facturacionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+            GeneralPanelInterface.panelPadreStatic.crearReportePantalla(jasperPrint, clave);
         } catch (IOException ex) {
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -247,7 +279,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     }
     
     @Override
-    public void error(ComprobanteElectronicoException cee,String claveAcceso) throws RemoteException {
+    public void error(ComprobanteElectronicoException cee,String claveAcceso)    {
         try {
             byte[] resporteSerializado = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,facturaProcesando.getEmpresa());
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(resporteSerializado);
@@ -262,11 +294,21 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
                         public void actionPerformed(ActionEvent e) {
                             if(verificarImprimirComprobanteVenta())
                             {
-                                facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
+                                //FacturacionModel.imprimirComprobanteVenta(facturaProcesando,FacturacionModel.NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
+                                FacturacionModel.imprimirComprobanteVenta(
+                                        facturaProcesando,
+                                        FacturacionModel.NOMBRE_REPORTE_FACTURA_ELECTRONICA,
+                                        true,
+                                        parametroPanel.dataReporte,
+                                        parametroPanel.mapParametros,
+                                        parametroPanel.parametroCodefac,
+                                        parametroPanel.tipoReporteEnum,
+                                        parametroPanel.configuracion,
+                                        GeneralPanelInterface.panelPadreStatic);
                             }
                             else
                             {
-                                facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
+                                GeneralPanelInterface.panelPadreStatic.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
                             }
 
                         }
@@ -282,19 +324,17 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             }
 
             //servicio.editar(facturaProcesando);
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        }catch (IOException ex) {
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
-        facturacionModel.panelPadre.actualizarNotificacionesCodefac();
+        GeneralPanelInterface.panelPadreStatic.actualizarNotificacionesCodefac();
     }
     
     private boolean verificarImprimirComprobanteVenta()
     {
-        ParametroCodefac parametroCodefac = facturacionModel.session.getParametrosCodefac().get(ParametroCodefac.COMPROBANTE_VENTA_ACTIVAR);
+        ParametroCodefac parametroCodefac = parametroPanel.sessionCodefac.getParametrosCodefac().get(ParametroCodefac.COMPROBANTE_VENTA_ACTIVAR);
         if (parametroCodefac == null) {
             //Si no esta tiene ningun dato por defecto no habilito la opcion de comprobante de venta
             return false;
@@ -349,5 +389,24 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         
     }
     */
+    
+    public static class ParametroPanel implements Serializable
+    {
+
+        public ParametroPanel() {
+        }
+        
+        
+        public String nombreInterno;
+        public Boolean opcionImpresion;
+        public List<ComprobanteVentaData> dataReporte;
+        public Map<String, Object> mapParametros;
+        public ParametroCodefac parametroCodefac;
+        public ConfiguracionImpresoraEnum configuracion;
+        public FacturaModelControlador.TipoReporteEnum tipoReporteEnum; 
+        public Empresa empresa;
+        //public InterfazComunicacionPanel panelPadre;
+        public SessionCodefacInterface sessionCodefac;
+    }
 
 }

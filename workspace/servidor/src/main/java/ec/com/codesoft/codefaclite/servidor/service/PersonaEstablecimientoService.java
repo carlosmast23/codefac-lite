@@ -16,7 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaEstablecimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,17 +30,17 @@ import org.apache.commons.collections.map.HashedMap;
  */
 public class PersonaEstablecimientoService extends ServiceAbstract<PersonaEstablecimiento,PersonaEstablecimientoFacade> implements PersonaEstablecimientoServiceIf {
 
-    public PersonaEstablecimientoService() throws RemoteException {
+    public PersonaEstablecimientoService()    {
         super(PersonaEstablecimientoFacade.class);
     }
  
-    public List<PersonaEstablecimiento> buscarActivoPorIdentificacion(String identificacion, Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException 
+    public List<PersonaEstablecimiento> buscarActivoPorIdentificacion(String identificacion, Empresa empresa) throws ServicioCodefacException  
     {
         
         Boolean datosCompartidosEmpresas=false;
         try {
             datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);           
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(PersonaEstablecimientoService.class.getName()).log(Level.SEVERE, null, ex);
         }        
         

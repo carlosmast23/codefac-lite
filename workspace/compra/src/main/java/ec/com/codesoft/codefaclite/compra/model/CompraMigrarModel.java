@@ -19,7 +19,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 public class CompraMigrarModel extends MigrarModel{
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         super.iniciar(); //To change body of generated methods, choose Tools | Templates.
         setTitle("Migrar Compras");
     }
@@ -120,7 +120,7 @@ public class CompraMigrarModel extends MigrarModel{
     {
         try {
             return ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(cedula,session.getEmpresa());
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(CompraMigrarModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -132,32 +132,32 @@ public class CompraMigrarModel extends MigrarModel{
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         
     }
 

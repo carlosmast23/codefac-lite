@@ -63,4 +63,6 @@ dependencies {
         exclude group: "javax.xml.stream"
         exclude group: "org.eclipse.persistence"
     }
+
+    implementation 'com.tascape.qa:lipermi:1.0.1'
 }

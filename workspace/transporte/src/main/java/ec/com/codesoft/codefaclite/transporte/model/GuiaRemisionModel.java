@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.DetalleGuiaRemisionComprobante;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -58,8 +59,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.transporte.callback.GuiaRemisionImplComprobante;
+import ec.com.codesoft.codefaclite.transporte.callback.GuiaRemisionImplComprobante.ParametroGuiaRemision;
 import ec.com.codesoft.codefaclite.transporte.data.ComprobanteGuiaTransporteData;
 import ec.com.codesoft.codefaclite.transporte.data.ComprobanteGuiaTransporteDetalleData;
+import ec.com.codesoft.codefaclite.transporte.nocallback.GuiaRemisionNoCallBack;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiaRemisionPanel;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
@@ -75,7 +78,7 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -109,7 +112,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     private Factura facturaSeleccionada;
     
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         listenerTextBox();
         listenerBotones();
         listenerComponentes();
@@ -119,7 +122,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         getTxtDireccionPartida().setText(session.getSucursal().getDirecccion());
         guiaRemision=new GuiaRemision();
     }
@@ -153,7 +156,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         try {
            
             setearValores();           
@@ -169,7 +172,15 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             comprobanteData.setMapInfoAdicional(getMapAdicional(guiaRemision));
             //comprobanteData.setMapInfoAdicional(new HashMap<String, String>());
             
-            GuiaRemisionImplComprobante gic=new GuiaRemisionImplComprobante(this, guiaRemision);            
+            GuiaRemisionImplComprobante gic=new GuiaRemisionImplComprobante(this, guiaRemision,session,getParametroGuiaRemision());            
+            
+            //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
+            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+                gic = null;
+                GuiaRemisionNoCallBack respuestaNoCallBack = new GuiaRemisionNoCallBack(guiaRemision, this);
+                respuestaNoCallBack.iniciar();
+            }
+            
             ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
             comprobanteServiceIf.procesarComprobante(comprobanteData, guiaRemision, session.getUsuario(), gic);
             
@@ -195,7 +206,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         if(!guiaRemision.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
         {
             DialogoCodefac.mensaje("Advertencia","La guia de remisión no se pueden modificar ",DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -207,9 +218,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             ServiceFactory.getFactory().getGuiaRemisionServiceIf().editar(guiaRemision);
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje(ex.getMessage(), DialogoCodefac.MENSAJE_ADVERTENCIA);
             Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite(ex.getMessage());
@@ -217,21 +226,19 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         ComprobanteElectronicoComponente.eliminarComprobante(this, guiaRemision,null);
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         if (this.guiaRemision != null && estadoFormulario.equals(ESTADO_EDITAR)) {
             try {
                 String claveAcceso = this.guiaRemision.getClaveAcceso();
                 byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,guiaRemision.getEmpresa());
                 JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                 panelPadre.crearReportePantalla(jasperPrint, guiaRemision.getPreimpreso());
-            } catch (RemoteException ex) {
-                Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
+            }catch (IOException ex) {
                 Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -240,7 +247,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -390,9 +397,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                             {
                                 cargarCliente(resultados.get(0));
                             }
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ServicioCodefacException ex) {
+                        }catch (ServicioCodefacException ex) {
                             Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         
@@ -502,7 +507,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                     }
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
@@ -560,7 +565,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
 
                     }
                     
-                } catch (RemoteException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -770,17 +775,23 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     }
     
     public void imprimirComprobanteGuiaRemision(GuiaRemision guiaRemision) {
+        List<ComprobanteGuiaTransporteData> dataReporte=getDetalleDataReporte(guiaRemision);
+        Map<String,Object> mapParametros=getMapParametrosReporte(guiaRemision);
+        GuiaRemisionModel.imprimirComprobanteGuiaRemisionStatic(guiaRemision, dataReporte, mapParametros, panelPadre);
+    }
+    
+    public static void imprimirComprobanteGuiaRemisionStatic(GuiaRemision guiaRemision,List<ComprobanteGuiaTransporteData> dataReporte,Map<String,Object> mapParametros,InterfazComunicacionPanel panelPadre) {
 
-         List<ComprobanteGuiaTransporteData> dataReporte=getDetalleDataReporte(guiaRemision);
+         //List<ComprobanteGuiaTransporteData> dataReporte=getDetalleDataReporte(guiaRemision);
             
             //map de los parametros faltantes
-            Map<String,Object> mapParametros=getMapParametrosReporte(guiaRemision);
+            //Map<String,Object> mapParametros=getMapParametrosReporte(guiaRemision);
             
             
             InputStream path = RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("comprobante_guia_remision.jrxml");            
            
             
-           ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, dataReporte, this.panelPadre, "Comprobante Guía Remisión ",OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.A5);
+           ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, dataReporte, panelPadre, "Comprobante Guía Remisión ",OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.A5);
     }
     
     /**
@@ -924,8 +935,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     }
 
     @Override
-    public ClienteInterfaceComprobante getInterfaceComprobante() throws RemoteException {
-        return new GuiaRemisionImplComprobante(this, guiaRemision);
+    public ClienteInterfaceComprobante getInterfaceComprobante()    {
+        return new GuiaRemisionImplComprobante(this, guiaRemision,session,getParametroGuiaRemision());
     }
 
     @Override
@@ -935,5 +946,12 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         return comprobanteData;
     }
     
+    public ParametroGuiaRemision getParametroGuiaRemision()
+    {
+        ParametroGuiaRemision parametro=new ParametroGuiaRemision();
+        parametro.dataReporte=getDetalleDataReporte(guiaRemision);
+        parametro.mapParametros=getMapParametrosReporte(guiaRemision);
+        return parametro;
+    }
     
 }

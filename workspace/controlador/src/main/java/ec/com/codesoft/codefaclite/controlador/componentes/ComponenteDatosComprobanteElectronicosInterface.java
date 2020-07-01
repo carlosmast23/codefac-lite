@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 
 /**
@@ -25,7 +25,7 @@ public interface ComponenteDatosComprobanteElectronicosInterface {
     public InterfazComunicacionPanel getPanelPadre();
     public List<ComprobanteAdicional> getDatosAdicionales();
     public GeneralPanelInterface.EstadoFormularioEnum getEstadoFormularioEnum();
-    public ClienteInterfaceComprobante getInterfaceComprobante() throws RemoteException;
+    public ClienteInterfaceComprobante getInterfaceComprobante();    
     public ComprobanteDataInterface obtenerComprobanteData();
     
 }

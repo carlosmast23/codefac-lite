@@ -42,7 +42,7 @@ import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -154,7 +154,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         SriIdentificacion sriIdentificacion = null;
         try {
             sriIdentificacion = servicioSri.obtenerPorTransaccionEIdentificacion(factura.getCliente().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -253,9 +253,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                 }
                 
                 detallesComprobante.add(detalle);
-            } catch (RemoteException ex) {
-                Logger.getLogger(ComprobanteDataFactura.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
+            }catch (ServicioCodefacException ex) {
                 Logger.getLogger(ComprobanteDataFactura.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

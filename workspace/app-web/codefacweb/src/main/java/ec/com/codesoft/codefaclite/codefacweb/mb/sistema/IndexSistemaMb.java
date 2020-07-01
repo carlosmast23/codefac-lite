@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.io.Serializable;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -59,9 +59,7 @@ public class IndexSistemaMb  extends GeneralAbstractMb implements Serializable {
             alertasSistemas=ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaRapida(sessionMb.getSession().getEmpresa());
             System.out.println("fin procesando ...");
             detenerActualizarAlerta=true;
-        } catch (RemoteException ex) {
-            Logger.getLogger(IndexSistemaMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(IndexSistemaMb.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("Fin Cargar Alertas");
@@ -170,11 +168,11 @@ public class IndexSistemaMb  extends GeneralAbstractMb implements Serializable {
         this.detenerActualizarAlerta = detenerActualizarAlerta;
     }
 
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

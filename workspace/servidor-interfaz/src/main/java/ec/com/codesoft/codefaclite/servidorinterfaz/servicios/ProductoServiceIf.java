@@ -11,8 +11,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+ 
+ ;
 import java.util.List;
 
 /**
@@ -22,24 +22,24 @@ import java.util.List;
 public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
 
        
-    public Producto grabar(Producto p) throws ServicioCodefacException, java.rmi.RemoteException;
+    public Producto grabar(Producto p) throws ServicioCodefacException ;
     
-    public void editarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException;
+    public void editarProducto(Producto p) throws ServicioCodefacException;
     
-    //public void eliminar(Producto p) throws java.rmi.RemoteException;
+    //public void eliminar(Producto p)   ;
     
-    public List<Producto> buscar(Empresa empresa) throws java.rmi.RemoteException;
+    public List<Producto> buscar(Empresa empresa)   ;
     
-    public Producto buscarPorNombreyEstado(String nombre,GeneralEnumEstado estadoEnum,Empresa empresa) throws RemoteException;
+    public Producto buscarPorNombreyEstado(String nombre,GeneralEnumEstado estadoEnum,Empresa empresa);    
     
-    public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws ServicioCodefacException,RemoteException;
+    public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws ServicioCodefacException   ;
     
-    public List<Producto> obtenerTodosActivos(Empresa empresa) throws java.rmi.RemoteException;
+    public List<Producto> obtenerTodosActivos(Empresa empresa)   ;
     
-    public Producto buscarGenerarCodigoBarras(EnumSiNo enumSiNo,Empresa empresa ) throws ServicioCodefacException,RemoteException;
+    public Producto buscarGenerarCodigoBarras(EnumSiNo enumSiNo,Empresa empresa ) throws ServicioCodefacException   ;
     
-    public void grabarConInventario(Producto p,KardexDetalle kardexDetalle) throws ServicioCodefacException,java.rmi.RemoteException;
+    public void grabarConInventario(Producto p,KardexDetalle kardexDetalle) throws ServicioCodefacException   ;
     
-    public void eliminarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException;
+    public void eliminarProducto(Producto p) throws ServicioCodefacException;
     
 }

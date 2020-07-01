@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 
 /**
@@ -16,6 +16,6 @@ import java.util.List;
  */
 public interface CatalogoProductoServiceIf extends ServiceAbstractIf<CatalogoProducto> 
 {
-    public List<CatalogoProducto> obtenerPorModulo(ModuloCodefacEnum modulo) throws RemoteException;
-    public CatalogoProducto obtenerPorNombre(String nombre) throws RemoteException;
+    public List<CatalogoProducto> obtenerPorModulo(ModuloCodefacEnum modulo);    
+    public CatalogoProducto obtenerPorNombre(String nombre);    
 }

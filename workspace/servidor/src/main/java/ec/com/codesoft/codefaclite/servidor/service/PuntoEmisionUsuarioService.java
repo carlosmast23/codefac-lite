@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuarioServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,15 +23,15 @@ import java.util.Map;
  */
 public class PuntoEmisionUsuarioService extends ServiceAbstract<PuntoEmisionUsuario,PuntoEmisionUsuarioFacade> implements PuntoEmisionUsuarioServiceIf
 {
-    public PuntoEmisionUsuarioService() throws RemoteException {
+    public PuntoEmisionUsuarioService()    {
         super(PuntoEmisionUsuarioFacade.class);
     }
 
     @Override
-    public PuntoEmisionUsuario grabar(PuntoEmisionUsuario entity) throws ServicioCodefacException, RemoteException {
+    public PuntoEmisionUsuario grabar(PuntoEmisionUsuario entity) throws ServicioCodefacException   {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 entityManager.persist(entity);
             }
@@ -40,11 +40,11 @@ public class PuntoEmisionUsuarioService extends ServiceAbstract<PuntoEmisionUsua
     }
     
     @Override   
-    public List<PuntoEmisionUsuario> obtenerActivoPorUsuario(Usuario usuario,Sucursal sucursal) throws ServicioCodefacException, RemoteException
+    public List<PuntoEmisionUsuario> obtenerActivoPorUsuario(Usuario usuario,Sucursal sucursal) throws ServicioCodefacException  
     {
         return (List<PuntoEmisionUsuario>)ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta() throws ServicioCodefacException   {
                 Map<String,Object> mapParametros=new  HashMap<String,Object>();
                 mapParametros.put("usuario",usuario);
                 mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
@@ -55,14 +55,14 @@ public class PuntoEmisionUsuarioService extends ServiceAbstract<PuntoEmisionUsua
     }
     
     @Override   
-    public List<PuntoEmisionUsuario> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException, RemoteException
+    public List<PuntoEmisionUsuario> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException  
     {
         //PuntoEmisionUsuario pe;
         //pe.getPuntoEmision().getSucursal().
         return (List<PuntoEmisionUsuario>)ejecutarConsulta(new MetodoInterfaceConsulta() 
         {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta() throws ServicioCodefacException   {
                 Map<String,Object> mapParametros=new  HashMap<String,Object>();
                 mapParametros.put("puntoEmision.sucursal",sucursal);
                 mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());

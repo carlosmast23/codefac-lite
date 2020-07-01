@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,12 +22,12 @@ import java.util.Map;
  */
 public class PerfilUsuarioService extends ServiceAbstract<PerfilUsuario,PerfilUsuarioFacade> implements PerfilUsuarioServiceIf{
 
-    public PerfilUsuarioService() throws RemoteException {
+    public PerfilUsuarioService()    {
         super(PerfilUsuarioFacade.class);
     }
 
     @Override
-    public List<PerfilUsuario> buscarPorPerfil(Perfil perfil) throws RemoteException {
+    public List<PerfilUsuario> buscarPorPerfil(Perfil perfil)    {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("perfil",perfil);            
         return getFacade().findByMap(mapParametros);

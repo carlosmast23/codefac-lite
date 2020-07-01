@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.OrdenTrabajoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoDetalleServiceIf;
-import java.rmi.RemoteException;
+ ;
 
 /**
  *
@@ -17,7 +17,7 @@ import java.rmi.RemoteException;
  */
 public class OrdenTrabajoDetalleService extends ServiceAbstract<OrdenTrabajoDetalle, OrdenTrabajoDetalleFacade> implements OrdenTrabajoDetalleServiceIf
 {
-    public OrdenTrabajoDetalleService() throws RemoteException {
+    public OrdenTrabajoDetalleService()    {
         super(OrdenTrabajoDetalleFacade.class);
     }
    

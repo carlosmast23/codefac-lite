@@ -13,5 +13,5 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
  * @author CodesoftDesarrollo
  */
 public interface NacionalidadServiceIf extends ServiceAbstractIf<Nacionalidad>{
-     public Nacionalidad obtenerDefaultEcuador() throws ServicioCodefacException,java.rmi.RemoteException;
+     public Nacionalidad obtenerDefaultEcuador() throws ServicioCodefacException   ;
 }

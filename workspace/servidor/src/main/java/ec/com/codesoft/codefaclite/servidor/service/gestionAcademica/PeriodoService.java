@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +29,12 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
 
     private PeriodoFacade periodoFacade;
 
-    public PeriodoService() throws RemoteException {
+    public PeriodoService()    {
         super(PeriodoFacade.class);
         this.periodoFacade = new PeriodoFacade();
     }
     
-    public Periodo buscarPorNombreyEstado(String nombre,GeneralEnumEstado estado) throws RemoteException
+    public Periodo buscarPorNombreyEstado(String nombre,GeneralEnumEstado estado)   
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("nombre",nombre);
@@ -62,7 +62,7 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
         return p;
     }*/
     
-    public List<Periodo> obtenerPeriodoActivo() throws RemoteException
+    public List<Periodo> obtenerPeriodoActivo()   
     {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
@@ -70,7 +70,7 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
         return periodos;
     }
     
-    public Periodo obtenerUnicoPeriodoActivo() throws RemoteException
+    public Periodo obtenerUnicoPeriodoActivo()   
     {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
@@ -84,11 +84,11 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
     
     
     
-    public void setearPeriodoActivo(Periodo periodoActivar) throws RemoteException,ServicioCodefacException
+    public void setearPeriodoActivo(Periodo periodoActivar) throws   ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 List<Periodo> periodos=obtenerPeriodosSinEliminar();
                 for (Periodo periodo : periodos) 
                 {
@@ -107,7 +107,7 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
         });
     }
     
-    public List<Periodo> obtenerPeriodosSinEliminar() throws RemoteException
+    public List<Periodo> obtenerPeriodosSinEliminar()   
     {
         return getFacade().getPeriodosSinEliminar();
     }

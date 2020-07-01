@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum.EtiquetaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,13 +56,11 @@ public abstract class ControladorPlantillaSms {
                 return false;
             }
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(ControladorPlantillaSms.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ControladorPlantillaSms.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
         }
-        return false;
+        //return false;
 
     }
 }

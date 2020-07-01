@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.NacionalidadFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,13 +22,13 @@ public class NacionalidadService extends ServiceAbstract<Nacionalidad, Nacionali
 
     NacionalidadFacade nacionalidadFacade;
 
-    public NacionalidadService() throws RemoteException {
+    public NacionalidadService()    {
         super(NacionalidadFacade.class);
         nacionalidadFacade = new NacionalidadFacade();
     }
 
     @Override
-    public Nacionalidad obtenerDefaultEcuador() throws ServicioCodefacException, RemoteException {
+    public Nacionalidad obtenerDefaultEcuador() throws ServicioCodefacException   {
         Map<String,Object> mapBusqueda=new HashMap<String, Object>();
         mapBusqueda.put("iso",Nacionalidad.ISO_NACIONALIDAD_DEFECTO);
         List<Nacionalidad> nacionalidades=obtenerPorMap(mapBusqueda);

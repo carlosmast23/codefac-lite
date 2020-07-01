@@ -25,7 +25,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,33 +53,33 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
    
  
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         listenerBotones();
         listenerPopUps();
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream("codigosBarras.jrxml");
         Map<String,Object> parametros = new HashMap<String,Object>();
         
@@ -109,7 +109,7 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -164,8 +164,6 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
                     
                     generarTabla(); //Dibujar los datos en la tabla
                     
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ImprimirCodidoBarrasModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(ImprimirCodidoBarrasModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
