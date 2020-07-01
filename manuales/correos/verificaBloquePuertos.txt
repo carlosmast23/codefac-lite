@@ -1,0 +1,2 @@
+#Verificar que el proveedor de internet no esta bloqueando el puerto de salida del correo
+telnet smtp.gmail.com 587
