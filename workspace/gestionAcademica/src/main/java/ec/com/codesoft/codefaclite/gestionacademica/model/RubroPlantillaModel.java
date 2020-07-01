@@ -46,7 +46,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -126,7 +126,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error","No se pueden grabar los datos", DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             DialogoCodefac.mensaje("Error","No existe comunicación con el servior",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -139,7 +139,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             setearVariables();
             ServiceFactory.getFactory().getRubroPlantillaServiceIf().editarConDetalles(rubroPlantilla,estudiantesEliminar);
             DialogoCodefac.mensaje("Correcto","La plantilla se edito correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             DialogoCodefac.mensaje("Incorrecto","La plantilla se grabo correctamente",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -178,11 +178,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                    }
                 }
             }
-        }
-        catch(RemoteException re)
-        {
-            re.printStackTrace();
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -288,8 +284,6 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             //Cargar las formas de aplicar los descuentos
             UtilidadesComboBox.llenarComboBox(getCmbFormaAplicarDescuentoMes(),AplicarDescuentoAcademicoEnum.values());
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -384,8 +378,6 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                             DialogoCodefac.mensaje("Correcto", "Las deudas para el mes " + rubroPlantillaMes.getMesEnum().getNombre() + " se generaron correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                             cargarDatos();
 
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (ServicioCodefacException ex) {
                             DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                             Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -702,7 +694,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             
             getTblDatosSinRegistrar().setModel(modeloTabla);
             UtilidadesTablas.ocultarColumna(getTblDatosSinRegistrar(),0);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -836,8 +828,6 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             }
             
 
-        } catch (RemoteException ex) {
-            Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -953,8 +943,6 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                         rubroPlantilla=ServiceFactory.getFactory().getRubroPlantillaServiceIf().buscarPorId(rubroPlantilla.getId());                        
                         cargarDatos();
                         //as
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
                         DialogoCodefac.mensaje("Incorrecto",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);

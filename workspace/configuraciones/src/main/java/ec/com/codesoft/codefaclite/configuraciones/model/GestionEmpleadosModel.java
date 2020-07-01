@@ -20,7 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpleadoServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +58,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
             limpiar();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(GestionEmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(GestionEmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -71,7 +71,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
             servicio.editar(empleado);
             DialogoCodefac.mensaje("Editar", "Se edito correctamente el departamento ", DialogoCodefac.MENSAJE_CORRECTO);
             limpiar();
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(GestionEmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -106,7 +106,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
                         servicio.editar(empleado);
                         limpiar();
                         DialogoCodefac.mensaje("Eliminar", "El empleado se elimino correctamente", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    } catch (RemoteException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -192,7 +192,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
             {
                 getCmbSexo().addItem(genero);
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(GestionEmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

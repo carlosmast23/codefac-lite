@@ -31,7 +31,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,33 +51,33 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
     private List<PresupuestoReporteData> presupuestosData;
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         listenerBotones();
         listenerCheckBox();
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         InputStream path = RecursoCodefac.JASPER_SERVICIO.getResourceInputStream("presupuestosReporteHorizontal.jrxml");
         InputStream pathReporteAgrupado = RecursoCodefac.JASPER_SERVICIO.getResourceInputStream("presupuestosReporteHorizontalDetalles.jrxml");
 
@@ -135,7 +135,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -219,7 +219,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
                     mostrarDatosTabla();
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(ReportePresupuestosModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(ReportePresupuestosModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

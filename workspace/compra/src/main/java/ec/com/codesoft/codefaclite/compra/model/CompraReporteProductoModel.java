@@ -32,7 +32,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -89,7 +89,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
     }
 
     @Override
-    public void imprimir() throws RemoteException {
+    public void imprimir()    {
         InputStream path= null;
         List<ReporteProductoProveedor> datos;
         try {
@@ -300,8 +300,6 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                             break;                
                     }
                     
-                } catch (RemoteException ex) {
-                    Logger.getLogger(CompraReporteProductoModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(CompraReporteProductoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -338,7 +336,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
         });
     }
     
-    public void buscarPorProductoProveedor(int opc) throws RemoteException, ServicioCodefacException
+    public void buscarPorProductoProveedor(int opc) throws    ServicioCodefacException
     {
         ProductoProveedorServiceIf productoProveedorServiceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
         //Map<String, Object> mapParametros = new HashMap<String, Object>();
@@ -357,7 +355,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
         
     }
     
-    public void buscarPorProveedor() throws RemoteException, ServicioCodefacException
+    public void buscarPorProveedor() throws    ServicioCodefacException
     {
         ProductoProveedorServiceIf productoProveedorServiceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
         //Map<String, Object> mapParametros = new HashMap<>();
@@ -365,7 +363,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
         productoProveedores = productoProveedorServiceIf.buscarPorProveedorActivo(proveedor);
     }
     
-    public void buscarPorProductor() throws RemoteException, ServicioCodefacException
+    public void buscarPorProductor() throws    ServicioCodefacException
     {
         ProductoProveedorServiceIf productoProveedorServiceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
         //Map<String, Object> mapParametros = new HashMap<String, Object>();
@@ -373,7 +371,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
         productoProveedores = productoProveedorServiceIf.buscarPorProductoActivo(producto);
     }
     
-    public void buscarTodosProductoProveedor() throws RemoteException, RemoteException
+    public void buscarTodosProductoProveedor() 
     {
         ProductoProveedorServiceIf productoProveedorServiceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
         productoProveedores = productoProveedorServiceIf.obtenerTodos();

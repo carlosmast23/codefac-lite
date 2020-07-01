@@ -7,15 +7,16 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.TipoDocumentoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoDocumento;
-import java.rmi.RemoteException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
+ ;
 
 /**
  *
  * @author Carlos
  */
-public class TipoDocumentoService extends ServiceAbstract<TipoDocumento, TipoDocumentoFacade>{
+public class TipoDocumentoService extends ServiceAbstract<TipoDocumento, TipoDocumentoFacade> implements TipoDocumentoServiceIf{
 
-    public TipoDocumentoService() throws RemoteException {
+    public TipoDocumentoService()    {
         super(TipoDocumentoFacade.class);
     }
     

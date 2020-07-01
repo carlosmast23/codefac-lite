@@ -22,7 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,13 +37,13 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
 
     EstudianteInscritoFacade estudianteInscritoFacade;
 
-    public EstudianteInscritoService() throws RemoteException {
+    public EstudianteInscritoService()    {
         super(EstudianteInscritoFacade.class);
         this.estudianteInscritoFacade = new EstudianteInscritoFacade();
 
     }
     
-    public EstudianteInscrito obtenerPorEstudianteYNivelYEstado(Estudiante estudiante,NivelAcademico nivel,GeneralEnumEstado estado ) throws RemoteException
+    public EstudianteInscrito obtenerPorEstudianteYNivelYEstado(Estudiante estudiante,NivelAcademico nivel,GeneralEnumEstado estado )   
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("estudiante",estudiante);
@@ -63,17 +63,17 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         return getFacade().obtenerTamanioEstudiatesInscritosPorEstudiante(estudiante);
     }
     
-    public Long obtenerTamanioEstudiatesInscritosPorCurso(NivelAcademico nivelAcademico) throws RemoteException
+    public Long obtenerTamanioEstudiatesInscritosPorCurso(NivelAcademico nivelAcademico)   
     {
         return getFacade().obtenerTamanioEstudiatesInscritosPorCurso(nivelAcademico);
     }
     
-    public EstudianteInscrito matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException,ServicioCodefacException
+    public EstudianteInscrito matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws   ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException   {
                 matricularEstudianteValidar(estudianteInscrito,rubroMatricula);
                 entityManager.persist(estudianteInscrito);
                 EstudianteInscrito estudianteInscritoTmp=entityManager.merge(estudianteInscrito);
@@ -92,7 +92,7 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         return estudianteInscrito;
     }
     
-    private void matricularEstudianteValidar(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException,ServicioCodefacException
+    private void matricularEstudianteValidar(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws   ServicioCodefacException
     {
         //rubroMatricula.getEstadoEnum();
         //rubroMatricula.getRubroNivel();
@@ -113,7 +113,7 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         
     }
     
-    public void eliminarEstudiantesInscrito(List<EstudianteInscrito> estudiantesEliminar) throws RemoteException
+    public void eliminarEstudiantesInscrito(List<EstudianteInscrito> estudiantesEliminar)   
     {
         EntityTransaction transaccion = getTransaccion();        
         transaccion.begin();
@@ -133,7 +133,7 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         
     }
     
-    public void matriculaEstudianteByList(List<EstudianteInscrito> estudiantesPorMatricular) throws RemoteException
+    public void matriculaEstudianteByList(List<EstudianteInscrito> estudiantesPorMatricular)   
     {
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
@@ -157,9 +157,9 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
      * Permite grabar un conjunto de estudiantes para matricular
      *
      * @param mapEstudiantes
-     * @throws RemoteException
+     * @  
      */
-    public void matricularEstudiantesByMap(Map<NivelAcademico, List<Estudiante>> mapEstudiantes) throws RemoteException {
+    public void matricularEstudiantesByMap(Map<NivelAcademico, List<Estudiante>> mapEstudiantes)    {
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         for (Map.Entry<NivelAcademico, List<Estudiante>> entry : mapEstudiantes.entrySet()) {
@@ -179,12 +179,12 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
     }
 
     @Override
-    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel,Periodo periodo) throws RemoteException {
+    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel,Periodo periodo)    {
         return estudianteInscritoFacade.obtenerEstudiantesInscritos(nivel,periodo);
     }
 
     @Override
-    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodo(Periodo periodo) throws RemoteException {
+    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodo(Periodo periodo)    {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("nivelAcademico.periodo",periodo);
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
@@ -192,7 +192,7 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
     }
     
     @Override
-    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodoYEstudiante(Periodo periodo,Estudiante estudiante) throws RemoteException {
+    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodoYEstudiante(Periodo periodo,Estudiante estudiante)    {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("nivelAcademico.periodo", periodo);
         mapParametros.put("estudiante", estudiante);
@@ -201,7 +201,7 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
     }
     
     @Override
-    public List<Object[]> consultarRepresentanteConEstudiantesYCursos() throws RemoteException
+    public List<Object[]> consultarRepresentanteConEstudiantesYCursos()   
     {
         PeriodoService periodoService=new PeriodoService();
         Periodo periodoActivo=periodoService.obtenerPeriodoActivo().get(0);
@@ -233,7 +233,7 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         return resultadoObjetos;
     }
     
-    public List<EstudianteInscrito> buscarPorNivelAcademico(Periodo periodo,NivelAcademico nivel) throws ServicioCodefacException, java.rmi.RemoteException {
+    public List<EstudianteInscrito> buscarPorNivelAcademico(Periodo periodo,NivelAcademico nivel) throws ServicioCodefacException  {
         /*Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("nivelAcademico", nivel);
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
@@ -241,7 +241,7 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         return getFacade().buscarPorNivelAcademicoFacade(periodo, nivel);
     }
     
-    public EstudianteInscrito buscarEstudianteMatriculadoPeriodoActivo(Estudiante estudiante) throws ServicioCodefacException, java.rmi.RemoteException {
+    public EstudianteInscrito buscarEstudianteMatriculadoPeriodoActivo(Estudiante estudiante) throws ServicioCodefacException  {
         
         PeriodoService servicePeriodo=new PeriodoService();
         Periodo periodoActivo=servicePeriodo.obtenerUnicoPeriodoActivo();

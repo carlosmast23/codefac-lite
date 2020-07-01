@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.main.model.SwingBrowser;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.Map;
 
@@ -113,37 +113,37 @@ public class VentanaManualUsuario extends ControladorCodefacInterface {
     }
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

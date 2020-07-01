@@ -21,7 +21,7 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.PrimeFaces;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.Map;
 
@@ -132,11 +132,11 @@ public class EjemploTestMb  extends GeneralAbstractMb implements Serializable {
         
     }
 
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

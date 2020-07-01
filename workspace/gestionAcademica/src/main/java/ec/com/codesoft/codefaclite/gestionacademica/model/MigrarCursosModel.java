@@ -18,7 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 public class MigrarCursosModel extends MigrarModel {
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         super.iniciar(); //To change body of generated methods, choose Tools | Templates.
         setTitle("Migración Cursos");
     }
@@ -75,8 +75,6 @@ public class MigrarCursosModel extends MigrarModel {
                     
                     ServiceFactory.getFactory().getNivelAcademicoServiceIf().grabar(curso);
                    
-                } catch (RemoteException ex) {
-                    Logger.getLogger(MigrarCursosModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(MigrarCursosModel.class.getName()).log(Level.SEVERE, null, ex);
                     throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());
@@ -91,32 +89,32 @@ public class MigrarCursosModel extends MigrarModel {
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

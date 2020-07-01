@@ -31,7 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -60,7 +60,7 @@ public class ProformaReporteModel extends ProformaReportePanel {
     private Map<String,BigDecimal> mapTotales;
     
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         iniciarComponentes();
         listenerBotones();
         listenerChecks();
@@ -75,22 +75,22 @@ public class ProformaReporteModel extends ProformaReportePanel {
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -138,7 +138,7 @@ public class ProformaReporteModel extends ProformaReportePanel {
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         Date fechaInicio = null;
         Date fechaFin = null;
         
@@ -212,7 +212,7 @@ public class ProformaReporteModel extends ProformaReportePanel {
     
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -302,8 +302,6 @@ public class ProformaReporteModel extends ProformaReportePanel {
                     construirDataReporte();
                     construirTabla();
                     //ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporte(cliente,getDateFechaInicio().getDate(),getDateFechaFin().getDate(), title, formularioCerrando, referido, formularioCerrando)
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ProformaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(ProformaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }

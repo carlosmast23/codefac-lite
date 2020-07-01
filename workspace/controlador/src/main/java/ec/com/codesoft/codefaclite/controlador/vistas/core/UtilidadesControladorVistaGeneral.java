@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.controlador.vistas.core;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
-import java.rmi.RemoteException;
+ ;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,7 +36,7 @@ public class UtilidadesControladorVistaGeneral {
             //System.err.println("Cancelado metodo iniciar");
             throw ex;
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(UtilidadesControladorVistaGeneral.class.getName()).log(Level.SEVERE, null, ex);
             FuncionesSistemaCodefac.servidorConexionPerdida();
         }
@@ -44,7 +44,7 @@ public class UtilidadesControladorVistaGeneral {
     
     public interface EjecutarVistaIf
     {
-        public void ejecutar() throws UnsupportedOperationException,ExcepcionCodefacLite,RemoteException ;
+        public void ejecutar() throws UnsupportedOperationException,ExcepcionCodefacLite    ;
     }
     
 }

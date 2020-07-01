@@ -35,7 +35,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -308,7 +308,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                 cargarDatosDetalles();
                 procesarTotales();
             } 
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
        
@@ -364,9 +364,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             this.factura.setCliente(persona);
             this.factura.setSucursal(persona.getEstablecimientos().get(0));//Se refiere a la sucursal del cliente
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -462,7 +460,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                 BigDecimal iva = iD.getPorcentaje();
             });
             return new BigDecimal(0.120);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

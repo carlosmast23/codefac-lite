@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.cartera.CarteraDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraDetalleServiceIf;
-import java.rmi.RemoteException;
+ ;
 
 /**
  *
@@ -17,7 +17,7 @@ import java.rmi.RemoteException;
  */
 public class CarteraDetalleService extends ServiceAbstract<CarteraDetalle,CarteraDetalleFacade> implements CarteraDetalleServiceIf{
 
-    public CarteraDetalleService() throws RemoteException{
+    public CarteraDetalleService()   {
         super(CarteraDetalleFacade.class);
     }
     

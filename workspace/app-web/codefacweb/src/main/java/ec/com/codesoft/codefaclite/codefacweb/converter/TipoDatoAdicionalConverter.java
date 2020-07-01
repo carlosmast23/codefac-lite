@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.codefacweb.converter;
 
 import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
-import java.rmi.RemoteException;
+ ;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -19,7 +19,7 @@ import javax.faces.convert.FacesConverter;
 public class TipoDatoAdicionalConverter extends AbstractConverter implements Converter {
 
     @Override
-    public Object buscarObjetoPorId(String valor) throws RemoteException {
+    public Object buscarObjetoPorId(String valor)    {
         return ComprobanteAdicional.Tipo.getByLetra(valor);
     }
     

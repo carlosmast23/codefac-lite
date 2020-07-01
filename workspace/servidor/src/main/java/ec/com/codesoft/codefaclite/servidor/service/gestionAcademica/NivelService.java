@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,12 +28,12 @@ public class NivelService extends ServiceAbstract<Nivel, NivelFacade> implements
 
     private NivelFacade nivelFacade;
 
-    public NivelService() throws RemoteException {
+    public NivelService()    {
         super(NivelFacade.class);
         this.nivelFacade = new NivelFacade();
     }
     
-    public Nivel obtenerNivelPorNombreYEstado(String nombre,GeneralEnumEstado estado) throws RemoteException
+    public Nivel obtenerNivelPorNombreYEstado(String nombre,GeneralEnumEstado estado)   
     {
         Map<String,Object> parametros=new HashMap<String,Object>();
         parametros.put("nombre",nombre);
@@ -69,7 +69,7 @@ public class NivelService extends ServiceAbstract<Nivel, NivelFacade> implements
         nivelFacade.edit(n);
     }
     
-    public List<Nivel> obtenerNivelesActivos() throws RemoteException
+    public List<Nivel> obtenerNivelesActivos()   
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());

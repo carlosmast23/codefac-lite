@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoEnsambleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleServiceIf;
-import java.rmi.RemoteException;
+ ;
 
 /**
  *
@@ -17,7 +17,7 @@ import java.rmi.RemoteException;
 public class ProductoEnsambleService extends ServiceAbstract<ProductoEnsamble,ProductoEnsambleFacade> implements  ProductoEnsambleServiceIf
 {
 
-    public ProductoEnsambleService() throws RemoteException {
+    public ProductoEnsambleService()    {
         super(ProductoEnsambleFacade.class);
     }
     

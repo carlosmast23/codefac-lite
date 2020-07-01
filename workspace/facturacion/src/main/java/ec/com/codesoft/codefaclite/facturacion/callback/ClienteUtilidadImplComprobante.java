@@ -31,7 +31,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.rmi.RemoteException;
+ ;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
@@ -46,18 +46,18 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implements ClienteInterfaceComprobante {
+public class ClienteUtilidadImplComprobante   implements ClienteInterfaceComprobante {
 
     private UtilidadComprobanteAvanzadoModel panel;
 
 
-    public ClienteUtilidadImplComprobante(UtilidadComprobanteAvanzadoModel panel) throws RemoteException {
-        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
+    public ClienteUtilidadImplComprobante(UtilidadComprobanteAvanzadoModel panel)    {
+         
         this.panel=panel;
     }
 
     @Override
-    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas) throws RemoteException {
+    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas)    {
         panel.estadoNormal(); //TODO:Ver si se puede mejorar este metodo porque desabilita la pantalla cuando termina el primer comprobante pero pueden ser varios
         //DialogoCodefac.mensaje("Dialogo", "Proceso Terminado", 1);
         panel.getCmbCarpetaComprobante().setSelectedIndex(panel.getCmbCarpetaComprobante().getSelectedIndex()); //Volver a cargar los comprobantes para actualizar y que no aparesca los que ya fueron enviados
@@ -70,7 +70,7 @@ public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implemen
     }
 
     @Override
-    public void procesando(int etapa, ClaveAcceso clave) throws RemoteException {
+    public void procesando(int etapa, ClaveAcceso clave)    {
         if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) //Si ya cumple la etapa de autorizar cambio el estado de los comprobantes
         {/*
             try {
@@ -85,7 +85,7 @@ public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implemen
                             try {
                                 factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
                                 servicio.editar(factura);
-                            } catch (RemoteException ex) {
+                            } catch (Exception ex) {
                                 Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
@@ -98,13 +98,13 @@ public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implemen
                             try {
                                 notaCredito.setClaveAcceso(NotaCreditoEnumEstado.TERMINADO.getEstado());
                                 servicioNotaCredito.editar(notaCredito);
-                            } catch (RemoteException ex) {
+                            } catch (Exception ex) {
                                 Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                         break;
                 }
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,7 +113,7 @@ public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implemen
     }
 
     @Override
-    public void error(ComprobanteElectronicoException cee, String claveAcceso) throws RemoteException {
+    public void error(ComprobanteElectronicoException cee, String claveAcceso)    {
         panel.estadoNormal();
         DialogoCodefac.mensaje("Dialogo", cee.getMessage(), 1);
     }

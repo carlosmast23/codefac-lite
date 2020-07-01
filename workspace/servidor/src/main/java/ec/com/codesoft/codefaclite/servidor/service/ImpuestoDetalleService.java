@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,13 +27,13 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
 {
     private ImpuestoDetalleFacade impuestoDetalleFacade;
 
-    public ImpuestoDetalleService() throws java.rmi.RemoteException
+    public ImpuestoDetalleService()   
     {
         super(ImpuestoDetalleFacade.class);
         impuestoDetalleFacade= new ImpuestoDetalleFacade();
     }
     /*
-    public ImpuestoDetalle grabar(ImpuestoDetalle i) throws ServicioCodefacException,java.rmi.RemoteException
+    public ImpuestoDetalle grabar(ImpuestoDetalle i) throws ServicioCodefacException   
     {
         try {
             impuestoDetalleFacade.create(i);
@@ -45,26 +45,26 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
         return i;
     } */   
     
-    public void eliminar(ImpuestoDetalle i) throws java.rmi.RemoteException
+    public void eliminar(ImpuestoDetalle i)   
     {
         impuestoDetalleFacade.remove(i);
     }
     
-    public List<ImpuestoDetalle> buscarImpuestoDetallePorMap(Map<String,Object> map) throws java.rmi.RemoteException
+    public List<ImpuestoDetalle> buscarImpuestoDetallePorMap(Map<String,Object> map)   
     {
         return impuestoDetalleFacade.findByMap(map);        
     }
     
-    public List<ImpuestoDetalle> obtenerIvaVigente() throws java.rmi.RemoteException
+    public List<ImpuestoDetalle> obtenerIvaVigente()   
     {
         return impuestoDetalleFacade.getImpuestoVigenteByName(Impuesto.IVA);
     }
     
-    public ImpuestoDetalle buscarPorTarifa(Integer tarifa) throws ServicioCodefacException,java.rmi.RemoteException
+    public ImpuestoDetalle buscarPorTarifa(Integer tarifa) throws ServicioCodefacException   
     {
         List<ImpuestoDetalle> resultados=(List<ImpuestoDetalle>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta() throws ServicioCodefacException   {
                 Map<String,Object> mapParametros=new HashMap<String, Object>();
                 mapParametros.put("tarifa",tarifa);
                 return getFacade().findByMap(mapParametros);

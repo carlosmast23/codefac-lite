@@ -24,7 +24,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import java.io.Serializable;
-import java.rmi.RemoteException;
+ ;
 import java.rmi.server.UnicastRemoteObject;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -37,12 +37,12 @@ import javax.mail.MessagingException;
  *
  * @author CARLOS_CODESOFT
  */
-public class AlertaService extends UnicastRemoteObject implements Serializable,AlertaServiceIf {
+public class AlertaService   implements Serializable,AlertaServiceIf {
 
-    public AlertaService() throws RemoteException {
+    public AlertaService()    {
     }
     
-    public List<AlertaResponse> actualizarNotificacionesCargaRapida(Empresa empresa) throws RemoteException,ServicioCodefacException
+    public List<AlertaResponse> actualizarNotificacionesCargaRapida(Empresa empresa) throws   ServicioCodefacException
     {
         List<AlertaResponse> alertas=new ArrayList<AlertaResponse>();
         alertas.add(obtenerNotificacionComprobantesElectronicos(empresa));
@@ -52,7 +52,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         return alertas;        
     }
     
-    public List<AlertaResponse> actualizarNotificacionesCargaLenta(Empresa empresa,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException
+    public List<AlertaResponse> actualizarNotificacionesCargaLenta(Empresa empresa,ModoProcesarEnum modoEnum) throws   ServicioCodefacException
     {
         List<AlertaResponse> alertas=new ArrayList<AlertaResponse>();
         alertas.add(verificarProblemasCorreo(empresa,modoEnum));
@@ -63,7 +63,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         return alertas;  
     }
     
-    public List<AlertaResponse> actualizarNotificaciones(Empresa empresa,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException
+    public List<AlertaResponse> actualizarNotificaciones(Empresa empresa,ModoProcesarEnum modoEnum) throws   ServicioCodefacException
     {
         List<AlertaResponse> alertas=new ArrayList<AlertaResponse>();
         alertas.addAll(actualizarNotificacionesCargaRapida(empresa));
@@ -72,7 +72,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         return alertas;        
     }
     
-    private AlertaResponse verificarProblemasCorreo(Empresa empresa,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException
+    private AlertaResponse verificarProblemasCorreo(Empresa empresa,ModoProcesarEnum modoEnum) throws   ServicioCodefacException
     {
         ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.FECHA_VALIDACION_CORREO);
         // Si el tipo de proceso es normal verifico que paso un día para volver a verificar el correo
@@ -146,7 +146,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         return null;
     }
     
-    private AlertaResponse obtenerNotificacionFechaLimiteFirma(Empresa empresa) throws RemoteException,ServicioCodefacException
+    private AlertaResponse obtenerNotificacionFechaLimiteFirma(Empresa empresa) throws   ServicioCodefacException
     {
         
         try {
@@ -190,7 +190,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         return null;
     }
     
-    private AlertaResponse obtenerNotificacionComprobantesElectronicos(Empresa empresa) throws RemoteException,ServicioCodefacException
+    private AlertaResponse obtenerNotificacionComprobantesElectronicos(Empresa empresa) throws   ServicioCodefacException
     {
         ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
         List<ComprobanteElectronico> comprobantesFirmadoSinEnviar = comprobanteServiceIf.getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa);
@@ -209,7 +209,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         return null;
     }
     
-    private AlertaResponse verificarConexionSri(Empresa empresa) throws RemoteException,ServicioCodefacException
+    private AlertaResponse verificarConexionSri(Empresa empresa) throws   ServicioCodefacException
     {
         if(!ServiceFactory.getFactory().getComprobanteServiceIf().verificarDisponibilidadSri(empresa))
         {

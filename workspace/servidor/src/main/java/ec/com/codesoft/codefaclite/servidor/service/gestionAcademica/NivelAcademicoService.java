@@ -16,7 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class NivelAcademicoService extends ServiceAbstract<NivelAcademico, Nivel
 
     private NivelAcademicoFacade nivelAcademicoFacade;
     
-    public NivelAcademico obtenerPorNombreYEstadoYPeriodo(String nombre,GeneralEnumEstado estado,Periodo periodo) throws RemoteException
+    public NivelAcademico obtenerPorNombreYEstadoYPeriodo(String nombre,GeneralEnumEstado estado,Periodo periodo)   
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("nombre", nombre);
@@ -46,7 +46,7 @@ public class NivelAcademicoService extends ServiceAbstract<NivelAcademico, Nivel
         return null;
     }
     
-    public NivelAcademico obtenerPorNombreYEstado(String nombre,GeneralEnumEstado estado) throws RemoteException
+    public NivelAcademico obtenerPorNombreYEstado(String nombre,GeneralEnumEstado estado)   
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("nombre", nombre);
@@ -60,7 +60,7 @@ public class NivelAcademicoService extends ServiceAbstract<NivelAcademico, Nivel
         return null;
     }
     
-    public List<NivelAcademico> obtenerTodosActivosPorPeriodo(Periodo periodo) throws RemoteException
+    public List<NivelAcademico> obtenerTodosActivosPorPeriodo(Periodo periodo)   
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();        
         mapParametros.put("periodo",periodo);
@@ -68,11 +68,11 @@ public class NivelAcademicoService extends ServiceAbstract<NivelAcademico, Nivel
         return getFacade().findByMap(mapParametros);
     }
 
-    public NivelAcademicoService() throws RemoteException {
+    public NivelAcademicoService()    {
         super(NivelAcademicoFacade.class);
     }
 
-    public void eliminarNivelAcademico(NivelAcademico n) throws RemoteException,ServicioCodefacException {
+    public void eliminarNivelAcademico(NivelAcademico n) throws   ServicioCodefacException {
         
         try {
             EstudianteInscritoService servicio=new EstudianteInscritoService();
@@ -94,13 +94,13 @@ public class NivelAcademicoService extends ServiceAbstract<NivelAcademico, Nivel
                 throw new ServicioCodefacException("No se puede eliminar el curso porque existen datos registrados ");
             }
            
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(NivelAcademicoService.class.getName()).log(Level.SEVERE, null, ex);
         }
        
     }
     
-    public List<NivelAcademico> buscarPorPeriodo(Periodo p) throws RemoteException, ServicioCodefacException {
+    public List<NivelAcademico> buscarPorPeriodo(Periodo p) throws    ServicioCodefacException {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("periodo", p);
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());        

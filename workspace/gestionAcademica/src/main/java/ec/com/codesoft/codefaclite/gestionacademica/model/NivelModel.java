@@ -17,7 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +62,7 @@ public class NivelModel extends NivelPanel {
                     }
                 }
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -82,7 +82,7 @@ public class NivelModel extends NivelPanel {
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar nivel modelo");
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             DialogoCodefac.mensaje("Error", "Error de comunicación con el servidor , nivel", DialogoCodefac.MENSAJE_ADVERTENCIA);
             Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -106,9 +106,7 @@ public class NivelModel extends NivelPanel {
             setearValoresNivel(nivel);
             nivelService.editar(nivel);
             DialogoCodefac.mensaje("Datos correctos", "El nivel se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (RemoteException ex) {
-            Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -124,9 +122,7 @@ public class NivelModel extends NivelPanel {
                 }
                 nivelService.eliminar(nivel);
                 DialogoCodefac.mensaje("Datos correctos", "El nivel se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            } catch (RemoteException ex) {
-                Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
+            }catch (ServicioCodefacException ex) {
                 Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
                 
                 DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);

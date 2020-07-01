@@ -18,7 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.PrestamoTablaInteres;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,17 +34,17 @@ public class TablaInteresModel extends TablaInteresPanel{
     private PrestamoTablaInteres prestamoTablaInteres;
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         try {
             seterarValoresVista();
             ServiceFactory.getFactory().getPrestamoTablaInteresServiceIf().grabar(prestamoTablaInteres);
@@ -57,7 +57,7 @@ public class TablaInteresModel extends TablaInteresPanel{
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         try {
             seterarValoresVista();
             ServiceFactory.getFactory().getPrestamoTablaInteresServiceIf().editar(prestamoTablaInteres);
@@ -70,7 +70,7 @@ public class TablaInteresModel extends TablaInteresPanel{
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         try {
             ServiceFactory.getFactory().getPrestamoTablaInteresServiceIf().eliminar(prestamoTablaInteres);
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
@@ -82,12 +82,12 @@ public class TablaInteresModel extends TablaInteresPanel{
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

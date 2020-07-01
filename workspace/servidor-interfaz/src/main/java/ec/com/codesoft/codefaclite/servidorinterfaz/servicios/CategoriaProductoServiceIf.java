@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import java.rmi.Remote;
+ 
 import java.util.List;
 
 /**
@@ -17,11 +17,11 @@ import java.util.List;
  */
 public interface CategoriaProductoServiceIf extends ServiceAbstractIf<CategoriaProducto>
 {
-    public CategoriaProducto grabar(CategoriaProducto c) throws ServicioCodefacException,java.rmi.RemoteException;
-    public void editar(CategoriaProducto c) throws java.rmi.RemoteException;
-    public void eliminar(CategoriaProducto c) throws java.rmi.RemoteException;
+    public CategoriaProducto grabar(CategoriaProducto c) throws ServicioCodefacException  ;
+    public void editar(CategoriaProducto c)   ;
+    public void eliminar(CategoriaProducto c)   ;
     
-    public List<CategoriaProducto> obtenerTodosPorEmpresa(Empresa empresa) throws java.rmi.RemoteException;
-    public CategoriaProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException;
+    public List<CategoriaProducto> obtenerTodosPorEmpresa(Empresa empresa)   ;
+    public CategoriaProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException   ;
     
 }

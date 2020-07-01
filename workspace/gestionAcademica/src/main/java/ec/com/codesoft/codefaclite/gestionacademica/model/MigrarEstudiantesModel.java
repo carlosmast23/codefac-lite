@@ -32,7 +32,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -75,37 +75,37 @@ public class MigrarEstudiantesModel extends MigrarModel{
     
     
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
        super.iniciar();
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -218,8 +218,6 @@ public class MigrarEstudiantesModel extends MigrarModel{
                     //Logger.getLogger(MigrarEstudiantesModel.class.getName()).log(Level.SEVERE, null, ex);
                     throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());
                     
-                } catch (RemoteException ex) {
-                    Logger.getLogger(MigrarEstudiantesModel.class.getName()).log(Level.SEVERE, null, ex);
                 }catch(Exception ex)
                 {
                     throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());
@@ -244,7 +242,7 @@ public class MigrarEstudiantesModel extends MigrarModel{
             }
             
             
-            public void procesarRepresentantes2(ExcelMigrar.CampoResultado campo,Estudiante estudiante) throws ExcelMigrar.ExcepcionExcel,ExcelMigrar.ExcepcionExcelRegistroDuplicado, RemoteException, ServicioCodefacException
+            public void procesarRepresentantes2(ExcelMigrar.CampoResultado campo,Estudiante estudiante) throws ExcelMigrar.ExcepcionExcel,ExcelMigrar.ExcepcionExcelRegistroDuplicado,    ServicioCodefacException
             {
                 
                 String identificacionRepresentante2 = (String) campo.valor;
@@ -264,7 +262,7 @@ public class MigrarEstudiantesModel extends MigrarModel{
             }
             
             
-            public void procesarRepresentantes1(ExcelMigrar.CampoResultado campo,Estudiante estudiante) throws ExcelMigrar.ExcepcionExcel,ExcelMigrar.ExcepcionExcelRegistroDuplicado, RemoteException, ServicioCodefacException
+            public void procesarRepresentantes1(ExcelMigrar.CampoResultado campo,Estudiante estudiante) throws ExcelMigrar.ExcepcionExcel,ExcelMigrar.ExcepcionExcelRegistroDuplicado,    ServicioCodefacException
             {
                 
                 String identificacionRepresentante1 = (String) campo.valor;

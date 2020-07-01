@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraCruceServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +24,11 @@ import java.util.Map;
 public class CarteraCruceService extends ServiceAbstract<CarteraCruce,CarteraCruceFacade> implements CarteraCruceServiceIf
 {
 
-    public CarteraCruceService() throws RemoteException {
+    public CarteraCruceService()    {
         super(CarteraCruceFacade.class);
     }
     
-    public List<CarteraCruce>  buscarPorCarteraDetalle(CarteraDetalle carteraDetalle) throws ServicioCodefacException, java.rmi.RemoteException
+    public List<CarteraCruce>  buscarPorCarteraDetalle(CarteraDetalle carteraDetalle) throws ServicioCodefacException 
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
         //if(cartera.getTipoCarteraEnum().equals(tipoCarteraEnum.CL))
@@ -38,7 +38,7 @@ public class CarteraCruceService extends ServiceAbstract<CarteraCruce,CarteraCru
         return getFacade().findByMap(parametros);
     }
     
-    public List<CarteraCruce>  buscarPorCarteraAfecta(Cartera carteraAfecta) throws ServicioCodefacException, java.rmi.RemoteException
+    public List<CarteraCruce>  buscarPorCarteraAfecta(Cartera carteraAfecta) throws ServicioCodefacException 
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
         //if(cartera.getTipoCarteraEnum().equals(tipoCarteraEnum.CL))

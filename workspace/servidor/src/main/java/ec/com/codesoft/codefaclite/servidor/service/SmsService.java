@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
-import java.rmi.RemoteException;
+ ;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
@@ -22,13 +22,13 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class SmsService extends UnicastRemoteObject implements SmsServiceIf{ 
+public class SmsService   implements SmsServiceIf{ 
 
-    public SmsService() throws RemoteException {
-        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
+    public SmsService()    {
+         
     }
     
-    public void enviarMensajes(Map<String,String> mensajesMap,EnvioMensajesCallBackInterface callback) throws RemoteException,ServicioCodefacException
+    public void enviarMensajes(Map<String,String> mensajesMap,EnvioMensajesCallBackInterface callback) throws   ServicioCodefacException
     {
         int totalMensajes=mensajesMap.size();
         int numeroMensaje=1;
@@ -57,7 +57,7 @@ public class SmsService extends UnicastRemoteObject implements SmsServiceIf{
         }
     }
     
-    public void enviarMensaje(String numero , String mensaje)throws RemoteException,ServicioCodefacException
+    public void enviarMensaje(String numero , String mensaje)throws   ServicioCodefacException
     {
         ServidorSMS servidorsms=ServidorSMS.getInstance();
         mensaje=UtilidadesTextos.quitaDiacriticos(mensaje); //Funcion que permite quitar acentuasiones y simbolo especiales que pueden generar problemas
@@ -69,7 +69,7 @@ public class SmsService extends UnicastRemoteObject implements SmsServiceIf{
         }
     }
     
-    public boolean isServicioDisponible()throws RemoteException
+    public boolean isServicioDisponible()  
     {
         ServidorSMS servidorsms=ServidorSMS.getInstance();
         return servidorsms.servicioDisponible();

@@ -25,7 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -99,12 +99,12 @@ public class ClienteReporte extends ControladorCodefacInterface{
             });
             
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ClienteReporte.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public List<Persona> obtenerConsulta() throws RemoteException
+    public List<Persona> obtenerConsulta()   
     {
         /*Persona persona;
         persona.getTipo()

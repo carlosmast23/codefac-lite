@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.UtilidadesControladorVistaGeneral;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +44,7 @@ public class UtilidadesCoreCodefac {
     {
         UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
             @Override
-            public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {
+            public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite   {
                 vistaCodefacIf.iniciar();
             }
         });
@@ -55,7 +55,7 @@ public class UtilidadesCoreCodefac {
         try {
             UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
                 @Override
-                public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {
+                public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite   {
                     vistaCodefacIf.nuevo();
                 }
             });
@@ -70,7 +70,7 @@ public class UtilidadesCoreCodefac {
         try {
             UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
                 @Override
-                public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {                    
+                public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite   {                    
                     vistaCodefacIf.limpiar();
                 }
             });

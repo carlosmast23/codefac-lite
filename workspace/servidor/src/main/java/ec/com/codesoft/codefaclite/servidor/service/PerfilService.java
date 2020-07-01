@@ -20,7 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.MenuCodefacRespuesta;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 import java.awt.Font;
@@ -42,14 +42,14 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
     private static final Logger LOG = Logger.getLogger(PerfilService.class.getName());
 
     private PerfilFacade perfilFacade;
-    public PerfilService() throws RemoteException 
+    public PerfilService()    
     {
         super(PerfilFacade.class);
         this.perfilFacade=new PerfilFacade();
     }
     
     
-    public Perfil grabar(Perfil entity) throws ServicioCodefacException,java.rmi.RemoteException
+    public Perfil grabar(Perfil entity) throws ServicioCodefacException   
     {
         EntityTransaction transaction=getTransaccion();
         transaction.begin();
@@ -59,7 +59,7 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
         return entity;
     }
     
-    public void eliminar(Perfil entity) throws java.rmi.RemoteException
+    public void eliminar(Perfil entity)   
     {
         EntityTransaction transaction=getTransaccion();
         transaction.begin();        
@@ -84,12 +84,12 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
             
             entityManager.merge(entity);
             transaction.commit();
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(PerfilService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public List<Perfil> obtenerPerfilesPorUsuario(Usuario usuario)
+    public List<Perfil> obtenerPerfilesPorUsuario(Usuario usuario)   
     {
         return this.perfilFacade.getPerfilesByUsuario(usuario);
     }
@@ -137,13 +137,13 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
             perfilDefecto.setVentanasPermisos(ventanas);
             entityManager.merge(perfilDefecto);
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(PerfilService.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
     
-    public MenuCodefacRespuesta construirMenuPermisosUsuario(SessionCodefac sessionCodefac) throws RemoteException, ServicioCodefacException
+    public MenuCodefacRespuesta construirMenuPermisosUsuario(SessionCodefac sessionCodefac) throws    ServicioCodefacException
     {
         //List<JMenu> menus=new ArrayList<JMenu>();
         MenuCodefacRespuesta respuesta=new MenuCodefacRespuesta();

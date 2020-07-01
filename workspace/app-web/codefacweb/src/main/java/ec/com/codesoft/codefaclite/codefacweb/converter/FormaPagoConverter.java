@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.codefacweb.converter;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
-import java.rmi.RemoteException;
+ ;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -19,7 +19,7 @@ import javax.faces.convert.FacesConverter;
 public class FormaPagoConverter extends AbstractConverter implements Converter {
 
     @Override
-    public Object buscarObjetoPorId(String valor) throws RemoteException {
+    public Object buscarObjetoPorId(String valor)    {
         //System.out.println("Valor Converter:"+valor);
         SriFormaPago formaPago= ServiceFactory.getFactory().getSriFormaPagoServiceIf().buscarPorId(Long.parseLong(valor));
         //System.out.println("Valor Sri Forma Pago:"+formaPago);

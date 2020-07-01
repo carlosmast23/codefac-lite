@@ -10,26 +10,26 @@ import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteMo
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.EnvioMensajesCallBackInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.EnvioMensajesCallBackInterface;
 import java.awt.Color;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+ 
+ ;
 import java.rmi.server.UnicastRemoteObject;
 
 /**
  *Clase que me permite comunicar con el servidor para saber la cantidad de mensajes enviadas
  * @author Carlos
  */
-public class EnvioMensajesCallBack extends UnicastRemoteObject implements EnvioMensajesCallBackInterface{
+public class EnvioMensajesCallBack   implements EnvioMensajesCallBackInterface{
     
     private MonitorComprobanteData monitorData;
 
-    public EnvioMensajesCallBack() throws RemoteException {
+    public EnvioMensajesCallBack()    {
         monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
         MonitorComprobanteModel.getInstance().mostrar();
     }
     
     
     
-    public void procesando(Integer porcentaje) throws RemoteException
+    public void procesando(Integer porcentaje)   
     {
         monitorData.getBarraProgreso().setValue(porcentaje);
         

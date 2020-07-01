@@ -45,7 +45,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,7 +111,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
    
             }catch (ServicioCodefacException ex) {
                 Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
-            }catch (RemoteException ex) {
+            }catch (Exception ex) {
                 Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
@@ -127,7 +127,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             limpiar();
             
       } 
-      catch (RemoteException ex) 
+      catch (Exception ex) 
       {
             Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error","Error de comunicacion con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
@@ -343,8 +343,6 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                     for (Empleado empleado : empleados) {
                         getCmbAsignadoADetalle().addItem(empleado);
                     }
-                } catch (RemoteException ex) {
-                    Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -471,17 +469,13 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         }
         
         getCmbTipoOrdenDetalle().removeAllItems();
-        try{
-            List<Departamento> departamentos = ServiceFactory.getFactory().getDepartamentoServiceIf().obtenerTodos();
-            for(Departamento departamento : departamentos)
-            {
-                getCmbTipoOrdenDetalle().addItem(departamento);
-            }
+        
+        List<Departamento> departamentos = ServiceFactory.getFactory().getDepartamentoServiceIf().obtenerTodos();
+        for (Departamento departamento : departamentos) {
+            getCmbTipoOrdenDetalle().addItem(departamento);
         }
-        catch(RemoteException e)
-        {
-            e.printStackTrace();
-        }
+        
+        
    
     }
     
@@ -748,7 +742,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                                 cargarDatosCliente(persona);
                                //Opcion cuando encuentra los datos del cliente 
                             }
-                        } catch (RemoteException ex) {
+                        } catch (Exception ex) {
                             Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         

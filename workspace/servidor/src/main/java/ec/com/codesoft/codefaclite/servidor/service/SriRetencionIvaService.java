@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidor.facade.SriRetencionIvaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 
 /**
@@ -17,11 +17,11 @@ import java.util.List;
  */
 public class SriRetencionIvaService extends ServiceAbstract<SriRetencionIva,SriRetencionIvaFacade> implements SriRetencionIvaServiceIf{
 
-    public SriRetencionIvaService() throws RemoteException {
+    public SriRetencionIvaService()    {
         super(SriRetencionIvaFacade.class);
     }
     
-    public List<SriRetencionIva> obtenerTodosOrdenadoPorCodigo() throws RemoteException
+    public List<SriRetencionIva> obtenerTodosOrdenadoPorCodigo()   
     {
         return getFacade().obtenerTodosOrdenadoPorCodigoFacade();
     }

@@ -36,7 +36,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.InputStream;
-import java.rmi.RemoteException;
+ ;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,7 +68,7 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
     private List<Cartera> carteraResultado;
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         listenerCheckBox();
         listerBotones();
         valoresInicialesPantalla();
@@ -76,27 +76,27 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         InputStream path=RecursoCodefac.JASPER_INVENTARIO.JASPER_CARTERA.getResourceInputStream("movimiento_cartera.jrxml");
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         
@@ -131,7 +131,7 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -215,9 +215,7 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
             //mapMovimientoCartera=convertirCrucesEnMap(cruces);
             construirTablaMovimientoCartera();
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(MovimientoCarteraModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(MovimientoCarteraModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         

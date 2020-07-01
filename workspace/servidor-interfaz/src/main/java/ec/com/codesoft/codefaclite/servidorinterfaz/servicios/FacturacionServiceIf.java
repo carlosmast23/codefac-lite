@@ -21,8 +21,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import java.math.BigDecimal;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+ 
+ ;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
@@ -33,30 +33,30 @@ import java.util.Map;
  */
 public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
 {
-    public void editar(Factura factura) throws ServicioCodefacException, RemoteException;
-    public Factura grabar(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 
-    public Factura grabar(Factura factura,Prestamo prestamo,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException;
-    public Factura grabar(Factura factura,Empleado empleado) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 
-    public List<Factura> obtenerFacturasPorIdentificacion(String identificacion,Empresa empresa) throws java.rmi.RemoteException;
-    public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo) throws java.rmi.RemoteException;
-    //public void editar(Factura factura) throws java.rmi.RemoteException;
-    public void editarFactura(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 
-    public List<Factura> obtenerTodos()throws java.rmi.RemoteException;
-    //public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa) throws java.rmi.RemoteException;
-    public List<Factura> obtenerFacturasReporte(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal) throws java.rmi.RemoteException;
-    public List<Factura> obtenerFacturasActivas() throws java.rmi.RemoteException;
-    //public String getPreimpresoSiguiente() throws java.rmi.RemoteException;
-    public void eliminarFactura(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException;
-    public Long obtenerSecuencialProformas(Empresa empresa) throws RemoteException;
-    public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException;
-    public void eliminarProforma(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException;
-    public List<Factura> consultarProformasReporte(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,GeneralEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException;
-    public Factura buscarPorPremimpresoYEstado(Integer secuencial,BigDecimal puntoEstablecimiento,Integer puntoEmision,ComprobanteEntity.ComprobanteEnumEstado estadoEnum) throws RemoteException;    
-    public void grabarCartera(Factura factura) throws RemoteException, ServicioCodefacException;
+    public void editar(Factura factura) throws ServicioCodefacException  ;
+    public Factura grabar(Factura factura) throws ServicioCodefacException   ,ServicioCodefacException; 
+    public Factura grabar(Factura factura,Prestamo prestamo,CarteraParametro carteraParametro) throws    ServicioCodefacException;
+    public Factura grabar(Factura factura,Empleado empleado) throws ServicioCodefacException   ,ServicioCodefacException; 
+    public List<Factura> obtenerFacturasPorIdentificacion(String identificacion,Empresa empresa)   ;
+    public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo)   ;
+    //public void editar(Factura factura)   ;
+    public void editarFactura(Factura factura) throws ServicioCodefacException   ,ServicioCodefacException; 
+    public List<Factura> obtenerTodos()  ;
+    //public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa)   ;
+    public List<Factura> obtenerFacturasReporte(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal)   ;
+    public List<Factura> obtenerFacturasActivas()   ;
+    //public String getPreimpresoSiguiente()   ;
+    public void eliminarFactura(Factura factura)   throws ServicioCodefacException;
+    public Long obtenerSecuencialProformas(Empresa empresa);    
+    public Factura grabarProforma(Factura proforma) throws   ServicioCodefacException;
+    public void eliminarProforma(Factura factura)   throws ServicioCodefacException;
+    public List<Factura> consultarProformasReporte(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,GeneralEnumEstado estado) throws ServicioCodefacException;
+    public Factura buscarPorPremimpresoYEstado(Integer secuencial,BigDecimal puntoEstablecimiento,Integer puntoEmision,ComprobanteEntity.ComprobanteEnumEstado estadoEnum);      
+    public void grabarCartera(Factura factura) throws    ServicioCodefacException;
     
-    public Factura grabarLiquidacionCompra(Factura liquidacionCompra) throws RemoteException,ServicioCodefacException;
-    public ReferenciaDetalleFacturaRespuesta obtenerReferenciaDetalleFactura(TipoDocumentoEnum tipoDocumentoEnum,Long referenciaId) throws java.rmi.RemoteException,ServicioCodefacException;
-    public Map<Factura,BigDecimal> obtenerCostoFacturas(List<Factura> facturas) throws RemoteException, ServicioCodefacException;
-    public Factura editarProforma(Factura proforma) throws RemoteException,ServicioCodefacException;
+    public Factura grabarLiquidacionCompra(Factura liquidacionCompra) throws   ServicioCodefacException;
+    public ReferenciaDetalleFacturaRespuesta obtenerReferenciaDetalleFactura(TipoDocumentoEnum tipoDocumentoEnum,Long referenciaId)   throws ServicioCodefacException;
+    public Map<Factura,BigDecimal> obtenerCostoFacturas(List<Factura> facturas) throws    ServicioCodefacException;
+    public Factura editarProforma(Factura proforma) throws   ServicioCodefacException;
     
 }

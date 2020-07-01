@@ -29,7 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +78,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite("cancelado guardar");
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite("cancelado guardar");
@@ -131,10 +131,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             DialogoCodefac.mensaje("Correcto", "El usuario se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             
             
-        } catch (RemoteException ex) {
-            DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
-            Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -174,9 +171,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                         {
                             return true; //Si todos los datos son validados retorno true
                         }
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
+                    }catch (ServicioCodefacException ex) {
                         Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -196,9 +191,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             }
             
             ServiceFactory.getFactory().getUsuarioServicioIf().eliminar(usuario);
-        } catch (RemoteException ex) {
-            Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);            
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite(ex.getMessage());

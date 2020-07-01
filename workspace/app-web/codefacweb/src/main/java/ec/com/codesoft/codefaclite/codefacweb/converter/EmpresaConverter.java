@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.codefacweb.converter;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import java.rmi.RemoteException;
+ ;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
@@ -22,7 +22,7 @@ import javax.faces.convert.FacesConverter;
 public class EmpresaConverter extends AbstractConverter implements Converter{
 
     @Override
-    public Object buscarObjetoPorId(String id) throws RemoteException {
+    public Object buscarObjetoPorId(String id)    {
         return ServiceFactory.getFactory().getEmpresaServiceIf().buscarPorId(Long.parseLong(id));
     }
     

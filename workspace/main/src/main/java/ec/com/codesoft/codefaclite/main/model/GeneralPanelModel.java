@@ -133,7 +133,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.rmi.RemoteException;
+ ;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -447,9 +447,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     parametro.setValor(widgetVirtualMall.getTxtCelular().getText());
                     servicio.editar(parametro);
                 }
-            } catch (RemoteException ex) {
-                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
+            }catch (ServicioCodefacException ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -496,9 +494,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             }
                         }
                     }
-                } catch (RemoteException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
+                }catch (IOException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -725,7 +721,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     System.out.println(ex.getMessage()); 
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     return;
-                } catch (RemoteException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     FuncionesSistemaCodefac.servidorConexionPerdida();
                 }
@@ -799,7 +795,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             LOG.log(Level.SEVERE,"Mensaje:"+ex.getMessage());
                             //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                             throw ex;
-                        } catch (RemoteException ex) {
+                        } catch (Exception ex) {
                             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                             FuncionesSistemaCodefac.servidorConexionPerdida();
                         }
@@ -836,7 +832,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     //getjButton4().setEnabled(false);
                 } catch (ExcepcionCodefacLite ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     FuncionesSistemaCodefac.servidorConexionPerdida();
                 }
@@ -886,7 +882,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     System.err.println(ex.getMessage());
-                } catch (RemoteException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     FuncionesSistemaCodefac.servidorConexionPerdida();
                 }
@@ -923,7 +919,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     //getjButton4().setEnabled(false);
                 } catch (ExcepcionCodefacLite ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     FuncionesSistemaCodefac.servidorConexionPerdida();
                 }                
@@ -1018,7 +1014,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         System.err.println(ex.getMessage());
                         //JOptionPane.showMessageDialog(null,ex.getMessage());
                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (RemoteException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                         FuncionesSistemaCodefac.servidorConexionPerdida();
                     }
@@ -1044,7 +1040,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         //ex.printStackTrace();
                         LOG.log(Level.WARNING, ex.getMessage());
                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (RemoteException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                         FuncionesSistemaCodefac.servidorConexionPerdida();
                     }
@@ -1342,6 +1338,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             panel.eventoCambiarEstado();
             panel.panelPadre=generalPanelModel;
+            GeneralPanelInterface.panelPadreStatic=generalPanelModel;
             panel.session=sessionCodefac;
             
             try {
@@ -2382,9 +2379,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         accesoDirecto.setX((int)nuevaPosicion.getX());
                         accesoDirecto.setY((int)nuevaPosicion.getY());
                         servicio.editar(accesoDirecto);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
+                    }catch (ServicioCodefacException ex) {
                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -2398,6 +2393,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             widgetVentasDiarias = new VentasDiariasModel(getjDesktopPane1(),sessionCodefac.getEmpresa());
             widgetVentasDiarias.panelPadre=this;
+            GeneralPanelInterface.panelPadreStatic=this;
             widgetVentasDiarias.setPreferredSize(new Dimension(xVd,yVd));
             widgetVentasDiarias.setBounds(xVd,yVd,250,330);
             
@@ -2418,9 +2414,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         accesoDirecto.setX((int)nuevaPosicion.getX());
                         accesoDirecto.setY((int)nuevaPosicion.getY());
                         servicio.editar(accesoDirecto);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
+                    }catch (ServicioCodefacException ex) {
                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -2459,9 +2453,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             crearWidget("configuracion.png", ComprobantesConfiguracionModel.class,"Configurar");
             
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -2477,9 +2469,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             getjDesktopPane1().add(iconoFactura);
             listaIconos.add(iconoFactura);
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -2552,34 +2542,34 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         GeneralPanelInterface internal = new GeneralPanelInterface() {
             @Override
-            public void iniciar() throws ExcepcionCodefacLite, RemoteException {                
+            public void iniciar() throws ExcepcionCodefacLite   {                
             }
 
             @Override
-            public void nuevo() throws ExcepcionCodefacLite, RemoteException {                
+            public void nuevo() throws ExcepcionCodefacLite   {                
             }
 
             @Override
-            public void grabar() throws ExcepcionCodefacLite, RemoteException{                
+            public void grabar() throws ExcepcionCodefacLite  {                
             }
 
             @Override
-            public void editar() throws ExcepcionCodefacLite, RemoteException {
+            public void editar() throws ExcepcionCodefacLite   {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
             @Override
-            public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+            public void eliminar() throws ExcepcionCodefacLite   {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
             @Override
-            public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+            public void imprimir() throws ExcepcionCodefacLite   {
                 
             }
 
             @Override
-            public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+            public void actualizar() throws ExcepcionCodefacLite   {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
@@ -2712,9 +2702,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             this.getJMenuBar().add(getjMenuVentanasActivas());
             //actualizarMenuCodefac();
             //agregarListenerMenu();
-        } catch (RemoteException ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -2945,9 +2933,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }            
             parametros.put("pl_url_piepagina",reportPiePagina);
             //System.out.println(parametros.get("SUBREPORT_DIR"));            
-        } catch (RemoteException ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JRException ex) {
+        }catch (JRException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -2972,7 +2958,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //Thread.sleep(10);
             ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametrosMap(sessionCodefac.getEmpresa());
             //System.out.println("COnsultando parametros");
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -2993,7 +2979,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             session.setMatriz(datosLogin.matriz);
             //session.setEmpresa(datosLogin.empresa);
             this.sessionCodefac=session;
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -3217,7 +3203,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         //dialogo.validacionLicenciaCodefac=validacion;
                         dialogo.setVisible(true);
                         //ec.com.codesoft.codefaclite.main.init.Main.iniciarComponentes();
-                    } catch (RemoteException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
@@ -3300,7 +3286,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             {
                 widgetVirtualMall.getTxtCelular().setText(parametro.getValor());
             }
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -3492,7 +3478,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
             
             getLblTextoSecundario().setText("Servidor IP: " + ipServidor + " | Licencia: " + licenciaNombre + " | Versión: " + ParametrosSistemaCodefac.VERSION);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -3550,9 +3536,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 acceso.setX((int)nuevaPosicion.getX());
                 acceso.setY((int)nuevaPosicion.getY());
                 servicio.editar(acceso);
-            } catch (RemoteException ex) {
-                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
+            }catch (ServicioCodefacException ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

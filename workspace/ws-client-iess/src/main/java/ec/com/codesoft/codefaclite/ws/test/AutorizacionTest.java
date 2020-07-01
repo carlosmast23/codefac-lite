@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.ws.test;
 
-import ec.com.codesoft.codefaclite.ws.recepcion.RecepcionComprobantesOfflineService;
+//import ec.com.codesoft.codefaclite.ws.recepcion.RecepcionComprobantesOfflineService;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -22,7 +22,7 @@ public class AutorizacionTest {
         try {
             URL url = new URL(uri);
              QName qname = new QName("http://ec.gob.sri.ws.recepcion", "RecepcionComprobantesOfflineService");
-             RecepcionComprobantesOfflineService servicio=new RecepcionComprobantesOfflineService(url,qname);
+             //RecepcionComprobantesOfflineService servicio=new RecepcionComprobantesOfflineService(url,qname);
              System.out.println("si existe servicio con sri");
         } catch (MalformedURLException ex) {
             Logger.getLogger(AutorizacionTest.class.getName()).log(Level.SEVERE, null, ex);

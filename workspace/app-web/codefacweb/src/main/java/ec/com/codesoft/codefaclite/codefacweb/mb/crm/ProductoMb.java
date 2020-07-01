@@ -20,7 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.io.Serializable;
-import java.rmi.RemoteException;
+ ;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -121,11 +121,11 @@ public class ProductoMb extends GeneralAbstractMb implements Serializable,Produc
         //TODO: Falta implementar
     }
 
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         System.out.println("Iniciando metodo iniciar ProductoMB ...");
     }
 
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

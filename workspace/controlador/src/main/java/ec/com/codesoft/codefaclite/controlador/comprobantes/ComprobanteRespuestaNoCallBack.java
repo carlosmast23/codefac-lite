@@ -21,7 +21,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.rmi.RemoteException;
+ ;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -57,6 +57,11 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
      * false=esperar solo hasta que se genere el ride
      */
     protected Boolean procesoCompleto=true;
+    
+    /**
+     * Variable para saber si tengo que generar el ride en la etapa de imprimir o al momento de finalizar
+     */
+    private Boolean generadoRideAutomaticamente=false;
 
     public ComprobanteRespuestaNoCallBack(ComprobanteEntity comprobante, ControladorCodefacInterface panel) {
         this.comprobante = comprobante;
@@ -69,10 +74,11 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
         new Thread(this).start();
     }
     
-    private ComprobanteEntity actualizarComprobante() throws RemoteException
+    private ComprobanteEntity actualizarComprobante()   
     {
         switch(comprobante.getCodigoDocumentoEnum())
         {
+            case LIQUIDACION_COMPRA:
             case FACTURA:
                 Factura factura=(Factura) comprobante;
                 return ServiceFactory.getFactory().getFacturacionServiceIf().buscarPorId(factura.getId());
@@ -101,8 +107,13 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
         for (int i = 0; i < TIEMPO_ESPERA; i++) 
         {            
             try {
-                Thread.sleep(2000);
+                
                 comprobante = actualizarComprobante();
+                if(comprobante==null)
+                {
+                    LOG.log(Level.SEVERE,"Ningun comprobante seleccionado");
+                    break;                    
+                }
 
                 if (comprobante.getFechaAutorizacionSri() != null) {
                     terminado();
@@ -112,10 +123,11 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
                     generadoRide();
                     LOG.log(Level.INFO,"Factura generado Ride :"+comprobante.getPreimpreso());
                 }
+                Thread.sleep(2000);
 
             } catch (InterruptedException ex) {
                 Logger.getLogger(ComprobanteRespuestaNoCallBack.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(ComprobanteRespuestaNoCallBack.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -141,6 +153,8 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
             return ;
         }
         
+        imprimirComprobante(); 
+        generadoRideAutomaticamente=true;
         monitorData.getBarraProgreso().setForeground(Color.YELLOW);
         monitorData.getBarraProgreso().setValue(75);
         
@@ -177,6 +191,10 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
                 }
             });
                        
+            if(!generadoRideAutomaticamente)
+            {
+                imprimirComprobante(); 
+            }
             
         } catch (IOException ex) {
             Logger.getLogger(ComprobanteRespuestaNoCallBack.class.getName()).log(Level.SEVERE, null, ex);
@@ -200,7 +218,7 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
                 panel.panelPadre.crearReportePantalla(jasperPrint, clave);
             }
             //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ComprobanteRespuestaNoCallBack.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ComprobanteRespuestaNoCallBack.class.getName()).log(Level.SEVERE, null, ex);

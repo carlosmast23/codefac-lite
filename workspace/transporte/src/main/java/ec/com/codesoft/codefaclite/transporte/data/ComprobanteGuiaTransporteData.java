@@ -5,13 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.transporte.data;
 
+import java.io.Serializable;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  *
  * @author Carlos
  */
-public class ComprobanteGuiaTransporteData {
+public class ComprobanteGuiaTransporteData implements Serializable{
     
     private String preimpreso;
     private String razon_social_persona;
@@ -19,7 +20,7 @@ public class ComprobanteGuiaTransporteData {
     private String motivo_traslado;
     private String destino;
     
-    private JRBeanCollectionDataSource productos;
+    private transient  JRBeanCollectionDataSource productos;
 
     public ComprobanteGuiaTransporteData() {
     }

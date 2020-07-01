@@ -67,7 +67,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -139,7 +139,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al prevalidar");
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -153,9 +153,6 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             
             DialogoCodefac.mensaje("Correcto","La persona fue editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje("Error","Error de comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Cancelado por error");
@@ -248,8 +245,6 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             try {
                 personaService.eliminar(persona);
                 System.out.println("Se elimino correctamente");
-            } catch (RemoteException ex) {
-                Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
                 DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                 //throw new ExcepcionCodefacLite("Cancelado por error");
@@ -465,7 +460,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 public Object consultarParametro(String nombreParametro) {
                     try {
                         return ServiceFactory.getFactory().getSriFormaPagoServiceIf().buscarPorId(Long.parseLong(nombreParametro));
-                    } catch (RemoteException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     return null;
@@ -476,9 +471,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 getCmbFormaPagoDefecto().setSelectedItem(sriFormaPagoDefecto);
             }
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         getCmbNacionalidad().setSelectedIndex(52);
@@ -559,7 +552,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 for (Nacionalidad n : nacion) {
                     getCmbNacionalidad().addItem(n);
                 }
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
             }
             
@@ -573,7 +566,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             
             ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE);
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -778,7 +771,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 
                 
                 
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

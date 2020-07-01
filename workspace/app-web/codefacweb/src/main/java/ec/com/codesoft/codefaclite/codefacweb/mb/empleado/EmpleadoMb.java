@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.io.Serializable;
-import java.rmi.RemoteException;
+ ;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -58,7 +58,7 @@ public class EmpleadoMb extends GeneralAbstractMb implements Serializable {
             MensajeMb.mensaje("Correctamente","Ejemplo guardado correctamente",FacesMessage.SEVERITY_INFO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(EmpleadoMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(EmpleadoMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -112,11 +112,11 @@ public class EmpleadoMb extends GeneralAbstractMb implements Serializable {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import java.rmi.Remote;
+ 
 
 /**
  *
@@ -16,5 +16,5 @@ import java.rmi.Remote;
  */
 public interface KardexItemEspecificoServiceIf extends ServiceAbstractIf<KardexItemEspecifico>
 {
-    public int obtenerCantidadItemsEspecificosPorKardex(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException;
+    public int obtenerCantidadItemsEspecificosPorKardex(Producto producto)   throws ServicioCodefacException;
 }

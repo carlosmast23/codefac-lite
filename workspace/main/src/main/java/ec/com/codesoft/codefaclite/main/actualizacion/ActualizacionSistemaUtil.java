@@ -20,7 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -70,9 +70,7 @@ public class ActualizacionSistemaUtil {
             ServiceFactory.getFactory().getComprobanteServiceIf().actualizarComprobanteDatos(listaComprobantesActualizar);
             
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -143,7 +141,7 @@ public class ActualizacionSistemaUtil {
                 }
             }
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -165,9 +163,7 @@ public class ActualizacionSistemaUtil {
                 }
             }
            
-        } catch (RemoteException ex) {
-            Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        }catch (ServicioCodefacException ex) {
             Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

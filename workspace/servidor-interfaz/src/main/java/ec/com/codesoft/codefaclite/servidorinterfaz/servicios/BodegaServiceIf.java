@@ -9,8 +9,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+ 
+ ;
 import java.util.List;
 
 /**
@@ -19,12 +19,12 @@ import java.util.List;
  */
 public interface BodegaServiceIf extends ServiceAbstractIf<Bodega>
 {
-    public Bodega grabar(Bodega b) throws ServicioCodefacException,java.rmi.RemoteException;
-    public void editar(Bodega b) throws ServicioCodefacException,java.rmi.RemoteException;
+    public Bodega grabar(Bodega b) throws ServicioCodefacException   ;
+    public void editar(Bodega b) throws ServicioCodefacException   ;
     
     
-    public Bodega buscarPorNombre(String nombre) throws ServicioCodefacException,RemoteException;
+    public Bodega buscarPorNombre(String nombre) throws ServicioCodefacException   ;
     
-    public List<Bodega> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException,RemoteException;
-    public Bodega obtenerBodegaVenta(Sucursal sucursal) throws ServicioCodefacException,RemoteException;
+    public List<Bodega> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException   ;
+    public Bodega obtenerBodegaVenta(Sucursal sucursal) throws ServicioCodefacException   ;
 }

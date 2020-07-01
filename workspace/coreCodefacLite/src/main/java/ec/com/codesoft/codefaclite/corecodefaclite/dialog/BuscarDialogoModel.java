@@ -22,7 +22,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +108,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             
             setearBotonesSiguienteAtras();
             imprimirTexto();
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -175,7 +175,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             Long tamanio=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryModificado, queryDialog.getParametros());
             
             return (tamanio!=null)?tamanio.intValue():0;
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
             FuncionesSistemaCodefac.servidorConexionPerdida();
         }

@@ -21,7 +21,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,11 +43,11 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
     }
      /**
     * Metodo iniciar
-    * @throws java.rmi.RemoteException
+    * @  
     * @throws ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException
     */ 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         
         arqueoCaja=new ArqueoCaja();
         arqueoCaja.setValorFisico(BigDecimal.ZERO);
@@ -64,13 +63,12 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite{
         iniciar();
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        
+    public void grabar() throws ExcepcionCodefacLite{
         try
         {       
             //Datos
@@ -93,7 +91,7 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         try {
             //Datos
             setearDatos();
@@ -106,7 +104,7 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         try {
             Boolean respuesta = dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO);
             if(!respuesta){
@@ -119,12 +117,12 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

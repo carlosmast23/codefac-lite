@@ -35,7 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +72,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             //Obtener la forma de pago
             formaPagoDefecto=ServiceFactory.getFactory().getSriServiceIf().obtenerFormarPagoDefecto();
             formaPagoConCartera=ServiceFactory.getFactory().getSriServiceIf().obtenerFormarPagoConCartera();
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -137,7 +137,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 {
                     tiposDocumento.add(DocumentoEnum.NOTA_VENTA_INTERNA); //Todo ver si utilizar este documento para grabar o crearme otros 
                 }
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             }
             /*
@@ -309,7 +309,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     interfaz.setComboIva(EnumSiNo.NO);
                 }
                 
-            } catch (RemoteException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             }
            
@@ -386,14 +386,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     } else {                        
                         return true;
                     }
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
+                }catch (ServicioCodefacException ex) {
                     Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
         //Por defecto si no tiene nada seleccionado si permito agregar el inventario
@@ -404,11 +402,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     /**
      * 
      * @return
-     * @throws RemoteException
+     * @  
      * @throws ServicioCodefacException 
      * @author Trebor
      */
-    public boolean verificarExistenciaStockProducto(FacturaDetalle facturaDetalle) throws RemoteException, ServicioCodefacException
+    public boolean verificarExistenciaStockProducto(FacturaDetalle facturaDetalle) throws    ServicioCodefacException
     {
         boolean verificadorStock;
         KardexServiceIf serviceKardex = ServiceFactory.getFactory().getKardexServiceIf();
@@ -462,7 +460,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             if(facturaDetalle.get)
             ReferenciaDetalleFacturaRespuesta respuesta=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(facturaDetalle.getTipoDocumentoEnum(),facturaDetalle.getReferenciaId());
             catalogoProducto=respuesta.catalogoProducto;
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }*/
         
@@ -721,7 +719,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             {
                 return;
             }            
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -775,7 +773,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

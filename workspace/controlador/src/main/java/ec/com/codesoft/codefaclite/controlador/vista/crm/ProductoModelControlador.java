@@ -34,7 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
+ ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -105,7 +105,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     }
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite   {
         
         System.out.println("Producto Modelo Controlador init ...");
         imprimirCodigoBarrasList=new ArrayList<EnumSiNo>(){
@@ -175,7 +175,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             }
             irbpnrList=irbpnr.getDetalleImpuestos();
             //interfaz.llenarComboIrbpnr(irbpnr.getDetalleImpuestos());
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -190,7 +190,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             }
             iceList=ice.getDetalleImpuestos();
             //interfaz.llenarComboIce(ice.getDetalleImpuestos());
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -216,18 +216,18 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             }
             ivaList=impuestoDetalleList;
             ivaSeleccionado=impuestoDefault;
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo() throws ExcepcionCodefacLite   {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar() throws ExcepcionCodefacLite   {
         try {
             setearValoresProducto(producto);
             producto=ServiceFactory.getFactory().getProductoServiceIf().grabar(producto);
@@ -237,21 +237,19 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             mostrarMensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
             //DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar");
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar() throws ExcepcionCodefacLite   {
         try {
             
             setearValoresProducto(producto);
             ServiceFactory.getFactory().getProductoServiceIf().editarProducto(producto);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
             //DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             //DialogoCodefac.mensaje("Datos correctos", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
@@ -262,17 +260,17 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar() throws ExcepcionCodefacLite   {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

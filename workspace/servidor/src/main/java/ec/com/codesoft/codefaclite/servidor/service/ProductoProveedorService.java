@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
-import java.rmi.RemoteException;
+ ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,12 +24,12 @@ import java.util.Map;
 public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,ProductoProveedorFacade> implements  ProductoProveedorServiceIf
 {
     
-    public ProductoProveedorService() throws RemoteException {
+    public ProductoProveedorService()    {
         super(ProductoProveedorFacade.class);
     }
 
     @Override
-    public List<ProductoProveedor> buscarProductoCompraActivo(Producto producto,Compra compra) throws ServicioCodefacException,java.rmi.RemoteException
+    public List<ProductoProveedor> buscarProductoCompraActivo(Producto producto,Compra compra) throws ServicioCodefacException   
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("producto", producto);
@@ -38,7 +38,7 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
     }
     
     @Override
-    public List<ProductoProveedor> buscarProductoProveedorActivo(Producto producto,Persona proveedor) throws ServicioCodefacException,java.rmi.RemoteException
+    public List<ProductoProveedor> buscarProductoProveedorActivo(Producto producto,Persona proveedor) throws ServicioCodefacException   
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("producto", producto);
@@ -46,7 +46,7 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
         return getFacade().findByMap(mapParametros);
     }
     
-    public List<ProductoProveedor> buscarPorProveedorActivo(Persona proveedor) throws ServicioCodefacException,java.rmi.RemoteException
+    public List<ProductoProveedor> buscarPorProveedorActivo(Persona proveedor) throws ServicioCodefacException   
     {
         //ProductoProveedor pp;
         Map<String, Object> mapParametros = new HashMap<String, Object>();
@@ -55,7 +55,7 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
         return getFacade().findByMap(mapParametros);
     }
     
-    public List<ProductoProveedor> buscarPorProductoActivo(Producto producto) throws ServicioCodefacException,java.rmi.RemoteException
+    public List<ProductoProveedor> buscarPorProductoActivo(Producto producto) throws ServicioCodefacException   
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("producto", producto);
