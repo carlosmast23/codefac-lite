@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.codefacweb.core;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import java.io.Serializable;
  ;
 import java.util.HashMap;
@@ -48,7 +49,7 @@ public class ControllerPublicoMb implements Serializable {
         try {
             if (idEmpresaStr == null || idEmpresaStr.isEmpty()) {
                 //Si no existe una parameatro ingresada por get busco por defecto la primera empresa
-                empresaSeleccionada = ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodosActivos().get(0);
+                empresaSeleccionada = ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodosActivos(OrdenarEnum.ASCEDENTE).get(0);
 
             } else {
                 empresaSeleccionada = ServiceFactory.getFactory().getEmpresaServiceIf().buscarPorId(Long.parseLong(idEmpresaStr));

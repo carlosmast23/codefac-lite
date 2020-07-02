@@ -230,7 +230,7 @@ public class ClienteFacturaImplComprobante  implements ClienteInterfaceComproban
                      parametroPanel.parametroCodefac, 
                      parametroPanel.tipoReporteEnum, 
                      parametroPanel.configuracion, 
-                     null);
+                     GeneralPanelInterface.panelPadreStatic);
                         
             //imprimirComprobanteVenta();
         } else {
