@@ -66,6 +66,9 @@ public class Empresa implements Serializable {
     @Column(name = "ESTADO")
     private String estado;
     
+    @Column(name = "ORDEN")
+    private Integer orden;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa",fetch = FetchType.EAGER)
     private List<Sucursal> sucursales;
 
@@ -202,6 +205,15 @@ public class Empresa implements Serializable {
     public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
         this.estado = estadoEnum.getEstado();
     }
+
+    public Integer getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Integer orden) {
+        this.orden = orden;
+    }
+    
     
     
     

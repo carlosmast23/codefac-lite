@@ -15905,6 +15905,389 @@
 							]
 						}
 					]
+				},
+				{
+					"_type": "ERDDataModel",
+					"_id": "AAAAAAFzDppnChVziQI=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "Distribuidores",
+					"ownedElements": [
+						{
+							"_type": "ERDDiagram",
+							"_id": "AAAAAAFzDppnChV0XNs=",
+							"_parent": {
+								"$ref": "AAAAAAFzDppnChVziQI="
+							},
+							"name": "ERDDiagram1",
+							"ownedViews": [
+								{
+									"_type": "ERDEntityView",
+									"_id": "AAAAAAFzDpqlCBWHbKQ=",
+									"_parent": {
+										"$ref": "AAAAAAFzDppnChV0XNs="
+									},
+									"model": {
+										"$ref": "AAAAAAFzDpqlCBWFUS4="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAFzDpqlCBWIFwQ=",
+											"_parent": {
+												"$ref": "AAAAAAFzDpqlCBWHbKQ="
+											},
+											"font": "Arial;13;1",
+											"left": 192,
+											"top": 245,
+											"width": 53.341796875,
+											"height": 13,
+											"text": "Ruta"
+										},
+										{
+											"_type": "ERDColumnCompartmentView",
+											"_id": "AAAAAAFzDpqlCBWJH3Q=",
+											"_parent": {
+												"$ref": "AAAAAAFzDpqlCBWHbKQ="
+											},
+											"model": {
+												"$ref": "AAAAAAFzDpqlCBWFUS4="
+											},
+											"font": "Arial;13;0",
+											"left": 192,
+											"top": 263,
+											"width": 53.341796875,
+											"height": 10
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 192,
+									"top": 240,
+									"width": 53.341796875,
+									"height": 33,
+									"nameLabel": {
+										"$ref": "AAAAAAFzDpqlCBWIFwQ="
+									},
+									"columnCompartment": {
+										"$ref": "AAAAAAFzDpqlCBWJH3Q="
+									}
+								},
+								{
+									"_type": "ERDEntityView",
+									"_id": "AAAAAAFzDpq2lhWULSE=",
+									"_parent": {
+										"$ref": "AAAAAAFzDppnChV0XNs="
+									},
+									"model": {
+										"$ref": "AAAAAAFzDpq2lhWS5/I="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAFzDpq2lhWVS1o=",
+											"_parent": {
+												"$ref": "AAAAAAFzDpq2lhWULSE="
+											},
+											"fillColor": "#d8fff8",
+											"font": "Arial;13;1",
+											"left": 344,
+											"top": 149,
+											"width": 83.6962890625,
+											"height": 13,
+											"text": "Vendedores"
+										},
+										{
+											"_type": "ERDColumnCompartmentView",
+											"_id": "AAAAAAFzDpq2lhWWvo8=",
+											"_parent": {
+												"$ref": "AAAAAAFzDpq2lhWULSE="
+											},
+											"model": {
+												"$ref": "AAAAAAFzDpq2lhWS5/I="
+											},
+											"fillColor": "#d8fff8",
+											"font": "Arial;13;0",
+											"left": 344,
+											"top": 167,
+											"width": 83.6962890625,
+											"height": 10
+										}
+									],
+									"fillColor": "#d8fff8",
+									"font": "Arial;13;0",
+									"left": 344,
+									"top": 144,
+									"width": 83.6962890625,
+									"height": 33,
+									"nameLabel": {
+										"$ref": "AAAAAAFzDpq2lhWVS1o="
+									},
+									"columnCompartment": {
+										"$ref": "AAAAAAFzDpq2lhWWvo8="
+									}
+								},
+								{
+									"_type": "ERDEntityView",
+									"_id": "AAAAAAFzDprWARWitn8=",
+									"_parent": {
+										"$ref": "AAAAAAFzDppnChV0XNs="
+									},
+									"model": {
+										"$ref": "AAAAAAFzDprWARWgDn4="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAFzDprWARWjs5c=",
+											"_parent": {
+												"$ref": "AAAAAAFzDprWARWitn8="
+											},
+											"fillColor": "#d8fff8",
+											"font": "Arial;13;1",
+											"left": 264,
+											"top": 389,
+											"width": 100.30810546875,
+											"height": 13,
+											"text": "oficina_cliente"
+										},
+										{
+											"_type": "ERDColumnCompartmentView",
+											"_id": "AAAAAAFzDprWARWkkxc=",
+											"_parent": {
+												"$ref": "AAAAAAFzDprWARWitn8="
+											},
+											"model": {
+												"$ref": "AAAAAAFzDprWARWgDn4="
+											},
+											"fillColor": "#d8fff8",
+											"font": "Arial;13;0",
+											"left": 264,
+											"top": 407,
+											"width": 100.30810546875,
+											"height": 10
+										}
+									],
+									"fillColor": "#d8fff8",
+									"font": "Arial;13;0",
+									"left": 264,
+									"top": 384,
+									"width": 100.30810546875,
+									"height": 33,
+									"nameLabel": {
+										"$ref": "AAAAAAFzDprWARWjs5c="
+									},
+									"columnCompartment": {
+										"$ref": "AAAAAAFzDprWARWkkxc="
+									}
+								},
+								{
+									"_type": "ERDEntityView",
+									"_id": "AAAAAAFzDps/NxWzW6o=",
+									"_parent": {
+										"$ref": "AAAAAAFzDppnChV0XNs="
+									},
+									"model": {
+										"$ref": "AAAAAAFzDps/NxWx+uM="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAFzDps/NxW0S+Y=",
+											"_parent": {
+												"$ref": "AAAAAAFzDps/NxWzW6o="
+											},
+											"fillColor": "#d8fff8",
+											"font": "Arial;13;1",
+											"left": 456,
+											"top": 285,
+											"width": 89.4599609375,
+											"height": 13,
+											"text": "transportista"
+										},
+										{
+											"_type": "ERDColumnCompartmentView",
+											"_id": "AAAAAAFzDps/NxW10o4=",
+											"_parent": {
+												"$ref": "AAAAAAFzDps/NxWzW6o="
+											},
+											"model": {
+												"$ref": "AAAAAAFzDps/NxWx+uM="
+											},
+											"fillColor": "#d8fff8",
+											"font": "Arial;13;0",
+											"left": 456,
+											"top": 303,
+											"width": 89.4599609375,
+											"height": 10
+										}
+									],
+									"fillColor": "#d8fff8",
+									"font": "Arial;13;0",
+									"left": 456,
+									"top": 280,
+									"width": 89.4599609375,
+									"height": 33,
+									"nameLabel": {
+										"$ref": "AAAAAAFzDps/NxW0S+Y="
+									},
+									"columnCompartment": {
+										"$ref": "AAAAAAFzDps/NxW10o4="
+									}
+								},
+								{
+									"_type": "ERDEntityView",
+									"_id": "AAAAAAFzDq/DOhXD00Y=",
+									"_parent": {
+										"$ref": "AAAAAAFzDppnChV0XNs="
+									},
+									"model": {
+										"$ref": "AAAAAAFzDq/DOhXBIbs="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAFzDq/DOhXE23Q=",
+											"_parent": {
+												"$ref": "AAAAAAFzDq/DOhXD00Y="
+											},
+											"font": "Arial;13;1",
+											"left": 240,
+											"top": 501,
+											"width": 145.80810546875,
+											"height": 13,
+											"text": "tipo_provedor_cliente"
+										},
+										{
+											"_type": "ERDColumnCompartmentView",
+											"_id": "AAAAAAFzDq/DOhXFJ3A=",
+											"_parent": {
+												"$ref": "AAAAAAFzDq/DOhXD00Y="
+											},
+											"model": {
+												"$ref": "AAAAAAFzDq/DOhXBIbs="
+											},
+											"font": "Arial;13;0",
+											"left": 240,
+											"top": 519,
+											"width": 145.80810546875,
+											"height": 10
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 240,
+									"top": 496,
+									"width": 145.80810546875,
+									"height": 33,
+									"nameLabel": {
+										"$ref": "AAAAAAFzDq/DOhXE23Q="
+									},
+									"columnCompartment": {
+										"$ref": "AAAAAAFzDq/DOhXFJ3A="
+									}
+								},
+								{
+									"_type": "ERDEntityView",
+									"_id": "AAAAAAFzDq/1jBXRIes=",
+									"_parent": {
+										"$ref": "AAAAAAFzDppnChV0XNs="
+									},
+									"model": {
+										"$ref": "AAAAAAFzDq/1jBXP81E="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAFzDq/1jRXSld8=",
+											"_parent": {
+												"$ref": "AAAAAAFzDq/1jBXRIes="
+											},
+											"font": "Arial;13;1",
+											"left": 264,
+											"top": 445,
+											"width": 97,
+											"height": 13,
+											"text": "cliente"
+										},
+										{
+											"_type": "ERDColumnCompartmentView",
+											"_id": "AAAAAAFzDq/1jRXTfpU=",
+											"_parent": {
+												"$ref": "AAAAAAFzDq/1jBXRIes="
+											},
+											"model": {
+												"$ref": "AAAAAAFzDq/1jBXP81E="
+											},
+											"font": "Arial;13;0",
+											"left": 264,
+											"top": 463,
+											"width": 97,
+											"height": 10
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 264,
+									"top": 440,
+									"width": 97,
+									"height": 33,
+									"nameLabel": {
+										"$ref": "AAAAAAFzDq/1jRXSld8="
+									},
+									"columnCompartment": {
+										"$ref": "AAAAAAFzDq/1jRXTfpU="
+									}
+								}
+							]
+						},
+						{
+							"_type": "ERDEntity",
+							"_id": "AAAAAAFzDpqlCBWFUS4=",
+							"_parent": {
+								"$ref": "AAAAAAFzDppnChVziQI="
+							},
+							"name": "Ruta"
+						},
+						{
+							"_type": "ERDEntity",
+							"_id": "AAAAAAFzDpq2lhWS5/I=",
+							"_parent": {
+								"$ref": "AAAAAAFzDppnChVziQI="
+							},
+							"name": "Vendedores"
+						},
+						{
+							"_type": "ERDEntity",
+							"_id": "AAAAAAFzDprWARWgDn4=",
+							"_parent": {
+								"$ref": "AAAAAAFzDppnChVziQI="
+							},
+							"name": "oficina_cliente"
+						},
+						{
+							"_type": "ERDEntity",
+							"_id": "AAAAAAFzDps/NxWx+uM=",
+							"_parent": {
+								"$ref": "AAAAAAFzDppnChVziQI="
+							},
+							"name": "transportista"
+						},
+						{
+							"_type": "ERDEntity",
+							"_id": "AAAAAAFzDq/DOhXBIbs=",
+							"_parent": {
+								"$ref": "AAAAAAFzDppnChVziQI="
+							},
+							"name": "tipo_provedor_cliente"
+						},
+						{
+							"_type": "ERDEntity",
+							"_id": "AAAAAAFzDq/1jBXP81E=",
+							"_parent": {
+								"$ref": "AAAAAAFzDppnChVziQI="
+							},
+							"name": "cliente"
+						}
+					]
 				}
 			]
 		},

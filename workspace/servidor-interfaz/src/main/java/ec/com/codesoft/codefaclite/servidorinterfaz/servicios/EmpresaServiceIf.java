@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 // 
 // ;
 import java.util.List;
@@ -26,5 +27,5 @@ public interface EmpresaServiceIf extends ServiceAbstractIf<Empresa>
     public void eliminar(Empresa p) throws ServicioCodefacException;
     public List<Empresa> buscar()   ;
     public Empresa buscarPorIdentificacion(String identificacion) ;
-    public List<Empresa> obtenerTodosActivos();
+    public List<Empresa> obtenerTodosActivos(OrdenarEnum ordenarEnum);
 }

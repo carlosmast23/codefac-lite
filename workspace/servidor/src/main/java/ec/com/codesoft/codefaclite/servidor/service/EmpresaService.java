@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.EmpresaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
  ;
 import java.util.HashMap;
@@ -106,12 +107,13 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         return null;
     }
     
-    public List<Empresa> obtenerTodosActivos()   
+    public List<Empresa> obtenerTodosActivos(OrdenarEnum ordenarEnum)   
     {
+        /*getFacade().
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        List<Empresa> empresas=getFacade().findByMap(mapParametros);
-        return empresas;
+        List<Empresa> empresas=getFacade().findByMap(mapParametros);*/
+        return getFacade().obtenerTodosActivosFacade(ordenarEnum);
         
     }
         

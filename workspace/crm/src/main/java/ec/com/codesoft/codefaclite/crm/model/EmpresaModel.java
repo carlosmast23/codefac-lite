@@ -122,6 +122,11 @@ public class EmpresaModel extends EmpresaForm
             
             getjTextLogo().setText(e.getImagenLogoPath());
             
+            if(e.getOrden()!=null)
+            {
+                getTxtOrden().setValue(e.getOrden());
+            }
+            
         }  
     }
     
@@ -211,7 +216,8 @@ public class EmpresaModel extends EmpresaForm
 
     @Override
     public void limpiar() {
-        getjTextLogo().setText("");        
+        getjTextLogo().setText("");    
+        getTxtOrden().setValue(0);
     }
 
 //    @Override
@@ -252,6 +258,7 @@ public class EmpresaModel extends EmpresaForm
         empresa.setFacebook(getTxtFacebook().getText());
         empresa.setAdicional(getTxtAdicional().getText());
         empresa.setCodigo(getjTextCodigoEmpresa().getText());
+        empresa.setOrden((Integer) getTxtOrden().getValue());
         
         if(getjCheckBLlevaContabilidad().isSelected())
         {
@@ -383,6 +390,10 @@ public class EmpresaModel extends EmpresaForm
         getTxtFacebook().setText(empresa.getFacebook());
         getTxtAdicional().setText(empresa.getAdicional());
         getjTextCodigoEmpresa().setText(empresa.getCodigo());
+        
+        if (empresa.getOrden() != null) {
+            getTxtOrden().setValue(empresa.getOrden());
+        }
     }
 
     
