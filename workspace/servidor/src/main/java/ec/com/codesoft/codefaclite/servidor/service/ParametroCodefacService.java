@@ -40,13 +40,12 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
                 public Object consulta() throws ServicioCodefacException, RemoteException {
                     Map<String, ParametroCodefac> parametrosCodefacMap = new HashMap<String, ParametroCodefac>();
                     
-                    List<ParametroCodefac> parametros = parametroCodefacFacade.findAll();
+                    List<ParametroCodefac> parametros = getFacade().getParametrosMapByEmpresa(empresaIf);
                     for (ParametroCodefac parametro : parametros) {
-                        if (parametro.getEmpresa() != null && parametro.getEmpresa().equals(empresaIf)) {
-                            parametrosCodefacMap.put(parametro.getNombre(), parametro);
-                        }
+                        parametrosCodefacMap.put(parametro.getNombre(), parametro);
                     }
                     return parametrosCodefacMap;
+                    //return getFacade().getParametrosMapByEmpresa(empresaIf);
                 }
             });
             
