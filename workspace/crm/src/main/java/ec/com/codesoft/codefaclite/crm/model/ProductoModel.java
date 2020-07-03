@@ -280,12 +280,15 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     @Override
     public Producto getResult() throws ExcepcionCodefacLite {
         try {
-            grabar();
+            controlador.grabar();
             return controlador.producto;
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override

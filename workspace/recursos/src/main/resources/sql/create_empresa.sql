@@ -24,6 +24,8 @@ create table EMPRESA
     TEXTO1 varchar(100),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.1.1)*/
     CODIGO varchar(3),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.3.6)*/
+    ORDEN INT,
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.2.9)*/
     ESTADO varchar(1),
     primary key (ID)

@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -26,5 +27,5 @@ public interface EmpresaServiceIf extends ServiceAbstractIf<Empresa>
     public void eliminar(Empresa p) throws ServicioCodefacException,java.rmi.RemoteException;
     public List<Empresa> buscar() throws java.rmi.RemoteException;
     public Empresa buscarPorIdentificacion(String identificacion) throws RemoteException;
-    public List<Empresa> obtenerTodosActivos() throws RemoteException;
+    public List<Empresa> obtenerTodosActivos(OrdenarEnum ordenarEnum) throws RemoteException;
 }

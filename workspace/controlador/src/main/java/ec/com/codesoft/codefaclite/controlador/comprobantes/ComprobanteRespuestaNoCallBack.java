@@ -73,6 +73,8 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
     {
         switch(comprobante.getCodigoDocumentoEnum())
         {
+            case LIQUIDACION_COMPRA:
+            case NOTA_VENTA:
             case FACTURA:
                 Factura factura=(Factura) comprobante;
                 return ServiceFactory.getFactory().getFacturacionServiceIf().buscarPorId(factura.getId());

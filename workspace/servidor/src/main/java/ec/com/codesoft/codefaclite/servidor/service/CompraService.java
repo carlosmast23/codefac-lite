@@ -133,6 +133,14 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             }
         }
         
+        /**
+         * Validar que este ingresando una compra repetida
+         */
+        if(getFacade().verificarCompraRepetida(compra))
+        {
+            throw new ServicioCodefacException("No se puede ingresar compras repetidas");
+        }
+        
         
     }
     

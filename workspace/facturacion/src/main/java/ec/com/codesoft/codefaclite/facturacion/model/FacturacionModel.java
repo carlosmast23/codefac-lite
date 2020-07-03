@@ -1186,7 +1186,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void grabar() throws ExcepcionCodefacLite {
 
         try {
-            
+            //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
             validacionesGrabar();
             
             Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Esta seguro que desea facturar?", DialogoCodefac.MENSAJE_ADVERTENCIA);

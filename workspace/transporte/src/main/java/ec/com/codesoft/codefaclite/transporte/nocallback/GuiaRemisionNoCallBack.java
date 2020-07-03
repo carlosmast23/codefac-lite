@@ -31,7 +31,7 @@ public class GuiaRemisionNoCallBack extends ComprobanteRespuestaNoCallBack {
 
     public GuiaRemisionNoCallBack(GuiaRemision guiaRemision, GuiaRemisionModel panel) {
         super(guiaRemision, panel);
-        this.guiaRemisionModel = guiaRemisionModel;
+        this.guiaRemisionModel = panel;
     }
 
     @Override
