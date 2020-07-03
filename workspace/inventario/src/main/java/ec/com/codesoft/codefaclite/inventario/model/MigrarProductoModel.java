@@ -119,12 +119,7 @@ public class MigrarProductoModel extends MigrarModel {
                         Bodega bodega=ServiceFactory.getFactory().getBodegaServiceIf().buscarPorNombre(bodegaNombre);
                         if(bodega!=null) //Si la bodega existe consulto cuanto quiere agregar al stock
                         {
-                            Double stock=0d;
-                            ExcelMigrar.CampoResultado campoResultado=fila.getByEnum(ExcelMigrarProductos.Enum.STOCK);
-                            if(campoResultado!=null)
-                            {                            
-                                stock=(Double) campoResultado.valor;
-                            }
+                            Double stock=(Double) fila.getByEnum(ExcelMigrarProductos.Enum.STOCK).valor;
                             
                             if(stock>0)
                             {
