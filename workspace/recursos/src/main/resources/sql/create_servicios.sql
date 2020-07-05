@@ -46,6 +46,8 @@ create table EMPLEADO
     NACIONALIDAD_ID BIGINT,
     CARGO varchar(30),
     ESTADO varchar(1),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.3.7)*/
+    CODIGO varchar(100),    
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.3)*/
     NOMBRES varchar(100),    
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.3)*/

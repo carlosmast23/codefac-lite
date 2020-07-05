@@ -69,7 +69,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     private Boolean facturacionOffline;
 
     public ClienteFacturaImplComprobante(FacturacionModel facturacionModel, Factura facturaProcesando,Boolean facturacionOffline) throws RemoteException {
-        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
+        //super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         this.facturacionModel = facturacionModel;
         //this.servicio = servicio;
         this.facturaProcesando = facturaProcesando;

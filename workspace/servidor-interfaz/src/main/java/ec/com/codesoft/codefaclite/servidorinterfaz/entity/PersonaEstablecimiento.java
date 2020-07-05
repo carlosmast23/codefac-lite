@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal.TipoSucursalEnum;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +34,9 @@ public class PersonaEstablecimiento implements  Serializable{
     @Column(name = "CODIGO_SUCURSAL")
     private String codigoSucursal;
     
+    @Column(name = "CODIGO_PERSONALIZADO")
+    private String codigoPersonalizado;
+    
     @Column(name = "NOMBRE_COMERCIAL")
     private String nombreComercial;
     
@@ -53,6 +57,12 @@ public class PersonaEstablecimiento implements  Serializable{
 
     @Column(name = "TIPO_SUCURSAL")
     private String tipoSucursal;
+    
+    @Column(name = "LATITUD")
+    private BigDecimal latitud;
+    
+    @Column(name = "LONGITUD")
+    private BigDecimal longitud;
     
     @JoinColumn(name ="PERSONA_ID")
     private Persona persona;
@@ -144,6 +154,31 @@ public class PersonaEstablecimiento implements  Serializable{
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
+
+    public String getCodigoPersonalizado() {
+        return codigoPersonalizado;
+    }
+
+    public void setCodigoPersonalizado(String codigoPersonalizado) {
+        this.codigoPersonalizado = codigoPersonalizado;
+    }
+
+    public BigDecimal getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(BigDecimal latitud) {
+        this.latitud = latitud;
+    }
+
+    public BigDecimal getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(BigDecimal longitud) {
+        this.longitud = longitud;
+    }
+    
     
     /**
      * ==============> DATOS ADICIONALES PARA MOSTRAR EN LAS DIALOGOS WEB <=================
@@ -160,9 +195,10 @@ public class PersonaEstablecimiento implements  Serializable{
     }
     
     
-    public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String nombreComercial,String direccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum)
+    public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String codigo,String nombreComercial,String direccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum)
     {
         //PersonaEstablecimiento personaEstablecimiento = new PersonaEstablecimiento();
+        establecimiento.setCodigoPersonalizado(codigo);
         establecimiento.setNombreComercial(nombreComercial);
         establecimiento.setDireccion(direccion);
         establecimiento.setExtensionTelefono(extensionTelefono);

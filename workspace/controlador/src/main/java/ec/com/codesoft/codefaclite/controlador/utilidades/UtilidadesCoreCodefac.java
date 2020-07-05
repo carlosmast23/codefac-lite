@@ -82,4 +82,20 @@ public class UtilidadesCoreCodefac {
         }
     }
     
+    public static void ejecutarCargarDatosPantalla(VistaCodefacIf vistaCodefacIf,Object dato)
+    {
+        try {
+            UtilidadesControladorVistaGeneral.ejecutarAccionVista(vistaCodefacIf,new UtilidadesControladorVistaGeneral.EjecutarVistaIf() {
+                @Override
+                public void ejecutar() throws UnsupportedOperationException, ExcepcionCodefacLite, RemoteException {                    
+                    vistaCodefacIf.cargarDatosPantalla(dato);
+                }
+            });
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(UtilidadesCoreCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(UnsupportedOperationException uoe)
+        {
+            //TODO: no imprimir nada
+        }
+    }
 }

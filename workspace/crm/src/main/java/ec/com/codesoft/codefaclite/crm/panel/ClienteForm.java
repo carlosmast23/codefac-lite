@@ -109,6 +109,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         txtDiasCredito = new javax.swing.JSpinner();
         jLabel28 = new javax.swing.JLabel();
         txtDiasCreditoProveedor = new javax.swing.JSpinner();
+        jLabel29 = new javax.swing.JLabel();
+        txtCodigoPersonalizado = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         chkContacto = new javax.swing.JCheckBox();
@@ -138,6 +140,12 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel27 = new javax.swing.JLabel();
         cmbTipoEstablecimiento = new javax.swing.JComboBox<>();
         btnEditarEstablecimiento = new javax.swing.JButton();
+        jLabel31 = new javax.swing.JLabel();
+        txtCodigoPersonalizadoOficina = new javax.swing.JTextField();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        txtLongitud = new javax.swing.JTextField();
+        txtLatitud = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -402,10 +410,10 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Tipo Cliente:");
+        jLabel5.setText("Código Personalizado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel5, gridBagConstraints);
@@ -504,6 +512,18 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(txtDiasCreditoProveedor, gridBagConstraints);
 
+        jLabel29.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel29.setText("Tipo Cliente:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel29, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel1.add(txtCodigoPersonalizado, gridBagConstraints);
+
         jTabbedPane1.addTab("Datos Adicionales", jPanel1);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
@@ -562,10 +582,10 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanelCaracteristicasGenerales1.add(jLabel22, gridBagConstraints);
 
         jLabel23.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel23.setText("Tipo Establecimiento:");
+        jLabel23.setText("Latitud:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales1.add(jLabel23, gridBagConstraints);
@@ -608,10 +628,10 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanelCaracteristicasGenerales1.add(jTextCelularEstablecimiento, gridBagConstraints);
 
         jLabel30.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel30.setText("Nombre Establecimiento:");
+        jLabel30.setText("Código Personalizado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales1.add(jLabel30, gridBagConstraints);
@@ -644,7 +664,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -655,7 +675,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         btnAgregarEstablecimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales1.add(btnAgregarEstablecimiento, gridBagConstraints);
@@ -698,10 +718,58 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         btnEditarEstablecimiento.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales1.add(btnEditarEstablecimiento, gridBagConstraints);
+
+        jLabel31.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel31.setText("Nombre Establecimiento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jLabel31, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales1.add(txtCodigoPersonalizadoOficina, gridBagConstraints);
+
+        jLabel32.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel32.setText("Longitud:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jLabel32, gridBagConstraints);
+
+        jLabel33.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel33.setText("Tipo Establecimiento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jLabel33, gridBagConstraints);
+
+        txtLongitud.setEditable(false);
+        txtLongitud.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales1.add(txtLongitud, gridBagConstraints);
+
+        txtLatitud.setEditable(false);
+        txtLatitud.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales1.add(txtLatitud, gridBagConstraints);
 
         jTabbedPane1.addTab("Establecimientos", jPanelCaracteristicasGenerales1);
 
@@ -748,8 +816,12 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -789,8 +861,12 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblOligadoLlevarContabilidad;
     private javax.swing.JTable tblEstablecimientos;
     private javax.swing.JSpinner txtCodigoEstablecimiento;
+    private javax.swing.JTextField txtCodigoPersonalizado;
+    private javax.swing.JTextField txtCodigoPersonalizadoOficina;
     private javax.swing.JSpinner txtDiasCredito;
     private javax.swing.JSpinner txtDiasCreditoProveedor;
+    private javax.swing.JTextField txtLatitud;
+    private javax.swing.JTextField txtLongitud;
     private javax.swing.JTextField txtNombreContacto;
     private javax.swing.JTextField txtNombreLegal;
     private javax.swing.JTextField txtNombreLegalEstablecimiento;
@@ -1042,6 +1118,38 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     public void setTxtDiasCreditoProveedor(JSpinner txtDiasCreditoProveedor) {
         this.txtDiasCreditoProveedor = txtDiasCreditoProveedor;
+    }
+
+    public JTextField getTxtCodigoPersonalizado() {
+        return txtCodigoPersonalizado;
+    }
+
+    public void setTxtCodigoPersonalizado(JTextField txtCodigoPersonalizado) {
+        this.txtCodigoPersonalizado = txtCodigoPersonalizado;
+    }
+
+    public JTextField getTxtCodigoPersonalizadoOficina() {
+        return txtCodigoPersonalizadoOficina;
+    }
+
+    public void setTxtCodigoPersonalizadoOficina(JTextField txtCodigoPersonalizadoOficina) {
+        this.txtCodigoPersonalizadoOficina = txtCodigoPersonalizadoOficina;
+    }
+
+    public JTextField getTxtLatitud() {
+        return txtLatitud;
+    }
+
+    public void setTxtLatitud(JTextField txtLatitud) {
+        this.txtLatitud = txtLatitud;
+    }
+
+    public JTextField getTxtLongitud() {
+        return txtLongitud;
+    }
+
+    public void setTxtLongitud(JTextField txtLongitud) {
+        this.txtLongitud = txtLongitud;
     }
     
     

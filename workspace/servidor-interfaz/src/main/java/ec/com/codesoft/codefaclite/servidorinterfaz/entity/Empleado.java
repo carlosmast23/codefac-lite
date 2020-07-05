@@ -29,6 +29,9 @@ public class Empleado implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(name = "CODIGO")
+    private String codigo;
+    
     @Column(name = "NOMBRES")
     private String nombres;
     @Column(name = "APELLIDOS")
@@ -182,6 +185,16 @@ public class Empleado implements Serializable
     {
         return nombres+" "+apellidos;
     }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+    
+    
      
 
     @Override

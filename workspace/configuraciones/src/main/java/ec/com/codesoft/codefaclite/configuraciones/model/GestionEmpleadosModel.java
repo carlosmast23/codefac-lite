@@ -207,6 +207,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
         getTxtNombres().setText("");
         getTxtTelefono().setText("");
         getTxtAreaDireccion().setText("");
+        getTxtCodigo().setText("");
         
         //getCmbNacionalidad().setSelectedItem(ABORT);
     }
@@ -237,6 +238,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
         }
         this.empleado.setTelefonoCelular(""+getTxtCelular().getText());
         this.empleado.setTelefonoConvencional(""+getTxtTelefono().getText());
+        this.empleado.setCodigo(getTxtCodigo().getText());
     }
     
     public void mostrarDatos()
@@ -253,6 +255,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
         getTxtIdentificacion().setText(this.empleado.getIdentificacion());
         getTxtNombres().setText(this.empleado.getNombres());
         getTxtTelefono().setText(this.empleado.getTelefonoConvencional());
+        getTxtCodigo().setText(this.empleado.getCodigo());
         
         /**
          * Cargar datos en combos

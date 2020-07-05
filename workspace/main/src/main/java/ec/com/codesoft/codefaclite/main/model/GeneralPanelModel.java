@@ -862,8 +862,20 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         return;
                     }
                     
-                    String tituloOriginal=getTituloOriginal(frame.getTitle());                    
-                    frameInterface.eliminar();
+                    String tituloOriginal=getTituloOriginal(frame.getTitle());     
+                    
+                    //Ejecutar el metodo eliminar del controlador si existe
+                    VistaCodefacIf frameControlador= UtilidadesCoreCodefac.getControladorTodoVista(frameInterface);
+                    if(frameControlador!=null)
+                    {                    
+                        frameControlador.eliminar();
+                    }
+                    else
+                    {
+                        frameInterface.eliminar();
+                    }
+                    
+                    
                     frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
                     frameInterface.eventoCambiarEstado();
                     limpiarAnotaciones(frameInterface);
@@ -877,6 +889,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     frameInterface.consola=new ConsolaGeneral();
                     mostrarConsola(frameInterface.consola,true);
                     frame.setTitle(tituloOriginal+" [Nuevo]");
+                    
+                    //Actualizar Vista
+                    frameInterface.actualizarBindingComponent(false,true);           
                 }
                 catch (UnsupportedOperationException ex) {
                     System.err.println("Metodo no implementado");
@@ -890,7 +905,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     FuncionesSistemaCodefac.servidorConexionPerdida();
                 }
-                               
+                    
             }
         });
         
@@ -1181,7 +1196,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     if (frameControlador != null) {
                         frameControlador.cargarDatosPantalla(resultado);
                     }
-                    frameInterface.cargarDatosPantalla(resultado);
+                    //frameInterface.cargarDatosPantalla(resultado);
+                    UtilidadesCoreCodefac.ejecutarCargarDatosPantalla(frameInterface, resultado);
                     
                 }
                 return;
@@ -1201,7 +1217,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 if (frameControlador != null) {
                     frameControlador.cargarDatosPantalla(resultado);
                 }
-                frameInterface.cargarDatosPantalla(resultado);
+                //frameInterface.cargarDatosPantalla(resultado);
+                UtilidadesCoreCodefac.ejecutarCargarDatosPantalla(frameInterface,resultado);
             }
             else
             {
@@ -1333,6 +1350,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado,Integer ancho ,Integer alto)
     {
         try {
+            
+            //Recargar parametros de configuracion
+            sessionCodefac.setParametrosCodefac(null);
+            
             //Anular el metodo de cierre automatico para controlar manualmente
             panel.setDefaultCloseOperation(JInternalFrame.DO_NOTHING_ON_CLOSE);
             
