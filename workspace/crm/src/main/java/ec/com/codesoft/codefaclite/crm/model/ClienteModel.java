@@ -41,6 +41,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal.TipoSucursalEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Zona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
@@ -50,6 +51,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -212,16 +214,15 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             }
         }
         
-        PersonaEstablecimiento.buildFromPersona(
-                establecimiento, 
+        PersonaEstablecimiento.buildFromPersona(establecimiento, 
                 getTxtCodigoPersonalizado().getText(),
                 getTxtNombreLegal().getText(), 
                 getjTextAreaDireccion().getText(), 
                 getjTextExtension().getText(), 
                 getjTextCelular().getText(), 
                 getjTextTelefono().getText(),
-                TipoSucursalEnum.MATRIZ
-                );
+                TipoSucursalEnum.MATRIZ, 
+                (Zona) getCmbZona().getSelectedItem());
         
         
         if(estadoFormulario.equals(ESTADO_GRABAR))
@@ -468,6 +469,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 getCmbFormaPagoDefecto().setSelectedItem(sriFormaPagoDefecto);
             }
             
+            getCmbZona().setSelectedItem(null);
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
@@ -521,6 +524,14 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             getCmbTipoEstablecimiento().addItem(tipoSucursal);
         }
         
+        try {
+            UtilidadesComboBox.llenarComboBox(getCmbZonaOficina(),ServiceFactory.getFactory().getZonaServiceIf().obtenerActivos());
+            UtilidadesComboBox.llenarComboBox(getCmbZona(),ServiceFactory.getFactory().getZonaServiceIf().obtenerActivos());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
@@ -890,6 +901,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         personaEstablecimiento.setTelefonoCelular(getjTextCelularEstablecimiento().getText());
         personaEstablecimiento.setTelefonoConvencional(getjTextTelefonoEstablecimiento().getText());
         TipoSucursalEnum tipoSucursalEnum = (TipoSucursalEnum) getCmbTipoEstablecimiento().getSelectedItem();
+        Zona zona=(Zona) getCmbZonaOficina().getSelectedItem();
+        personaEstablecimiento.setZona(zona);
         personaEstablecimiento.setTipoSucursal(tipoSucursalEnum.getCodigo());
         return personaEstablecimiento;
     }
@@ -972,6 +985,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextCelularEstablecimiento().setText("");
         getTxtCodigoEstablecimiento().setValue(1);
         getCmbTipoEstablecimiento().setSelectedIndex(0);
+        getCmbZonaOficina().setSelectedItem(null);
         
         getTxtLatitud().setText(BigDecimal.ZERO.toString());
         getTxtLongitud().setText(BigDecimal.ZERO.toString());
@@ -1005,6 +1019,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             getjTextTelefono().setText(establecimiento.getTelefonoConvencional());
             getjTextExtension().setText(establecimiento.getExtensionTelefono());
             getjTextCelular().setText(establecimiento.getTelefonoCelular());
+            getCmbZona().setSelectedItem(establecimiento.getZona());
             construirVistaEstablecimientos();
         }
     }
@@ -1054,7 +1069,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextCelularEstablecimiento().setText(personaEstablecimientoEditar.getTelefonoCelular());
         getjTextTelefonoEstablecimiento().setText(personaEstablecimientoEditar.getTelefonoConvencional());
         getCmbTipoEstablecimiento().setSelectedItem(personaEstablecimientoEditar.getTipoSucursalEnum());
-        
+        getCmbZonaOficina().setSelectedItem(personaEstablecimientoEditar.getZona());
         
         //PersonaEstablecimiento personaEstablecimiento = new PersonaEstablecimiento();
         //personaEstablecimiento.setPersona(persona);

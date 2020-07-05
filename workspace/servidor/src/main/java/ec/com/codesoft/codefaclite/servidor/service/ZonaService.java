@@ -11,6 +11,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ZonaServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -75,8 +78,15 @@ public class ZonaService extends ServiceAbstract<Zona,ZonaFacade> implements Zon
         if(zona.getEmpresa()==null)
         {
             throw new ServicioCodefacException("No se puede grabar sin una empresa");
-        }
-                
+        }       
+    }
+    
+    public List<Zona> obtenerActivos() throws ServicioCodefacException, RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+        
     }
     
 }
