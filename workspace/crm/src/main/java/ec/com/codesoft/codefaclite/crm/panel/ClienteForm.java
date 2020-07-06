@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal.TipoSucursalEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Zona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
@@ -114,6 +115,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         txtCodigoPersonalizado = new javax.swing.JTextField();
         jLabel35 = new javax.swing.JLabel();
         cmbZona = new javax.swing.JComboBox<>();
+        jLabel37 = new javax.swing.JLabel();
+        cmbTipoCliente = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         chkContacto = new javax.swing.JCheckBox();
@@ -151,6 +154,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         txtLatitud = new javax.swing.JTextField();
         jLabel34 = new javax.swing.JLabel();
         cmbZonaOficina = new javax.swing.JComboBox<>();
+        jLabel36 = new javax.swing.JLabel();
+        cmbTipoClienteOficina = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -426,7 +431,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jComboTipoCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CLIENTE", "SUJETO RETENIDO", "DESTINATARIO" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(jComboTipoCliente, gridBagConstraints);
@@ -435,14 +440,14 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel12.setText("Tipo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel12, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(cmbTipoOperador, gridBagConstraints);
@@ -451,14 +456,14 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel16.setText("Días de Credito Proveedor:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel16, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel1.add(cmbFormaPagoDefecto, gridBagConstraints);
 
@@ -466,23 +471,23 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         lblOligadoLlevarContabilidad.setText("Obligado a Llevar Contabilidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(lblOligadoLlevarContabilidad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(chkObligadoLlevarContabilidad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio7, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.4;
         jPanel1.add(lblEspacio4, gridBagConstraints);
@@ -491,13 +496,13 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel19.setText("Forma Pago Defecto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel19, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(txtDiasCredito, gridBagConstraints);
@@ -506,19 +511,19 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel28.setText("Días de Credito Cliente:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel28, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(txtDiasCreditoProveedor, gridBagConstraints);
 
         jLabel29.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel29.setText("Zona:");
+        jLabel29.setText("Categoria Cliente:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -533,16 +538,31 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel35.setText("Tipo Cliente:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel35, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel1.add(cmbZona, gridBagConstraints);
+
+        jLabel37.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel37.setText("Zona:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel37, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel1.add(cmbTipoCliente, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Adicionales", jPanel1);
 
@@ -633,10 +653,10 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanelCaracteristicasGenerales1.add(jTextExtensionEstablecimiento, gridBagConstraints);
 
         jLabel25.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel25.setText("Zona:");
+        jLabel25.setText("Categoria Cliente:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales1.add(jLabel25, gridBagConstraints);
@@ -807,6 +827,22 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales1.add(cmbZonaOficina, gridBagConstraints);
 
+        jLabel36.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel36.setText("Zona:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(jLabel36, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales1.add(cmbTipoClienteOficina, gridBagConstraints);
+
         jTabbedPane1.addTab("Establecimientos", jPanelCaracteristicasGenerales1);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
@@ -827,6 +863,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<Nacionalidad> cmbNacionalidad;
+    private javax.swing.JComboBox<TipoEstablecimiento> cmbTipoCliente;
+    private javax.swing.JComboBox<TipoEstablecimiento> cmbTipoClienteOficina;
     private javax.swing.JComboBox<TipoSucursalEnum> cmbTipoEstablecimiento;
     private javax.swing.JComboBox<OperadorNegocioEnum> cmbTipoOperador;
     private javax.swing.JComboBox<Zona> cmbZona;
@@ -862,6 +900,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1207,6 +1247,25 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public void setCmbZona(JComboBox<Zona> cmbZona) {
         this.cmbZona = cmbZona;
     }
+
+    public JComboBox<TipoEstablecimiento> getCmbTipoClienteOficina() {
+        return cmbTipoClienteOficina;
+    }
+
+    public void setCmbTipoClienteOficina(JComboBox<TipoEstablecimiento> cmbTipoClienteOficina) {
+        this.cmbTipoClienteOficina = cmbTipoClienteOficina;
+    }
+
+    public JComboBox<TipoEstablecimiento> getCmbTipoCliente() {
+        return cmbTipoCliente;
+    }
+
+    public void setCmbTipoCliente(JComboBox<TipoEstablecimiento> cmbTipoCliente) {
+        this.cmbTipoCliente = cmbTipoCliente;
+    }
+
+    
+    
 
     
 }

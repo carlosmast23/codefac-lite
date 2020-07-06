@@ -87,6 +87,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoAcademico</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Zona</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoEstablecimiento</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

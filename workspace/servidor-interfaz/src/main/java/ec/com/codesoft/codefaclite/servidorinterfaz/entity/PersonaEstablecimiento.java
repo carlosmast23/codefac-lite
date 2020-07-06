@@ -69,6 +69,9 @@ public class PersonaEstablecimiento implements  Serializable{
     
     @JoinColumn(name ="ZONA_ID")
     private Zona zona;
+    
+    @JoinColumn(name ="TIPO_ESTABLECIMIENTO_ID")
+    private TipoEstablecimiento tipoEstablecimiento;
 
     public Long getId() {
         return id;
@@ -189,6 +192,14 @@ public class PersonaEstablecimiento implements  Serializable{
     public void setZona(Zona zona) {
         this.zona = zona;
     }
+
+    public TipoEstablecimiento getTipoEstablecimiento() {
+        return tipoEstablecimiento;
+    }
+
+    public void setTipoEstablecimiento(TipoEstablecimiento tipoEstablecimiento) {
+        this.tipoEstablecimiento = tipoEstablecimiento;
+    }
     
     
     
@@ -207,7 +218,7 @@ public class PersonaEstablecimiento implements  Serializable{
     }
     
     
-    public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String codigo,String nombreComercial,String direccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum,Zona zona)
+    public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String codigo,String nombreComercial,String direccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum,Zona zona,TipoEstablecimiento tipoEstablecimiento)
     {
         //PersonaEstablecimiento personaEstablecimiento = new PersonaEstablecimiento();
         establecimiento.setCodigoPersonalizado(codigo);
@@ -219,6 +230,7 @@ public class PersonaEstablecimiento implements  Serializable{
         establecimiento.setTelefonoConvencional(telefonoConvencional);
         establecimiento.setTipoSucursalEnum(tipoEnum);
         establecimiento.setZona(zona);
+        establecimiento.setTipoEstablecimiento(tipoEstablecimiento);
         return establecimiento;
     }
     

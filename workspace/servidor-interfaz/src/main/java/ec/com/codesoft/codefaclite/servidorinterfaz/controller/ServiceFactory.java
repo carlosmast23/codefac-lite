@@ -87,6 +87,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.Transpo
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuarioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ZonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaCargoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaServiceIf;
@@ -203,6 +204,7 @@ public abstract class ServiceFactory {
     public CajaSesionServiceIf getCajaSesionServiceIf(){return (CajaSesionServiceIf) getRecursosRMI(CajaSesionServiceIf.class);};
     public ArqueoCajaServiceIf getArqueoCajaServiceIf(){return (ArqueoCajaServiceIf) getRecursosRMI(ArqueoCajaServiceIf.class);};
     public ZonaServiceIf getZonaServiceIf(){return (ZonaServiceIf) getRecursosRMI(ZonaServiceIf.class);};
+    public TipoEstablecimientoServiceIf getTipoEstablecimientoServiceIf(){return (TipoEstablecimientoServiceIf) getRecursosRMI(TipoEstablecimientoServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente

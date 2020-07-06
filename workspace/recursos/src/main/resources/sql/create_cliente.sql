@@ -53,6 +53,8 @@ create table PERSONA_ESTABLECIMIENTO(
     PERSONA_ID BIGINT, 
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.3.7)*/
     ZONA_ID BIGINT, 
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.3.7)*/
+    TIPO_ESTABLECIMIENTO_ID BIGINT, 
     CODIGO_SUCURSAL varchar(3),
     NOMBRE_COMERCIAL varchar(256),
     DIRECCION varchar(1024), 
@@ -78,6 +80,18 @@ create table ZONA(
     CODIGO varchar(100), 
     NOMBRE varchar(200),
     DESCRIPCION varchar(1024),
+    ESTADO varchar(1), 
+
+    primary key (ID)
+);
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.3.7)*/
+create table TIPO_ESTABLECIMIENTO( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) ,
+    EMPRESA_ID BIGINT,
+    NOMBRE varchar(200),
+    DESCRIPCION varchar(1024),
+    TIPO varchar(1), 
     ESTADO varchar(1), 
 
     primary key (ID)

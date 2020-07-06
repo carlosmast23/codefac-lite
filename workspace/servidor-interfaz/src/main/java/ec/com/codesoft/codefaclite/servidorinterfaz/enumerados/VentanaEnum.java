@@ -24,7 +24,8 @@ import javax.swing.KeyStroke;
 public enum VentanaEnum implements Serializable{
 
     CLIENTE("ec.com.codesoft.codefaclite.crm.model.ClienteModel", "CLIE", "Cliente", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,KeyEvent.VK_C,"cliente"),
-    ZONA("ec.com.codesoft.codefaclite.crm.model.ZonaModel", "ZONA", "Zona", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,KeyEvent.VK_C,"cliente"),
+    ZONA("ec.com.codesoft.codefaclite.crm.model.ZonaModel", "ZONA", "Zona", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
+    TIPO_ESTABLECIMIENTO("ec.com.codesoft.codefaclite.crm.model.TipoEstablecimientoModel", "TPES", "Tipo Establecimiento", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     SUCURSAL("ec.com.codesoft.codefaclite.configuraciones.model.SucursalModel", "SUCU", "Sucursal", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.PROCESOS, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
     UTILIDAD_ENVIO_COMPROBANTES("ec.com.codesoft.codefaclite.configuraciones.model.UtilidadEnvioReportesModel", "UECT", "Utilidad envio reportes", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.UTILIDADES, false, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     PUNTO_EMISION("ec.com.codesoft.codefaclite.configuraciones.model.PuntoEmisionModel", "PUVE", "Punto de Emision", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.PROCESOS, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
