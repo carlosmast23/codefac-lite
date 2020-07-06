@@ -203,6 +203,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     case AGRUPADO_POR_PRODUCTO:
                         controladorReporte.obtenerReporteAgrupadoPorProducto(panelPadre);
                         break;
+                        
+                    case AGRUPADO_POR_VENDEDOR:
+                        controladorReporte.obtenerReporteAgrupadoPorVendedor(panelPadre);
+                        break;
                 }
                 
                 //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, titulo, OrientacionReporteEnum.HORIZONTAL);
@@ -622,6 +626,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     public enum TipoReporteEnum
     {
         NORMAL("Normal"),
+        AGRUPADO_POR_VENDEDOR("Agrupado por vendedor"),
         AGRUPADO_POR_CATEGORIA("Agrupado por punto de emisión"),
         AGRUPADO_POR_PRODUCTO("Agrupado por producto");
 

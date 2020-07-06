@@ -530,6 +530,26 @@ public class ControladorReporteFactura {
         ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     
+    public void obtenerReporteAgrupadoPorVendedor(InterfazComunicacionPanel panelPadre)
+    {
+        String titulo = "Reporte Ventas Agrupado por Vendedores";
+        InputStream path=getReportePorVendedores();
+        ordenarListaPorVendedores(data);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+    }
+    
+    private void ordenarListaPorVendedores(List<ReporteFacturaData> reporteData)
+    {
+        Collections.sort(reporteData,new Comparator<ReporteFacturaData>(){
+            public int compare(ReporteFacturaData obj1,ReporteFacturaData  obj2)
+                {
+                    return obj1.getVendedor().compareTo(obj2.getVendedor());
+                }
+        });
+        
+        //Collections.sort(new Comparator<>);
+    }
+    
     /**
      * Metodo que permite ordenar la lista de resultados por productos
      * @param reporteData 
@@ -548,6 +568,7 @@ public class ControladorReporteFactura {
             }
         });
     }
+    
     
     /**
      * Metodo que me permite organizar la lista por 
@@ -578,6 +599,11 @@ public class ControladorReporteFactura {
     protected InputStream getReportePorProductos()
     {//reporte_factura_por_producto
         return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_factura_por_producto.jrxml");
+    }
+    
+    protected InputStream getReportePorVendedores()
+    {
+        return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_ventas_por_vendedor.jrxml");
     }
    
 
