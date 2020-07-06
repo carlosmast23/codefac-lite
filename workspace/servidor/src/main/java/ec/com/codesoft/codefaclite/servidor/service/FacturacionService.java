@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidor.service.cartera.PrestamoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
@@ -132,7 +133,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion() throws RemoteException, ServicioCodefacException {
-                   
+                        //Agregado vendedor de forma automatica si el usuario tiene relacionado un empleado con departamento de ventas
+                        asignarVendedorProforma(proforma);
+                    
                         proforma.setSecuencial(obtenerSecuencialProformas(proforma.getEmpresa()).intValue());
                         proforma.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                         
@@ -147,6 +150,20 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         
         return proforma;
+    }
+    
+    private void asignarVendedorProforma(Factura proforma)
+    {
+        Empleado empleado=proforma.getUsuario().getEmpleado();
+        if(empleado!=null)
+        {
+            Departamento departamento=empleado.getDepartamento();
+            if(departamento.getNombre().equals(Departamento.TipoEnum.Ventas.getNombre()))
+            {
+                proforma.setVendedor(empleado);
+            }
+        }
+        
     }
     
     public Factura editarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
