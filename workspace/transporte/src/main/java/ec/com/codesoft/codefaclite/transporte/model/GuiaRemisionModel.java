@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
@@ -43,6 +44,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.Destinatar
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
@@ -53,6 +55,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteService
 import ec.com.codesoft.codefaclite.transporte.callback.GuiaRemisionImplComprobante;
 import ec.com.codesoft.codefaclite.transporte.data.ComprobanteGuiaTransporteData;
 import ec.com.codesoft.codefaclite.transporte.data.ComprobanteGuiaTransporteDetalleData;
+import ec.com.codesoft.codefaclite.transporte.data.ConsolidadoCargaData;
 import ec.com.codesoft.codefaclite.transporte.nocallback.GuiaRemisionNoCallBack;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiaRemisionPanel;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -170,6 +173,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             comprobanteServiceIf.procesarComprobante(comprobanteData, guiaRemision, session.getUsuario(), gic);
             
             DialogoCodefac.mensaje("Correcto","Los datos de la guia de remisión fueron grabados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            imprimirConsolidadoCarga(guiaRemision);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -177,6 +181,37 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         }
         
         
+    }
+    
+    private void imprimirConsolidadoCarga(GuiaRemision guiaRemision)
+    {
+        if(!DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea imprimir el consolidado de carga ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA)))
+        {
+            return ;
+        }
+        
+        Map<String,ConsolidadoCargaData> mapResulados=new HashMap<String,ConsolidadoCargaData>();
+        
+        for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
+            for (DetalleProductoGuiaRemision detallesProducto : destinatario.getDetallesProductos()) {
+                
+                ConsolidadoCargaData data=mapResulados.get(detallesProducto.getCodigoInterno());
+                if(data==null)
+                {
+                    data=new ConsolidadoCargaData(detallesProducto);                    
+                    mapResulados.put(detallesProducto.getCodigoInterno(),data);
+                }
+                else
+                {
+                    data.agregarCantidad(detallesProducto.getCantidad());
+                }
+            }
+        }
+        
+        ////////////////////////////////////////////////////////////////////////
+        //Transformar en una lista el map
+        List<ConsolidadoCargaData> listaReporte=new ArrayList<ConsolidadoCargaData>(mapResulados.values());        
+        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_TRANSPORTE,"consolidadoCarga.jrxml", new HashMap(), listaReporte, panelPadre, "Consolidado de Carga", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4, ConfiguracionImpresoraEnum.NINGUNA);
     }
     
     private Map<String,String> getMapAdicional(GuiaRemision guiaRemision)
@@ -221,10 +256,23 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         if (this.guiaRemision != null && estadoFormulario.equals(ESTADO_EDITAR)) {
             try {
-                String claveAcceso = this.guiaRemision.getClaveAcceso();
-                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,guiaRemision.getEmpresa());
-                JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
-                panelPadre.crearReportePantalla(jasperPrint, guiaRemision.getPreimpreso());
+                
+                String[] opciones = {"Ride", "Consolidado de Carga", "Cancelar"};
+                int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Por favor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_CORRECTO, opciones);
+                switch (opcionSeleccionada) {
+                    case 0:
+                        String claveAcceso = this.guiaRemision.getClaveAcceso();
+                        byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,guiaRemision.getEmpresa());
+                        JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                        panelPadre.crearReportePantalla(jasperPrint, guiaRemision.getPreimpreso());
+                        break;
+
+                    case 1:
+                        imprimirConsolidadoCarga(guiaRemision);
+                        break;
+                }
+                
+                
             } catch (RemoteException ex) {
                 Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
