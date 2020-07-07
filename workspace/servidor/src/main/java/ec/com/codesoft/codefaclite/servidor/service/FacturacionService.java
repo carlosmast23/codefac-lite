@@ -157,8 +157,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         Empleado empleado=proforma.getUsuario().getEmpleado();
         if(empleado!=null)
         {
-            Departamento departamento=empleado.getDepartamento();
-            if(departamento.getNombre().equals(Departamento.TipoEnum.Ventas.getNombre()))
+            Departamento departamento=empleado.getDepartamento();            
+            if(departamento.getTipoEnum().equals(Departamento.TipoEnum.Ventas))
             {
                 proforma.setVendedor(empleado);
             }
