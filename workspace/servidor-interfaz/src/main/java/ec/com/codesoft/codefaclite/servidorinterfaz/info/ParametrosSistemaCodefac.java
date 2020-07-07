@@ -123,7 +123,7 @@ public abstract class ParametrosSistemaCodefac {
     
     public static final String LINK_PUBLICIDAD_CODEDAC="http://www.cf.codesoft-ec.com/index.php/general/publicidad2";
     
-    public static String IP_SERVIDOR_PRUEBA="70.37.57.216";
+    public static String IP_SERVIDOR_PRUEBA="codesoft-ec.com";
     
     /**
      * Correo para enviar correos y verificar que los usuarios no tenga problemas con las credenciales de sus correso configurados
