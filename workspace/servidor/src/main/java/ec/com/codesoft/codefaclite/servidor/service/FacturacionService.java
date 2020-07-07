@@ -202,6 +202,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                validacionInicialFacturar(factura);
                 grabarSinTransaccion(factura,carteraParametro);
                 
                 /**
@@ -224,12 +225,26 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                validacionInicialFacturar(factura);
                 grabarSinTransaccion(factura,null);
                 
             }
         });
         return factura;
         
+    }
+    
+    public void validacionInicialFacturar(Factura factura) throws ServicioCodefacException, RemoteException
+    {
+        if(factura.getCliente()==null)
+        {
+            throw new ServicioCodefacException("La factura tiene que tener un cliente asignado");
+        }
+        
+        if(factura.getCliente().getRazonSocial()==null || factura.getCliente().getRazonSocial().trim().isEmpty())
+        {
+            throw new ServicioCodefacException("No se puede emitir una factura sin la razón social del cliente ");
+        }
     }
     
     public void grabarSinTransaccion(Factura factura,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException

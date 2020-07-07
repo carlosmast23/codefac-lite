@@ -16315,11 +16315,11 @@
 												"$ref": "AAAAAAFzDq/DOhXD00Y="
 											},
 											"font": "Arial;13;1",
-											"left": 240,
+											"left": 232,
 											"top": 645,
 											"width": 187.708984375,
 											"height": 13,
-											"text": "tipo_provedor_cliente(canal)"
+											"text": "tipo_establecimiento(canal)"
 										},
 										{
 											"_type": "ERDColumnCompartmentView",
@@ -16331,14 +16331,14 @@
 												"$ref": "AAAAAAFzDq/DOhXBIbs="
 											},
 											"font": "Arial;13;0",
-											"left": 240,
+											"left": 232,
 											"top": 663,
 											"width": 187.708984375,
 											"height": 10
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 240,
+									"left": 232,
 									"top": 640,
 									"width": 187.708984375,
 									"height": 33,
@@ -17797,7 +17797,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFzDppnChVziQI="
 							},
-							"name": "tipo_provedor_cliente(canal)",
+							"name": "tipo_establecimiento(canal)",
 							"ownedElements": [
 								{
 									"_type": "ERDRelationship",
