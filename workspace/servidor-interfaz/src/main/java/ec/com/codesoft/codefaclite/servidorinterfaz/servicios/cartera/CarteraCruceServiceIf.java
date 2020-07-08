@@ -18,5 +18,13 @@ import java.util.List;
  */
 public interface CarteraCruceServiceIf extends ServiceAbstractIf<CarteraCruce>{
     public List<CarteraCruce>  buscarPorCarteraDetalle(CarteraDetalle carteraDetalle) throws ServicioCodefacException, java.rmi.RemoteException;
+    /**
+     * Metodo que me permite buscar todos los cruces que estan afectando a un documento 
+     * Ejemplo: Envio como parametro una factura y tengo un resultado de cruces que lo afectan , para ver que datos le afectan tengo que consultar los detalles
+     * @param carteraAfecta
+     * @return
+     * @throws ServicioCodefacException
+     * @throws java.rmi.RemoteException 
+     */
     public List<CarteraCruce>  buscarPorCarteraAfecta(Cartera carteraAfecta) throws ServicioCodefacException, java.rmi.RemoteException;
 }

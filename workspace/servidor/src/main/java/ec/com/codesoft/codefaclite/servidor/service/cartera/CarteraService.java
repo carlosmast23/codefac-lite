@@ -677,25 +677,95 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                if(entity.getCruces()!=null && entity.getCruces().size()>0)
-                {
-                    throw new ServicioCodefacException("No se puede eliminar el documentos porque le afectan cruces");
-                }
                 
-                for (CarteraDetalle detalle : entity.getDetalles()) {
-                    if(detalle.getCruces()!=null && detalle.getCruces().size()>0)
+                if(modo.NORMAL.equals(modo))
+                {
+                    if(entity.getCruces()!=null && entity.getCruces().size()>0)
                     {
-                        throw new ServicioCodefacException("No se puede eliminar el documentos porque afecta cruces a otro documento");
+                        throw new ServicioCodefacException("No se puede eliminar el documentos porque le afectan cruces");
+                    }
+
+                    for (CarteraDetalle detalle : entity.getDetalles()) 
+                    {
+                        if(detalle.getCruces()!=null && detalle.getCruces().size()>0)
+                        {
+                            throw new ServicioCodefacException("No se puede eliminar el documentos porque afecta cruces a otro documento");
+                        }
                     }
                 }
                 
-                
+                //Elimino la cartera principal cambiando de estado           
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);
                 
-                //TODO , Falta implementar para borrar los cruces
+                //TODO: Ver alguna manera de identificar cuales son carteras principales (factura) y cuales son cartera que afectan (abonos)
+                quitarCruceCarteraPrincipal(entity);
+                quitarCruceCarteraAfectan(entity);
+                entityManager.flush();
+                
             }
         });
+    }
+    
+    /**
+     * Metodo que me permite recalcular y quitar cruces cuando la cartera eliminada es una principal
+     * es decir uan factura de venta o compra , olagun tipo similar
+     */
+    private void quitarCruceCarteraPrincipal(Cartera cartera) throws RemoteException, ServicioCodefacException
+    {
+        CarteraCruceService cruceService=new CarteraCruceService();
+        //Obtener las relaciones de carteras que le esten afectando, ejemplo: abonos
+        List<CarteraCruce> relacionesCarteraAfecta=cruceService.buscarPorCarteraAfecta(cartera);
+        
+        //Se supone que que si ya tengo los cruces involucrados ya no necesito esta lista
+        //Esto lo hago de esta forma por que si existe alguna referencia de los cruces luego no elimina el cruce
+        cartera.getCruces().clear();
+        entityManager.merge(cartera);
+        
+        for (CarteraCruce carteraCruce : relacionesCarteraAfecta) {
+            CarteraDetalle carteraDetalleAfecta=carteraCruce.getCarteraDetalle();
+            
+            //Volver a aumentar los saldos de la cartera relacionada
+            carteraDetalleAfecta.setSaldo(carteraDetalleAfecta.getSaldo().add(carteraCruce.getValor()));
+            carteraDetalleAfecta.getCartera().setSaldo(carteraDetalleAfecta.getCartera().getSaldo().add(carteraCruce.getValor()));
+                        
+            carteraDetalleAfecta.getCruces().remove(carteraCruce);
+            //Actualizar los valores en la base de datos
+            entityManager.merge(carteraDetalleAfecta);
+            entityManager.merge(carteraDetalleAfecta.getCartera());            
+            
+            //Eliminar la relacion del cruce en la cartera
+            entityManager.remove(carteraCruce);            
+        }
+    }
+    
+    private void quitarCruceCarteraAfectan(Cartera cartera) throws RemoteException, ServicioCodefacException
+    {
+        CarteraCruceService cruceService=new CarteraCruceService();
+        for (CarteraDetalle carteraDetallaAfecta : cartera.getDetalles()) {
+            //obtener los cruces de esas facturas
+            List<CarteraCruce> cruces=cruceService.buscarPorCarteraDetalle(carteraDetallaAfecta);
+            for (CarteraCruce cruce : cruces) 
+            {
+                Cartera carteraPrincipal=cruce.getCarteraAfectada();
+                
+                //Agregar nuevamente los valores de los saldos tanto a la cartera principal como al detalle
+                carteraPrincipal.restaurarSaldo(cruce.getValor());
+                
+                
+                //Actualizo las referencias en la base de datos                
+                carteraPrincipal.getCruces().remove(cruce);
+                for (CarteraDetalle detalleTmp : carteraPrincipal.getDetalles()) {
+                    entityManager.merge(detalleTmp);
+                }
+                entityManager.merge(carteraPrincipal);
+
+                //Elimino  la referencia del cruce
+                entityManager.remove(cruce);
+                
+            }
+        }
+        
     }
 
     public Cartera buscarCarteraPorReferencia(Long referenciaId,DocumentoEnum documento,GeneralEnumEstado estadoEnum,Cartera.TipoCarteraEnum tipoCarteraEnum,Sucursal sucursal)
