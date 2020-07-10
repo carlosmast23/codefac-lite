@@ -86,6 +86,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRem
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuarioServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ZonaServiceIf;
@@ -205,6 +207,8 @@ public abstract class ServiceFactory {
     public ArqueoCajaServiceIf getArqueoCajaServiceIf(){return (ArqueoCajaServiceIf) getRecursosRMI(ArqueoCajaServiceIf.class);};
     public ZonaServiceIf getZonaServiceIf(){return (ZonaServiceIf) getRecursosRMI(ZonaServiceIf.class);};
     public TipoEstablecimientoServiceIf getTipoEstablecimientoServiceIf(){return (TipoEstablecimientoServiceIf) getRecursosRMI(TipoEstablecimientoServiceIf.class);};
+    public RutaServiceIf getRutaServiceIf(){return (RutaServiceIf) getRecursosRMI(RutaServiceIf.class);};
+    public RutaDetalleServiceIf getRutaDetalleServiceIf(){return (RutaDetalleServiceIf) getRecursosRMI(RutaDetalleServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente
