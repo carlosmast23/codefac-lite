@@ -257,4 +257,16 @@ public class Usuario implements Serializable{
         return "";
     }
     
+    public String imprimirPuntoEmision()
+    {
+        String puntoEmisionTxt="";
+        for (PuntoEmisionUsuario puntoEmisionUsuario : this.puntosEmisionUsuario) {
+            if(!puntoEmisionUsuario.getEstadoEnum().equals(GeneralEnumEstado.ELIMINADO))
+            {
+                puntoEmisionTxt+=puntoEmisionUsuario.getPuntoEmision().puntoEmisionFormatoTexto()+"  ";
+            }
+        }
+        return puntoEmisionTxt;
+    }
+    
 }
