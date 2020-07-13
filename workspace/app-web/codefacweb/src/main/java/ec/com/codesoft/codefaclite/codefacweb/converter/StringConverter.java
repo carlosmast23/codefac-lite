@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.converter;
 
- ;
+import java.rmi.RemoteException;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -17,7 +17,7 @@ import javax.faces.convert.FacesConverter;
 public class StringConverter extends AbstractConverter implements Converter {
 
     @Override
-    public Object buscarObjetoPorId(String valor)    {
+    public Object buscarObjetoPorId(String valor) throws RemoteException {
         return valor;
     }
     

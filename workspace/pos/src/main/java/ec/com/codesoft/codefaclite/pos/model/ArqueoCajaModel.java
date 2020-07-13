@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -61,18 +62,17 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite {
-        //TODO: verificar que eliminar debe funcionar directamente en el contralador
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         this.controlador.eliminar();
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite   {
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -82,7 +82,7 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
             this.controlador.iniciar();
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ArqueoCajaModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ArqueoCajaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

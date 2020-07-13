@@ -37,7 +37,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
- ;
+import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
@@ -51,10 +51,10 @@ import java.util.Map;
  *
  * @author Carlos
  */
-public class AtsService   implements Serializable,AtsServiceIf {
+public class AtsService extends UnicastRemoteObject implements Serializable,AtsServiceIf {
 
-    public AtsService()    {
-         
+    public AtsService() throws RemoteException {
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
     }
     
     private String formatearMes(Integer mes)
@@ -66,7 +66,7 @@ public class AtsService   implements Serializable,AtsServiceIf {
         return mes.toString();
     }
     
-    public AtsJaxb consultarAts(Integer anio, MesEnum mes,Empresa empresa,String numeroSucursal,boolean  comprasBool, boolean  ventasBool,boolean anuladosBool) throws    ServicioCodefacException
+    public AtsJaxb consultarAts(Integer anio, MesEnum mes,Empresa empresa,String numeroSucursal,boolean  comprasBool, boolean  ventasBool,boolean anuladosBool) throws  RemoteException,ServicioCodefacException
     {
         AtsJaxb ats=new AtsJaxb();
         ats.setAnio(anio);
@@ -131,7 +131,7 @@ public class AtsService   implements Serializable,AtsServiceIf {
         
     }
     
-    public List<AnuladoAts> consultarAnuladosAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws    ServicioCodefacException
+    public List<AnuladoAts> consultarAnuladosAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
     {
         List<AnuladoAts> anuladosAts=new ArrayList<AnuladoAts>();
         NotaCreditoService notaCreditoService=new NotaCreditoService();
@@ -153,7 +153,7 @@ public class AtsService   implements Serializable,AtsServiceIf {
     }
    
     
-    public List<CompraAts> consultarComprasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws    ServicioCodefacException
+    public List<CompraAts> consultarComprasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
     {
         SriRetencionService sriRetencionService=new SriRetencionService();
         SriRetencion sriRetencionIva=sriRetencionService.consultarPorNombre(SriRetencion.NOMBRE_RETENCION_IVA);//Variable que necesito para las retenciones
@@ -306,7 +306,7 @@ public class AtsService   implements Serializable,AtsServiceIf {
     }
     
     
-    private List<RetencionDetalle> consultarRetencionesRenta(Compra compra,SriRetencion sriRetencion)   
+    private List<RetencionDetalle> consultarRetencionesRenta(Compra compra,SriRetencion sriRetencion) throws RemoteException
     {
         RetencionService retencionService=new RetencionService();
         return retencionService.obtenerRetencionesRentaPorCompra(compra,sriRetencion);
@@ -324,7 +324,7 @@ public class AtsService   implements Serializable,AtsServiceIf {
         return valorRetencion;
     }
     
-    private Map<BigDecimal,BigDecimal> consultarRetencionesIva(Compra compra,SriRetencion sriRetencion)   
+    private Map<BigDecimal,BigDecimal> consultarRetencionesIva(Compra compra,SriRetencion sriRetencion) throws RemoteException
     {
         RetencionService retencionService=new RetencionService();
         List<Object[]> retencionesLista=retencionService.obtenerRetencionesIvaPorCompra(compra,sriRetencion);
@@ -339,7 +339,7 @@ public class AtsService   implements Serializable,AtsServiceIf {
         
     }
     
-    public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws    ServicioCodefacException
+    public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
     {
         FacturacionService facturacionService=new FacturacionService();
         /**

@@ -28,7 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,7 +94,10 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
             //} catch (ServicioCodefacException ex) {
             //    DialogoCodefac.mensaje("Error", "Existe un error en los datos", DialogoCodefac.MENSAJE_INCORRECTO);
             //    Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
-            }catch (ServicioCodefacException ex) {
+            } catch (RemoteException ex) {
+                Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje("Error", "Existe un error en los datos", DialogoCodefac.MENSAJE_INCORRECTO);
+            } catch (ServicioCodefacException ex) {
                 Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
                 throw new ExcepcionCodefacLite(ex.getMessage());
@@ -168,7 +171,9 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
             for (Bodega bodega : bodegas) {
                 getCmbBodega().addItem(bodega);        
             }
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -197,7 +202,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                         {
                             getLblStockActual().setText("0");
                         }
-                    } catch (Exception ex) {
+                    } catch (RemoteException ex) {
                         Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -287,7 +292,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                     kardeList.add(kardexComponente);
                     
                 }
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
             }            
         }
@@ -360,7 +365,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                     productosProblemas.add(componente);
                 }
                 tableModel.addRow(fila);
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
             }
             

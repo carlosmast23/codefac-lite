@@ -9,7 +9,6 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.controlador.comprobantes.ComprobanteRespuestaNoCallBack;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
-import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
@@ -26,7 +25,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
- ;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -38,13 +37,11 @@ import net.sf.jasperreports.engine.JasperPrint;
 public class FacturaRespuestaNoCallBack extends ComprobanteRespuestaNoCallBack
 {
     private FacturacionModel facturacionModel;
-    private ClienteFacturaImplComprobante.ParametroPanel parametroPanel;
 
-    public FacturaRespuestaNoCallBack(Factura factura, FacturacionModel panel,Boolean procesoCompleto,ClienteFacturaImplComprobante.ParametroPanel parametroPanel) {
+    public FacturaRespuestaNoCallBack(Factura factura, FacturacionModel panel,Boolean procesoCompleto) {
         super(factura, panel);
         this.facturacionModel=panel;
         this.procesoCompleto=procesoCompleto;
-        this.parametroPanel=parametroPanel;
     }
     
 
@@ -59,17 +56,7 @@ public class FacturaRespuestaNoCallBack extends ComprobanteRespuestaNoCallBack
             
             if(verificarImprimirComprobanteVenta())
             {
-                //facturacionModel.imprimirComprobanteVenta((Factura) comprobante,NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
-                FacturacionModel.imprimirComprobanteVenta(
-                     (Factura) comprobante, 
-                     FacturacionModel.NOMBRE_REPORTE_FACTURA_ELECTRONICA, 
-                     true, 
-                     parametroPanel.dataReporte, 
-                     parametroPanel.mapParametros, 
-                     parametroPanel.parametroCodefac, 
-                     parametroPanel.tipoReporteEnum, 
-                     parametroPanel.configuracion, 
-                     GeneralPanelInterface.panelPadreStatic);
+                facturacionModel.imprimirComprobanteVenta((Factura) comprobante,NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
             }
             else
             {            
@@ -78,7 +65,9 @@ public class FacturaRespuestaNoCallBack extends ComprobanteRespuestaNoCallBack
                 facturacionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
             }
             //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
-        }catch (IOException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);

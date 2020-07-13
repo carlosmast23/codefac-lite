@@ -25,7 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +38,11 @@ import java.util.logging.Logger;
  */
 public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisionFacade> implements GuiaRemisionServiceIf{
 
-    public GuiaRemisionService()    {
+    public GuiaRemisionService() throws RemoteException {
         super(GuiaRemisionFacade.class);
     }
 
-    public GuiaRemision grabar(GuiaRemision entity) throws ServicioCodefacException   {
+    public GuiaRemision grabar(GuiaRemision entity) throws ServicioCodefacException, RemoteException {
         //Validaciones previas antes de grabar
         for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {
             if(destinatario.getAutorizacionNumero()==null || destinatario.getAutorizacionNumero().isEmpty())
@@ -89,6 +89,8 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                     }
                     
                     entityManager.persist(entity);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(GuiaRemisionService.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(GuiaRemisionService.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -97,21 +99,21 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         return entity;
     }
     
-    public void editarGuiaRemision(GuiaRemision guiaRemision) throws ServicioCodefacException  
+    public void editarGuiaRemision(GuiaRemision guiaRemision) throws ServicioCodefacException, RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 entityManager.merge(guiaRemision);
             }
         });
     }
     
-    public List<GuiaRemision> obtenerConsulta(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado,Transportista transportista,Persona destinatario,String codigoProducto,Empresa empresa) throws ServicioCodefacException  
+    public List<GuiaRemision> obtenerConsulta(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado,Transportista transportista,Persona destinatario,String codigoProducto,Empresa empresa) throws ServicioCodefacException, RemoteException
     {
         return (List<GuiaRemision>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException   {
+            public Object consulta() throws ServicioCodefacException, RemoteException {
                 return getFacade().obtenerConsultaFacade(fechaInicial, fechaFinal,estado,transportista,destinatario,codigoProducto,empresa);
             }
         });
@@ -119,11 +121,11 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
     }
 
     @Override
-    public void eliminar(GuiaRemision entity)    {
+    public void eliminar(GuiaRemision entity) throws RemoteException {
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException   {
+                public void transaccion() throws ServicioCodefacException, RemoteException {
                     ComprobantesService comprobanteService = new ComprobantesService();
                     comprobanteService.eliminarComprobanteSinTransaccion(entity);
                     

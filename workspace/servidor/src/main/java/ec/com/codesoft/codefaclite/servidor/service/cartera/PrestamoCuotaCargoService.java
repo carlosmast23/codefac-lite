@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.PrestamoCuotaCargo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaCargoServiceIf;
- ;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -20,7 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCu
  */
 public class PrestamoCuotaCargoService extends ServiceAbstract<PrestamoCuotaCargo,PrestamoCuotaCargoFacade> implements PrestamoCuotaCargoServiceIf {
 
-    public PrestamoCuotaCargoService()    {
+    public PrestamoCuotaCargoService() throws RemoteException {
         super(PrestamoCuotaCargoFacade.class);
     }
     

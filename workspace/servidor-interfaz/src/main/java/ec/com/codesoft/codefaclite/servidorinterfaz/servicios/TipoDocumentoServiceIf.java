@@ -5,13 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoDocumento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 
 /**
  *
  * @author Carlos
  */
-public interface TipoDocumentoServiceIf extends ServiceAbstractIf<TipoDocumento> {
+public interface TipoDocumentoServiceIf extends ServiceAbstractIf<Usuario> {
     
 }

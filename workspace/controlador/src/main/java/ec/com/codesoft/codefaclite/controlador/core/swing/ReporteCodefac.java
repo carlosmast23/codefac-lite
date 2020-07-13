@@ -22,7 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import java.io.IOException;
 import java.io.InputStream;
- ;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -398,6 +398,8 @@ public class ReporteCodefac {
             
             parametros.put("pl_url_piepagina",reportPiePagina);
             //System.out.println(parametros.get("SUBREPORT_DIR"));            
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
             Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

@@ -88,7 +88,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
     }
 
-    public List<Object[]> consultarStockMinimoFacade(Bodega bodega,CategoriaProducto categoria)    {
+    public List<Object[]> consultarStockMinimoFacade(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException {
 
         String whereBodega="";
         if(bodega!=null)
@@ -126,9 +126,9 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * TODO: Falta filtrar por empresa cuando sea vacia la bodega
      * @param bodega
      * @return
-     * @   
+     * @throws java.rmi.RemoteException 
      */
-    public List<Object[]> consultarStockFacade(Bodega bodega,CategoriaProducto categoria)    {
+    public List<Object[]> consultarStockFacade(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException {
         //Kardex k;k.getProducto().getEstado();
         //k.getProducto().getCatalogoProducto().getCategoriaProducto();
         //k.getProducto().getNombre()

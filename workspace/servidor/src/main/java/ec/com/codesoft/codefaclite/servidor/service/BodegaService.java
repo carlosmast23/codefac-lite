@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
 
     private BodegaFacade bodegaFacade;
 
-    public BodegaService()    {
+    public BodegaService() throws RemoteException {
         super(BodegaFacade.class);
         this.bodegaFacade = new BodegaFacade();
     }
@@ -51,10 +51,10 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
 */
 
     @Override
-    public Bodega grabar(Bodega entity) throws ServicioCodefacException   {
+    public Bodega grabar(Bodega entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 //Esta sucursal solo sirve de guia para grabar null
                 if(entity.getSucursal().equals(Sucursal.getSucursalPermitirTodos()))
                 {
@@ -70,11 +70,11 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
     }
     
 
-    public void editar(Bodega b) throws ServicioCodefacException  
+    public void editar(Bodega b) throws ServicioCodefacException, RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 
                 //Esta sucursal solo sirve de guia para grabar null
                 if(b.getSucursal().equals(Sucursal.getSucursalPermitirTodos()))
@@ -89,10 +89,10 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
         
     }
 
-    public void eliminar(Bodega b) throws ServicioCodefacException    {
+    public void eliminar(Bodega b) throws ServicioCodefacException,RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 KardexService kardexService=new KardexService();
                 List<Kardex> kardexResultado=kardexService.buscarPorBodega(b);
                 
@@ -111,13 +111,13 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
                 
     }
     
-    public Bodega buscarPorNombre(String nombre) throws ServicioCodefacException   
+    public Bodega buscarPorNombre(String nombre) throws ServicioCodefacException,RemoteException
     {
         Bodega bodega;
         //bodega.getEstado(); //FALTA FILTRAR
         List<Bodega> bodegas=(List<Bodega>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException   {
+            public Object consulta() throws ServicioCodefacException, RemoteException {
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                 mapParametros.put("nombre", nombre);
                 return getFacade().findByMap(mapParametros);
@@ -132,11 +132,11 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
         return null;
     }
     
-    public List<Bodega> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException   
+    public List<Bodega> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException,RemoteException
     {        
         List<Bodega> bodegas=(List<Bodega>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException   {
+            public Object consulta() throws ServicioCodefacException, RemoteException {
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                
                 mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
@@ -157,11 +157,11 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
         return bodegas;
     }
     
-    public Bodega obtenerBodegaVenta(Sucursal sucursal) throws ServicioCodefacException   
+    public Bodega obtenerBodegaVenta(Sucursal sucursal) throws ServicioCodefacException,RemoteException
     {        
         List<Bodega> bodegas=(List<Bodega>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException   {
+            public Object consulta() throws ServicioCodefacException, RemoteException {
                 //Primero busco si exite alguna bodega por sucursal asignada
                 //Bodega b;
                 //b.getTipoBodega();

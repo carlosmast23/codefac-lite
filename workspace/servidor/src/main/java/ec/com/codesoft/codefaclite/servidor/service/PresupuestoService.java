@@ -17,7 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,7 +33,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
 {
     private PresupuestoFacade presupuestoFacade;
 
-    public PresupuestoService()    
+    public PresupuestoService() throws RemoteException 
     {
         super(PresupuestoFacade.class);
         this.presupuestoFacade = new PresupuestoFacade();
@@ -89,7 +89,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         presupuestoFacade.edit(p);
     }
     
-    public void eliminar(Presupuesto p) throws ServicioCodefacException   
+    public void eliminar(Presupuesto p) throws ServicioCodefacException,RemoteException
     {
         if(p.getEstadoEnum().equals(Presupuesto.EstadoEnum.FACTURADO))
         {
@@ -98,7 +98,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 p.setEstadoEnum(Presupuesto.EstadoEnum.ANULADO);
                 entityManager.merge(p);
             }
@@ -116,7 +116,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         return presupuestoFacade.listarOrdenTrabajo(ordenTrabajo);
     }
     
-    public List<Presupuesto> consultarPresupuestos(Date fechaInicial, Date fechaFinal,Persona cliente,Presupuesto.EstadoEnum estadoEnum) throws ServicioCodefacException   
+    public List<Presupuesto> consultarPresupuestos(Date fechaInicial, Date fechaFinal,Persona cliente,Presupuesto.EstadoEnum estadoEnum) throws ServicioCodefacException,java.rmi.RemoteException
     {
         return getFacade().consultarPresupuestos(fechaInicial, fechaFinal, cliente, estadoEnum);
     }

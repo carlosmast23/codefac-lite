@@ -24,7 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionS
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -117,12 +117,12 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
         try {
             sriIdentificacion = servicioSri.obtenerPorTransaccionEIdentificacion(guiaRemision.getTransportista().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
             info.setTipoIdentificacionTransportista(sriIdentificacion.getCodigo());
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
         }
         /*try {
             sriIdentificacion=servicioSri.obtenerPorTransaccionEIdentificacion(guiaRemision.getProveedor().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
         }
 

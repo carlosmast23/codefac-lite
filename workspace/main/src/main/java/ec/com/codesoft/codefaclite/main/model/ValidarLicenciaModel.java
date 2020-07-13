@@ -40,7 +40,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -96,7 +96,9 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
             propiedad = ServiceFactory.getFactory().getUtilidadesServiceIf().crearLicencia(empresa, licencia);
 
             //Properties propiedad = validacionLicenciaCodefac.crearLicenciaMaquina(licencia);
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -160,7 +162,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                     } catch (ServicioCodefacException ex) {
                         DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                         return;
-                    } catch (Exception ex) {
+                    } catch (RemoteException ex) {
                         Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -235,7 +237,9 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                         try {
                             ServiceFactory.getFactory().getUtilidadesServiceIf().crearLicenciaDescargada(empresa, licenciaInternet);
                             //validacionLicenciaCodefac.crearLicenciaDescargada(licenciaDescargada);
-                        }catch (ServicioCodefacException ex) {
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ServicioCodefacException ex) {
                             Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         

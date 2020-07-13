@@ -17,7 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -208,7 +208,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         }
     }
     
-    public List<RetencionDetalle> obtenerRetencionesRentaPorCompraFacade(Compra compra,SriRetencion sriRetencion)   
+    public List<RetencionDetalle> obtenerRetencionesRentaPorCompraFacade(Compra compra,SriRetencion sriRetencion) throws RemoteException
     {
         String queryString="SELECT rd FROM RetencionDetalle rd WHERE rd.retencion.compra=?1 and rd.retencion.estado<>?2 and rd.codigoSri=?3 ";
         Query query = getEntityManager().createQuery(queryString);
@@ -219,7 +219,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         return query.getResultList();
     }
     
-    public List<Object[]> obtenerRetencionesIvaPorCompraFacade(Compra compra,SriRetencion sriRetencion)  
+    public List<Object[]> obtenerRetencionesIvaPorCompraFacade(Compra compra,SriRetencion sriRetencion)throws RemoteException
     {
         RetencionDetalle rd;
         //rd.getRetencion().getCompra();

@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,7 +84,7 @@ public class SubreporteGuiaRemisionProductoData {
             facturaDetalle = ServiceFactory.getFactory().getFacturaDetalleServiceIf().buscarPorId(Long.valueOf(productoNuevo.getReferenciaId()));  // TODO: En esta parte falta implentar la referencia cuando se grabe la guia de remision con una referencia libre es decire al producto          
             subtotalProducto=facturaDetalle.getSubtotalRestadoDescuentos();            
             
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(SubreporteGuiaRemisionProductoData.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -107,7 +107,7 @@ public class SubreporteGuiaRemisionProductoData {
             try {
                 Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
                 nombreProducto = producto.getNombre();
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(SubreporteGuiaRemisionProductoData.class.getName()).log(Level.SEVERE, null, ex);
             }
             

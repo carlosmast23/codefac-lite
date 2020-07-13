@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlanti
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -22,12 +22,12 @@ import java.util.List;
  */
 public interface RubrosNivelServiceIf extends ServiceAbstractIf<RubrosNivel>{
     
-    public List<RubrosNivel> obtenerPorCatalogoCatagoriaYNivel(CatalogoProducto.TipoEnum tipoEnum,Nivel nivel);    
-    public List<RubrosNivel> obtenerPorCatalogoCatagoriaYNivelPeriodo(CatalogoProducto.TipoEnum tipoEnum,Nivel nivel,Periodo periodo);    
-    public List<RubrosNivel> buscarPorCatalogoYNivel(CatalogoProducto catalogoProducto,Nivel nivel);    
-    public List<RubrosNivel> buscarPorCatalogo(CatalogoProducto catalogoProducto);    
-    public List<RubrosNivel> buscarPorPeriodoYMeses(Periodo periodo,CatalogoProducto catalogoProducto,List<RubroPlantillaMes> meses);    
-    public void eliminarRubroNivel(RubrosNivel rubrosNivel) throws   ServicioCodefacException;
-    public List<RubrosNivel> buscarPorPeriodoYNivel(Periodo p,Nivel nivel) throws   ServicioCodefacException;
-    public List<RubrosNivel> buscarPorPeriodoYCatalogo(Periodo p,CatalogoProducto catalogoProducto) throws   ServicioCodefacException;
+    public List<RubrosNivel> obtenerPorCatalogoCatagoriaYNivel(CatalogoProducto.TipoEnum tipoEnum,Nivel nivel) throws RemoteException;
+    public List<RubrosNivel> obtenerPorCatalogoCatagoriaYNivelPeriodo(CatalogoProducto.TipoEnum tipoEnum,Nivel nivel,Periodo periodo) throws RemoteException;
+    public List<RubrosNivel> buscarPorCatalogoYNivel(CatalogoProducto catalogoProducto,Nivel nivel) throws RemoteException;
+    public List<RubrosNivel> buscarPorCatalogo(CatalogoProducto catalogoProducto) throws RemoteException;
+    public List<RubrosNivel> buscarPorPeriodoYMeses(Periodo periodo,CatalogoProducto catalogoProducto,List<RubroPlantillaMes> meses) throws RemoteException;
+    public void eliminarRubroNivel(RubrosNivel rubrosNivel) throws RemoteException,ServicioCodefacException;
+    public List<RubrosNivel> buscarPorPeriodoYNivel(Periodo p,Nivel nivel) throws RemoteException,ServicioCodefacException;
+    public List<RubrosNivel> buscarPorPeriodoYCatalogo(Periodo p,CatalogoProducto catalogoProducto) throws RemoteException,ServicioCodefacException;
 }

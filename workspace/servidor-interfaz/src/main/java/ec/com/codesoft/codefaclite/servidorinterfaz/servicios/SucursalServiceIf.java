@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public interface SucursalServiceIf  extends ServiceAbstractIf<Sucursal>{
     
-    public abstract List<Sucursal> consultarActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException  ; 
-    public abstract Sucursal obtenerPorCodigo(Integer codigo) throws ServicioCodefacException  ;
-    public abstract Sucursal obtenerMatrizPorSucursal(Empresa empresa) throws ServicioCodefacException  ;
+    public abstract List<Sucursal> consultarActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException; 
+    public abstract Sucursal obtenerPorCodigo(Integer codigo) throws ServicioCodefacException, RemoteException;
+    public abstract Sucursal obtenerMatrizPorSucursal(Empresa empresa) throws ServicioCodefacException, RemoteException;
 }

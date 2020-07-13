@@ -27,7 +27,7 @@ import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +51,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         SriIdentificacion sriIdentificacion = getSriIdentificacion(comprobante);
         /*try {
             sriIdentificacion = servicioSri.obtenerPorTransaccionEIdentificacion(comprobante.getCliente().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
         }*/
 
@@ -108,6 +108,8 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
 
             }
             return listaComprobantes;
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -155,7 +157,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         try {
             sriIdentificacion = servicioSri.obtenerPorTransaccionEIdentificacion(comprobante.getCliente().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
             return sriIdentificacion;
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

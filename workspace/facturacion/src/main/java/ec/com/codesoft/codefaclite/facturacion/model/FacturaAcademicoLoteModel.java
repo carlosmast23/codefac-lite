@@ -39,7 +39,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -151,7 +151,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
             for (Periodo periodo : periodos) {
                 getCmbPeriodo().addItem(periodo);
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -172,7 +172,9 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
                     for (NivelAcademico nivel : niveles) {
                         getCmbNivelAcademico().addItem(nivel);
                     }
-                }catch (ServicioCodefacException ex) {
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
                     Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -210,7 +212,9 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
                     cargarEstudiantesNuevos();
                     cargarTabla();
 
-                }catch (ServicioCodefacException ex) {
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
                     Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -243,7 +247,9 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
                 for (EstudianteInscrito estudiantesInscrito : estudiantesInscritos) {
                     mapEstudianteRubros.put(estudiantesInscrito, new ArrayList<RubroEstudiante>());
                 }
-            }catch (ServicioCodefacException ex) {
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -367,7 +373,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
 
                     ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobanteLote(comprobantes, session.getUsuario(),session.getEmpresa().getIdentificacion(),cic);
 
-                } catch (Exception ex) {
+                } catch (RemoteException ex) {
                     Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -384,7 +390,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
                 comprobanteFactura.setFactura(factura);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -516,7 +522,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
                     subtotalConImpuestos = subtotalConImpuestos.add(facturaDetalle.getTotal());
                     ivaTotal = ivaTotal.add(facturaDetalle.getIva());
                 }
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -600,7 +606,9 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
                     rubrosLista.add(rubroEstudiante);
                 }
 
-            }catch (ServicioCodefacException ex) {
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +42,7 @@ public class AgregarDescuentoDialog extends javax.swing.JDialog {
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(AgregarDescuentoDialog.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(AgregarDescuentoDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
         

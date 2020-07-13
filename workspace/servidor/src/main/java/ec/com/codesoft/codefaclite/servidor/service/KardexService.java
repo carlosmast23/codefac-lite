@@ -32,7 +32,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.ObtenerFecha;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,7 +57,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      */
     private EntityManager em;
     
-    public KardexService()    {
+    public KardexService() throws RemoteException {
         super(KardexFacade.class);
         em=AbstractFacade.entityManager;
     }
@@ -67,7 +67,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * @return 
      */
     
-    public Kardex buscarKardexPorProductoyBodega(Bodega bodega,Producto producto)   
+    public Kardex buscarKardexPorProductoyBodega(Bodega bodega,Producto producto) throws java.rmi.RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("bodega",bodega);
@@ -88,9 +88,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * TODO: Este metodo solo es temporal hasta solucionar un problema con el reporte de factura con costos
      * @param producto
      * @return
-     * @   
+     * @throws java.rmi.RemoteException 
      */
-   public Kardex buscarKardexPorProducto(Producto producto)   
+   public Kardex buscarKardexPorProducto(Producto producto) throws java.rmi.RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         //mapParametros.put("bodega",bodega);
@@ -110,7 +110,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * Obtiene los valores modificos del stock y la reserva para grabar en el Kardex
      * @return 
      */
-    public List<Kardex> getKardexModificados(Producto productoEnsamble,Integer cantidadEnsamble,Bodega bodega,ProductoEnsamble.EnsambleAccionEnum accion)  throws ServicioCodefacException
+    public List<Kardex> getKardexModificados(Producto productoEnsamble,Integer cantidadEnsamble,Bodega bodega,ProductoEnsamble.EnsambleAccionEnum accion) throws java.rmi.RemoteException,ServicioCodefacException
     {
         //Integer cantidadEnsamble=Integer.parseInt(getTxtCantidad().getText());
         
@@ -175,7 +175,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     kardeList.add(kardexComponente);
                     
                 }
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(KardexService.class.getName()).log(Level.SEVERE, null, ex);
             }            
         }
@@ -185,11 +185,11 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     }
     
     
-    public void ingresoEgresoInventarioEnsamble(Bodega bodega, Producto productoEnsamble,Integer cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes)  throws ServicioCodefacException
+    public void ingresoEgresoInventarioEnsamble(Bodega bodega, Producto productoEnsamble,Integer cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 ingresoEgresoInventarioEnsambleSinTransaccion(bodega, productoEnsamble,cantidad, ProductoEnsamble.EnsambleAccionEnum.AGREGAR,validarStockComponentes);
             }
         });
@@ -197,7 +197,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
     }
     
-    public void ingresoEgresoInventarioEnsambleSinTransaccion(Bodega bodega, Producto productoEnsamble,Integer cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes)  throws ServicioCodefacException
+    public void ingresoEgresoInventarioEnsambleSinTransaccion(Bodega bodega, Producto productoEnsamble,Integer cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException
     {
         /**
          * ===============> Buscar el Ensamble de producto o crear
@@ -296,10 +296,10 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * @param productoEnsamble
      * @param bodega
      * @param cantidad
-     * @  
+     * @throws java.rmi.RemoteException
      * @throws ServicioCodefacException 
      */
-    private void validarEnsambleComponentes( Producto productoEnsamble,Bodega bodega,int cantidad)  throws ServicioCodefacException
+    private void validarEnsambleComponentes( Producto productoEnsamble,Bodega bodega,int cantidad) throws java.rmi.RemoteException,ServicioCodefacException
     {        
   
         for(ProductoEnsamble componenteProducto: productoEnsamble.getDetallesEnsamble())
@@ -326,21 +326,21 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
     }
     
-    public void ingresarInventario(KardexDetalle detalle) throws ServicioCodefacException
+    public void ingresarInventario(KardexDetalle detalle) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 grabarKardexDetallSinTransaccion(detalle);
             }
         });
     }
     
-    public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,Integer cantidad,BigDecimal precio,Date fechaTransaccion)  throws ServicioCodefacException
+    public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,Integer cantidad,BigDecimal precio,Date fechaTransaccion) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 ///========> Validaciones basicas de los datos ingresados <=========================//
                 if(cantidad<=0)
                 {
@@ -430,7 +430,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * @param kardex
      * @param kardexDetalle 
      */
-    public void recalcularValoresKardex(Kardex kardex,KardexDetalle kardexDetalle)  throws ServicioCodefacException
+    public void recalcularValoresKardex(Kardex kardex,KardexDetalle kardexDetalle) throws java.rmi.RemoteException,ServicioCodefacException
     {
 
         BigDecimal costoPonderado=kardex.getPrecioPromedio(); 
@@ -494,7 +494,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return resultadoCosto;
     }
     
-    public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,Integer cantidad)  throws ServicioCodefacException
+    public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,Integer cantidad) throws java.rmi.RemoteException,ServicioCodefacException
     {
         KardexDetalle movimientoOrigen = new KardexDetalle();
         BigDecimal total=precioUnitario.multiply(new BigDecimal(cantidad.toString()));
@@ -511,7 +511,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return movimientoOrigen;
     }
     
-    public void anularInventario(Kardex kardex)  throws ServicioCodefacException
+    public void anularInventario(Kardex kardex) throws java.rmi.RemoteException,ServicioCodefacException
     {
         /**
          * Validaciones del Stock
@@ -523,7 +523,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 Integer stockAnular= kardex.getStock()*-1;
                 KardexDetalle kardexDetalle=new KardexDetalle();                
                 kardexDetalle.setPrecioUnitario(kardex.getPrecioPromedio());
@@ -549,11 +549,11 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
     }
     
-    public void ingresarInventario(List<KardexDetalle> detalles)  throws ServicioCodefacException
+    public void ingresarInventario(List<KardexDetalle> detalles) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 
                 for (KardexDetalle detalle : detalles) {
                     grabarKardexDetallSinTransaccion(detalle);
@@ -565,7 +565,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     }
     
     
-    public void grabarKardexDetallSinTransaccion(KardexDetalle detalle) throws    ServicioCodefacException
+    public void grabarKardexDetallSinTransaccion(KardexDetalle detalle) throws RemoteException, ServicioCodefacException
     {
         /**
          * ==============================================================
@@ -642,7 +642,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
     }
     
-    private void validarDetallesKardex(KardexDetalle detalle) throws ServicioCodefacException
+    private void validarDetallesKardex(KardexDetalle detalle) throws java.rmi.RemoteException,ServicioCodefacException
     {
          /**
          * ==============================================================
@@ -666,7 +666,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * @param detalles 
      * @deprecated 
      */
-    public void ingresarInventario(Map<KardexDetalle,CompraDetalle> detalles,Bodega bodega) throws ServicioCodefacException
+    public void ingresarInventario(Map<KardexDetalle,CompraDetalle> detalles,Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException
     {
         EntityTransaction transaction=em.getTransaction();
         try
@@ -745,7 +745,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     }
     
-    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Integer cantidadMovimientos)   
+    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Integer cantidadMovimientos) throws java.rmi.RemoteException
     {
         List<KardexDetalle> datosConsulta=getFacade().obtenerConsultaPorFechaFacade(fechaInicial, fechaFinal, producto, bodega,cantidadMovimientos);
         //Invertir la lista porque los resultados estan invertidos
@@ -855,17 +855,17 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return datosConsulta;
     }
     
-    public List<Object[]> consultarStockMinimo(Bodega bodega,CategoriaProducto categoria)   
+    public List<Object[]> consultarStockMinimo(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException
     {
         return getFacade().consultarStockMinimoFacade(bodega,categoria);
     }
     
-    public List<Object[]> consultarStock(Bodega bodega,CategoriaProducto categoria)   
+    public List<Object[]> consultarStock(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException
     {
         return getFacade().consultarStockFacade(bodega,categoria);
     }
 
-    public List<Kardex> buscarPorProducto(Producto producto)   throws ServicioCodefacException
+    public List<Kardex> buscarPorProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("producto", producto);
@@ -873,7 +873,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return getFacade().findByMap(mapParametros);
     }
     
-    public List<Kardex> buscarPorProducto(Producto producto,GeneralEnumEstado estadoEnum) throws ServicioCodefacException
+    public List<Kardex> buscarPorProducto(Producto producto,GeneralEnumEstado estadoEnum) throws java.rmi.RemoteException,ServicioCodefacException
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("producto", producto);
@@ -882,7 +882,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return getFacade().findByMap(mapParametros);
     }
     
-    public List<Kardex> buscarPorProductoYBodega(Producto producto,Bodega bodega)  throws ServicioCodefacException
+    public List<Kardex> buscarPorProductoYBodega(Producto producto,Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("producto", producto);
@@ -935,10 +935,10 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     }
 
     @Override
-    public List<Kardex> buscarPorBodega(Bodega bodega) throws    ServicioCodefacException {
+    public List<Kardex> buscarPorBodega(Bodega bodega) throws RemoteException, ServicioCodefacException {
         return (List<Kardex>)ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException   {
+            public Object consulta() throws ServicioCodefacException, RemoteException {
                 //Kardex k;
                 //        k.get
                 Map<String,Object> mapParametros=new HashMap<String,Object>();
@@ -948,7 +948,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         });
     }
     
-    public Kardex construirKardexVacioSinPersistencia()  throws ServicioCodefacException
+    public Kardex construirKardexVacioSinPersistencia() throws java.rmi.RemoteException,ServicioCodefacException
     {
         Kardex kardexNuevo=new Kardex();
         kardexNuevo.setStock(0);

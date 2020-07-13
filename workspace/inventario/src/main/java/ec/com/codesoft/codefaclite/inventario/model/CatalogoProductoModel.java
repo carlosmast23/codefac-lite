@@ -31,7 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +66,7 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error","Ocurrio un error al grabar los datos",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(CatalogoProductoModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             DialogoCodefac.mensaje("Error","No existe comunicacion con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(CatalogoProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -79,7 +79,10 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
             CatalogoProductoServiceIf servicio=ServiceFactory.getFactory().getCatalogoProductoServiceIf();
             servicio.editar(catalogoProducto);
             DialogoCodefac.mensaje("Correcto","Los datos fueron editados correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            DialogoCodefac.mensaje("Error","Los datos fueron editados correctamente",DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(CatalogoProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(CatalogoProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -241,7 +244,7 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
             getComboIrbpnr().setSelectedItem("Seleccione: ");
             
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(CatalogoProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

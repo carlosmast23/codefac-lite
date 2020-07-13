@@ -18,7 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +61,7 @@ public class DepartamentoModel extends DepartamentoPanel
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite(ex.getMessage());
             
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -76,7 +76,7 @@ public class DepartamentoModel extends DepartamentoPanel
             limpiar();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -99,7 +99,7 @@ public class DepartamentoModel extends DepartamentoPanel
                         DialogoCodefac.mensaje("Eliminar", "El departamento se elimino correctamente", SOMEBITS);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (Exception ex) {
+                    } catch (RemoteException ex) {
                         Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }

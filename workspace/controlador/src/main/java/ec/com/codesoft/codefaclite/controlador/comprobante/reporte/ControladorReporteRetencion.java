@@ -29,7 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,7 +104,7 @@ public class ControladorReporteRetencion {
             
             construirMapSumatorias();
             
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ControladorReporteRetencion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -246,6 +246,8 @@ public class ControladorReporteRetencion {
             parameters.put("listaIva", datavc);
             parameters.put("listaRenta", datav);
             return parameters;
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorReporteRetencion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
             Logger.getLogger(ControladorReporteRetencion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -283,7 +285,7 @@ public class ControladorReporteRetencion {
                 mapTipoRetencion.put(sriRetencion.getCodigo(), sriRetencion);
                 //getCmbTipo().addItem(sriRetencion);
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ControladorReporteRetencion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -22,7 +22,7 @@ import java.awt.Cursor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,11 +48,6 @@ import org.jdesktop.swingx.VerticalLayout;
  */
 public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame implements VistaCodefacIf
 {
-    /**
-     * Referencia estatica de la interfaz del panel padre que se supone que solo existe una por todo el programa
-     */
-    public static InterfazComunicacionPanel panelPadreStatic;
-    
     public static final int BOTON_GRABAR = 1;
     public static final int BOTON_ELIMINAR = 2;
     public static final int BOTON_IMPRIMIR = 3;
@@ -152,7 +147,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
      * Metodo que se ejecuta despues de presionar el boton de buscar     * 
      * Es recomendable usar este metodo solo para buscar datos de la propia clase
      */
-    public void buscar() throws ExcepcionCodefacLite   
+    public void buscar() throws ExcepcionCodefacLite,RemoteException
     {
         //Esto lo pongo de esta manera porque Codefac construye automaticamente el metodo buscar desde el controlador
         //y ya no ahy necesidad de implementar, pero si en ultimo caso el usuario tiene la necesidad de escribir su

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
@@ -32,7 +33,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,7 +133,7 @@ public class LoginModel extends LoginFormDialog{
                 matriz = ServiceFactory.getFactory().getSucursalServiceIf().obtenerMatrizPorSucursal(sucursal.getEmpresa());
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -205,7 +206,10 @@ public class LoginModel extends LoginFormDialog{
                 }
                 
                
-            }catch (ServicioCodefacException ex) {
+            } catch (RemoteException ex) {
+                Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje("Error Login", "Datos Incorrectos", DialogoCodefac.MENSAJE_INCORRECTO);
+            } catch (ServicioCodefacException ex) {
                 Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -239,14 +243,14 @@ public class LoginModel extends LoginFormDialog{
         getLblPiePagina().setText("Codefac software de facturación electrónica @ Codesoft "+anioActualStr);
         
         try {
-            UtilidadesComboBox.llenarComboBox(getCmbEmpresa(),ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodosActivos());
+            UtilidadesComboBox.llenarComboBox(getCmbEmpresa(),ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodosActivos(OrdenarEnum.ASCEDENTE));
             //Setear valores de los combos
             /*List<Empresa> empresas=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodos(); //Todo: Cambiar este metodo para solo obtener las empresas activas
             getCmbEmpresa().removeAllItems();
             for (Empresa empresa : empresas) {
                 getCmbEmpresa().addItem(empresa);
             }*/
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -264,6 +268,8 @@ public class LoginModel extends LoginFormDialog{
             for (Sucursal sucursal : sucursales) {
                 getCmbSucursal().addItem(sucursal);
             }
+        } catch (RemoteException ex) {
+            Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
         }catch (ServicioCodefacException ex) {
             Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
         }

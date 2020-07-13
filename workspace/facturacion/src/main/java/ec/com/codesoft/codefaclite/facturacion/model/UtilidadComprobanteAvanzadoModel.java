@@ -33,7 +33,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -314,6 +314,8 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
             panelPadre.cambiarCursorNormal();
             getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Volver a cargar los comprobantes para actualizar y que no aparesca los que ya fueron enviados
 
+        } catch (RemoteException ex) {
+            Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -375,7 +377,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
             {
                 DialogoCodefac.mensaje("Advertencia","Seleccione datos para procesar",DialogoCodefac.MENSAJE_ADVERTENCIA);
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -480,7 +482,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                    
 
                     
-                } catch (Exception ex) {
+                } catch (RemoteException ex) {
                     Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -564,6 +566,8 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                             ServiceFactory.getFactory().getComprobanteServiceIf().eliminarComprobanteFisico(claveAcesso,nombreCarpeta);
                             DialogoCodefac.mensaje("Correcto","El xml fue eliminado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                             getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex());
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (ServicioCodefacException ex) {
                             Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -599,7 +603,9 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                     panelPadre.actualizarNotificacionesCodefac();
                     
 
-                }catch (ServicioCodefacException ex) {
+                } catch (RemoteException ex) {
+                    Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
                     Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 

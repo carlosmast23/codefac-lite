@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.ParametroCodefacFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,26 +27,25 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
 
     private ParametroCodefacFacade parametroCodefacFacade;
 
-    public ParametroCodefacService()    {
+    public ParametroCodefacService() throws RemoteException {
         super(ParametroCodefacFacade.class);
         parametroCodefacFacade=new ParametroCodefacFacade();
     }
     
-    public Map<String ,ParametroCodefac> getParametrosMap(Empresa empresaIf)   
+    public Map<String ,ParametroCodefac> getParametrosMap(Empresa empresaIf) throws java.rmi.RemoteException
     {
         try {
             return (Map<String, ParametroCodefac>) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
-                public Object consulta() throws ServicioCodefacException   {
+                public Object consulta() throws ServicioCodefacException, RemoteException {
                     Map<String, ParametroCodefac> parametrosCodefacMap = new HashMap<String, ParametroCodefac>();
                     
-                    List<ParametroCodefac> parametros = parametroCodefacFacade.findAll();
+                    List<ParametroCodefac> parametros = getFacade().getParametrosMapByEmpresa(empresaIf);
                     for (ParametroCodefac parametro : parametros) {
-                        if (parametro.getEmpresa() != null && parametro.getEmpresa().equals(empresaIf)) {
-                            parametrosCodefacMap.put(parametro.getNombre(), parametro);
-                        }
+                        parametrosCodefacMap.put(parametro.getNombre(), parametro);
                     }
                     return parametrosCodefacMap;
+                    //return getFacade().getParametrosMapByEmpresa(empresaIf);
                 }
             });
             
@@ -57,7 +56,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         return new HashMap<>();
     }
     
-    public ParametroCodefac getParametroByNombre(String nombre,Empresa empresa)   
+    public ParametroCodefac getParametroByNombre(String nombre,Empresa empresa) throws java.rmi.RemoteException
     {
         Map<String,Object> map=new HashMap<String, Object>();
         map.put("nombre",nombre);
@@ -70,12 +69,12 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
     }
     
     
-    public void editarParametros(List<ParametroCodefac> parametro)   
+    public void editarParametros(List<ParametroCodefac> parametro) throws java.rmi.RemoteException
     {
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException   {
+                public void transaccion() throws ServicioCodefacException, RemoteException {
                     for (ParametroCodefac parametroCodefac : parametro) {
                         if (parametroCodefac.getId() == null) //Si no existe el dato lo grabo
                         {
@@ -93,11 +92,11 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         
     }
     
-    public void grabarOEditar(ParametroCodefac parametro) throws ServicioCodefacException
+    public void grabarOEditar(ParametroCodefac parametro) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 //TODO: Analizar si debo tener creado 2 metodos por separado para grabar y editar
                 if(parametro.getId()==null)
                 {
@@ -112,7 +111,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         return ;
     }
     
-    public void grabarOEditar(Empresa empresa,String parametroNombre,String valor) throws ServicioCodefacException
+    public void grabarOEditar(Empresa empresa,String parametroNombre,String valor) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ParametroCodefac parametroCodefac=getParametroByNombre(parametroNombre,empresa);
         //Si no existe creando antes creo un nuevo parametroCodefac
@@ -132,7 +131,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
      * @param parametro 
      * @deprecated porque cuando se actualizan todos los valores causan problemas en algunos formularios
      */
-    public void editarParametros(Map<String ,ParametroCodefac> parametro)   
+    public void editarParametros(Map<String ,ParametroCodefac> parametro) throws java.rmi.RemoteException
     {
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -166,7 +165,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
     }
     
     /*
-    public ParametroCodefac grabar(ParametroCodefac parametro)   
+    public ParametroCodefac grabar(ParametroCodefac parametro) throws java.rmi.RemoteException
     {
         try {
             parametroCodefacFacade.create(parametro);
@@ -178,7 +177,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         return parametro;
     }*/
     
-    public List<ParametroCodefac> buscarParametrosPorMap(Map<String,Object> map)   
+    public List<ParametroCodefac> buscarParametrosPorMap(Map<String,Object> map) throws java.rmi.RemoteException
     {
         return parametroCodefacFacade.findByMap(map);
     }

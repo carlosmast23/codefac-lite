@@ -88,7 +88,7 @@ import java.awt.event.MouseAdapter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,7 +151,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite   {
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         ComprobanteElectronicoComponente.eliminarComprobante(this,notaCredito,null);
     }
 
@@ -166,7 +166,9 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                 byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso,notaCredito.getEmpresa());
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                 panelPadre.crearReportePantalla(jasperPrint,notaCredito.getPreimpreso());
-            }catch (IOException ex) {
+            } catch (RemoteException ex) {
+                Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
                 Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -230,7 +232,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             notaCredito = new NotaCredito();
             crearDetalleTabla();
             limpiarCampos();
-        //} catch (Exception ex) {
+        //} catch (RemoteException ex) {
         //    Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
         //}
     }
@@ -409,7 +411,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                 BigDecimal iva = iD.getPorcentaje();
             });
             return new BigDecimal(0.120);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -451,7 +453,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
             try {
                 catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
             
@@ -853,7 +855,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                         break;
 
                 }
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
             
@@ -1074,7 +1076,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                 {
                     habilitarModoIngresoDatos();
                 }
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -1278,8 +1280,8 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     }
 
     @Override
-    public ClienteInterfaceComprobante getInterfaceComprobante()    {
-        return new ClienteNotaCreditoImplComprobante(session.getEmpresa(), notaCredito);
+    public ClienteInterfaceComprobante getInterfaceComprobante() throws RemoteException {
+        return new ClienteNotaCreditoImplComprobante(this, notaCredito);
     }
 
     @Override
@@ -1320,8 +1322,8 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     @Override
     public ClienteInterfaceComprobante obtenerClienteInterfaceComprobante(NotaCredito notaCredito) {
         try {
-            return new ClienteNotaCreditoImplComprobante(session.getEmpresa(), notaCredito);
-        } catch (Exception ex) {
+            return new ClienteNotaCreditoImplComprobante(this, notaCredito);
+        } catch (RemoteException ex) {
             Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SucursalServiceIf;
 import java.io.Serializable;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,15 +27,15 @@ import java.util.logging.Logger;
  */
 public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> implements SucursalServiceIf{
 
-    public SucursalService()    {
+    public SucursalService() throws RemoteException {
         super(SucursalFacade.class);
     }
 
     @Override
-    public Sucursal grabar(Sucursal entity) throws ServicioCodefacException   {
+    public Sucursal grabar(Sucursal entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                 entityManager.persist(entity);
             }
@@ -44,7 +44,7 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
     }
     
     @Override
-    public List<Sucursal> consultarActivosPorEmpresa(Empresa empresa)  throws ServicioCodefacException  
+    public List<Sucursal> consultarActivosPorEmpresa(Empresa empresa)  throws ServicioCodefacException, RemoteException
     {
         //Sucursal sucursal;
         //sucursal.getEmpresa();
@@ -56,11 +56,11 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
     }
 
     @Override
-    public void eliminar(Sucursal entity)    {
+    public void eliminar(Sucursal entity) throws RemoteException {
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException   {
+                public void transaccion() throws ServicioCodefacException, RemoteException {
                     entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                     entityManager.merge(entity);
                 }
@@ -71,7 +71,7 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
     }
     
     @Override
-    public Sucursal obtenerPorCodigo(Integer codigo) throws ServicioCodefacException   {
+    public Sucursal obtenerPorCodigo(Integer codigo) throws ServicioCodefacException, RemoteException {
        Map<String,Object> mapParametros=new HashMap<String,Object>();
        //Sucursal sucursal;
        //sucursal.getCodigoSucursal()
@@ -85,7 +85,7 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
        return null;
     }
     
-    public Sucursal obtenerMatrizPorSucursal(Empresa empresa) throws ServicioCodefacException  
+    public Sucursal obtenerMatrizPorSucursal(Empresa empresa) throws ServicioCodefacException, RemoteException
     {
        Map<String,Object> mapParametros=new HashMap<String,Object>();
        //Sucursal sucursal;

@@ -21,7 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubrosNivelServiceIf;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,11 +33,11 @@ import java.util.Map;
  */
 public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelFacade> implements RubrosNivelServiceIf{
 
-    public RubrosNivelService()    {
+    public RubrosNivelService() throws RemoteException {
         super(RubrosNivelFacade.class);
     }
     
-    public List<RubrosNivel> obtenerPorCatalogoCatagoriaYNivel(CatalogoProducto.TipoEnum tipoEnum,Nivel nivel)   
+    public List<RubrosNivel> obtenerPorCatalogoCatagoriaYNivel(CatalogoProducto.TipoEnum tipoEnum,Nivel nivel) throws RemoteException
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("catalogoProducto.tipoCod", tipoEnum.getCodigo());
@@ -53,7 +53,7 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
         return rubrosTodosLosNiveles;
     }
     
-    public List<RubrosNivel> obtenerPorCatalogoCatagoriaYNivelPeriodo(CatalogoProducto.TipoEnum tipoEnum,Nivel nivel,Periodo periodo)   
+    public List<RubrosNivel> obtenerPorCatalogoCatagoriaYNivelPeriodo(CatalogoProducto.TipoEnum tipoEnum,Nivel nivel,Periodo periodo) throws RemoteException
     {
 
         Map<String, Object> mapParametros = new HashMap<String, Object>();
@@ -76,7 +76,7 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
    
     }
     
-    public List<RubrosNivel> buscarPorCatalogoYNivel(CatalogoProducto catalogoProducto,Nivel nivel)   
+    public List<RubrosNivel> buscarPorCatalogoYNivel(CatalogoProducto catalogoProducto,Nivel nivel) throws RemoteException
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("catalogoProducto", catalogoProducto);
@@ -93,14 +93,14 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
 
     }
     
-    public List<RubrosNivel> buscarPorCatalogo(CatalogoProducto catalogoProducto)   
+    public List<RubrosNivel> buscarPorCatalogo(CatalogoProducto catalogoProducto) throws RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("catalogoProducto", catalogoProducto);
         return getFacade().findByMap(mapParametros);
     }
     
-    public List<RubrosNivel> buscarPorPeriodoYMeses(Periodo periodo,CatalogoProducto catalogoProducto,List<RubroPlantillaMes> meses)   
+    public List<RubrosNivel> buscarPorPeriodoYMeses(Periodo periodo,CatalogoProducto catalogoProducto,List<RubroPlantillaMes> meses) throws RemoteException
     {
         if(meses.size()>0)
         {
@@ -112,7 +112,7 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
         }
     }
     
-    public void eliminarRubroNivel(RubrosNivel rubrosNivel) throws   ServicioCodefacException
+    public void eliminarRubroNivel(RubrosNivel rubrosNivel) throws RemoteException,ServicioCodefacException
     {
         //RubrosNivelService rubrosNivelService;
         RubroEstudianteService servicio=new RubroEstudianteService();
@@ -136,10 +136,10 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
     }
 
     @Override
-    public RubrosNivel grabar(RubrosNivel entity) throws ServicioCodefacException   {
+    public RubrosNivel grabar(RubrosNivel entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 //Si el valor es 0 lanzar una excepcion
                 if(entity.getValor().compareTo(BigDecimal.ZERO)<=0)
                 {
@@ -154,7 +154,7 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
     }
     
     
-    public List<RubrosNivel> buscarPorPeriodoYNivel(Periodo p,Nivel nivel) throws   ServicioCodefacException
+    public List<RubrosNivel> buscarPorPeriodoYNivel(Periodo p,Nivel nivel) throws RemoteException,ServicioCodefacException
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         //Cargar rubros generales para todos los niveles
@@ -165,7 +165,7 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
     }
 
     
-    public List<RubrosNivel> buscarPorPeriodoYCatalogo(Periodo p,CatalogoProducto catalogoProducto) throws   ServicioCodefacException
+    public List<RubrosNivel> buscarPorPeriodoYCatalogo(Periodo p,CatalogoProducto catalogoProducto) throws RemoteException,ServicioCodefacException
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("periodo", p);

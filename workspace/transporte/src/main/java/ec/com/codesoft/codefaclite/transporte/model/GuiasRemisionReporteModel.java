@@ -41,7 +41,7 @@ import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,7 +73,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
     //private Date fechaFinal;
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         getDateFechaInicio().setDate(UtilidadesFecha.fechaInicioMes(UtilidadesFecha.hoy()));
         getDateFechaFin().setDate(UtilidadesFecha.hoy());
         
@@ -116,32 +116,32 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite   {
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite   {
+    public void grabar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite   {
+    public void editar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite   {
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite   {
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         imprimirReporte();
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -439,7 +439,9 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
                         byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,session.getEmpresa());
                         JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                         panelPadre.crearReportePantalla(jasperPrint,controladorReporte.getListReporte().get(filaSeleccionada).getPreimpreso());
-                    }catch (IOException ex) {
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
                         Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);

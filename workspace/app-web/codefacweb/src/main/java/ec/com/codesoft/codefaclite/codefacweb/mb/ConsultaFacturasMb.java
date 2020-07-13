@@ -16,7 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.io.IOException;
 import java.io.Serializable;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +68,7 @@ public class ConsultaFacturasMb extends GeneralPublicoAbstractMb{
             //    System.out.println(usuario.getNick());
             //}
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ConsultaFacturasMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -81,7 +81,9 @@ public class ConsultaFacturasMb extends GeneralPublicoAbstractMb{
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
             UtilidadesWeb.exportarPDF(jasperPrint);
             System.out.println("Imprimiendo factura..");
-        }catch (IOException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ConsultaFacturasMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(ConsultaFacturasMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ConsultaFacturasMb.class.getName()).log(Level.SEVERE, null, ex);

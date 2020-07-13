@@ -7,10 +7,9 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.controller;
 
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
- ;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.RemoteServer;
@@ -19,9 +18,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import net.sf.lipermi.exception.LipeRMIException;
-import net.sf.lipermi.handler.CallHandler;
-import net.sf.lipermi.net.Server;
 
 /**
  *
@@ -38,17 +34,13 @@ public class ServiceControllerServer {
     public static void cargarRecursos(Map<Class,Class> mapRecursos,String host)
     {
         try {
-            //Registry registro=LocateRegistry.createRegistry(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
+            Registry registro=LocateRegistry.createRegistry(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
             //String host=InetAddress.getLocalHost().getHostAddress();
-            Server servidorRmi=new Server();  
-            CallHandler objetoEnRed=new CallHandler();
             
             for (Map.Entry<Class, Class> entry : mapRecursos.entrySet()) {
                 Class claseImplementacion=entry.getKey();
-                
                 LOG.log(Level.INFO,"Load RMI server: "+host+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+":"+claseImplementacion.getName());
-                //UnicastRemoteObject remoteObject=(UnicastRemoteObject) claseImplementacion.newInstance();
-                Object impleObject=claseImplementacion.newInstance();
+                UnicastRemoteObject remoteObject=(UnicastRemoteObject) claseImplementacion.newInstance();
                 
                 Class claseInterfaz=entry.getValue();
                 
@@ -56,28 +48,18 @@ public class ServiceControllerServer {
                 
                 //Lanza el recurso para que este disponible por la red
                 //registro.rebind("rmi://"+host+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+"/"+nombreRecurso,remoteObject);               
-                //registro.rebind(nombreRecurso,remoteObject);               
-                                
-                
-                objetoEnRed.registerGlobal(claseInterfaz,impleObject);               
-                
+                registro.rebind(nombreRecurso,remoteObject);               
                 
             }
-            servidorRmi.bind(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED, objetoEnRed);
             
-            
-       /* } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-            System.exit(0);*/
+            System.exit(0);
         } catch (InstantiationException ex) {
             Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
             Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (LipeRMIException ex) {
-            Logger.getLogger(ServiceControllerServer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ServiceControllerServer.class.getName()).log(Level.SEVERE, null, ex);
         } /*catch (UnknownHostException ex) {
             Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
         }*/

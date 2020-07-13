@@ -48,7 +48,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.InputStream;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -119,7 +119,7 @@ public class CarteraModel extends CarteraPanel{
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite(ex.getMessage());
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -134,7 +134,7 @@ public class CarteraModel extends CarteraPanel{
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
         }
@@ -168,7 +168,7 @@ public class CarteraModel extends CarteraPanel{
                 Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                 throw new ExcepcionCodefacLite(ex.getMessage());
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -347,6 +347,8 @@ public class CarteraModel extends CarteraPanel{
                 List<CarteraCruce> cruces = servicio.buscarPorCarteraDetalle(carteraDetalle);
                 this.cruces.addAll(cruces);
             
+            } catch (RemoteException ex) {
+                Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -462,7 +464,7 @@ public class CarteraModel extends CarteraPanel{
                                 cargarDatosCliente(persona);
                                //Opcion cuando encuentra los datos del cliente 
                             }
-                        } catch (Exception ex) {
+                        } catch (RemoteException ex) {
                             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         

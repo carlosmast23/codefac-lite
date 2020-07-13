@@ -26,7 +26,7 @@ import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -52,19 +52,19 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     private KardexDetalle kardexDetalle;
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         valoresIniciales();
         listenerBotones();
        
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite   {
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite   {
+    public void grabar() throws ExcepcionCodefacLite, RemoteException {
         
         try {
             setearVariables();
@@ -78,22 +78,22 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite   {
+    public void editar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite   {
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite   {
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -155,7 +155,9 @@ public class GestionInventarioModel extends GestionInventarioPanel{
             for (Bodega bodega : bodegas) {
                 getCmbBodega().addItem(bodega);                
             }
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -221,7 +223,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     }
 
     @Override
-    public void buscar() throws ExcepcionCodefacLite   {
+    public void buscar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

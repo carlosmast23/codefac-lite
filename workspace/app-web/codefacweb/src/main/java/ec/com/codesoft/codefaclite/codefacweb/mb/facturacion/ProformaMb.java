@@ -47,7 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -210,7 +210,9 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             setearDatosAdicionales();
             factura=ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura);
             mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.EDITADO);
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -255,7 +257,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
                                     imprimirFactura(dato); 
                                 }
 
-                            } catch (Exception ex) {
+                            } catch (RemoteException ex) {
                                 Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
@@ -293,7 +295,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
             MensajeMb.mensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex); 
         }
 
@@ -314,7 +316,9 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
             //mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
             nuevo();
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
             MensajeMb.mensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
         }
@@ -578,7 +582,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
                     imprimirFactura(factura);
                 }
                 //imprimirFactura(factura);s
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -626,7 +630,9 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
             UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,factura.getPreimpreso()+".pdf");
             
-        }catch (IOException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);        
@@ -706,7 +712,9 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionales.jrxml"));
             reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
             mapParametros.put("SUBREPORT_INFO_ADICIONAL",reportDatosAdicionales);
-        }catch (IOException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -1033,11 +1041,11 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         return false; //TODO: Falta aumentar una opcion en la vista para habilitar es nueva funcion
     }
 
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -1102,28 +1110,28 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         }
     }
 
-    public static class InterfazCallBack   implements ClienteInterfaceComprobante {
+    public static class InterfazCallBack extends UnicastRemoteObject implements ClienteInterfaceComprobante {
 
         private BarraProgreso barraProgreso;
         private SessionMb sessionMb;
         
-        public InterfazCallBack(BarraProgreso barraProgreso,SessionMb sessionMb)    {
+        public InterfazCallBack(BarraProgreso barraProgreso,SessionMb sessionMb) throws RemoteException {
             this.barraProgreso=barraProgreso;
             this.sessionMb=sessionMb;
         }
         
 
-        public void termino(byte[] byteJasperPrint, List<AlertaComprobanteElectronico> alertas)    {
+        public void termino(byte[] byteJasperPrint, List<AlertaComprobanteElectronico> alertas) throws RemoteException {
             barraProgreso.setPorcentaje(100);
             sessionMb.setActualizarMonitor(false);
         }
 
-        public void iniciado()    {
+        public void iniciado() throws RemoteException {
             barraProgreso.setPorcentaje(0);
             sessionMb.setActualizarMonitor(true);
         }
 
-        public void procesando(int etapa, ClaveAcceso clave)    {
+        public void procesando(int etapa, ClaveAcceso clave) throws RemoteException {
             if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
                 barraProgreso.setPorcentaje(20);                
                 //monitorData.getBarraProgreso().setValue(20);
@@ -1167,7 +1175,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             //UtilidadesWeb.actualizaComponente(ID_COMPONENTE_MONITOR);
         }
 
-        public void error(ComprobanteElectronicoException cee, String claveAcceso)    {
+        public void error(ComprobanteElectronicoException cee, String claveAcceso) throws RemoteException {
             String mensaje=cee.obtenerErrorFormato();            
             barraProgreso.setMensajeAlerta(mensaje);
             System.out.println("error ...");
@@ -1213,7 +1221,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             this.puntosEmision=puntosEmision;
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         }
 

@@ -29,7 +29,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,12 +48,12 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
 
     RubroEstudianteFacade rubroEstudianteFacade;
 
-    public RubroEstudianteService()    {
+    public RubroEstudianteService() throws RemoteException {
         super(RubroEstudianteFacade.class);
         rubroEstudianteFacade = new RubroEstudianteFacade();
     }
 
-    public void eliminar(RubroEstudiante entity)   
+    public void eliminar(RubroEstudiante entity) throws java.rmi.RemoteException
     {        
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
@@ -62,7 +62,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         transaccion.commit();        
     }
     
-    public List<RubroEstudiante> obtenerRubroMatriculaPorEstudianteInscrito(EstudianteInscrito estudianteInscrito)   
+    public List<RubroEstudiante> obtenerRubroMatriculaPorEstudianteInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("estudianteInscrito",estudianteInscrito);
@@ -71,7 +71,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         return getFacade().findByMap(mapParametros);
     }
     
-    public List<RubroEstudiante> obtenerRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum)   
+    public List<RubroEstudiante> obtenerRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum) throws RemoteException
     {
         return getFacade().getRubrosActivosPorEstudianteYEstadoFacturado(estadoFacturadoEnum);
     }
@@ -80,17 +80,17 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
      * Obtener rubros activos por estudiante que aun no han sido pagados
      * @param estudianteInscrito
      * @return
-     * @   
+     * @throws RemoteException 
      */
-    public List<RubroEstudiante> obtenerRubrosActivosPorEstudiantesInscrito(EstudianteInscrito estudianteInscrito)    {
+    public List<RubroEstudiante> obtenerRubrosActivosPorEstudiantesInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException {
         return getFacade().getRubrosActivosPorEstudiante(estudianteInscrito);
     }
 
-    public List<RubroEstudiante> obtenerRubrosEstudiantesPorRubros(List<RubrosNivel> rubros)    {
+    public List<RubroEstudiante> obtenerRubrosEstudiantesPorRubros(List<RubrosNivel> rubros) throws RemoteException {
         return getFacade().findRubrosEstudiantesPorRubros(rubros);
     }
 
-    public void eliminarRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes)    {
+    public void eliminarRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException {
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         for (RubroEstudiante rubrosEstudiante : rubrosEstudiantes) {
@@ -104,7 +104,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         transaccion.commit();
     }
     
-    public void eliminarMesRubroPlantilla(RubroPlantillaMes rubroPlantillaMes) throws    ServicioCodefacException
+    public void eliminarMesRubroPlantilla(RubroPlantillaMes rubroPlantillaMes) throws RemoteException, ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
@@ -152,7 +152,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
                     entityPersistent.getRubroPlantilla().getMesesGenerados().remove(entityPersistent); //Eliminar de la referencia de la lista
                     entityManager.remove(entityPersistent); //eliminar de la persistenca
                     
-                } catch (Exception ex) {
+                } catch (RemoteException ex) {
                     Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -163,11 +163,11 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         
     }
 
-    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla, MesEnum mesEnum, String nombreRubroMes,Integer anio,DescuentoAcademico descuentoAcademico,AplicarDescuentoAcademicoEnum aplicarDescuentoEnum) throws   ServicioCodefacException {
+    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla, MesEnum mesEnum, String nombreRubroMes,Integer anio,DescuentoAcademico descuentoAcademico,AplicarDescuentoAcademicoEnum aplicarDescuentoEnum) throws RemoteException,ServicioCodefacException {
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 /**
                  * =============================================================
                  *      CALCULAR EL TEMA DE PORCENTAJES DE DESCUENTOS
@@ -307,7 +307,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         
     }
     
-    public void actualizarRubrosEstudiante(List<RubroEstudiante> rubroEstudiantes)    {
+    public void actualizarRubrosEstudiante(List<RubroEstudiante> rubroEstudiantes) throws RemoteException {
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
@@ -323,7 +323,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     }
 
 
-    public void crearRubrosEstudiantes(List<EstudianteInscrito> estudiantes, RubrosNivel rubroNivel)    {
+    public void crearRubrosEstudiantes(List<EstudianteInscrito> estudiantes, RubrosNivel rubroNivel) throws RemoteException {
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         for (EstudianteInscrito estudiante : estudiantes) {
@@ -342,7 +342,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         transaccion.commit();
     }
 
-    public void crearRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes)    {
+    public void crearRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException {
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         for (RubroEstudiante rubroEstudiante : rubrosEstudiantes) {
@@ -361,31 +361,31 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     }
 
     @Override
-    public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante,Periodo periodo)    {
+    public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante,Periodo periodo) throws RemoteException {
         return rubroEstudianteFacade.obtenerDeudasEstudiante(estudiante,periodo);
     }
 
     @Override
-    public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo,Date fechaInicio,Date fechaFin)    {
+    public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo,Date fechaInicio,Date fechaFin) throws RemoteException {
         return rubroEstudianteFacade.obtenerRubroPeriodoGrupo(periodo,fechaInicio,fechaFin);
     }
 
-    public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito est,Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses)    
+    public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito est,Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses) throws RemoteException 
     {
         return rubroEstudianteFacade.buscarRubrosMes(est,periodo, catalogoProducto, meses);
     }
     
-    public Long contarRubrosEstudiantePorRubroNivel(RubrosNivel rubroNivel)   
+    public Long contarRubrosEstudiantePorRubroNivel(RubrosNivel rubroNivel) throws RemoteException
     {
         return getFacade().contarRubrosEstudiantePorRubroNivelFacade(rubroNivel);
     }
     
-    public List<RubroEstudiante> consultarPorEstudianteInscritoSinFacturar(EstudianteInscrito estudianteInscrito)   
+    public List<RubroEstudiante> consultarPorEstudianteInscritoSinFacturar(EstudianteInscrito estudianteInscrito) throws RemoteException
     {
         return getFacade().consultarPorEstudianteInscritoSinFacturarFacade(estudianteInscrito);
     }
     
-    public List<RubroEstudiante> buscarPorEstudianteInscritoYRubroNivel(EstudianteInscrito estudianteInscrito, RubrosNivel rubroNivel) throws ServicioCodefacException   {
+    public List<RubroEstudiante> buscarPorEstudianteInscritoYRubroNivel(EstudianteInscrito estudianteInscrito, RubrosNivel rubroNivel) throws ServicioCodefacException, RemoteException {
         Map<String, Object> mapParametro = new HashMap<String, Object>();
         mapParametro.put("estudianteInscrito", estudianteInscrito);
         mapParametro.put("rubroNivel", rubroNivel);
@@ -393,7 +393,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         return getFacade().findByMap(mapParametro);
     }
     
-    public List<RubroEstudiante> buscarPorEstudianteInscritoYRubroNivelActivos(EstudianteInscrito estudianteInscrito, RubrosNivel rubroNivel) throws ServicioCodefacException   {
+    public List<RubroEstudiante> buscarPorEstudianteInscritoYRubroNivelActivos(EstudianteInscrito estudianteInscrito, RubrosNivel rubroNivel) throws ServicioCodefacException, RemoteException {
         //RubroEstudiante R;
         //R.getEstadoEnum()
         Map<String, Object> mapParametro = new HashMap<String, Object>();

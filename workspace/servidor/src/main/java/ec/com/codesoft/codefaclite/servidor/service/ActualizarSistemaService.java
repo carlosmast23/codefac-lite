@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ActualizarSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,16 +23,16 @@ import java.util.logging.Logger;
  */
 public class ActualizarSistemaService extends ServiceAbstract<ActualizarSistema,ActualizarSistemaFacade> implements ActualizarSistemaServiceIf{
 
-    public ActualizarSistemaService()    {
+    public ActualizarSistemaService() throws RemoteException {
         super(ActualizarSistemaFacade.class);
     }
 
-    public List<ActualizarSistema> obtenerCambiosPendientes()   
+    public List<ActualizarSistema> obtenerCambiosPendientes() throws RemoteException
     {
         try {
             return (List<ActualizarSistema>) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
-                public Object consulta() throws ServicioCodefacException   {
+                public Object consulta() throws ServicioCodefacException, RemoteException {
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
                     mapParametros.put("cambioActualizado", EnumSiNo.NO.getLetra());
                     return getFacade().findByMap(mapParametros);
@@ -44,7 +44,7 @@ public class ActualizarSistemaService extends ServiceAbstract<ActualizarSistema,
         return null;
     }
     
-    /*public void actualizarEstado(EnumSiNo enumSiNo,ActualizarSistema entidad)   
+    /*public void actualizarEstado(EnumSiNo enumSiNo,ActualizarSistema entidad) throws RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("cambioActualizado", enumSiNo.getLetra());

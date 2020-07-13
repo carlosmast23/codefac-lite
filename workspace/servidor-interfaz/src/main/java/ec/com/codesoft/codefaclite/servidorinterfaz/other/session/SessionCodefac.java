@@ -17,7 +17,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -72,14 +73,17 @@ public class SessionCodefac implements SessionCodefacInterface,Serializable{
     public Map<String,ParametroCodefac>  getParametrosCodefac() {
         try {
             //return parametrosCodefac;
-            if(parametrosCodefac==null)
+            if(this.parametrosCodefac==null)
             {
-                parametrosCodefac=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametrosMap(empresa);
+                System.out.println("==============> CONSULTANDO PARAMETROS <===============");
+                this.parametrosCodefac=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametrosMap(empresa);
             }
-        } catch (Exception ex) {
+            
+            return parametrosCodefac;
+        } catch (RemoteException ex) {
             Logger.getLogger(SessionCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return parametrosCodefac;
+        return null;
     }
 
     @Override
@@ -187,7 +191,7 @@ public class SessionCodefac implements SessionCodefacInterface,Serializable{
                         {
                             return true;
                         }                        
-                    } catch (Exception ex) {
+                    } catch (RemoteException ex) {
                         Logger.getLogger(SessionCodefac.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     return false;

@@ -33,7 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
- ;
+import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -59,13 +59,13 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     PerfilFacade perfilFacade=new PerfilFacade();
     
 
-    public UsuarioServicio()    {
+    public UsuarioServicio() throws RemoteException {
         super(UsuarioFacade.class);
         this.usuarioFacade=new UsuarioFacade();
     }    
     
     
-    public LoginRespuesta login(String nick,String clave,Empresa empresa) throws ServicioCodefacException
+    public LoginRespuesta login(String nick,String clave,Empresa empresa) throws java.rmi.RemoteException,ServicioCodefacException
     {
         LoginRespuesta loginRespuesta=new LoginRespuesta();
         
@@ -136,6 +136,8 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                     usuarioRoot = usuarioServicio.obtenerPorMap(mapParametros).get(0);//obtiene el usuario root de la base de datos 
                     usuarioRoot.isRoot = true;
                     usuarioRoot.setEmpresa(empresa); //Seteo con el nombre de la empresa que vayan a usar
+                } catch (RemoteException ex) {
+                    Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -233,7 +235,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         return null;
     }
     
-    public void eliminar(Usuario entity)    {
+    public void eliminar(Usuario entity) throws java.rmi.RemoteException {
         EntityTransaction transaccion=getTransaccion();
         transaccion.begin();
         entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
@@ -241,7 +243,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         transaccion.commit();
     }
     
-    public Usuario cambiarClave(Usuario usuario,String claveAnterior,String claveNueva)  throws ServicioCodefacException
+    public Usuario cambiarClave(Usuario usuario,String claveAnterior,String claveNueva) throws java.rmi.RemoteException, ServicioCodefacException
     {
         //TODO: Complentar la validacion completa validando con el usuario guardado y el nuevo usuario para ver si los datos coinciden
         //Actualizo las referencia del nuevo objecto a editar
@@ -265,7 +267,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 //EntityTransaction transaccion = getTransaccion();
                 //transaccion.begin();
 
@@ -350,11 +352,11 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         
     }
     
-    public Usuario grabar(Usuario entity) throws ServicioCodefacException   
+    public Usuario grabar(Usuario entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 
                 if (UtilidadesServidor.mapEmpresasLicencias.get(entity.getEmpresa()).tipoLicencia.equals(TipoLicenciaEnum.GRATIS)) {
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
@@ -394,7 +396,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 usuario.setClave(UtilidadesHash.generarHashBcrypt(usuario.getClave()));
                 entityManager.persist(usuario);
                 Map<String, Object> parametros = new HashMap<String, Object>();
@@ -424,7 +426,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
        
     }
     
-    public Usuario consultarUsuarioActivoPorEmpresa(String nick,Empresa empresa) throws ServicioCodefacException   
+    public Usuario consultarUsuarioActivoPorEmpresa(String nick,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();        
         mapParametros = new HashMap<String, Object>();
@@ -476,7 +478,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
 
     }
     
-    public Usuario obtenerUsuarioConfiguracion() throws ServicioCodefacException   
+    public Usuario obtenerUsuarioConfiguracion() throws ServicioCodefacException,java.rmi.RemoteException
     {
         //Usuario u;
         //u.get
@@ -493,7 +495,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         {            
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException   {
+                public void transaccion() throws ServicioCodefacException, RemoteException {
                     Usuario usuario=new Usuario();
                     usuario.setNick(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION);
                     usuario.setClave(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION);

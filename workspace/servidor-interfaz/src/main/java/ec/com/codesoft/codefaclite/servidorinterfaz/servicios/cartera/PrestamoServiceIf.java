@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.PrestamoCuota;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -17,5 +17,5 @@ import java.util.List;
  * @author Carlos
  */
 public interface PrestamoServiceIf extends ServiceAbstractIf<Prestamo>{
-    public List<PrestamoCuota> buscarCuotasPorPrestamo(Prestamo prestamo) throws ServicioCodefacException;
+    public List<PrestamoCuota> buscarCuotasPorPrestamo(Prestamo prestamo) throws RemoteException ,ServicioCodefacException;
 }

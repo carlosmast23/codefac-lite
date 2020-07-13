@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
- ;
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,18 +30,18 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
 
     OrdenTrabajoFacade ordenTrabajoFacade;
 
-    public OrdenTrabajoService()    {
+    public OrdenTrabajoService() throws RemoteException {
         super(OrdenTrabajoFacade.class);
         this.ordenTrabajoFacade = new OrdenTrabajoFacade();
     }
 
     @Override
-    public List<OrdenTrabajo> consultaDialogo(String param, int limiteMinimo, int limiteMaximo)    {
+    public List<OrdenTrabajo> consultaDialogo(String param, int limiteMinimo, int limiteMaximo) throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabarOrdenTrabajo(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException   {
+    public void grabarOrdenTrabajo(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, RemoteException {
         try {
             entityManager.getTransaction().begin(); //Inicio de la transaccion
             entityManager.persist(ordenTrabajo);
@@ -62,10 +62,10 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
     }
 
     @Override
-    public void eliminar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException  {
+    public void eliminar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, java.rmi.RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.ELIMINADO);
                 entityManager.merge(ordenTrabajo);
             }
@@ -74,16 +74,16 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
     }
 
     @Override
-    public List<OrdenTrabajoDetalle> consultarReporte(Date fechaInicial, Date fechaFinal, Departamento departamento, Empleado empleado, OrdenTrabajoDetalle.EstadoEnum estado)    {
+    public List<OrdenTrabajoDetalle> consultarReporte(Date fechaInicial, Date fechaFinal, Departamento departamento, Empleado empleado, OrdenTrabajoDetalle.EstadoEnum estado) throws RemoteException {
         return getFacade().consultaReporteFacade(fechaInicial, fechaFinal, departamento, empleado, estado);
     }
 
     @Override
-    public OrdenTrabajo grabar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException  {
+    public OrdenTrabajo grabar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, java.rmi.RemoteException {
 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 OrdenTrabajo.EstadoEnum estadoEnum = OrdenTrabajo.EstadoEnum.GENERADO;
                 ordenTrabajo.setEstadoEnum(estadoEnum);
 

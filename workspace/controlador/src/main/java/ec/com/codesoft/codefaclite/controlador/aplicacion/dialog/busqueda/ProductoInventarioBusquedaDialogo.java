@@ -20,7 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -67,7 +67,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Pro
         Boolean datosCompartidosEmpresas=false;
         try {
             datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);           
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ClienteEstablecimientoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -111,7 +111,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Pro
             vector.add(producto.getValorUnitario());
             vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().toString():"Sin Especificar");
             vector.add((kardex!=null)?kardex.getStock():"0");
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ProductoInventarioBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

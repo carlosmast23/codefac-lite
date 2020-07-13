@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-// ;
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 
@@ -20,11 +20,11 @@ import java.util.List;
  */
 public interface OrdenTrabajoServiceIf extends ServiceAbstractIf<OrdenTrabajo>
 {
-    public void grabarOrdenTrabajo(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException; 
-    public List<OrdenTrabajo> consultaDialogo(String param,int limiteMinimo,int limiteMaximo) ;
-    public void editar(OrdenTrabajo ordenTrabajo) ;
-    public List<OrdenTrabajo> obtenerTodos();
-    public void eliminar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException;
-    public List<OrdenTrabajoDetalle> consultarReporte(Date fechaInicial, Date fechaFinal,Departamento  departamento,Empleado empleado,OrdenTrabajoDetalle.EstadoEnum estado) ;
-    public OrdenTrabajo grabar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException;
+    public void grabarOrdenTrabajo(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException,java.rmi.RemoteException; 
+    public List<OrdenTrabajo> consultaDialogo(String param,int limiteMinimo,int limiteMaximo) throws java.rmi.RemoteException;
+    public void editar(OrdenTrabajo ordenTrabajo) throws java.rmi.RemoteException;
+    public List<OrdenTrabajo> obtenerTodos()throws java.rmi.RemoteException;
+    public void eliminar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, java.rmi.RemoteException;
+    public List<OrdenTrabajoDetalle> consultarReporte(Date fechaInicial, Date fechaFinal,Departamento  departamento,Empleado empleado,OrdenTrabajoDetalle.EstadoEnum estado) throws RemoteException;
+    public OrdenTrabajo grabar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException,java.rmi.RemoteException;
 }

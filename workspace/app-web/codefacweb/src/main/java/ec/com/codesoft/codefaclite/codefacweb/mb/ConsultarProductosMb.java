@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import java.io.Serializable;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -50,7 +50,7 @@ public class ConsultarProductosMb extends GeneralPublicoAbstractMb{
         try {
             ProductoServiceIf catalogosService=ServiceFactory.getFactory().getProductoServiceIf();
             productos=catalogosService.obtenerTodosActivos(getControladorPlantilla().getEmpresaSeleccionada());
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ConsultarProductosMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

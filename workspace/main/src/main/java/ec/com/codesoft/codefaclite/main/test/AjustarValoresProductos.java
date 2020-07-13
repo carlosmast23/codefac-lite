@@ -18,7 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,7 +57,9 @@ public class AjustarValoresProductos {
             Logger.getLogger(TestBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PersistenciaDuplicadaException ex) {
             Logger.getLogger(TestBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(TestBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(AjustarValoresProductos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

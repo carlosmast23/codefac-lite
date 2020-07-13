@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.io.Serializable;
@@ -49,6 +50,10 @@ public class Usuario implements Serializable{
     
     @Column (name = "ESTADO")
     private String estado;
+    
+    //PARAMETRO QUE ME PERMITE FILTRAR FACTURAS DE OTROS USUARIOS
+    @Column(name = "FILTRAR_FACTURA")
+    private String filtrarFactura;
     
     //PARAMETROS_COMPROBANTES_ELECTRONICOS
     @Column (name = "PARAMETROS_COMPROBANTES_ELECTRONICOS")
@@ -175,8 +180,22 @@ public class Usuario implements Serializable{
     public void setPuntosEmisionUsuario(List<PuntoEmisionUsuario> puntosEmisionUsuario) {
         this.puntosEmisionUsuario = puntosEmisionUsuario;
     }
+
+    public String getFiltrarFactura() {
+        return filtrarFactura;
+    }
+
+    public void setFiltrarFactura(String filtrarFactura) {
+        this.filtrarFactura = filtrarFactura;
+    }
     
+    public EnumSiNo getFiltrarFacturaEnum(){
+        return EnumSiNo.getEnumByLetra(this.filtrarFactura);
+    }
     
+    public void setFiltrarFacturaEnum(EnumSiNo enumSiNo){
+        this.filtrarFactura = enumSiNo.getLetra();
+    }
 
     @Override
     public int hashCode() {

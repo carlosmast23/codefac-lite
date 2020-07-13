@@ -16,7 +16,7 @@ import ec.com.codesoft.codefaclite.transporte.callback.GuiaRemisionImplComproban
 import ec.com.codesoft.codefaclite.transporte.model.GuiaRemisionModel;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.io.IOException;
- ;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -51,7 +51,9 @@ public class GuiaRemisionNoCallBack extends ComprobanteRespuestaNoCallBack {
                 guiaRemisionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
             }
             //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
-        }catch (IOException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(GuiaRemisionImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
@@ -60,7 +62,6 @@ public class GuiaRemisionNoCallBack extends ComprobanteRespuestaNoCallBack {
     }
 
     private boolean verificarImprimirComprobante() {
-        
         ParametroCodefac parametroCodefac = guiaRemisionModel.session.getParametrosCodefac().get(ParametroCodefac.COMPROBANTE_GUIA_REMISION_ACTIVAR);
         if (parametroCodefac == null) {
             //Si no esta tiene ningun dato por defecto no habilito la opcion de comprobante de venta

@@ -19,7 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 import java.io.Serializable;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -81,7 +81,9 @@ public class LoginMb extends GeneralPublicoAbstractMb{
 
             }
             
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "login.xhtml?faces-redirect=true";
@@ -99,7 +101,7 @@ public class LoginMb extends GeneralPublicoAbstractMb{
             session.setMatriz(sucursal);//TODO: Falta buscar la matriz de esa sucursal
             sessionMb.setSession(session);
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -113,7 +115,7 @@ public class LoginMb extends GeneralPublicoAbstractMb{
                 matriz = ServiceFactory.getFactory().getSucursalServiceIf().obtenerMatrizPorSucursal(sucursal.getEmpresa());
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -124,7 +126,7 @@ public class LoginMb extends GeneralPublicoAbstractMb{
         try {
             PerfilServiceIf servicio = ServiceFactory.getFactory().getPerfilServicioIf();
             return servicio.obtenerPerfilesPorUsuario(usuario);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -179,7 +181,7 @@ public class LoginMb extends GeneralPublicoAbstractMb{
                 empresaSeleccionada = empresas.get(0);
                 cargarSucursales(empresaSeleccionada); 
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
         }
         //sucursales=ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(empresa);
@@ -207,7 +209,9 @@ public class LoginMb extends GeneralPublicoAbstractMb{
                 System.out.println("sucursal:"+sucursal.getNombre());
             }
             //System.out.println("Datos encontrados" + sucursales.size());
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -7,7 +7,6 @@ package ec.com.codesoft.codefaclite.facturacion.callback;
 
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
-import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
@@ -19,7 +18,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceCom
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
@@ -31,8 +29,7 @@ import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.Serializable;
- ;
+import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
@@ -45,22 +42,20 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class ClienteNotaCreditoImplComprobante   implements ClienteInterfaceComprobante,Serializable {
+public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject implements ClienteInterfaceComprobante {
 
-    //private transient NotaCreditoModel notaCreditoModel;
+    private NotaCreditoModel notaCreditoModel;
     private MonitorComprobanteData monitorData;
     private NotaCredito notaCreditoProcesando;
-    private Empresa empresa;
 
-    public ClienteNotaCreditoImplComprobante(Empresa empresa, NotaCredito notaCreditoProcesando)    {
-         
-        //this.notaCreditoModel = notaCreditoModel;
+    public ClienteNotaCreditoImplComprobante(NotaCreditoModel notaCreditoModel, NotaCredito notaCreditoProcesando) throws RemoteException {
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
+        this.notaCreditoModel = notaCreditoModel;
         this.notaCreditoProcesando = notaCreditoProcesando;
-        this.empresa=empresa;
     }
     
     @Override
-    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas)    {
+    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas) throws RemoteException {
 
         try {
             
@@ -82,7 +77,7 @@ public class ClienteNotaCreditoImplComprobante   implements ClienteInterfaceComp
             Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        GeneralPanelInterface.panelPadreStatic.actualizarNotificacionesCodefac();
+        notaCreditoModel.panelPadre.actualizarNotificacionesCodefac();
 
     }
 
@@ -100,7 +95,7 @@ public class ClienteNotaCreditoImplComprobante   implements ClienteInterfaceComp
     }
 
     @Override
-    public void procesando(int etapa, ClaveAcceso clave)    {
+    public void procesando(int etapa, ClaveAcceso clave) throws RemoteException {
         if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
             monitorData.getBarraProgreso().setValue(20);
             notaCreditoProcesando.setClaveAcceso(clave.clave);
@@ -146,7 +141,7 @@ public class ClienteNotaCreditoImplComprobante   implements ClienteInterfaceComp
     }
 
     @Override
-    public void error(ComprobanteElectronicoException cee,String claveAcceso)    {
+    public void error(ComprobanteElectronicoException cee,String claveAcceso) throws RemoteException {
         try {
             byte[] resporteSerializado = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,notaCreditoProcesando.getEmpresa());
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(resporteSerializado);
@@ -159,7 +154,7 @@ public class ClienteNotaCreditoImplComprobante   implements ClienteInterfaceComp
                     monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            GeneralPanelInterface.panelPadreStatic.crearReportePantalla(jasperPrint, notaCreditoProcesando.getPreimpreso());
+                            notaCreditoModel.panelPadre.crearReportePantalla(jasperPrint, notaCreditoProcesando.getPreimpreso());
                             //JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
                             //panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
                         }
@@ -175,20 +170,24 @@ public class ClienteNotaCreditoImplComprobante   implements ClienteInterfaceComp
             }
 
             //servicio.editar(facturaProcesando);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
-        GeneralPanelInterface.panelPadreStatic.actualizarNotificacionesCodefac();
+        notaCreditoModel.panelPadre.actualizarNotificacionesCodefac();
     }
     
     private void generarReportePdf(String clave) {
         try {
 
-            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave,empresa);
+            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave,notaCreditoModel.getEmpresa());
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
-            GeneralPanelInterface.panelPadreStatic.crearReportePantalla(jasperPrint, clave);
+            notaCreditoModel.panelPadre.crearReportePantalla(jasperPrint, clave);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {

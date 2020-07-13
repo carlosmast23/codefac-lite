@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-// 
+import java.rmi.Remote;
 import java.sql.Date;
 import java.util.List;
 
@@ -20,10 +20,10 @@ import java.util.List;
  */
 public interface NotaCreditoServiceIf extends ServiceAbstractIf<NotaCredito>
 {
-    public NotaCredito grabar(NotaCredito notaCredito) throws ServicioCodefacException;
-    //public String getPreimpresoSiguiente()   ;;
-    public void editar(NotaCredito notaCredito) ;
-    public List<NotaCredito> obtenerTodos() ;
-    public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa) ;
+    public NotaCredito grabar(NotaCredito notaCredito) throws ServicioCodefacException,java.rmi.RemoteException;;
+    //public String getPreimpresoSiguiente() throws java.rmi.RemoteException;;
+    public void editar(NotaCredito notaCredito) throws java.rmi.RemoteException;
+    public List<NotaCredito> obtenerTodos() throws java.rmi.RemoteException;
+    public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa) throws java.rmi.RemoteException;
 
 }

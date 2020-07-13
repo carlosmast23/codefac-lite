@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraDetalleServiceIf;
- ;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -19,7 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraDetalle
  */
 public class OrdenCompraDetalleService extends ServiceAbstract<OrdenCompraDetalle,OrdenCompraDetalleFacade> implements OrdenCompraDetalleServiceIf{
 
-    public OrdenCompraDetalleService()    {
+    public OrdenCompraDetalleService() throws RemoteException {
         super(OrdenCompraDetalleFacade.class);
     }
     

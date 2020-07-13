@@ -22,6 +22,7 @@ import javax.persistence.Query;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 
 /**
  *
@@ -32,6 +33,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
     private PersonaEstablecimiento establecimiento;
     private EnumSiNo estadoEnviadoGuiaRemision;
     private Empresa empresa;
+    private Usuario usuario;
     
 
     public FacturaBusqueda(Persona cliente,Empresa empresa) {
@@ -46,6 +48,11 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
 
     public FacturaBusqueda(Empresa empresa) {
         this.empresa=empresa;
+    }
+    
+    public FacturaBusqueda(Empresa empresa, Usuario usuario) {
+        this.empresa = empresa;
+        this.usuario = usuario;
     }
     
     
@@ -91,6 +98,11 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
             queryString+=" AND u.estadoEnviadoGuiaRemision=?11 ";
         }
         
+        if(usuario != null)
+            if(usuario.getFiltrarFacturaEnum().compareTo(EnumSiNo.SI) == 0 )
+                queryString += " AND u.usuario=?14 ";
+        
+        
         queryString+=getQueryDocumentos();
         
         queryString+="AND ( LOWER(u.cliente.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
@@ -120,6 +132,9 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
             queryDialog.agregarParametro(11,estadoEnviadoGuiaRemision.getLetra());
         }
         
+        if(usuario != null)
+            if(usuario.getFiltrarFacturaEnum().compareTo(EnumSiNo.SI) == 0 )
+                queryDialog.agregarParametro(14, usuario);
         
         
         //queryDialog.agregarParametro(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());

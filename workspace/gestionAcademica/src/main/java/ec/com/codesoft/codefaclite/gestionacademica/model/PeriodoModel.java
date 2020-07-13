@@ -26,7 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -100,7 +100,7 @@ public class PeriodoModel extends PeriodoPanel {
             for (Periodo periodo : periodos) {
                 getCmbPeriodosActivos().addItem(periodo);
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(PeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -120,7 +120,7 @@ public class PeriodoModel extends PeriodoPanel {
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar periodo modelo");
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             DialogoCodefac.mensaje("Error", "Error de comunicación con el servidor , periodo", DialogoCodefac.MENSAJE_ADVERTENCIA);
             Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -147,7 +147,9 @@ public class PeriodoModel extends PeriodoPanel {
             setearValoresPeriodo(periodo);
             periodoService.editar(periodo);
             DialogoCodefac.mensaje("Datos correctos", "El periodo se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(PeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -169,7 +171,7 @@ public class PeriodoModel extends PeriodoPanel {
                     throw new ExcepcionCodefacLite(ex.getMessage());
                 }
                 DialogoCodefac.mensaje("Datos correctos", "El periodo se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -256,7 +258,10 @@ public class PeriodoModel extends PeriodoPanel {
                     Periodo periodoSeleccionado=(Periodo) getCmbPeriodosActivos().getSelectedItem();
                     ServiceFactory.getFactory().getPeriodoServiceIf().setearPeriodoActivo(periodoSeleccionado);
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
-                }catch (ServicioCodefacException ex) {
+                } catch (RemoteException ex) {
+                    Logger.getLogger(PeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
+                } catch (ServicioCodefacException ex) {
                     Logger.getLogger(PeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
                     DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                 }

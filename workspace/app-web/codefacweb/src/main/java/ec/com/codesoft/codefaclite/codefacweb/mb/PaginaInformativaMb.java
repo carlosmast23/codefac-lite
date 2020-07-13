@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import java.io.Serializable;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +48,7 @@ public class PaginaInformativaMb extends GeneralPublicoAbstractMb{
     public void postAddController() {
         try {
             listaProductosMasVendidos=ServiceFactory.getFactory().getProductoServiceIf().obtenerTodosActivos(getControladorPlantilla().getEmpresaSeleccionada());
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(PaginaInformativaMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

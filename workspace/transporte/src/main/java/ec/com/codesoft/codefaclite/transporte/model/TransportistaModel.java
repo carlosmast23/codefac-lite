@@ -26,7 +26,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +44,7 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
     private TransportistaServiceIf transportistaService;
     
     @Override
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         transportista = new Transportista();
         transportistaService = ServiceFactory.getFactory().getTransportistaServiceIf();
         cargarCombos();
@@ -52,12 +52,12 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite   {
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         transportista = new Transportista();        
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite   {
+    public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try {
             if (!prevalidar()) {
                 //Cancela el evento guardar porque no prevalido
@@ -69,43 +69,43 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al prevalidar");
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(TransportistaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite   {
+    public void editar() throws ExcepcionCodefacLite, RemoteException {
          try {
             setearDatos();
             transportistaService.editar(transportista); 
             DialogoCodefac.mensaje("Correcto","El transportista fue editado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(Transportista.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error","Error de comunicacion con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
         }
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite   {
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
          Boolean confirmacion = DialogoCodefac.dialogoPregunta("Alerta", "Está seguro que desea eliminar el transportista?", DialogoCodefac.MENSAJE_ADVERTENCIA);
         if (confirmacion) {
             try {
                 transportistaService.eliminar(transportista);
                 DialogoCodefac.mensaje("Correcto","El transportista se elimino correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(Transportista.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite   {
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -147,7 +147,7 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
     }
 
     @Override
-    public void buscar() throws ExcepcionCodefacLite   {
+    public void buscar() throws ExcepcionCodefacLite, RemoteException {
         BuscarDialogoModel dialogoBusqueda=new BuscarDialogoModel(obtenerDialogoBusqueda());
         dialogoBusqueda.setVisible(true);
         Transportista transportistaTemp = (Transportista) dialogoBusqueda.getResultado();
@@ -210,7 +210,7 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
         try {
             grabar();
             return transportista;
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(TransportistaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

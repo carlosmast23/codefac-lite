@@ -19,7 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,8 +44,11 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
         try {
             catProducto = new CategoriaProducto();
             setearValoresCatProducto(catProducto);
-            catProductoService.grabar(catProducto);
-            
+            try {
+                catProductoService.grabar(catProducto);
+            } catch (RemoteException ex) {
+                Logger.getLogger(CategoriaProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
             DialogoCodefac.mensaje("Datos correctos", "La categoria del producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
@@ -66,7 +69,7 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
             setearValoresCatProducto(catProducto);
             catProductoService.editar(catProducto);
             DialogoCodefac.mensaje("Datos correctos", "La categoria del producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(CategoriaProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -80,7 +83,7 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
                 }
                 catProductoService.eliminar(catProducto);
                 DialogoCodefac.mensaje("Datos correctos", "La categoria del producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(CategoriaProductoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

@@ -34,7 +34,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.InputStream;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,7 +80,7 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
             for (Periodo periodo : periodos) {
                 getCmbPeriodo().addItem(periodo);
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -140,7 +140,7 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
             }
             getTblDeudas().setModel(modeloTablaDeudas);
             getLblTotalDeuda().setText(acum.toString());
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     
@@ -203,7 +203,7 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
             parameters.put("valorDeuda", acum.toString());
 
             ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Deuda Estudiante");
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -263,7 +263,11 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
                 }
             }
 
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(MatriculaModel.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(MatriculaModel.class
                     .getName()).log(Level.SEVERE, null, ex);
         }

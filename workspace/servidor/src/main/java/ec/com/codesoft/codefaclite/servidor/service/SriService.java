@@ -22,18 +22,18 @@ import java.util.Map;
  *
  * @author Carlos
  */
-public class SriService   implements SriServiceIf
+public class SriService extends UnicastRemoteObject implements SriServiceIf
 {
     private SriFormaPagoFacade sriFormaPagoFacade;
     private SriIdentificacionFacade sriIdentificacionFacade;
 
-    public SriService()    {
-        // 
+    public SriService() throws java.rmi.RemoteException {
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         this.sriFormaPagoFacade = new SriFormaPagoFacade();
         this.sriIdentificacionFacade = new SriIdentificacionFacade();
     }
     
-    public SriFormaPago obtenerFormarPagoDefecto()   
+    public SriFormaPago obtenerFormarPagoDefecto() throws java.rmi.RemoteException
     {
         //Todo:Cambiar por algun parametro del sistema para que sepa cual forma de pago buscar
         String codigoFormaPago="01";
@@ -49,7 +49,7 @@ public class SriService   implements SriServiceIf
         return null;
     }
     
-    public SriFormaPago obtenerFormarPagoConCartera()   
+    public SriFormaPago obtenerFormarPagoConCartera() throws java.rmi.RemoteException
     {
     //Todo:Cambiar por algun parametro del sistema para que sepa cual forma de pago buscar
         String aliasFormaPago="Cartera";
@@ -65,7 +65,7 @@ public class SriService   implements SriServiceIf
         return null;
     }
     
-    public List<SriFormaPago> obtenerFormasPagoActivo()   
+    public List<SriFormaPago> obtenerFormasPagoActivo() throws java.rmi.RemoteException
     {
         java.util.Date fechaActual=new java.util.Date();
         
@@ -81,7 +81,7 @@ public class SriService   implements SriServiceIf
      * @param tipo
      * @return 
      */
-    public List<SriIdentificacion> obtenerIdentificaciones(String tipo)   
+    public List<SriIdentificacion> obtenerIdentificaciones(String tipo) throws java.rmi.RemoteException
     {
 
         return sriIdentificacionFacade.getSriIdentificacionByTipoTransaccion(tipo);

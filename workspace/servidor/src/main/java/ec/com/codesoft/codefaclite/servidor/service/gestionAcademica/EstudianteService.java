@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,21 +29,21 @@ public class EstudianteService extends ServiceAbstract<Estudiante, EstudianteFac
 
     EstudianteFacade estudianteFacade;
 
-    public EstudianteService()    {
+    public EstudianteService() throws RemoteException {
         super(EstudianteFacade.class);
         estudianteFacade = new EstudianteFacade();
     }
 
-    public List<Estudiante> estudianteSinMatriculaPorPeriodo(Periodo periodo)    {
+    public List<Estudiante> estudianteSinMatriculaPorPeriodo(Periodo periodo) throws RemoteException {
         return estudianteFacade.getEstudiantesSinMatricula(periodo);
     }
     
 
-    public List<Estudiante> estudianteNuevosSinMatricula()    {
+    public List<Estudiante> estudianteNuevosSinMatricula() throws RemoteException {
         return estudianteFacade.getEstudiantesNuevos();
     }
     
-    public List<Estudiante> obtenerEstudiantesActivos()   
+    public List<Estudiante> obtenerEstudiantesActivos() throws RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
@@ -52,10 +52,10 @@ public class EstudianteService extends ServiceAbstract<Estudiante, EstudianteFac
     }
 
     @Override
-    public Estudiante grabar(Estudiante entity) throws ServicioCodefacException   {
+    public Estudiante grabar(Estudiante entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 
                 EstudianteService servicio=new EstudianteService();
                 Estudiante estudiante=servicio.buscarPorCedulayEstado(entity.getCedula(), GeneralEnumEstado.ACTIVO);
@@ -75,7 +75,7 @@ public class EstudianteService extends ServiceAbstract<Estudiante, EstudianteFac
     
     
 
-    public void eliminarEstudiante(Estudiante e)  throws ServicioCodefacException {
+    public void eliminarEstudiante(Estudiante e)  throws RemoteException ,ServicioCodefacException {
         try {
             EstudianteInscritoService service=new EstudianteInscritoService();
             Long cantidadEstudiantesInscritos=service.obtenerTamanioPorEstudiante(e);
@@ -95,13 +95,13 @@ public class EstudianteService extends ServiceAbstract<Estudiante, EstudianteFac
             }
             
            
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(EstudianteService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public Estudiante buscarPorCedulayEstado(String cedula, GeneralEnumEstado estado) throws    ServicioCodefacException {
+    public Estudiante buscarPorCedulayEstado(String cedula, GeneralEnumEstado estado) throws RemoteException, ServicioCodefacException {
         Map<String,Object> mapParametro=new HashMap<String,Object>();
         mapParametro.put("cedula",cedula);
         mapParametro.put("estado",estado.getEstado());

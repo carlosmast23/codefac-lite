@@ -29,7 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -125,7 +125,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             }
 
             getTblEstudiantes().setModel(modeloTablaEstudiantes);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -229,7 +229,11 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                 comboNivel.addItem(resultado);
             }
 
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(MatriculaModel.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(MatriculaModel.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
@@ -291,7 +295,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             }
             getCmbPeriodo().setSelectedItem(periodoActivo);
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -302,7 +306,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             defaultTodos.setNombre("TODOS");
 
             periodoActivo = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerUnicoPeriodoActivo();
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 

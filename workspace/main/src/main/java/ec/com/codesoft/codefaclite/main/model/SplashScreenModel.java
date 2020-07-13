@@ -6,10 +6,8 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.main.panel.SplashScreenFrame;
-import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +20,6 @@ import java.util.logging.Logger;
  * @author Carlos
  */
 public class SplashScreenModel extends SplashScreenFrame implements Runnable {
-    //TODO: Ver si se puede poner como un servicio
-    public static final Image ICONO_SISTEMA=Toolkit.getDefaultToolkit().createImage(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png"));
 
     private Integer porcentajeCarga = 0;
     private Thread hiloPorcentaje;
@@ -42,7 +38,7 @@ public class SplashScreenModel extends SplashScreenFrame implements Runnable {
         //setBorder(new Fondo(fondoImg));
         
         //setear icono
-        setIconImage(ICONO_SISTEMA);
+        setIconImage(ParametrosSistemaCodefac.iconoSistema);
     }
 
     public void agregarPorcentaje(Integer porcentaje, String mensaje) {

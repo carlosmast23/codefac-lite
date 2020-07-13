@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
 
@@ -21,6 +21,6 @@ import java.util.List;
  * @author Carlos
  */
 public interface GuiaRemisionServiceIf extends ServiceAbstractIf<GuiaRemision> {
-    public List<GuiaRemision> obtenerConsulta(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado,Transportista transportista,Persona destinatario,String codigoProducto,Empresa empresa) throws ServicioCodefacException  ;
-    public void editarGuiaRemision(GuiaRemision guiaRemision) throws ServicioCodefacException  ;
+    public List<GuiaRemision> obtenerConsulta(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado,Transportista transportista,Persona destinatario,String codigoProducto,Empresa empresa) throws ServicioCodefacException, RemoteException;
+    public void editarGuiaRemision(GuiaRemision guiaRemision) throws ServicioCodefacException, RemoteException;
 }

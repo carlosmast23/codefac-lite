@@ -25,7 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +84,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
             //Logger.getLogger(AsociarProductoProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error","Error al grabar",DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("error grabar");
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(AsociarProductoProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -175,7 +175,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
                     getTxtProveedor().setText(identificacion+" - "+nombre);
                     try {
                         cargarTablaProductoProveedor(proveedor);
-                    } catch (Exception ex) {
+                    } catch (RemoteException ex) {
                         Logger.getLogger(AsociarProductoProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -209,7 +209,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
            
     }
     
-    private void cargarTablaProductoProveedor(Persona persona)   
+    private void cargarTablaProductoProveedor(Persona persona) throws RemoteException
     {
         try {
             String[] titulos={"Producto","Costo","Iva"};

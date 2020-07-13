@@ -5,13 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
-import java.io.Serializable;
-
 /**
  *
  * @author Carlos
  */
-public class ComprobanteVentaData implements Serializable{
+public class ComprobanteVentaData {
     private String codigo;
     private String nombre;
     private String cantidad;

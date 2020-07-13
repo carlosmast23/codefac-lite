@@ -23,7 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -97,7 +97,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
             });
             setClosable(true);
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ProductoReporte.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

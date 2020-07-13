@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpleadoServiceIf;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class EmpleadoService extends ServiceAbstract<Empleado, EmpleadoFacade> i
 {
     private EmpleadoFacade empleadoFacade;
     
-    public EmpleadoService()   
+    public EmpleadoService() throws RemoteException
     {
         super(EmpleadoFacade.class);
         this.empleadoFacade = new EmpleadoFacade();
@@ -59,11 +59,11 @@ public class EmpleadoService extends ServiceAbstract<Empleado, EmpleadoFacade> i
     }
 
     @Override
-    public List<Empleado> buscar()    {
+    public List<Empleado> buscar() throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public List<Empleado> buscarPorDepartamento(Departamento departamento,Empresa empresa) throws ServicioCodefacException 
+    public List<Empleado> buscarPorDepartamento(Departamento departamento,Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
     {
         Map<String, Object> parametroMap = new HashMap<String, Object>();
         parametroMap.put("departamento", departamento);

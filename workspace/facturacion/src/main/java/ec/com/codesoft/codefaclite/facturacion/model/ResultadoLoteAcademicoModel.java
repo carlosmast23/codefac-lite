@@ -24,7 +24,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,7 +129,9 @@ public class ResultadoLoteAcademicoModel extends ResultadoLoteAcademicoPanel{
 
                 }
                 
-            }catch (ExcepcionCodefacLite ex) {
+            } catch (RemoteException ex) {
+                Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
             
@@ -150,7 +152,9 @@ public class ResultadoLoteAcademicoModel extends ResultadoLoteAcademicoPanel{
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(reporteByte);
                 panelPadre.crearReportePantalla(jasperPrint, claveAcceso);
 
-            }catch (IOException ex) {
+            } catch (RemoteException ex) {
+                Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
                 Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);

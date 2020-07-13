@@ -25,7 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,16 +43,16 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
 
     RetencionFacade retencionFacade;
 
-    public RetencionService()    {
+    public RetencionService() throws RemoteException {
         super(RetencionFacade.class);
         retencionFacade = new RetencionFacade();
     }
 
-    public Retencion grabar(Retencion entity) throws ServicioCodefacException   {
+    public Retencion grabar(Retencion entity) throws ServicioCodefacException, RemoteException {
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 
                 validarRetencion(entity);
                 
@@ -111,14 +111,14 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         return entity;
     }
     
-    private void grabarCartera(Retencion retencion) throws    ServicioCodefacException
+    private void grabarCartera(Retencion retencion) throws RemoteException, ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
         carteraService.grabarDocumentoCartera(retencion, Cartera.TipoCarteraEnum.PROVEEDORES,null);
     }
     
-    private void validarRetencion(Retencion retencion) throws ServicioCodefacException  
+    private void validarRetencion(Retencion retencion) throws ServicioCodefacException, RemoteException
     {
         if(retencion.getDetalles()==null|| retencion.getDetalles().size()==0)
         {
@@ -159,11 +159,11 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
     
 
     @Override
-    public void eliminar(Retencion entity)    {
+    public void eliminar(Retencion entity) throws RemoteException {
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException   {
+                public void transaccion() throws ServicioCodefacException, RemoteException {
                     ComprobantesService comprobanteService=new ComprobantesService();
                     comprobanteService.eliminarComprobanteSinTransaccion(entity);
                     
@@ -185,20 +185,20 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         }
     }
     
-    public List<Object[]> obtenerRetencionesIvaPorCompra(Compra compra,SriRetencion sriRetencion)  
+    public List<Object[]> obtenerRetencionesIvaPorCompra(Compra compra,SriRetencion sriRetencion)throws RemoteException
     {
         return retencionFacade.obtenerRetencionesIvaPorCompraFacade(compra,sriRetencion);
         //compra.getSecuencial();
     }
     
-    public List<RetencionDetalle> obtenerRetencionesRentaPorCompra(Compra compra,SriRetencion sriRetencion)  
+    public List<RetencionDetalle> obtenerRetencionesRentaPorCompra(Compra compra,SriRetencion sriRetencion)throws RemoteException
     {
         return retencionFacade.obtenerRetencionesRentaPorCompraFacade(compra,sriRetencion);
         //compra.getSecuencial();
     }
     
     @Override
-    public List<RetencionDetalle> obtenerRetencionesReportes(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Empresa empresa)    {
+    public List<RetencionDetalle> obtenerRetencionesReportes(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Empresa empresa) throws RemoteException {
         //return retencionFacade.lista(persona, fi, ff, iva, renta,tipo);
         return retencionFacade.obtenerRetencionesReportesFacade(persona, fi, ff, iva, renta,sriRetencion,estadoEnum,empresa);
     }
@@ -207,7 +207,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
     }
     
     @Override
-    public List<Retencion> obtenerRetencionesPorCompra(Compra compra) throws ServicioCodefacException  
+    public List<Retencion> obtenerRetencionesPorCompra(Compra compra) throws ServicioCodefacException, RemoteException
     {
         return getFacade().obtenerRetencionesPorCompraFacade(compra);
     }

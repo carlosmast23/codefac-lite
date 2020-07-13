@@ -20,4 +20,6 @@ create table
     ESTADO varchar(1), 
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.0.1)*/
     PARAMETROS_COMPROBANTES_ELECTRONICOS varchar(1024), 
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.3.7)*/
+    FILTRAR_FACTURA varchar(1),
     primary key (ID))

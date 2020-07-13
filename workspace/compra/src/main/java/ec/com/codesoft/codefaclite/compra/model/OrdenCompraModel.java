@@ -44,7 +44,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -125,7 +125,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Incorrecto","No se puede gurdar la compra",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -538,7 +538,9 @@ public class OrdenCompraModel extends OrdenCompraPanel{
                 }
 
                 getTxtDescripcionItem().setText(productoSeleccionado.getNombre());
-            }catch (ServicioCodefacException ex) {
+            } catch (RemoteException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

@@ -16,11 +16,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -154,6 +156,122 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
     }
     
+    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario) {
+        String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="",filtrarSucursal="", usuarioId="";
+        if(usuario != null && usuario.getFiltrarFacturaEnum().equals(EnumSiNo.SI)){
+            usuarioId = " AND u.usuario = ?14";
+        } else {
+            usuarioId = " AND 1=1";
+        }
+        
+        if (persona != null) {
+            cliente = "u.sucursal=?1";
+        } else {
+            cliente = "1=1";
+        }
+        
+        if (fi == null && ff != null) {
+            fecha = " AND u.fechaEmision <= ?3";
+        } else if (fi != null && ff == null) {
+            fecha = " AND u.fechaEmision >= ?2";
+        } else if (fi == null && ff == null) {
+            fecha = "";
+        } else {
+            fecha = " AND (u.fechaEmision BETWEEN ?2 AND ?3)";
+        }
+        
+        if (estadoEnum!= null) {
+            //Si la peticion es por todos sri entonces tengo que setear 2 valores
+            if(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum))
+            {
+                estadoFactura = " AND ( u.estado=?10 or u.estado=?11 ) ";
+            }
+            else
+            {                
+                estadoFactura = " AND u.estado=?4";
+            }
+        }
+        
+        if(agrupadoReferido)
+        {
+            ordenarAgrupado=" u.referido ,";
+        }
+        
+        if(consultarReferidos)
+        {
+            filtrarReferidos=" AND u.referido IS NOT NULL ";
+            if(referido!=null)
+            {            
+                filtrarReferidos+=" AND u.referido=?5 ";
+            }
+        }
+        
+        if(sucursal!=null)
+        {
+            filtrarSucursal+=" AND u.sucursalEmpresa=?13 ";
+        }
+        
+        String filtroPuntoEmision="";
+        if(puntoEmision!=null)
+        {
+            filtroPuntoEmision=" AND u.puntoEmision =?12 ";
+        }
+
+        try {
+            String queryString = "SELECT u FROM Factura u WHERE u.empresa=?7 and u.codigoDocumento=?6 and  " + cliente + usuarioId + fecha + estadoFactura +filtrarReferidos+filtroPuntoEmision+filtrarSucursal+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
+            Query query = getEntityManager().createQuery(queryString);
+
+            
+            if (persona != null) {
+                query.setParameter(1, persona);
+            }
+            if (fi != null) {
+                query.setParameter(2, fi);
+            }
+            if (ff != null) {
+                query.setParameter(3, ff);
+            }
+            if (estadoEnum != null) {
+                if(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum))
+                {
+                    query.setParameter(10,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                    query.setParameter(11,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+                }else
+                {
+                    query.setParameter(4, estadoEnum.getEstado());
+                }
+            }
+            
+            if (consultarReferidos) 
+            {
+                if (referido != null) 
+                {
+                    query.setParameter(5, referido);
+                }
+            }
+            
+            query.setParameter(6,documentoEnum.getCodigo());
+            query.setParameter(7,empresa);
+            
+            if (puntoEmision != null) {
+                query.setParameter(12,puntoEmision.getPuntoEmision());
+            }
+            
+            if(sucursal!=null)
+            {
+                query.setParameter(13,sucursal);
+            }
+
+            if(usuario != null && usuario.getFiltrarFacturaEnum().equals(EnumSiNo.SI)){
+                query.setParameter(14, usuario);
+            }
+            
+            
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
    
 
     public List<Factura> getFacturaEnable() {

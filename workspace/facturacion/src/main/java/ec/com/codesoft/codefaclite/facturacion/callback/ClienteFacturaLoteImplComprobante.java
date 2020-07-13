@@ -29,7 +29,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
- ;
+import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
@@ -42,19 +42,19 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class ClienteFacturaLoteImplComprobante   implements ClienteInterfaceComprobanteLote {
+public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject implements ClienteInterfaceComprobanteLote {
 
     private InterfaceCallbakClient listener;
     private MonitorComprobanteData monitorData;
     private ControladorCodefacInterface controlador;
 
-    public ClienteFacturaLoteImplComprobante(ControladorCodefacInterface controlador)    {
-         
+    public ClienteFacturaLoteImplComprobante(ControladorCodefacInterface controlador) throws RemoteException {
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         this.controlador=controlador;
     }
     
-    public ClienteFacturaLoteImplComprobante(ControladorCodefacInterface controlador,InterfaceCallbakClient listener)    {
-         
+    public ClienteFacturaLoteImplComprobante(ControladorCodefacInterface controlador,InterfaceCallbakClient listener) throws RemoteException {
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         this.controlador = controlador;
         this.listener=listener;
     }

@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.codefacweb.converter;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
- ;
+import java.rmi.RemoteException;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -19,7 +19,7 @@ import javax.faces.convert.FacesConverter;
 public class PuntoEmisionConverter extends AbstractConverter implements Converter{
 
     @Override
-    public Object buscarObjetoPorId(String id)    {
+    public Object buscarObjetoPorId(String id) throws RemoteException {
         return ServiceFactory.getFactory().getPuntoVentaServiceIf().buscarPorId(Long.parseLong(id));
     }
     

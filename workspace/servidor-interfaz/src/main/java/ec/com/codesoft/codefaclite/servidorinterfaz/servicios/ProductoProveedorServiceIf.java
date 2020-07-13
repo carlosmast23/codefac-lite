@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import es.mityc.firmaJava.ocsp.config.ProveedorInfo;
- 
+import java.rmi.Remote;
 import java.util.List;
 
 /**
@@ -20,11 +20,11 @@ import java.util.List;
  */
 public interface ProductoProveedorServiceIf extends ServiceAbstractIf<ProductoProveedor>
 {
-    public List<ProductoProveedor> buscarProductoCompraActivo(Producto producto,Compra compra) throws ServicioCodefacException   ;
+    public List<ProductoProveedor> buscarProductoCompraActivo(Producto producto,Compra compra) throws ServicioCodefacException,java.rmi.RemoteException;
     
-    public List<ProductoProveedor> buscarProductoProveedorActivo(Producto producto,Persona proveedor) throws ServicioCodefacException   ;
+    public List<ProductoProveedor> buscarProductoProveedorActivo(Producto producto,Persona proveedor) throws ServicioCodefacException,java.rmi.RemoteException;
     
-    public List<ProductoProveedor> buscarPorProveedorActivo(Persona proveedor) throws ServicioCodefacException   ;
+    public List<ProductoProveedor> buscarPorProveedorActivo(Persona proveedor) throws ServicioCodefacException,java.rmi.RemoteException;
     
-    public List<ProductoProveedor> buscarPorProductoActivo(Producto producto) throws ServicioCodefacException   ;
+    public List<ProductoProveedor> buscarPorProductoActivo(Producto producto) throws ServicioCodefacException,java.rmi.RemoteException;
 }

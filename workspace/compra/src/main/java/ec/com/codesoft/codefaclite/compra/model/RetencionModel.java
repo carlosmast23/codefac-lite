@@ -69,7 +69,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,7 +157,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite("error: "+ex.getMessage());
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite("error");
@@ -200,9 +200,12 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
                 byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso,retencion.getEmpresa());
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                 panelPadre.crearReportePantalla(jasperPrint,retencion.getPreimpreso());
-            }catch (ClassNotFoundException ex) {
+            } catch (RemoteException ex) {
+                DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
                 Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
+                Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
                 Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -311,7 +314,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
                 {
                     getCmbRetencionIva().setSelectedItem(sriRetencionIva);
                 }
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -325,7 +328,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
                 {
                     getCmbRetencionRenta().setSelectedItem(sriRetencionRenta);
                 }
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -799,7 +802,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
             getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA);
             
             
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -1176,7 +1179,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
     }
 
     @Override
-    public ClienteInterfaceComprobante getInterfaceComprobante()    {
+    public ClienteInterfaceComprobante getInterfaceComprobante() throws RemoteException {
         return new RetencionImplCallBack(retencion, this);
     }
 

@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -16,6 +16,6 @@ import java.util.List;
  * @author CARLOS_CODESOFT
  */
 public interface DescuentoAcademicoServiceIf extends ServiceAbstractIf<DescuentoAcademico>{
-    public List<DescuentoAcademico> obtenerDescuentoActivosPorPeriodoActivo()throws ServicioCodefacException  ;
-    public List<DescuentoAcademico> obtenerDescuentoActivosPorPeriodoActivo(DescuentoAcademico.TipoEnum tipoEnum)throws ServicioCodefacException  ;
+    public List<DescuentoAcademico> obtenerDescuentoActivosPorPeriodoActivo()throws ServicioCodefacException, RemoteException;
+    public List<DescuentoAcademico> obtenerDescuentoActivosPorPeriodoActivo(DescuentoAcademico.TipoEnum tipoEnum)throws ServicioCodefacException, RemoteException;
 }

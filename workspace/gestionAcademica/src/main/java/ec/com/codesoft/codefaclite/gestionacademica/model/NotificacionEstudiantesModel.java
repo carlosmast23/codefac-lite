@@ -27,7 +27,7 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,39 +47,39 @@ public class NotificacionEstudiantesModel extends NotificacionEstudiantesPanel {
     private List<EstudianteInscrito> estudiantesIngresados;
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         placeHolder();
         popUps();
         listenerBotones();
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite   {
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite   {
+    public void grabar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite   {
+    public void editar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite   {
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite   {
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -183,7 +183,7 @@ public class NotificacionEstudiantesModel extends NotificacionEstudiantesPanel {
                 return null;
             }
             return periodo;
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(NotificacionEstudiantesModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -342,7 +342,7 @@ public class NotificacionEstudiantesModel extends NotificacionEstudiantesPanel {
 
                     }
 
-                } catch (Exception ex) {
+                } catch (RemoteException ex) {
                     Logger.getLogger(NotificacionEstudiantesModel.class
                             .getName()).log(Level.SEVERE, null, ex);
                 }
@@ -363,7 +363,7 @@ public class NotificacionEstudiantesModel extends NotificacionEstudiantesPanel {
                     agregarEstudiantes(estudianteInscritos);
                     actualizarTabla();
 
-                } catch (Exception ex) {
+                } catch (RemoteException ex) {
                     Logger.getLogger(NotificacionEstudiantesModel.class
                             .getName()).log(Level.SEVERE, null, ex);
                 }

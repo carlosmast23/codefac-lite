@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,12 +28,12 @@ public class AulaService extends ServiceAbstract<Aula, AulaFacade> implements Au
 
     private AulaFacade aulaFacade;
 
-    public AulaService()    {
+    public AulaService() throws RemoteException {
         super(AulaFacade.class);
         this.aulaFacade = new AulaFacade();
     }
     
-    public List<Aula> obtenerAulasActivas()   
+    public List<Aula> obtenerAulasActivas() throws RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());

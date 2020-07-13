@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.codefacweb.converter;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
- ;
+import java.rmi.RemoteException;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -18,7 +18,7 @@ import javax.faces.convert.FacesConverter;
 public class SiNoEnumConverter extends AbstractConverter implements Converter {
 
     @Override
-    public Object buscarObjetoPorId(String valor)    {
+    public Object buscarObjetoPorId(String valor) throws RemoteException {
         return EnumSiNo.getEnumByLetra(valor);
     }
     

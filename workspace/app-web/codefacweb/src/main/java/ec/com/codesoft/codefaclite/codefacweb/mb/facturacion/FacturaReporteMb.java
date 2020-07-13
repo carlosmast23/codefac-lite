@@ -50,7 +50,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -120,7 +120,9 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
             valoresIniciales();
             cargarCombos();
             crearCabezeraTabla();
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaReporteMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturaReporteMb.class.getName()).log(Level.SEVERE, null, ex);
         }
        
@@ -198,7 +200,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         valorTotal = "0.00";
     }
     
-    public void cargarCombos() throws    ServicioCodefacException
+    public void cargarCombos() throws RemoteException, ServicioCodefacException
     {
         //Estado de comprobantes
         this.comprobanteEstados = ComprobanteEntity.ComprobanteEnumEstado.values();
@@ -650,11 +652,11 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         this.sucursalCheck = sucursalCheck;
     }
 
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

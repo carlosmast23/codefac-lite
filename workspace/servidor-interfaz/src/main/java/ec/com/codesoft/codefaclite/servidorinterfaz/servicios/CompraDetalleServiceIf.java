@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
- 
+import java.rmi.Remote;
 
 /**
  *

@@ -24,7 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.sri.ComprobantesElectronicosParametros;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +40,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     CompraDetalleFacade compraDetalleFacade;
     
     
-    public CompraService()    {
+    public CompraService() throws RemoteException {
         super(CompraFacade.class);
         this.compraFacade = new CompraFacade();
         this.compraDetalleFacade = new CompraDetalleFacade();
@@ -52,7 +52,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         //TODO: Editar este metodo porque el de grabar es muy similar
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
                     for (CompraDetalle compraDetalle : compra.getDetalles()) {
                         if (compraDetalle.getProductoProveedor().getId() == null) {
@@ -69,13 +69,13 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     
     
     @Override
-    public void grabarCompra(Compra compra,CarteraParametro carteraParametro) throws ServicioCodefacException  
+    public void grabarCompra(Compra compra,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
         validarDatosCompra(compra);
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                
                 compra.setInventarioIngreso(EnumSiNo.NO.getLetra()); //La primera vez que grabo por defecto grabo para poder ingresar al inventario
                 //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
@@ -95,7 +95,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         //TODO: Falta retornar el tipo de dato por ejemplo en los dialogos necesita obtener el nuevo dato modificado.
     }
     
-    private void validarDatosCompra(Compra compra) throws    ServicioCodefacException
+    private void validarDatosCompra(Compra compra) throws RemoteException, ServicioCodefacException
     {
         /**
          * =====================================================================
@@ -133,21 +133,29 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             }
         }
         
+        /**
+         * Validar que este ingresando una compra repetida
+         */
+        if(getFacade().verificarCompraRepetida(compra))
+        {
+            throw new ServicioCodefacException("No se puede ingresar compras repetidas");
+        }
+        
         
     }
     
-    private void grabarCartera(Compra compra,CarteraParametro carteraParametro) throws    ServicioCodefacException
+    private void grabarCartera(Compra compra,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
         carteraService.grabarDocumentoCartera(compra, Cartera.TipoCarteraEnum.PROVEEDORES,carteraParametro);
     }
 
-    public void eliminarCompra(Compra compra) throws ServicioCodefacException   
+    public void eliminarCompra(Compra compra) throws ServicioCodefacException,RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 RetencionService retencionService=new RetencionService();
                 List<Retencion> retencionesAsociadas= retencionService.obtenerRetencionesPorCompra(compra);
                 
@@ -182,7 +190,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     }
     
     @Override
-    public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum de, TipoDocumentoEnum tde,GeneralEnumEstado estadoEnum,Empresa empresa) throws ServicioCodefacException   
+    public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum de, TipoDocumentoEnum tde,GeneralEnumEstado estadoEnum,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException
     {
         return compraFacade.obtenerCompraReporte(proveedor, fechaInicial, fechaFin, de, tde,estadoEnum,empresa);
     }    

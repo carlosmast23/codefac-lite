@@ -6,12 +6,12 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
- ;
+import java.rmi.RemoteException;
 
 /**
  *
  * @author Carlos
  */
 public interface MetodoInterfaceTransaccion {
-    public void transaccion() throws ServicioCodefacException   ;
+    public void transaccion() throws ServicioCodefacException,RemoteException;
 }

@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -21,7 +21,7 @@ public class SriRetencionRentaFacade extends AbstractFacade<SriRetencionRenta>{
         super(SriRetencionRenta.class);
     }
     
-    public List<SriRetencionRenta> obtenerTodosOrdenadoPorCodigoFacade()   
+    public List<SriRetencionRenta> obtenerTodosOrdenadoPorCodigoFacade() throws RemoteException
     {
         //SriRetencionRenta srr;
         //srr.getCodigo().get

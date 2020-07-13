@@ -32,7 +32,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,13 +73,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             setearVariable();
             ParametroCodefacServiceIf service = ServiceFactory.getFactory().getParametroCodefacServiceIf();
             service.editarParametros(parametrosEditar);
-            //Seteo en nulo para que vuelvan a cargar todos los parametros en la session
-            this.session.setParametrosCodefac(null);
             DialogoCodefac.mensaje("Actualizado datos", "Los parametros fueron actualizados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             //Cargar nuevamente lo datos de la base para tener persistente la informacion
             cargarDatos();
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error", "No se pueden grabar los parametros", DialogoCodefac.MENSAJE_INCORRECTO);
         }
@@ -163,7 +161,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
                 getCmbFormaPagoDefecto().addItem(formaPago);
             }
             
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
        
@@ -234,7 +232,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             for (SriRetencionRenta sriRetencionRenta : tipoRetencionesRenta) {
                 getCmbRetencionRenta().addItem(sriRetencionRenta);
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -249,7 +247,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
                 getCmbRetencionIva().addItem(tipoRetencione);
             }
             
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -456,7 +454,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             getjComboFiltrarFacturaPorUsuario().setSelectedItem((enumSiNo != null) ? enumSiNo:null);
             
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

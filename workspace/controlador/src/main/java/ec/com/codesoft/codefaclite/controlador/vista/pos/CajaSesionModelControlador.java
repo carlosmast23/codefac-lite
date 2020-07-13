@@ -20,7 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
@@ -40,18 +40,18 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     }
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         getInterfaz().setCajaSession(new CajaSession());
         CajaEnum[] estadosCaja = CajaEnum.values();
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite   {
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         getInterfaz().setCajaSession(new CajaSession());
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite   {
+    public void grabar() throws ExcepcionCodefacLite, RemoteException {
          try
         {
             if(getInterfaz().getCajaSession()== null){
@@ -76,7 +76,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite   {
+    public void editar() throws ExcepcionCodefacLite, RemoteException {
         try {
             //Datos
             obtenerDatos();
@@ -90,7 +90,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite   {
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         try {
             ServiceFactory.getFactory().getCajaSesionServiceIf().eliminar(getInterfaz().getCajaSession());
         } catch (ServicioCodefacException ex) {
@@ -99,12 +99,12 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite   {
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

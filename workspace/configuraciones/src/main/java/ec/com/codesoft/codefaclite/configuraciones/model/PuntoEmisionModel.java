@@ -18,7 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,17 +34,17 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
     PuntoEmision puntoEmision;
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         valoresIniciales();
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite   {
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite   {
+    public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try {
             setearDatos();
             ServiceFactory.getFactory().getPuntoVentaServiceIf().grabar(puntoEmision);
@@ -57,7 +57,7 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite   {
+    public void editar() throws ExcepcionCodefacLite, RemoteException {
         try {
             setearDatos();
             ServiceFactory.getFactory().getPuntoVentaServiceIf().editar(puntoEmision);
@@ -69,7 +69,7 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite   {
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         try {
             setearDatos();
             ServiceFactory.getFactory().getPuntoVentaServiceIf().eliminar(puntoEmision);
@@ -82,12 +82,12 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite   {
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -175,7 +175,9 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
                 getCmbSucursal().addItem(sucursal);
             }
             
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(PuntoEmisionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(PuntoEmisionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         

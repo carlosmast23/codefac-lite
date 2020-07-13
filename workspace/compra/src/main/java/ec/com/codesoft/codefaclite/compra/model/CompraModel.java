@@ -70,7 +70,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -137,7 +137,7 @@ public class CompraModel extends CompraPanel{
         listenerTexts();
         try {
             mostrarVentanaRetenciones();
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -174,7 +174,7 @@ public class CompraModel extends CompraPanel{
             DialogoCodefac.mensaje("Error al grabar la compra",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite(ex.getMessage());
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite(ex.getMessage());
         }
@@ -262,14 +262,14 @@ public class CompraModel extends CompraPanel{
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.dialogoPregunta("Error al grabar",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite(ex.getMessage());
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite(ex.getMessage());
         }
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite   {
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         if(estadoFormulario==ESTADO_EDITAR)
         {
             try {
@@ -503,7 +503,7 @@ public class CompraModel extends CompraPanel{
             }
             
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -890,7 +890,9 @@ public class CompraModel extends CompraPanel{
                         
                         getTxtProductoItem().setText(productoSeleccionado.getCodigoPersonalizado());
                         getTxtDescripcionItem().setText(productoSeleccionado.getNombre());
-                    }catch (ServicioCodefacException ex) {
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
                         Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -1175,7 +1177,7 @@ public class CompraModel extends CompraPanel{
         mostrarDatosTotales();
     }
     
-    public void mostrarVentanaRetenciones()   
+    public void mostrarVentanaRetenciones() throws RemoteException
     {
         EmpresaServiceIf empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
         List<Empresa> listadoEmpresas = empresaService.obtenerTodos();
@@ -1323,7 +1325,9 @@ public class CompraModel extends CompraPanel{
                             bloquearDesbloquearBotones(true);
                             getTxtCantidadItem().requestFocus();
                          }
-                     }catch (ServicioCodefacException ex) {
+                     } catch (RemoteException ex) {
+                         Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                     } catch (ServicioCodefacException ex) {
                          Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
                      }
                  }

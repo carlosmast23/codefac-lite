@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.transporte.GuiaRemisionAdicio
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionAdicionalServiceIf;
- ;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -17,7 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRem
  */
 public class GuiaRemisionAdicionalService extends ServiceAbstract<GuiaRemisionAdicional,GuiaRemisionAdicionalFacade> implements GuiaRemisionAdicionalServiceIf{
 
-    public GuiaRemisionAdicionalService()    {
+    public GuiaRemisionAdicionalService() throws RemoteException {
         super(GuiaRemisionAdicionalFacade.class);
     }
     

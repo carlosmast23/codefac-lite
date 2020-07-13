@@ -23,7 +23,7 @@ import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
- ;
+import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -107,7 +107,9 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
                     }
                     //getTblNotificaciones().setModel(modeloTabla);
                     
-                }catch (ServicioCodefacException ex) {
+                } catch (RemoteException ex) {
+                    Logger.getLogger(WidgetNotificacionCodefacModelo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
                     Logger.getLogger(WidgetNotificacionCodefacModelo.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 //Pongo nuevamente el titulo original

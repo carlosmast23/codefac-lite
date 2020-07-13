@@ -39,7 +39,6 @@ import ec.com.codesoft.codefaclite.main.model.LoginModel;
 import ec.com.codesoft.codefaclite.main.model.ModoAplicativoModel;
 import ec.com.codesoft.codefaclite.main.model.ServidorMonitorModel;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
-import static ec.com.codesoft.codefaclite.main.model.SplashScreenModel.ICONO_SISTEMA;
 import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
 import ec.com.codesoft.codefaclite.main.other.ArchivoDescarga;
 import ec.com.codesoft.codefaclite.main.other.BaseDatosCredenciales;
@@ -74,7 +73,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
- ;
+import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -130,7 +129,7 @@ public class Main {
     public static void main(String[] args) {
         //Desabilito para que no se veo nada de la pantalla que contiene el proceso de inicio
         frameAplicacion.setUndecorated(true);
-        frameAplicacion.setIconImage(ICONO_SISTEMA);
+        frameAplicacion.setIconImage(ParametrosSistemaCodefac.iconoSistema);
         frameAplicacion.setVisible(true);
         
         System.setProperty("sun.net.client.defaultConnectTimeout", "2000"); //Establece el tiempo de espera para las conexiones con el servidor
@@ -654,7 +653,7 @@ public class Main {
             /**
              * Establecer propiedades del formulario principal
              */
-            panel.setIconImage(ICONO_SISTEMA); // NOI18N
+            panel.setIconImage(ParametrosSistemaCodefac.iconoSistema); // NOI18N
             panel.setExtendedState(MAXIMIZED_BOTH);
             splashScren.siguiente();
             splashScren.termino();
@@ -714,7 +713,9 @@ public class Main {
             panel.setVisible(true);
             
             
-        }catch (UnknownHostException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnknownHostException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -734,7 +735,7 @@ public class Main {
             session.setMatriz(datosLogin.matriz);
             session.setEmpresa(datosLogin.empresa);
             return session;
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -785,7 +786,9 @@ public class Main {
             //TODO: Ver si esta validacion se la hace antes , la unica razon porque se lo hace en esta parte es porque la variable global del usuario esta en el metodo verificarLicencia
             //verificarFechaMaximaPago(UtilidadesServidor.mapEmpresasLicencias.get(empresa).usuarioLicencia);
             
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
                 
@@ -817,7 +820,9 @@ public class Main {
                 ServiceFactory.getFactory().getParametroCodefacServiceIf().editar(parametroDirectorioRecursos);
             }
 
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -857,7 +862,7 @@ public class Main {
                 DialogoCodefac.mensaje("Error", "Excedio el numero de clientes permitidos", DialogoCodefac.MENSAJE_INCORRECTO);
                 System.exit(0);
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -1029,7 +1034,7 @@ public class Main {
         try {
             PerfilServiceIf servicio = ServiceFactory.getFactory().getPerfilServicioIf();
             return servicio.obtenerPerfilesPorUsuario(usuario);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -1121,7 +1126,9 @@ public class Main {
                      LOG.log(Level.WARNING,"El metodo no se encontro para actualizar con el nombre :"+nombreMetodo);
                  }
             }
-        }catch (IllegalAccessException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

@@ -21,7 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +37,7 @@ public class DescuentoAcademicoModel extends DescuentoAcademicoPanel {
     private DescuentoAcademico descuentoAcademico;
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         descuentoAcademico = new DescuentoAcademico();
         UtilidadesComboBox.llenarComboBox(getCmbTipo(), DescuentoAcademico.TipoEnum.values());
 
@@ -46,12 +46,12 @@ public class DescuentoAcademicoModel extends DescuentoAcademicoPanel {
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite   {
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
 
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite   {
+    public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try {
             setearDatos();
             ServiceFactory.getFactory().getDescuentoAcademicoServiceIf().grabar(descuentoAcademico);
@@ -65,7 +65,7 @@ public class DescuentoAcademicoModel extends DescuentoAcademicoPanel {
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite   {
+    public void editar() throws ExcepcionCodefacLite, RemoteException {
         try {
             setearDatos();
             ServiceFactory.getFactory().getDescuentoAcademicoServiceIf().editar(descuentoAcademico);
@@ -79,7 +79,7 @@ public class DescuentoAcademicoModel extends DescuentoAcademicoPanel {
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite   {
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
 
         if (!DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO)) 
         {
@@ -97,12 +97,12 @@ public class DescuentoAcademicoModel extends DescuentoAcademicoPanel {
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite   {
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
 
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
 
     }
 
@@ -138,7 +138,7 @@ public class DescuentoAcademicoModel extends DescuentoAcademicoPanel {
         try {
             Periodo periodo = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerUnicoPeriodoActivo();
             return new DescuentoAcademicoBusqueda(periodo);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(DescuentoAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

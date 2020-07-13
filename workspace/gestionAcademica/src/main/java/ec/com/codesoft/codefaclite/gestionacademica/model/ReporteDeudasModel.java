@@ -40,7 +40,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.io.InputStream;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -106,7 +106,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             UtilidadesComboBox.llenarComboBox(getCmbTipoReporte(),ReporteDeudasData.TipoReporteEnum.values());            
             
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -221,7 +221,9 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
 
             }
 
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -330,7 +332,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                 }
             }
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(MatriculaModel.class
                     .getName()).log(Level.SEVERE, null, ex);
 

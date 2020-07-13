@@ -59,7 +59,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
- ;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.HashMap;
@@ -110,8 +110,8 @@ public class TestPruebaRMI {
             mapRecursos.put(UsuarioServicio.class, UsuarioServicioIf.class);
             mapRecursos.put(UtilidadesService.class,UtilidadesServiceIf.class);
             */
-            //System.setProperty("java.rmi.server.hostname","186.4.212.15");
-            ControllerServiceUtil.cargarRecursosServidor("192.168.1.5");
+            System.setProperty("java.rmi.server.hostname","186.4.212.15");
+            ControllerServiceUtil.cargarRecursosServidor("192.168.100.2");
             //ServiceControllerServer.cargarRecursos(mapRecursos,"1099");
             System.out.println("servidor iniciado");
             /*
@@ -124,7 +124,7 @@ public class TestPruebaRMI {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
             } catch (PersistenciaDuplicadaException ex) {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
             } catch (UnknownHostException ex) {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);

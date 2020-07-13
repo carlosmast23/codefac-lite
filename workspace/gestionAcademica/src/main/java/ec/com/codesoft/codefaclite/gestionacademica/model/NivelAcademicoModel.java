@@ -21,7 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import java.io.Serializable;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +65,7 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", "Ocurrio un error al grabar los datos", DialogoCodefac.MENSAJE_CORRECTO);
             Logger.getLogger(NivelAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             DialogoCodefac.mensaje("Error", "Error de comunicación con el servidor", DialogoCodefac.MENSAJE_ADVERTENCIA);
             Logger.getLogger(NivelAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -77,6 +77,8 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
             setearVariablesPantalla();
             nivelAcademicoService.editar(nivelAcademico);
             DialogoCodefac.mensaje("Datos correctos", "El nivel academico se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(NivelAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -95,7 +97,9 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
                 
                 nivelAcademicoService.eliminarNivelAcademico(nivelAcademico);
                 DialogoCodefac.mensaje("Datos correctos", "El nivel academico se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            }catch (ServicioCodefacException ex) {
+            } catch (RemoteException ex) {
+                Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
                 DialogoCodefac.mensaje("Alerta",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                 Logger.getLogger(NivelAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -205,7 +209,7 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
                 getCmbNivel().addItem(nivel);
             }
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(NivelAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

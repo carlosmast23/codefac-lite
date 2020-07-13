@@ -22,7 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -197,6 +197,8 @@ public class ComponenteEnvioSmsPanel extends javax.swing.JPanel {
                     //Metodo que se encarga de contruir el mensaje y enviar
                     ControladorPlantillaSms.enviarMensajesConPlantilla(controlador.getDataSms(), mensajeEnviar,controlador.getInterfaceCallback());                    
                     
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComponenteEnvioSmsPanel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(ComponenteEnvioSmsPanel.class.getName()).log(Level.SEVERE, null, ex);
                 }

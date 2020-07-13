@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 import javax.persistence.Query;
 
@@ -25,7 +25,7 @@ public class RubrosNivelFacade extends AbstractFacade<RubrosNivel> {
         super(RubrosNivel.class);
     }
 
-    public List<RubrosNivel> findPorPeriodoYMeses(Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses)    {
+    public List<RubrosNivel> findPorPeriodoYMeses(Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses) throws RemoteException {
 
         String stringQuery = "SELECT rn FROM RubrosNivel rn WHERE rn.catalogoProducto=?1 AND rn.periodo=?2 AND ";
 

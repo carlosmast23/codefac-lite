@@ -50,7 +50,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -195,7 +195,9 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
 
             setearDatosAdicionales();
             ServiceFactory.getFactory().getFacturacionServiceIf().editar(null);            mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.EDITADO);
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             MensajeMb.mensaje(new CodefacMsj("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO));
             Logger.getLogger(NotaCreditoMb.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite(ex.getMessage());
@@ -229,7 +231,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
             MensajeMb.mostrarMensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         }*/
         
@@ -251,7 +253,9 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
             MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
             //mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
             nuevo();
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
             MensajeMb.mensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
         }
@@ -506,7 +510,9 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
                 
                 UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,notaCredito.getPreimpreso());
                 
-            }catch (IOException ex) {
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -566,7 +572,9 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
             inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionales.jrxml"));
             reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
             mapParametros.put("SUBREPORT_INFO_ADICIONAL",reportDatosAdicionales);
-        }catch (IOException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -736,7 +744,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
                         imprimirNotaCredito(dato);
                         
                         
-                    } catch (Exception ex) {
+                    } catch (RemoteException ex) {
                         Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -751,7 +759,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
             //new ProformaMb.InterfazCallBack(barraProgreso, sessionMb);
             //return new ProformaMb.InterfazCallBack(barraProgreso, sessionMb);
             return interfazCallBack;
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(NotaCreditoMb.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -769,11 +777,11 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
         }
     }
 
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -834,26 +842,26 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
         }
     }
 
-    public class InterfazCallBack   implements ClienteInterfaceComprobante {
+    public class InterfazCallBack extends UnicastRemoteObject implements ClienteInterfaceComprobante {
 
         private BarraProgreso barraProgreso;
         
-        public InterfazCallBack(BarraProgreso barraProgreso)    {
+        public InterfazCallBack(BarraProgreso barraProgreso) throws RemoteException {
             this.barraProgreso=barraProgreso;
         }
         
 
-        public void termino(byte[] byteJasperPrint, List<AlertaComprobanteElectronico> alertas)    {
+        public void termino(byte[] byteJasperPrint, List<AlertaComprobanteElectronico> alertas) throws RemoteException {
             barraProgreso.setPorcentaje(100);
             sessionMb.setActualizarMonitor(false);
         }
 
-        public void iniciado()    {
+        public void iniciado() throws RemoteException {
             barraProgreso.setPorcentaje(0);
             sessionMb.setActualizarMonitor(true);
         }
 
-        public void procesando(int etapa, ClaveAcceso clave)    {
+        public void procesando(int etapa, ClaveAcceso clave) throws RemoteException {
             if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
                 barraProgreso.setPorcentaje(20);                
                 //monitorData.getBarraProgreso().setValue(20);
@@ -897,7 +905,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
             //UtilidadesWeb.actualizaComponente(ID_COMPONENTE_MONITOR);
         }
 
-        public void error(ComprobanteElectronicoException cee, String claveAcceso)    {
+        public void error(ComprobanteElectronicoException cee, String claveAcceso) throws RemoteException {
             System.out.println("error ...");
             sessionMb.setActualizarMonitor(false);
         }
@@ -941,7 +949,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
             this.puntosEmision=puntosEmision;
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         }
 

@@ -21,8 +21,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -32,7 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -81,6 +83,8 @@ public class ControladorReporteFactura {
     private PuntoEmision puntoEmision; //en este campo me permite filtrar por el punto de emision
     private Sucursal sucursal;
     protected Empresa empresa;
+    private Usuario usuario;
+    
 
     public ControladorReporteFactura(Empresa empresa) {
         this.empresa=empresa;
@@ -88,6 +92,12 @@ public class ControladorReporteFactura {
         this.reporteConDetallesFactura=false;
     }
     
+    public ControladorReporteFactura(Empresa empresa, Usuario usuario){
+        this.empresa = empresa;
+        this.usuario = usuario;
+        this.data = new ArrayList<ReporteFacturaData>();
+        this.reporteConDetallesFactura=false;
+    }
     
     
     public ControladorReporteFactura(PersonaEstablecimiento persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentoEnum documentoConsultaEnum,Empresa empresa,Sucursal sucursal) {
@@ -128,7 +138,14 @@ public class ControladorReporteFactura {
              *              OBTENER TODAS LAS FACTURAS POR FILTROS
              * ===============================================================
              */
-            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,sucursal);
+            List<Factura> datafact;
+            if(usuario != null)
+            {
+                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,sucursal, usuario);
+            }
+            else{
+                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,sucursal);
+            }   
             /**
              * ===============================================================
              *           AGREGAR EL COSTO DE LA VENTA DISPONIBLE EN EL EXCEL
@@ -361,6 +378,8 @@ public class ControladorReporteFactura {
                     break;
                     
             }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -528,6 +547,26 @@ public class ControladorReporteFactura {
         ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     
+    public void obtenerReporteAgrupadoPorVendedor(InterfazComunicacionPanel panelPadre)
+    {
+        String titulo = "Reporte Ventas Agrupado por Vendedores";
+        InputStream path=getReportePorVendedores();
+        ordenarListaPorVendedores(data);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+    }
+    
+    private void ordenarListaPorVendedores(List<ReporteFacturaData> reporteData)
+    {
+        Collections.sort(reporteData,new Comparator<ReporteFacturaData>(){
+            public int compare(ReporteFacturaData obj1,ReporteFacturaData  obj2)
+                {
+                    return obj1.getVendedor().compareTo(obj2.getVendedor());
+                }
+        });
+        
+        //Collections.sort(new Comparator<>);
+    }
+    
     /**
      * Metodo que permite ordenar la lista de resultados por productos
      * @param reporteData 
@@ -546,6 +585,7 @@ public class ControladorReporteFactura {
             }
         });
     }
+    
     
     /**
      * Metodo que me permite organizar la lista por 
@@ -576,6 +616,11 @@ public class ControladorReporteFactura {
     protected InputStream getReportePorProductos()
     {//reporte_factura_por_producto
         return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_factura_por_producto.jrxml");
+    }
+    
+    protected InputStream getReportePorVendedores()
+    {
+        return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_ventas_por_vendedor.jrxml");
     }
    
 

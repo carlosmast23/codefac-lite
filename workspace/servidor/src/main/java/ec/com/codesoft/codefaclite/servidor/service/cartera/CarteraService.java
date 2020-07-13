@@ -41,7 +41,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,12 +58,12 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     
     CarteraFacade carteraFacade;
     
-    public CarteraService()    {
+    public CarteraService() throws RemoteException {
         super(CarteraFacade.class);
         carteraFacade = new CarteraFacade();
     }
     
-    public List<CarteraCruce> consultarMovimientoCartera(Persona persona)   
+    public List<CarteraCruce> consultarMovimientoCartera(Persona persona) throws java.rmi.RemoteException
     {
         return getFacade().getMovimientoCartera(persona);
     }
@@ -74,14 +74,14 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      * @param cruces
      * @return
      * @throws ServicioCodefacException
-     * @   
+     * @throws java.rmi.RemoteException 
      */
-    public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException   
+    public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
     {
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws    ServicioCodefacException {
+            public void transaccion() throws RemoteException, ServicioCodefacException {
                 
                 grabarCarteraSinTransaccion(cartera, cruces);
             }
@@ -90,7 +90,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         return cartera;
     }
     
-    private void grabarCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException   
+    private void grabarCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
     {
         /**
          * ===========================================================
@@ -135,7 +135,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         actualizarReferenciasCartera(cartera);
     }
     
-    private void grabarDetallesCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException   
+    private void grabarDetallesCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
     {
          Map<Long, CarteraDetalle> mapDetallesGrabados = new HashMap<Long, CarteraDetalle>();
         //grabar los detalles de la cartera
@@ -189,14 +189,14 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
     }
     
-    private void  clonarCruces(List<CarteraCruce> cruces) throws    ServicioCodefacException
+    private void  clonarCruces(List<CarteraCruce> cruces) throws RemoteException, ServicioCodefacException
     {
         for (CarteraCruce cruce : cruces) {
             cruce.setCarteraDetalle(cruce.getCarteraDetalle().clone());
         }
     }
     
-    private void actualizarReferenciasCartera(Cartera cartera) throws    ServicioCodefacException
+    private void actualizarReferenciasCartera(Cartera cartera) throws RemoteException, ServicioCodefacException
     {
         actualizarReferenciasCrucesSinTransaccion(cartera);
         for (CarteraDetalle carteraDetalle : cartera.getDetalles()) 
@@ -211,10 +211,10 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     /**
      * Metodo que permite actualizar las nuevas referencias de cruces para tener actualizada en las listas de las rferencias
      * @param cartera
-     * @  
+     * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    private void actualizarReferenciasCrucesSinTransaccion(Cartera cartera) throws    ServicioCodefacException
+    private void actualizarReferenciasCrucesSinTransaccion(Cartera cartera) throws RemoteException, ServicioCodefacException
     {
         CarteraCruceService carteraCruceService=new CarteraCruceService();
         
@@ -240,14 +240,14 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
     }
     
-    private String generarCodigoCartera(Sucursal sucursal,String codigoDocumento) throws    ServicioCodefacException
+    private String generarCodigoCartera(Sucursal sucursal,String codigoDocumento) throws RemoteException, ServicioCodefacException
     {
         UtilidadesService utilidadesService=new UtilidadesService();
         String codigo=utilidadesService.crearCodigoPorEmpresaYSucursalSinTransaccion(sucursal,codigoDocumento,Cartera.class.getSimpleName());
         return codigo;        
     }
     
-    private void validacionCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException    
+    private void validacionCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException 
     {
         if(cartera.getDetalles()==null || cartera.getDetalles().size()==0)
         {
@@ -308,7 +308,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     /**
      * Metodo que me permite almacenar los documentos en la tabla de cartera
      */
-    public void grabarDocumentoCartera(ComprobanteEntity comprobante,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro) throws    ServicioCodefacException 
+    public void grabarDocumentoCartera(ComprobanteEntity comprobante,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException 
     {
         //Si no esta activo el modulo de cartera no continua
         if(!ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.ACTIVAR_CARTERA, EnumSiNo.SI))
@@ -366,7 +366,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
 
     }
     
-    private void crearCrucesFactura(Factura factura,Cartera carteraFactura,List<CarteraCruce> cruces,CarteraParametro carteraParametro) throws ServicioCodefacException  
+    private void crearCrucesFactura(Factura factura,Cartera carteraFactura,List<CarteraCruce> cruces,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
         /**
          * =====================================================================
@@ -421,7 +421,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(CarteraService.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(CarteraService.class.getName()).log(Level.SEVERE, null, ex);
             }
         
@@ -473,7 +473,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         }
     }
     
-    private void crearCarteraFactura(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro) throws ServicioCodefacException  
+    private void crearCarteraFactura(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
         //TODO: Unir la misma logica tanto para facturas de venta como de compra
         if (tipo.equals(tipo.CLIENTE)) {
@@ -564,7 +564,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                     cruces.add(carteraCruceRenta);
                 }
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(CarteraService.class.getName()).log(Level.SEVERE, null, ex);
         }
                 
@@ -647,9 +647,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      * @param tipoCartera
      * @return
      * @throws ServicioCodefacException
-     * @   
+     * @throws RemoteException 
      */
-    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum) throws ServicioCodefacException   {
+    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum) throws ServicioCodefacException, RemoteException {
         return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum);
     }
     
@@ -659,10 +659,10 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     }*/
 
     
-    public void editar(Cartera entity,List<CarteraCruce> cruces) throws ServicioCodefacException   {
+    public void editar(Cartera entity,List<CarteraCruce> cruces) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 //Falta agregar validaciones porque no siempre se puede editar cualquier dato
                 grabarCarteraSinTransaccion(entity, cruces);
             }
@@ -672,11 +672,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     
 
     @Override
-    public void eliminar(Cartera entity,ModoProcesarEnum modo) throws ServicioCodefacException   {
+    public void eliminar(Cartera entity,ModoProcesarEnum modo) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() 
         {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 if(entity.getCruces()!=null && entity.getCruces().size()>0)
                 {
                     throw new ServicioCodefacException("No se puede eliminar el documentos porque le afectan cruces");
@@ -720,22 +720,22 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         return null;
     }
     
-    public List<Cartera> obtenerCarteraPorCobrar(Persona cliente,Empresa empresa) throws ServicioCodefacException   
+    public List<Cartera> obtenerCarteraPorCobrar(Persona cliente,Empresa empresa) throws ServicioCodefacException, RemoteException 
     {
         return (List<Cartera>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException   {
+            public Object consulta() throws ServicioCodefacException, RemoteException {
                 return getFacade().obtenerCarteraPorCobrarFacade(cliente, empresa);
             }
         });
         
     }
     
-    public BigDecimal obtenerSaldoDisponibleCruzar(Persona cliente,Empresa empresa) throws ServicioCodefacException   
+    public BigDecimal obtenerSaldoDisponibleCruzar(Persona cliente,Empresa empresa) throws ServicioCodefacException, RemoteException 
     {
         return (BigDecimal) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException   {
+            public Object consulta() throws ServicioCodefacException, RemoteException {
                 return getFacade().obtenerSaldoDisponibleCruzarFacade(cliente, empresa);
             }
         });

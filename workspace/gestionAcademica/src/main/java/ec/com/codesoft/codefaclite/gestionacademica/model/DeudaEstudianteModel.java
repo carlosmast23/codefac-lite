@@ -25,7 +25,7 @@ import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -105,7 +105,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                 ServiceFactory.getFactory().getRubroEstudianteServiceIf().eliminarRubrosEstudiantes(rubrosEstudianteEliminado);
                 
                 DialogoCodefac.mensaje("Correcto","El estudiante fue actualizado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(DeudaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje("Incorrecto","No se pueden grabar los rubros",DialogoCodefac.MENSAJE_INCORRECTO);
                  throw new ExcepcionCodefacLite("Cancelar ...");
@@ -254,7 +254,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                             cargarRubrosAsociados(estudianteInscrito, periodo);
                         }
                         
-                    } catch (Exception ex) {
+                    } catch (RemoteException ex) {
                         Logger.getLogger(DeudaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
                     }/* catch (ServicioCodefacException ex) {
                         Logger.getLogger(DeudaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -486,7 +486,9 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
             }
             
             
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(DeudaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(DeudaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -503,7 +505,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
             rubrosEstudianteEliminado=new ArrayList<RubroEstudiante>();
             estudianteInscrito=null;
         
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(DeudaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
             
             

@@ -27,7 +27,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +56,7 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar");
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -103,7 +103,9 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
             setearValoresBodega(bodega);
             bodegaService.editar(bodega);
             DialogoCodefac.mensaje("Datos correctos", "La bodega se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -118,7 +120,9 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
                 }
                 bodegaService.eliminar(bodega);
                 DialogoCodefac.mensaje("Datos correctos", "La bodega se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            }catch (ServicioCodefacException ex) {
+            } catch (RemoteException ex) {
+                Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
                 DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                 Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -291,7 +295,7 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

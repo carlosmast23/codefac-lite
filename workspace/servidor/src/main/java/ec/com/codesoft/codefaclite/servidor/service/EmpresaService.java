@@ -10,8 +10,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.EmpresaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
 {
     private EmpresaFacade empresaFacade;
     
-    public EmpresaService()    
+    public EmpresaService() throws RemoteException 
     {        
         super(EmpresaFacade.class);
         this.empresaFacade = new EmpresaFacade();
@@ -37,7 +38,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 //Grabar la empresa
                 entityManager.persist(p);
                 
@@ -73,14 +74,14 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         
     }*/
     
-    public void eliminar(Empresa p) throws ServicioCodefacException   
+    public void eliminar(Empresa p) throws ServicioCodefacException,java.rmi.RemoteException
     {
         //Empresa empresa;
         //empresa.getEstado();
         //p.setEstadoEnum(GeneralEnumEstado.);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException   {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 p.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(p);
             }
@@ -93,7 +94,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         return empresaFacade.findAll();
     } 
     
-    public Empresa buscarPorIdentificacion(String identificacion)    
+    public Empresa buscarPorIdentificacion(String identificacion) throws RemoteException 
     {
         //Empresa empresa;       
         Map<String,Object> mapParametros=new HashMap<String, Object>();
@@ -106,12 +107,13 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         return null;
     }
     
-    public List<Empresa> obtenerTodosActivos()   
+    public List<Empresa> obtenerTodosActivos(OrdenarEnum ordenarEnum) throws RemoteException
     {
+        /*getFacade().
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        List<Empresa> empresas=getFacade().findByMap(mapParametros);
-        return empresas;
+        List<Empresa> empresas=getFacade().findByMap(mapParametros);*/
+        return getFacade().obtenerTodosActivosFacade(ordenarEnum);
         
     }
         

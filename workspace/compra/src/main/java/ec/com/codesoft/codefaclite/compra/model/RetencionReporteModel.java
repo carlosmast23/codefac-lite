@@ -39,7 +39,7 @@ import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -282,7 +282,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                 //mapTipoRetencion.put(sriRetencion.getCodigo(),sriRetencion);
                 getCmbTipo().addItem(sriRetencion);
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -532,7 +532,9 @@ public class RetencionReporteModel extends RetencionReportePanel {
                         byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,session.getEmpresa());
                         JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                         panelPadre.crearReportePantalla(jasperPrint,controladorReporte.getDataReporte().get(filaSeleccionada).getPreimpresoRetencion());
-                    }catch (IOException ex) {
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
                         Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);

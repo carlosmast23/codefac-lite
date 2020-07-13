@@ -22,8 +22,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.Serializable;
- ;
+import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,20 +34,20 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class RetencionImplCallBack   implements ClienteInterfaceComprobante,Serializable{
+public class RetencionImplCallBack extends UnicastRemoteObject implements ClienteInterfaceComprobante{
 
     private MonitorComprobanteData monitorData;
     private Retencion retencion;
-    private transient ControladorCodefacInterface formulario;
+    private ControladorCodefacInterface formulario;
 
-    public RetencionImplCallBack(Retencion retencion, ControladorCodefacInterface formulario)    {
+    public RetencionImplCallBack(Retencion retencion, ControladorCodefacInterface formulario) throws RemoteException {
         this.retencion = retencion;
         this.formulario = formulario;
     }
 
     
     @Override
-    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas)    {
+    public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas) throws RemoteException {
         
         try {
             
@@ -80,7 +79,7 @@ public class RetencionImplCallBack   implements ClienteInterfaceComprobante,Seri
     }
 
     @Override
-    public void iniciado()    {
+    public void iniciado() throws RemoteException {
         monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
         monitorData.getLblPreimpreso().setText(retencion.getPreimpreso() + " ");
         monitorData.getBtnAbrir().setEnabled(false);
@@ -92,7 +91,7 @@ public class RetencionImplCallBack   implements ClienteInterfaceComprobante,Seri
     }
 
     @Override
-    public void procesando(int etapa, ClaveAcceso clave)    {
+    public void procesando(int etapa, ClaveAcceso clave) throws RemoteException {
         
         if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
             monitorData.getBarraProgreso().setValue(20);
@@ -139,7 +138,7 @@ public class RetencionImplCallBack   implements ClienteInterfaceComprobante,Seri
     }
 
     @Override
-    public void error(ComprobanteElectronicoException cee, String claveAcceso)    {
+    public void error(ComprobanteElectronicoException cee, String claveAcceso) throws RemoteException {
         monitorData.getBtnReporte().setEnabled(true);
         monitorData.getBtnCerrar().setEnabled(true);
         monitorData.getBtnReporte().addActionListener(new ActionListener() {
@@ -171,7 +170,9 @@ public class RetencionImplCallBack   implements ClienteInterfaceComprobante,Seri
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
             formulario.panelPadre.crearReportePantalla(jasperPrint, clave);
             //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
-        }catch (IOException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(RetencionImplCallBack.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(RetencionImplCallBack.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(RetencionImplCallBack.class.getName()).log(Level.SEVERE, null, ex);

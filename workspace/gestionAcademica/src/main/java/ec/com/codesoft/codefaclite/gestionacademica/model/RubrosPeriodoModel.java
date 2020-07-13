@@ -29,7 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +76,7 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
             Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);            
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite(ex.getMessage());
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -87,7 +87,9 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
             setearVariablesPantalla();
             ServiceFactory.getFactory().getRubrosNivelServiceIf().editar(rubrosNivel);
             DialogoCodefac.mensaje("Correcto","El rubro se edito correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -100,7 +102,9 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
             try {
                 ServiceFactory.getFactory().getRubrosNivelServiceIf().eliminarRubroNivel(rubrosNivel);
                 DialogoCodefac.mensaje("Correcto","El rubro del periodo fue eliminado correctado", DialogoCodefac.MENSAJE_CORRECTO);
-            }catch (ServicioCodefacException ex) {
+            } catch (RemoteException ex) {
+                Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
                 DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                 Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -204,7 +208,7 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
                 getCmbTipoRubro().addItem(tipoRubroEnum);
             }*/
             
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

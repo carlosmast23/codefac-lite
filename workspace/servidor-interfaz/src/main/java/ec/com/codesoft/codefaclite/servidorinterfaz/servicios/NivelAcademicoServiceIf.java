@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcadem
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -18,10 +18,10 @@ import java.util.List;
  * @author CodesoftDesarrollo
  */
 public interface NivelAcademicoServiceIf extends ServiceAbstractIf<NivelAcademico>{
-    public List<NivelAcademico> obtenerTodosActivosPorPeriodo(Periodo periodo);    
-    public void eliminarNivelAcademico(NivelAcademico n) throws   ServicioCodefacException;
-    public NivelAcademico obtenerPorNombreYEstadoYPeriodo(String nombre,GeneralEnumEstado estado,Periodo periodo);    
-    public NivelAcademico obtenerPorNombreYEstado(String nombre,GeneralEnumEstado estado);    
-    public List<NivelAcademico> buscarPorPeriodo(Periodo p) throws   ServicioCodefacException;
+    public List<NivelAcademico> obtenerTodosActivosPorPeriodo(Periodo periodo) throws RemoteException;
+    public void eliminarNivelAcademico(NivelAcademico n) throws RemoteException,ServicioCodefacException;
+    public NivelAcademico obtenerPorNombreYEstadoYPeriodo(String nombre,GeneralEnumEstado estado,Periodo periodo) throws RemoteException;
+    public NivelAcademico obtenerPorNombreYEstado(String nombre,GeneralEnumEstado estado) throws RemoteException;
+    public List<NivelAcademico> buscarPorPeriodo(Periodo p) throws RemoteException,ServicioCodefacException;
     
 }

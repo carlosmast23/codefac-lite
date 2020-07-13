@@ -36,7 +36,7 @@ import java.awt.event.ItemListener;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +58,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
     private List<Cartera> carteraResultado;
     
     @Override
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         addListenerBotones();
         addListenerCheck();
         initDatosTabla();
@@ -70,22 +70,22 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
     
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite   {
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite   {
+    public void grabar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite   {
+    public void editar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite   {
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -106,7 +106,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite   {
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         InputStream path=RecursoCodefac.JASPER_INVENTARIO.JASPER_CARTERA.getResourceInputStream("cuentas_por_cobrar.jrxml");
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         
@@ -147,7 +147,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -226,7 +226,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                     mostrarDatosTabla(carteras);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(CuentasPorCobrarReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (Exception ex) {
+                } catch (RemoteException ex) {
                     Logger.getLogger(CuentasPorCobrarReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
                

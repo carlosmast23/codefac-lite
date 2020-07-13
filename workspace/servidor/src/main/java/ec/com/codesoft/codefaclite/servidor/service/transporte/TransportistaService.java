@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TransportistaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
- ;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -26,7 +26,7 @@ public class TransportistaService extends ServiceAbstract<Transportista, Transpo
 {
     private TransportistaFacade transportistaFacade;
 
-    public TransportistaService()   
+    public TransportistaService() throws RemoteException
     {
         super(TransportistaFacade.class);
         this.transportistaFacade = new TransportistaFacade();   

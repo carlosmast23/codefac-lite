@@ -114,5 +114,32 @@ public class CompraFacade extends AbstractFacade<Compra>{
             return null;
         }
     }
+     
+    public Boolean verificarCompraRepetida(Compra compra) {
+        try {
+            /*Compra compra;
+            compra.getProveedor();
+            compra.getSecuencial();
+            compra.getPuntoEmision();
+            compra.getPuntoEstablecimiento();*/
+            
+            String queryString = "SELECT count(u.id) FROM Compra u WHERE u.proveedor=?1 and u.secuencial=?2 and u.puntoEmision=?3 and u.puntoEstablecimiento=?4 and u.estado<>?5 ";
+            Query query = getEntityManager().createQuery(queryString);
+            query.setParameter(1,compra.getProveedor());
+            query.setParameter(2,compra.getSecuencial());
+            query.setParameter(3,compra.getPuntoEmision());
+            query.setParameter(4,compra.getPuntoEstablecimiento());
+            query.setParameter(5,GeneralEnumEstado.ELIMINADO.getEstado());
+            Long cantidad= (Long) query.getSingleResult();
+            if(cantidad>0)
+                return true;
+            else
+                return false;
+            
+        } catch (NoResultException e) {
+            return null;
+        }
+
+    }
     
 }

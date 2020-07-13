@@ -53,8 +53,10 @@ import ec.com.codesoft.codefaclite.servidor.service.SriRetencionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidor.service.SucursalService;
 import ec.com.codesoft.codefaclite.servidor.service.TipoDocumentoService;
+import ec.com.codesoft.codefaclite.servidor.service.TipoEstablecimientoService;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
+import ec.com.codesoft.codefaclite.servidor.service.ZonaService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraCruceService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
@@ -85,6 +87,7 @@ import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionAdici
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.TransportistaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
@@ -162,6 +165,8 @@ import javax.persistence.PersistenceException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuarioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ZonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaCargoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoServiceIf;
@@ -268,7 +273,8 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(ArqueoCajaService.class, ArqueoCajaServiceIf.class);
             mapRecursos.put(DescuentoAcademicoService.class,DescuentoAcademicoServiceIf.class);
             mapRecursos.put(AlertaService.class,AlertaServiceIf.class);
-            
+            mapRecursos.put(ZonaService.class,ZonaServiceIf.class);
+            mapRecursos.put(TipoEstablecimientoService.class,TipoEstablecimientoServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);
             LOG.log(Level.INFO,"Servidor Iniciado");

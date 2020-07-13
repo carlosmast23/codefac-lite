@@ -23,13 +23,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +80,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite("cancelado guardar");
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite("cancelado guardar");
@@ -131,7 +133,10 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             DialogoCodefac.mensaje("Correcto", "El usuario se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             
             
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -171,7 +176,9 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                         {
                             return true; //Si todos los datos son validados retorno true
                         }
-                    }catch (ServicioCodefacException ex) {
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
                         Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -191,7 +198,9 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             }
             
             ServiceFactory.getFactory().getUsuarioServicioIf().eliminar(usuario);
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);            
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite(ex.getMessage());
@@ -229,6 +238,10 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getTxtParametrosComprobantesElectronicos().setText(usuario.getParametrosComprobatesElectronicos());
         cargarListaPerfilesUsuario();
         cargarListaPuntosEmision();
+        /**
+         * Filtrar factura por usuario
+         */
+        getjComboBoxFiltrarFacturas().setSelectedItem(usuario.getFiltrarFacturaEnum());
     }
 
     @Override
@@ -422,13 +435,17 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             {
                 usuario.setClave(new String(getTxtClave().getPassword()));
             }*/
-        }        
+        }
+        EnumSiNo enumSiNo = (EnumSiNo) getjComboBoxFiltrarFacturas().getSelectedItem();
+        usuario.setFiltrarFacturaEnum(enumSiNo);
+        
     }
 
     private void valoresIniciales() {
         getCmbEstado().removeAllItems();
         getCmbEstado().addItem(GeneralEnumEstado.ACTIVO);
         getCmbEstado().addItem(GeneralEnumEstado.INACTIVO);
+        UtilidadesComboBox.llenarComboBox(getjComboBoxFiltrarFacturas(), EnumSiNo.values());
     }
 
     @Override

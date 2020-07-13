@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.contabilidad.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 

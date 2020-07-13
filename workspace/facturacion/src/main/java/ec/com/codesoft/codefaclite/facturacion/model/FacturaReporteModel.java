@@ -36,6 +36,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -53,7 +54,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.net.URL;
- ;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -108,6 +109,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
         return new ControladorReporteFactura(session.getEmpresa());
     }
     
+    public ControladorReporteFactura crearControladorPorPuntoEmision(){
+        return new ControladorReporteFactura(session.getEmpresa(), session.getUsuario());
+    }
+    
     
     private void generarReporte()
     {
@@ -135,8 +140,17 @@ public class FacturaReporteModel extends FacturaReportePanel {
             }
 
             DocumentoEnum documentoConsultaEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
+            
+            ParametroCodefac siNofiltrarFacturaPorUsuario = session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO);
+            EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((siNofiltrarFacturaPorUsuario != null ) ? siNofiltrarFacturaPorUsuario.getValor() : null);
+            //session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO).compararEnumSiNo(EnumSiNo.SI))
+            if(enumSiNo != null && enumSiNo.equals(EnumSiNo.SI)){
+                controladorReporte = crearControladorPorPuntoEmision();    
+            }else{
+                controladorReporte =crearControlador();
+            }
             //Seteando datos para el controlador         
-            controladorReporte =crearControlador();
+            //controladorReporte =crearControlador();
             controladorReporte.setPersona(persona);
             controladorReporte.setFechaInicio(fechaInicio);
             controladorReporte.setFechaFin(fechaFin);
@@ -202,6 +216,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         
                     case AGRUPADO_POR_PRODUCTO:
                         controladorReporte.obtenerReporteAgrupadoPorProducto(panelPadre);
+                        break;
+                        
+                    case AGRUPADO_POR_VENDEDOR:
+                        controladorReporte.obtenerReporteAgrupadoPorVendedor(panelPadre);
                         break;
                 }
                 
@@ -427,7 +445,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -480,7 +498,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             {
                 getCmbDocumento().setSelectedItem(documentoEnum);
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -603,7 +621,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,session.getEmpresa()); //TODO: Revisar si es correcto buscar con el nombre de la empresa
                         JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                         panelPadre.crearReportePantalla(jasperPrint,controladorReporte.getData().get(filaSeleccionada).getNumeroFactura());
-                    }catch (IOException ex) {
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
                         Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -620,6 +640,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     public enum TipoReporteEnum
     {
         NORMAL("Normal"),
+        AGRUPADO_POR_VENDEDOR("Agrupado por vendedor"),
         AGRUPADO_POR_CATEGORIA("Agrupado por punto de emisión"),
         AGRUPADO_POR_PRODUCTO("Agrupado por producto");
 

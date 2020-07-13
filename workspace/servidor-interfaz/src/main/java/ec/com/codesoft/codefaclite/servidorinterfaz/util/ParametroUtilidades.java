@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,9 +27,9 @@ public abstract class ParametroUtilidades {
      * @param nombreParametro nombre dado por la clase de ParemetroCodefac
      * @param valorComparar
      * @return
-     * @   
+     * @throws RemoteException 
      */
-    /*public static Boolean comparar(Empresa empresa,String nombreParametro,EnumSiNo valorComparar)   
+    /*public static Boolean comparar(Empresa empresa,String nombreParametro,EnumSiNo valorComparar) throws RemoteException
     {
         ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(nombreParametro,empresa);
         if (parametroCodefac != null) {
@@ -41,7 +41,7 @@ public abstract class ParametroUtilidades {
         return false;
     }*/
     
-    public static <T extends ComparadorInterface> Boolean comparar(Empresa empresa,String nombreParametro,T valorComparar)   
+    public static <T extends ComparadorInterface> Boolean comparar(Empresa empresa,String nombreParametro,T valorComparar) throws RemoteException
     {
         String valorParametro=obtenerValorParametro(empresa, nombreParametro);
         if(valorParametro!=null)
@@ -62,7 +62,7 @@ public abstract class ParametroUtilidades {
      * @param empresa
      * @param nombreParametro
      * @return Si no encuentra nada devuelve null
-     * @   
+     * @throws RemoteException 
      */
     public static String obtenerValorParametro(Empresa empresa , String nombreParametro) 
     {
@@ -77,7 +77,7 @@ public abstract class ParametroUtilidades {
                 
             }
                
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ParametroUtilidades.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -92,9 +92,9 @@ public abstract class ParametroUtilidades {
      * @param nombreParametro
      * @param interfaceConsulta
      * @return
-     * @   
+     * @throws RemoteException 
      */
-    public static <T extends Object> T obtenerValorBaseDatos(Empresa empresa , String nombreParametro,ComparadorInterface interfaceConsulta)   
+    public static <T extends Object> T obtenerValorBaseDatos(Empresa empresa , String nombreParametro,ComparadorInterface interfaceConsulta) throws RemoteException
     {
         String idParametro=obtenerValorParametro(empresa, nombreParametro);
         if(idParametro!=null && !idParametro.toString().isEmpty())

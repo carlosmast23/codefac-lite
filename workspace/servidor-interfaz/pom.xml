@@ -26,12 +26,6 @@
         </dependency>
         
         <dependency>
-            <groupId>com.tascape.qa</groupId>
-            <artifactId>lipermi</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        
-        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>utilidades</artifactId>
             <version>${project.version}</version>

@@ -19,7 +19,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -99,7 +99,7 @@ public class DialogoBuscarMb implements Serializable {
             }
             System.out.println("La busqueda genero " + datosConsulta.size() + " registros");
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
         }
 

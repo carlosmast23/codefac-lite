@@ -1,0 +1,1 @@
+hacer que cuando se use un controlador se pueda ingresar el metodo de permisosFormulario tambien desde el controlador , actualmente solo funciona desde la vista

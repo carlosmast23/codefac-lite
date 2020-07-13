@@ -7,8 +7,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.AccesoDirecto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
- 
- ;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -16,5 +16,5 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
  */
 public interface AccesoDirectoServiceIf extends ServiceAbstractIf<AccesoDirecto>
 {
-    public AccesoDirecto buscarPorNombre(String nombre) throws ServicioCodefacException;
+    public AccesoDirecto buscarPorNombre(String nombre)  throws RemoteException ,ServicioCodefacException;
 }

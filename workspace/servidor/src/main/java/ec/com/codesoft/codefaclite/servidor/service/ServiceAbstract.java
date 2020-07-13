@@ -12,6 +12,9 @@ import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -25,7 +28,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author Carlos
  */
-public abstract class ServiceAbstract<Entity,Facade> implements Serializable
+public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject implements Serializable
 {
 
     //private static final Logger LOG = Logger.getLogger(ServiceAbstract.class.getName());
@@ -39,8 +42,8 @@ public abstract class ServiceAbstract<Entity,Facade> implements Serializable
      */
     public Object tmp;
 
-    public ServiceAbstract() {
-        // 
+    public ServiceAbstract() throws RemoteException {
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         this.entityManager=AbstractFacade.entityManager;
     }
     
@@ -52,9 +55,9 @@ public abstract class ServiceAbstract<Entity,Facade> implements Serializable
         return entityManager.getTransaction();
     }
  
-    public ServiceAbstract(Class<Facade> clase) 
+    public ServiceAbstract(Class<Facade> clase) throws java.rmi.RemoteException
     {
-        // 
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         try {
             this.facade =(AbstractFacade<Entity>) clase.newInstance();
             this.entityManager=AbstractFacade.entityManager;
@@ -71,7 +74,7 @@ public abstract class ServiceAbstract<Entity,Facade> implements Serializable
         try {
             return (List<Entity>) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
-                public Object consulta() throws ServicioCodefacException {
+                public Object consulta() throws ServicioCodefacException, RemoteException {
                     return facade.findAll();
                 }
             });
@@ -81,23 +84,23 @@ public abstract class ServiceAbstract<Entity,Facade> implements Serializable
         return null;
     }
     
-    public Entity grabar(Entity entity) throws ServicioCodefacException
+    public Entity grabar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 entityManager.persist(entity);
             }
         });
         return entity;
     }
    
-    public Entity buscarPorId(Object primaryKey) 
+    public Entity buscarPorId(Object primaryKey) throws java.rmi.RemoteException
     {
         try {
             return (Entity) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
-                public Object consulta() throws ServicioCodefacException {
+                public Object consulta() throws ServicioCodefacException, RemoteException {
                     return facade.find(primaryKey);
                 }
             });
@@ -108,22 +111,22 @@ public abstract class ServiceAbstract<Entity,Facade> implements Serializable
         
     }
     
-    public void editar(Entity entity) throws ServicioCodefacException
+    public void editar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException {
+            public void transaccion() throws ServicioCodefacException, RemoteException {
                 entityManager.merge(entity);
             }
         });
     }
     
-    public void eliminar(Entity entity) throws ServicioCodefacException
+    public void eliminar(Entity entity) throws ServicioCodefacException, java.rmi.RemoteException 
     {
         this.facade.remove(entity);
     }
     
-    public List<Entity> obtenerPorMap(Map<String,Object> parametros) throws ServicioCodefacException
+    public List<Entity> obtenerPorMap(Map<String,Object> parametros) throws ServicioCodefacException, java.rmi.RemoteException 
     {
         return this.facade.findByMap(parametros);
     }
@@ -132,7 +135,11 @@ public abstract class ServiceAbstract<Entity,Facade> implements Serializable
     {
         try {
             return interfaz.consulta();
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            throw new ServicioCodefacException("Error de conexión con el servidor");
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
             //ex.printStackTrace();
             throw ex;
@@ -179,6 +186,13 @@ public abstract class ServiceAbstract<Entity,Facade> implements Serializable
             interfaz.transaccion();
             transaccion.commit();
             entityManager.clear();
+        }catch (RemoteException ex) { //Hacer un RoolBack cuando no exista comunicacion con el servidor
+            if (transaccion.isActive()) {
+                transaccion.rollback();
+            }
+            //ex.printStackTrace();
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServicioCodefacException("Error de conexión con el servidor");
         }catch (ServicioCodefacException ex) { //Hacer un RoolBack cuando sea un error personalizado
             if (transaccion.isActive()) {
                 transaccion.rollback();

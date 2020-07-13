@@ -55,7 +55,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
- ;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -114,8 +114,6 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             }
             
             this.parametroCodefacService.editarParametros(parametrosEditar);
-            //Seteo en nulo para que vuelvan a cargar todos los parametros en la session
-            this.session.setParametrosCodefac(null);
             /**
              * Establesco el ciclo de vida en el cual me encuentro
              */
@@ -123,7 +121,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             DialogoCodefac.mensaje("Actualizado datos", "Los datos de los parametros fueron actualizados", DialogoCodefac.MENSAJE_CORRECTO);            
             //DialogoCodefac.mensaje("Firma", "Datos actualizados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             dispose(); //TODO: En esta parte analizar porque cuando se sale del formulario no se borra de la lita de ventas abiertas del menu
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -322,7 +320,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             }
             
             
-        }catch (Exception ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -335,7 +335,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
                 getCmbIvaDefault().addItem(impuesto);
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -404,7 +404,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -601,7 +601,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                 }
 
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -653,7 +653,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             }
             cliente.setCorreoElectronico(getTxtCorreoElectronico().getText());
             clienteService.editar(cliente);
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

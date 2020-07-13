@@ -17,7 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
- ;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -44,7 +44,7 @@ public class CajaMb
         this.controlador = new CajaModelControlador(MensajeMb.intefaceMensaje, sessionMb.getSession(), this, ModelControladorAbstract.TipoVista.WEB);
         try {
             this.controlador.iniciar();
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(CajaMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(CajaMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -168,11 +168,11 @@ public class CajaMb
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

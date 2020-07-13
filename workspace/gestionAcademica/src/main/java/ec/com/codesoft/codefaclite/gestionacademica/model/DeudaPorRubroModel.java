@@ -26,7 +26,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +60,7 @@ public class DeudaPorRubroModel extends DeudaPorRubroPanel{
     private RubrosNivel rubroNivelSeleccionado;
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite   {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         valoresInicialesPantalla();
         listenerTabla();
         listenerBotones();
@@ -68,12 +68,12 @@ public class DeudaPorRubroModel extends DeudaPorRubroPanel{
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite   {
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite   {
+    public void grabar() throws ExcepcionCodefacLite, RemoteException {
         ServiceFactory.getFactory().getRubroEstudianteServiceIf().crearRubrosEstudiantes(obtenerRubrosCrear());
         ServiceFactory.getFactory().getRubroEstudianteServiceIf().eliminarRubrosEstudiantes(rubrosEstudianteEliminar);
         DialogoCodefac.mensaje("Correcto","Los datos fueron actualizados correctamente",DialogoCodefac.MENSAJE_CORRECTO);
@@ -92,22 +92,22 @@ public class DeudaPorRubroModel extends DeudaPorRubroPanel{
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite   {
+    public void editar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite   {
+    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite   {
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite   {
+    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -159,7 +159,7 @@ public class DeudaPorRubroModel extends DeudaPorRubroPanel{
             for (Periodo periodo : periodos) {
                 getCmbPeriodo().addItem(periodo);
             }
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -271,7 +271,7 @@ public class DeudaPorRubroModel extends DeudaPorRubroPanel{
                         rubrosEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosEstudiantesPorRubros(rubrosNivel);
                         construirTabla();
                         
-                    } catch (Exception ex) {
+                    } catch (RemoteException ex) {
                         Logger.getLogger(DeudaPorRubroModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }

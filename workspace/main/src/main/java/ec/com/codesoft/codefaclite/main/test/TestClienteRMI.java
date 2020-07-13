@@ -10,11 +10,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
- ;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
@@ -29,14 +27,12 @@ import java.util.logging.Logger;
 public class TestClienteRMI {
     public static void main(String[] args) {
         try {
-            ServiceFactory.newController("192.168.1.5");
+            ServiceFactory.newController("192.168.1.7");
             //ServiceFactory.newController("186.4.212.15");
             //ServiceFactory.newController("192.168.100.13");
             
             PersonaServiceIf personaServiceIf= ServiceFactory.getFactory().getPersonaServiceIf();
-            List<Persona> buscarList= personaServiceIf.obtenerTodos();
-            //Persona persona=personaServiceIf.getEjemplo();
-            //System.out.println(persona);
+            List<Persona> buscarList= personaServiceIf.buscar();
             
             for (Persona persona : buscarList) {
                System.out.println(persona.getNombres()); 
@@ -59,7 +55,7 @@ public class TestClienteRMI {
             System.out.println(persona.getIdentificacion());
             }
             
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
             Logger.getLogger(TestClienteRMI.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NotBoundException ex) {
             Logger.getLogger(TestClienteRMI.class.getName()).log(Level.SEVERE, null, ex);
@@ -67,7 +63,7 @@ public class TestClienteRMI {
             Logger.getLogger(TestClienteRMI.class.getName()).log(Level.SEVERE, null, ex);
             }*/
         
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(TestClienteRMI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

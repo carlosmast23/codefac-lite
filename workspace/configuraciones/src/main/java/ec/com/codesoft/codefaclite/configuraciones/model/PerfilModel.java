@@ -23,7 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +97,7 @@ public class PerfilModel extends PerfilPanel{
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error","No se pueden grabar los datos", DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -110,7 +110,10 @@ public class PerfilModel extends PerfilPanel{
             PerfilServiceIf perfilServiceIf=ServiceFactory.getFactory().getPerfilServicioIf();
             perfilServiceIf.editar(perfil);
             DialogoCodefac.mensaje("Correcto","El perfil se edito correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -141,7 +144,9 @@ public class PerfilModel extends PerfilPanel{
                 throw new ExcepcionCodefacLite("Cancelado eliminar");
             }
             
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

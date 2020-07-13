@@ -37,7 +37,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +142,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
             }
             getTblComprasPendientes().setModel(datos);
             UtilidadesTablas.ocultarColumna(getTblComprasPendientes(), 0);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(RetencionesPendienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -244,7 +244,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(RetencionesPendienteModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(RetencionesPendienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

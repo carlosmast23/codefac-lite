@@ -8,10 +8,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.MenuCodefacRespuesta;
 import java.io.Serializable;
- ;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -52,7 +53,7 @@ public class EjemploMenu implements Serializable {
             session.setMatriz(sucursal);//TODO: Falta buscar la matriz de esa sucursal
             return session;
 
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(LoginMb.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -64,7 +65,7 @@ public class EjemploMenu implements Serializable {
         try {
             ServiceFactory.newController("192.168.100.7"); 
             System.out.println("Conexion iniciada");
-            Empresa empresa=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodosActivos().get(0);
+            Empresa empresa=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodosActivos(OrdenarEnum.ASCEDENTE).get(0);
             Usuario usuario=ServiceFactory.getFactory().getUsuarioServicioIf().consultarUsuarioActivoPorEmpresa("soporte", empresa);
             Sucursal sucursal=ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(empresa).get(0);
             
@@ -115,7 +116,9 @@ public class EjemploMenu implements Serializable {
             
             
             model.getElements().add(secondSubmenu);
-        }catch (ServicioCodefacException ex) {
+        } catch (RemoteException ex) {
+            Logger.getLogger(EjemploMenu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(EjemploMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

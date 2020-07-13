@@ -7,7 +7,6 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.info;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -21,7 +20,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.2.8.3.5";
+    public static final String VERSION="1.2.8.3.7";
     /**
      * El modo de configuracion del sistema
      */
@@ -31,7 +30,6 @@ public abstract class ParametrosSistemaCodefac {
      * Puerto por defecto para configurar las conexiones en red no es final porque puedo modificar al momento de leer el archivo de configuraciones
      */
     public static  int PUERTO_COMUNICACION_RED=1099;
-    //public static  int PUERTO_COMUNICACION_RED=10540;
     /**2.8.
      * Nombre de la base de datosv1
      */
@@ -40,8 +38,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Icono por defecto para usar en todo el sistema
      */
-    //public static final Image iconoSistema=new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage();
-    //public static final Image iconoSistema=Toolkit.getDefaultToolkit().createImage(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png"));
+    public static final Image iconoSistema=new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage();
 
     /**
      * Cadena que contiene la clave para encriptar o desencriptar los datos en codefac

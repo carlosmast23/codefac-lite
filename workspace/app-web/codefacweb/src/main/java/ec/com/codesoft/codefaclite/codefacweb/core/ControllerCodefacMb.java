@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesCoreCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstadoFormEnum;
 import java.io.Serializable;
- ;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -115,7 +115,7 @@ public class ControllerCodefacMb implements Serializable {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedOperationException ex) {
             MensajeMb.mensaje(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
-        } catch (Exception ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -164,7 +164,7 @@ public class ControllerCodefacMb implements Serializable {
                 Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
             } catch (UnsupportedOperationException ex) {
                 MensajeMb.mensaje(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (estadoEnum.equals(EstadoFormEnum.EDITAR)) {
@@ -184,7 +184,7 @@ public class ControllerCodefacMb implements Serializable {
                 Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
             } catch (UnsupportedOperationException ex) {
                 MensajeMb.mensaje(MensajeCodefacSistema.ErroresComunes.METODO_SIN_IMPLEMENTAR);
-            } catch (Exception ex) {
+            } catch (RemoteException ex) {
                 Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

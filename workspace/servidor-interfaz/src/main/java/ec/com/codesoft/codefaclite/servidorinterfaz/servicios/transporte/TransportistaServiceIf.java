@@ -15,7 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
  */
 public interface TransportistaServiceIf extends ServiceAbstractIf<Transportista>
 {
-    public Transportista grabar(Transportista t) throws ServicioCodefacException;
-    public void editar(Transportista t) ;
-    public void eliminar(Transportista t) ;
+    public Transportista grabar(Transportista t) throws ServicioCodefacException,java.rmi.RemoteException;
+    public void editar(Transportista t) throws java.rmi.RemoteException;
+    public void eliminar(Transportista t) throws java.rmi.RemoteException;
 }

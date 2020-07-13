@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PermisoVentanaServiceIf;
- ;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class PermisoVentanaService extends ServiceAbstract<PermisoVentana,PermisoVentanaFacade> implements PermisoVentanaServiceIf{
 
-    public PermisoVentanaService()    {
+    public PermisoVentanaService() throws RemoteException {
         super(PermisoVentanaFacade.class);
     }
     
