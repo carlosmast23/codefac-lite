@@ -214,6 +214,32 @@ public class Ruta implements Serializable {
         return false;
     }
     
+    /**
+     * Metodo de verificacion cuando voy a editar por que no tiene que tener en cuento el objeto original
+     * @param rutaDetalle
+     * @param RutaDetalleExcepcion
+     * @return 
+     */
+    public Boolean verificarDatoDuplicado(RutaDetalle rutaDetalle,RutaDetalle RutaDetalleExcepcion)
+    {
+        if(this.detalles!=null)
+        {
+            for (RutaDetalle rutaDetalleTmp : this.detalles) 
+            {
+                if(RutaDetalleExcepcion!=rutaDetalleTmp)
+                {
+                    GeneralEnumEstado estadoEnum=rutaDetalleTmp.getEstadoEnum();
+                    if(rutaDetalleTmp.getEstablecimiento().equals(rutaDetalle.getEstablecimiento()) 
+                            && estadoEnum.equals(GeneralEnumEstado.ACTIVO))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
     public static RutaDetalle getInstanceActivo()
     {
         RutaDetalle rutaDetalle=new RutaDetalle();

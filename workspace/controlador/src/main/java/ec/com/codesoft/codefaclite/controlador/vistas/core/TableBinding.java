@@ -28,4 +28,9 @@ public @interface TableBinding {
      * @return 
      */
     public String tableAddDataInterface();
+    /**
+     * Campo donde se va a grabar el valor seleccionado por la fila
+     * @return 
+     */
+    public String selectValue();
 }

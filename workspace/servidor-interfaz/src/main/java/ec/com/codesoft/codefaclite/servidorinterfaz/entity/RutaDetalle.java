@@ -21,7 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "RUTA_DETALLE")
-public class RutaDetalle implements Serializable  {
+public class RutaDetalle implements Serializable,Cloneable  {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -90,6 +90,24 @@ public class RutaDetalle implements Serializable  {
     public void setEstablecimiento(PersonaEstablecimiento establecimiento) {
         this.establecimiento = establecimiento;
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
     
+    ///////////////////////////////////////////////////////////////////////////
+    ///                     METODOS GET AND SET
+    ///////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Metodo util en especial para editar en la vista
+     * @param rutaDetalle 
+     */
+    public void setObject(RutaDetalle rutaDetalle)
+    {
+        this.establecimiento=rutaDetalle.getEstablecimiento();
+        this.orden=rutaDetalle.getOrden();
+    }
     
 }
