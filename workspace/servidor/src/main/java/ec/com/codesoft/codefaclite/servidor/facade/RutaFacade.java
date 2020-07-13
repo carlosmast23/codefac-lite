@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta;
  */
 public class RutaFacade extends AbstractFacade<Ruta> {
 
-    public RutaFacade(Class<Ruta> entityClass) {
+    public RutaFacade() {
         super(Ruta.class);
     }
     

@@ -170,6 +170,9 @@ public abstract class ComponentBindingAbstract<T,A> {
             //return UtilidadesReflexion.buscarComponentePorNombrePropiedad(controlador,nombrePropiedad,Object.class);
             contexto=UtilidadesReflexion.obtenerValorDelMetodo(getMetodoPropiedad,contexto,Object.class);
             
+            //Si el contexto es null no continuo
+            if(contexto==null)
+                break;
             
         }
         return contexto;
@@ -193,10 +196,17 @@ public abstract class ComponentBindingAbstract<T,A> {
                 break;            
             //return UtilidadesReflexion.buscarComponentePorNombrePropiedad(controlador,nombrePropiedad,Object.class);
             contexto=UtilidadesReflexion.obtenerValorDelMetodo(getMetodoPropiedad,contexto,Object.class);
+            if(contexto==null)
+            {
+                return;
+            }
         }
         
         String nombreMetodoSet=UtilidadesReflexion.castNameMethodGetOrSet(propiedadesRecursivas[propiedadesRecursivas.length-1],UtilidadesReflexion.GetSetEnum.SET);
         Method metodoSetPropiedad=UtilidadesReflexion.buscarMetodoPorNombre(contexto.getClass(),nombreMetodoSet);
+        
+        if(metodoSetPropiedad==null)
+            return ;
         
         //Si existe un converter utilizar para transformar los valores
         if(converter!=null)
@@ -206,6 +216,11 @@ public abstract class ComponentBindingAbstract<T,A> {
         
     }
     
+    public void actualizarBindingVista()
+    {
+        ejecutarMetodoControlador("actualizarBindingCompontValues");
+    }
+    
     /**
      * TODO: Este metodo va ser usado directamente solo los listener para corregir un problema que se
      * activan al inicio del aplicativo sin querer
@@ -213,15 +228,29 @@ public abstract class ComponentBindingAbstract<T,A> {
      */
     public void ejecutarMetodoControlador(String nombreMetodo)
     {
-        //if(listaListenersCache.contains(nombreMetodo))
-        //{
-            Method metodoEjecutar=UtilidadesReflexion.buscarMetodoPorNombre(controlador.getClass(), nombreMetodo);
-            UtilidadesReflexion.ejcutarMetodo(metodoEjecutar,controlador);
-        //}
-        //else
-        //{
-        //    listaListenersCache.add(nombreMetodo);
-        //}
+        String[] metodosRecursivos=nombreMetodo.split("\\.");
+        if(metodosRecursivos.length==0)
+        {
+            metodosRecursivos=new String[]{nombreMetodo};
+        }
+        
+        Object contexto=controlador;    
+        for (int i = 0; i < metodosRecursivos.length-1; i++) {
+            String getMetodoPropiedadStr=UtilidadesReflexion.castNameMethodGetOrSet(metodosRecursivos[i], UtilidadesReflexion.GetSetEnum.GET);
+            Method getMetodoPropiedad=UtilidadesReflexion.buscarMetodoPorNombre(contexto.getClass(), getMetodoPropiedadStr);            
+            if(getMetodoPropiedad==null)
+                break;            
+            //return UtilidadesReflexion.buscarComponentePorNombrePropiedad(controlador,nombrePropiedad,Object.class);
+            contexto=UtilidadesReflexion.obtenerValorDelMetodo(getMetodoPropiedad,contexto,Object.class);
+        }
+        
+        if(contexto==null)
+            return;
+        
+        String nombreMetodoFinal=metodosRecursivos[metodosRecursivos.length-1];
+        Method metodoEjecutar=UtilidadesReflexion.buscarMetodoPorNombre(contexto.getClass(),nombreMetodoFinal);
+        UtilidadesReflexion.ejcutarMetodo(metodoEjecutar,contexto);
+       
     }
 
     public T getComponente() {

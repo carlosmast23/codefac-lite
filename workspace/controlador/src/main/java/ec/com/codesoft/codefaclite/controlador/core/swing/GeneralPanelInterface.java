@@ -410,6 +410,14 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
         this.bindingComponentList.add(bindingAbstract);
     }
     
+    /**
+     * Actualizar solo valores de los componentes vinculados
+     */
+    public void actualizarBindingCompontValues()
+    {
+        actualizarBindingComponent(false,true);
+    }
+    
     public void actualizarBindingComponent(Boolean get,Boolean set)
     {
         for (ComponentBindingAbstract componentBindingAbstract : this.bindingComponentList) {

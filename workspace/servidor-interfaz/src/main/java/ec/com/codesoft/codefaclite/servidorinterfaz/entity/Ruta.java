@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -134,8 +136,90 @@ public class Ruta implements Serializable {
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 29 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Ruta other = (Ruta) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
     
     
+    
+    ///////////////////////////////////////////////////////////////////////////
+    ///                   METODOS PERSONALIZADOS
+    //////////////////////////////////////////////////////////////////////////
+    
+    public List<RutaDetalle> getDetallesActivos()
+    {
+        List<RutaDetalle> resultado=new ArrayList<RutaDetalle>();
         
+        if(detalles!=null)
+        {
+            for (RutaDetalle detalle : detalles) 
+            {
+                if(detalle.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                {
+                    resultado.add(detalle);
+                }
+            }
+        }
+        return resultado;
+    }
+    
+    public void addDetalle(RutaDetalle rutaDetalle)
+    {
+        if(this.detalles==null)
+        {
+            this.detalles=new ArrayList<RutaDetalle>();
+        }
+        
+        rutaDetalle.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        rutaDetalle.setRuta(this);
+        this.detalles.add(rutaDetalle);
+    }
+    
+    public Boolean verificarDatoDuplicado(RutaDetalle rutaDetalle)
+    {
+        if(this.detalles!=null)
+        {
+            for (RutaDetalle rutaDetalleTmp : this.detalles) 
+            {
+                GeneralEnumEstado estadoEnum=rutaDetalleTmp.getEstadoEnum();
+                if(rutaDetalleTmp.getEstablecimiento().equals(rutaDetalle.getEstablecimiento()) 
+                        && estadoEnum.equals(GeneralEnumEstado.ACTIVO))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public static RutaDetalle getInstanceActivo()
+    {
+        RutaDetalle rutaDetalle=new RutaDetalle();
+        rutaDetalle.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        rutaDetalle.setOrden(0);
+        return rutaDetalle;
+    }
     
 }

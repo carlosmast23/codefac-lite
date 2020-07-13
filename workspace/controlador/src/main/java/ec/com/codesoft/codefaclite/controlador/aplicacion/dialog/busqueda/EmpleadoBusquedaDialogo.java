@@ -29,6 +29,10 @@ public class EmpleadoBusquedaDialogo implements InterfaceModelFind<Empleado>,Int
         this.tipoEnum=null;
     }
     
+    public EmpleadoBusquedaDialogo(Departamento.TipoEnum tipoEnum) {
+        this.tipoEnum=tipoEnum;
+    }
+    
     
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
@@ -43,8 +47,8 @@ public class EmpleadoBusquedaDialogo implements InterfaceModelFind<Empleado>,Int
     public QueryDialog getConsulta(String filter) {
         //Empleado empleado;
         //empleado.getDepartamento().getTipo();
-        String queryString = "SELECT e FROM Empleado e WHERE (LOWER(e.nombres) like ?1) or ";
-        queryString+="(LOWER(e.apellidos) like ?2) or e.identificacion like ?3  and e.estado=?4";
+        String queryString = "SELECT e FROM Empleado e WHERE ((LOWER(e.nombres) like ?1) or ";
+        queryString+="(LOWER(e.apellidos) like ?2) or e.identificacion like ?3 )  and e.estado=?4";
         
         if(tipoEnum!=null)
         {

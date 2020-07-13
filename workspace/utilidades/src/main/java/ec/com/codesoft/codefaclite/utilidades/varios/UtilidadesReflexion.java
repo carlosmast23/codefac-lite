@@ -132,7 +132,7 @@ public class UtilidadesReflexion {
     public static void ejcutarMetodo(Method metodo, Object context) {
                 
         try {
-            metodo.setAccessible(true);
+            //metodo.setAccessible(true);
             metodo.invoke(context);
             //
         } catch (IllegalArgumentException ex) {
@@ -157,7 +157,7 @@ public class UtilidadesReflexion {
     
     public static void setearValorDelMetodo(Method metodo, Object context,Object value) {
         try {
-            metodo.setAccessible(true);
+            //metodo.setAccessible(true);
             metodo.invoke(context, value);
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE, null, ex);

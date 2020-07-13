@@ -6,6 +6,14 @@
 package ec.com.codesoft.codefaclite.crm.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TableBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
+import javax.swing.JButton;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
 /**
  *
@@ -33,27 +41,27 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtCodigo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        txtDiaVisita = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        txtEmpleado = new javax.swing.JTextField();
+        btnBuscarEmpleado = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblDatos = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        jTextField4 = new javax.swing.JTextField();
+        txtClienteDetalle = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         lblEspacio123 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnBuscarClienteDetalle = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnAgregarDetalle = new javax.swing.JButton();
+        btnEditarDetalle = new javax.swing.JButton();
+        btnEliminarDetalle = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jSpinner2 = new javax.swing.JSpinner();
+        txtOrdenDetalle = new javax.swing.JSpinner();
 
         setClosable(true);
         setIconifiable(true);
@@ -70,7 +78,7 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         jPanel1.add(jLabel1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Empleado:");
+        jLabel2.setText("Vendedor:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -81,7 +89,7 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         gridBagConstraints.ipadx = 150;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jTextField1, gridBagConstraints);
+        jPanel1.add(txtCodigo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
@@ -93,7 +101,7 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jTextField2, gridBagConstraints);
+        jPanel1.add(txtNombre, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Nombre:");
@@ -109,7 +117,7 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         gridBagConstraints.ipadx = 25;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jSpinner1, gridBagConstraints);
+        jPanel1.add(txtDiaVisita, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Día Visita:");
@@ -119,6 +127,8 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel5, gridBagConstraints);
+
+        txtEmpleado.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -126,15 +136,15 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jTextField3, gridBagConstraints);
+        jPanel1.add(txtEmpleado, gridBagConstraints);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscarEmpleado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
-        jPanel1.add(jButton1, gridBagConstraints);
+        jPanel1.add(btnBuscarEmpleado, gridBagConstraints);
 
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblDatos);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -149,7 +159,7 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detalle", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 2, 11))); // NOI18N
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jTextField4.setEnabled(false);
+        txtClienteDetalle.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -158,7 +168,7 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jTextField4, gridBagConstraints);
+        jPanel2.add(txtClienteDetalle, gridBagConstraints);
 
         jLabel6.setText("Orden:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -172,31 +182,31 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.2;
         jPanel2.add(lblEspacio123, gridBagConstraints);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscarClienteDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        jPanel2.add(jButton2, gridBagConstraints);
+        jPanel2.add(btnBuscarClienteDetalle, gridBagConstraints);
 
         jToolBar1.setFloatable(false);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton3);
+        btnAgregarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
+        btnAgregarDetalle.setFocusable(false);
+        btnAgregarDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarDetalle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnAgregarDetalle);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
-        jButton4.setFocusable(false);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton4);
+        btnEditarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
+        btnEditarDetalle.setFocusable(false);
+        btnEditarDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEditarDetalle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnEditarDetalle);
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
-        jButton5.setFocusable(false);
-        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton5);
+        btnEliminarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
+        btnEliminarDetalle.setFocusable(false);
+        btnEliminarDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEliminarDetalle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnEliminarDetalle);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -212,7 +222,7 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 20;
-        jPanel2.add(jSpinner2, gridBagConstraints);
+        jPanel2.add(txtOrdenDetalle, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -229,11 +239,11 @@ public abstract class RutaForm extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton btnAgregarDetalle;
+    private javax.swing.JButton btnBuscarClienteDetalle;
+    private javax.swing.JButton btnBuscarEmpleado;
+    private javax.swing.JButton btnEditarDetalle;
+    private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -244,14 +254,124 @@ public abstract class RutaForm extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblEspacio123;
+    private javax.swing.JTable tblDatos;
+    private javax.swing.JTextField txtClienteDetalle;
+    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JSpinner txtDiaVisita;
+    private javax.swing.JTextField txtEmpleado;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JSpinner txtOrdenDetalle;
     // End of variables declaration//GEN-END:variables
+
+    @ButtonBinding(actionListener ="controlador.listenerAddDetalle" )
+    public JButton getBtnAgregarDetalle() {
+        return btnAgregarDetalle;
+    }
+
+    public void setBtnAgregarDetalle(JButton btnAgregarDetalle) {
+        this.btnAgregarDetalle = btnAgregarDetalle;
+    }
+
+    @ButtonBinding(actionListener ="controlador.listenerBotonBuscarCliente" )
+    public JButton getBtnBuscarClienteDetalle() {
+        return btnBuscarClienteDetalle;
+    }
+
+    public void setBtnBuscarClienteDetalle(JButton btnBuscarClienteDetalle) {
+        this.btnBuscarClienteDetalle = btnBuscarClienteDetalle;
+    }
+
+    @ButtonBinding(actionListener ="controlador.listenerBotonBuscarVendedor" )
+    public JButton getBtnBuscarEmpleado() {
+        return btnBuscarEmpleado;
+    }
+
+    public void setBtnBuscarEmpleado(JButton btnBuscarEmpleado) {
+        this.btnBuscarEmpleado = btnBuscarEmpleado;
+    }
+
+    public JButton getBtnEditarDetalle() {
+        return btnEditarDetalle;
+    }
+
+    public void setBtnEditarDetalle(JButton btnEditarDetalle) {
+        this.btnEditarDetalle = btnEditarDetalle;
+    }
+
+    public JButton getBtnEliminarDetalle() {
+        return btnEliminarDetalle;
+    }
+
+    public void setBtnEliminarDetalle(JButton btnEliminarDetalle) {
+        this.btnEliminarDetalle = btnEliminarDetalle;
+    }
+
+    @TextFieldBinding(value = "controlador.rutaDetalle.establecimiento.persona.nombresCompletos")
+    public JTextField getTxtClienteDetalle() {
+        return txtClienteDetalle;
+    }
+
+    public void setTxtClienteDetalle(JTextField txtClienteDetalle) {
+        this.txtClienteDetalle = txtClienteDetalle;
+    }
+
+    @TextFieldBinding(value = "controlador.ruta.codigo")
+    public JTextField getTxtCodigo() {
+        return txtCodigo;
+    }
+    
+    public void setTxtCodigo(JTextField txtCodigo) {
+        this.txtCodigo = txtCodigo;
+    }
+
+
+    @SpinnerBinding(value = "controlador.ruta.diaVisita")    
+    public JSpinner getTxtDiaVisita() {
+        return txtDiaVisita;
+    }
+
+    public void setTxtDiaVisita(JSpinner txtDiaVisita) {
+        this.txtDiaVisita = txtDiaVisita;
+    }
+
+    @TextFieldBinding(value = "controlador.ruta.vendedor.nombresCompletos")
+    public JTextField getTxtEmpleado() {
+        return txtEmpleado;
+    }
+
+    public void setTxtEmpleado(JTextField txtEmpleado) {
+        this.txtEmpleado = txtEmpleado;
+    }
+
+    @TextFieldBinding(value = "controlador.ruta.nombre")
+    public JTextField getTxtNombre() {
+        return txtNombre;
+    }
+
+    public void setTxtNombre(JTextField txtNombre) {
+        this.txtNombre = txtNombre;
+    }
+
+    @SpinnerBinding(value = "controlador.rutaDetalle.orden")
+    public JSpinner getTxtOrdenDetalle() {
+        return txtOrdenDetalle;
+    }
+
+    public void setTxtOrdenDetalle(JSpinner txtOrdenDetalle) {
+        this.txtOrdenDetalle = txtOrdenDetalle;
+    }
+
+    @TableBinding(source = "controlador.ruta.detalles",tableAddDataInterface = "tableBindingAddData")
+    public JTable getTblDatos() {
+        return tblDatos;
+    }
+
+    public void setTblDatos(JTable tblDatos) {
+        this.tblDatos = tblDatos;
+    }
+
+    
+    
 }
