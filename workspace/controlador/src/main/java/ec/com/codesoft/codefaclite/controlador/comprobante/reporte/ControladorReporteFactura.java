@@ -21,8 +21,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -81,6 +83,8 @@ public class ControladorReporteFactura {
     private PuntoEmision puntoEmision; //en este campo me permite filtrar por el punto de emision
     private Sucursal sucursal;
     protected Empresa empresa;
+    private Usuario usuario;
+    
 
     public ControladorReporteFactura(Empresa empresa) {
         this.empresa=empresa;
@@ -88,6 +92,12 @@ public class ControladorReporteFactura {
         this.reporteConDetallesFactura=false;
     }
     
+    public ControladorReporteFactura(Empresa empresa, Usuario usuario){
+        this.empresa = empresa;
+        this.usuario = usuario;
+        this.data = new ArrayList<ReporteFacturaData>();
+        this.reporteConDetallesFactura=false;
+    }
     
     
     public ControladorReporteFactura(PersonaEstablecimiento persona, Date fechaInicio, Date fechaFin, ComprobanteEntity.ComprobanteEnumEstado estadoFactura, Boolean filtrarReferidos, Persona referido, Boolean reporteAgrupado, Boolean afectarNotaCredito, DocumentoEnum documentoConsultaEnum,Empresa empresa,Sucursal sucursal) {
@@ -128,7 +138,14 @@ public class ControladorReporteFactura {
              *              OBTENER TODAS LAS FACTURAS POR FILTROS
              * ===============================================================
              */
-            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,sucursal);
+            List<Factura> datafact;
+            if(usuario != null)
+            {
+                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,sucursal, usuario);
+            }
+            else{
+                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,sucursal);
+            }   
             /**
              * ===============================================================
              *           AGREGAR EL COSTO DE LA VENTA DISPONIBLE EN EL EXCEL

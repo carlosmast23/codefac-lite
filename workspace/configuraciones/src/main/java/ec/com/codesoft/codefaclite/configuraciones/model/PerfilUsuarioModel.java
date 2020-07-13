@@ -23,10 +23,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -236,6 +238,10 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getTxtParametrosComprobantesElectronicos().setText(usuario.getParametrosComprobatesElectronicos());
         cargarListaPerfilesUsuario();
         cargarListaPuntosEmision();
+        /**
+         * Filtrar factura por usuario
+         */
+        getjComboBoxFiltrarFacturas().setSelectedItem(usuario.getFiltrarFacturaEnum());
     }
 
     @Override
@@ -429,13 +435,17 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             {
                 usuario.setClave(new String(getTxtClave().getPassword()));
             }*/
-        }        
+        }
+        EnumSiNo enumSiNo = (EnumSiNo) getjComboBoxFiltrarFacturas().getSelectedItem();
+        usuario.setFiltrarFacturaEnum(enumSiNo);
+        
     }
 
     private void valoresIniciales() {
         getCmbEstado().removeAllItems();
         getCmbEstado().addItem(GeneralEnumEstado.ACTIVO);
         getCmbEstado().addItem(GeneralEnumEstado.INACTIVO);
+        UtilidadesComboBox.llenarComboBox(getjComboBoxFiltrarFacturas(), EnumSiNo.values());
     }
 
     @Override

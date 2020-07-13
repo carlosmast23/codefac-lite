@@ -86,6 +86,10 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.PrestamoCuotaCargo</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoAcademico</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Venta</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Zona</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoEstablecimiento</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta</class>

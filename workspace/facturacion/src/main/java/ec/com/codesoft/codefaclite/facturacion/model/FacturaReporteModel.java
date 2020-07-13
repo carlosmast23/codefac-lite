@@ -36,6 +36,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -108,6 +109,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
         return new ControladorReporteFactura(session.getEmpresa());
     }
     
+    public ControladorReporteFactura crearControladorPorPuntoEmision(){
+        return new ControladorReporteFactura(session.getEmpresa(), session.getUsuario());
+    }
+    
     
     private void generarReporte()
     {
@@ -135,8 +140,17 @@ public class FacturaReporteModel extends FacturaReportePanel {
             }
 
             DocumentoEnum documentoConsultaEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
+            
+            ParametroCodefac siNofiltrarFacturaPorUsuario = session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO);
+            EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((siNofiltrarFacturaPorUsuario != null ) ? siNofiltrarFacturaPorUsuario.getValor() : null);
+            //session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO).compararEnumSiNo(EnumSiNo.SI))
+            if(enumSiNo != null && enumSiNo.equals(EnumSiNo.SI)){
+                controladorReporte = crearControladorPorPuntoEmision();    
+            }else{
+                controladorReporte =crearControlador();
+            }
             //Seteando datos para el controlador         
-            controladorReporte =crearControlador();
+            //controladorReporte =crearControlador();
             controladorReporte.setPersona(persona);
             controladorReporte.setFechaInicio(fechaInicio);
             controladorReporte.setFechaFin(fechaFin);

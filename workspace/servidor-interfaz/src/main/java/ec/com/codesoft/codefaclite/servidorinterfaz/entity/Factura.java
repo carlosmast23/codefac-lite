@@ -90,6 +90,9 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     @JoinColumn(name = "VENDEDOR_ID")
     private Empleado vendedor;
     
+    @JoinColumn(name = "USUARIO_ID")
+    private Usuario usuario;
+    
         
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -485,6 +488,15 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setVendedor(Empleado vendedor) {
         this.vendedor = vendedor;
     }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
     
     /**
      * Metodo que devuelve los datos adicionales de la factura en tipo de dato Map

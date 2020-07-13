@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -69,6 +70,8 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         jLabel10 = new javax.swing.JLabel();
         txtParametrosComprobantesElectronicos = new javax.swing.JTextField();
         lblEspacio1 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jComboBoxFiltrarFacturas = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         btnAgregarPuntoEmision = new javax.swing.JButton();
@@ -281,17 +284,37 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel10, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(txtParametrosComprobantesElectronicos, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel3.add(lblEspacio1, gridBagConstraints);
+
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel11.setText("Filtrar facturas:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jLabel11, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jComboBoxFiltrarFacturas, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Adicionales", jPanel3);
 
@@ -359,8 +382,10 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnQuitarPerfil;
     private javax.swing.JButton btnQuitarPuntoEmision;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<EnumSiNo> jComboBoxFiltrarFacturas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -523,10 +548,11 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         this.txtParametrosComprobantesElectronicos = txtParametrosComprobantesElectronicos;
     }
 
-    
-    
-    
+    public JComboBox<EnumSiNo> getjComboBoxFiltrarFacturas() {
+        return jComboBoxFiltrarFacturas;
+    }
 
-    
-    
+    public void setjComboBoxFiltrarFacturas(JComboBox<EnumSiNo> jComboBoxFiltrarFacturas) {
+        this.jComboBoxFiltrarFacturas = jComboBoxFiltrarFacturas;
+    }
 }

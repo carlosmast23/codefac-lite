@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.pos.panel.ArqueoCajaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,46 +32,33 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import org.eclipse.persistence.internal.sessions.UnitOfWorkImpl;
 
 /**
  *
  * @author Robert
  */
 public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVistaIf, ArqueoCajaModelControlador.SwingIf
-{    
-    //private GeneralEnumEstado estado;
-    private String valorTeorico;
-    //private BigDecimal valorFisico;
-    private Date fechaRevision;
-    private Date horaRevision;
-    
+{       
     private ArqueoCajaModelControlador controlador = new ArqueoCajaModelControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
-            
-    @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        //this.controlador.iniciar();
-        listenerCombos();
-        listenerFecha();
-        listenerHora();
-        valoresIniciales();
+
+    public void iniciar() throws ExcepcionCodefacLite {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
-        this.controlador.nuevo();
+    public void nuevo() throws ExcepcionCodefacLite {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        //this.controlador.grabar();
-        this.setearDatos();
-        
+    public void grabar() throws ExcepcionCodefacLite {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
-        this.controlador.editar();
-        this.setearDatos();
+    public void editar() throws ExcepcionCodefacLite {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -123,11 +111,10 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        this.controlador.cargarDatosPantalla(entidad);
-        //getjComboEstado().setSelectedItem(this.controlador.getArqueoCaja().getEstado());
-        //getjTextValorFisico().setText(this.controlador.getInterfaz().getValorFisico().toString());
-        getjTextValorTeorico().setText(this.controlador.getInterfaz().getValorTeorico());
-        
+        ArqueoCaja arqueoCaja = (ArqueoCaja) entidad;
+        getjTextValorTeorico().setText(arqueoCaja.getValorTeorico().toString());
+        getjTextValorFisico().setText(arqueoCaja.getValorFisico().toString());
+        getjComboEstado().setSelectedItem(arqueoCaja.getEstadoEnum());
     }
 
     @Override
@@ -144,23 +131,6 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
      * Funciones comunes
      */
     
-    public void valoresIniciales(){
-        //this.getjComboEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
-        this.getjDateFechaRevision().setDate(new java.util.Date());
-        //this.getjTextValorFisico().setText(BigDecimal.ZERO.toString());
-        this.getjTextValorTeorico().setText("");
-    }
-    
-    public void setearDatos(){
-        //this.estado = (GeneralEnumEstado) this.getjComboEstado().getSelectedItem();
-        java.util.Date dateTemp = (Date) getjDateFechaRevision().getDate();
-        this.fechaRevision = new Date(dateTemp.getTime());
-        java.util.Date timeTemp = (Date) getjDateFechaRevision().getDate();
-        this.horaRevision = new Date(timeTemp.getTime());
-        //this.valorFisico = new BigDecimal(this.getjTextValorFisico().getText());
-        this.valorTeorico = this.getjTextValorTeorico().getText();
-    }
-    
     public void listenerHora()
     {
         getjTimeHoraRevision().addChangeListener(new  ChangeListener() {
@@ -170,76 +140,41 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
             }
         });
     }
+      
     
-    public void listenerCombos()
-    {
-        
-    }
-    
-    public void listenerFecha(){
-        getjDateFechaRevision().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(getjDateFechaRevision().getDate() != null){
-                    java.util.Date dateTemp = (Date) getjDateFechaRevision().getDate();
-                    fechaRevision = new Date(dateTemp.getTime());
-                }  
-            }
-        });
-    }
-
-    
-    
-    
-
-    public ArqueoCajaModelControlador getControlador() {
-        return controlador;
-    }
-
     /**
      * Get and Setter
      * @return 
      */
+    
+    public ArqueoCajaModelControlador getControlador() {
+        return controlador;
+    }
+    
     public void setControlador(ArqueoCajaModelControlador controlador) {
         this.controlador = controlador;
     }
-
+    
     @Override
     public Date getFechaRevision() {
-        return fechaRevision;
+        java.util.Date dateTemp = (java.util.Date) getjDateFechaRevision().getDate();
+        return new Date(dateTemp.getTime());
     }
 
     @Override
-    public void setFechaRevision(Date fechaRevision) {
-        this.fechaRevision = fechaRevision;
+    public void setFechaRevision(Date fechaRevision) {        
+        getjDateFechaRevision().setDate(UtilidadesFecha.castDateSqlToUtil(fechaRevision));
     }
 
     @Override
     public Date getHoraRevision() {
-        return this.horaRevision;
+        java.util.Date timeTemp = (java.util.Date) getjTimeHoraRevision().getValue();
+        return new Date(timeTemp.getTime());
     }
 
     @Override
-    public void setHoraRevision(Date fechaRevision) {
-        this.horaRevision = fechaRevision;
+    public void setHoraRevision(Date horaRevision) {
+        java.util.Date hora = UtilidadesFecha.castDateSqlToUtil(horaRevision);
+        getjTimeHoraRevision().setValue(hora);
     }
-
-    @Override
-    public String getValorTeorico() {
-        return this.valorTeorico;
-    }
-
-    @Override
-    public void setValorTeorico(String valorTeorico) {
-        this.valorTeorico = valorTeorico;        
-    }
-
-
-
-    //@Override
-    //public void setEstadosGeneralesVista(GeneralEnumEstado[] estados) {
-    //    UtilidadesComboBox.llenarComboBox(getjComboEstado(), estados);
-    //}
-
-    
 }
