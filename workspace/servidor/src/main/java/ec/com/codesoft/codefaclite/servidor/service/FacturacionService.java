@@ -158,8 +158,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         Empleado empleado=proforma.getUsuario().getEmpleado();
         if(empleado!=null)
         {
-            Departamento departamento=empleado.getDepartamento();
-            if(departamento.getNombre().equals(Departamento.TipoEnum.Ventas.getNombre()))
+            Departamento departamento=empleado.getDepartamento();            
+            if(departamento.getTipoEnum().equals(Departamento.TipoEnum.Ventas))
             {
                 proforma.setVendedor(empleado);
             }
@@ -203,6 +203,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                validacionInicialFacturar(factura);
                 grabarSinTransaccion(factura,carteraParametro);
                 
                 /**
@@ -215,6 +216,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     PrestamoService prestamoService=new PrestamoService();
                     prestamoService.grabarSinTransaccion(prestamo, factura);
                 }
+                //Despues de grabar genero inmediatamente un flush para evitar perder la transacción por causas como perdida de energia
+                entityManager.flush();
             }
         });
         return factura;
@@ -225,12 +228,26 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                validacionInicialFacturar(factura);
                 grabarSinTransaccion(factura,null);
                 
             }
         });
         return factura;
         
+    }
+    
+    public void validacionInicialFacturar(Factura factura) throws ServicioCodefacException, RemoteException
+    {
+        if(factura.getCliente()==null)
+        {
+            throw new ServicioCodefacException("La factura tiene que tener un cliente asignado");
+        }
+        
+        if(factura.getCliente().getRazonSocial()==null || factura.getCliente().getRazonSocial().trim().isEmpty())
+        {
+            throw new ServicioCodefacException("No se puede emitir una factura sin la razón social del cliente ");
+        }
     }
     
     public void grabarSinTransaccion(Factura factura,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException

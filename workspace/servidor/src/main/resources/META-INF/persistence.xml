@@ -92,6 +92,8 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Zona</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoEstablecimiento</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.RutaDetalle</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

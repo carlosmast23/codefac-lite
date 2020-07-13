@@ -30,6 +30,8 @@ public class PerfilUsuarioBusquedaDialogo implements InterfaceModelFind<Usuario>
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<ColumnaDialogo>();
         titulo.add(new ColumnaDialogo("Usuario", 100));        
+        titulo.add(new ColumnaDialogo("Empleado", 200));
+        titulo.add(new ColumnaDialogo("Punto Emisión", 50));
         return titulo;
     }
 
@@ -48,6 +50,18 @@ public class PerfilUsuarioBusquedaDialogo implements InterfaceModelFind<Usuario>
     @Override
     public void agregarObjeto(Usuario t, Vector dato) {
         dato.add(t.getNick());
+        
+        if(t.getEmpleado()!=null)
+        {
+            dato.add(t.getEmpleado().getNombresCompletos());
+        }
+        else
+        {
+            dato.add("");
+        }
+        
+        dato.add(t.imprimirPuntoEmision());
+        
     }
 
     /*

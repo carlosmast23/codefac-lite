@@ -44,6 +44,8 @@ import ec.com.codesoft.codefaclite.servidor.service.PuntoEmisionService;
 import ec.com.codesoft.codefaclite.servidor.service.PuntoEmisionUsuarioService;
 import ec.com.codesoft.codefaclite.servidor.service.RecursosService;
 import ec.com.codesoft.codefaclite.servidor.service.RetencionService;
+import ec.com.codesoft.codefaclite.servidor.service.RutaDetalleService;
+import ec.com.codesoft.codefaclite.servidor.service.RutaService;
 import ec.com.codesoft.codefaclite.servidor.service.SmsService;
 import ec.com.codesoft.codefaclite.servidor.service.SriFormaPagoService;
 import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
@@ -164,6 +166,8 @@ import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuarioServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ZonaServiceIf;
@@ -275,6 +279,8 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(AlertaService.class,AlertaServiceIf.class);
             mapRecursos.put(ZonaService.class,ZonaServiceIf.class);
             mapRecursos.put(TipoEstablecimientoService.class,TipoEstablecimientoServiceIf.class);
+            mapRecursos.put(RutaService.class,RutaServiceIf.class);
+            mapRecursos.put(RutaDetalleService.class,RutaDetalleServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);
             LOG.log(Level.INFO,"Servidor Iniciado");

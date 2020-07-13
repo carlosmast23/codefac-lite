@@ -96,3 +96,27 @@ create table TIPO_ESTABLECIMIENTO(
 
     primary key (ID)
 );
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.3.8)*/
+create table RUTA( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) ,
+    EMPRESA_ID BIGINT,
+    EMPLEADO_ID BIGINT,
+    CODIGO varchar(100), 
+    NOMBRE varchar(200),
+    DIA_VISITA INT,
+    ESTADO varchar(1), 
+
+    primary key (ID)
+);
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.3.8)*/
+create table RUTA_DETALLE( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) ,
+    PERSONA_ESTABLECIMIENTO_ID BIGINT,
+    RUTA_ID BIGINT,
+    ORDEN INT,
+    ESTADO varchar(1), 
+
+    primary key (ID)
+);

@@ -447,6 +447,47 @@ public class Cartera implements Serializable{
         return this.total.subtract(saldo);
     }
     
+    /**
+     * Metodo que me permite volver a agregar saldo en especial cuando se elimina
+     * un cruce
+     * @param saldo
+     * @return 
+     */
+    public void restaurarSaldo(BigDecimal saldo)
+    {
+        //Aumentar el saldo de la cartera
+        this.saldo=this.saldo.add(saldo);
+        
+        //TODO: Supiestamente no devuelvo a los detalles por que para documentos principales de cartera no utlizo ese campo
+        //Restaurar saldo de forma indistinta en cada detalle
+        /*BigDecimal saldoTotalRestaurar=saldo;
+        for (CarteraDetalle detalle : detalles) 
+        {
+            BigDecimal valorMaximaRestaurar=detalle.getTotal().subtract(detalle.getSaldo());
+            BigDecimal valorResturarDetalle=saldoTotalRestaurar;
+            
+            //Si el saldo que requiero restaurar es mayor que el saldo diponible, solor restauro el valor disppnible
+            if(valorMaximaRestaurar.compareTo(saldoTotalRestaurar)<0)
+            {
+                valorResturarDetalle=valorMaximaRestaurar;                
+            }
+            
+            //Restauro el valor segun el caso
+            detalle.setSaldo(detalle.getSaldo().add(valorResturarDetalle));
+            saldoTotalRestaurar=saldoTotalRestaurar.subtract(valorMaximaRestaurar);
+            
+            //Verifico si ya no tengo saldo disponible para restarurar termino el metodo
+            if(saldoTotalRestaurar.compareTo(BigDecimal.ZERO)==0)
+            {
+                break;
+            }
+        }*/
+        
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    //          CLASES Y ENUMS ADICIONALES
+    //////////////////////////////////////////////////////////////////////////
     public enum TipoSaldoCarteraEnum
     {
         SIN_SALDO("Sin Saldo"),

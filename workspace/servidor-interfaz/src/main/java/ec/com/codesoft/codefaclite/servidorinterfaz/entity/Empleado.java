@@ -64,6 +64,8 @@ public class Empleado implements Serializable
     @JoinColumn(name = "NACIONALIDAD_ID")
     @ManyToOne
     private Nacionalidad nacionalidad;
+    
+    //TODO: Falta aumentar la empresa
             
     public Empleado() {
         

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.List;
 import java.util.Vector;
 
@@ -63,7 +64,7 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        Cartera cartera;
+        Cartera cartera;        
         //cartera.getCodigoDocumento()
         //cartera.getSecuencial();
         //cartera.getPersona().getRazonSocial();
@@ -124,9 +125,10 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
             queryString=queryString+" AND  u.saldo>0 ";
         }
         
-        queryString += " AND ( LOWER(u.persona.razonSocial) like ?1 or u.persona.identificacion like ?1 or CAST(u.secuencial CHAR(64)) like ?1 )";
+        queryString += "AND u.estado=?6 AND ( LOWER(u.persona.razonSocial) like ?1 or u.persona.identificacion like ?1 or CAST(u.secuencial CHAR(64)) like ?1 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, filter.toLowerCase());
+        queryDialog.agregarParametro(6, GeneralEnumEstado.ACTIVO.getEstado());
         
         if(documentosEnum!=null)
         {

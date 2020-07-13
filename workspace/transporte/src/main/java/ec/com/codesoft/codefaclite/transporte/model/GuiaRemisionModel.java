@@ -561,6 +561,12 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             destinatario.addProducto(detalle);
         }        
         
+        if(destinatario.getDetallesProductos()==null || destinatario.getDetallesProductos().size()==0)
+        {
+            DialogoCodefac.mensaje(new CodefacMsj("El destinatario no tiene ningun detalle",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            return null;
+        }
+        
         return destinatario;
     }
     

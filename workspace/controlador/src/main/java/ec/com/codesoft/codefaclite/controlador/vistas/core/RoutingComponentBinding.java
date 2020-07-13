@@ -10,6 +10,8 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBind
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBindingImp;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.SpinnerBindingImp;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.TableBindingImp;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.TextFieldBindingImp;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,9 @@ public class RoutingComponentBinding {
     {
         routingMap.put(TextFieldBinding.class,TextFieldBindingImp.class);
         routingMap.put(ComboBoxBinding.class,ComboBoxBindingImp.class);
-        routingMap.put(ButtonBinding.class,ButtonBindingImp.class);        
+        routingMap.put(ButtonBinding.class,ButtonBindingImp.class);    
+        routingMap.put(SpinnerBinding.class,SpinnerBindingImp.class);
+        routingMap.put(TableBinding.class,TableBindingImp.class);
     }
     
 }

@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategori
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraCruceServiceIf;
@@ -148,15 +149,15 @@ public class CarteraModel extends CarteraPanel{
             {
                if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
                {
-                    if(cartera.getCruces().size()>0)
+                    /*if(cartera.getCruces().size()>0)
                     {
                         DialogoCodefac.dialogoPregunta("La cartera tiene cruces registrados desea eliminar de todas maneras?", DialogoCodefac.MENSAJE_ADVERTENCIA);
                         
                     }
                     else
-                    {
-                        ServiceFactory.getFactory().getCarteraServiceIf().eliminar(cartera);
-                    }
+                    {*/
+                    ServiceFactory.getFactory().getCarteraServiceIf().eliminar(cartera,ModoProcesarEnum.FORZADO);
+                    //}
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
                }
                else
@@ -261,6 +262,7 @@ public class CarteraModel extends CarteraPanel{
         getLblTotalCartera().setText("0");
         getTxtValorDetalle().setText("");
         getTxtDescripcionDetalle().setText("");
+        getTxtPreimpreso().setText("");
     }
 
     //@Override

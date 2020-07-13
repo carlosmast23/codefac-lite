@@ -112,7 +112,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
             }
         }
 
-        if (p.getRazonSocial() == null || p.getRazonSocial().isEmpty()) {
+        if (p.getRazonSocial() == null || p.getRazonSocial().trim().isEmpty()) {
             throw new ServicioCodefacException("La razón social no puede ser vacia");
         }
 

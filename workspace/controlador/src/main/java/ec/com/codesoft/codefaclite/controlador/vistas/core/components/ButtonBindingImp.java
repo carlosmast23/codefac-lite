@@ -25,6 +25,7 @@ public class ButtonBindingImp extends ComponentBindingAbstract<JButton,ButtonBin
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     ejecutarMetodoControlador(nombreMetodo);
+                    actualizarBindingVista();
                 }
             });
         }
