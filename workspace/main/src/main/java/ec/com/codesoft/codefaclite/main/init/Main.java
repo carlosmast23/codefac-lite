@@ -567,6 +567,8 @@ public class Main {
                 {
                     System.setProperty("java.rmi.server.hostname",ipPublica); 
                     System.setProperty("com.healthmarketscience.rmiio.exporter.port", "1099");
+                    ParametrosClienteEscritorio.puertoCallBack=ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED;
+                    
                 }
                 
                 cargarRecursosServidor(ipServidor); 
