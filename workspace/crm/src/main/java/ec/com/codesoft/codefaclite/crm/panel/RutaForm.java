@@ -365,7 +365,7 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         this.txtOrdenDetalle = txtOrdenDetalle;
     }
 
-    @TableBinding(source = "controlador.ruta.detalles",tableAddDataInterface = "tableBindingAddData",selectValue = "controlador.rutaDetalleSeleccionado")
+    @TableBinding(source = "controlador.ruta.detallesOrdenadoPorOrden",tableAddDataInterface = "tableBindingAddData",selectValue = "controlador.rutaDetalleSeleccionado")
     public JTable getTblDatos() {
         return tblDatos;
     }

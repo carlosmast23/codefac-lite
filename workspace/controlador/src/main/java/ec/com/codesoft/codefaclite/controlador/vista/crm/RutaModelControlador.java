@@ -80,12 +80,30 @@ public class RutaModelControlador extends ModelControladorAbstract<RutaModelCont
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearDatosAdicionales();
+            ServiceFactory.getFactory().getRutaServiceIf().editar(ruta);
+            mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ZonaControlador.class.getName()).log(Level.SEVERE, null, ex);
+            mostrarMensaje(new CodefacMsj(ex.getMessage(),CodefacMsj.TipoMensajeEnum.ERROR));
+            throw new ExcepcionCodefacLite(ex.getMessage());
+        }
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
+        {
+            try {
+                ServiceFactory.getFactory().getRutaServiceIf().eliminar(ruta);
+                mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);                
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(RutaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                mostrarMensaje(new CodefacMsj(ex.getMessage(),CodefacMsj.TipoMensajeEnum.ERROR));
+                throw new ExcepcionCodefacLite(ex.getMessage());
+            }
+        }
     }
 
     @Override

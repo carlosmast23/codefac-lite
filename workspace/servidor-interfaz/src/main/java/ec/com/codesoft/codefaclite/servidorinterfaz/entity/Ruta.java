@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -167,6 +169,18 @@ public class Ruta implements Serializable {
     ///////////////////////////////////////////////////////////////////////////
     ///                   METODOS PERSONALIZADOS
     //////////////////////////////////////////////////////////////////////////
+    public List<RutaDetalle> getDetallesOrdenadoPorOrden()
+    {
+        List<RutaDetalle> resultado=new ArrayList<RutaDetalle>(getDetallesActivos());
+        
+        Collections.sort(resultado, new Comparator<RutaDetalle>() {
+            @Override
+            public int compare(RutaDetalle o1, RutaDetalle o2) {
+                return o1.getOrden().compareTo(o2.getOrden());
+            }
+        });
+        return resultado;
+    }
     
     public List<RutaDetalle> getDetallesActivos()
     {

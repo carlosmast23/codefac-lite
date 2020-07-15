@@ -70,6 +70,9 @@ public class TableBindingImp extends ComponentBindingAbstract<JTable,TableBindin
 
                             setValoresAlControlador(valorSeleccionado,nombrePropiedadControlador,converter);
                             actualizarBindingVista();
+                            
+                            //Como el anterior codigo vuelve a construir la tabla vuelvo a seleccionar el mismo valor para que se vea visualmente
+                            getComponente().setRowSelectionInterval(filaSeleccionada,filaSeleccionada);
                         }
                         
                     }
