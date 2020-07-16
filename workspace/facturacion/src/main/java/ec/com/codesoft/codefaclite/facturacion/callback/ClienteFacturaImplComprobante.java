@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import static ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel.NOMBRE_REPORTE_FACTURA_ELECTRONICA;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
+import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -69,7 +70,8 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     private Boolean facturacionOffline;
 
     public ClienteFacturaImplComprobante(FacturacionModel facturacionModel, Factura facturaProcesando,Boolean facturacionOffline) throws RemoteException {
-        //super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
+        super(ParametrosClienteEscritorio.puertoCallBack);
+        
         this.facturacionModel = facturacionModel;
         //this.servicio = servicio;
         this.facturaProcesando = facturaProcesando;

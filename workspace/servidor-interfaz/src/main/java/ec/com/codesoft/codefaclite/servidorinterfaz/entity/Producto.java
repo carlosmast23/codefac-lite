@@ -511,7 +511,7 @@ public class Producto implements Serializable, Comparable<Producto> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public static class PrecioVenta {
+    public static class PrecioVenta implements Serializable{
         public static final String PV1="pv1";
         public static final String PV2="pv2";
         public static final String PV3="pv3";
@@ -523,6 +523,23 @@ public class Producto implements Serializable, Comparable<Producto> {
         public String toString() {
             return alias;
         }
+
+        public String getAlias() {
+            return alias;
+        }
+
+        public void setAlias(String alias) {
+            this.alias = alias;
+        }
+
+        public BigDecimal getPrecio() {
+            return precio;
+        }
+
+        public void setPrecio(BigDecimal precio) {
+            this.precio = precio;
+        }
+        
         
         
 

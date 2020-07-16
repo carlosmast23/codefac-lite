@@ -8,8 +8,12 @@ package ec.com.codesoft.codefaclite.controlador.vistas.core.components;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.ConverterSwingMvvc;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TableBinding;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -46,7 +50,74 @@ public class TableBindingImp extends ComponentBindingAbstract<JTable,TableBindin
     
     };
     
-    
+    public ComponentBindingIf valueSelect=new ComponentBindingIf<Object,TableBinding>()
+    {
+        @Override
+        public void getAccion(String nombrePropiedadControlador, ConverterSwingMvvc converter) {
+            
+            getComponente().addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    int filaSeleccionada=getComponente().getSelectedRow();
+                    System.out.println("fila Seleccionada: "+filaSeleccionada);
+                    if(filaSeleccionada>=0)
+                    {
+                        DefaultTableModel modeloTabla=(DefaultTableModel) getComponente().getModel();
+                        if(modeloTabla!=null)
+                        {
+                            //TODO:Asumiendo que el dato que necesito siempre esta en la primera fila                        
+                            Object valorSeleccionado=getComponente().getValueAt(filaSeleccionada,0);
+
+                            setValoresAlControlador(valorSeleccionado,nombrePropiedadControlador,converter);
+                            actualizarBindingVista();
+                            
+                            //Como el anterior codigo vuelve a construir la tabla vuelvo a seleccionar el mismo valor para que se vea visualmente
+                            getComponente().setRowSelectionInterval(filaSeleccionada,filaSeleccionada);
+                        }
+                        
+                    }
+ 
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    
+                }
+            });
+                        
+        }
+
+        @Override
+        public void setAccion(Object value) {
+            
+        }
+
+        @Override
+        public String getNombrePropiedadControlador(TableBinding componente) {
+            return componente.selectValue();
+        }
+
+        @Override
+        public Class getConverterClass(TableBinding anotacion) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+    };
     
     
     public ComponentBindingIf value=new ComponentBindingIf<List,TableBinding>()
@@ -94,7 +165,7 @@ public class TableBindingImp extends ComponentBindingAbstract<JTable,TableBindin
     public void getAccionesComponente(List<ComponentBindingIf> lista) {
         lista.add(interfaceAddData);
         lista.add(value);
-        
+        lista.add(valueSelect);
     }
 
     @Override

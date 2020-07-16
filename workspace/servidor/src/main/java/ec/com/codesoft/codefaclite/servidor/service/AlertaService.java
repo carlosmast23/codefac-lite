@@ -40,6 +40,7 @@ import javax.mail.MessagingException;
 public class AlertaService extends UnicastRemoteObject implements Serializable,AlertaServiceIf {
 
     public AlertaService() throws RemoteException {
+        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
     }
     
     public List<AlertaResponse> actualizarNotificacionesCargaRapida(Empresa empresa) throws RemoteException,ServicioCodefacException

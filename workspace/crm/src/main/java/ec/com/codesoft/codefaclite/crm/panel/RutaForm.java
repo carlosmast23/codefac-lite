@@ -292,6 +292,7 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         this.btnBuscarEmpleado = btnBuscarEmpleado;
     }
 
+    @ButtonBinding(actionListener = "controlador.listenerEditarDetalle")
     public JButton getBtnEditarDetalle() {
         return btnEditarDetalle;
     }
@@ -300,6 +301,7 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         this.btnEditarDetalle = btnEditarDetalle;
     }
 
+    @ButtonBinding(actionListener = "controlador.listenerEliminarDetalle")
     public JButton getBtnEliminarDetalle() {
         return btnEliminarDetalle;
     }
@@ -363,7 +365,7 @@ public abstract class RutaForm extends ControladorCodefacInterface {
         this.txtOrdenDetalle = txtOrdenDetalle;
     }
 
-    @TableBinding(source = "controlador.ruta.detalles",tableAddDataInterface = "tableBindingAddData")
+    @TableBinding(source = "controlador.ruta.detallesOrdenadoPorOrden",tableAddDataInterface = "tableBindingAddData",selectValue = "controlador.rutaDetalleSeleccionado")
     public JTable getTblDatos() {
         return tblDatos;
     }

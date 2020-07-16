@@ -114,6 +114,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
      */
     private FacturaDetalle facturaDetalle; 
 
+    private List<Producto.PrecioVenta> precioVentaList;
     private List<DocumentoEnum> documentos;     
     private List<PuntoEmision> puntosEmision;    
     private EnumSiNo[] enumSiNoList;
@@ -124,6 +125,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     private PuntoEmision puntoEmisionSeleccionado;
     private FacturaAdicional facturaAdicionalSeleccionada;
     private SriFormaPago sriFormaPagoSeleccionado;
+    private Producto.PrecioVenta precioVentaSeleccionado;
     
     private TipoPaginaEnum tipoPaginaEnum;
     
@@ -263,7 +265,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
                         }
 
                         public String tituloBarra(Factura dato) {
-                            return dato.getPreimpreso();
+                            return dato.getPreimpreso();  
                         }
                     });
  
@@ -871,6 +873,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public void cargarPrecios(Producto producto) {
         //TODO: Metodo donde se deben cargar los diferentes precios 
+        precioVentaList=new ArrayList<Producto.PrecioVenta>(); 
+        for (Producto.PrecioVenta precioVenta : producto.obtenerPreciosVenta()) {
+            precioVentaList.add(precioVenta);
+        }
     }
 
     public void setearValoresProducto(BigDecimal valorUnitario, String descripcion, String codigo, CatalogoProducto catologoProducto) {
@@ -1243,10 +1249,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         this.puntoEmisionSeleccionado = puntoEmisionSeleccionado;
     }
     
-    /**
-     * ==========================> METODOS GET AND SET
-     * <=============================
-     */
+    ///////////////////////////////////////////////////////////////////////////
+    //                       METODOS GET AND SET
+    ///////////////////////////////////////////////////////////////////////////
+    
     public Factura getFactura() {
         return factura;
     }
@@ -1321,6 +1327,23 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     public void setDescuentoPorcentaje(Boolean descuentoPorcentaje) {
         this.descuentoPorcentaje = descuentoPorcentaje;
     }
+
+    public List<Producto.PrecioVenta> getPrecioVentaList() {
+        return precioVentaList;  
+    }
+
+    public void setPrecioVentaList(List<Producto.PrecioVenta> precioVentaList) {
+        this.precioVentaList = precioVentaList;
+    }
+
+    public Producto.PrecioVenta getPrecioVentaSeleccionado() {
+        return precioVentaSeleccionado;
+    }
+
+    public void setPrecioVentaSeleccionado(Producto.PrecioVenta precioVentaSeleccionado) {
+        this.precioVentaSeleccionado = precioVentaSeleccionado;
+    }
+    
     
     
          

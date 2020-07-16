@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -167,6 +169,18 @@ public class Ruta implements Serializable {
     ///////////////////////////////////////////////////////////////////////////
     ///                   METODOS PERSONALIZADOS
     //////////////////////////////////////////////////////////////////////////
+    public List<RutaDetalle> getDetallesOrdenadoPorOrden()
+    {
+        List<RutaDetalle> resultado=new ArrayList<RutaDetalle>(getDetallesActivos());
+        
+        Collections.sort(resultado, new Comparator<RutaDetalle>() {
+            @Override
+            public int compare(RutaDetalle o1, RutaDetalle o2) {
+                return o1.getOrden().compareTo(o2.getOrden());
+            }
+        });
+        return resultado;
+    }
     
     public List<RutaDetalle> getDetallesActivos()
     {
@@ -208,6 +222,32 @@ public class Ruta implements Serializable {
                         && estadoEnum.equals(GeneralEnumEstado.ACTIVO))
                 {
                     return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Metodo de verificacion cuando voy a editar por que no tiene que tener en cuento el objeto original
+     * @param rutaDetalle
+     * @param RutaDetalleExcepcion
+     * @return 
+     */
+    public Boolean verificarDatoDuplicado(RutaDetalle rutaDetalle,RutaDetalle RutaDetalleExcepcion)
+    {
+        if(this.detalles!=null)
+        {
+            for (RutaDetalle rutaDetalleTmp : this.detalles) 
+            {
+                if(RutaDetalleExcepcion!=rutaDetalleTmp)
+                {
+                    GeneralEnumEstado estadoEnum=rutaDetalleTmp.getEstadoEnum();
+                    if(rutaDetalleTmp.getEstablecimiento().equals(rutaDetalle.getEstablecimiento()) 
+                            && estadoEnum.equals(GeneralEnumEstado.ACTIVO))
+                    {
+                        return true;
+                    }
                 }
             }
         }

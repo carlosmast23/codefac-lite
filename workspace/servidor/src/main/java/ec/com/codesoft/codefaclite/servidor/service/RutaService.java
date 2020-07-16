@@ -34,6 +34,31 @@ public class RutaService extends ServiceAbstract<Ruta,RutaFacade> implements Rut
         });
         return entity;
     }
+
+    @Override
+    public void editar(Ruta entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                validacionGrabar(entity);
+                entityManager.merge(entity);
+            }
+        });
+    }
+
+    @Override
+    public void eliminar(Ruta entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                entityManager.merge(entity);
+            }
+        });
+    }
+    
+    
+    
     
     private void validacionGrabar(Ruta ruta) throws ServicioCodefacException, RemoteException
     {

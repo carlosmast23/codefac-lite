@@ -17,6 +17,12 @@ public class ParametrosClienteEscritorio {
      */
     public static TipoClienteSwingEnum tipoClienteEnum=TipoClienteSwingEnum.LOCAL;
     
+    /**
+     * TODO:Metodo temporal para corregir un problema que sucede con los callback de la factura cuando es ip publica
+     * Referencia para saber si el cliente inicio con una ip publica
+     */
+    public static Integer puertoCallBack=0;
+    
     public enum TipoClienteSwingEnum
     {
         LOCAL("Local"),

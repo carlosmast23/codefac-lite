@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RutaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -42,6 +43,11 @@ public class RutaModelControlador extends ModelControladorAbstract<RutaModelCont
      * Variable temporal para poder agreagar
      */
     private RutaDetalle rutaDetalle;
+    
+    /**
+     * Variable para almacenar la variable seleccionada
+     */
+    private RutaDetalle rutaDetalleSeleccionado;
     
     
     
@@ -74,12 +80,30 @@ public class RutaModelControlador extends ModelControladorAbstract<RutaModelCont
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearDatosAdicionales();
+            ServiceFactory.getFactory().getRutaServiceIf().editar(ruta);
+            mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ZonaControlador.class.getName()).log(Level.SEVERE, null, ex);
+            mostrarMensaje(new CodefacMsj(ex.getMessage(),CodefacMsj.TipoMensajeEnum.ERROR));
+            throw new ExcepcionCodefacLite(ex.getMessage());
+        }
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
+        {
+            try {
+                ServiceFactory.getFactory().getRutaServiceIf().eliminar(ruta);
+                mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);                
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(RutaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                mostrarMensaje(new CodefacMsj(ex.getMessage(),CodefacMsj.TipoMensajeEnum.ERROR));
+                throw new ExcepcionCodefacLite(ex.getMessage());
+            }
+        }
     }
 
     @Override
@@ -151,35 +175,94 @@ public class RutaModelControlador extends ModelControladorAbstract<RutaModelCont
         }
     }
     
+    private void crearNuevoDetalle()
+    {
+        rutaDetalle=Ruta.getInstanceActivo();
+        rutaDetalle.setOrden(0);
+        rutaDetalleSeleccionado=null;
+    }
+    
     public void listenerAddDetalle()
     {
-        if(validarAgregarDetalle(rutaDetalle))
+        if(validarAgregarDetalle(rutaDetalle,CrudEnum.CREAR))
         {
             ruta.addDetalle(rutaDetalle);
-
-            //Despues de agregar al detalle creo uno nuevo
-            rutaDetalle=Ruta.getInstanceActivo();
-            rutaDetalle.setOrden(0);
+            //Despues de agregar al detalle creo uno nuevo      
+            crearNuevoDetalle();
         }
     }
     
-    public boolean validarAgregarDetalle(RutaDetalle rutaDetalle)
+    public void listenerEditarDetalle()
+    {
+        if(rutaDetalleSeleccionado==null)
+        {
+            mostrarMensaje(new CodefacMsj("No esta seleccionado un dato para editar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            return;
+        }
+        
+        if(validarAgregarDetalle(rutaDetalle,CrudEnum.EDITAR))
+        {
+            rutaDetalleSeleccionado.setObject(rutaDetalle);
+            //ruta.addDetalle(rutaDetalle);
+            //Despues de agregar al detalle creo uno nuevo            
+            crearNuevoDetalle();
+        }
+    }
+    
+    public void listenerEliminarDetalle()
+    {
+        if(rutaDetalleSeleccionado==null)
+        {
+            mostrarMensaje(new CodefacMsj("No esta seleccionado un dato para eliminar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            return;
+        }
+        
+        if(this.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
+        {
+            this.ruta.getDetalles().remove(rutaDetalleSeleccionado);
+            crearNuevoDetalle();
+        }
+        
+    }
+    
+    public boolean validarAgregarDetalle(RutaDetalle rutaDetalle,CrudEnum crudEnum)
     {
         if (rutaDetalle.getEstablecimiento() == null) {
             mostrarMensaje(new CodefacMsj("No se puede agregar sin un Establecimiento", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             return false;
         }
         
-        //TODO: Verificar que no exista una rutaDetalle duplicada en la ruta
-        if(this.ruta.verificarDatoDuplicado(rutaDetalle))
+        if(crudEnum.equals(CrudEnum.CREAR))
         {
-            mostrarMensaje(new CodefacMsj("No se puede agregar un Establecimiento Repetido", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-            return false;
+            //TODO: Verificar que no exista una rutaDetalle duplicada en la ruta
+            if(this.ruta.verificarDatoDuplicado(rutaDetalle))
+            {
+                mostrarMensaje(new CodefacMsj("No se puede agregar un Establecimiento Repetido", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                return false;
+            }
+        }
+        else if (crudEnum.equals(CrudEnum.EDITAR))
+        {
+            if(this.ruta.verificarDatoDuplicado(rutaDetalle,rutaDetalleSeleccionado))
+            {
+                mostrarMensaje(new CodefacMsj("No se puede agregar un Establecimiento Repetido", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                return false;
+            }
         }
         
         return true;
     }
     
+    private void cargarDatoEditar(RutaDetalle rutaDetalle)
+    {
+        rutaDetalle.setId(rutaDetalle.getId()*-1);
+        this.rutaDetalle=rutaDetalle;
+        //Seleccionado metodo para editar
+    }
+    
+
+
+            
     ///////////////////////////////////////////////////////////////////////////
     //                          GET AND SET
     ///////////////////////////////////////////////////////////////////////////
@@ -199,6 +282,20 @@ public class RutaModelControlador extends ModelControladorAbstract<RutaModelCont
     public void setRutaDetalle(RutaDetalle rutaDetalle) {
         this.rutaDetalle = rutaDetalle;
     }
+
+    public RutaDetalle getRutaDetalleSeleccionado() {
+        return rutaDetalleSeleccionado;
+    }
+
+    public void setRutaDetalleSeleccionado(RutaDetalle rutaDetalleSeleccionado) {
+        this.rutaDetalleSeleccionado = rutaDetalleSeleccionado;
+        try {
+            cargarDatoEditar((RutaDetalle) this.rutaDetalleSeleccionado.clone());
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(RutaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     
     
 

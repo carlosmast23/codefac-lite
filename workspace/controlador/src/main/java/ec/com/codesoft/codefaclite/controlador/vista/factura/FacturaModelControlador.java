@@ -430,14 +430,6 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @return 
      */
     public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle) throws ServicioCodefacException {
-        //boolean agregar = true;
-
-        //Verifica si manda un detalle existe solo se modifica
-        //if (facturaDetalle != null) {
-        //    agregar = false;
-        //} else {
-        //    facturaDetalle = new FacturaDetalle();
-        //}
 
         //Validacion de los datos ingresados para ver si puedo agregar al detalle
         if (!interfaz.validarIngresoDetalle()) {
@@ -456,46 +448,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
             
             
-        //Variable del producto para verificar otros datos como el iva
-        //CatalogoProducto catalogoProducto=null;
-        /*try {
-            if(facturaDetalle.get)
-            ReferenciaDetalleFacturaRespuesta respuesta=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(facturaDetalle.getTipoDocumentoEnum(),facturaDetalle.getReferenciaId());
-            catalogoProducto=respuesta.catalogoProducto;
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        
-        //Seleccionar la referencia dependiendo del tipo de documento
-        //TipoDocumentoEnum tipoDocumentoEnum=interfaz.obtenerTipoDocumentoSeleccionado();
-        //facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());s
-        //Obtengo el catalogo producto dependiendo el documento para poder saber las caracteristicas del producto
-        /*switch (tipoDocumentoEnum)
-        {
-            case ACADEMICO:
-                facturaDetalle.setReferenciaId(interfaz.obtenerRubroSeleccionado().getId());
-                catalogoProducto = interfaz.obtenerRubroSeleccionado().getRubroNivel().getCatalogoProducto();
-                break;
-                
-            case PRESUPUESTOS:
-                facturaDetalle.setReferenciaId(interfaz.obtenerPresupuestoSeleccionado().getId());
-                catalogoProducto=interfaz.obtenerPresupuestoSeleccionado().getCatalogoProducto();
-                break;
-                
-                //Para invetario o para libre es la misma logica
-            case INVENTARIO: case LIBRE: 
-                facturaDetalle.setReferenciaId(interfaz.obtenerProductoSeleccionado().getIdProducto());
-                catalogoProducto =interfaz.obtenerProductoSeleccionado().getCatalogoProducto();
-                //catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
-                break;
-        }*/
-        
-        //Advertecia cuando el item a facturar no tiene asignando un catalogo producto que es importante porque es de donde obtiene los valore
-        /*if(catalogoProducto==null)
-        {
-            DialogoCodefac.mensaje("Advertencia","No esta definido el Catalogo Producto ,donde se especifica los impuestos para facturar ",DialogoCodefac.MENSAJE_INCORRECTO);
-            return false;
-        }*/
+       
         facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));
         facturaDetalle.setDescripcion(interfaz.obtenerTxtDescripcion());
         //Calcula los valores dependiendo del iva para tener el valor unitario
@@ -798,16 +751,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
          * FALTA AGREGAR LIMPIAR PARA EL RESTO DE VARIABLES
          */
         interfaz.setProductoSeleccionado(null);
-        //PRE presupuestoSeleccionado=null;
-        //interfazrubroEstudiante=null;
-           
-        
-        //Limpio los datos en la pantalla
-        /*interfaz.setearCantidadTxt("1");
-        interfaz.setearDescripcionTxt("");
-        interfaz.setearValorUnitarioTxt("");
-        interfaz.setearDescuentoTxt("0");
-        interfaz.setearCodigoDetalleTxt("");*/
+
         interfaz.limpiarIngresoDetalleVista();
         
         interfaz.focoTxtCodigoDetalle();

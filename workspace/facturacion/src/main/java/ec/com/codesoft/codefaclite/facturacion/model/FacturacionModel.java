@@ -1095,8 +1095,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void cargarPrecios(Producto producto) {
         getCmbPreciosVenta().removeAllItems();
         for (Producto.PrecioVenta precioVenta : producto.obtenerPreciosVenta()) {
-            getCmbPreciosVenta().addItem(precioVenta);
-            
+            getCmbPreciosVenta().addItem(precioVenta);            
         }
     }
     
