@@ -7,11 +7,11 @@
       xmlns:c="http://xmlns.jcp.org/jsf/composite/componentes">
 
     <ui:composition  template="/template/codefac_template.xhtml">
-        
+
         <ui:define name="opciones" >
             <p:menuitem oncomplete="PF('btnCargarProforma').jq.click();" value="Cargar desde la proforma"  icon="pi pi-clone"  />
         </ui:define>
-        
+
         <ui:define name="vistaControlador" >
             <f:event listener="#{controllerCodefacMb.agregarVista(proformaMb)}" type="preRenderComponent" /> 
         </ui:define>
@@ -20,11 +20,11 @@
         <ui:define name="contenido" >
             <!--<p:commandButton type="button" onclick="rc()" value="Execute" icon="pi pi-refresh" />-->
             <!--<p:remoteCommand name="rc" autoRun="true" oncomplete="PF('btnCargarProforma').jq.click()"/>-->
-            
-            <!--<p:remoteCommand name="rc" update="panelContenido" action="#{remoteCommandView.execute}" >
-                <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProforma}" update="panelContenido"  />
-            </p:remoteCommand>-->
-                       
+
+<!--<p:remoteCommand name="rc" update="panelContenido" action="#{remoteCommandView.execute}" >
+    <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProforma}" update="panelContenido"  />
+</p:remoteCommand>-->
+
             <f:metadata>
                 <!--<f:viewParam name="tipo" value="#{proformaMb.tipoPagina}"/>-->
                 <f:event type="preRenderView" listener="#{proformaMb.verificarPagina()}"/>
@@ -93,7 +93,7 @@
 
             </p:accordionPanel>
 
-            
+
             <p:remoteCommand name="updateDataTable" update=":formulario:tblProductoDetalles"/>
 
             <p:panel id="pnlDatosFactura">
@@ -102,13 +102,20 @@
                         <div class="p-grid " style="text-align: left"  >
                             <div class="p-col-12 p-md-6 p-lg-3" >
                                 <div class="p-grid" style="text-align: left" >
-                                    <div class="p-col-9 p-md-8 p-lg-10" >
+                                    <div class="p-col-7 p-md-6 p-lg-8" >
                                         <p:inputText id="txtProducto" placeholder="Código" value="#{proformaMb.productoSeleccionado.codigoPersonalizado}" style="width: 100%" />
                                     </div>
                                     <div class="p-col-3 p-md-4 p-lg-2" >
                                         <p:commandButton  process="@this,:formulario:acordionCabecera:cmbDocumento" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBusquedaProducto()}" style="width: 100%"  >
-                                            <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}"  update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,cmbIncluyeIvaDetalle"  />
-                                        </p:commandButton>
+                                            <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}"  update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,cmbIncluyeIvaDetalle,cmbPreciosVenta"  />
+                                        </p:commandButton>                                        
+                                    </div>
+                                    <div class="p-col-2 p-md-2 p-lg-2" >
+                                        <!-- Combo box para seleccionar cuando tiene varios listado de precios -->
+                                        <p:selectOneMenu  id="cmbPreciosVenta" value="#{proformaMb.facturaDetalle.precioUnitario}" converter="precioVentaConverter"   >
+                                            <f:selectItems value="#{proformaMb.precioVentaList}" var="precio" itemValue="#{precio.precio}" itemLabel="#{precio.alias}" />
+                                            <p:ajax event="itemSelect"  update="txtValorUnitario"  />
+                                        </p:selectOneMenu>
                                     </div>
                                 </div>
                             </div>
