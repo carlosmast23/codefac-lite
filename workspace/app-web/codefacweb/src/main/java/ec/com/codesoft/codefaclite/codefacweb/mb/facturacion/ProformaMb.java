@@ -455,21 +455,6 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         
     }
 
-    /*private void cargarDetalleFacturaAgregar(Producto productoSeleccionado) {    
-        facturaDetalle = new FacturaDetalle();
-        facturaDetalle.setCantidad(BigDecimal.ONE);
-        facturaDetalle.setDescripcion(productoSeleccionado.getNombre());
-        facturaDetalle.setPrecioUnitario(productoSeleccionado.getValorUnitario());   
-        facturaDetalle.setDescuento(BigDecimal.ZERO); 
-        facturaDetalle.setIvaPorcentaje(productoSeleccionado.getCatalogoProducto().getIva().getTarifa()); //TODO: Revisar este valor porque parece que esta mal seteado y se refiere al iva del producto      
-        if(productoSeleccionado.getCatalogoProducto().getIce()!=null)
-        {
-            facturaDetalle.setIcePorcentaje(productoSeleccionado.getCatalogoProducto().getIce().getPorcentaje());
-        }
-        facturaDetalle.setTipoDocumentoEnum(TipoDocumentoEnum.LIBRE);//TODO: Por el momento solo dejo como documento por defecto libre
-        facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
-
-    }*/
 
     public void agregarProducto() {
 
@@ -1048,7 +1033,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     }
 
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.controlador.iniciar();
     }
 
     public void actualizar() throws ExcepcionCodefacLite, RemoteException {
@@ -1342,6 +1327,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public void setPrecioVentaSeleccionado(Producto.PrecioVenta precioVentaSeleccionado) {
         this.precioVentaSeleccionado = precioVentaSeleccionado;
+    }
+
+    public FacturaModelControlador getControlador() {
+        return controlador;
+    }
+
+    public void setControlador(FacturaModelControlador controlador) {
+        this.controlador = controlador;
     }
     
     

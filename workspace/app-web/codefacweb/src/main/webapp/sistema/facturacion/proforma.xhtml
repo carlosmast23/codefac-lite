@@ -67,8 +67,8 @@
                                     <p:outputLabel value="Tipo Documento:" />
                                 </div>
                                 <div class="p-col-12 p-md-3 p-lg-6" >
-                                    <p:selectOneMenu label="label" title="title" id="cmbTipoDocumento" value="#{proformaMb.puntoEmisionSeleccionado}" converter="puntoEmisionConverter" style="width: 70%" >
-                                        <f:selectItems value="#{proformaMb.puntosEmision}" var="puntoEmision" itemValue="#{puntoEmision.id.toString()}" />
+                                    <p:selectOneMenu label="label" title="title" id="cmbTipoDocumento" value="#{proformaMb.controlador.tipoDocumentoEnumSeleccionado}" converter="tipoDocumentoConverter" style="width: 70%" >
+                                        <f:selectItems value="#{proformaMb.controlador.tipoDocumentoList}" var="tipoDocumento" itemValue="#{tipoDocumento.codigo}" />
                                     </p:selectOneMenu>
                                 </div>
                             </div>
@@ -138,7 +138,7 @@
                             <div class="p-col-12 p-md-6 p-lg-3" >
                                 <div class="p-grid" style="text-align: left" >
                                     <div class="p-col-3 p-md-3 p-lg-3" >
-                                        <p:outputLabel style="font-weight: bold">Inc Iva:</p:outputLabel>
+                                        <p:outputLabel style="font-weight: bold;text-align: right">Inc Iva:</p:outputLabel>
                                     </div>
                                     <div class="p-col-6 p-md-6 p-lg-6" >
                                         <p:selectOneMenu  id="cmbIncluyeIvaDetalle" value="#{proformaMb.incluyeIvaDetalleEnum}" converter="siNoEnumConverter" disabled="#{!proformaMb.cmbIvaDetalleEnable}" >

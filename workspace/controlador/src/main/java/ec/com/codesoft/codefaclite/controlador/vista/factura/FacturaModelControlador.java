@@ -49,6 +49,10 @@ import java.util.logging.Logger;
  */
 public class FacturaModelControlador extends FacturaNotaCreditoModelControladorAbstract{
     
+    private TipoDocumentoEnum tipoDocumentoEnumSeleccionado;
+    
+    private List<TipoDocumentoEnum> tipoDocumentoList;
+    
     private FacturaModelControlador.FacturaModelInterface interfaz;
     
         /**
@@ -433,10 +437,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
 
         //Validacion de los datos ingresados para ver si puedo agregar al detalle
         if (!interfaz.validarIngresoDetalle()) {
-            //int filaSeleccionada=getTblDetalleFactura().getSelectedRow();
             int filaSeleccionada=interfaz.filaSeleccionadaTablaDetalle();
             interfaz.cargarDatosDetalles(); //Si no se pudo editar vuelvo a cargar los detalles si se modifico desde la tabla para que quede la forma original
-            //getTblDetalleFactura().setRowSelectionInterval(filaSeleccionada,filaSeleccionada);
             interfaz.seleccionarFilaTablaDetalle(filaSeleccionada);
             return false;
         }
@@ -447,7 +449,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 return false;
         }
             
-            
+        //Agregar el tipo de documento seleccionado
+        facturaDetalle.setTipoDocumentoEnum(tipoDocumentoEnumSeleccionado);
+        
        
         facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));
         facturaDetalle.setDescripcion(interfaz.obtenerTxtDescripcion());
@@ -459,8 +463,6 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         if(incluidoIvaSiNo.equals(EnumSiNo.SI))
         {
-            //BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);
-            //valorTotalUnitario=valorTotalUnitario.divide(ivaTmp,6,BigDecimal.ROUND_HALF_UP); //Redondeando con 4 decimales ya no genera problema con el centavo aveces
             BigDecimal porcentajeIce=(facturaDetalle.getIcePorcentaje()!=null)?facturaDetalle.getIcePorcentaje():null;
             valorTotalUnitario=UtilidadIva.calcularValorUnitario(
                     session.obtenerIvaActualDecimal(),
@@ -472,7 +474,6 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
          * ===========> CALCULA LOS VALORES DEL DESCUENTO <=============
          */
         BigDecimal descuento;
-        //if (!getCheckPorcentaje().isSelected()) { //Cuando no es porcentaje el valor se setea directo
         if (!interfaz.obtenerCheckPorcentajeSeleccion()) { //Cuando no es porcentaje el valor se setea directo
             if (!interfaz.obtenerTxtDescuento().equals("")) {
                 descuento = new BigDecimal(this.interfaz.obtenerTxtDescuento());
@@ -781,8 +782,57 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     public void setFormaPagoConCartera(SriFormaPago formaPagoConCartera) {
         this.formaPagoConCartera = formaPagoConCartera;
     }
+
+    public TipoDocumentoEnum getTipoDocumentoEnumSeleccionado() {
+        return tipoDocumentoEnumSeleccionado;
+    }
+
+    public void setTipoDocumentoEnumSeleccionado(TipoDocumentoEnum tipoDocumentoEnumSeleccionado) {
+        this.tipoDocumentoEnumSeleccionado = tipoDocumentoEnumSeleccionado;
+    }
+
+    public List<TipoDocumentoEnum> getTipoDocumentoList() {
+        return tipoDocumentoList;
+    }
+
+    public void setTipoDocumentoList(List<TipoDocumentoEnum> tipoDocumentoList) {
+        this.tipoDocumentoList = tipoDocumentoList;
+    }
     
     
+    
+
+    public void iniciar() {
+        try {
+            tipoDocumentoList= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION,session.getModulos());
+            
+            if(tipoDocumentoList.size()==0)
+            {
+                mostrarMensaje(new CodefacMsj("No tiene disponible ningun modo para facturar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            }
+            
+            //Seleccionar el tipo de documento configurado por defecto
+            TipoDocumentoEnum tipoDocumentoEnumDefault=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(),ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA,TipoDocumentoEnum.ACADEMICO);
+            if(tipoDocumentoEnumDefault!=null)
+            {
+                tipoDocumentoEnumSeleccionado=tipoDocumentoEnumDefault;
+            }
+            
+            /*ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA);
+            if(parametroCodefac!=null)
+            {
+            TipoDocumentoEnum tipoDocumentoEnumDefault=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroCodefac.getValor());
+            getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnumDefault);
+            }*/
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    ///                 CLASES E INTERFACES ADICIONALES
+    ////////////////////////////////////////////////////////////////////////////
     
     
     public interface FacturaModelInterface

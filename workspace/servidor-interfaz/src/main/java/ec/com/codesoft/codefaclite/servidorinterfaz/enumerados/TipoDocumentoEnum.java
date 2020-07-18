@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @author Carlos
  * @nota No mover los codigos anteriores porque en la basese de datos ya estan referenciados a las mismas
  */
-public enum TipoDocumentoEnum {
+public enum TipoDocumentoEnum implements ParametroUtilidades.ComparadorInterface<TipoDocumentoEnum>{
     
      
     /**
@@ -360,6 +361,11 @@ public enum TipoDocumentoEnum {
     @Override
     public String toString() {
         return getNombre();
+    }
+
+    @Override
+    public TipoDocumentoEnum consultarParametro(String nombreParametro) {
+        return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(nombreParametro);
     }
     
 }
