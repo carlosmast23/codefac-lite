@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="2.1435888100000478"/>
-	<property name="ireport.x" value="203"/>
-	<property name="ireport.y" value="377"/>
+	<property name="ireport.zoom" value="1.6105100000000379"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="487"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -279,30 +279,30 @@
 		</band>
 	</title>
 	<columnHeader>
-		<band height="24" splitType="Stretch">
+		<band height="21" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="1" width="60" height="20" uuid="b9fc8cd1-b8d2-43f7-a73c-ffa567fa0552"/>
+				<reportElement x="0" y="1" width="56" height="20" uuid="b9fc8cd1-b8d2-43f7-a73c-ffa567fa0552"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Comprobante]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="60" y="1" width="80" height="20" uuid="e2e445cc-53d4-4f16-bbf4-8aa1de7fd349"/>
+				<reportElement x="56" y="1" width="89" height="20" uuid="e2e445cc-53d4-4f16-bbf4-8aa1de7fd349"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Número]]></text>
 			</staticText>
@@ -314,8 +314,8 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ejerc.Fiscal]]></text>
 			</staticText>
@@ -327,8 +327,8 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Base Imponible]]></text>
 			</staticText>
@@ -340,21 +340,21 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Impuesto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="140" y="1" width="70" height="20" uuid="eb9ec666-cb14-47c4-b340-108dc1b564bc"/>
+				<reportElement x="145" y="1" width="65" height="20" uuid="eb9ec666-cb14-47c4-b340-108dc1b564bc"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha Emisión]]></text>
 			</staticText>
@@ -366,8 +366,8 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Código]]></text>
 			</staticText>
@@ -379,8 +379,8 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[% Retención]]></text>
 			</staticText>
@@ -392,17 +392,17 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Valor Retenido]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="23" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="60" height="20" uuid="96aacd30-59f9-4ce5-9542-5691ac80b57c"/>
+				<reportElement x="0" y="0" width="56" height="20" uuid="96aacd30-59f9-4ce5-9542-5691ac80b57c"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -416,7 +416,7 @@
 				<textFieldExpression><![CDATA[$F{comprobante}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="60" y="0" width="80" height="20" uuid="677d9c87-3285-432c-9a45-934987635c8e"/>
+				<reportElement x="56" y="0" width="89" height="20" uuid="677d9c87-3285-432c-9a45-934987635c8e"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -472,7 +472,7 @@
 				<textFieldExpression><![CDATA[$F{impuesto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="140" y="0" width="70" height="20" uuid="cfc15e5e-ab7b-4e72-ae28-10cd519ff378"/>
+				<reportElement x="145" y="0" width="65" height="20" uuid="cfc15e5e-ab7b-4e72-ae28-10cd519ff378"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -579,17 +579,17 @@
 	<summary>
 		<band height="140">
 			<rectangle radius="10">
-				<reportElement x="0" y="0" width="555" height="127" uuid="4c480e46-a4e3-400a-b74b-706a025f3078"/>
+				<reportElement x="0" y="13" width="555" height="127" uuid="4c480e46-a4e3-400a-b74b-706a025f3078"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="5" y="0" width="540" height="20" uuid="72acdd4c-a8e5-4703-9a75-cddfeb3b5ef8"/>
+				<reportElement x="5" y="13" width="540" height="20" uuid="72acdd4c-a8e5-4703-9a75-cddfeb3b5ef8"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Información Adicional]]></text>
 			</staticText>
 			<subreport>
-				<reportElement stretchType="RelativeToTallestObject" x="5" y="20" width="540" height="89" uuid="78a52071-cfc2-461a-a6c3-299d9151537a">
+				<reportElement stretchType="RelativeToTallestObject" x="5" y="33" width="540" height="89" uuid="78a52071-cfc2-461a-a6c3-299d9151537a">
 					<printWhenExpression><![CDATA[$P{SUBREPORT_INFO_ADICIONAL}!=null]]></printWhenExpression>
 				</reportElement>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{informacionAdicionalList})]]></dataSourceExpression>
