@@ -1280,6 +1280,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         ComprobanteDataInterface comprobanteData = obtenerComprobanteData();
         //comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
+        //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
+        
         ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this, facturaProcesando, true);
         ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
 
