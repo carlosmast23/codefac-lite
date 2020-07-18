@@ -48,7 +48,7 @@ public class SessionMb implements Serializable{
     public static final String LOGOUT_PAGE_REDIRECT =
       "/login.xhtml?faces-redirect=true";
     
-    public List<BarraProgreso> barraProgresoList;
+    public List<BarraProgreso> barraProgresoList; 
     
     /**
      * Variable que me permite almacenar los permisos del perfil para acceso a las diferentes pantallas
@@ -187,6 +187,12 @@ public class SessionMb implements Serializable{
         firstSubmenu.setLabel(nombre);
         firstSubmenu.setExpanded(false);
         return firstSubmenu;
+    }
+    
+    public void limpiarBarrasProgresoFactura()
+    {
+        this.barraProgresoList.clear();
+        System.out.println("Limpiado barras de progreso");  
     }
 
     public Boolean getActualizarMonitor() {

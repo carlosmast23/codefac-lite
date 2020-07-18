@@ -297,6 +297,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
             MensajeMb.mensaje("Error al grabar", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex); 
         }
