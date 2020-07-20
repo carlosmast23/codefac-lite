@@ -126,30 +126,7 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel imp
         return controlador;
     }
     
-    @Override
-    public void addCheckListener()
-    {
-        getCheckTodos().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(getCheckTodos().isSelected())
-                {
-                    controlador.setTodos(true);
-                    getBtnBuscarGenerica().setEnabled(false);
-                    getTxtNombre().setEnabled(false);
-                    getTxtNombre().setText("");
-                }
-                else
-                {
-                    controlador.setTodos(false);
-                    getBtnBuscarGenerica().setEnabled(true);
-                    getTxtNombre().setEnabled(true);
-                    getTxtNombre().setText("");
-                }
-            }
-        });
-    } 
-
+    
     public ReporteInventarioStockControlador getControlador() {
         return controlador;
     }

@@ -68,6 +68,12 @@ public class ArchivoConfiguracionesCodefac {
      */
     public static final String CAMPO_INTERFAZ_RED_LICENCIA="interfaz_red_licencia";
     
+    /**
+     * Establece el tipo de modo que se puede actualizar la aplicacion
+     * Opiones esta en el enum ModoActualizacionEnum
+     */
+    public static final String CAMPO_MODO_ACTUALIZACION="modo_actualizar";
+    
     private Properties propiedadesIniciales;
     
     private static ArchivoConfiguracionesCodefac instance;
@@ -121,5 +127,25 @@ public class ArchivoConfiguracionesCodefac {
         return propiedadesIniciales;
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    ///                          CLASES E INTEFACES
+    ////////////////////////////////////////////////////////////////////////////
     
+    public enum ModoActualizacionEnum
+    {
+        ESTABLE("estable"),
+        DESARROLLO("desarrollo");
+
+        private ModoActualizacionEnum(String nombre) {
+            this.nombre = nombre;
+        }
+        
+        private String nombre;
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        
+    }
 }

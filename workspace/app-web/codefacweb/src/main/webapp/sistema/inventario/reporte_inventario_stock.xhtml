@@ -11,50 +11,48 @@
             <f:event listener="#{controllerCodefacMb.agregarVista(reporteInventarioStockMb)}" type="preRenderComponent" /> 
                 <div class="p-grid" style="text-align: left" >
                     <div class="p-col-12 p-md-6 p-lg-6" >
-                        <h:outputLabel id="txtReporte"  value="Reporte: "/>
-                         <p:selectOneMenu id="console1" value=""  style="width:125px">
-                            <f:selectItems var="" value="" itemValue=""    />
+                        <div><h:outputLabel id="cmbBodega"  value="Bodega: "/></div>
+                        <p:selectOneMenu id="console1" value="#{reporteInventarioStockMb.controlador.bodegaSeleccionada}"  style="width:125px" converter="bodegaConverter">
+                            <f:selectItems value="#{reporteInventarioStockMb.controlador.bodegasList}" var="bodega" itemValue="#{bodega.idBodega.toString()}"    />
                         </p:selectOneMenu>
                     </div> 
                 </div>
                 <div class="p-grid" style="text-align: left" >
                     <div class="p-col-12 p-md-6 p-lg-6" >
-                        <h:outputLabel id="txtBodega"  value="Bodega: "/>                      
-                         <p:selectOneMenu id="console2" value=""  style="width:125px">
-                            <f:selectItems var="" value="" itemValue=""    />
+                        <div><h:outputLabel id="cmbCategoria"  value="Categoria: "/></div>
+                        <p:selectOneMenu id="console2" value="#{reporteInventarioStockMb.controlador.categoriaSeleccionada}" converter="categoriaProductoConverter"  style="width:125px">
+                            <f:selectItem itemLabel="Seleccione un valor" itemValue="" />
+                            <f:selectItems value="#{reporteInventarioStockMb.controlador.categoriaList}" var="categoria" itemValue="#{categoria.idCatProducto.toString()}"     />
                         </p:selectOneMenu>
                     </div> 
                 </div>
                 <div class="p-grid" style="text-align: left" >
-                   <div class="p-col-12 p-md-6 p-lg-6" >
-                       <h:outputLabel id="txtDescripcion"  value="Descripción: "/>                    
-                       <p:selectOneMenu id="console3" value=""  style="width:125px">
-                           <f:selectItems var="" value="" itemValue=""    />
-                       </p:selectOneMenu>
-                       <p:selectBooleanCheckbox value="" />
+                   <div class="p-col-12 p-md-6 p-lg-6" >                       
                        <p:commandButton 
                            process="@this"
                            value="Buscar" 
-                           update=""
+                           actionListener="#{reporteInventarioStockMb.controlador.listenerConsultar()}"
+                           update="tblDatos"
                        >
                        </p:commandButton>
                    </div> 
                 </div>
                 <div class="p-grid" style="text-align: left" >
                     <div class="p-col-12 p-md-12 p-lg-12" >
-                        <p:dataTable var="productos" value="">
-                            <p:column headerText="Nombre">
-                                <h:outputText value="" />
+                        <p:dataTable id="tblDatos" var="dato" value="#{reporteInventarioStockMb.controlador.listaData}" reflow="true" >
+                            <p:column headerText="Código">
+                                <h:outputText value="#{dato.codigo}" />
                             </p:column>
-                            <p:column headerText="Proveedor">
-                                <h:outputText value="" />
+                            <p:column headerText="Producto">
+                                <h:outputText value="#{dato.producto}" />
+                            </p:column>
+                            <p:column headerText="Stock">
+                                <h:outputText value="#{dato.stock}" />
                             </p:column>
                             <p:column headerText="Categoria">
-                                <h:outputText value="" />
+                                <h:outputText value="#{dato.categoria}" />
                             </p:column>
-                            <p:column headerText="Cantidad">
-                                <h:outputText value="" />
-                            </p:column>
+                            
                         </p:dataTable>
                     </div>
                 </div>

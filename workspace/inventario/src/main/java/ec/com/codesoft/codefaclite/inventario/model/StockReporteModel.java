@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CategoriaProductoBusquedaDialogo;
-import ec.com.codesoft.codefaclite.inventario.data.StockMinimoData;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.StockMinimoData;
 import ec.com.codesoft.codefaclite.inventario.panel.StockMinimoPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -197,8 +197,7 @@ public class StockReporteModel extends StockMinimoPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Bodega bodegaSeleccionada=(Bodega) getCmbBodega().getSelectedItem();
-                    
+                    Bodega bodegaSeleccionada=(Bodega) getCmbBodega().getSelectedItem();                    
                     
                     listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,categoriaProducto);
                     

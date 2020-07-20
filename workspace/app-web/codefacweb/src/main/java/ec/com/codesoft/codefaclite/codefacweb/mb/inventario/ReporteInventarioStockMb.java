@@ -6,8 +6,11 @@
 package ec.com.codesoft.codefaclite.codefacweb.mb.inventario;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.inventario.ReporteInventarioStockControlador;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.RutaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -29,7 +32,7 @@ public class ReporteInventarioStockMb extends GeneralAbstractMb implements Contr
     private ReporteInventarioStockControlador controlador;
     
     public ModelControladorAbstract getControladorVista() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return controlador;
     }
 
     @Override
@@ -73,7 +76,7 @@ public class ReporteInventarioStockMb extends GeneralAbstractMb implements Contr
     }
 
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        controlador=new ReporteInventarioStockControlador(MensajeMb.intefaceMensaje,sessionMb.getSession(), this, ModelControladorAbstract.TipoVista.WEB);
     }
 
     public void actualizar() throws ExcepcionCodefacLite, RemoteException {
@@ -99,5 +102,18 @@ public class ReporteInventarioStockMb extends GeneralAbstractMb implements Contr
     public Map<Integer, Boolean> permisosFormulario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    ///                     GET AND SET
+    ////////////////////////////////////////////////////////////////////////////
+
+    public ReporteInventarioStockControlador getControlador() {
+        return controlador;
+    }
+
+    public void setControlador(ReporteInventarioStockControlador controlador) {
+        this.controlador = controlador;
+    }
+    
     
 }

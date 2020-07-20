@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.licence.NoExisteLicenciaException;
 import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaExcepcion;
+import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac.ModoActualizacionEnum;
 import ec.com.codesoft.codefaclite.main.model.ConfiguracionesInicalesModel;
 import ec.com.codesoft.codefaclite.main.model.DescargaModel;
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
@@ -137,16 +138,17 @@ public class Main {
         //Configurar diferente tipo de letra para los dialogos
         UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));
         
+        /**
+         * Configura el archivo para guardar la configuracion inicial en propertys de como va a iniciar el aplicativo
+         */
+        cargarConfiguracionesIniciales();
         
         //Verifica si se esta ejecutando la ultima version o manda a aactualizar
         verificarUltimaVersionCodefac();
         
         //Configurar los log el directorio y donde se va a mandar a grabar los datos
         configurarLogs();
-        /**
-         * Configura el archivo para guardar la configuracion inicial en propertys de como va a iniciar el aplicativo
-         */
-        cargarConfiguracionesIniciales();
+
         
         /**
          * Carga el tema seleccionado por defecto en aarchivo codefac.ini
@@ -187,7 +189,18 @@ public class Main {
     
     private static void verificarUltimaVersionCodefac()
     {
-        String path="http://www.cf.codesoft-ec.com/uploads/versiones/"; //directorio principal desde donde se van a bajar los archivos para actualizar
+        ////////////////////////////////////////////////////////////////////
+        ///  BUSCAR EL REPOSITORIO PARA ACTUALIZAR EN DESARROLLO O ESTABLE
+        ////////////////////////////////////////////////////////////////////
+        Properties propiedadesArchivo=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+        String modoActualizacion = propiedadesArchivo.getProperty(ArchivoConfiguracionesCodefac.CAMPO_MODO_ACTUALIZACION);
+        String path = ParametrosSistemaCodefac.REPOSITORIO_ACTUALIZACION_ESTABLE; //Por defecto el repositorio para actualizar siempre es el estable
+
+        if (modoActualizacion != null && modoActualizacion.equals(ModoActualizacionEnum.DESARROLLO.getNombre())) {
+            path = ParametrosSistemaCodefac.REPOSITORIO_ACTUALIZACION_DESARROLLO;
+        }
+        
+        //String path="http://www.cf.codesoft-ec.com/uploads/versiones/"; //directorio principal desde donde se van a bajar los archivos para actualizar
         //String path="http://localhost:8080/codefac_pagina/uploads/versiones/";
         String carpetaDescarga="tmp"; //nombre de la carpeta para almacenar en el directoro TODO: Crear una variable global paa hacer referenca al directorio temporal
         

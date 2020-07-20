@@ -131,5 +131,8 @@ public abstract class ParametrosSistemaCodefac {
      */
     public static String CORREO_COMPROBACION_CORREOS="codefac.test@gmail.com";
     
+    public static String REPOSITORIO_ACTUALIZACION_ESTABLE="http://www.cf.codesoft-ec.com/uploads/versiones/";
+    public static String REPOSITORIO_ACTUALIZACION_DESARROLLO="http://www.cf.codesoft-ec.com/uploads/version_desarrollo/";
+    
     
 }

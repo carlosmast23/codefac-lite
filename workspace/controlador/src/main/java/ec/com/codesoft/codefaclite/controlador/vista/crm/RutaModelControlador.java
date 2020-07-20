@@ -48,12 +48,13 @@ public class RutaModelControlador extends ModelControladorAbstract<RutaModelCont
      * Variable para almacenar la variable seleccionada
      */
     private RutaDetalle rutaDetalleSeleccionado;
-    
-    
-    
+
     public RutaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);
     }
+    
+    
+
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.inventario.data;
+package ec.com.codesoft.codefaclite.controlador.comprobante.reporte;
 
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
