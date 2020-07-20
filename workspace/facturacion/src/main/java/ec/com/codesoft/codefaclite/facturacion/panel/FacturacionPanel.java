@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosPanel;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CursorPorDefectoAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
@@ -1892,6 +1893,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.cmbDocumento = cmbDocumento;
     }
 
+    @ComboBoxBinding(source = "controlador.tipoDocumentoList",valueSelect ="controlador.tipoDocumentoEnumSeleccionado" )
     public JComboBox<TipoDocumentoEnum> getCmbTipoDocumento() {
         return cmbTipoDocumento;
     }

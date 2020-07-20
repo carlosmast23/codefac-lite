@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacA
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
@@ -49,7 +50,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         btnCargarFacturaIgualSecuencial = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         panelDatosGenerales = new javax.swing.JPanel();
-        jLabel35 = new javax.swing.JLabel();
         jLabel38 = new javax.swing.JLabel();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
@@ -61,6 +61,9 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         lblEstablecimiento = new javax.swing.JLabel();
         cmbPuntoEmision = new javax.swing.JComboBox<>();
         lblSecuencial = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        chkEnviarCorreoClientes = new javax.swing.JCheckBox();
+        chkEnviarCorreoTransportista = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jToolBar2 = new javax.swing.JToolBar();
         txtIdentificacionDestinatario = new javax.swing.JTextField();
@@ -148,14 +151,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         panelDatosGenerales.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         panelDatosGenerales.setLayout(new java.awt.GridBagLayout());
 
-        jLabel35.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel35.setText("Secuencial:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelDatosGenerales.add(jLabel35, gridBagConstraints);
-
         jLabel38.setText("             ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -229,6 +224,31 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
         panelDatosGenerales.add(jToolBar6, gridBagConstraints);
+
+        jLabel36.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel36.setText("Secuencial:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelDatosGenerales.add(jLabel36, gridBagConstraints);
+
+        chkEnviarCorreoClientes.setSelected(true);
+        chkEnviarCorreoClientes.setText("Enviar correos a los clientes");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        panelDatosGenerales.add(chkEnviarCorreoClientes, gridBagConstraints);
+
+        chkEnviarCorreoTransportista.setText("Enviar correos al transportista");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        panelDatosGenerales.add(chkEnviarCorreoTransportista, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -719,6 +739,8 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarTransportista;
     private javax.swing.JButton btnCargarFacturaIgualSecuencial;
     private javax.swing.JButton btnEliminarDetalle;
+    private javax.swing.JCheckBox chkEnviarCorreoClientes;
+    private javax.swing.JCheckBox chkEnviarCorreoTransportista;
     private javax.swing.JComboBox<DestinatarioGuiaRemision> cmbDestinatarios;
     private com.toedter.calendar.JDateChooser cmbFechaFactura;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFin;
@@ -736,7 +758,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
@@ -942,6 +964,22 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     @ComponenteSecundarioAnotacion(nombreCategoria = "Otros", visible = true)
     public JButton getBtnCargarFacturaIgualSecuencial() {
         return btnCargarFacturaIgualSecuencial;
+    }
+
+    public JCheckBox getChkEnviarCorreoClientes() {
+        return chkEnviarCorreoClientes;
+    }
+
+    public void setChkEnviarCorreoClientes(JCheckBox chkEnviarCorreoClientes) {
+        this.chkEnviarCorreoClientes = chkEnviarCorreoClientes;
+    }
+
+    public JCheckBox getChkEnviarCorreoTransportista() {
+        return chkEnviarCorreoTransportista;
+    }
+
+    public void setChkEnviarCorreoTransportista(JCheckBox chkEnviarCorreoTransportista) {
+        this.chkEnviarCorreoTransportista = chkEnviarCorreoTransportista;
     }
      
     

@@ -1808,8 +1808,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             //TODO:parametrizar las etiquetas que estan quemadas
             if(ParametroUtilidades.comparar(comprobante.getEmpresa(),ParametroCodefac.FACTURACION_RIDE_DIRECCION_EMPLEADO,EnumSiNo.SI))
             {
-                ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Dirección",empleado.getDireccion());
-                comprobante.addDatoAdicional(comprobanteAdicional);
+                if(empleado.getDireccion()!=null && !empleado.getDireccion().trim().isEmpty())
+                {
+                    ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Dirección",empleado.getDireccion());
+                    comprobante.addDatoAdicional(comprobanteAdicional);
+                }
             }
             
             if(ParametroUtilidades.comparar(comprobante.getEmpresa(),ParametroCodefac.FACTURACION_RIDE_RUC_EMPLEADO,EnumSiNo.SI))

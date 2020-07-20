@@ -30,7 +30,7 @@ public class ComboBoxBindingImp extends ComponentBindingAbstract<JComboBox,Combo
         }
 
         @Override
-        public void setAccion(List value) {
+        public void setAccion(List value,String nombrePropiedadControlador,ConverterSwingMvvc converter) {
             if(valueTemp==value)
                 return;
                 
@@ -69,7 +69,7 @@ public class ComboBoxBindingImp extends ComponentBindingAbstract<JComboBox,Combo
         }
 
         @Override
-        public void setAccion(Object value) {
+        public void setAccion(Object value,String nombrePropiedadControlador,ConverterSwingMvvc converter) {
             Object componente=getComponente();
             getComponente().setSelectedItem(value);
         }

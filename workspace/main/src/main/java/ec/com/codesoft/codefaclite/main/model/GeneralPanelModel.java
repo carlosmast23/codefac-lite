@@ -1460,6 +1460,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //Agregar ventana al combo de ventanas abiertas
             agregarVentanaAbierta(panel,false);
             
+            //TODO: Metodo de prueba para solucionar si se cambia de pantalla por ejemplo con abrir con parametros no estaba funcionando los permisos de 
+            //habilitarConfiguracioneBotones();
 
                         
         } catch (PropertyVetoException ex) {

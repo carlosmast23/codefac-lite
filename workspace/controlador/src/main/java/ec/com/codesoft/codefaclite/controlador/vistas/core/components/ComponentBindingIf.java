@@ -19,7 +19,7 @@ public interface ComponentBindingIf<T,C> {
     /**
      * Este metodo me permite establecer elos valores que van del CONTROLADOR a la VISTA
      */
-    public void setAccion(T value);
+    public void setAccion(T value,String nombrePropiedadControlador,ConverterSwingMvvc converter);
 
     /**
      * Metodo que debe devuelve el nombre de la propiedad de la vista

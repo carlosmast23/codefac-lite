@@ -33,4 +33,21 @@ public @interface TableBinding {
      * @return 
      */
     public String selectValue();
+    
+    /**
+     * Este modo permite crear una tabla con campos de seleccion con checks
+     */
+    public boolean modeCheck() default false;
+    
+    /**
+     * En este campo se tiene que setear la propiedad que voy a llenar los datos cuando tengo check habilitados
+     * @return 
+     */
+    public String listSelected() default ""; 
+    
+    /**
+     * Componente que esta vinculado a un checkBox que permite terminar de completar la logica de selecciona con las tablas
+     * @return 
+     */
+    public String componenteCheckSelect() default "";
 }

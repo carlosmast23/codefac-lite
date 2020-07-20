@@ -39,24 +39,15 @@
                 <p:tab title="Datos Cabecera">
                     <div class="p-grid" style="text-align: left" >
                         <div class="p-col-12 p-md-6 p-lg-3" >
-                            <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 70%" />                    
-                            <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}">
-                                <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarCliente}" update="txtCliente,datosCliente,formulario:tabDatosFactura:tblDatosAdicional"  />
-                            </p:commandButton>   
-                            <p:commandButton process="@this" icon="fa fa-plus"  styleClass="white-button" action="#{proformaMb.abrirDialogoCrearCliente()}">
-                                <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarClienteCreado}" update="txtCliente,datosCliente,formulario:tabDatosFactura:tblDatosAdicional"  />
-                            </p:commandButton>   
-                        </div>                            
+                            <p:selectOneMenu id="cmbDocumento" value="#{proformaMb.documentoSeleccionado}" converter="documentoEnumConverter" style="width: 70%" >
+                                <f:selectItems value="#{proformaMb.documentos}" var="documento" itemValue="#{documento.codigo}" />
+                            </p:selectOneMenu>
+                        </div>
 
                         <div class="p-col-12 p-md-6 p-lg-3" >
                             <p:datePicker  id="button" value="#{proformaMb.fechaEmision}" showIcon="true" placeholder="Fecha Emisión" style="width: 70%" />
                         </div>
 
-                        <div class="p-col-12 p-md-6 p-lg-3" >
-                            <p:selectOneMenu id="cmbDocumento" value="#{proformaMb.documentoSeleccionado}" converter="documentoEnumConverter" style="width: 70%" >
-                                <f:selectItems value="#{proformaMb.documentos}" var="documento" itemValue="#{documento.codigo}" />
-                            </p:selectOneMenu>
-                        </div>
                         <div class="p-col-12 p-md-6 p-lg-3" >
                             <div class="p-grid" style="text-align: left" >
                                 <div class="p-col-12 p-md-3 p-lg-6" >
@@ -68,8 +59,33 @@
                                     </p:selectOneMenu>
                                 </div>
                             </div>
-
                         </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <div class="p-grid" style="text-align: left" >
+                                <div class="p-col-12 p-md-3 p-lg-6" >
+                                    <p:outputLabel value="Tipo Documento:" />
+                                </div>
+                                <div class="p-col-12 p-md-3 p-lg-6" >
+                                    <p:selectOneMenu label="label" title="title" id="cmbTipoDocumento" value="#{proformaMb.controlador.tipoDocumentoEnumSeleccionado}" converter="tipoDocumentoConverter" style="width: 70%" >
+                                        <f:selectItems value="#{proformaMb.controlador.tipoDocumentoList}" var="tipoDocumento" itemValue="#{tipoDocumento.codigo}" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <p:inputText id="txtCliente" placeholder="Identificación Cliente" value="#{proformaMb.factura.cliente.identificacion}" style="width: 70%" />                    
+                            <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBuscarCliente}">
+                                <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarCliente}" update="txtCliente,datosCliente,formulario:tabDatosFactura:tblDatosAdicional"  />
+                            </p:commandButton>   
+                            <p:commandButton process="@this" icon="fa fa-plus"  styleClass="white-button" action="#{proformaMb.abrirDialogoCrearCliente()}">
+                                <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarClienteCreado}" update="txtCliente,datosCliente,formulario:tabDatosFactura:tblDatosAdicional"  />
+                            </p:commandButton>   
+                        </div>   
                     </div>
 
 
@@ -122,7 +138,7 @@
                             <div class="p-col-12 p-md-6 p-lg-3" >
                                 <div class="p-grid" style="text-align: left" >
                                     <div class="p-col-3 p-md-3 p-lg-3" >
-                                        <p:outputLabel style="font-weight: bold">Inc Iva:</p:outputLabel>
+                                        <p:outputLabel style="font-weight: bold;text-align: right">Inc Iva:</p:outputLabel>
                                     </div>
                                     <div class="p-col-6 p-md-6 p-lg-6" >
                                         <p:selectOneMenu  id="cmbIncluyeIvaDetalle" value="#{proformaMb.incluyeIvaDetalleEnum}" converter="siNoEnumConverter" disabled="#{!proformaMb.cmbIvaDetalleEnable}" >

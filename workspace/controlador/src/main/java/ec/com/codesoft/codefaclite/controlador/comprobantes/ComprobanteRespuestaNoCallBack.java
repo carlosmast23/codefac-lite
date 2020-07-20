@@ -142,6 +142,7 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
         {
             return ;
         }
+        imprimirComprobante(); 
         
         monitorData.getBarraProgreso().setForeground(Color.YELLOW);
         monitorData.getBarraProgreso().setValue(75);

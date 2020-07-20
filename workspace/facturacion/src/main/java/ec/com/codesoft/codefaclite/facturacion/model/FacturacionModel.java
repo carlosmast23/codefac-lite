@@ -527,7 +527,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnAgregarProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                TipoDocumentoEnum tipoDocumentoEnum=controlador.getTipoDocumentoEnumSeleccionado();
                 
                 switch(tipoDocumentoEnum)
                 {
@@ -738,7 +738,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             try {
                 FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
                 //Buscar la referencia de las variables depedendiendo del modulo seleccionado
-                TipoDocumentoEnum tipoDocumentoEnum = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
                 switch (tipoDocumentoEnum) {
                     case LIBRE:
                     case INVENTARIO:
@@ -796,7 +796,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     private void btnListenerCrearProducto() {
-        TipoDocumentoEnum tipoDocumento=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        TipoDocumentoEnum tipoDocumento=controlador.getTipoDocumentoEnumSeleccionado();
         
         EnumSiNo manejoInventario=EnumSiNo.NO;
         switch (tipoDocumento) {
@@ -922,7 +922,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     presupuestoSeleccionado.getId().toString(), 
                     presupuestoSeleccionado.getCatalogoProducto(), 
                     presupuestoSeleccionado.getId(),
-                    (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem(),
+                    controlador.getTipoDocumentoEnumSeleccionado(),
                     BigDecimal.ZERO);
             
             controlador.setearValoresProducto(facturaDetalle);
@@ -960,7 +960,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     rubroEstudianteTmp.getId().toString(), 
                     rubroEstudianteTmp.getRubroNivel().getCatalogoProducto(), 
                     rubroEstudianteTmp.getId(), 
-                    (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem(),
+                    controlador.getTipoDocumentoEnumSeleccionado(),
                     descuentoValor);
             controlador.setearValoresProducto(facturaDetalle);
             setFacturaDetalleSeleccionado(facturaDetalle);
@@ -1280,6 +1280,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         ComprobanteDataInterface comprobanteData = obtenerComprobanteData();
         //comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
+        //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
+        
         ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this, facturaProcesando, true);
         ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
 
@@ -1631,7 +1633,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         ///Cargar los datos de la factura segun el tipo de datos del primer detalle
         TipoDocumentoEnum tipoReferenciaEnum = factura.getDetalles().get(0).getTipoDocumentoEnum();
-        getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
+        controlador.setTipoDocumentoEnumSeleccionado(tipoReferenciaEnum);
+        //getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
         seleccionarPanelTipoDocumento(tipoReferenciaEnum);
 
         switch (tipoReferenciaEnum) {
@@ -2200,7 +2203,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private void setearValoresCliente() {
         
         
-        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        TipoDocumentoEnum tipoDocumentoEnum=controlador.getTipoDocumentoEnumSeleccionado();
         
         //Cargar los tipos de documentos segun el tipo de dcumento
         switch(tipoDocumentoEnum)
@@ -2371,6 +2374,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         System.out.println("Ingresando a iniciar");
         
         controlador=new FacturaModelControlador(session,this,DialogoCodefac.intefaceMensaje);
+        controlador.iniciar();
         if (!validacionParametrosCodefac()) {
             dispose();
             throw new ExcepcionCodefacLite("No cumple validacion inicial");
@@ -2557,7 +2561,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 //Variable del producto para verificar otros datos como el iva
                 CatalogoProducto catalogoProducto=null;
                 //Seleccionar la referencia dependiendo del tipo de documento
-                TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                TipoDocumentoEnum tipoDocumentoEnum=controlador.getTipoDocumentoEnumSeleccionado();
                 
                 switch (tipoDocumentoEnum) {
                     case ACADEMICO:
@@ -2713,27 +2717,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        //Agregar los tipos de documentos disponibles
-        getCmbTipoDocumento().removeAllItems();
-        List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION,session.getModulos());
-        
-        if(tipoDocumentos.size()==0)
-        {
-            DialogoCodefac.mensaje("Advertencia","No tiene disponible ningun modo para facturar",DialogoCodefac.MENSAJE_INCORRECTO);
-        }
-        
-        for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
-            getCmbTipoDocumento().addItem(tipoDocumento);
-        }
-        
-        //Seleccionar el tipo de documento configurado por defecto
-        ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA);
-        if(parametroCodefac!=null)
-        {
-            TipoDocumentoEnum tipoDocumentoEnumDefault=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroCodefac.getValor());
-            getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnumDefault);
         }
         
         getCmbIva().removeAllItems();
@@ -3149,7 +3132,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 
                     try {
-                        TipoDocumentoEnum tipoDocumentoEnum = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                        TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
                         
                         switch (tipoDocumentoEnum) {
                             case ACADEMICO:
@@ -3573,7 +3556,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public TipoDocumentoEnum obtenerTipoDocumentoSeleccionado() {
-        return (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        return controlador.getTipoDocumentoEnumSeleccionado();
     }
 
     @Override
@@ -3682,6 +3665,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         return getChkPagoConCartera().isSelected();
     }
+
+    public FacturaModelControlador getControlador() {
+        return controlador;
+    }
+
+    public void setControlador(FacturaModelControlador controlador) {
+        this.controlador = controlador;
+    }
+    
     
 
     @Override

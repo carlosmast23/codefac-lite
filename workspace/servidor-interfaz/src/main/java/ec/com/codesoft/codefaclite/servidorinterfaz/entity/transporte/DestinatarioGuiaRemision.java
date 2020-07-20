@@ -5,15 +5,24 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -270,6 +279,72 @@ public class DestinatarioGuiaRemision implements Serializable{
         return destinatorio.getRazonSocial()+" ("+preimpreso+")";
     }
     
+    ////////////////////////////////////////////////////////////////////////////
+    ///                     METODOS PERSONALIZADOS
+    ////////////////////////////////////////////////////////////////////////////
+    
+    public static DestinatarioGuiaRemision crearDestinatario(GuiaRemision guiaRemision,Factura factura,String autorizacion,Persona destinatarioCliente,String direccionDestino,java.util.Date fechaFactura,String motivoTraslado,String preimpresoFactura,Integer codigoSucursal) throws ServicioCodefacException
+    {
+        //Validaciones previas para agregar el destinatario
+        if(autorizacion.isEmpty())
+        {            
+            throw new ServicioCodefacException("No se puede agregar facturas sin autorización");
+            //return null;
+        }
+        
+        DestinatarioGuiaRemision destinatario=new DestinatarioGuiaRemision();
+        destinatario.setAutorizacionNumero(autorizacion);
+        destinatario.setCodDucumentoSustento(""); //TODO: falta ver si solo pongo el codigo de la factura o pueden haber otros documentos que se pueden transportar
+        destinatario.setDestinatorio(destinatarioCliente);
+        destinatario.setDireccionDestino(direccionDestino);
+        destinatario.setFechaEmision(new java.sql.Date(fechaFactura.getTime()));
+        destinatario.setGuiaRemision(guiaRemision);
+        destinatario.setMotivoTranslado(motivoTraslado);
+        destinatario.setPreimpreso(preimpresoFactura);
+        destinatario.setRazonSocial(destinatarioCliente.getRazonSocial());
+        destinatario.setRuta(destinatario.getRuta());
+        destinatario.setFacturaReferencia(factura);
+        destinatario.setIdentificacion(destinatarioCliente.getIdentificacion());
+        destinatario.setCodigoEstablecimiento(codigoSucursal);
+        
+        ///Agregado detalle  de los productos de la factura enlazada
+        for (FacturaDetalle facturaDetalle : factura.getDetalles()) {
+            
+            //Vericar que cuando sea productos esta activado la opcion de poder transportar en la guia de remision
+            if(facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.INVENTARIO) || facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
+            {
+                try {
+                    Producto producto = (Producto) ServiceFactory.getFactory().getFacturaDetalleServiceIf().getReferenciaDetalle(facturaDetalle);
+                    if(producto.getTransportarEnGuiaRemisionEnum().equals(EnumSiNo.NO))
+                    {
+                        continue;
+                    }
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(DestinatarioGuiaRemision.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(DestinatarioGuiaRemision.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+            
+            DetalleProductoGuiaRemision detalle=new DetalleProductoGuiaRemision();
+            detalle.setCantidad(facturaDetalle.getCantidad().intValue());
+            detalle.setCodigoAdicional("");
+            detalle.setCodigoInterno(facturaDetalle.getReferenciaId()+""); //Todo: Ver si en este campo para futuras versiones se graba mejor el codigo de los productos , sevicios , etc
+            detalle.setDescripcion(facturaDetalle.getDescripcion());
+            detalle.setReferenciaId(facturaDetalle.getId());
+            destinatario.addProducto(detalle);
+        }        
+        
+        if(destinatario.getDetallesProductos()==null || destinatario.getDetallesProductos().size()==0)
+        {
+            throw new ServicioCodefacException("El destinatario no tiene ningun detalle");
+            //DialogoCodefac.mensaje(new CodefacMsj("El destinatario no tiene ningun detalle",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            //return null;
+        }
+        
+        return destinatario;
+    }
     
     
 }
