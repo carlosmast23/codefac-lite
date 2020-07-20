@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:c="http://xmlns.jcp.org/jsf/composite/componentes">
+
+    <ui:composition  template="/template/codefac_template.xhtml">
+        <ui:define name="contenido" >
+            <f:event listener="#{controllerCodefacMb.agregarVista(reporteInventarioStockMb)}" type="preRenderComponent" /> 
+                <div class="p-grid" style="text-align: left" >
+                    <div class="p-col-12 p-md-6 p-lg-6" >
+                        <h:outputLabel id="txtReporte"  value="Reporte: "/>
+                         <p:selectOneMenu id="console1" value=""  style="width:125px">
+                            <f:selectItems var="" value="" itemValue=""    />
+                        </p:selectOneMenu>
+                    </div> 
+                </div>
+                <div class="p-grid" style="text-align: left" >
+                    <div class="p-col-12 p-md-6 p-lg-6" >
+                        <h:outputLabel id="txtBodega"  value="Bodega: "/>                      
+                         <p:selectOneMenu id="console2" value=""  style="width:125px">
+                            <f:selectItems var="" value="" itemValue=""    />
+                        </p:selectOneMenu>
+                    </div> 
+                </div>
+                <div class="p-grid" style="text-align: left" >
+                   <div class="p-col-12 p-md-6 p-lg-6" >
+                       <h:outputLabel id="txtDescripcion"  value="Descripción: "/>                    
+                       <p:selectOneMenu id="console3" value=""  style="width:125px">
+                           <f:selectItems var="" value="" itemValue=""    />
+                       </p:selectOneMenu>
+                       <p:selectBooleanCheckbox value="" />
+                       <p:commandButton 
+                           process="@this"
+                           value="Buscar" 
+                           update=""
+                       >
+                       </p:commandButton>
+                   </div> 
+                </div>
+                <div class="p-grid" style="text-align: left" >
+                    <div class="p-col-12 p-md-12 p-lg-12" >
+                        <p:dataTable var="productos" value="">
+                            <p:column headerText="Nombre">
+                                <h:outputText value="" />
+                            </p:column>
+                            <p:column headerText="Proveedor">
+                                <h:outputText value="" />
+                            </p:column>
+                            <p:column headerText="Categoria">
+                                <h:outputText value="" />
+                            </p:column>
+                            <p:column headerText="Cantidad">
+                                <h:outputText value="" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+        </ui:define>
+    </ui:composition>
+
+</html>
+

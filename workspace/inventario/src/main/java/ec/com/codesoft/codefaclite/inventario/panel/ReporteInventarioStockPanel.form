@@ -55,13 +55,7 @@
     <Component class="javax.swing.JComboBox" name="cmbTipoReporte">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="5">
-            <StringItem index="0" value="Seleccione busqueda"/>
-            <StringItem index="1" value="Producto"/>
-            <StringItem index="2" value="Proveedor"/>
-            <StringItem index="3" value="Categoria"/>
-            <StringItem index="4" value=" "/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
       </Properties>
       <AuxValues>

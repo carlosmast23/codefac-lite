@@ -11,6 +11,9 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
+import ec.com.codesoft.codefaclite.controlador.inventario.ReporteInventarioStockControlador;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CatalogoProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.ProveedorBusquedaDialogo;
@@ -43,19 +46,12 @@ import java.util.logging.Logger;
  *
  * @author DesarrolloSoftware
  */
-public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
+public class ReporteInventarioStockModel extends ReporteInventarioStockPanel implements ControladorVistaIf, ReporteInventarioStockControlador.SwingIf
 {
-    private Producto producto;
-    private Persona proveedor; 
-    private CategoriaProducto categoriaProducto;
-    private Boolean todos;
-    
+    private ReporteInventarioStockControlador controlador = new ReporteInventarioStockControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        iniciarValores();
-        addListenerBotones();
-        addCheckListener();
-        addComboListener();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -90,11 +86,8 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
 
     @Override
     public void limpiar() {
-        this.producto = null;
-        this.proveedor = null;
-        this.categoriaProducto = null;
-        getTxtNombre().setText("");
-   }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
     public String getURLAyuda() {
@@ -102,201 +95,38 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
     }
 
     @Override
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public InterfaceModelFind obtenerDialogoBusqueda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public Map<Integer, Boolean> permisosFormulario() {
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
         permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
-        permisos.put(GeneralPanelInterface.BOTON_GRABAR, false);
-        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
-        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
 
     @Override
-    public List<String> getPerfilesPermisos() {
-        List<String> permisos = new ArrayList<String>();
-        permisos.add(Perfil.PERFIl_ADMINISTRADOR);
-        permisos.add(Perfil.PERFIl_OPERADOR);
-        return permisos;
+    public ModelControladorAbstract getControladorVista() {
+        return controlador;
     }
-
+    
     @Override
-    public InterfaceModelFind obtenerDialogoBusqueda() {
-        BuscarDialogoModel buscarDialogoModel = null;
-        String opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
-        switch(opcionReporte)
-        {
-            case "Producto":
-                ProductoBusquedaDialogo busquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
-                return busquedaDialogo;
-                //buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
-            //break;
-            case "Proveedor":
-                ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
-                return proveedorBusquedaDialogo;
-                //buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
-            //break;
-            case "Categoria":
-                CategoriaProductoBusquedaDialogo categoriaProductoBusquedaDialogo = new CategoriaProductoBusquedaDialogo(session.getEmpresa());
-                return categoriaProductoBusquedaDialogo;
-                //buscarDialogoModel = new BuscarDialogoModel(categoriaProductoBusquedaDialogo);
-            //break;
-        }
-        return null;
-    }
-
-    @Override
-    public void cargarDatosPantalla(Object entidad) {
-        String opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
-        switch(opcionReporte)
-        {
-            case "Producto":
-                producto = (Producto) entidad;
-                getTxtNombre().setText(" " + producto.getNombre()+ " - " + producto.getCodigoPersonalizado());
-            break;
-            case "Proveedor":
-                proveedor =(Persona) entidad;
-                getTxtNombre().setText(" " + proveedor.getIdentificacion() + " - " + proveedor.getRazonSocial());
-            break;
-            case "Categoria":
-                categoriaProducto = (CategoriaProducto) entidad;
-                getTxtNombre().setText(" " + categoriaProducto.getNombre() + " " + categoriaProducto.getDescripcion());
-                
-            break;
-            default:
-                getTxtNombre().setText("");
-            break;
-        }
-        
-    }
-    
-    private void iniciarValores() {
-        try {
-            BodegaServiceIf bodegaServiceIf = ServiceFactory.getFactory().getBodegaServiceIf();
-            List<Bodega> bodegas = bodegaServiceIf.obtenerActivosPorEmpresa(session.getEmpresa());
-            getCmbBodega().removeAllItems();
-            for (Bodega bodega : bodegas) {
-                getCmbBodega().addItem(bodega);
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(ReporteInventarioStockModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ReporteInventarioStockModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void addListenerBotones()
-    {
-        getBtnBuscarGenerica().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                if(getCmbTipoReporte().getSelectedItem().equals("Producto"))
-                {
-                    ProductoBusquedaDialogo busquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
-                    BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
-                    buscarDialogoModel.setVisible(true);
-                    Producto productoTemp = (Producto) buscarDialogoModel.getResultado();
-                    if(productoTemp != null)
-                    {
-                        limpiar();
-                        producto = productoTemp;
-                        getTxtNombre().setText(" " + producto.getNombre()+ " - " + producto.getCodigoPersonalizado());
-                        
-                    }
-                }
-                else if(getCmbTipoReporte().getSelectedItem().equals("Proveedor"))
-                {
-                    ProveedorBusquedaDialogo busquedaDialogo = new ProveedorBusquedaDialogo();
-                    BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
-                    buscarDialogoModel.setVisible(true);
-                    Persona proveedorTemp = (Persona) buscarDialogoModel.getResultado();
-                    if(proveedorTemp != null)
-                    {
-                        limpiar();
-                        proveedor = proveedorTemp;
-                        getTxtNombre().setText(" " + proveedor.getNombreSimple() + " " + proveedor.getIdentificacion());
-                    }
-                }
-                else if(getCmbTipoReporte().getSelectedItem().equals("Categoria"))
-                {
-                    CatalogoProductoBusquedaDialogo busquedaDialogo = new CatalogoProductoBusquedaDialogo(session.getEmpresa());
-                    BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
-                    buscarDialogoModel.setVisible(true);
-                    CategoriaProducto categoriaProductoTemp = (CategoriaProducto) buscarDialogoModel.getResultado();
-                    if(categoriaProductoTemp != null)
-                    {
-                        limpiar();
-                        categoriaProducto = categoriaProductoTemp;
-                        getTxtNombre().setText(" " + categoriaProducto.getNombre() + " " + categoriaProducto.getDescripcion());
-                    }
-                }else
-                {
-                    DialogoCodefac.mensaje("Advertencia", "Seleccione una opción valida", DialogoCodefac.MENSAJE_ADVERTENCIA);                
-                }
-            }
-        });
-        
-        getBtnBuscar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                String opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
-                switch(opcionReporte)
-                {
-                    case "Producto":
-                        if(!todos){
-                            //buscarProducto();
-                            crearMapPorProducto();
-                        }else{
-                            //buscarTodosProducto();
-                            crearMapPorProducto();
-                        }
-//                      if(productoProveedores != null && productoProveedores.size() > 0){
-//                          mostrarDatosTablaProducto();
-//                      }else{
-//                          DialogoCodefac.mensaje("Producto", "No existen Proveedores para el Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-//                      }
-                    break;
-                    case "Proveedor":
-                        if(!todos){
-//                                buscarPorProveedor();
-//                                crearMapPorProveedor();
-                        }else{
-//                                buscarTodosProductoProveedor();
-//                                crearMapPorProveedor();
-                        }
-//                      if(productoProveedores != null && productoProveedores.size() > 0){
-//                          mostrarDatosTablaProveedor();
-//                      }else{
-//                          DialogoCodefac.mensaje("Proveedor", "No existen Producots para el Proveedor", DialogoCodefac.MENSAJE_ADVERTENCIA);
-//                      }
-                    break;
-                    case "Categoria":
-                        if(!todos)
-                        {
-                            
-                        }else
-                        {
-                            
-                        }
-                    default:
-                        DialogoCodefac.mensaje("Advertencia", "Seleccione una opción valida", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    break;                
-                }
-            }
-        });
-    }
-    
-    public void addComboListener()
-    {
-        getCmbTipoReporte().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                limpiar();                
-            }
-        });
-    }
-    
     public void addCheckListener()
     {
         getCheckTodos().addActionListener(new ActionListener() {
@@ -304,85 +134,29 @@ public class ReporteInventarioStockModel extends ReporteInventarioStockPanel
             public void actionPerformed(ActionEvent e) {
                 if(getCheckTodos().isSelected())
                 {
-                    todos = true;
+                    controlador.setTodos(true);
                     getBtnBuscarGenerica().setEnabled(false);
                     getTxtNombre().setEnabled(false);
                     getTxtNombre().setText("");
                 }
                 else
                 {
-                    todos = false;
+                    controlador.setTodos(false);
                     getBtnBuscarGenerica().setEnabled(true);
                     getTxtNombre().setEnabled(true);
                     getTxtNombre().setText("");
                 }
             }
         });
+    } 
+
+    public ReporteInventarioStockControlador getControlador() {
+        return controlador;
     }
-    
-    public List<ProductoProveedor> buscarProducto() throws RemoteException, ServicioCodefacException
-    {
-        ProductoProveedorServiceIf serviceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
-        //Map<String,Object> parametros = new HashMap<>();
-        //parametros.put("producto", this.producto);
-        List<ProductoProveedor> productos = serviceIf.buscarPorProductoActivo(producto);
-        return productos;
-    }
-    
-    public List<ProductoProveedor> buscarTodosProducto() throws RemoteException, RemoteException
-    {
-        ProductoProveedorServiceIf serviceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
-        List<ProductoProveedor> productos = serviceIf.obtenerTodos();
-        return productos;
+
+    public void setControlador(ReporteInventarioStockControlador controlador) {
+        this.controlador = controlador;
     }
     
     
-    public Map<Producto, List<ProductoProveedor>> mapProducto(List<ProductoProveedor> productos)
-    {
-        Map<Producto, List<ProductoProveedor>> mapProductos = new TreeMap<>(new Comparator<Producto>() {
-            @Override
-            public int compare(Producto p1, Producto p2){
-                return p1.compareTo(p2);
-            }
-        });
-        
-       for(ProductoProveedor pp : productos) 
-       {
-           if(mapProductos.get(pp.getProducto()) == null)
-           {
-               List<ProductoProveedor> pps = new ArrayList<>();
-               pps.add(pp);
-               mapProductos.put(pp.getProducto(), pps);
-           }else{
-               mapProductos.get(pp.getProducto()).add(pp);
-           }  
-       }
-       
-       return mapProductos;
-    }
-    
-    
-    
-    
-    public void crearMapPorProducto()
-    {
-        
-    }
-    
-    public void buscarPorProveedor()
-    {
-        
-    }
-    
-    public void buscarPorTodosProveedor(){
-        
-    }
-    
-    public void buscarPorCategoria(){
-        
-    }
-    
-    public void buscarPorTodosCategoria(){
-        
-    }
 }

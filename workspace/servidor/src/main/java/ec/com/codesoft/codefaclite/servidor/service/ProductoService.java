@@ -236,7 +236,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return null;
         
     }
-            
+                
     public List<Producto> obtenerTodosActivos(Empresa empresa) throws java.rmi.RemoteException
     {
         //Producto producto;
@@ -288,6 +288,36 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 
             }
         });
+    }
+    
+    public List<Producto> buscarPorCategoria(Empresa empresa, CategoriaProducto categoria)
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        //mapParametros.put("estado",estadoEnum.getEstado());
+        mapParametros.put("empresa",empresa);
+        
+        List<Producto> productos=getFacade().findByMap(mapParametros);
+        /*if(productos.size()>0)
+        {
+            return productos.;
+        }*/
+        return productos;
+        //return productoFacade.findAll();
+    }
+    
+    public List<Producto> buscarProductoActivo(Producto producto,Empresa empresa) throws ServicioCodefacException, RemoteException
+    {
+        Map<String,Object> mapParametros = new HashMap<String,Object>();        
+        mapParametros.put("producto",producto);
+        mapParametros.put("empresa",empresa);        
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());        
+        
+        List<Producto> productos = getFacade().findByMap(mapParametros);
+        if(productos.size()>0)
+        {
+            return productos;
+        }
+        return null;
     }
     
 

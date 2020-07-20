@@ -42,4 +42,5 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     
     public void eliminarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException;
     
+    public List<Producto> buscarProductoActivo(Producto producto,Empresa empresa) throws ServicioCodefacException,RemoteException;
 }

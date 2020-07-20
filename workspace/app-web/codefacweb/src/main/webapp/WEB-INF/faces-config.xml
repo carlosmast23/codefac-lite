@@ -203,7 +203,24 @@
             </redirect>
         </navigation-case>
         
-        <!--- -->
-        
+        <!--
+            ->INVENTARIO
+                ->REPORTES
+                    ->REPORTE INVENTRAIO STOCK
+        -->
+        <navigation-case>
+            <from-outcome>reporte_inventario_stock</from-outcome>
+            <to-view-id>sistema/inventario/reporte_inventario_stock.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+                <view-param>
+                    <name>tipo</name>
+                    <value>reporte_inventario_stock</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -69,7 +71,6 @@ public abstract class ReporteInventarioStockPanel extends ControladorCodefacInte
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
 
-        cmbTipoReporte.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione busqueda", "Producto", "Proveedor", "Categoria", " " }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -149,7 +150,8 @@ public abstract class ReporteInventarioStockPanel extends ControladorCodefacInte
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    @ButtonBinding(actionListener ="controlador.listenerBotonBuscarFiltroPorCategoria" )
     public JButton getBtnBuscar() {
         return btnBuscar;
     }
@@ -157,7 +159,8 @@ public abstract class ReporteInventarioStockPanel extends ControladorCodefacInte
     public void setBtnBuscar(JButton btnBuscar) {
         this.btnBuscar = btnBuscar;
     }
-
+    
+    @ButtonBinding(actionListener = "controlador.listenerBotonBuscar")
     public JButton getBtnBuscarGenerica() {
         return btnBuscarGenerica;
     }
@@ -177,11 +180,13 @@ public abstract class ReporteInventarioStockPanel extends ControladorCodefacInte
     public JComboBox<Bodega> getCmbBodega() {
         return cmbBodega;
     }
-
+    
+    @ComboBoxBinding(source = "controlador.bodegas", valueSelect = "controlador.bodega")
     public void setCmbBodega(JComboBox<Bodega> cmbBodega) {
         this.cmbBodega = cmbBodega;
     }
-
+    
+    @ComboBoxBinding(source = "controlador.filtroPorCategoria", valueSelect = "controlador.elementoSeleccionadoFiltroPorCategoria")
     public JComboBox<String> getCmbTipoReporte() {
         return cmbTipoReporte;
     }
