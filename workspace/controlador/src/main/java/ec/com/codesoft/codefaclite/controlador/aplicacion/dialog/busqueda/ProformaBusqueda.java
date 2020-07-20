@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import java.io.Serializable;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 
 /**
@@ -25,10 +26,19 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
     
     private Empresa empresa;
     private static final long serialVersionUID = -1238278914412853685L;
+    
+    private Boolean mostrarFacturados;
 
     public ProformaBusqueda(Empresa empresa) {
         this.empresa = empresa;
+        this.mostrarFacturados=false;
     }
+    
+    public ProformaBusqueda(Empresa empresa,Boolean mostrarFacturados) {
+        this.empresa = empresa;
+        this.mostrarFacturados=mostrarFacturados;
+    }
+    
     
     
     @Override
@@ -45,9 +55,15 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
 
     @Override
     public QueryDialog getConsulta(String filter) {
+        
+        String mostrarFacturadosStr="";
+        if(mostrarFacturados)
+        {
+            mostrarFacturadosStr=" or u.estado=?5 ";
+        }
         //Factura factura;
         //factura.getEmpresa();
-        String queryString = "SELECT u FROM Factura u WHERE u.empresa=?4 and u.estado=?1 ";
+        String queryString = "SELECT u FROM Factura u WHERE u.empresa=?4 and ( u.estado=?1 "+mostrarFacturadosStr+" ) ";
         
 
         queryString += " AND (u.codigoDocumento=?3) ";
@@ -55,7 +71,13 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         queryString += "AND ( LOWER(u.cliente.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
         queryString += " ORDER BY u.id DESC ";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1, ComprobanteEnumEstado.AUTORIZADO.getEstado());
+        
+        if(mostrarFacturados)
+        {
+            queryDialog.agregarParametro(5, ComprobanteEnumEstado.FACTURADO_PROFORMA.getEstado());
+        }
+        
         queryDialog.agregarParametro(2, filter);
         queryDialog.agregarParametro(3, DocumentoEnum.PROFORMA.getCodigo());
         queryDialog.agregarParametro(4,empresa);

@@ -93,6 +93,9 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     @JoinColumn(name = "USUARIO_ID")
     private Usuario usuario;
     
+    @JoinColumn(name = "PEDIDO_ID")
+    private Factura proforma;
+    
         
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -496,6 +499,15 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    public Factura getProforma() {
+        return proforma;
+    }
+
+    public void setProforma(Factura proforma) {
+        this.proforma = proforma;
+    }
+    
     
     
     /**

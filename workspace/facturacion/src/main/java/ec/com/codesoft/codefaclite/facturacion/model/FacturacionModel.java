@@ -370,16 +370,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 buscarDialogoModel.setVisible(true);
                 if(buscarDialogoModel.getResultado()!=null)
                 {
-                    factura = (Factura) buscarDialogoModel.getResultado();
+                    Factura proforma = (Factura) buscarDialogoModel.getResultado();
                     //Metodo para actualizar las referencias editadas , ene este caso el cliente cuando cambios los datos
                     //Todo: Ver como se puede optimizar
                     try {
-                        factura=(Factura) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(factura);
+                        factura=(Factura) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(proforma);
                     } catch (RemoteException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
                     factura.setId(null); //Con este artificio no tengo que copiar a un nuevo objeto y al grabar me reconoce como un nuevo dato
+                    factura.setProforma(proforma);
 
                     //Todo: revisar que el cambio sea correcto
                     //Actualizo con los nuevo valores del cliente si se modifico y viene de un presupuesto

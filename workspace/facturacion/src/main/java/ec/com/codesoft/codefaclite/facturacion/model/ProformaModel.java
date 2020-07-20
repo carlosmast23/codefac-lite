@@ -98,7 +98,7 @@ public class ProformaModel extends FacturacionModel{
 
     @Override
     public InterfaceModelFind getBusquedaInterface() {
-        return new ProformaBusqueda(session.getEmpresa());
+        return new ProformaBusqueda(session.getEmpresa(),true);
     }
 
     @Override

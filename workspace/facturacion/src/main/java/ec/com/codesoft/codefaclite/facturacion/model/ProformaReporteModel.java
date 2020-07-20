@@ -69,8 +69,10 @@ public class ProformaReporteModel extends ProformaReportePanel {
 
     private void iniciarComponentes() {
         getCmbEstado().removeAllItems();
-        getCmbEstado().addItem(GeneralEnumEstado.ACTIVO);
-        getCmbEstado().addItem(GeneralEnumEstado.ELIMINADO);
+        //TODO:Toca establecer un solo estado
+        getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
+        getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO);
+        getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
 
     }
 
@@ -146,7 +148,7 @@ public class ProformaReporteModel extends ProformaReportePanel {
         //Map<String,BigDecimal> mapTotales=new HashMap<String,BigDecimal>();
 
         //BigDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
-        GeneralEnumEstado estadoFactura = (GeneralEnumEstado) getCmbEstado().getSelectedItem();
+        ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
         String estadoStr = estadoFactura.getEstado();
 
         if (getDateFechaInicio().getDate() != null) {
@@ -298,7 +300,7 @@ public class ProformaReporteModel extends ProformaReportePanel {
                     }
                     
                     
-                    proformasConsulta=ServiceFactory.getFactory().getFacturacionServiceIf().consultarProformasReporte(cliente,fechaInicial,fechaFinal,session.getEmpresa(),(GeneralEnumEstado) getCmbEstado().getSelectedItem());
+                    proformasConsulta=ServiceFactory.getFactory().getFacturacionServiceIf().consultarProformasReporte(cliente,fechaInicial,fechaFinal,session.getEmpresa(),(ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem());
                     construirDataReporte();
                     construirTabla();
                     //ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporte(cliente,getDateFechaInicio().getDate(),getDateFechaFin().getDate(), title, formularioCerrando, referido, formularioCerrando)

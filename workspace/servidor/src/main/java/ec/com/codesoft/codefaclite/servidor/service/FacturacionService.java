@@ -262,6 +262,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         factura.setIdentificacion(factura.getCliente().getIdentificacion());
         factura.setDireccion(factura.getSucursal().getDireccion());
         factura.setTelefono(factura.getSucursal().getTelefonoConvencional());
+        
+        //Cambiar el estado si viene de un pedido si fuera el caso
+        Factura proforma=factura.getProforma();
+        proforma.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
+        entityManager.merge(proforma);
 
         ComprobantesService servicioComprobante = new ComprobantesService();
         servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);
@@ -686,7 +691,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         });
     }
     
-    public List<Factura> consultarProformasReporte(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,GeneralEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException
+    public List<Factura> consultarProformasReporte(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException
     {
         return getFacade().consultarProformasReporteFacade(cliente, fechaInicial, fechaFinal, empresa,estado);
     }

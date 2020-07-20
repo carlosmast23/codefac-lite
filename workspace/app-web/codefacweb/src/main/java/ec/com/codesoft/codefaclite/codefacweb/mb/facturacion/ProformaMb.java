@@ -338,7 +338,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
         if (tipoPaginaEnum.equals(tipoPaginaEnum.PROFORMA)) {
-            return new ProformaBusqueda(sessionMb.getSession().getEmpresa());
+            return new ProformaBusqueda(sessionMb.getSession().getEmpresa(),true);
         } else if (tipoPaginaEnum.equals(tipoPaginaEnum.FACTURA)) {
             return new FacturaBusqueda(sessionMb.getSession().getEmpresa());
         }

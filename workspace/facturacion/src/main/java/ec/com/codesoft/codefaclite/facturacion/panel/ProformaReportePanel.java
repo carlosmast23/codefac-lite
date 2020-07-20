@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -231,7 +232,7 @@ public abstract class ProformaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnLimpiarFechaFin;
     private javax.swing.JButton btnLimpiarFechaInicio;
     private javax.swing.JCheckBox chkTodos;
-    private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstado;
     private com.toedter.calendar.JDateChooser dateFechaFin;
     private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JLabel jLabel8;
@@ -267,7 +268,7 @@ public abstract class ProformaReportePanel extends ControladorCodefacInterface {
         return chkTodos;
     }
 
-    public JComboBox<GeneralEnumEstado> getCmbEstado() {
+    public JComboBox<ComprobanteEntity.ComprobanteEnumEstado> getCmbEstado() {
         return cmbEstado;
     }
 

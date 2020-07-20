@@ -415,7 +415,12 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
          * Estado auxiliar para decir al sistema que tiene buscar autorizados y
          * anulados por el Sri
          */
-        TODOS_SRI("T", "Todos Sri");
+        TODOS_SRI("T", "Todos Sri"),
+        /**
+         * Estado que solo sirve para las proformas para saber que estan facturas
+         * TODO: Buscar otra forma mejor de ubicar el estado de la proformas por que esta mesclando la logica de los comprobantes
+         */
+        FACTURADO_PROFORMA("F","Facturado");
 
         private ComprobanteEnumEstado(String estado, String nombre) {
             this.estado = estado;

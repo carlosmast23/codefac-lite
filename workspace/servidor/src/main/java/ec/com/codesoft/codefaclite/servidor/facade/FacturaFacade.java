@@ -340,7 +340,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
     }
       
-      public List<Factura> consultarProformasReporteFacade(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,GeneralEnumEstado estado) 
+      public List<Factura> consultarProformasReporteFacade(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estado) 
       {
           Factura factura;
           //factura.getCodigoDocumento()
