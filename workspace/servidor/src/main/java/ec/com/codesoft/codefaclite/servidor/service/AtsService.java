@@ -346,7 +346,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
          * TODO: Verificar si en esta consulta no se traen las notas de venta interna porque no son documentos validos
          * Pero si deberia trear otros documentos que nos sean facturas tener pendiente
          */
-        List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,false,null,false,null,empresa,DocumentoEnum.FACTURA,null);
+        List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,false,null,false,null,empresa,DocumentoEnum.FACTURA,null,null);
         
         Map<String,VentaAts> mapVentas=new HashMap<String,VentaAts>();
         

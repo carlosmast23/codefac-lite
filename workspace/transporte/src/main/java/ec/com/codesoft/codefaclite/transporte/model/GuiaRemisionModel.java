@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataGuiaRemision;
@@ -90,7 +91,7 @@ import org.jdesktop.swingx.JXDatePicker;
  *
  * @author Carlos
  */
-public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDatosComprobanteElectronicosInterface{
+public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDatosComprobanteElectronicosInterface,InterfazPostConstructPanel{
     
     private GuiaRemision guiaRemision;
     //private Transportista transportista;
@@ -510,46 +511,47 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     
     private DestinatarioGuiaRemision crearDestinatario()
     {
-        //Validaciones previas para agregar el destinatario
-        if(getTxtAutorizacion().getText().isEmpty())
-        {
+        try {
+            //Validaciones previas para agregar el destinatario
+            /*if(getTxtAutorizacion().getText().isEmpty())
+            {
             DialogoCodefac.mensaje("Advertencia","No se puede agregar facturas sin autorización",DialogoCodefac.MENSAJE_ADVERTENCIA);
             return null;
-        }
-        
-        DestinatarioGuiaRemision destinatario=new DestinatarioGuiaRemision();
-        destinatario.setAutorizacionNumero(getTxtAutorizacion().getText());
-        destinatario.setCodDucumentoSustento(""); //TODO: falta ver si solo pongo el codigo de la factura o pueden haber otros documentos que se pueden transportar
-        destinatario.setDestinatorio(this.destinatario);
-        destinatario.setDireccionDestino(getTxtDireccionDestino().getText());
-        destinatario.setFechaEmision(new java.sql.Date(getCmbFechaFactura().getDate().getTime()));
-        destinatario.setGuiaRemision(guiaRemision);
-        destinatario.setMotivoTranslado(getTxtMotivoTraslado().getText());
-        destinatario.setPreimpreso(getTxtPreimpreso().getText());
-        destinatario.setRazonSocial(this.destinatario.getRazonSocial());
-        destinatario.setRuta(destinatario.getRuta());
-        destinatario.setFacturaReferencia(facturaSeleccionada);
-        destinatario.setIdentificacion(this.destinatario.getIdentificacion());
-        destinatario.setCodigoEstablecimiento((Integer) getTxtCodigoSucursal().getValue());
-        
-        ///Agregado detalle  de los productos de la factura enlazada
-        for (FacturaDetalle facturaDetalle : facturaSeleccionada.getDetalles()) {
+            }
+            
+            DestinatarioGuiaRemision destinatario=new DestinatarioGuiaRemision();
+            destinatario.setAutorizacionNumero(getTxtAutorizacion().getText());
+            destinatario.setCodDucumentoSustento(""); //TODO: falta ver si solo pongo el codigo de la factura o pueden haber otros documentos que se pueden transportar
+            destinatario.setDestinatorio(this.destinatario);
+            destinatario.setDireccionDestino(getTxtDireccionDestino().getText());
+            destinatario.setFechaEmision(new java.sql.Date(getCmbFechaFactura().getDate().getTime()));
+            destinatario.setGuiaRemision(guiaRemision);
+            destinatario.setMotivoTranslado(getTxtMotivoTraslado().getText());
+            destinatario.setPreimpreso(getTxtPreimpreso().getText());
+            destinatario.setRazonSocial(this.destinatario.getRazonSocial());
+            destinatario.setRuta(destinatario.getRuta());
+            destinatario.setFacturaReferencia(facturaSeleccionada);
+            destinatario.setIdentificacion(this.destinatario.getIdentificacion());
+            destinatario.setCodigoEstablecimiento((Integer) getTxtCodigoSucursal().getValue());
+            
+            ///Agregado detalle  de los productos de la factura enlazada
+            for (FacturaDetalle facturaDetalle : facturaSeleccionada.getDetalles()) {
             
             //Vericar que cuando sea productos esta activado la opcion de poder transportar en la guia de remision
             if(facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.INVENTARIO) || facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
             {
-                try {
-                    Producto producto = (Producto) ServiceFactory.getFactory().getFacturaDetalleServiceIf().getReferenciaDetalle(facturaDetalle);
-                    if(producto.getTransportarEnGuiaRemisionEnum().equals(EnumSiNo.NO))
-                    {
-                        continue;
-                    }
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
+            try {
+            Producto producto = (Producto) ServiceFactory.getFactory().getFacturaDetalleServiceIf().getReferenciaDetalle(facturaDetalle);
+            if(producto.getTransportarEnGuiaRemisionEnum().equals(EnumSiNo.NO))
+            {
+            continue;
+            }
+            } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             }
             
             DetalleProductoGuiaRemision detalle=new DetalleProductoGuiaRemision();
@@ -559,15 +561,33 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             detalle.setDescripcion(facturaDetalle.getDescripcion());
             detalle.setReferenciaId(facturaDetalle.getId());
             destinatario.addProducto(detalle);
-        }        
-        
-        if(destinatario.getDetallesProductos()==null || destinatario.getDetallesProductos().size()==0)
-        {
+            }
+            
+            if(destinatario.getDetallesProductos()==null || destinatario.getDetallesProductos().size()==0)
+            {
             DialogoCodefac.mensaje(new CodefacMsj("El destinatario no tiene ningun detalle",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             return null;
+            }*/
+            java.util.Date fechaFactura=getCmbFechaFactura().getDate();
+            
+            DestinatarioGuiaRemision destinatario=DestinatarioGuiaRemision.crearDestinatario(
+                    guiaRemision,
+                    facturaSeleccionada,
+                    getTxtAutorizacion().getText(),
+                    this.destinatario,
+                    getTxtDireccionDestino().getText(),
+                    fechaFactura,
+                    getTxtMotivoTraslado().getText(),
+                    getTxtPreimpreso().getText(),
+                    (Integer) getTxtCodigoSucursal().getValue());   
+            
+            return destinatario;
+            
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        return destinatario;
+        return null;
     }
     
     private void cargarDatosTransportista() {
@@ -795,7 +815,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         /**
          * Agregar los correos de los destinatarios
          */
-        if(guiaRemision.getDestinatarios()!=null)
+        if(getChkEnviarCorreoClientes().isSelected() && guiaRemision.getDestinatarios()!=null)
         {
             for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
                 guiaRemision.addDatosAdicionalCorreo(destinatario.getDestinatorio().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO);
@@ -803,7 +823,13 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         }
         
         //Agregado correo del transportista
-        //guiaRemision.addDatosAdicionalCorreo(guiaRemision.getTransportista().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO);
+        if(getChkEnviarCorreoTransportista().isSelected() &&  
+                guiaRemision.getTransportista()!=null && 
+                guiaRemision.getTransportista().getCorreoElectronico()!=null && 
+                !guiaRemision.getTransportista().getCorreoElectronico().trim().isEmpty())
+        {
+            guiaRemision.addDatosAdicionalCorreo(guiaRemision.getTransportista().getCorreoElectronico(), ComprobanteAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO);
+        }
   
         
     }
@@ -983,6 +1009,20 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         ComprobanteDataGuiaRemision comprobanteData= new ComprobanteDataGuiaRemision(this.guiaRemision);
         comprobanteData.setMapInfoAdicional(getMapAdicional(guiaRemision));
         return comprobanteData;
+    }
+
+    /**
+     * [0] -> campo 0 corrresponde a la guia de remision
+     * [1] -> campo corresponde valor para enviar correos a los clientes
+     * [2] -> campo corresponde valor para enviar correos al transportista
+     * @param parametros 
+     */
+    @Override
+    public void postConstructorExterno(Object[] parametros) {
+        this.guiaRemision=(GuiaRemision) parametros[0];
+        getChkEnviarCorreoClientes().setSelected((boolean) parametros[1]);
+        getChkEnviarCorreoTransportista().setSelected((boolean) parametros[2]);
+        imprimirTabla();
     }
     
     

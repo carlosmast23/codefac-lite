@@ -31,7 +31,7 @@ public class SpinnerBindingImp extends ComponentBindingAbstract<JSpinner, Spinne
         }
 
         @Override
-        public void setAccion(Object value) {
+        public void setAccion(Object value,String nombrePropiedadControlador,ConverterSwingMvvc converter) {
             if(value!=null)
             {
                 getComponente().setValue(value);

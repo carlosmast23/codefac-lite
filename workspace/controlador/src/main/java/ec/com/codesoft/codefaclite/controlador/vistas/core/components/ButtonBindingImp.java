@@ -31,7 +31,7 @@ public class ButtonBindingImp extends ComponentBindingAbstract<JButton,ButtonBin
         }
 
         @Override
-        public void setAccion(Object value) {
+        public void setAccion(Object value,String nombrePropiedadControlador,ConverterSwingMvvc converter) {
             //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

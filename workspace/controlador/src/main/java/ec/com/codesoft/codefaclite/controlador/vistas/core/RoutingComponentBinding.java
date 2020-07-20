@@ -7,9 +7,12 @@ package ec.com.codesoft.codefaclite.controlador.vistas.core;
 
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBindingImp;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBindingImp;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBindingImp;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.DateComboBindingImp;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.SpinnerBindingImp;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.TableBindingImp;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.TextFieldBindingImp;
@@ -30,6 +33,8 @@ public class RoutingComponentBinding {
         routingMap.put(ButtonBinding.class,ButtonBindingImp.class);    
         routingMap.put(SpinnerBinding.class,SpinnerBindingImp.class);
         routingMap.put(TableBinding.class,TableBindingImp.class);
+        routingMap.put(DateComboBinding.class,DateComboBindingImp.class);
+        routingMap.put(CheckBoxBinding.class,CheckBoxBindingImp.class);
     }
     
 }

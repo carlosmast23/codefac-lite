@@ -115,7 +115,7 @@ public abstract class ComponentBindingAbstract<T,A> {
                     valorPropiedadControlador=converter.castPropertyToComponente(valorPropiedadControlador);
                 
                 //Envia los valores del controlador para setar con una propiedad de los componentes de la vista
-                componentBindingIf.setAccion(valorPropiedadControlador);
+                componentBindingIf.setAccion(valorPropiedadControlador,nombrePropiedad,converter);
             }
                         
         }
@@ -252,6 +252,7 @@ public abstract class ComponentBindingAbstract<T,A> {
         UtilidadesReflexion.ejcutarMetodo(metodoEjecutar,contexto);
        
     }
+    
 
     public T getComponente() {
         return componenteVista;

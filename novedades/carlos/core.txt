@@ -1,2 +1,7 @@
 hacer que cuando se use un controlador se pueda ingresar el metodo de permisosFormulario tambien desde el controlador , actualmente solo funciona desde la vista
 hacer que los departamentos sean por empresa
+Verificar que cuando utilizo el metodo de abrir desde otra pantalla pasando parametros y cierro el formulario actual los permisos de la pantalla nueva no funciona
+	Probar: Pantalla de guia de retencion lote , que paso los datos a la pantalla de guia de remisión no funciona los permisos , si en ese momento cierro la primera pantalla
+
+Optimizar el metodo de seleccionar todos los check del modelo , pro algun motivo hace un proceso recursivo que demora mucho (JtableBinding) checkBoxSelection
+Esta de grabar la referencia de la ruta en la factura por si algun momento cambia de vendedor

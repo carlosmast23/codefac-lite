@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 import ec.com.codesoft.codefaclite.servidor.service.KardexDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -42,7 +43,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal) {
+    /*public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal) {
         //Factura factura;
         //factura.getSucursalEmpresa();
         //factura.getSucursal();
@@ -154,20 +155,33 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         } catch (NoResultException e) {
             return null;
         }
-    }
+    }*/
     
-    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario) {
-        String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="",filtrarSucursal="", usuarioId="";
+    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) {
+       
+        
+        String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="",filtrarSucursal="", usuarioId="",enviadoGuiaRemisionStr="",vendedorStr="";
+        
+        if(vendedor!=null)
+        {
+            vendedorStr=" AND u.vendedor=?16 ";
+        }
+        
+        if(enviadoGuiaRemision!=null)
+        {
+            enviadoGuiaRemisionStr=" AND u.estadoEnviadoGuiaRemision= ?15 ";
+        }
+        
         if(usuario != null && usuario.getFiltrarFacturaEnum().equals(EnumSiNo.SI)){
-            usuarioId = " AND u.usuario = ?14";
+            usuarioId = " AND u.usuario = ?14 ";
         } else {
-            usuarioId = " AND 1=1";
+            usuarioId = " AND 1=1 ";
         }
         
         if (persona != null) {
-            cliente = "u.sucursal=?1";
+            cliente = " u.sucursal=?1 ";
         } else {
-            cliente = "1=1";
+            cliente = " 1=1 ";
         }
         
         if (fi == null && ff != null) {
@@ -218,7 +232,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
 
         try {
-            String queryString = "SELECT u FROM Factura u WHERE u.empresa=?7 and u.codigoDocumento=?6 and  " + cliente + usuarioId + fecha + estadoFactura +filtrarReferidos+filtroPuntoEmision+filtrarSucursal+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
+            String queryString = "SELECT u FROM Factura u WHERE u.empresa=?7 and u.codigoDocumento=?6 and  " + cliente + usuarioId + fecha + estadoFactura +filtrarReferidos+filtroPuntoEmision+filtrarSucursal+enviadoGuiaRemisionStr+vendedorStr+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
             Query query = getEntityManager().createQuery(queryString);
 
             
@@ -264,6 +278,16 @@ public class FacturaFacade extends AbstractFacade<Factura> {
 
             if(usuario != null && usuario.getFiltrarFacturaEnum().equals(EnumSiNo.SI)){
                 query.setParameter(14, usuario);
+            }
+            
+            if (enviadoGuiaRemision != null) 
+            {
+                query.setParameter(15,enviadoGuiaRemision.getLetra());
+            }
+            
+            if(vendedor!=null)
+            {
+                query.setParameter(16,vendedor);
             }
             
             

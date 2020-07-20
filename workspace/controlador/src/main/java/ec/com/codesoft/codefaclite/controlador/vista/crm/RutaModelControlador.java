@@ -255,7 +255,10 @@ public class RutaModelControlador extends ModelControladorAbstract<RutaModelCont
     
     private void cargarDatoEditar(RutaDetalle rutaDetalle)
     {
-        rutaDetalle.setId(rutaDetalle.getId()*-1);
+        if(rutaDetalle.getId()!=null)
+        {
+            rutaDetalle.setId(rutaDetalle.getId()*-1);
+        }
         this.rutaDetalle=rutaDetalle;
         //Seleccionado metodo para editar
     }

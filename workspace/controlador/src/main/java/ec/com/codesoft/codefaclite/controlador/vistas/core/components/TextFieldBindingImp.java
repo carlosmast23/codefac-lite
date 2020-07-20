@@ -56,7 +56,7 @@ public class TextFieldBindingImp extends ComponentBindingAbstract<JTextField,Tex
         }
 
         @Override
-        public void setAccion(String value) {
+        public void setAccion(String value,String nombrePropiedadControlador,ConverterSwingMvvc converter) {
             getComponente().setText(value);
         }
 
@@ -86,7 +86,7 @@ public class TextFieldBindingImp extends ComponentBindingAbstract<JTextField,Tex
         }
 
         @Override
-        public void setAccion(Boolean value) {
+        public void setAccion(Boolean value,String nombrePropiedadControlador,ConverterSwingMvvc converter) {
             getComponente().setEditable(value);
         }
 
@@ -117,7 +117,7 @@ public class TextFieldBindingImp extends ComponentBindingAbstract<JTextField,Tex
         }
 
         @Override
-        public void setAccion(Boolean value) {
+        public void setAccion(Boolean value,String nombrePropiedadControlador,ConverterSwingMvvc converter) {
             getComponente().setEditable(value);
         }
 
