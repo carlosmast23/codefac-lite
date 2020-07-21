@@ -39,7 +39,11 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
                 @Override
                 public Object consulta() throws ServicioCodefacException, RemoteException {
                     Map<String, ParametroCodefac> parametrosCodefacMap = new HashMap<String, ParametroCodefac>();
+                    System.out.println("EJECUNTANDO CONSULTA DE getParametrosMap <--------------------------");
                     
+                    //ALERTA: REVISAR QUE ESTA LINEA DE CODIGO GENERA  EL SIGUIENTE LOG
+                    //A signal was attempted before wait() on ConcurrencyManager. This normally means that an attempt was made to 
+                    //commit or rollback a transaction before it was started, or to rollback a transaction twice.
                     List<ParametroCodefac> parametros = getFacade().getParametrosMapByEmpresa(empresaIf);
                     for (ParametroCodefac parametro : parametros) {
                         parametrosCodefacMap.put(parametro.getNombre(), parametro);

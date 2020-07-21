@@ -265,8 +265,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         //Cambiar el estado si viene de un pedido si fuera el caso
         Factura proforma=factura.getProforma();
-        proforma.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
-        entityManager.merge(proforma);
+        if(proforma!=null)
+        {
+            proforma.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
+            entityManager.merge(proforma);
+        }
 
         ComprobantesService servicioComprobante = new ComprobantesService();
         servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);
