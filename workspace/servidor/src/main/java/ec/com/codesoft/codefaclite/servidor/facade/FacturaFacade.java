@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoConsultaEnum;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -157,9 +158,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
     }*/
     
-    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) {
-       
-        
+    public Query ListaQuery(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,TipoConsultaEnum tipoConsultaEnum) {
         String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="",filtrarSucursal="", usuarioId="",enviadoGuiaRemisionStr="",vendedorStr="";
         
         if(vendedor!=null)
@@ -230,71 +229,88 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         {
             filtroPuntoEmision=" AND u.puntoEmision =?12 ";
         }
+        
+        String selectStr="SELECT u ";
+        if(tipoConsultaEnum.equals(TipoConsultaEnum.TAMANIO))
+        {
+            selectStr="SELECT COUNT(1) ";
+        }
+        
+        String orderByStr=" ";
+        if(tipoConsultaEnum.equals(TipoConsultaEnum.DATOS))
+        {
+            orderByStr= " ORDER BY" + ordenarAgrupado + " u.secuencial+0 asc";
+        }
 
+        String queryString = selectStr+"FROM Factura u WHERE u.empresa=?7 and u.codigoDocumento=?6 and  " + cliente + usuarioId + fecha + estadoFactura + filtrarReferidos + filtroPuntoEmision + filtrarSucursal + enviadoGuiaRemisionStr + vendedorStr+orderByStr;
+                
+        
+        Query query = getEntityManager().createQuery(queryString);
+
+        if (persona != null) {
+            query.setParameter(1, persona);
+        }
+        if (fi != null) {
+            query.setParameter(2, fi);
+        }
+        if (ff != null) {
+            query.setParameter(3, ff);
+        }
+        if (estadoEnum != null) {
+            if (ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum)) {
+                query.setParameter(10, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                query.setParameter(11, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+            } else {
+                query.setParameter(4, estadoEnum.getEstado());
+            }
+        }
+
+        if (consultarReferidos) {
+            if (referido != null) {
+                query.setParameter(5, referido);
+            }
+        }
+
+        query.setParameter(6, documentoEnum.getCodigo());
+        query.setParameter(7, empresa);
+
+        if (puntoEmision != null) {
+            query.setParameter(12, puntoEmision.getPuntoEmision());
+        }
+
+        if (sucursal != null) {
+            query.setParameter(13, sucursal);
+        }
+
+        if (usuario != null && usuario.getFiltrarFacturaEnum().equals(EnumSiNo.SI)) {
+            query.setParameter(14, usuario);
+        }
+
+        if (enviadoGuiaRemision != null) {
+            query.setParameter(15, enviadoGuiaRemision.getLetra());
+        }
+
+        if (vendedor != null) {
+            query.setParameter(16, vendedor);
+        }
+
+        return query;
+
+    }
+    
+    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) {
         try {
-            String queryString = "SELECT u FROM Factura u WHERE u.empresa=?7 and u.codigoDocumento=?6 and  " + cliente + usuarioId + fecha + estadoFactura +filtrarReferidos+filtroPuntoEmision+filtrarSucursal+enviadoGuiaRemisionStr+vendedorStr+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
-            Query query = getEntityManager().createQuery(queryString);
-
-            
-            if (persona != null) {
-                query.setParameter(1, persona);
-            }
-            if (fi != null) {
-                query.setParameter(2, fi);
-            }
-            if (ff != null) {
-                query.setParameter(3, ff);
-            }
-            if (estadoEnum != null) {
-                if(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum))
-                {
-                    query.setParameter(10,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-                    query.setParameter(11,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
-                }else
-                {
-                    query.setParameter(4, estadoEnum.getEstado());
-                }
-            }
-            
-            if (consultarReferidos) 
-            {
-                if (referido != null) 
-                {
-                    query.setParameter(5, referido);
-                }
-            }
-            
-            query.setParameter(6,documentoEnum.getCodigo());
-            query.setParameter(7,empresa);
-            
-            if (puntoEmision != null) {
-                query.setParameter(12,puntoEmision.getPuntoEmision());
-            }
-            
-            if(sucursal!=null)
-            {
-                query.setParameter(13,sucursal);
-            }
-
-            if(usuario != null && usuario.getFiltrarFacturaEnum().equals(EnumSiNo.SI)){
-                query.setParameter(14, usuario);
-            }
-            
-            if (enviadoGuiaRemision != null) 
-            {
-                query.setParameter(15,enviadoGuiaRemision.getLetra());
-            }
-            
-            if(vendedor!=null)
-            {
-                query.setParameter(16,vendedor);
-            }
-            
-            
+            Query query=ListaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.DATOS);
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
         }
+    }
+    
+    public Long listaConTamanio(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) 
+    {
+        Query query=ListaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.TAMANIO);
+        return (Long) query.getSingleResult();
     }
    
 

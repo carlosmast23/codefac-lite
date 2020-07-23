@@ -8,10 +8,14 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AlertaServiceIf;
@@ -46,7 +50,8 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
     public List<AlertaResponse> actualizarNotificacionesCargaRapida(Empresa empresa) throws RemoteException,ServicioCodefacException
     {
         List<AlertaResponse> alertas=new ArrayList<AlertaResponse>();
-        alertas.add(obtenerNotificacionComprobantesElectronicos(empresa));
+        //alertas.add(obtenerNotificacionComprobantesElectronicos(empresa));
+        alertas.add(obtenerNotificacionComprobantesElectronicosBaseDatos(empresa));
         alertas.add(obtenerNotificacionFechaLimiteFirma(empresa));
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
         
@@ -190,7 +195,19 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         }
         return null;
     }
-    
+
+    /**
+     * TODO: Este metodo buscaba en el directorio de la computadora el cual estaba demorando mucho
+     * y presumiblemente genereba errores porque se quedaban los archivos como abiertos
+     * Pueda que me sirva este metodo si por ejemplo el sistema debe funcionar de forma independiente para autorizar otro tipo de documentos
+     * 
+     * @param empresa
+     * @return
+     * @throws RemoteException
+     * @throws ServicioCodefacException
+     * @deprecated
+     */
+    @Deprecated
     private AlertaResponse obtenerNotificacionComprobantesElectronicos(Empresa empresa) throws RemoteException,ServicioCodefacException
     {
         ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
@@ -204,6 +221,37 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
             return new AlertaResponse(
                     AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,
                     totalComprobantesSinEnviar + " Comprobantes de enviar al Sri",
+                    "Utilizar herramienta enviar");
+        }
+
+        return null;
+    }
+    
+    private AlertaResponse obtenerNotificacionComprobantesElectronicosBaseDatos(Empresa empresa) throws RemoteException,ServicioCodefacException
+    {
+        Long totalComprobantesSinProcesar=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporteTamanio(
+                    null,
+                    null,
+                    null,
+                    ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR,
+                    Boolean.FALSE,
+                    null,
+                    Boolean.FALSE,
+                    null,
+                    empresa,
+                    DocumentoEnum.FACTURA,
+                    null,
+                    null,
+                    null,
+                    null);
+        
+        
+        
+        if (totalComprobantesSinProcesar > 0) {
+            //modeloTabla.addRow(new Object[]{TipoAdvertenciaEnum.ADVERTENCIA,totalComprobantesSinEnviar+" Comprobantes de enviar al Sri","Utilizar herramienta enviar"});
+            return new AlertaResponse(
+                    AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,
+                    totalComprobantesSinProcesar + " Comprobantes de enviar al Sri",
                     "Utilizar herramienta enviar");
         }
 
