@@ -50,8 +50,8 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
     public List<AlertaResponse> actualizarNotificacionesCargaRapida(Empresa empresa) throws RemoteException,ServicioCodefacException
     {
         List<AlertaResponse> alertas=new ArrayList<AlertaResponse>();
-        //alertas.add(obtenerNotificacionComprobantesElectronicos(empresa));
-        alertas.add(obtenerNotificacionComprobantesElectronicosBaseDatos(empresa));
+        alertas.add(obtenerNotificacionComprobantesElectronicos(empresa));
+        //alertas.add(obtenerNotificacionComprobantesElectronicosBaseDatos(empresa));
         alertas.add(obtenerNotificacionFechaLimiteFirma(empresa));
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
         
@@ -211,10 +211,10 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
     private AlertaResponse obtenerNotificacionComprobantesElectronicos(Empresa empresa) throws RemoteException,ServicioCodefacException
     {
         ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
-        List<ComprobanteElectronico> comprobantesFirmadoSinEnviar = comprobanteServiceIf.getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa);
-        List<ComprobanteElectronico> comprobantesEnviadosSinRespuesta = comprobanteServiceIf.getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA, empresa);
+        Integer comprobantesFirmadoSinEnviar = comprobanteServiceIf.getComprobantesObjectByFolderCantidad(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa);
+        Integer comprobantesEnviadosSinRespuesta = comprobanteServiceIf.getComprobantesObjectByFolderCantidad(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA, empresa);
 
-        Integer totalComprobantesSinEnviar = comprobantesFirmadoSinEnviar.size() + comprobantesEnviadosSinRespuesta.size();
+        Integer totalComprobantesSinEnviar = comprobantesFirmadoSinEnviar + comprobantesEnviadosSinRespuesta;
 
         if (totalComprobantesSinEnviar > 0) {
             //modeloTabla.addRow(new Object[]{TipoAdvertenciaEnum.ADVERTENCIA,totalComprobantesSinEnviar+" Comprobantes de enviar al Sri","Utilizar herramienta enviar"});

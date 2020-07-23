@@ -49,6 +49,8 @@ public interface ComprobanteServiceIf extends Remote {
     
     public List<ComprobanteElectronico> getComprobantesObjectByFolder(String carpetaConfiguracion,Empresa empresa) throws RemoteException;
     
+    public Integer getComprobantesObjectByFolderCantidad(String carpetaConfiguracion,Empresa empresa) throws RemoteException;
+    
     public byte[] getReporteComprobante(String claveAcceso,Empresa empresa) throws RemoteException;
 
     public void procesarComprobante(ComprobanteDataInterface comprobanteData,ComprobanteEntity comprobante, Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException;

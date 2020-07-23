@@ -615,7 +615,41 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         } else {
             pathComprobantes =path+"/"+ DirectorioCodefac.COMPROBANTES_PRUEBAS.getNombre();
         }
+        
         return ComprobantesElectronicosUtil.getComprobantesObjectByFolder(pathComprobantes,carpetaConfiguracion);
+        
+    }
+    
+    
+    public Integer getComprobantesObjectByFolderCantidad(String carpetaConfiguracion,Empresa empresa) throws RemoteException
+    {
+        //Esta validacion se la hacer porque la primera vez que no tiene une empresa por defecto no debe hacer esta validacion
+        if(empresa==null)
+        {
+            return 0;
+        }
+        
+        ParametroCodefacService parametroService=new ParametroCodefacService();
+        String path= parametroService.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,empresa).valor;
+        ParametroCodefac modoFacturacionParam=parametroService.getParametroByNombre(ParametroCodefac.MODO_FACTURACION, empresa);
+        
+        //Si tiene configurado el modo de facturacion retorno vacio
+        if(modoFacturacionParam==null)
+        {
+            return 0;
+        }
+            
+        String modoFacturacion=modoFacturacionParam.valor;
+        String pathComprobantes="";
+        
+        if (modoFacturacion.equals(ComprobanteElectronicoService.MODO_PRODUCCION)) {
+            pathComprobantes =path+"/"+ DirectorioCodefac.COMPROBANTES_PRODUCCION.getNombre();
+        } else {
+            pathComprobantes =path+"/"+ DirectorioCodefac.COMPROBANTES_PRUEBAS.getNombre();
+        }
+        
+        return ComprobantesElectronicosUtil.getComprobantesObjectByFolderCantidad(pathComprobantes,carpetaConfiguracion);
+        
     }
     
     /**

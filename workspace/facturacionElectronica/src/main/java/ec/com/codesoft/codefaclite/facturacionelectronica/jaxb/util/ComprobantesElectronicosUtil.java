@@ -296,6 +296,20 @@ public abstract class ComprobantesElectronicosUtil {
         return null;
     }
     
+    public static int getComprobantesObjectByFolderCantidad(String pathBase, String carpetaConfiguracion) {
+        String pathDirectorio = pathBase +"/" + carpetaConfiguracion;
+        File f = new File(pathDirectorio);
+        
+        if (f.exists()) { // Directorio existe 
+            File[] ficheros = f.listFiles();
+            if(ficheros!=null)
+            {
+                return ficheros.length;
+            }
+        }
+        return 0;
+    }
+    
     public static List<ComprobanteElectronico> getComprobantesObjectByFolder(String pathBase, String carpetaConfiguracion) {
         List<ComprobanteElectronico> comprobantes=new ArrayList<ComprobanteElectronico>();
         
