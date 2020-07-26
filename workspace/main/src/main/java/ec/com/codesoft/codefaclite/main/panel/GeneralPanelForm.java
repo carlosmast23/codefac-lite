@@ -137,6 +137,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JpanelAuxiliar.add(jSplitPanelVerticalSecundario);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Codefac");
         setSize(new java.awt.Dimension(800, 600));
 
         JPanelMenu.setBackground(new java.awt.Color(255, 255, 255));

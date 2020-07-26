@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.vista.crm;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
@@ -263,7 +264,24 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) 
+        //{
+            try {
+                Boolean respuesta =dialogoPregunta(new CodefacMsj("Estas seguro que desea eliminar el producto?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                //Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar el producto?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if (!respuesta) {
+                    throw new ExcepcionCodefacLite("Cancelacion usuario");
+                }
+                ServiceFactory.getFactory().getProductoServiceIf().eliminarProducto(producto);
+                DialogoCodefac.mensaje("Datos correctos", "El producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ExcepcionCodefacLite(ex.getMessage());
+            }
+        //}
     }
 
     @Override

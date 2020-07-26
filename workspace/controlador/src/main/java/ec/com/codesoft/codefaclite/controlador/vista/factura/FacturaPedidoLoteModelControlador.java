@@ -3,19 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.facturacion.model;
+package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
-import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
-import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaPedidoLoteModelControlador;
-import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.controlador.vista.transporte.GuiaRemisionLoteControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.facturacion.panel.FacturaPedidoLotePanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import java.rmi.RemoteException;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,13 +20,19 @@ import java.util.Map;
  *
  * @author CARLOS_CODESOFT
  */
-public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements ControladorVistaIf,FacturaPedidoLoteModelControlador.SwingIf {
+public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<FacturaPedidoLoteModelControlador.CommonIf,FacturaPedidoLoteModelControlador.SwingIf,FacturaPedidoLoteModelControlador.WebIf> implements VistaCodefacIf {
 
-    private FacturaPedidoLoteModelControlador controlador;
+    private java.util.Date fechaInicial;
+    private java.util.Date fechaFin;
     
+    public FacturaPedidoLoteModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, FacturaPedidoLoteModelControlador.CommonIf interfaz, TipoVista tipoVista) {
+        super(mensajeVista, session, interfaz, tipoVista);
+    }
+
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        this.controlador=new FacturaPedidoLoteModelControlador(DialogoCodefac.intefaceMensaje, session,this, ModelControladorAbstract.TipoVista.ESCRITORIO);
+        fechaInicial=new Date();
+        fechaFin=new Date();
     }
 
     @Override
@@ -89,29 +92,47 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
-        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
-        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
-        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
-        return permisos;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public ModelControladorAbstract getControladorVista() {
-        return controlador;
-    }
-
-    public FacturaPedidoLoteModelControlador getControlador() {
-        return controlador;
-    }
-
-    public void setControlador(FacturaPedidoLoteModelControlador controlador) {
-        this.controlador = controlador;
-    }
-
     
+    
+    
+    ///////////////////////////////////////////////////////////////////////////
+    //             METODOS QUE CONTIENEN INTERFACES PARA LA IMPLEMTACION
+    ///////////////////////////////////////////////////////////////////////////
+    public interface CommonIf 
+    {
+    }
 
+    public interface SwingIf extends CommonIf 
+    {
+    }
+
+    public interface WebIf extends CommonIf 
+    {
+        //TODO: Implementacion de las interafaces solo para la web
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    ///                         GET AND SET
+    ////////////////////////////////////////////////////////////////////////////
+
+    public Date getFechaInicial() {
+        return fechaInicial;
+    }
+
+    public void setFechaInicial(Date fechaInicial) {
+        this.fechaInicial = fechaInicial;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+    
+    
+    
 }

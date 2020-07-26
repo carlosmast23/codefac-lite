@@ -575,5 +575,22 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         }
 
     }
+    
+    /**
+     * Metodo que me permite hacer correciones cuando tenga un error con los datos
+     * adicionales
+     */
+    /*public void validarDatosAdicionales()
+    {
+        //Validar que no tenga más de 15 datos adicionales o si no lo borro por que el Sri no autoriza
+        List datosAdicionales=getDatosAdicionalesComprobante();
+        if (datosAdicionales != null) 
+        {
+            while (datosAdicionales.size() > 15) 
+            {
+                datosAdicionales.remove(datosAdicionales.size()-1);
+            }
+        }
+    }*/
 
 }

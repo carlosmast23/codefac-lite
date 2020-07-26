@@ -114,6 +114,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             }
             
             this.parametroCodefacService.editarParametros(parametrosEditar);
+            this.panelPadre.actualizarTituloCodefac();
             /**
              * Establesco el ciclo de vida en el cual me encuentro
              */

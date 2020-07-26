@@ -260,6 +260,24 @@ public abstract class FacturaPedidoLotePanel extends ControladorCodefacInterface
     private javax.swing.JTextField txtVendedor;
     // End of variables declaration//GEN-END:variables
 
+    @DateComboBinding(value = "controlador.fechaInicial")
+    public JXDatePicker getCmbFechaFinal() {
+        return cmbFechaFinal;
+    }
+
+    public void setCmbFechaFinal(JXDatePicker cmbFechaFinal) {
+        this.cmbFechaFinal = cmbFechaFinal;
+    }
+
+    @DateComboBinding(value = "controlador.fechaFin")
+    public JXDatePicker getCmbFechaInicial() {
+        return cmbFechaInicial;
+    }
+
+    public void setCmbFechaInicial(JXDatePicker cmbFechaInicial) {
+        this.cmbFechaInicial = cmbFechaInicial;
+    }
+
     
     
     

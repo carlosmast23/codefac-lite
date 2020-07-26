@@ -1075,6 +1075,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     private void procesarComprobanteExtend(ComprobanteElectronicoService comprobanteElectronico,ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobanteOriginal,ClienteInterfaceComprobante callbackClientObject)
     {
+        //comprobanteOriginal.validarDatosAdicionales();
         comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
         
         try {

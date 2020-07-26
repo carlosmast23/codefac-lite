@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.controlador.vistas.core.components;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.transporte.GuiaRemisionLoteControlador;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.ConverterSwingMvvc;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesReflexion;
 import java.lang.reflect.Method;
@@ -165,7 +166,13 @@ public abstract class ComponentBindingAbstract<T,A> {
             Method getMetodoPropiedad=UtilidadesReflexion.buscarMetodoPorNombre(contexto.getClass(), getMetodoPropiedadStr);
             
             if(getMetodoPropiedad==null)
+            {
+                if(propiedad.toLowerCase().equals("controlador"))
+                {
+                    Logger.getLogger(ComponentBindingAbstract.class.getName()).log(Level.SEVERE, "NO SE ENCONTRO CONTROLADOR");
+                }                
                 break;
+            }
             
             //return UtilidadesReflexion.buscarComponentePorNombrePropiedad(controlador,nombrePropiedad,Object.class);
             contexto=UtilidadesReflexion.obtenerValorDelMetodo(getMetodoPropiedad,contexto,Object.class);

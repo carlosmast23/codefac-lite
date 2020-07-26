@@ -274,6 +274,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         agregarListenerGraphics();
         agregarListenerItemMenu();
         cargarDatosAdicionales();
+        actualizarTituloCodefac();
                
         habilitarBotones(false);  
         
@@ -3524,6 +3525,22 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public void actualizarNotificacionesCodefac() {
         this.widgetNotificacionCodefac.setEmpresa(sessionCodefac.getEmpresa()); //Actualizo este dato porque puede ser que esta cambiando de empresa
         this.widgetNotificacionCodefac.actualizarNotificaciones(ModoProcesarEnum.NORMAL);
+    }
+    
+    @Override
+    public void actualizarTituloCodefac()
+    {
+        ParametroCodefac parametroCodefac=sessionCodefac.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION);
+        if(parametroCodefac==null)
+        {
+            setTitle(ParametrosSistemaCodefac.NOMBRE_SISTEMA);
+        }
+        else
+        {
+            String valor=parametroCodefac.getValor();
+            setTitle(ParametrosSistemaCodefac.NOMBRE_SISTEMA+" [ "+valor+" ]");
+        }        
+        
     }
 
        
