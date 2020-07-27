@@ -293,7 +293,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
             public void mouseClicked(MouseEvent e) {
                 try {
                     Desktop dk = Desktop.getDesktop();
-                    dk.browse(new URI("http://www.cf.codesoft-ec.com/general/registro"));
+                    dk.browse(new URI("http://www.cf.codesoft-ec.com/index.php/general/registro"));
                 } catch (IOException ex) {
                     Logger.getLogger(HiloPublicidadCodefac.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (URISyntaxException ex) {
