@@ -148,6 +148,13 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
             DestinatariosGuiaRemisionComprobante destinatarioData=new DestinatariosGuiaRemisionComprobante();
             destinatarioData.setCodDocSustento("01");
             destinatarioData.setCodEstabDestino(destinatario.getCodigoEstablecimiento());//Todo: Verificar porque este campo deberia trabajar con sucursales
+            
+            //TODO: Este código solo es temporal para corregir unos problemas de esta versión, pero en un futuro se debe quitar
+            if(destinatario.getDireccionDestino()==null || destinatario.getDireccionDestino().trim().isEmpty())
+            {
+                destinatario.setDireccionDestino("Sin especificar");
+            }
+            
             destinatarioData.setDirDestinatario(UtilidadValidador.normalizarTexto(destinatario.getDireccionDestino()));
             destinatarioData.setDocAduaneroUnico(" ");//Todo: Ver este campo debe estar grabando pero no esta
             destinatarioData.setFechaEmisionDocSustento(ComprobantesElectronicosUtil.dateToString(destinatario.getFechaEmision()));

@@ -1279,9 +1279,19 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
         //Validacion para verificar que si no existen datos adicionales no se agregue nada
         List<InformacionAdicional> informacionAdicional = getInformacionAdicional(comprobanteData);
-        if (informacionAdicional != null && informacionAdicional.size() > 0) {
-            comprobante.setInformacionAdicional(informacionAdicional);
+        if (informacionAdicional != null && informacionAdicional.size() > 0) 
+        {
+            //Validar que si son mas de 15 datos solo coja los 15 primeros por que no permite enviar más para la facturación electrónica
+            if(informacionAdicional.size()>15)
+            {
+                comprobante.setInformacionAdicional(informacionAdicional.subList(0,15));
+            }
+            else
+            {
+                comprobante.setInformacionAdicional(informacionAdicional);
+            }
         }
+        
         
         //Agregar datos adicionales del Reporte
         comprobanteElectronico.setMapAdicionalReporte(mapReportePlantilla(comprobanteData.getEmpresa()));

@@ -33,7 +33,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "GUIA_REMISION")
-public class GuiaRemision extends ComprobanteEntity implements  Serializable{
+public class GuiaRemision extends ComprobanteEntity<GuiaRemisionAdicional> implements  Serializable{
     
     @Id
     @Column(name = "ID")
@@ -291,8 +291,8 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
     }
 
     @Override
-    public List<ComprobanteAdicional> getDatosAdicionalesComprobante() {
-        return (List<ComprobanteAdicional>)(ArrayList<?>)getDatosAdicionales();
+    public List<GuiaRemisionAdicional> getDatosAdicionalesComprobante() {
+        return getDatosAdicionales();
     }
 
     /**
@@ -300,7 +300,7 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
      * @param comprobanteAdicional 
      */
     @Override
-    public void addDatoAdicionalAbstract(ComprobanteAdicional comprobanteAdicional) {
+    public void addDatoAdicionalAbstract(GuiaRemisionAdicional comprobanteAdicional) {
         GuiaRemisionAdicional datoAdicional=(GuiaRemisionAdicional) comprobanteAdicional;
         if(this.datosAdicionales==null)
         {

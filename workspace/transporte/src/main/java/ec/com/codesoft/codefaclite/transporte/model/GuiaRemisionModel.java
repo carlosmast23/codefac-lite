@@ -713,11 +713,18 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         }
     }
     
+    //TODO: Agregar estas validaciones en el servidor
     private boolean validarDestinarioGuiaRemision(DestinatarioGuiaRemision destinatarioGuiaRemision)
     {
+        if(destinatarioGuiaRemision.getDireccionDestino()==null || destinatarioGuiaRemision.getDireccionDestino().trim().isEmpty())
+        {
+            DialogoCodefac.mensaje("Error Validación","Por favor ingrese una dirección de destino ",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        
         if(destinatarioGuiaRemision.getMotivoTranslado().isEmpty())
         {
-            DialogoCodefac.mensaje("Error Validación","Por favor ingrese un motivo de translado",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error Validación","Por favor ingrese un motivo de traslado",DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
         }
         

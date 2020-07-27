@@ -3538,7 +3538,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         else
         {
             String valor=parametroCodefac.getValor();
-            setTitle(ParametrosSistemaCodefac.NOMBRE_SISTEMA+" [ "+valor+" ]");
+            setTitle(ParametrosSistemaCodefac.NOMBRE_SISTEMA+" | "+valor);
         }        
         
     }
