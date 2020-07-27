@@ -229,8 +229,9 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        try {
+        try {           
             setearValoresProducto(producto);
+            validar(producto);
             producto=ServiceFactory.getFactory().getProductoServiceIf().grabar(producto);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             //DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
@@ -519,6 +520,16 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         TipoProductoEnum tipoProductoEnum=TipoProductoEnum.PRODUCTO;
         catalogoProducto.setModuloCod(ModuloCodefacEnum.INVENTARIO.getCodigo());
         return catalogoProducto;
+    }
+
+    private void validar(Producto producto) throws ExcepcionCodefacLite {
+        if(producto.getValorUnitario().equals(BigDecimal.ZERO))
+        {
+            if(!dialogoPregunta(new CodefacMsj("Desea grabar un producto con valor Cero ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA)))
+            {
+                throw  new ExcepcionCodefacLite("Error de validación producto precio cero");
+            }
+        }
     }
     
     

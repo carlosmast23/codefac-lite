@@ -125,6 +125,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             throw new ServicioCodefacException("Ya existe un producto ingresado con el mismo código principal");
         }
 
+        ///////////////////////////////////////////////////////////////////////
+        ///             HACER UNAS CORRECIONES ANTES DE GRABAR
+        ///////////////////////////////////////////////////////////////////////
+        //Quitar espacios en blanco
+        p.setNombre(p.getNombre().trim());
         
     }
     
