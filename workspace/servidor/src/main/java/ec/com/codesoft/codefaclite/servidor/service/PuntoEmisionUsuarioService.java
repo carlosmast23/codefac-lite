@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.PuntoEmisionUsuarioFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
@@ -13,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuarioServiceIf;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +72,16 @@ public class PuntoEmisionUsuarioService extends ServiceAbstract<PuntoEmisionUsua
             }
         });
         
+    }
+    
+    public List<PuntoEmision> obtenerActivosPorSucursalCastPuntoEmision(Usuario usuario,Sucursal sucursal) throws ServicioCodefacException, RemoteException
+    {
+        List<PuntoEmision> puntosEmision=new ArrayList<PuntoEmision>();
+        List<PuntoEmisionUsuario> resultado=obtenerActivoPorUsuario(usuario, sucursal);
+        for (PuntoEmisionUsuario puntoEmisionUsuario : resultado) {
+            puntosEmision.add(puntoEmisionUsuario.getPuntoEmision());            
+        }
+        return puntosEmision;        
     }
     
 }

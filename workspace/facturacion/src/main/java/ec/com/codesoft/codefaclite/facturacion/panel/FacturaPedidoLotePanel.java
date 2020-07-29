@@ -11,8 +11,11 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.TableBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import org.jdesktop.swingx.JXDatePicker;
@@ -60,8 +63,11 @@ public abstract class FacturaPedidoLotePanel extends ControladorCodefacInterface
         cmbSeleccionarTodo = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        txtMotivoTraslado = new javax.swing.JTextField();
         lblEspacio4747 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        cmbPuntoEmision = new javax.swing.JComboBox<>();
+        lblEspacio124 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
 
         setClosable(true);
@@ -194,22 +200,49 @@ public abstract class FacturaPedidoLotePanel extends ControladorCodefacInterface
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Adicionales Guía Remisión", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Motivo:");
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel6.setText("Punto Emisión:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(txtMotivoTraslado, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.weightx = 0.1;
         jPanel2.add(lblEspacio4747, gridBagConstraints);
+
+        jLabel3.setText("001");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(cmbPuntoEmision, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(lblEspacio124, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel8.setText("Establecimiento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel8, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -242,25 +275,46 @@ public abstract class FacturaPedidoLotePanel extends ControladorCodefacInterface
     private javax.swing.JCheckBox chkSeleccionarTodosVendedores;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFinal;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicial;
+    private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision> cmbPuntoEmision;
     private javax.swing.JCheckBox cmbSeleccionarTodo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio123;
+    private javax.swing.JLabel lblEspacio124;
     private javax.swing.JLabel lblEspacio4747;
     private javax.swing.JTable tblDatos;
-    private javax.swing.JTextField txtMotivoTraslado;
     private javax.swing.JTextField txtRuta;
     private javax.swing.JTextField txtVendedor;
     // End of variables declaration//GEN-END:variables
 
-    @DateComboBinding(value = "controlador.fechaInicial")
+    @ButtonBinding(actionListener = "controlador.listenerBuscarVendedor")
+    public JButton getBtnBuscarVendedor() {
+        return btnBuscarVendedor;
+    }
+
+    public void setBtnBuscarVendedor(JButton btnBuscarVendedor) {
+        this.btnBuscarVendedor = btnBuscarVendedor;
+    }
+
+    @ButtonBinding(actionListener = "controlador.listenerConsultarGuiasRemision")
+    public JButton getBtnConsultar() {
+        return btnConsultar;
+    }
+
+    public void setBtnConsultar(JButton btnConsultar) {
+        this.btnConsultar = btnConsultar;
+    }
+
+    @DateComboBinding(value = "controlador.fechaFin")
     public JXDatePicker getCmbFechaFinal() {
         return cmbFechaFinal;
     }
@@ -269,7 +323,7 @@ public abstract class FacturaPedidoLotePanel extends ControladorCodefacInterface
         this.cmbFechaFinal = cmbFechaFinal;
     }
 
-    @DateComboBinding(value = "controlador.fechaFin")
+    @DateComboBinding(value = "controlador.fechaInicial")
     public JXDatePicker getCmbFechaInicial() {
         return cmbFechaInicial;
     }
@@ -278,8 +332,77 @@ public abstract class FacturaPedidoLotePanel extends ControladorCodefacInterface
         this.cmbFechaInicial = cmbFechaInicial;
     }
 
+    @TableBinding(source = "controlador.ventasList",tableAddDataInterface = "tableBindingAddData",selectValue = "controlador.facturaSeleccionada",listSelected = "controlador.ventasSeleccionadasList",componenteCheckSelect = "cmbSeleccionarTodo",modeCheck = true)
+    public JTable getTblDatos() {
+        return tblDatos;
+    }
+
+    public void setTblDatos(JTable tblDatos) {
+        this.tblDatos = tblDatos;
+    }
+
+
+    @TextFieldBinding(value = "controlador.vendedorSeleccionado.nombresCompletos")
+    public JTextField getTxtVendedor() {
+        return txtVendedor;
+    }
+
+    public void setTxtVendedor(JTextField txtVendedor) {
+        this.txtVendedor = txtVendedor;
+    }
+
+    public JCheckBox getCmbSeleccionarTodo() {
+        return cmbSeleccionarTodo;
+    }
+
+    public void setCmbSeleccionarTodo(JCheckBox cmbSeleccionarTodo) {
+        this.cmbSeleccionarTodo = cmbSeleccionarTodo;
+    }
     
+    @ButtonBinding(actionListener = "controlador.listenerBuscarRuta")
+    public JButton getBtnBuscarRuta() {
+        return btnBuscarRuta;
+    }
+
+    public void setBtnBuscarRuta(JButton btnBuscarRuta) {
+        this.btnBuscarRuta = btnBuscarRuta;
+    }
     
-    
+    @CheckBoxBinding(value = "controlador.seleccionTodosRuta",actionListener = "controlador.listenerCheckRutas")
+    public JCheckBox getChkSeleccionarTodasRutas() {
+        return chkSeleccionarTodasRutas;
+    }
+
+    public void setChkSeleccionarTodasRutas(JCheckBox chkSeleccionarTodasRutas) {
+        this.chkSeleccionarTodasRutas = chkSeleccionarTodasRutas;
+    }
+
+    @CheckBoxBinding(value = "controlador.seleccionTodosVendedor",actionListener = "controlador.listenerCheckVendedores")
+    public JCheckBox getChkSeleccionarTodosVendedores() {
+        return chkSeleccionarTodosVendedores;
+    }
+
+    public void setChkSeleccionarTodosVendedores(JCheckBox chkSeleccionarTodosVendedores) {
+        this.chkSeleccionarTodosVendedores = chkSeleccionarTodosVendedores;
+    }
+
+    @TextFieldBinding(value = "controlador.rutaSeleccionada.codigo")
+    public JTextField getTxtRuta() {
+        return txtRuta;
+    }
+
+    public void setTxtRuta(JTextField txtRuta) {
+        this.txtRuta = txtRuta;
+    }
+
+    @ComboBoxBinding(source = "controlador.puntoEmisionList", valueSelect = "controlador.puntoEmisionSeleccionado" )
+    public JComboBox<PuntoEmision> getCmbPuntoEmision() {
+        return cmbPuntoEmision;
+    }
+
+    public void setCmbPuntoEmision(JComboBox<PuntoEmision> cmbPuntoEmision) {
+        this.cmbPuntoEmision = cmbPuntoEmision;
+    }
+
     
 }

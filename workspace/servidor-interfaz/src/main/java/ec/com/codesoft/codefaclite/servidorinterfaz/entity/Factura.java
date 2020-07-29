@@ -40,7 +40,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "FACTURA")
-public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional> {
+public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional> implements Cloneable{
 
     private static final long serialVersionUID = -1238278914412853684L;
     
@@ -635,6 +635,11 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public GeneralEnumEstado getEnumEstadoProforma()
     {
         return GeneralEnumEstado.getEnum(estado);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
             
     

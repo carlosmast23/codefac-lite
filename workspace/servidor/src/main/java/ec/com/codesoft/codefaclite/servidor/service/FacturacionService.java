@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -234,6 +235,28 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             }
         });
         return factura;
+        
+    }
+    
+    public FacturaLoteRespuesta grabarLote(List<Factura> facturaList) throws RemoteException,ServicioCodefacException {
+        
+        FacturaLoteRespuesta respuesta=new FacturaLoteRespuesta();
+        
+        for (Factura factura : facturaList) 
+        {
+            try
+            {
+                Factura facturaGrabada=grabar(factura);
+                respuesta.agregarFacturaProcesada(factura);
+            }
+            catch(ServicioCodefacException e)
+            {
+                //Agrego a la lista las facturas que tienen problemas y no fueron procesadas
+                respuesta.agregarFacturaNoProcesada(new FacturaLoteRespuesta.Error(factura, e.getMessage()));
+            }
+        }
+        
+        return respuesta;
         
     }
     

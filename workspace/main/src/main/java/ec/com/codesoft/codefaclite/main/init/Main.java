@@ -246,23 +246,25 @@ public class Main {
                         DialogoCodefac.mensaje("Advertencia","El proceso de actualización fue cancelado",DialogoCodefac.MENSAJE_ADVERTENCIA);
                         System.exit(0); //Salir del sistema
                     }
-                    
-                    //Ejecutar el updater para que se encargue de hacer la actualicacion de la nueva version
-                    try {
-                        //String carpeta = "";
-                        String pid=obtenerPIDProcesoActual();
-                        //List<String> comando = Arrays.asList("java","-jar","updater.jar "+pid);
-                        /**
-                         * La variable pid sirve para enviar como parametro a updater.jar y luego permita matar el proceso actual si por algun motivo no se termina
-                         */
-                        List<String> comando = Arrays.asList("java","-jar","updater.jar",pid);
-                        ProcessBuilder pb = new ProcessBuilder()
-                                .command(comando);
-                        Process p = pb.start();
-                        System.exit(0); //Terminar la ejecucion del hilo actual , porque el updater se encargara de lanzar la nueva version
+                    else
+                    {
+                        //Ejecutar el updater para que se encargue de hacer la actualicacion de la nueva version
+                        try {
+                            //String carpeta = "";
+                            String pid=obtenerPIDProcesoActual();
+                            //List<String> comando = Arrays.asList("java","-jar","updater.jar "+pid);
+                            /**
+                             * La variable pid sirve para enviar como parametro a updater.jar y luego permita matar el proceso actual si por algun motivo no se termina
+                             */
+                            List<String> comando = Arrays.asList("java","-jar","updater.jar",pid);
+                            ProcessBuilder pb = new ProcessBuilder()
+                                    .command(comando);
+                            Process p = pb.start();
+                            System.exit(0); //Terminar la ejecucion del hilo actual , porque el updater se encargara de lanzar la nueva version
 
-                    } catch (IOException ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     
                     

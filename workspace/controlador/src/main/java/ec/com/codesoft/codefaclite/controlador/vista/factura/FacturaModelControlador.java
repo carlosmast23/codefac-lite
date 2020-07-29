@@ -327,7 +327,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * Validacion de la la logica dependiendo el modulo
      * @return 
      */
-    private boolean validacionPersonalizadaPorModulos(FacturaDetalle facturaDetalle) {
+    private boolean validacionPersonalizadaPorModulos(FacturaDetalle facturaDetalle,DocumentoEnum documentoEnum) {
         
         if(facturaDetalle==null)
         {
@@ -358,14 +358,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 break;
                 
             case INVENTARIO:
-                return validarAgregarInventario(facturaDetalle); //Metodo que se encarga de validar el inventario
+                return validarAgregarInventario(facturaDetalle,documentoEnum); //Metodo que se encarga de validar el inventario
                 
         }
         
         return true;
     }
     
-    private boolean validarAgregarInventario(FacturaDetalle facturaDetalle)
+    private boolean validarAgregarInventario(FacturaDetalle facturaDetalle,DocumentoEnum documentoEnum)
     {
         try {
             
@@ -380,15 +380,18 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                         return true;
                     }
                     
-                    
-                    boolean verifadorStock = verificarExistenciaStockProducto(facturaDetalle);
-                    //Verificar si agrego los datos al fomurlaro cuando no existe inventario
-                    if (!verifadorStock) {
-                        mostrarMensaje(new CodefacMsj("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA));
-                        //DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        return false;
-                    } else {                        
-                        return true;
+                    //Solo hago la validacion del inventario cuando es un producto diferente de proforma , por que para ese tema no deberia importar
+                    if(!documentoEnum.equals(DocumentoEnum.PROFORMA))
+                    {                    
+                        boolean verifadorStock = verificarExistenciaStockProducto(facturaDetalle);
+                        //Verificar si agrego los datos al fomurlaro cuando no existe inventario
+                        if (!verifadorStock) {
+                            mostrarMensaje(new CodefacMsj("No existe stock para el producto", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                            //DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                            return false;
+                        } else {                        
+                            return true;
+                        }
                     }
                 } catch (RemoteException ex) {
                     Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -433,7 +436,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @param facturaDetalle
      * @return 
      */
-    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle) throws ServicioCodefacException {
+    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,DocumentoEnum documentoEnum) throws ServicioCodefacException {
 
         //Validacion de los datos ingresados para ver si puedo agregar al detalle
         if (!interfaz.validarIngresoDetalle()) {
@@ -445,7 +448,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
 
             
         //Validacion personalizada dependiendo de la logica de cada tipo de documento
-        if (!validacionPersonalizadaPorModulos(facturaDetalle)) {
+        if (!validacionPersonalizadaPorModulos(facturaDetalle,documentoEnum)) {
                 return false;
         }
             

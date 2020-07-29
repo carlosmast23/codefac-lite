@@ -380,6 +380,10 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     public DocumentoEnum getCodigoDocumentoEnum() {
         return DocumentoEnum.obtenerDocumentoPorCodigo(codigoDocumento);
     }
+    
+    public void setCodigoDocumentoEnum(DocumentoEnum documentoEnum) {
+        this.codigoDocumento=documentoEnum.getCodigo();
+    }
 
     public TipoEmisionEnum getTipoFacturacionEnum() {
         return TipoEmisionEnum.getEnumByEstado(tipoFacturacion);

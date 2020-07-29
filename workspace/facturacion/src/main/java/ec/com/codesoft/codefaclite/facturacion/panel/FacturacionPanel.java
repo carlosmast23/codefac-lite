@@ -975,7 +975,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         lblEstablecimiento.setText("001-");
         jToolBar3.add(lblEstablecimiento);
 
-        cmbPuntoEmision.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        cmbPuntoEmision.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jToolBar3.add(cmbPuntoEmision);
 
         lblSecuencial.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N

@@ -585,7 +585,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void actionPerformed(ActionEvent e) {
                 try {
                     //System.out.println(panelPadre.validarPorGrupo("detalles"));
-                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado);
+                    DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado,documentoSeleccionado);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -709,7 +710,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (getBtnAgregarDetalleFactura().isEnabled()) {
             try {
                 //Si esta habilitado el boton de agregar funciona para agregar
-                controlador.agregarDetallesFactura(facturaDetalleSeleccionado);
+                DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                controlador.agregarDetallesFactura(facturaDetalleSeleccionado,documentoSeleccionado);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -758,7 +760,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         break;
                         
                 }
-                if(controlador.agregarDetallesFactura(facturaDetalle))
+                
+                DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                if(controlador.agregarDetallesFactura(facturaDetalle,documentoSeleccionado))
                 {
                     habilitarModoIngresoDatos();
                 }

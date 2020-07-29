@@ -187,6 +187,10 @@ public class DescargaModel extends DescargaDialog implements Runnable{
             } catch (IOException ex) {
                 Logger.getLogger(DescargaModel.class.getName()).log(Level.SEVERE, null, ex);
                 return;
+            } catch (Exception e)
+            {
+                Logger.getLogger(DescargaModel.class.getName()).log(Level.SEVERE, null, e);
+                return;
             }
         }
         descargaCompleta=true;
