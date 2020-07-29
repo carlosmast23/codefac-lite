@@ -2210,6 +2210,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         TipoDocumentoEnum tipoDocumentoEnum=controlador.getTipoDocumentoEnumSeleccionado();
         
+        if(tipoDocumentoEnum==null)
+        {
+            DialogoCodefac.mensaje(new CodefacMsj("Por favor seleccione un tipo de documento", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+        }
+        
         //Cargar los tipos de documentos segun el tipo de dcumento
         switch(tipoDocumentoEnum)
         {

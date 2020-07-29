@@ -816,6 +816,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             //Seleccionar el tipo de documento configurado por defecto
             TipoDocumentoEnum tipoDocumentoEnumDefault=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(),ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA,TipoDocumentoEnum.ACADEMICO);
+            tipoDocumentoEnumSeleccionado=TipoDocumentoEnum.LIBRE;
             if(tipoDocumentoEnumDefault!=null)
             {
                 tipoDocumentoEnumSeleccionado=tipoDocumentoEnumDefault;
@@ -827,6 +828,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             TipoDocumentoEnum tipoDocumentoEnumDefault=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroCodefac.getValor());
             getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnumDefault);
             }*/
+            
         } catch (RemoteException ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
