@@ -285,6 +285,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         factura.setIdentificacion(factura.getCliente().getIdentificacion());
         factura.setDireccion(factura.getSucursal().getDireccion());
         factura.setTelefono(factura.getSucursal().getTelefonoConvencional());
+        asignarVendedorAutomatico(factura);
         
         //Cambiar el estado si viene de un pedido si fuera el caso
         Factura proforma=factura.getProforma();
@@ -298,6 +299,19 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);
         grabarDetallesFacturaSinTransaccion(factura);
         grabarCarteraSinTransaccion(factura,carteraParametro);
+    }
+    
+    /**
+     * Metodo que me permite asiganar un vendedor de forma automatica si el usuario tiene vinculado el vendedor
+     */
+    private void asignarVendedorAutomatico(Factura factura) throws ServicioCodefacException, RemoteException
+    {
+        Empleado vendedor=factura.getUsuario().getEmpleado();
+        if(vendedor!=null && vendedor.getDepartamento()!=null && vendedor.getDepartamento().getTipoEnum().equals(Departamento.TipoEnum.Ventas))
+        {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Grabado vendedor de forma automatica");
+            factura.setVendedor(vendedor);
+        }
     }
     
     /**
