@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -216,7 +217,11 @@ public abstract class UtilidadesComprobantes {
                 //file.mkdir();
             }
             
-            JasperExportManager.exportReportToPdfFile(print, pathGrabar);
+            //JasperExportManager.exportReportToPdfFile(print, pathGrabar);
+            //generando directamente el file stream por que con el otro metodo gena
+            FileOutputStream fileOutputStream=new FileOutputStream(file);
+            JasperExportManager.exportReportToPdfStream(print,fileOutputStream);
+            fileOutputStream.close();
             //JasperViewer.viewReport(print,false);
         } catch (JRException ex) {
             Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
