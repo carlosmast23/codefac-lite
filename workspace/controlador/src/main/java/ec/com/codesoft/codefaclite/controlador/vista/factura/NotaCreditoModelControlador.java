@@ -235,7 +235,7 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
 
     }
     
-    private Map<String,String> getMapAdicional(NotaCredito notaCredito)
+    public Map<String,String> getMapAdicional(NotaCredito notaCredito)
     {
         Map<String,String> parametroMap=new HashMap<String ,String>();
         if(notaCredito.getDatosAdicionales()!=null)

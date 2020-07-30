@@ -1286,7 +1286,9 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
 
     @Override
     public ComprobanteDataInterface obtenerComprobanteData() {
-        return new ComprobanteDataNotaCredito(notaCredito);
+        ComprobanteDataNotaCredito comprobanteData=new ComprobanteDataNotaCredito(notaCredito);
+        comprobanteData.setMapInfoAdicional(controlador.getMapAdicional(notaCredito));
+        return comprobanteData;
     }
 
     @Override
