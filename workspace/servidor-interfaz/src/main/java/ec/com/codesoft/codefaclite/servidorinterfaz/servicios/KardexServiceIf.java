@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.math.BigDecimal;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
@@ -60,5 +61,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public void anularInventario(Kardex kardex) throws java.rmi.RemoteException,ServicioCodefacException;
     
     public Kardex buscarKardexPorProducto(Producto producto) throws java.rmi.RemoteException;
+    
+    public  Kardex consultarOCrearStockSinPersistencia(Producto producto, Bodega bodega) throws RemoteException, ServicioCodefacException;
     
 }

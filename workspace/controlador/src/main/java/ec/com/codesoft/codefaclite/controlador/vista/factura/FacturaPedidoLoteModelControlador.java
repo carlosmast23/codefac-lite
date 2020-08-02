@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.RutaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
@@ -14,6 +15,11 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
@@ -27,6 +33,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
+import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -47,11 +55,11 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
     private java.util.Date fechaFin;
     
     
-    private List<Factura> ventasList;
-    private List<Factura> ventasSeleccionadasList;
+    private List<FacturaDataTable> ventasList;
+    private List<FacturaDataTable> ventasSeleccionadasList;
     private List<PuntoEmision> puntoEmisionList;
     
-    private Factura facturaSeleccionada;
+    private FacturaDataTable facturaSeleccionada;
     
     private Empleado vendedorSeleccionado;
     private Ruta rutaSeleccionada;
@@ -61,7 +69,7 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
     private Boolean seleccionTodosRuta;
     
     public FacturaPedidoLoteModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
-        super(mensajeVista, session, interfaz, tipoVista);
+        super(mensajeVista, session, interfaz, tipoVista);                
     }
 
     @Override
@@ -83,12 +91,9 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
         
         try 
         {
-            List<Factura> facturasProcesar=construirFacturas();
-            if(facturasProcesar.size()==0)
-            {
-                mostrarMensaje(new CodefacMsj("Seleccione alguna factura para procesar ",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-                throw new ExcepcionCodefacLite("Seleccione alguna factura para procesar ");
-            }
+            validar();
+            
+            //List<Factura> facturasProcesar=construirFacturas();
             
             FacturaLoteRespuesta respuesta=ServiceFactory.getFactory().getFacturacionServiceIf().grabarLote(construirFacturas());
             
@@ -99,9 +104,15 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
                 mostrarMensaje(new CodefacMsj(respuesta.costruirMensajeError(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             }
             
-            ///Procesar las facturas de forma electronica
+            if(respuesta.procesadosList.size()>0)
+            {
+                ///Procesar las facturas de forma electronica
+                ClienteInterfaceComprobanteLote cic = getInterazEscritorio().getInterfaceCallBack();
+                ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(ComprobanteElectronicoService.ETAPA_GENERAR, ComprobanteElectronicoService.ETAPA_AUTORIZAR, null,obtenerComprobantesParaProcesarElectronicamente(respuesta), session.getEmpresa().getIdentificacion(),cic,true,session.getEmpresa(),false);
+            }
             
-            
+            //volver a consultar los datos con la ultima consulta
+            listenerConsultarGuiasRemision();
             
         } catch (ServicioCodefacException ex) {            
             mostrarMensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -111,6 +122,20 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
         
         
     }
+    
+    private List<ComprobanteDataInterface> obtenerComprobantesParaProcesarElectronicamente(FacturaLoteRespuesta respuesta)
+    {
+        List<ComprobanteDataInterface> comprobantesProcesarList=new ArrayList<ComprobanteDataInterface>();
+        
+        for (Factura factura : respuesta.procesadosList) {
+            ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+            comprobantesProcesarList.add(comprobanteData);
+        }
+                
+        return comprobantesProcesarList;
+    }
+    
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
@@ -136,8 +161,8 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
     public void limpiar() {
         fechaInicial=new Date();
         fechaFin=new Date();
-        ventasList=new ArrayList<Factura>();
-        ventasSeleccionadasList=new ArrayList<Factura>();
+        ventasList=new ArrayList<FacturaDataTable>();
+        ventasSeleccionadasList=new ArrayList<FacturaDataTable>();
         seleccionTodosRuta=true;
         seleccionTodosVendedor=true;
                 
@@ -171,7 +196,7 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
     public void listenerConsultarGuiasRemision()
     {        
         try {
-            ventasList=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporte(
+            List<Factura> ventasList=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporte(
                     null,
                     new java.sql.Date(fechaInicial.getTime()),
                     new java.sql.Date(fechaFin.getTime()),
@@ -187,8 +212,18 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
                     vendedorSeleccionado,
                     null);
             
+            castListDataTable(ventasList);
+            
         } catch (RemoteException ex) {
             Logger.getLogger(GuiaRemisionLoteControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void castListDataTable(List<Factura> ventasListTmp)
+    {
+        ventasList=new ArrayList<FacturaDataTable>();
+        for (Factura factura : ventasListTmp) {
+            ventasList.add(new FacturaDataTable(factura,true, 0));
         }
     }
     
@@ -202,7 +237,8 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
         }
         //Verificar si todos las ventas seleccionadas tiene una direccion importante para procesar la guia de remision
         
-        for (Factura venta : ventasSeleccionadasList) {
+        for (FacturaDataTable ventaTmp : ventasSeleccionadasList) {
+            Factura venta=ventaTmp.factura;
             String direccion=venta.getSucursal().getDireccion();
             if(direccion==null || direccion.trim().isEmpty())
             {
@@ -275,27 +311,27 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
         this.fechaFin = fechaFin;
     }
 
-    public List<Factura> getVentasList() {
+    public List<FacturaDataTable> getVentasList() {
         return ventasList;
     }
 
-    public void setVentasList(List<Factura> ventasList) {
+    public void setVentasList(List<FacturaDataTable> ventasList) {
         this.ventasList = ventasList;
     }
 
-    public List<Factura> getVentasSeleccionadasList() {
+    public List<FacturaDataTable> getVentasSeleccionadasList() {
         return ventasSeleccionadasList;
     }
 
-    public void setVentasSeleccionadasList(List<Factura> ventasSeleccionadasList) {
+    public void setVentasSeleccionadasList(List<FacturaDataTable> ventasSeleccionadasList) {
         this.ventasSeleccionadasList = ventasSeleccionadasList;
     }
 
-    public Factura getFacturaSeleccionada() {
+    public FacturaDataTable getFacturaSeleccionada() {
         return facturaSeleccionada;
     }
 
-    public void setFacturaSeleccionada(Factura facturaSeleccionada) {
+    public void setFacturaSeleccionada(FacturaDataTable facturaSeleccionada) {
         this.facturaSeleccionada = facturaSeleccionada;
     }
 
@@ -350,22 +386,38 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
     
     
 
-    private List<Factura> construirFacturas() {
-        List<Factura> facturasProcesar=new ArrayList<Factura>();
-        for (Factura proforma : ventasSeleccionadasList) {
+    private List<FacturaParametro> construirFacturas() {
+        List<FacturaParametro> facturasProcesar=new ArrayList<FacturaParametro>();
+        for (FacturaDataTable proformaTmp : ventasSeleccionadasList) {
             try {
+                Factura proforma=proformaTmp.factura;
                 Factura facturaNueva = (Factura) proforma.clone();
                 facturaNueva.setId(null);
                 facturaNueva.setCodigoDocumentoEnum(DocumentoEnum.FACTURA);
                 facturaNueva.setProforma(proforma);
                 facturaNueva.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision());
                 facturaNueva.setPuntoEstablecimiento(new BigDecimal(session.getSucursal().getCodigoSucursal().toString()));
-                facturasProcesar.add(facturaNueva);
+                
+                FacturaParametro facturaParametro=new FacturaParametro(facturaNueva, new CarteraParametro(proformaTmp.credito, proformaTmp.dias),null);
+                facturasProcesar.add(facturaParametro);
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(FacturaPedidoLoteModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return facturasProcesar;
+    }
+
+    private void validar() throws ServicioCodefacException 
+    {
+        if(ventasSeleccionadasList==null || ventasSeleccionadasList.size()==0)
+        {
+            throw new ServicioCodefacException("No se puede procesar sin seleccionar alguna factura");
+        }
+        
+        if(puntoEmisionSeleccionado==null)
+        {
+            throw new ServicioCodefacException("Seleccione un punto de emisión para continuar");
+        }
     }
 
     
@@ -382,10 +434,28 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
     public interface SwingIf extends CommonIf {
         //TODO: Implementacion de las interfaces solo necesarias para Swing
         public void abrirGuiaRemision(GuiaRemision guiaRemision);
+        public ClienteInterfaceComprobanteLote getInterfaceCallBack();
     }
 
     public interface WebIf extends CommonIf {
         //TODO: Implementacion de las interafaces solo para la web
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    ///                 CLASES ADICIONALES
+    ///////////////////////////////////////////////////////////////////////////
+    public class FacturaDataTable
+    {
+
+        public FacturaDataTable(Factura factura, Boolean credito, Integer dias) {
+            this.factura = factura;
+            this.credito = credito;
+            this.dias = dias;
+        }
+        
+        public Factura factura;
+        public Boolean credito;
+        public Integer dias;                
     }
     
     

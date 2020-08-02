@@ -19,6 +19,12 @@ public class FacturaLoteRespuesta implements Serializable{
     public List<Factura> procesadosList;
     public List<Error> noProcesadosList;
 
+    public FacturaLoteRespuesta() {
+        this.procesadosList=new ArrayList();
+        this.noProcesadosList=new ArrayList<Error>();
+    }
+
+    
     
     public void agregarFacturaProcesada(Factura factura)
     {

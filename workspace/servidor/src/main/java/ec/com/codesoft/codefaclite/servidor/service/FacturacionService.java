@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
+import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
@@ -238,21 +239,21 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }
     
-    public FacturaLoteRespuesta grabarLote(List<Factura> facturaList) throws RemoteException,ServicioCodefacException {
+    public FacturaLoteRespuesta grabarLote(List<FacturaParametro> facturaList) throws RemoteException,ServicioCodefacException {
         
         FacturaLoteRespuesta respuesta=new FacturaLoteRespuesta();
         
-        for (Factura factura : facturaList) 
+        for (FacturaParametro factura : facturaList) 
         {
             try
             {
-                Factura facturaGrabada=grabar(factura);
-                respuesta.agregarFacturaProcesada(factura);
+                Factura facturaGrabada=grabar(factura.factura,factura.prestamo,factura.carteraPrestamo);
+                respuesta.agregarFacturaProcesada(factura.factura);
             }
             catch(ServicioCodefacException e)
             {
                 //Agrego a la lista las facturas que tienen problemas y no fueron procesadas
-                respuesta.agregarFacturaNoProcesada(new FacturaLoteRespuesta.Error(factura, e.getMessage()));
+                respuesta.agregarFacturaNoProcesada(new FacturaLoteRespuesta.Error(factura.factura, e.getMessage()));
             }
         }
         
@@ -448,7 +449,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }
     
-    private Kardex consultarOCrearStock(Producto producto, Bodega bodega) throws RemoteException, ServicioCodefacException
+    /*private Kardex consultarOCrearStock(Producto producto, Bodega bodega) throws RemoteException, ServicioCodefacException
     {
         
         //Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
@@ -466,7 +467,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
         return kardex;
 
-    }
+    }*/
     
     private void afectarInventario(FacturaDetalle detalle,Bodega bodega) throws RemoteException, ServicioCodefacException
     {
@@ -484,7 +485,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         } else {
             kardex = kardexs.get(0);
         }*/
-        Kardex kardex = consultarOCrearStock(producto, bodega);
+        Kardex kardex =ServiceFactory.getFactory().getKardexServiceIf().consultarOCrearStockSinPersistencia(producto, bodega);
+        //Kardex kardex = consultarOCrearStock(producto, bodega);
 
         /**
          * Validacion pára verificar que exista un stock superior o igual en el

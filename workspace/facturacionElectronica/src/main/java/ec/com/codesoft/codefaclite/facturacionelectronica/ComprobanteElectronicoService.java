@@ -1536,7 +1536,11 @@ public class ComprobanteElectronicoService implements Runnable {
     
     //TODO: Revisar si usa este metodo y unificar con el de enum
     private String getTipoComprobante(ComprobanteElectronico comprobante) {
-        switch (comprobante.getTipoDocumento()) {
+        
+        String tipoDocumento=comprobante.getTipoDocumento();
+        
+        /*switch (tipoDocumento) 
+        {
             case ComprobanteElectronico.FACTURA:
                 return "01";
 
@@ -1547,12 +1551,12 @@ public class ComprobanteElectronicoService implements Runnable {
                 return "07";
                 
             case ComprobanteElectronico.GUIA_REMISION:
-                return "06";
-                
+                return "06";                
 
             default:
                 return "00";
-        }
+        }*/
+        return tipoDocumento;
     }
 
     private StringWriter generarXml(ComprobanteElectronico comprobante,String claveAccesoStr) {

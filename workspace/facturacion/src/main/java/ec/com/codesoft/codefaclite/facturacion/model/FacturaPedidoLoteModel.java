@@ -14,7 +14,10 @@ import ec.com.codesoft.codefaclite.controlador.vista.transporte.GuiaRemisionLote
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBindingAddData;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaLoteImplComprobante;
+import ec.com.codesoft.codefaclite.facturacion.interfaz.InterfaceCallbakClient;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaPedidoLotePanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -23,6 +26,8 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,7 +36,19 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements ControladorVistaIf,FacturaPedidoLoteModelControlador.SwingIf {
 
+    private FacturaPedidoLoteModel formThis=this;
+    
     private FacturaPedidoLoteModelControlador controlador;
+
+    public FacturaPedidoLoteModel() {
+        /**
+         * Desactivo el ciclo de vida para controlar manualmente
+         */
+        //super.cicloVida = false;
+        //super.validacionDatosIngresados = false;
+    }
+    
+    
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -132,7 +149,9 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
             "Vendedor",
             "Ruta",
             "Documento",
-            "Total"};
+            "Total",
+            "Crédito",
+            "Dias"};
         
         DefaultTableModel modelo=UtilidadesTablas.crearModeloTabla(
                 titulo, 
@@ -148,6 +167,8 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
                     Object.class,
                     Object.class,
                     Object.class,
+                    Boolean.class,
+                    Integer.class,
                 }
         );
         
@@ -157,13 +178,14 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
     
     public ITableBindingAddData getTableBindingAddData()
     {
-        return new ITableBindingAddData<Factura>() {
+        return new ITableBindingAddData<FacturaPedidoLoteModelControlador.FacturaDataTable>() {
             @Override
-            public Object[] addData(Factura value) {
+            public Object[] addData(FacturaPedidoLoteModelControlador.FacturaDataTable valueTmp) {
+                Factura value=valueTmp.factura;
                 String nombreComercial=(value.getSucursal().getNombreComercial()!=null)?value.getSucursal().getNombreComercial():"";
                 String vendedor=(value.getVendedor()!=null)?value.getVendedor().getNombresCompletos():"";
                 return new Object[]{
-                    value,
+                    valueTmp,
                     value.getPreimpreso(),
                     value.getFechaEmision(),
                     value.getIdentificacion(),
@@ -172,7 +194,9 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
                     vendedor,
                     "",//Ruta                    
                     value.getCodigoDocumentoEnum().getNombre(),
-                    value.getTotal()
+                    value.getTotal(),
+                    valueTmp.credito,
+                    valueTmp.dias
                 };
             }
         };
@@ -191,6 +215,23 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
     @Override
     public void cerrarPantalla() {
         //dispose();
+    }
+
+    @Override
+    public ClienteInterfaceComprobanteLote getInterfaceCallBack() {
+        ClienteInterfaceComprobanteLote cic =null;
+        try {
+            cic = new ClienteFacturaLoteImplComprobante(this,new InterfaceCallbakClient() {
+                @Override
+                public void terminoProceso() {
+                    formThis.estadoNormal();
+                    //getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Vuelve a cargar los comprobantes
+                }
+            });
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaPedidoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return cic;
     }
 
     

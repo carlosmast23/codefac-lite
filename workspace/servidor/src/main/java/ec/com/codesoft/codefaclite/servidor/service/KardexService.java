@@ -130,6 +130,14 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 //mapParametros.put("bodega",bodega);
                 KardexServiceIf servicioKardex=ServiceFactory.getFactory().getKardexServiceIf();
                 Kardex kardexComponente= servicioKardex.buscarKardexPorProductoyBodega(bodega,componente);
+                
+                //Si no existe el kardex del componente que intento facturar lo debo crear
+                if(kardexComponente==null)
+                {
+                    kardexComponente=consultarOCrearStockSinPersistencia(componente, bodega);
+                }
+                                
+                
                 if(kardexComponente!=null)
                 {
                     Integer cantidadTotal=cantidadEnsamble*cantidadProducto;
@@ -183,6 +191,26 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return kardeList;
         
     }
+    public  Kardex consultarOCrearStockSinPersistencia(Producto producto, Bodega bodega) throws RemoteException, ServicioCodefacException
+    {
+        
+        //Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+        //Map<String,Object> mapParametros=new HashMap<String,Object>();
+        //mapParametros.put("producto", producto);
+        KardexService kardexService = new KardexService();
+        List<Kardex> kardexs = kardexService.buscarPorProductoYBodega(producto, bodega);
+
+        Kardex kardex = null;
+        if (kardexs == null || kardexs.size() == 0) {
+            kardex = kardexService.crearObjeto(bodega, producto);
+            entityManager.persist(kardex);
+        } else {
+            kardex = kardexs.get(0);
+        }
+        return kardex;
+
+    }
+    
     
     
     public void ingresoEgresoInventarioEnsamble(Bodega bodega, Producto productoEnsamble,Integer cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException
@@ -244,8 +272,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             parametrosMap.put("bodega", bodega);
             parametrosMap.put("producto", componenteEmsamble.getComponenteEnsamble());
             kardexList = obtenerPorMap(parametrosMap);
-
-            costoIndividualEnsamble = costoIndividualEnsamble.add(new BigDecimal(componenteEmsamble.getCantidad().toString()).multiply(kardexList.get(0).getPrecioUltimo()));
+            
+            //Solo calculo el costo del ensamble si los otros productos ya estana ingresados en el kardex
+            if(kardexList.size()>0)
+            {
+                costoIndividualEnsamble = costoIndividualEnsamble.add(new BigDecimal(componenteEmsamble.getCantidad().toString()).multiply(kardexList.get(0).getPrecioUltimo()));
+            }
         }
 
         ///Actualizar los totales del emsamble

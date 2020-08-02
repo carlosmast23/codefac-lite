@@ -184,7 +184,43 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         return false;
     }
     
-    public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,String ruc,ClienteInterfaceComprobanteLote callbackClientObject,Boolean enviarCorreo,Empresa empresa,Boolean sincrono) throws RemoteException
+    private void setearComprobanteLote(List<ComprobanteDataInterface> comprobantesProcesos,ComprobanteElectronicoService comprobanteElectronico) throws RemoteException
+    {
+        if(comprobantesProcesos!=null)
+        {
+            List<ComprobanteElectronico> comprobantesConvertidoList=new ArrayList<ComprobanteElectronico>();
+            for (ComprobanteDataInterface comprobantesProceso : comprobantesProcesos) {
+                ComprobanteElectronico datoConvertido=convertirComprobanteDatoToComprobateElectronico(comprobantesProceso);
+                comprobantesConvertidoList.add(datoConvertido);
+            }
+            comprobanteElectronico.setComprobantesLote(comprobantesConvertidoList);
+            
+        }
+    }
+    
+    private void setearClavesAccesoLote(List<ClaveAcceso> listaClaves,Empresa empresa)
+    {
+        for (ClaveAcceso claveAcceso : listaClaves) 
+        {
+            ComprobanteEntity comprobanteEntity=consultarPorClaveAcceso(claveAcceso, empresa);
+            comprobanteEntity.setClaveAcceso(claveAcceso.clave);
+            
+            try {
+                ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                    @Override
+                    public void transaccion() throws ServicioCodefacException, RemoteException {
+                        entityManager.merge(comprobanteEntity);
+                    }
+                });
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+        }
+    }
+    
+    public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,List<ComprobanteDataInterface> comprobantesProcesos,String ruc,ClienteInterfaceComprobanteLote callbackClientObject,Boolean enviarCorreo,Empresa empresa,Boolean sincrono) throws RemoteException
     {
         //Empresa empresa=obtenerEmpresaPorClaveAcceso(clavesAcceso.get(0));
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
@@ -194,6 +230,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //comprobanteElectronico.setClaveAcceso(claveAcceso);
         comprobanteElectronico.setEtapaLimiteProcesar(etapaLimite);
         comprobanteElectronico.setClavesAccesoLote(clavesAcceso);
+        setearComprobanteLote(comprobantesProcesos, comprobanteElectronico);
+        //comprobanteElectronico.setComprobantesLote(comprobantesProcesos);
         comprobanteElectronico.setRuc(ruc);
         
         
@@ -228,6 +266,30 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             @Override
             public void clavesGeneradas(List<ClaveAcceso> listaClaves) {
                 //TODO: Metodo que devuelve las claves generadas
+                //try {
+                    if(existeConexionRemota)
+                    {
+                        //callbackClientObject.procesando(etapa, clave);
+                    }                    
+                             
+                    setearClavesAccesoLote(listaClaves, empresa);
+                    //Si se genera la etapa firmar entonces seteo la clave de acceso
+                    //if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
+                        //comprobanteOriginal.setClaveAcceso(clave.clave);
+
+                        /*ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                            @Override
+                            public void transaccion() {
+                                entityManager.merge(comprobanteOriginal);
+                            }
+                        });*/
+                    //}
+                    
+                    
+                    
+                //} catch (ServicioCodefacException ex) {
+                //    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                //}
             }
 
             @Override
@@ -1265,18 +1327,17 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         return comprobanteElectronico;
     }
     
-    private ComprobanteElectronicoService cargarConfiguracionesInicialesComprobantes(ComprobanteDataInterface comprobanteData,Usuario usuario) throws RemoteException
+    /**
+     * Convertir clase intermediaria en el formato para procesar electronicamente
+     * @return 
+     */
+    private ComprobanteElectronico convertirComprobanteDatoToComprobateElectronico(ComprobanteDataInterface comprobanteData) throws RemoteException
     {
-        /**
-         * Metodo del modulo de facturacion electronica que contiene la interfaz
-         * para facturar electronicamente
-         */
         ComprobanteElectronico comprobante= comprobanteData.getComprobante();
-        ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
-
+        
         //Agregando informacionTributaria
         comprobante.setInformacionTributaria(getInfoInformacionTributaria(comprobanteData));
-
+        
         //Validacion para verificar que si no existen datos adicionales no se agregue nada
         List<InformacionAdicional> informacionAdicional = getInformacionAdicional(comprobanteData);
         if (informacionAdicional != null && informacionAdicional.size() > 0) 
@@ -1291,6 +1352,38 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 comprobante.setInformacionAdicional(informacionAdicional);
             }
         }
+        
+        return comprobante;
+        
+    }
+    
+    private ComprobanteElectronicoService cargarConfiguracionesInicialesComprobantes(ComprobanteDataInterface comprobanteData,Usuario usuario) throws RemoteException
+    {
+        /**
+         * Metodo del modulo de facturacion electronica que contiene la interfaz
+         * para facturar electronicamente
+         */
+        //ComprobanteElectronico comprobante= comprobanteData.getComprobante();
+        ComprobanteElectronico comprobante= convertirComprobanteDatoToComprobateElectronico(comprobanteData);
+        ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
+
+        //Agregando informacionTributaria
+        //comprobante.setInformacionTributaria(getInfoInformacionTributaria(comprobanteData));
+
+        //Validacion para verificar que si no existen datos adicionales no se agregue nada
+        /*List<InformacionAdicional> informacionAdicional = getInformacionAdicional(comprobanteData);
+        if (informacionAdicional != null && informacionAdicional.size() > 0) 
+        {
+            //Validar que si son mas de 15 datos solo coja los 15 primeros por que no permite enviar más para la facturación electrónica
+            if(informacionAdicional.size()>15)
+            {
+                comprobante.setInformacionAdicional(informacionAdicional.subList(0,15));
+            }
+            else
+            {
+                comprobante.setInformacionAdicional(informacionAdicional);
+            }
+        }*/
         
         
         //Agregar datos adicionales del Reporte
@@ -2098,6 +2191,35 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             throw new ServicioCodefacException("Error,Secuencial negativo invaido");
         }
         
+    }
+    
+    
+    private ComprobanteEntity consultarPorClaveAcceso(ClaveAcceso claveAcceso,Empresa empresa)
+    {
+        //claveAcceso
+        
+        DocumentoEnum documentoEnum=DocumentoEnum.obtenerPorComprobanteEnum(claveAcceso.getTipoComprobante());
+        BigDecimal puntoEstablecimiento=new BigDecimal(claveAcceso.puntoEstablecimiento);
+        Integer puntoEmision=Integer.parseInt(claveAcceso.puntoEmision);
+        Integer secuencial=Integer.parseInt(claveAcceso.secuencial);
+        
+        ComprobanteEntityFacade facadeEntity=new ComprobanteEntityFacade();
+        
+        List<ComprobanteEntity> comprobantesEncontradoList=facadeEntity.validarSecuencialRepetidoComprobanteFacade(
+                empresa, 
+                documentoEnum, 
+                puntoEstablecimiento, 
+                puntoEmision, 
+                secuencial
+        );
+        
+        
+        if(comprobantesEncontradoList.size()>0)
+        {
+            return comprobantesEncontradoList.get(0);
+        }
+        
+        return null;
     }
     
     /**

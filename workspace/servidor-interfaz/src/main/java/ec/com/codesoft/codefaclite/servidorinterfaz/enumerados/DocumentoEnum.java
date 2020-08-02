@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.util.ArrayList;
@@ -397,6 +398,36 @@ public enum DocumentoEnum implements ParametroUtilidades.ComparadorInterface{
             }
         }
         return null;
+    }
+    
+    public static DocumentoEnum obtenerPorComprobanteEnum(ComprobanteEnum comprobanteEnum)
+    {
+        if(comprobanteEnum.equals(ComprobanteEnum.FACTURA))
+        {
+            return DocumentoEnum.FACTURA;
+        }else if(comprobanteEnum.equals(ComprobanteEnum.LIQUIDACION_COMPRA))
+        {
+            return DocumentoEnum.LIQUIDACION_COMPRA;
+        }else if(comprobanteEnum.equals(ComprobanteEnum.NOTA_CREDITO))
+        {
+            return DocumentoEnum.NOTA_CREDITO;
+        }else if(comprobanteEnum.equals(ComprobanteEnum.NOTA_DEBITO))
+        {
+            return null;
+        }else if(comprobanteEnum.equals(ComprobanteEnum.GUIA_REMISION))
+        {
+            return DocumentoEnum.GUIA_REMISION;
+        }
+        else if(comprobanteEnum.equals(ComprobanteEnum.COMPROBANTE_RETENCION))
+        {
+            return DocumentoEnum.RETENCIONES;
+        }
+        else
+        {
+            return null;
+        }
+        
+        
     }
 
     @Override
