@@ -97,8 +97,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoTablaInteresServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.DescuentoAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.ArqueoCajaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaPermisoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaSesionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.IngresoCajaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.TurnoAsignadoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.TurnoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.VentaServiceIf;
 
 /**
  *
@@ -205,6 +210,12 @@ public abstract class ServiceFactory {
     public CajaServiceIf getCajaServiceIf(){return (CajaServiceIf) getRecursosRMI(CajaServiceIf.class);};
     public CajaSesionServiceIf getCajaSesionServiceIf(){return (CajaSesionServiceIf) getRecursosRMI(CajaSesionServiceIf.class);};
     public ArqueoCajaServiceIf getArqueoCajaServiceIf(){return (ArqueoCajaServiceIf) getRecursosRMI(ArqueoCajaServiceIf.class);};
+    public CajaPermisoServiceIf getCajaPermisoServiceIf(){return (CajaPermisoServiceIf) getRecursosRMI(CajaPermisoServiceIf.class);};
+    public IngresoCajaServiceIf getIngresoCajaServiceIf(){return (IngresoCajaServiceIf) getRecursosRMI(IngresoCajaServiceIf.class);};
+    public TurnoServiceIf getTurnoServiceIf(){return (TurnoServiceIf) getRecursosRMI(TurnoServiceIf.class);};
+    public TurnoAsignadoServiceIf getTurnoAsignadoServiceIf(){return (TurnoAsignadoServiceIf) getRecursosRMI(TurnoAsignadoServiceIf.class);};
+    public VentaServiceIf getVentaServiceIf(){return (VentaServiceIf) getRecursosRMI(VentaServiceIf.class);};
+    
     public ZonaServiceIf getZonaServiceIf(){return (ZonaServiceIf) getRecursosRMI(ZonaServiceIf.class);};
     public TipoEstablecimientoServiceIf getTipoEstablecimientoServiceIf(){return (TipoEstablecimientoServiceIf) getRecursosRMI(TipoEstablecimientoServiceIf.class);};
     public RutaServiceIf getRutaServiceIf(){return (RutaServiceIf) getRecursosRMI(RutaServiceIf.class);};

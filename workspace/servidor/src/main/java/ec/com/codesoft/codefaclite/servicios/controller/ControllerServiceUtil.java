@@ -81,8 +81,13 @@ import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlanti
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlantillaService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubrosNivelService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.ArqueoCajaService;
+import ec.com.codesoft.codefaclite.servidor.service.pos.CajaPermisoService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaSesionService;
+import ec.com.codesoft.codefaclite.servidor.service.pos.IngresoCajaService;
+import ec.com.codesoft.codefaclite.servidor.service.pos.TurnoAsignadoService;
+import ec.com.codesoft.codefaclite.servidor.service.pos.TurnoService;
+import ec.com.codesoft.codefaclite.servidor.service.pos.VentaService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.DestinatarioGuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.DetalleProductoGuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionAdicionalService;
@@ -177,8 +182,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoTablaInteresServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.DescuentoAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.ArqueoCajaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaPermisoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaSesionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.IngresoCajaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.TurnoAsignadoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.TurnoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.VentaServiceIf;
 
 /**
  *
@@ -281,6 +291,12 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(TipoEstablecimientoService.class,TipoEstablecimientoServiceIf.class);
             mapRecursos.put(RutaService.class,RutaServiceIf.class);
             mapRecursos.put(RutaDetalleService.class,RutaDetalleServiceIf.class);
+            mapRecursos.put(CajaPermisoService.class, CajaPermisoServiceIf.class);
+            mapRecursos.put(IngresoCajaService.class, IngresoCajaServiceIf.class);
+            mapRecursos.put(TurnoAsignadoService.class, TurnoAsignadoServiceIf.class);
+            mapRecursos.put(TurnoService.class, TurnoServiceIf.class);
+            mapRecursos.put(VentaService.class, VentaServiceIf.class);
+            
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);
             LOG.log(Level.INFO,"Servidor Iniciado");
