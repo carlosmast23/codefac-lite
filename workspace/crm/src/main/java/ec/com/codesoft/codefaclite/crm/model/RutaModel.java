@@ -136,6 +136,11 @@ public class RutaModel extends RutaForm implements ControladorVistaIf,RutaModelC
                     value.getOrden(),
                 };
             }
+
+            @Override
+            public void setData(RutaDetalle objetoOriginal, Object objetoModificado, Integer columnaModificada) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         };
     };
     

@@ -11,4 +11,6 @@ package ec.com.codesoft.codefaclite.controlador.vistas.core.components;
  */
 public interface ITableBindingAddData<T> {
     public Object[] addData(T value);
+    //Evento que se ejecuta cuando un nuevo valor se selecciona en el modelo
+    public void setData(T objetoOriginal,Object objetoModificado,Integer columnaModificada);
 }

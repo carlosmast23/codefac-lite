@@ -199,6 +199,29 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
                     valueTmp.dias
                 };
             }
+
+            @Override
+            public void setData(FacturaPedidoLoteModelControlador.FacturaDataTable objetoOriginal, Object objetoModificado, Integer columnaModificada) {
+                final int COLUMNA_OBJETO=0;
+                final int COLUMNA_CREDITO=11;
+                final int COLUMNA_DIAS_CREDITO=12;
+                
+                switch (columnaModificada) {
+                    case COLUMNA_OBJETO:
+                        break;
+
+                    case COLUMNA_CREDITO:
+                        objetoOriginal.credito=(Boolean) objetoModificado;
+                        break;
+
+                    case COLUMNA_DIAS_CREDITO:
+                        objetoOriginal.dias=(Integer) objetoModificado;
+                        break;
+
+                }
+                
+                
+            }
         };
     };
 
