@@ -163,6 +163,11 @@ public class GuiaRemisionLoteModel extends GuiaRemisionLotePanel implements Cont
                     value.getTotal()
                 };
             }
+
+            @Override
+            public void setData(Factura objetoOriginal, Object objetoModificado, Integer columnaModificada) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         };
     };
     

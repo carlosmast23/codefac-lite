@@ -185,7 +185,8 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             transaccion.begin();
             interfaz.transaccion();
             transaccion.commit();
-            entityManager.clear();
+            //transaccion.setRollbackOnly();
+            //entityManager.clear(); //Supuestamente esto no es neceario y solo se estaba usando supuestamente para errores de cache
         }catch (RemoteException ex) { //Hacer un RoolBack cuando no exista comunicacion con el servidor
             if (transaccion.isActive()) {
                 transaccion.rollback();

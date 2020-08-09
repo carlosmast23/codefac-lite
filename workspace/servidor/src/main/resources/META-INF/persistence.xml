@@ -4,7 +4,8 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby:Derby2.DB"/>
-      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>      
+      <property name="eclipselink.allow-zero-id" value="true"/>
       <!--<property name = " eclipselink.ddl-generation " value = "create-or-extend-tables" />-->
     </properties>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.AccesoDirecto</class>

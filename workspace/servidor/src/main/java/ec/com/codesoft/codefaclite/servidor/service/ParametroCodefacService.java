@@ -39,7 +39,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
                 @Override
                 public Object consulta() throws ServicioCodefacException, RemoteException {
                     Map<String, ParametroCodefac> parametrosCodefacMap = new HashMap<String, ParametroCodefac>();
-                    System.out.println("EJECUNTANDO CONSULTA DE getParametrosMap <--------------------------");
+                    //System.out.println("EJECUNTANDO CONSULTA DE getParametrosMap <--------------------------");
                     
                     //ALERTA: REVISAR QUE ESTA LINEA DE CODIGO GENERA  EL SIGUIENTE LOG
                     //A signal was attempted before wait() on ConcurrencyManager. This normally means that an attempt was made to 
@@ -62,14 +62,24 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
     
     public ParametroCodefac getParametroByNombre(String nombre,Empresa empresa) throws java.rmi.RemoteException
     {
-        Map<String,Object> map=new HashMap<String, Object>();
-        map.put("nombre",nombre);
-        map.put("empresa",empresa);
-        List<ParametroCodefac> parametroCodefacList=getFacade().findByMap(map);
-        if(parametroCodefacList!=null && parametroCodefacList.size()>0 )
-            return ((List<ParametroCodefac>) (getFacade().findByMap(map))).get(0);
-        else
-            return null;
+        try {
+            return (ParametroCodefac) ejecutarConsulta(new MetodoInterfaceConsulta() {
+                @Override
+                public Object consulta() throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    map.put("nombre", nombre);
+                    map.put("empresa", empresa);
+                    List<ParametroCodefac> parametroCodefacList = getFacade().findByMap(map);
+                    if (parametroCodefacList != null && parametroCodefacList.size() > 0)
+                        return parametroCodefacList.get(0);
+                    else
+                        return null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ParametroCodefacService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     
@@ -112,7 +122,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
                 }
             }
         });
-        return ;
+        return  ;
     }
     
     public void grabarOEditar(Empresa empresa,String parametroNombre,String valor) throws java.rmi.RemoteException,ServicioCodefacException

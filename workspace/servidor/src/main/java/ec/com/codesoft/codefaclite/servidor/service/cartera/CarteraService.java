@@ -127,6 +127,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             entityManager.merge(cartera);
         }
         
+        //TODO: Actualizo las referencias de datos persitentes por que la actualiza los saldo utiloiza el modo flush automatico y si previamente no estan persistentes las entidades en la consulta genera error
+        entityManager.flush();
 
         //Actuaizar Saldo de las entidades de cartera afectada en los cruces
         actualizarSaldosCarteraSinTrasaccion(cruces);
@@ -279,7 +281,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 //TODO: En los 2 casos asumo que los cruces siempre son con 2 carteras , pero analizar si pueden haber mas de 2 carteras que esten siendo afectadas
                 Cartera carteraAfectada=cruce.getCarteraAfectada(); //Solo busco el primer dato de la cartera que afecta porque en los demas debe apuntar al mismo
                 Cartera carteraQueAfecta= cruce.getCarteraDetalle().getCartera();
-
+                
                 ///Generar el valor del saldo 
                 BigDecimal valorCruzadoCarteraAfectada=  getFacade().obtenerValorCruceCarteraAfecta(carteraAfectada);
                 carteraAfectada.setSaldo(carteraAfectada.getTotal().subtract(valorCruzadoCarteraAfectada));            

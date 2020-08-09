@@ -18,6 +18,9 @@ import java.util.List;
  * @author CARLOS_CODESOFT
  */
 public interface AlertaServiceIf extends Remote {
+    
+    public void procesoBloqueado(Empresa empresaIf) throws RemoteException,ServicioCodefacException;
+    
     public List<AlertaResponse> actualizarNotificaciones(Empresa empresa,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException;
     public List<AlertaResponse> actualizarNotificacionesCargaRapida(Empresa empresa) throws RemoteException,ServicioCodefacException;
     public List<AlertaResponse> actualizarNotificacionesCargaLenta(Empresa empresa,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException;

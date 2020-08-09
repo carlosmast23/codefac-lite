@@ -62,7 +62,7 @@ public class CarteraDetalle implements Serializable,Cloneable {
     private Cartera cartera;
     
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "carteraDetalle", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "carteraDetalle", fetch = FetchType.EAGER)
     private List<CarteraCruce> cruces;
     
 

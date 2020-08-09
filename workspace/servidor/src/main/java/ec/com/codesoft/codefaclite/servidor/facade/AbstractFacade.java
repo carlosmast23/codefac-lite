@@ -20,11 +20,14 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.FlushModeType;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.RollbackException;
 import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
+import org.eclipse.persistence.config.HintValues;
+import org.eclipse.persistence.config.QueryHints;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -139,6 +142,8 @@ public abstract class AbstractFacade<T>
                 query.setParameter(parametro.replace(".",""), parametros.get(parametro));
             }
         }
+        query.setFlushMode(FlushModeType.COMMIT);
+        //query.setHint(QueryHints.READ_ONLY, HintValues.TRUE);
         return query.getResultList();
 
     }   
