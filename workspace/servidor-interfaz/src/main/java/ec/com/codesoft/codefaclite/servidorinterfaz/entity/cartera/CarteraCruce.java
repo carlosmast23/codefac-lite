@@ -40,7 +40,7 @@ public class CarteraCruce implements Serializable {
     @Column(name = "VALOR")
     private BigDecimal valor;
     
-    @JoinColumn(name = "CARTERA_AFECTA_ID")
+    @JoinColumn(name = "CARTERA_AFECTA_ID" )
     private Cartera carteraAfectada;
     
     @JoinColumn(name = "CARTERA_DETALLE_ID")

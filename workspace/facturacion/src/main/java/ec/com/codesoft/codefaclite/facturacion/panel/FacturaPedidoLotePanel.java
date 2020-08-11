@@ -78,7 +78,7 @@ public abstract class FacturaPedidoLotePanel extends ControladorCodefacInterface
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Fecha Inicial:");
+        jLabel1.setText("Fecha Final:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;

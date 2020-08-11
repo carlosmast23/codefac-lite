@@ -237,7 +237,7 @@ public class NotificacionEstudiantesModel extends NotificacionEstudiantesPanel {
             //Todo:Ver si poner un mensaje para saber que el correo fue enviado correctamente
         } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje("Error", "No se pudo enviar el correo \n\nProblema:\n", DialogoCodefac.MENSAJE_INCORRECTO);
+            //DialogoCodefac.mensaje("Error", "No se pudo enviar el correo \n\nProblema:\n", DialogoCodefac.MENSAJE_INCORRECTO);
         }
     }
 
@@ -245,7 +245,11 @@ public class NotificacionEstudiantesModel extends NotificacionEstudiantesPanel {
         String mensaje = getTxtMensaje().getText().replace("\n", "<br>");
 
         mensaje = mensaje.replace(EtiquetaMensajeEnum.ETIQUETA_NOMBRE_ESTUDIANTE.getEtiqueta(), estudianteInscrito.getEstudiante().getNombreCompleto());
-        mensaje = mensaje.replace(EtiquetaMensajeEnum.ETIQUETA_NOMBRE_REPRESENTANTE.getEtiqueta(), estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
+        
+        if(estudianteInscrito.getEstudiante().getRepresentante()!=null)
+        {
+            mensaje = mensaje.replace(EtiquetaMensajeEnum.ETIQUETA_NOMBRE_REPRESENTANTE.getEtiqueta(), estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
+        }
 
         return mensaje;
     }

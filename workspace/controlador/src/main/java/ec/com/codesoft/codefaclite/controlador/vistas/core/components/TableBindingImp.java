@@ -52,6 +52,49 @@ public class TableBindingImp extends ComponentBindingAbstract<JTable, TableBindi
     private Boolean modoSelectedCheck;
     private Map<Object, Boolean> mapSeleccionCheck;
     
+    public ComponentBindingIf eventoCambiarPropiedadTabla=new ComponentBindingIf<List, TableBinding>()
+    {
+        @Override
+        public void getAccion(String nombrePropiedadControlador, ConverterSwingMvvc converter) {
+            getComponente().getModel().addTableModelListener(new TableModelListener() {
+                @Override
+                public void tableChanged(TableModelEvent e) {
+                    if(addDataInterface!=null)
+                    {
+                        if(e.getFirstRow()>=0 && e.getColumn()>=0)
+                        {
+                            Object objetoOriginal=getComponente().getModel().getValueAt(e.getFirstRow(),COLUMNA_OBJETO);
+                            Object objetoEditado=getComponente().getModel().getValueAt(e.getFirstRow(),e.getColumn());
+                            try
+                            {
+                                addDataInterface.setData(objetoOriginal, objetoEditado, e.getColumn());
+                            }catch(UnsupportedOperationException uoe)
+                            {}
+                        }
+                    }
+                }
+            });
+            
+            //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html
+        }
+
+        @Override
+        public void setAccion(List value, String nombrePropiedadControlador, ConverterSwingMvvc converter) {
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public String getNombrePropiedadControlador(TableBinding componente) {
+            return componente.source();
+        }
+
+        @Override
+        public Class getConverterClass(TableBinding anotacion) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+    
+    };
+    
         
     public ComponentBindingIf checkBoxSelection=new ComponentBindingIf<JCheckBox,TableBinding>()
     {
@@ -309,7 +352,6 @@ public class TableBindingImp extends ComponentBindingAbstract<JTable, TableBindi
                     //Limpiar todos los datos de la tabla
                     UtilidadesTablas.eliminarTodosLosDatos(defaultTableModel);
                     if (value != null) {
-                        
 
                         for (Object valor : value) {
                             Object[] datosAgregar = addDataInterface.addData(valor);
@@ -342,12 +384,20 @@ public class TableBindingImp extends ComponentBindingAbstract<JTable, TableBindi
 
     @Override
     public void getAccionesComponente(List<ComponentBindingIf> lista) {
+        //Permite habilitar los checks en las tablas
         lista.add(modoSelectedCheckImp);
+        ///Interfaz que me permite establecer como se deben cargar los datos en la tabla
         lista.add(interfaceAddData);
+        // permite establecer la lista de los valores para mostrar en la tabla
         lista.add(value);
+        // implementacion que me permite devolver todos los objetos seleccionados en los checks
         lista.add(listSelectCheckImp);
+        // Propiedad que me permite devolver el primer objeto de la fila seleccionada que debe corresponder al objeto
         lista.add(valueSelect);
+        // Implementacion que permite seleccionar o deseleccionar todos los componentes vinculados
         lista.add(checkBoxSelection);
+        // Implementacion para poder setear un valor cuando se modifica el modelo en la tabla
+        lista.add(eventoCambiarPropiedadTabla);
 
     }
 

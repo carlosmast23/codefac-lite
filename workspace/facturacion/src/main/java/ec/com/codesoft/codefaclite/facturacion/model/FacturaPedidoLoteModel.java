@@ -18,10 +18,14 @@ import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaLoteImplCo
 import ec.com.codesoft.codefaclite.facturacion.interfaz.InterfaceCallbakClient;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaPedidoLotePanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteData;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +33,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRPrintPage;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -93,7 +100,7 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
 
     @Override
     public String getURLAyuda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "https://docs.google.com/document/d/e/2PACX-1vRxHiHd5vpEu1In25BKtCXigpl4m1phGAZwNR7Rh2Jm-Xqe7ffQpivlYJsMAWHFBS0BOnYxj4dpUi7H/pub?embedded=true#h.3l5c2w2a02kz";
     }
 
     @Override
@@ -199,6 +206,29 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
                     valueTmp.dias
                 };
             }
+
+            @Override
+            public void setData(FacturaPedidoLoteModelControlador.FacturaDataTable objetoOriginal, Object objetoModificado, Integer columnaModificada) {
+                final int COLUMNA_OBJETO=0;
+                final int COLUMNA_CREDITO=11;
+                final int COLUMNA_DIAS_CREDITO=12;
+                
+                switch (columnaModificada) {
+                    case COLUMNA_OBJETO:
+                        break;
+
+                    case COLUMNA_CREDITO:
+                        objetoOriginal.credito=(Boolean) objetoModificado;
+                        break;
+
+                    case COLUMNA_DIAS_CREDITO:
+                        objetoOriginal.dias=(Integer) objetoModificado;
+                        break;
+
+                }
+                
+                
+            }
         };
     };
 
@@ -223,8 +253,9 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
         try {
             cic = new ClienteFacturaLoteImplComprobante(this,new InterfaceCallbakClient() {
                 @Override
-                public void terminoProceso() {
-                    formThis.estadoNormal();
+                public void terminoProceso(List<ComprobanteData> comprobantes) {
+                    generarReporteUnificado(comprobantes);
+                    //formThis.estadoNormal();
                     //getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Vuelve a cargar los comprobantes
                 }
             });
@@ -234,6 +265,41 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
         return cic;
     }
 
-    
+    private void generarReporteUnificado(List<ComprobanteData> comprobantes)
+    {
+        JasperPrint reporteUnido=null;
+        if(comprobantes!=null)
+        {
+        for (ComprobanteData comprobante : comprobantes) {
+            try {
+                    byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(comprobante.getNumeroAutorizacion(),session.getEmpresa());
+                    JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+
+                    if(reporteUnido==null)
+                    {
+                        reporteUnido=jasperPrint;
+                    }else
+                    {
+                        List pages = jasperPrint.getPages();
+                        for (int j = 0; j < pages.size(); j++) {
+                            JRPrintPage nuevasPaginas = (JRPrintPage) pages.get(j);
+                            reporteUnido.addPage(nuevasPaginas);
+                        }
+                        //reporteUnido.addPage(page);
+                    }
+
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturaPedidoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(FacturaPedidoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(FacturaPedidoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+
+            JasperViewer.viewReport(reporteUnido,false);
+        }
+    }
 
 }

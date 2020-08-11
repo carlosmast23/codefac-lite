@@ -2576,41 +2576,28 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         GeneralPanelInterface internal = new GeneralPanelInterface() {
             @Override
-            public void iniciar() throws ExcepcionCodefacLite, RemoteException {                
-            }
+            public void iniciar() throws ExcepcionCodefacLite, RemoteException {}
 
             @Override
-            public void nuevo() throws ExcepcionCodefacLite, RemoteException {                
-            }
+            public void nuevo() throws ExcepcionCodefacLite, RemoteException {}
 
             @Override
-            public void grabar() throws ExcepcionCodefacLite, RemoteException{                
-            }
+            public void grabar() throws ExcepcionCodefacLite, RemoteException{ }
 
             @Override
-            public void editar() throws ExcepcionCodefacLite, RemoteException {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+            public void editar() throws ExcepcionCodefacLite, RemoteException {}
 
             @Override
-            public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+            public void eliminar() throws ExcepcionCodefacLite, RemoteException {}
 
             @Override
-            public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-                
-            }
+            public void imprimir() throws ExcepcionCodefacLite, RemoteException {}
 
             @Override
-            public void actualizar() throws ExcepcionCodefacLite, RemoteException {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+            public void actualizar() throws ExcepcionCodefacLite, RemoteException {}
 
             @Override
-            public void limpiar() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+            public void limpiar() {}
 
             @Override
             public String getURLAyuda() {

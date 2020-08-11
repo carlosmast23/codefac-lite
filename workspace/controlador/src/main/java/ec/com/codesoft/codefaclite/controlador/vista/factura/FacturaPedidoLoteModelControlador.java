@@ -90,14 +90,19 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         
         try 
-        {
+        {                        
             validar();
+            
+            if(!dialogoPregunta(new CodefacMsj("Está seguro que quiere procesar los pedidos en facturas ?", CodefacMsj.TipoMensajeEnum.CORRECTO)))
+            {               
+                throw new ExcepcionCodefacLite("Cancelado grabar");
+            }
             
             //List<Factura> facturasProcesar=construirFacturas();
             
             FacturaLoteRespuesta respuesta=ServiceFactory.getFactory().getFacturacionServiceIf().grabarLote(construirFacturas());
             
-            mostrarMensaje(new CodefacMsj("El proceso finalizo", CodefacMsj.TipoMensajeEnum.CORRECTO));
+            mostrarMensaje(new CodefacMsj("El proceso finalizo correctamente", CodefacMsj.TipoMensajeEnum.CORRECTO));
             
             if(respuesta.noProcesadosList.size()>0)
             {

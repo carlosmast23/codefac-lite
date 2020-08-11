@@ -705,7 +705,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel6.add(jToolBar1, gridBagConstraints);
 
-        tabMenu.addTab("Emsamble", jPanel6);
+        tabMenu.addTab("Ensamble", jPanel6);
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 

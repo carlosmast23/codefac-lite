@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.math.BigDecimal;
 import java.util.List;
+import javax.persistence.FlushModeType;
 import javax.persistence.Query;
 
 /**
@@ -167,6 +168,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
 
         String queryString = "SELECT SUM(u.valor) FROM CarteraCruce u WHERE u.carteraAfectada=?1 ";
         Query query = getEntityManager().createQuery(queryString);
+        query.setFlushMode(FlushModeType.AUTO);
         query.setParameter(1, cartera);
         Number sumatoria=(Number) query.getSingleResult();
         return new BigDecimal(sumatoria.toString());

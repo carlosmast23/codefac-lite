@@ -47,6 +47,17 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
     }
     
+    public void procesoBloqueado(Empresa empresaIf) throws RemoteException,ServicioCodefacException
+    {
+        ParametroCodefacService service=new ParametroCodefacService();
+        while(true)
+        {
+            //service.getParametrosMap(empresaIf);
+            service.getParametroByNombre(ParametroCodefac.ACTIVAR_NOTA_VENTA, empresaIf);
+            //System.out.println("Consultando map");
+        }
+    }
+    
     public List<AlertaResponse> actualizarNotificacionesCargaRapida(Empresa empresa) throws RemoteException,ServicioCodefacException
     {
         List<AlertaResponse> alertas=new ArrayList<AlertaResponse>();
@@ -80,7 +91,6 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
     
     private AlertaResponse verificarProblemasCorreo(Empresa empresa,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException
     {
-        ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.FECHA_VALIDACION_CORREO);
         // Si el tipo de proceso es normal verifico que paso un día para volver a verificar el correo
         if(modoEnum.equals(ModoProcesarEnum.NORMAL))
         {
