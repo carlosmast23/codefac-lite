@@ -115,7 +115,7 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
         monitorData.getBtnReporte().setEnabled(true);
         //Ejecutar listener para informar a la pantalla prinicipal que termino el proceso
         if(listener!=null)
-            listener.terminoProceso();
+            listener.terminoProceso(null);
         
         monitorData.getBtnReporte().addActionListener(new ActionListener() {
             @Override
@@ -135,7 +135,7 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
             
             //Ejecutar listener para informar a la pantalla prinicipal que termino el proceso
             if(listener!=null)
-                listener.terminoProceso();
+                listener.terminoProceso(comprobantes);
             
             monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                 @Override

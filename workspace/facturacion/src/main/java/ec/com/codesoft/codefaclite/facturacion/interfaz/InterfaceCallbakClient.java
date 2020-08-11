@@ -5,10 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.interfaz;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteData;
+import java.util.List;
+
 /**
  *
  * @author Carlos
  */
 public interface InterfaceCallbakClient {
-    public void terminoProceso();
+    public void terminoProceso(List<ComprobanteData> comprobantes);
 }

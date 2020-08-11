@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.facturacion.reportdata.DataEjemploReporte;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ReporteFacturaData;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -68,7 +69,9 @@ import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import sun.nio.cs.ext.Big5;
 
 /**
@@ -611,24 +614,38 @@ public class FacturaReporteModel extends FacturaReportePanel {
         itemRide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada=getTblDocumentos().getSelectedRow();
-                if(filaSeleccionada>=0)
+                int filasSeleccionada[]=getTblDocumentos().getSelectedRows();
+                if(filasSeleccionada.length>=0)
                 {
-                    panelPadre.cambiarCursorEspera();
-                    try {
-                        //controladorReporte.getData().get
-                        String claveAcceso=controladorReporte.getData().get(filaSeleccionada).getClaveAcceso();//                    String claveAcceso = this.factura.getClaveAcceso();
-                        byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,session.getEmpresa()); //TODO: Revisar si es correcto buscar con el nombre de la empresa
-                        JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
-                        panelPadre.crearReportePantalla(jasperPrint,controladorReporte.getData().get(filaSeleccionada).getNumeroFactura());
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    if(filasSeleccionada.length==1)
+                    {
+                        int filaSeleccionada=filasSeleccionada[0];
+                        panelPadre.cambiarCursorEspera();
+                        try {
+                            //controladorReporte.getData().get
+                            String claveAcceso=controladorReporte.getData().get(filaSeleccionada).getClaveAcceso();//                    String claveAcceso = this.factura.getClaveAcceso();
+                            //byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,session.getEmpresa()); //TODO: Revisar si es correcto buscar con el nombre de la empresa
+                            //JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                            JasperPrint jasperPrint =obtenerJasperPrint(claveAcceso);
+                            panelPadre.crearReportePantalla(jasperPrint,controladorReporte.getData().get(filaSeleccionada).getNumeroFactura());
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        panelPadre.cambiarCursorNormal();
                     }
-                    panelPadre.cambiarCursorNormal();
+                    else
+                    {
+                        List<String> clavesAcceso=new ArrayList<String>();
+                        for (int fila : filasSeleccionada) 
+                        {
+                            clavesAcceso.add(controladorReporte.getData().get(fila).getClaveAcceso());//  
+                        }
+                        generarReporteUnificado(clavesAcceso);
+                    }
                 }
             }
         });
@@ -637,6 +654,51 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getTblDocumentos().setComponentPopupMenu(jpopMenuItem);
     }
     
+    private void generarReporteUnificado(List<String> comprobantes)
+    {
+        JasperPrint reporteUnido=null;
+        if(comprobantes!=null)
+        {
+        for (String claveAcceso : comprobantes) {
+            try {
+                    byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,session.getEmpresa());
+                    JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+
+                    if(reporteUnido==null)
+                    {
+                        reporteUnido=jasperPrint;
+                    }else
+                    {
+                        List pages = jasperPrint.getPages();
+                        for (int j = 0; j < pages.size(); j++) {
+                            JRPrintPage nuevasPaginas = (JRPrintPage) pages.get(j);
+                            reporteUnido.addPage(nuevasPaginas);
+                        }
+                        //reporteUnido.addPage(page);
+                    }
+
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturaPedidoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(FacturaPedidoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(FacturaPedidoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+
+            JasperViewer.viewReport(reporteUnido,false);
+        }
+    }
+    
+    private JasperPrint obtenerJasperPrint(String claveAcceso) throws RemoteException, IOException, ClassNotFoundException
+    {
+        byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso, session.getEmpresa()); //TODO: Revisar si es correcto buscar con el nombre de la empresa
+        JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+        return jasperPrint;
+    }
+            
+            
     public enum TipoReporteEnum
     {
         NORMAL("Normal"),

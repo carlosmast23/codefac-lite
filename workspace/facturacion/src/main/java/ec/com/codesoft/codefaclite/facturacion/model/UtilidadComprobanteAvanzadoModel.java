@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronico
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
@@ -351,7 +352,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                 estadoCargando();
                 ClienteInterfaceComprobanteLote cic = new ClienteFacturaLoteImplComprobante(this,new InterfaceCallbakClient() {
                     @Override
-                    public void terminoProceso() {
+                    public void terminoProceso(List<ComprobanteData> comprobantes) {
                         formThis.estadoNormal();
                         getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Vuelve a cargar los comprobantes
                     }
