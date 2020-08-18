@@ -38,4 +38,6 @@ public interface ParametroCodefacServiceIf extends ServiceAbstractIf<ParametroCo
     public void grabarOEditar(ParametroCodefac parametro) throws java.rmi.RemoteException,ServicioCodefacException;
     
     public void grabarOEditar(Empresa empresa,String parametroNombre,String valor) throws java.rmi.RemoteException,ServicioCodefacException;
+    
+    public void procesoBloqueadoPrueba() throws java.rmi.RemoteException, ServicioCodefacException;
 }

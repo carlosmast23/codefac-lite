@@ -196,6 +196,21 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         return parametroCodefacFacade.findByMap(map);
     }
     
+    public void procesoBloqueadoPrueba() throws java.rmi.RemoteException, ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                try {
+                    System.out.println("Iniciada transaccion");
+                    Thread.sleep(10000000);
+                    System.out.println("Terminada transaccion");
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ParametroCodefacService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
     
     
 }
