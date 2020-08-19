@@ -2840,12 +2840,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         {
             nombreComercial=sessionCodefac.getEmpresa().getRazonSocial();
         }
+        else
+        {
+            parametros.put("pl_razon_social", sessionCodefac.getEmpresa().getRazonSocial());
+        }
         
         parametros.put("pl_nombre_empresa", nombreComercial);
         parametros.put("pl_telefonos", sessionCodefac.getMatriz().getTelefono());
         parametros.put("pl_celular", sessionCodefac.getMatriz().getCelular());
         parametros.put("pl_facebook", sessionCodefac.getEmpresa().getFacebook());
-        parametros.put("pl_ruc", sessionCodefac.getEmpresa().getIdentificacion());
+        parametros.put("pl_ruc", sessionCodefac.getEmpresa().getIdentificacion());        
         
         /**
          * Agregado valdación cuando no llenen ningun dato que salgo información del sistema cuando el usuario tiene una licencia gratuita
