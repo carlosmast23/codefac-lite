@@ -22,6 +22,7 @@ import javax.persistence.Query;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 
 /**
@@ -32,26 +33,26 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
     private Persona cliente;
     private PersonaEstablecimiento establecimiento;
     private EnumSiNo estadoEnviadoGuiaRemision;
-    private Empresa empresa;
+    private Sucursal sucursal;
     private Usuario usuario;
     
 
-    public FacturaBusqueda(Persona cliente,Empresa empresa) {
-        this.cliente = cliente;    
-        this.empresa=empresa;
+    public FacturaBusqueda(Persona cliente,Sucursal sucursal) {
+        this.cliente = cliente;
+        this.sucursal=sucursal;
     }
     
-    public FacturaBusqueda(PersonaEstablecimiento establecimiento,Empresa empresa) {
+    public FacturaBusqueda(PersonaEstablecimiento establecimiento,Sucursal sucursal) {
         this.establecimiento = establecimiento;    
-        this.empresa=empresa;
+        this.sucursal=sucursal;
     }
 
-    public FacturaBusqueda(Empresa empresa) {
-        this.empresa=empresa;
+    public FacturaBusqueda(Sucursal sucursal) {
+        this.sucursal=sucursal;
     }
     
-    public FacturaBusqueda(Empresa empresa, Usuario usuario) {
-        this.empresa = empresa;
+    public FacturaBusqueda(Sucursal sucursal, Usuario usuario) {
+        this.sucursal = sucursal;
         this.usuario = usuario;
     }
     
@@ -73,14 +74,14 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
     @Override
     public QueryDialog getConsulta(String filter) {
         Factura f;
-        //f.getEmpresa();
+        //f.getSucursalEmpresa().gete
         //f.getEstadoEnviadoGuiaRemision()
         //f.getSecuencial();
         String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 ";
         
-        if(empresa!=null)
+        if(sucursal!=null)
         {
-            queryString+=" AND u.empresa=?13 ";
+            queryString+=" AND u.sucursalEmpresa=?13 ";
         }
         
         if(cliente!=null)
@@ -115,8 +116,8 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         setParameterQuery(queryDialog);
         
         
-        if (empresa != null) {
-            queryDialog.agregarParametro(13,empresa);
+        if (sucursal != null) {
+            queryDialog.agregarParametro(13,sucursal);
         }
         
         if (cliente != null) {

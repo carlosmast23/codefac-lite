@@ -78,7 +78,7 @@ public class LiquidacionCompraModel extends FacturacionModel{
 
     @Override
     public InterfaceModelFind getBusquedaInterface() {
-        LiquidacionCompraBusqueda compraModel=new LiquidacionCompraBusqueda(session.getEmpresa());
+        LiquidacionCompraBusqueda compraModel=new LiquidacionCompraBusqueda(session.getSucursal());
         return compraModel;        
     }
     

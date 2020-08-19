@@ -678,9 +678,9 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                 FacturaBusqueda facturaBusqueda =null;
                 
                 if(destinatarioEstablecimiento!=null)
-                    facturaBusqueda = new FacturaBusqueda(destinatarioEstablecimiento,session.getEmpresa());
+                    facturaBusqueda = new FacturaBusqueda(destinatarioEstablecimiento,session.getSucursal());
                 else
-                    facturaBusqueda = new FacturaBusqueda(destinatario,session.getEmpresa());
+                    facturaBusqueda = new FacturaBusqueda(destinatario,session.getSucursal());
                     
                 facturaBusqueda.setEstadoEnviadoGuiaRemision(EnumSiNo.NO);
                 
