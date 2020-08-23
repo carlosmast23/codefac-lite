@@ -63,6 +63,7 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable  {
      */
     protected String codigoProducto;
     protected String nombreProducto;
+    protected String categoria;
     protected String cantidad;
     
     public ReporteFacturaData() {
@@ -327,6 +328,14 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable  {
 
     public void setCantidad(String cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
     
     

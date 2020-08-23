@@ -19,13 +19,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -402,7 +406,8 @@ public class ControladorReporteFactura {
                 dataFacturaCopia.setCantidad(detalle.getCantidad()+"");
                 dataFacturaCopia.setDescFactura(detalle.getDescuento()+"");
                 dataFacturaCopia.setIvaDoceFactura(detalle.getIva()+"");
-                dataFacturaCopia.setTotalFactura(detalle.getPrecioUnitario()+"");
+                //dataFacturaCopia.setTotalFactura(detalle.getPrecioUnitario()+"");
+                dataFacturaCopia.setTotalFactura(detalle.calcularTotalFinal()+"");
                 if(!factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.SIN_ANULAR))
                 {
                     dataFacturaCopia.setTotalFinal(BigDecimal.ZERO+"");
@@ -413,9 +418,31 @@ public class ControladorReporteFactura {
                 }
                 dataFacturaCopia.setNombreProducto(detalle.getDescripcion());
                 dataFacturaCopia.setCodigoProducto(detalle.getCodigoPrincipal());
+                
+                //TODO: Por el momento se realiza la consulta directa del producto pero esta parte tiene que estar en el servidor
+                String nombreCategoria="Sin asignar";
+                ReferenciaDetalleFacturaRespuesta respuesta=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(detalle.getTipoDocumentoEnum(),detalle.getReferenciaId());
+                if (respuesta.objecto != null) {
+                    switch (respuesta.tipoDocumentoEnum) {
+                        case LIBRE:
+                        case INVENTARIO:
+                            Producto producto=(Producto) respuesta.objecto;
+                            if(producto.getCatalogoProducto().getCategoriaProducto()!=null)
+                            {
+                                nombreCategoria=producto.getCatalogoProducto().getCategoriaProducto().getNombre();
+                            }
+                            break;
+                    }
+                }
+                                
+                dataFacturaCopia.setCategoria(nombreCategoria);
                 resultados.add(dataFacturaCopia);
             }
         } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
         }
         return resultados;
@@ -541,9 +568,17 @@ public class ControladorReporteFactura {
     
     public void obtenerReporteAgrupadoPorProducto(InterfazComunicacionPanel panelPadre)
     {
-        String titulo = "Reporte Ventas Agrupado por Producto";
+        String titulo = "Ventas Agrupado por Producto";
         InputStream path=getReportePorProductos();
         ordenarListaPorProducto(data);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+    }
+    
+    public void obtenerReporteAgrupadoPorProductoCategoria(InterfazComunicacionPanel panelPadre)
+    {
+        String titulo = "Ventas Agrupado por Categoria";
+        InputStream path=getReportePorCategorias();
+        ordenarListaPorProductoCategoria(data);
         ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     
@@ -586,6 +621,22 @@ public class ControladorReporteFactura {
         });
     }
     
+    private void ordenarListaPorProductoCategoria(List<ReporteFacturaData> reporteData)
+    {
+        Collections.sort(reporteData,new Comparator<ReporteFacturaData>(){
+            public int compare(ReporteFacturaData obj1, ReporteFacturaData obj2) 
+            {
+                //String categoriaProducto1=obj1.getCategoria().cop
+                return obj1.getCategoria().compareTo(obj2.getCategoria());
+                //if(comparacion==0)
+                //{
+                //    comparacion=obj1.getCodigoProducto().compareTo(obj2.getCodigoProducto());
+                //}
+                //return comparacion;
+            }
+        });
+    }
+    
     
     /**
      * Metodo que me permite organizar la lista por 
@@ -616,6 +667,11 @@ public class ControladorReporteFactura {
     protected InputStream getReportePorProductos()
     {//reporte_factura_por_producto
         return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_factura_por_producto.jrxml");
+    }
+    
+    protected InputStream getReportePorCategorias()
+    {//reporte_factura_por_producto
+        return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_factura_por_categoria.jrxml");
     }
     
     protected InputStream getReportePorVendedores()
