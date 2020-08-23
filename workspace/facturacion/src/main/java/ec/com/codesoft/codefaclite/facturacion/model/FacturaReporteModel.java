@@ -171,7 +171,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
             //Cuando se quiere agrupar por produto activo la opcion de Agrupado por Producto
             TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
             if(tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO)
-                    || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CATEGORIA) )
+                    || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CATEGORIA)
+                    || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_VALOR))
             {
                 controladorReporte.setReporteConDetallesFactura(true);
             }
@@ -229,6 +230,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     case AGRUPADO_POR_CATEGORIA:
                         controladorReporte.obtenerReporteAgrupadoPorProductoCategoria(panelPadre);
                         break;
+                    case AGRUPADO_POR_VALOR:
+                        controladorReporte.obtenerReporteAgrupadoPorPrecio(panelPadre);
+                        break;
+                    
                 }
                 
                 //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, titulo, OrientacionReporteEnum.HORIZONTAL);
@@ -710,7 +715,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
         AGRUPADO_POR_VENDEDOR("Agrupado por vendedor"),
         AGRUPADO_POR_PUNTO_EMISION("Agrupado por punto de emisión"),
         AGRUPADO_POR_PRODUCTO("Agrupado por producto"),
-        AGRUPADO_POR_CATEGORIA("Agrupado por categoria");
+        AGRUPADO_POR_CATEGORIA("Agrupado por categoria"),
+        AGRUPADO_POR_VALOR("Agrupado por valores");
+        
         
         
 

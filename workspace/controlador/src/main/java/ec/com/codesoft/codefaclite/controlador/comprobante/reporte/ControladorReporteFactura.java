@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -436,6 +437,7 @@ public class ControladorReporteFactura {
                 }
                                 
                 dataFacturaCopia.setCategoria(nombreCategoria);
+                dataFacturaCopia.setPrecioUnitarioReporte(detalle.getPrecioUnitario().setScale(0,BigDecimal.ROUND_DOWN).toString());
                 resultados.add(dataFacturaCopia);
             }
         } catch (CloneNotSupportedException ex) {
@@ -582,6 +584,15 @@ public class ControladorReporteFactura {
         ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     
+    public void obtenerReporteAgrupadoPorPrecio(InterfazComunicacionPanel panelPadre)
+    {
+        String titulo = "Ventas Agrupado por Precio";
+        InputStream path=getReportePorPrecios();
+        ordenarListaPorPrecio(data);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+    }
+    
+    
     public void obtenerReporteAgrupadoPorVendedor(InterfazComunicacionPanel panelPadre)
     {
         String titulo = "Reporte Ventas Agrupado por Vendedores";
@@ -637,6 +648,16 @@ public class ControladorReporteFactura {
         });
     }
     
+    private void ordenarListaPorPrecio(List<ReporteFacturaData> reporteData)
+    {
+        Collections.sort(reporteData,new Comparator<ReporteFacturaData>(){
+            public int compare(ReporteFacturaData obj1, ReporteFacturaData obj2) 
+            {
+                return obj1.getPrecioUnitarioReporte().compareTo(obj2.getPrecioUnitarioReporte());
+            }
+        });
+    }
+    
     
     /**
      * Metodo que me permite organizar la lista por 
@@ -679,6 +700,10 @@ public class ControladorReporteFactura {
         return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_ventas_por_vendedor.jrxml");
     }
    
+    protected InputStream getReportePorPrecios()
+    {//reporte_factura_por_producto
+        return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_factura_por_precios.jrxml");
+    }
 
     public List<ReporteFacturaData> getData() {
         return data;
