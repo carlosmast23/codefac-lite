@@ -204,9 +204,11 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         if (kardexs == null || kardexs.size() == 0) {
             kardex = kardexService.crearObjeto(bodega, producto);
             entityManager.persist(kardex);
+            entityManager.flush();
         } else {
             kardex = kardexs.get(0);
         }
+        
         return kardex;
 
     }

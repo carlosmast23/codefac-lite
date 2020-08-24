@@ -26,5 +26,7 @@ public interface BodegaServiceIf extends ServiceAbstractIf<Bodega>
     public Bodega buscarPorNombre(String nombre) throws ServicioCodefacException,RemoteException;
     
     public List<Bodega> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException,RemoteException;
+    public List<Bodega> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException,RemoteException;
     public Bodega obtenerBodegaVenta(Sucursal sucursal) throws ServicioCodefacException,RemoteException;
+    public Bodega obtenerUnicaBodegaPorSucursal(Sucursal sucursal) throws ServicioCodefacException,RemoteException;
 }

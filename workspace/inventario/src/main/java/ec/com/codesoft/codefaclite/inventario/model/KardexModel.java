@@ -38,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
@@ -87,6 +88,8 @@ public class KardexModel extends KardexPanel {
 
     
     private TotalesAcumulado totalesAcumulado;
+    
+    private Bodega bodegaSeleccionada;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -512,12 +515,17 @@ public class KardexModel extends KardexPanel {
     private void valoresIniciales() {
 
         try {
-            getCmbBodega().removeAllItems();
-            BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
-            List<Bodega> bodegas = servicioBodega.obtenerActivosPorEmpresa(session.getEmpresa());
-            for (Bodega bodega : bodegas) {
-                getCmbBodega().addItem(bodega);
-            }
+            
+            bodegaSeleccionada=ServiceFactory.getFactory().getBodegaServiceIf().obtenerUnicaBodegaPorSucursal(session.getSucursal());
+            
+            UtilidadesComboBox.llenarComboBox(getCmbBodega(),ServiceFactory.getFactory().getBodegaServiceIf().obtenerActivosPorEmpresa(session.getEmpresa()));
+            getCmbBodega().setSelectedItem(bodegaSeleccionada);
+            //getCmbBodega().removeAllItems();
+            //BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
+            //List<Bodega> bodegas = servicioBodega.obtenerActivosPorEmpresa(session.getEmpresa());
+            //for (Bodega bodega : bodegas) {
+            //    getCmbBodega().addItem(bodega);
+            //}
         } catch (RemoteException ex) {
             Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
