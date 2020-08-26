@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 
 /**
@@ -16,8 +17,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
  */
 public class LiquidacionCompraBusqueda extends FacturaBusqueda{
     
-    public LiquidacionCompraBusqueda(Empresa empresa) {
-        super(empresa);
+    public LiquidacionCompraBusqueda(Sucursal sucursal) {
+        super(sucursal);
     }
 
     @Override

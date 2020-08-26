@@ -574,6 +574,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
         entityManager.persist(kardexDetalle); //Grabo el kardex detalle
         kardex.addDetalleKardex(kardexDetalle);
+        
+        //Solo ejecuto un merge por que anteriormente ya se ejecuto un persistent cuando no existe
         entityManager.merge(kardex); //Actualizo el kardex con la nueva referencia
        
     }

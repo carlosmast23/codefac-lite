@@ -69,6 +69,8 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
                 try {
                     Logger.getLogger(WidgetNotificacionCodefacModelo.class.getName()).log(Level.INFO,"Actualizando Notificaciones en el servidor");
                     //ServiceFactory.getFactory().getAlertaServiceIf().procesoBloqueado(empresa);
+                    //ServiceFactory.getFactory().getParametroCodefacServiceIf().procesoBloqueadoPrueba();
+                    
                     
                     List<AlertaResponse> alertas = ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaRapida(empresa);
                     String[] tituloTabla = {"Tipo", "Problema", "Solución"};

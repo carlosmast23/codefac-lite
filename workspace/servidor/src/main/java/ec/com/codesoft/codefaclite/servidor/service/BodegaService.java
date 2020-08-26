@@ -137,6 +137,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
         List<Bodega> bodegas=(List<Bodega>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta() throws ServicioCodefacException, RemoteException {
+                Bodega bodega=new Bodega();
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                
                 mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
@@ -155,6 +156,42 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
             }
         });
         return bodegas;
+    }
+    
+    public List<Bodega> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException,RemoteException
+    {        
+        List<Bodega> bodegas=(List<Bodega>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                Bodega bodega=new Bodega();
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+               
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("sucursal", sucursal);
+                List<Bodega> resultadoConsulta=getFacade().findByMap(mapParametros);
+                
+                /**
+                 * Obtener resultado de las bodegas generales
+                 */
+                mapParametros = new HashMap<String, Object>();               
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("empresa",null);
+                resultadoConsulta.addAll(getFacade().findByMap(mapParametros));
+                return resultadoConsulta;
+                
+            }
+        });
+        return bodegas;
+    }
+    
+    public Bodega obtenerUnicaBodegaPorSucursal(Sucursal sucursal) throws ServicioCodefacException,RemoteException
+    {
+        List<Bodega> bodegas=obtenerActivosPorSucursal(sucursal);
+        if(bodegas.size()>0)
+        {
+            return bodegas.get(0);
+        }
+        return null;
     }
     
     public Bodega obtenerBodegaVenta(Sucursal sucursal) throws ServicioCodefacException,RemoteException

@@ -345,7 +345,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         FacturaReporteModel.TipoReporteEnum tipoReporteEnum=(FacturaReporteModel.TipoReporteEnum) tipoReporteSeleccionado;
         switch(tipoReporteEnum)
         {
-            case AGRUPADO_POR_CATEGORIA:
+            case AGRUPADO_POR_PUNTO_EMISION:
                 titulo = "Reporte Ventas Agrupado por Punto de Emisión";
                 path =  RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_ventas_punto_emision.jrxml");
                 imprimirReporteFactura(titulo, path);

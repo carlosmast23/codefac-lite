@@ -10,8 +10,9 @@
 	<parameter name="pl_titulo" class="java.lang.String"/>
 	<parameter name="pl_telefonos" class="java.lang.String"/>
 	<parameter name="pl_url_img1" class="java.lang.Object"/>
+	<parameter name="pl_razon_social" class="java.lang.String"/>
 	<title>
-		<band height="31" splitType="Stretch">
+		<band height="37" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="160" height="12" uuid="6d32c61e-7403-4e29-ae20-cc34c0e33104"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -20,7 +21,7 @@
 				<textFieldExpression><![CDATA[$P{pl_titulo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="15" y="23" width="145" height="8" uuid="762323ac-9ad0-48e2-a3ff-8bc176c1b6ea"/>
+				<reportElement x="15" y="29" width="145" height="8" uuid="762323ac-9ad0-48e2-a3ff-8bc176c1b6ea"/>
 				<textElement textAlignment="Center">
 					<font size="6" isItalic="true"/>
 					<paragraph rightIndent="20"/>
@@ -33,6 +34,13 @@
 					<font size="8" isBold="true" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_nombre_empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="21" width="160" height="8" uuid="cd48d5fa-c3a3-4c0a-9514-838fa8011953"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pl_razon_social}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

@@ -63,7 +63,12 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable  {
      */
     protected String codigoProducto;
     protected String nombreProducto;
+    protected String categoria;
     protected String cantidad;
+    /**
+     * Este parametro me permite sacar un reporte de productos agrupado por precio para el reporte de ventas
+     */
+    protected String precioUnitarioReporte;
     
     public ReporteFacturaData() {
     }
@@ -327,6 +332,22 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable  {
 
     public void setCantidad(String cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getPrecioUnitarioReporte() {
+        return precioUnitarioReporte;
+    }
+
+    public void setPrecioUnitarioReporte(String precioUnitarioReporte) {
+        this.precioUnitarioReporte = precioUnitarioReporte;
     }
     
     

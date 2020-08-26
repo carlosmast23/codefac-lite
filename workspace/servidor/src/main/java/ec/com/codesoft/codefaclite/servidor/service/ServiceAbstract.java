@@ -30,6 +30,8 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  */
 public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject implements Serializable
 {
+    private static final Integer TIEMPO_ESPERA_TRANSACCION=1000;
+    private static final Integer INTENTOS_ESPERA_TRANSACCION=5;
 
     //private static final Logger LOG = Logger.getLogger(ServiceAbstract.class.getName());
     
@@ -181,7 +183,36 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
    {
        
         EntityTransaction transaccion = entityManager.getTransaction();
-        try {            
+        
+        //No se puede iniciar una nueva transaccion si previamente existe otra
+       //TODO: En teoria deberia ver una forma de tener varios entity manager sincronizados y no como en este caso que solo permite una transacción a la vez
+       //TODO: Se puede optimizar un tiempo de espera antes de lanzar el mensaje previamente escrito
+       
+       //Si existe una transaccion procesando esperar un tiempo para ver si se libera y procesar la siguiente
+       for (int i = 0; i < INTENTOS_ESPERA_TRANSACCION; i++) 
+       {
+            if(!transaccion.isActive())
+            {
+                break;
+            }
+           
+            try {
+                Thread.sleep(TIEMPO_ESPERA_TRANSACCION);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+       }
+       
+       if (transaccion.isActive()) 
+       {
+           throw new ServicioCodefacException("Previamente existe una transacción activa , por favor intente nuevamente");
+       }
+       
+       
+        
+        try {        
+            
             transaccion.begin();
             interfaz.transaccion();
             transaccion.commit();

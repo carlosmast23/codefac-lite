@@ -1626,9 +1626,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         ParametroCodefac siNofiltrarFacturaPorUsuario = session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO);
         EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((siNofiltrarFacturaPorUsuario != null ) ? siNofiltrarFacturaPorUsuario.getValor() : null);
         if(enumSiNo != null && enumSiNo.equals(EnumSiNo.SI)){
-            facturaBusqueda = new FacturaBusqueda(session.getEmpresa(), session.getUsuario());
+            facturaBusqueda = new FacturaBusqueda(session.getSucursal(), session.getUsuario());
         }else{
-            facturaBusqueda = new FacturaBusqueda(session.getEmpresa());
+            facturaBusqueda = new FacturaBusqueda(session.getSucursal());
         }
         
         return facturaBusqueda;

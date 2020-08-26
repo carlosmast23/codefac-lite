@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import java.math.BigDecimal;
 import java.util.List;
+import javax.persistence.FlushModeType;
 import javax.persistence.Query;
 
 /**
@@ -44,12 +45,15 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
         String queryString = "SELECT f FROM "+nombreTabla+" f WHERE f.estado<>?1 AND f.empresa=?2 AND f.puntoEstablecimiento=?3 AND f.puntoEmision=?4 AND f.secuencial=?5 AND f.codigoDocumento=?6 ";
         Query query = getEntityManager().createQuery(queryString);
         
-        query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //TODO: Buscar cualquier 
+        query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //TODO: Buscar cualquier }
+        
         query.setParameter(2, empresa);
         query.setParameter(3, puntoEstablecimiento);
         query.setParameter(4, puntoEmision);
         query.setParameter(5, Secuencial);
         query.setParameter(6, documentoEnum.getCodigo());
+        //TODO: Cambio temporal para ver si resuelve un problema al momento de facturar en el ID de Nacionalidad
+        query.setFlushMode(FlushModeType.COMMIT);
         return query.getResultList();
         //return (Usuario) query.getSingleResult();
         

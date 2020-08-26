@@ -360,6 +360,13 @@ public class Persona implements Serializable, Comparable<Persona> {
     public String getNombresCompletos() {
         String nombresTmp = (nombres != null) ? nombres : "";
         String apellidosTmp = (apellidos != null) ? apellidos : "";
+        String nombresCompletosTmp=nombresTmp + " " + apellidosTmp;
+        
+        if(nombresCompletosTmp.trim().isEmpty())
+        {
+            return razonSocial;
+        }
+        
         return nombresTmp + " " + apellidosTmp;
     }
 

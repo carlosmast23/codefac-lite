@@ -169,7 +169,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
             controladorReporte.setPuntoEmision(puntoEmisionReporte);
             
             //Cuando se quiere agrupar por produto activo la opcion de Agrupado por Producto
-            if(getCmbTipoReporte().getSelectedItem().equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO))
+            TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
+            if(tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO)
+                    || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CATEGORIA)
+                    || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_VALOR))
             {
                 controladorReporte.setReporteConDetallesFactura(true);
             }
@@ -209,7 +212,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
                 switch(tipoReporteEnum)
                 {
-                    case AGRUPADO_POR_CATEGORIA:
+                    case AGRUPADO_POR_PUNTO_EMISION:
                         controladorReporte.obtenerReportePdfAgrupadoPorPuntosEstablecimiento(panelPadre);
                         break;  
                     
@@ -224,6 +227,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     case AGRUPADO_POR_VENDEDOR:
                         controladorReporte.obtenerReporteAgrupadoPorVendedor(panelPadre);
                         break;
+                    case AGRUPADO_POR_CATEGORIA:
+                        controladorReporte.obtenerReporteAgrupadoPorProductoCategoria(panelPadre);
+                        break;
+                    case AGRUPADO_POR_VALOR:
+                        controladorReporte.obtenerReporteAgrupadoPorPrecio(panelPadre);
+                        break;
+                    
                 }
                 
                 //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, titulo, OrientacionReporteEnum.HORIZONTAL);
@@ -703,8 +713,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
     {
         NORMAL("Normal"),
         AGRUPADO_POR_VENDEDOR("Agrupado por vendedor"),
-        AGRUPADO_POR_CATEGORIA("Agrupado por punto de emisión"),
-        AGRUPADO_POR_PRODUCTO("Agrupado por producto");
+        AGRUPADO_POR_PUNTO_EMISION("Agrupado por punto de emisión"),
+        AGRUPADO_POR_PRODUCTO("Agrupado por producto"),
+        AGRUPADO_POR_CATEGORIA("Agrupado por categoria"),
+        AGRUPADO_POR_VALOR("Agrupado por valores");
+        
+        
+        
 
         private TipoReporteEnum(String nombre) {
             this.nombre = nombre;

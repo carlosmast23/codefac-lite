@@ -340,7 +340,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         if (tipoPaginaEnum.equals(tipoPaginaEnum.PROFORMA)) {
             return new ProformaBusqueda(sessionMb.getSession().getEmpresa(),true);
         } else if (tipoPaginaEnum.equals(tipoPaginaEnum.FACTURA)) {
-            return new FacturaBusqueda(sessionMb.getSession().getEmpresa());
+            return new FacturaBusqueda(sessionMb.getSession().getSucursal(),sessionMb.getSession().getUsuario());
         }
         return null;
     }

@@ -590,7 +590,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
 
             getCmbBodega().removeAllItems();
             BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
-            List<Bodega> bodegas = servicioBodega.obtenerActivosPorEmpresa(session.getEmpresa());
+            List<Bodega> bodegas = servicioBodega.obtenerActivosPorSucursal(session.getSucursal());
             for (Bodega bodega : bodegas) {
                 getCmbBodega().addItem(bodega);
                 cmbBodegaSeleccion.addItem(bodega); //Combo para la seleccion de la tabla

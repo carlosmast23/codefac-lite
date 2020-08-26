@@ -48,6 +48,7 @@ public class StockReporteModel extends StockMinimoPanel{
     
     private List<Object[]> listaStock;
     private List<StockMinimoData> listaData;
+    private Bodega bodegaSeleccionada;
     
     protected CategoriaProducto categoriaProducto;
     
@@ -62,10 +63,14 @@ public class StockReporteModel extends StockMinimoPanel{
     
     private void valoresIniciales() {
         try {                       
-            getCmbBodega().removeAllItems();
+            
+            //Obtener bodega por defecto seleccionada
+            bodegaSeleccionada=ServiceFactory.getFactory().getBodegaServiceIf().obtenerUnicaBodegaPorSucursal(session.getSucursal());
+            //getCmbBodega().removeAllItems();
             BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
             List<Bodega> bodegas = servicioBodega.obtenerActivosPorEmpresa(session.getEmpresa());
             UtilidadesComboBox.llenarComboBox(getCmbBodega(), bodegas);
+            getCmbBodega().setSelectedItem(bodegaSeleccionada);
             //for (Bodega bodega : bodegas) {
             //    getCmbBodega().addItem(bodega);                
             //}
