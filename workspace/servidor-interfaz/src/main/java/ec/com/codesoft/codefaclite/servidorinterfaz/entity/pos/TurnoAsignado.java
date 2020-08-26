@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -59,7 +60,18 @@ public class TurnoAsignado implements Serializable
     public void setEstado(String estado) {
         this.estado = estado;
     }
-
+    
+    public GeneralEnumEstado getEstadoEnum(){
+        return GeneralEnumEstado.getEnum(estado);
+    }
+    
+    public void setEstadoEnum(GeneralEnumEstado generalEnumEstado){
+        if(generalEnumEstado == null)
+            this.estado = null;
+        else
+            this.estado = generalEnumEstado.getEstado();
+    }
+    
     public Turno getTurno() {
         return turno;
     }

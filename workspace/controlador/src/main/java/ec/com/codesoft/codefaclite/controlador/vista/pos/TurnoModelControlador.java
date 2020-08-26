@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.pos;
 
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ArqueoCajaBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TurnoBusquedaDiagolo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
@@ -15,14 +15,10 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Turno;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
-import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
-import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
-import java.math.BigDecimal;
 import java.rmi.RemoteException;
-import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -32,50 +28,32 @@ import java.util.logging.Logger;
  *
  * @author Robert
  */
-public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoCajaModelControlador.CommonIf, ArqueoCajaModelControlador.SwingIf, ArqueoCajaModelControlador.WebIf> implements VistaCodefacIf
+public class TurnoModelControlador extends ModelControladorAbstract<TurnoModelControlador.CommonIf, TurnoModelControlador.SwingIf, TurnoModelControlador.WebIf> implements  VistaCodefacIf
 {
-    private ArqueoCaja arqueoCaja;
-    private List<GeneralEnumEstado> estadosList;
-        
-
-    public ArqueoCajaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, ArqueoCajaModelControlador.CommonIf interfaz, TipoVista tipoVista) 
-    {
+    private Turno turno;
+    
+    public TurnoModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, TurnoModelControlador.CommonIf interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);
     }
-     /**
-    * Metodo iniciar
-    * @throws java.rmi.RemoteException
-    * @throws ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException
-    */ 
+
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        
-        arqueoCaja=new ArqueoCaja();
-        arqueoCaja.setValorFisico(BigDecimal.ZERO);
-        arqueoCaja.setValorTeorico(BigDecimal.ZERO);
-        arqueoCaja.setEstadoEnum(GeneralEnumEstado.ACTIVO);        
-        
-        
-        long date = new java.util.Date().getTime();
-        getInterfaz().setFechaRevision(new Date(date));      
-        getInterfaz().setHoraRevision(new Date(date));
-        
-        estadosList = UtilidadesLista.arrayToList(GeneralEnumEstado.values());
+        turno = new Turno();
     }
 
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException{
+    @Override
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         iniciar();
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-
         try
         {       
             //Datos
             setearDatos();
             //Grabar
-            ServiceFactory.getFactory().getArqueoCajaServiceIf().grabar(getArqueoCaja());
+            ServiceFactory.getFactory().getTurnoServiceIf().grabar(turno);
             //Mensaje
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             
@@ -88,7 +66,6 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
                 Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             }
         }   
-        
     }
 
     @Override
@@ -97,7 +74,7 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
             //Datos
             setearDatos();
             //Editar
-            ServiceFactory.getFactory().getArqueoCajaServiceIf().editar(getArqueoCaja());
+            ServiceFactory.getFactory().getTurnoServiceIf().editar(turno);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ArqueoCajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -106,12 +83,12 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-        try {
+         try {
             Boolean respuesta = dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO);
             if(!respuesta){
-                throw new ServicioCodefacException("Error eliminando Arqueo Caja");
+                throw new ServicioCodefacException("Error eliminando Turno");
             }
-            ServiceFactory.getFactory().getArqueoCajaServiceIf().eliminar(getArqueoCaja());
+            ServiceFactory.getFactory().getTurnoServiceIf().eliminar(turno);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ArqueoCajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -144,16 +121,15 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
-        ArqueoCajaBusquedaDialogo arqueoCajaBusquedaDialogo = new ArqueoCajaBusquedaDialogo();
-        return arqueoCajaBusquedaDialogo;
+        TurnoBusquedaDiagolo busquedaDiagolo = new TurnoBusquedaDiagolo(session);
+        return busquedaDiagolo;
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        ArqueoCaja arqueoCaja = (ArqueoCaja) entidad;
-        setArqueoCaja(arqueoCaja);
-        getInterfaz().setFechaRevision(UtilidadesFecha.getFechaDeTimeStamp(arqueoCaja.getFechaHora()));
-        getInterfaz().setHoraRevision(UtilidadesFecha.getHoraDeTimeStamp(arqueoCaja.getFechaHora()));
+        this.turno = (Turno) entidad;
+        getInterfaz().setHoraInicial(turno.getHoraInicial());
+        getInterfaz().setHoraFinal(turno.getHoraFinal());
     }
 
     @Override
@@ -162,49 +138,45 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    //                      GET AND SET
+    //                      INTERFACE
     ////////////////////////////////////////////////////////////////////////////
-
-    public ArqueoCaja getArqueoCaja() {
-        return arqueoCaja;
-    }
-
-    public void setArqueoCaja(ArqueoCaja arqueoCaja) {
-        this.arqueoCaja = arqueoCaja;
-    }
-
-    public List<GeneralEnumEstado> getEstadosList() {
-        return estadosList;
-    }
-
-    public void setEstadosList(List<GeneralEnumEstado> estadosList) {
-        this.estadosList = estadosList;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    //                      INTERFACES Y CLASES
-    ////////////////////////////////////////////////////////////////////////////
+    
     public interface CommonIf
     {
-        public Date getFechaRevision();
-        public void setFechaRevision(Date fechaRevision);
-        public Date getHoraRevision();
-        public void setHoraRevision(Date horaRevision);        
+        public Time getHoraInicial();
+        public void setHoraInicial(Time horaInicial);
+        public Time getHoraFinal();
+        public void setHoraFinal(Time horaFinal);
     }
     
-    public interface SwingIf extends ArqueoCajaModelControlador.CommonIf
+    public interface SwingIf extends TurnoModelControlador.CommonIf
     {
         //TODO: Implementacion de las interfaces solo necesarias para Swing
     }
     
-    public interface WebIf extends ArqueoCajaModelControlador.CommonIf
+    public interface WebIf extends TurnoModelControlador.CommonIf
     {
         //TODO: Implementacion de las interafaces solo para la web
     }
     
-    public void setearDatos(){
-       //Unir las dos fechas en un solo formato; 1era fecha y 2da tiempo seleccionado
-       Date fechaHora = UtilidadesFecha.FechaHoraPorUnion(getInterfaz().getFechaRevision(), getInterfaz().getHoraRevision());    
-       arqueoCaja.setFechaHora(UtilidadesFecha.castDateSqlToTimeStampSql(fechaHora));
+    ////////////////////////////////////////////////////////////////////////////
+    //                      FUNCIONES
+    ////////////////////////////////////////////////////////////////////////////
+    private void setearDatos(){
+        turno.setHoraInicial(getInterfaz().getHoraInicial());
+        turno.setHoraFinal(getInterfaz().getHoraFinal());
     }
+    ////////////////////////////////////////////////////////////////////////////
+    //                      GET AND SET
+    ////////////////////////////////////////////////////////////////////////////
+
+    public Turno getTurno() {
+        return turno;
+    }
+
+    public void setTurno(Turno turno) {
+        this.turno = turno;
+    }
+    
+    
 }

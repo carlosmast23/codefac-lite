@@ -101,4 +101,9 @@ public class Turno implements Serializable
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "Turno{" + "nombre=" + nombre + ", horaInicial=" + horaInicial + ", horaFinal=" + horaFinal + '}';
+    }
+
 }

@@ -3,21 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.pos.model;
+package ec.com.codesoft.codefaclite.controlador.vista.pos;
 
-import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaModelControlador;
-import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaSesionModelControlador;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.pos.panel.CajaSessionPanel;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
-import java.math.BigDecimal;
+import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import java.rmi.RemoteException;
-import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,12 +18,15 @@ import java.util.Map;
  *
  * @author Robert
  */
-//public class CajaSessionModel extends CajaSessionPanel implements CajaSesionModelControlador.Interface
-public class CajaSessionModel extends CajaSessionPanel
+public class IngresoCajaModelControlador extends ModelControladorAbstract<IngresoCajaModelControlador.CommonIf, IngresoCajaModelControlador.SwingIf, IngresoCajaModelControlador.WebIf> implements VistaCodefacIf
 {
 
+    public IngresoCajaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, IngresoCajaModelControlador.CommonIf interfaz, TipoVista tipoVista) {
+        super(mensajeVista, session, interfaz, tipoVista);
+    }
+
     @Override
-    public void iniciar() {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -75,19 +71,12 @@ public class CajaSessionModel extends CajaSessionPanel
     }
 
     @Override
-    public Map<Integer, Boolean> permisosFormulario() {
-        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
-        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
-        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
-        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
-        return permisos;
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<String> getPerfilesPermisos() {
+    public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -97,10 +86,30 @@ public class CajaSessionModel extends CajaSessionPanel
     }
 
     @Override
-    public InterfaceModelFind obtenerDialogoBusqueda() {
+    public Map<Integer, Boolean> permisosFormulario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-
     
+    ////////////////////////////////////////////////////////////////////////////
+    //                      INTERFACE
+    ////////////////////////////////////////////////////////////////////////////
+    
+    public interface CommonIf
+    {        
+         
+    }
+    
+    public interface SwingIf extends IngresoCajaModelControlador.CommonIf
+    {
+        //TODO: Implementacion de las interfaces solo necesarias para Swing
+    }
+    
+    public interface WebIf extends IngresoCajaModelControlador.CommonIf
+    {
+        //TODO: Implementacion de las interafaces solo para la web
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //                      GET AND SET
+    ////////////////////////////////////////////////////////////////////////////
 }

@@ -1,0 +1,16 @@
+#Properties
+#Wed Aug 26 10:11:28 COT 2020
+modulo_crm=si
+modulo_gestion_academica=si
+modulo_sistema=si
+modulo_inventario=si
+licencia=$2a$12$cVBPTy4tsE9OTbN0zw489.GnsakuatumyQH3mCW6Mm/aEn1eySbhy
+modulo_cartera=si
+modulo_compra=si
+modulo_facturacion=si
+modulo_servicios=si
+usuario=trebortc@hotmail.com
+clientes=1
+modulo_pos=si
+tipo=PREMIUM
+modulo_transporte=si
