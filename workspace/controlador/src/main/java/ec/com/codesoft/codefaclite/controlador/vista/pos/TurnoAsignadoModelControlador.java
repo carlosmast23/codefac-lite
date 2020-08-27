@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.controlador.vista.pos;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CajaBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CajaPermisoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TurnoAsignadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TurnoBusquedaDiagolo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
@@ -89,7 +91,7 @@ public class TurnoAsignadoModelControlador extends ModelControladorAbstract<Turn
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
-         try {
+        try {
             Boolean respuesta = dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO);
             if(!respuesta){
                 throw new ServicioCodefacException("Error eliminando Turno Asignado");
@@ -127,7 +129,8 @@ public class TurnoAsignadoModelControlador extends ModelControladorAbstract<Turn
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TurnoAsignadoBusquedaDialogo turnoAsignadoBusquedaDialogo = new TurnoAsignadoBusquedaDialogo(session);
+        return turnoAsignadoBusquedaDialogo;
     }
 
     @Override
@@ -158,14 +161,15 @@ public class TurnoAsignadoModelControlador extends ModelControladorAbstract<Turn
     {
         //TODO: Implementacion de las interafaces solo para la web
     }
-     ////////////////////////////////////////////////////////////////////////////
+    
+    ////////////////////////////////////////////////////////////////////////////
     //                      FUNCIONES
     ////////////////////////////////////////////////////////////////////////////
     
     public void listenerBotonBuscarCaja()
     {
-        CajaBusquedaDialogo busquedaDialogo = new CajaBusquedaDialogo(session);
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
+        CajaPermisoBusquedaDialogo cajaPermisoBusquedaDialogo = new CajaPermisoBusquedaDialogo(session);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(cajaPermisoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         if (buscarDialogoModel.getResultado() != null) 
         {   

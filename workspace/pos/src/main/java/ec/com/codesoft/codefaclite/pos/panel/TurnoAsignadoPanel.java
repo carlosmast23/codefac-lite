@@ -81,12 +81,14 @@ public abstract class TurnoAsignadoPanel extends ControladorCodefacInterface{
         getContentPane().add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.ipadx = 150;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jTextCaja, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 150;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jTextTurno, gridBagConstraints);
 
@@ -94,6 +96,7 @@ public abstract class TurnoAsignadoPanel extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jButtonCaja, gridBagConstraints);
 
@@ -101,6 +104,7 @@ public abstract class TurnoAsignadoPanel extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jButtonTurnoAsignar, gridBagConstraints);
 
@@ -122,6 +126,7 @@ public abstract class TurnoAsignadoPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jComboEstado, gridBagConstraints);
 
@@ -150,7 +155,7 @@ public abstract class TurnoAsignadoPanel extends ControladorCodefacInterface{
         this.jButtonTurnoAsignar = jButtonTurnoAsignar;
     }
 
-    @ComboBoxBinding(source = "controlador.estadoLista", valueSelect = "controlador.turnoasignado.estadoEnum" )
+    @ComboBoxBinding(source = "controlador.estadoLista", valueSelect = "controlador.turnoAsignado.estadoEnum" )
     public JComboBox<GeneralEnumEstado> getjComboEstado() {
         return jComboEstado;
     }
@@ -159,7 +164,8 @@ public abstract class TurnoAsignadoPanel extends ControladorCodefacInterface{
         this.jComboEstado = jComboEstado;
     }
     
-    @TextFieldBinding(value = "controlador.turnoAsignado.cajaPermiso")
+    @LimpiarAnotacion
+    @TextFieldBinding(value = "controlador.turnoAsignado.cajaPermiso.caja.nombre")
     public JTextField getjTextCaja() {
         return jTextCaja;
     }
@@ -168,7 +174,8 @@ public abstract class TurnoAsignadoPanel extends ControladorCodefacInterface{
         this.jTextCaja = jTextCaja;
     }
 
-    @TextFieldBinding(value = "controlador.turnoAsignado.turno")
+    @LimpiarAnotacion
+    @TextFieldBinding(value = "controlador.turnoAsignado.turno.nombre")
     public JTextField getjTextTurno() {
         return jTextTurno;
     }

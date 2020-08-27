@@ -108,6 +108,8 @@ create table TURNO_ASIGNADO(
     
     CAJA_PERMISO_ID BIGINT,
     TURNO_ID BIGINT,
+
+    ESTADO varchar(1),
     
     primary key(ID),
     constraint id_turno_asignado_caja_permiso_fk foreign key(CAJA_PERMISO_ID) references CAJA_PERMISO(ID),
