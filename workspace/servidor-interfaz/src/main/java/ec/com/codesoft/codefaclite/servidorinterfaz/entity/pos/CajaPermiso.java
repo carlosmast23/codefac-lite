@@ -5,9 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -22,22 +21,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author CARLOS_CODESOFT
+ * @author Robert
  */
 @Entity
-@Table(name = "CAJA")
+@Table(name = "CAJA_PERMISO")
 @XmlRootElement
-public class Caja implements Serializable {
-    
-    private static final long serialVersionUID = 1L;
+public class CajaPermiso implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     private Long id;
-    
-    @Column(name = "NOMBRE")
-    private String nombre;
     
     @Column(name = "DESCRIPCION")
     private String descripcion;
@@ -45,13 +40,13 @@ public class Caja implements Serializable {
     @Column(name = "ESTADO")
     private String estado;
     
-    @JoinColumn(name = "SUCURSAL_ID")
-    private Sucursal sucursal;
+    @JoinColumn(name = "USUARIO_ID")
+    private Usuario usuario;
     
-    @JoinColumn(name = "PUNTO_EMISION_ID")
-    private PuntoEmision puntoEmision;
+    @JoinColumn(name = "CAJA_ID")
+    private Caja caja;
 
-    public Caja() {
+    public CajaPermiso() {
     }
 
     public Long getId() {
@@ -60,14 +55,6 @@ public class Caja implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getDescripcion() {
@@ -86,44 +73,39 @@ public class Caja implements Serializable {
         this.estado = estado;
     }
     
-    public CajaEnum getEstadoEnum() {
-        return CajaEnum.getEnum(estado);
-    }
-
-    public void setEstadoEnum(CajaEnum estadoEnum) {
-        if(estadoEnum==null)
-        {
-            this.estado=null;
-        }
-        else
-        {
-            this.estado = estadoEnum.getEstado();
-        }
-    }
-
-    public Sucursal getSucursal() {
-        return sucursal;
-    }
-
-    public void setSucursal(Sucursal sucursal) {
-        this.sucursal = sucursal;
-    }
-
-    public PuntoEmision getPuntoEmision() {
-        return puntoEmision;
-    }
-
-    public void setPuntoEmision(PuntoEmision puntoEmision) {
-        this.puntoEmision = puntoEmision;
+    public GeneralEnumEstado getEstadoEnum(){
+        return GeneralEnumEstado.getEnum(estado);
     }
     
-    /*
-    * Equals and Hascode
-    */
+    public void setEstadoEnum(GeneralEnumEstado generalEnumEstado){
+        if(generalEnumEstado == null)
+            this.estado = null;
+        else
+            this.estado = generalEnumEstado.getEstado();
+    }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Caja getCaja() {
+        return caja;
+    }
+
+    public void setCaja(Caja caja) {
+        this.caja = caja;
+    }
+    
+    
+    
     @Override
     public int hashCode() {
-        int hash = 7;
+        int hash = 5;
+        hash = 37 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -138,7 +120,7 @@ public class Caja implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Caja other = (Caja) obj;
+        final CajaPermiso other = (CajaPermiso) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -147,6 +129,7 @@ public class Caja implements Serializable {
 
     @Override
     public String toString() {
-        return "Caja{" + "nombre=" + nombre + "}";
+        return "" + caja.getNombre();
     }
+
 }

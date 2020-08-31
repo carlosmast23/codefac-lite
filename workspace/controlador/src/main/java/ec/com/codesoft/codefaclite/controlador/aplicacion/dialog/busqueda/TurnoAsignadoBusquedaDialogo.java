@@ -7,11 +7,8 @@ package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.TurnoAsignado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import java.util.Vector;
@@ -20,29 +17,24 @@ import java.util.Vector;
  *
  * @author Robert
  */
-public class CajaBusquedaDialogo implements InterfaceModelFind<Caja>, InterfacesPropertisFindWeb
+public class TurnoAsignadoBusquedaDialogo implements InterfaceModelFind<TurnoAsignado>
 {
-    //private Sucursal sucursal;
-    //private PuntoEmision puntoEmision;
-    
-    public CajaBusquedaDialogo(SessionCodefacInterface sessionCodefac) {
-        
-    }
 
+    public TurnoAsignadoBusquedaDialogo(SessionCodefacInterface sessionCodefac) {
+    }
+       
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> columnasTitulo = new Vector<>();
-        columnasTitulo.add(new ColumnaDialogo("Sucursal", 0.2d));
-        columnasTitulo.add(new ColumnaDialogo("Punto Emisión", 0.2d));
         columnasTitulo.add(new ColumnaDialogo("Caja", 0.2d));
-        columnasTitulo.add(new ColumnaDialogo("Descripción", 0.2d));
+        columnasTitulo.add(new ColumnaDialogo("Turno", 0.2d));
         return columnasTitulo;
     }
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT c FROM Caja c WHERE ";
-        queryString+=" ( LOWER(c.nombre) like ?1 and (c.estado) like ?2 )";
+        String queryString = "SELECT ta FROM TurnoAsignado ta WHERE ";
+        queryString+=" ((ta.cajaPermiso.caja.nombre) like ?1 ) and (ta.estado) like ?2";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
         queryDialog.agregarParametro(2,GeneralEnumEstado.ACTIVO.getEstado());
@@ -50,22 +42,17 @@ public class CajaBusquedaDialogo implements InterfaceModelFind<Caja>, Interfaces
     }
 
     @Override
-    public void agregarObjeto(Caja t, Vector dato) {
-        dato.add(t.getSucursal().toString());
-        dato.add(t.getPuntoEmision().toString());
-        dato.add(t.getNombre());
-        dato.add(t.getDescripcion());
+    public void agregarObjeto(TurnoAsignado ta, Vector dato) {
+        dato.add(ta.getCajaPermiso().getCaja().getNombre());
+        dato.add(ta.getTurno().getNombre());
     }
 
     @Override
     public Vector<String> getNamePropertysObject() {
         Vector<String> propiedades = new Vector<String>();
-        propiedades.add("sucursal.nombre");
-        propiedades.add("puntoEmision.descripcion");
-        propiedades.add("nombre");
-        propiedades.add("descripcion");
+        propiedades.add("cajaPermiso.caja.nombre");
+        propiedades.add("turno.nombre");
         return propiedades;
     }
     
-
 }

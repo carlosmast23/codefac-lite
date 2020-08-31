@@ -5,24 +5,27 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.pos;
 
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ArqueoCajaBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CajaBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CajaPermisoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.UsuarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
-import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
-import java.math.BigDecimal;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.rmi.RemoteException;
-import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -32,50 +35,35 @@ import java.util.logging.Logger;
  *
  * @author Robert
  */
-public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoCajaModelControlador.CommonIf, ArqueoCajaModelControlador.SwingIf, ArqueoCajaModelControlador.WebIf> implements VistaCodefacIf
+public class CajaPermisoModelControlador extends ModelControladorAbstract<CajaPermisoModelControlador.CommonIf, CajaPermisoModelControlador.SwingIf, CajaPermisoModelControlador.WebIf> implements VistaCodefacIf
 {
-    private ArqueoCaja arqueoCaja;
-    private List<GeneralEnumEstado> estadosList;
-        
 
-    public ArqueoCajaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, ArqueoCajaModelControlador.CommonIf interfaz, TipoVista tipoVista) 
-    {
+    private CajaPermiso cajaPermiso;
+    private List<GeneralEnumEstado> estadosLista;
+    
+    public CajaPermisoModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CajaPermisoModelControlador.CommonIf interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);
     }
-     /**
-    * Metodo iniciar
-    * @throws java.rmi.RemoteException
-    * @throws ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException
-    */ 
+
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        
-        arqueoCaja=new ArqueoCaja();
-        arqueoCaja.setValorFisico(BigDecimal.ZERO);
-        arqueoCaja.setValorTeorico(BigDecimal.ZERO);
-        arqueoCaja.setEstadoEnum(GeneralEnumEstado.ACTIVO);        
-        
-        
-        long date = new java.util.Date().getTime();
-        getInterfaz().setFechaRevision(new Date(date));      
-        getInterfaz().setHoraRevision(new Date(date));
-        
-        estadosList = UtilidadesLista.arrayToList(GeneralEnumEstado.values());
+        cajaPermiso = new CajaPermiso();
+        estadosLista = UtilidadesLista.arrayToList(GeneralEnumEstado.values());
     }
 
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException{
+    @Override
+    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         iniciar();
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-
-        try
+         try
         {       
-            //Datos
-            setearDatos();
             //Grabar
-            ServiceFactory.getFactory().getArqueoCajaServiceIf().grabar(getArqueoCaja());
+            setearDatos();
+            ServiceFactory.getFactory().getCajaPermisoServiceIf().grabar(cajaPermiso);
             //Mensaje
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             
@@ -87,17 +75,15 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }   
-        
+        } 
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
         try {
-            //Datos
-            setearDatos();
             //Editar
-            ServiceFactory.getFactory().getArqueoCajaServiceIf().editar(getArqueoCaja());
+            setearDatos();
+            ServiceFactory.getFactory().getCajaPermisoServiceIf().editar(cajaPermiso);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ArqueoCajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,9 +95,9 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
         try {
             Boolean respuesta = dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO);
             if(!respuesta){
-                throw new ServicioCodefacException("Error eliminando Arqueo Caja");
+                throw new ServicioCodefacException("Error eliminando Turno Asignado");
             }
-            ServiceFactory.getFactory().getArqueoCajaServiceIf().eliminar(getArqueoCaja());
+            ServiceFactory.getFactory().getCajaPermisoServiceIf().eliminar(cajaPermiso);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ArqueoCajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -144,67 +130,87 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
-        ArqueoCajaBusquedaDialogo arqueoCajaBusquedaDialogo = new ArqueoCajaBusquedaDialogo();
-        return arqueoCajaBusquedaDialogo;
+        CajaPermisoBusquedaDialogo cajaPermisoBusquedaDialogo = new CajaPermisoBusquedaDialogo(session);
+        return cajaPermisoBusquedaDialogo;
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        ArqueoCaja arqueoCaja = (ArqueoCaja) entidad;
-        setArqueoCaja(arqueoCaja);
-        getInterfaz().setFechaRevision(UtilidadesFecha.getFechaDeTimeStamp(arqueoCaja.getFechaHora()));
-        getInterfaz().setHoraRevision(UtilidadesFecha.getHoraDeTimeStamp(arqueoCaja.getFechaHora()));
+        cajaPermiso = (CajaPermiso)entidad;
     }
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    ////////////////////////////////////////////////////////////////////////////
+    //                      INTERFACE
+    ////////////////////////////////////////////////////////////////////////////
+    
+    public interface CommonIf
+    {        
+         public String getDescripcionText();
+    }
+    
+    public interface SwingIf extends CajaPermisoModelControlador.CommonIf
+    {
+        //TODO: Implementacion de las interfaces solo necesarias para Swing
+    }
+    
+    public interface WebIf extends CajaPermisoModelControlador.CommonIf
+    {
+        //TODO: Implementacion de las interafaces solo para la web
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //                      FUNCIONES
+    ////////////////////////////////////////////////////////////////////////////
+    public void listenerBotonBuscarCaja()
+    {
+        CajaBusquedaDialogo cajaBusquedaDialogo = new CajaBusquedaDialogo(session);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(cajaBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        if (buscarDialogoModel.getResultado() != null) 
+        {   
+            cajaPermiso.setCaja((Caja)buscarDialogoModel.getResultado());
+        }
+    }
+    
+    public void listenerBotonBuscarUsuario()
+    {
+        UsuarioBusquedaDialogo usuarioBusquedaDialogo = new UsuarioBusquedaDialogo(session);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(usuarioBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        if(buscarDialogoModel.getResultado() != null)
+        {
+            cajaPermiso.setUsuario((Usuario)buscarDialogoModel.getResultado());
+        }
+    }
+    
+    public void setearDatos(){
+        cajaPermiso.setDescripcion(getInterfaz().getDescripcionText());
+    }
+    
     
     ////////////////////////////////////////////////////////////////////////////
     //                      GET AND SET
     ////////////////////////////////////////////////////////////////////////////
 
-    public ArqueoCaja getArqueoCaja() {
-        return arqueoCaja;
+    public CajaPermiso getCajaPermiso() {
+        return cajaPermiso;
     }
 
-    public void setArqueoCaja(ArqueoCaja arqueoCaja) {
-        this.arqueoCaja = arqueoCaja;
+    public void setCajaPermiso(CajaPermiso cajaPermiso) {
+        this.cajaPermiso = cajaPermiso;
     }
 
-    public List<GeneralEnumEstado> getEstadosList() {
-        return estadosList;
+    public List<GeneralEnumEstado> getEstadosLista() {
+        return estadosLista;
     }
 
-    public void setEstadosList(List<GeneralEnumEstado> estadosList) {
-        this.estadosList = estadosList;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    //                      INTERFACES Y CLASES
-    ////////////////////////////////////////////////////////////////////////////
-    public interface CommonIf
-    {
-        public Date getFechaRevision();
-        public void setFechaRevision(Date fechaRevision);
-        public Date getHoraRevision();
-        public void setHoraRevision(Date horaRevision);        
+    public void setEstadosLista(List<GeneralEnumEstado> estadosLista) {
+        this.estadosLista = estadosLista;
     }
     
-    public interface SwingIf extends ArqueoCajaModelControlador.CommonIf
-    {
-        //TODO: Implementacion de las interfaces solo necesarias para Swing
-    }
     
-    public interface WebIf extends ArqueoCajaModelControlador.CommonIf
-    {
-        //TODO: Implementacion de las interafaces solo para la web
-    }
-    
-    public void setearDatos(){
-       //Unir las dos fechas en un solo formato; 1era fecha y 2da tiempo seleccionado
-       Date fechaHora = UtilidadesFecha.FechaHoraPorUnion(getInterfaz().getFechaRevision(), getInterfaz().getHoraRevision());    
-       arqueoCaja.setFechaHora(UtilidadesFecha.castDateSqlToTimeStampSql(fechaHora));
-    }
 }

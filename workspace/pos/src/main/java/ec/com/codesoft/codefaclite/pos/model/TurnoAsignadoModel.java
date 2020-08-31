@@ -6,17 +6,14 @@
 package ec.com.codesoft.codefaclite.pos.model;
 
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaModelControlador;
-import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaSesionModelControlador;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.controlador.vista.pos.TurnoAsignadoModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.pos.panel.CajaSessionPanel;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
-import java.math.BigDecimal;
+import ec.com.codesoft.codefaclite.pos.panel.TurnoAsignadoPanel;
 import java.rmi.RemoteException;
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +22,13 @@ import java.util.Map;
  *
  * @author Robert
  */
-//public class CajaSessionModel extends CajaSessionPanel implements CajaSesionModelControlador.Interface
-public class CajaSessionModel extends CajaSessionPanel
+public class TurnoAsignadoModel extends TurnoAsignadoPanel implements ControladorVistaIf, TurnoAsignadoModelControlador.SwingIf
 {
-
+    
+    private TurnoAsignadoModelControlador controlador = new TurnoAsignadoModelControlador(DialogoCodefac.intefaceMensaje , session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
+            
     @Override
-    public void iniciar() {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -75,6 +73,21 @@ public class CajaSessionModel extends CajaSessionPanel
     }
 
     @Override
+    public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public InterfaceModelFind obtenerDialogoBusqueda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public Map<Integer, Boolean> permisosFormulario() {
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
         permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
@@ -87,20 +100,19 @@ public class CajaSessionModel extends CajaSessionPanel
     }
 
     @Override
-    public List<String> getPerfilesPermisos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ModelControladorAbstract getControladorVista() {
+        return controlador;
     }
-
-    @Override
-    public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public InterfaceModelFind obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-
     
+    /**
+     * Get and Setter
+     * @return 
+     */
+    public TurnoAsignadoModelControlador getControlador() {
+        return controlador;
+    }
+
+    public void setControlador(TurnoAsignadoModelControlador controlador) {
+        this.controlador = controlador;
+    }
 }

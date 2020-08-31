@@ -76,3 +76,43 @@ create table INGRESO_CAJA(
     constraint id_ingreso_caja_venta_fk foreign key(VENTA_ID) references VENTA(ID)
 );
 
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.4.0)*/
+create table CAJA_PERMISO(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
+
+    CAJA_ID BIGINT,
+    USUARIO_ID BIGINT,
+
+    ESTADO varchar(1),
+    DESCRIPCION varchar(1024),
+
+    primary key(ID),
+    constraint id_caja_permiso_caja_session_fk foreign key(CAJA_ID) references CAJA(ID),
+    constraint id_caja_permiso_usuario_session_fk foreign key(USUARIO_ID) references USUARIO(ID)
+);
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.4.0)*/
+create table TURNO(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
+    
+    NOMBRE varchar(256),
+    HORA_INICIAL time,
+    HORA_FINAL time,
+
+    primary key(ID)
+);
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.4.0)*/
+create table TURNO_ASIGNADO(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
+    
+    CAJA_PERMISO_ID BIGINT,
+    TURNO_ID BIGINT,
+
+    ESTADO varchar(1),
+    
+    primary key(ID),
+    constraint id_turno_asignado_caja_permiso_fk foreign key(CAJA_PERMISO_ID) references CAJA_PERMISO(ID),
+    constraint id_turno_asignado_turno_fk foreign key(TURNO_ID) references TURNO(ID)
+);
+

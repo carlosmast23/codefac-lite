@@ -150,7 +150,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
-        CajaBusquedaDialogo cajaBusquedaDialogo = new CajaBusquedaDialogo();
+        CajaBusquedaDialogo cajaBusquedaDialogo = new CajaBusquedaDialogo(session);
         return cajaBusquedaDialogo;
     }
 
