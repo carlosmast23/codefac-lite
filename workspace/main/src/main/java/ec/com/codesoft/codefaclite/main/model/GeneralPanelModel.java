@@ -79,6 +79,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
@@ -397,7 +398,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             case 1: //opcion cambiar de usuario
                 cerrarTodasPantallas();
                 setVisible(false);
-                LoginModel.DatosLogin datosLogin = Main.cargarLoginUsuario(this);
+                Sucursal sucursalDefecto=ArchivoConfiguracionesCodefac.getInstance().getSucursalPorDefecto();
+                LoginModel.DatosLogin datosLogin = Main.cargarLoginUsuario(this,sucursalDefecto);
                 //Main.validacionesEmpresa(datosLogin.empresa, this); //Haciendo verificacion de validacion de la licencia y datos de la empresa
                 sessionCodefac.setUsuario(datosLogin.usuario);
                 sessionCodefac.setSucursal(datosLogin.sucursal);

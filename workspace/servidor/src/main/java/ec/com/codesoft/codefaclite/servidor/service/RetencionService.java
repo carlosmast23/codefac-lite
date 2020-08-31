@@ -75,7 +75,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 
                 ComprobantesService servicioComprobante = new ComprobantesService();
                 servicioComprobante.setearSecuencialComprobanteSinTransaccion(entity);
-                grabarCartera(entity);
+                
                /* 
                 ParametroCodefacService parametroService = new ParametroCodefacService();
                 ParametroCodefac parametro = null;
@@ -95,6 +95,9 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 
 
                 entityManager.persist(entity);
+                entityManager.flush();
+                
+                grabarCartera(entity);
 
                 //Aumentar el secuencial para facturar
                 //parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";

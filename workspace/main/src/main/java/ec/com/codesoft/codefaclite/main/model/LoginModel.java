@@ -348,6 +348,15 @@ public class LoginModel extends LoginFormDialog{
         return (Sucursal) getCmbSucursal().getSelectedItem();
     }
     
+    public void setearSucursalPorDefecto(Sucursal sucursal)
+    {
+        if(sucursal!=null)
+        {
+            getCmbEmpresa().setSelectedItem(sucursal.getEmpresa());
+            getCmbSucursal().setSelectedItem(sucursal);
+        }
+    }
+    
     /**
      * Clase de envoltorio solo para agrupar un conjunto de resultados de la pantalla Login
      */

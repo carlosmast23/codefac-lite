@@ -141,6 +141,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     {
          Map<Long, CarteraDetalle> mapDetallesGrabados = new HashMap<Long, CarteraDetalle>();
         //grabar los detalles de la cartera
+        long idAuxiliar=-1;
         for (CarteraDetalle detalle : cartera.getDetalles()) {
             
             /*if((cruces!=null && cruces.size()>0) && detalle.getId()==null)
@@ -152,13 +153,27 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
              * Esto funciona de esta manera porque cuando se usan cruces tienes ids negativos auxiliares , pero cuando vienen desde otro modulos tiene id null porque son nuevos
              * asd
              */
-            Long idTemporal=(detalle.getId()!=null)?detalle.getId():-1l; //Valor de id temporal para poder guardar los cruces , este artificio se usa porque el id de los nuevos detales viene con npumeros negativos
+            Long idTemporal=idAuxiliar--;// en caso de no tener referencia le asigno una
+            if(detalle.getId()!=null)
+            {
+                idTemporal=detalle.getId();
+            }
+            else
+            {
+                detalle.setId(idTemporal);
+            }
+            
+            //Long idTemporal=(detalle.getId()!=null)?detalle.getId():idAuxiliar--; //Valor de id temporal para poder guardar los cruces , este artificio se usa porque el id de los nuevos detales viene con npumeros negativos
+            
+            
             if(idTemporal<0)
             {
-                detalle.setId(null); //Esta variable dejo en null para que al grabar genere el nuevo objeto
-                entityManager.persist(detalle);
+                CarteraDetalle carteraDetalleTmp= detalle.clone();
+                carteraDetalleTmp.setId(null); //Esta variable dejo en null para que al grabar genere el nuevo objeto
+                entityManager.persist(carteraDetalleTmp);
+                //entityManager.flush();
                 //Grabar los antiguos id con los nuevos que despues me sirve para poder grabar los cruces
-                mapDetallesGrabados.put(idTemporal, detalle);
+                mapDetallesGrabados.put(idTemporal, carteraDetalleTmp);
             }
             else
             {
@@ -355,7 +370,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 break;
 
             case RETENCIONES:
-                crearCarteraRetencion(comprobante, cartera, cruces);                                
+                crearCarteraRetencion(comprobante, cartera, cruces);                              
                 break;
 
             case NOTA_CREDITO:
@@ -601,6 +616,12 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         carteraDetallIva.setSaldo(retencionIva);
         carteraDetallIva.setTotal(retencionIva);
         cartera.addDetalle(carteraDetallIva);
+        
+        //persistir las entidades creadas
+        entityManager.persist(cartera);
+        entityManager.persist(carteraDetallIva);
+        entityManager.persist(carteraDetalleRenta);
+        entityManager.flush();
 
         /**
          * CONSULTAR LA CARTERA QUE AFECTA DE UNA RETENCION

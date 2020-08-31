@@ -6,10 +6,13 @@
 package ec.com.codesoft.codefaclite.main.archivos;
 
 import ec.com.codesoft.codefaclite.main.init.Main;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -74,6 +77,12 @@ public class ArchivoConfiguracionesCodefac {
      */
     public static final String CAMPO_MODO_ACTUALIZACION="modo_actualizar";
     
+    /**
+     * Campo que me sirve para guardar y almacenar cual es la sucursal seleccionada 
+     * para que aparesca por defecto la siguiente vez que ingrese al sistema
+     */
+    public static final String CAMPO_SUCURSAL_INICIAL_ID="sucursal_inicial_id";
+    
     private Properties propiedadesIniciales;
     
     private static ArchivoConfiguracionesCodefac instance;
@@ -126,6 +135,31 @@ public class ArchivoConfiguracionesCodefac {
     public Properties getPropiedadesIniciales() {
         return propiedadesIniciales;
     }
+    
+    public Sucursal getSucursalPorDefecto()
+    {
+        String sucursalId=obtenerValor(ArchivoConfiguracionesCodefac.CAMPO_SUCURSAL_INICIAL_ID);
+        if(sucursalId!=null && !sucursalId.trim().isEmpty())
+        {
+            try {
+                Sucursal sucursal=ServiceFactory.getFactory().getSucursalServiceIf().buscarPorId(Long.parseLong(sucursalId));
+                return sucursal;                
+            } catch (RemoteException ex) {
+                Logger.getLogger(ArchivoConfiguracionesCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    public void setSucursalPorDefecto(Sucursal sucursal)
+    {
+        agregarCampo(ArchivoConfiguracionesCodefac.CAMPO_SUCURSAL_INICIAL_ID,sucursal.getId().toString());
+        try {
+            guardar();
+        } catch (IOException ex) {
+            Logger.getLogger(ArchivoConfiguracionesCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     ///                          CLASES E INTEFACES
@@ -145,7 +179,6 @@ public class ArchivoConfiguracionesCodefac {
         public String getNombre() {
             return nombre;
         }
-        
         
     }
 }

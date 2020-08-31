@@ -62,6 +62,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ActualizarSistema;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
@@ -691,7 +692,8 @@ public class Main {
             /**
              * Si el usuario devuuelto es incorrecto terminar el aplicativo
              */
-            LoginModel.DatosLogin  datosLogin= cargarLoginUsuario(panel);
+            Sucursal sucursalDefecto= ArchivoConfiguracionesCodefac.getInstance().getSucursalPorDefecto();
+            LoginModel.DatosLogin  datosLogin= cargarLoginUsuario(panel,sucursalDefecto);
             if (datosLogin.usuario == null) {
                 LOG.log(Level.WARNING, "Error en la licencia ");
                 //return;
@@ -852,9 +854,12 @@ public class Main {
         }
     }
     
-    public static LoginModel.DatosLogin cargarLoginUsuario(GeneralPanelModel generalPanel) {
+    public static LoginModel.DatosLogin cargarLoginUsuario(GeneralPanelModel generalPanel,Sucursal sucursal) {
         frameAplicacion.setVisible(true); //muestro el hilo de ejcucion porque el login es un dialog que no tiene icono en la barra de tareas
         LoginModel loginModel = new LoginModel(generalPanel);
+        
+        
+        loginModel.setearSucursalPorDefecto(sucursal);
         loginModel.setVisible(true);
         
         //if(loginModel.salirAplicacion)System.exit(0);
@@ -863,6 +868,10 @@ public class Main {
         frameAplicacion.dispose();
         loginModel.getTxtUsuario().requestFocus();
         loginModel.dispose();
+        
+        //Grabar en el archivo por defecto cual fue la sucursal seleccionada para ingresar al sistema
+        ArchivoConfiguracionesCodefac.getInstance().setSucursalPorDefecto(usuarioLogin.sucursal);
+        
         return usuarioLogin;
     }
 
