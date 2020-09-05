@@ -49,7 +49,7 @@ import java.util.Map;
 @ViewScoped
 public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>, Serializable {
 
-    private static final String TITULO_CLIENTE="Cliente";
+    private static final String TITULO_CLIENTE="Cliente";  
     private static final String TITULO_PROVEEDOR="Proveedor";
     private Persona cliente;
     private List<Nacionalidad> nacionalidadesList;
@@ -249,7 +249,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         {
             establecimientoDefecto.setCodigoSucursal("1");
             establecimientoDefecto.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
-            cliente.addEstablecimiento(establecimientoDefecto);
+            cliente.addEstablecimiento(establecimientoDefecto); 
         }
         
 

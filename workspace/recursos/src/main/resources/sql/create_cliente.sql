@@ -69,6 +69,8 @@ create table PERSONA_ESTABLECIMIENTO(
     LATITUD decimal(12,8),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.3.7)*/
     CODIGO_PERSONALIZADO varchar(100), 
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.4.5)*/
+    REFERENCIA_DIRECCION varchar(100), 
 
     primary key (ID)
 );

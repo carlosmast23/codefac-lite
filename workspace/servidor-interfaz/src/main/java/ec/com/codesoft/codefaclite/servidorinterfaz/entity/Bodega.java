@@ -7,14 +7,19 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -52,6 +57,9 @@ public class Bodega implements Serializable {
     
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bodegaPermiso", fetch = FetchType.EAGER)
+    private List<BodegaPermisoTransferencia> bodegasPermisoTransfereciaList;
 
     public Long getIdBodega() {
         return idBodega;
@@ -139,6 +147,59 @@ public class Bodega implements Serializable {
 
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
+    }
+
+    public List<BodegaPermisoTransferencia> getBodegasPermisoTransfereciaList() {
+        return bodegasPermisoTransfereciaList;
+    }
+
+    public void setBodegasPermisoTransfereciaList(List<BodegaPermisoTransferencia> bodegasPermisoTransfereciaList) {
+        this.bodegasPermisoTransfereciaList = bodegasPermisoTransfereciaList;
+    }
+    
+    
+    public void agregarPermisoTransferenciaBodega(BodegaPermisoTransferencia bodegaPermisoTransferencia)
+    {
+        if(bodegasPermisoTransfereciaList==null)
+        {
+            this.bodegasPermisoTransfereciaList=new ArrayList<BodegaPermisoTransferencia>();
+        }
+               
+        bodegaPermisoTransferencia.setBodegaPrincipal(this);        
+        this.bodegasPermisoTransfereciaList.add(bodegaPermisoTransferencia);
+        
+    }
+    
+    
+    public BodegaPermisoTransferencia buscarBodegaPermiso(Bodega bodegaPermiso)
+    {
+        if(bodegasPermisoTransfereciaList!=null)
+        {
+            for (BodegaPermisoTransferencia bodegaPermisoTransferencia : bodegasPermisoTransfereciaList) {
+                if(bodegaPermisoTransferencia.getBodegaPermiso().equals(bodegaPermiso))
+                {
+                    return bodegaPermisoTransferencia;
+                }
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Metodo util en especial para editar en la vista
+     * @param rutaDetalle 
+     */
+    public void setObject(Bodega bodega)
+    {
+        this.bodegasPermisoTransfereciaList=bodega.getBodegasPermisoTransfereciaList();
+        this.descripcion=bodega.getDescripcion();
+        this.empresa=bodega.getEmpresa();
+        this.encargado=bodega.getEncargado();
+        this.estado=bodega.getEstado();
+        this.imagenPath=bodega.getImagenPath();
+        this.nombre=bodega.getNombre();
+        this.sucursal=bodega.getSucursal();
+        this.tipoBodega=bodega.getTipoBodega();
     }
 
     @Override

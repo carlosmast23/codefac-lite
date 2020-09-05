@@ -14,3 +14,11 @@ create table BODEGA(
 
     primary key (BODEGA_ID)
 );
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.4.4)*/
+create table BODEGA_PERMISO_TRANSFERENCIA( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) ,
+    BODEGA_PRINCIPAL_ID BIGINT,
+    BODEGA_PERMISO_ID varchar(100), 
+    primary key (ID)
+);

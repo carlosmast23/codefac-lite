@@ -184,7 +184,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setDiasCreditoProveedor((Integer)getTxtDiasCreditoProveedor().getValue());
         persona.setContactoClienteNombre(getTxtNombreContacto().getText());
         persona.setEmpresa(session.getEmpresa());
-        
+                
         
         //Grabar la variable de obligado a llevar contabilidad
         if(getChkObligadoLlevarContabilidad().isSelected())
@@ -219,6 +219,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 getTxtCodigoPersonalizado().getText(),
                 getTxtNombreLegal().getText(), 
                 getjTextAreaDireccion().getText(), 
+                getjTextReferenciaDireccion().getText(),
                 getjTextExtension().getText(), 
                 getjTextCelular().getText(), 
                 getjTextTelefono().getText(),
@@ -909,6 +910,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         
         personaEstablecimiento.setCorreoElectronico(""); //implementar de forma posterior
         personaEstablecimiento.setDireccion(getjTextAreaDireccionEstablecimiento().getText());
+        personaEstablecimiento.setReferenciaDireccion(getjTextReferenciaDireccionEstablecimiento().getText());
         personaEstablecimiento.setExtensionTelefono(getjTextExtensionEstablecimiento().getText());
         personaEstablecimiento.setPersona(persona);
         personaEstablecimiento.setTelefonoCelular(getjTextCelularEstablecimiento().getText());
@@ -995,6 +997,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getTxtNombreLegalEstablecimiento().setText("");
         getTxtCodigoPersonalizado().setText("");
         getjTextAreaDireccionEstablecimiento().setText("");
+        getjTextReferenciaDireccionEstablecimiento().setText("");
         getjTextTelefonoEstablecimiento().setText("");
         getjTextExtensionEstablecimiento().setText("");
         getjTextCelularEstablecimiento().setText("");
@@ -1032,6 +1035,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             getTxtNombreLegal().setText(establecimiento.getNombreComercial());
             getTxtCodigoPersonalizado().setText(establecimiento.getCodigoPersonalizado());
             getjTextAreaDireccion().setText(establecimiento.getDireccion());
+            getjTextReferenciaDireccion().setText(establecimiento.getReferenciaDireccion());
             getjTextTelefono().setText(establecimiento.getTelefonoConvencional());
             getjTextExtension().setText(establecimiento.getExtensionTelefono());
             getjTextCelular().setText(establecimiento.getTelefonoCelular());
@@ -1082,6 +1086,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         
         getTxtCodigoPersonalizado().setText(personaEstablecimientoEditar.getCodigoPersonalizado());
         getjTextAreaDireccionEstablecimiento().setText(personaEstablecimientoEditar.getDireccion());
+        getjTextReferenciaDireccionEstablecimiento().setText(personaEstablecimientoEditar.getReferenciaDireccion());
         getjTextExtensionEstablecimiento().setText(personaEstablecimientoEditar.getExtensionTelefono());
         getjTextCelularEstablecimiento().setText(personaEstablecimientoEditar.getTelefonoCelular());
         getjTextTelefonoEstablecimiento().setText(personaEstablecimientoEditar.getTelefonoConvencional());

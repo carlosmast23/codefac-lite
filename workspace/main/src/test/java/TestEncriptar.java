@@ -17,11 +17,11 @@ import java.util.logging.Logger;
 public class TestEncriptar {
     public static void main(String[] args) {
         try {
-            //String datosEncriptado=UtilidadesEncriptar.encriptar("2020-07-13",ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            String datosEncriptado=UtilidadesEncriptar.encriptar("2020-09-01",ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
             //System.out.println(datosEncriptado);
             //System.out.println(UtilidadesEncriptar.desencriptar("1zP71DO+Pj+jLHF+c4sAdQ==", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-            String datosSinEncriptar=UtilidadesEncriptar.desencriptar("JJqLqIj4MuvzWU+DD7I6Aw==", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
-            System.out.println(datosSinEncriptar);
+            //String datosSinEncriptar=UtilidadesEncriptar.desencriptar("5mMONjUvCXNrd5+AdZyooQ==", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            System.out.println(datosEncriptado);
         } catch (Exception ex) {
             Logger.getLogger(TestEncriptar.class.getName()).log(Level.SEVERE, null, ex);
         }

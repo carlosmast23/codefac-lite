@@ -1,5 +1,6 @@
 package ec.com.codesoft.codefaclite.inventario.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -7,6 +8,9 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBindingAddData;
 import ec.com.codesoft.codefaclite.inventario.busqueda.BodegaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.BodegaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
@@ -14,11 +18,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.BodegaPermisoTransferencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RutaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -35,6 +45,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
 public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bodega> {
 
@@ -43,8 +54,12 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     private JFileChooser jFileChooser;
     private Path origen = null;
     private Path destino = null;
+    
+    private Bodega bodegaPermisoSeleccionado;
+    private BodegaPermisoTransferencia bodegaPermisoTransferenciaSeleccionado;
 
     public BodegaModel() {
+        crearModeloTabla();
     }
 
     @Override
@@ -299,5 +314,150 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
             Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void listenerBotonBuscarBodega()
+    {
+        BodegaBusquedaDialogo bodegaBusquedaDialogo = new BodegaBusquedaDialogo(session.getEmpresa());
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(bodegaBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        Bodega bodegaTmp = (Bodega) buscarDialogoModel.getResultado();
+        
+        if (buscarDialogoModel.getResultado() != null) 
+        {   
+            bodegaPermisoSeleccionado=(Bodega) buscarDialogoModel.getResultado();
+        }
 
+
+    }
+    
+    public void listenerEditarDetalle()
+    {
+        if(bodegaPermisoSeleccionado==null)
+        {
+            DialogoCodefac.mensaje(new CodefacMsj("No esta seleccionado un dato para editar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            return;
+        }
+        
+        if(validarAgregarDetalle(bodegaPermisoSeleccionado,CrudEnum.EDITAR))
+        {
+            bodegaPermisoSeleccionado.setObject(bodegaPermisoSeleccionado);
+            //ruta.addDetalle(rutaDetalle);
+            //Despues de agregar al detalle creo uno nuevo            
+            crearNuevoDetalle();
+        }
+    }
+    
+    private void crearNuevoDetalle()
+    {
+        bodegaPermisoSeleccionado=new Bodega();
+        bodegaPermisoTransferenciaSeleccionado=null;
+    }
+    
+    
+    public void listenerEliminarDetalle()
+    {
+        if(bodegaPermisoTransferenciaSeleccionado==null)
+        {
+            DialogoCodefac.mensaje(new CodefacMsj("No esta seleccionado un dato para eliminar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            return;
+        }
+        
+        
+        if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
+        {
+            this.bodega.getBodegasPermisoTransfereciaList().remove(bodegaPermisoTransferenciaSeleccionado);
+            crearNuevoDetalle();
+        }
+        
+        
+    }
+    
+    public void listenerAddDetalle()
+    {
+        if(validarAgregarDetalle(bodegaPermisoSeleccionado,CrudEnum.CREAR))
+        {
+            BodegaPermisoTransferencia bodegaTransferencia=new BodegaPermisoTransferencia();
+            bodegaTransferencia.setBodegaPermiso(bodegaPermisoSeleccionado);    
+            bodega.agregarPermisoTransferenciaBodega(bodegaTransferencia);
+            bodegaPermisoSeleccionado=null;
+        }
+        
+    }
+    
+    public boolean validarAgregarDetalle(Bodega bodegaSeleccionada,CrudEnum crudEnum)
+    {
+        if (bodegaSeleccionada == null) {
+            DialogoCodefac.mensaje(new CodefacMsj("No se puede agregar una bodega vacia", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            return false;
+        }
+        
+        if(bodega.buscarBodegaPermiso(bodegaSeleccionada)!=null)
+        {
+            DialogoCodefac.mensaje(new CodefacMsj("No se pueden ingresar bodegas duplicadas", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            return false;
+        }
+                
+        return true;
+    }
+    
+    public void crearModeloTabla()
+    {   
+        String titulo[]=new String[]{
+            "",
+            "Bodega Permiso Transferencia"};
+        
+        DefaultTableModel modelo=UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class,Object.class});
+        getTblDatos().setModel(modelo);
+        UtilidadesTablas.definirTamanioColumnas(getTblDatos(),new Integer[]{0});
+    }
+    
+    public ITableBindingAddData getTableBindingAddData()
+    {
+        return new ITableBindingAddData<BodegaPermisoTransferencia>() {
+            @Override
+            public Object[] addData(BodegaPermisoTransferencia value) {
+                return new Object[]{
+                    value,
+                    value.getBodegaPermiso(),
+                };
+            }
+
+            @Override
+            public void setData(BodegaPermisoTransferencia objetoOriginal, Object objetoModificado, Integer columnaModificada) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+    };
+
+    ////////////////////////////////////////////////////////////////////////////
+    ///                          GET AND SET
+    ///////////////////////////////////////////////////////////////////////////
+    
+    public Bodega getBodegaPermisoSeleccionado() {
+        return bodegaPermisoSeleccionado;
+    }
+
+    public void setBodegaPermisoSeleccionado(Bodega bodegaPermisoSeleccionado) {
+        this.bodegaPermisoSeleccionado = bodegaPermisoSeleccionado;
+    }
+
+    public BodegaPermisoTransferencia getBodegaPermisoTransferenciaSeleccionado() {
+        return bodegaPermisoTransferenciaSeleccionado;
+    }
+
+    public void setBodegaPermisoTransferenciaSeleccionado(BodegaPermisoTransferencia bodegaPermisoTransferenciaSeleccionado) {
+        this.bodegaPermisoTransferenciaSeleccionado = bodegaPermisoTransferenciaSeleccionado;
+    }
+
+    public Bodega getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodega bodega) {
+        this.bodega = bodega;
+    }
+    
+    
+
+    
 }

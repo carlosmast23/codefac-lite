@@ -44,6 +44,9 @@ public class PersonaEstablecimiento implements  Serializable{
     @Column(name = "DIRECCION")
     private String direccion;
     
+    @Column(name = "REFERENCIA_DIRECCION")
+    private String referenciaDireccion;
+    
     @Column(name = "TELEFONO_CONVENCIONAL")
     private String telefonoConvencional;
     
@@ -202,6 +205,16 @@ public class PersonaEstablecimiento implements  Serializable{
         this.tipoEstablecimiento = tipoEstablecimiento;
     }
 
+    public String getReferenciaDireccion() {
+        return referenciaDireccion;
+    }
+
+    public void setReferenciaDireccion(String referenciaDireccion) {
+        this.referenciaDireccion = referenciaDireccion;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -245,12 +258,13 @@ public class PersonaEstablecimiento implements  Serializable{
     }
     
     
-    public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String codigo,String nombreComercial,String direccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum,Zona zona,TipoEstablecimiento tipoEstablecimiento)
+    public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String codigo,String nombreComercial,String direccion,String referenciadireccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum,Zona zona,TipoEstablecimiento tipoEstablecimiento)
     {
         //PersonaEstablecimiento personaEstablecimiento = new PersonaEstablecimiento();
         establecimiento.setCodigoPersonalizado(codigo);
         establecimiento.setNombreComercial(nombreComercial);
         establecimiento.setDireccion(direccion);
+        establecimiento.setReferenciaDireccion(referenciadireccion);
         establecimiento.setExtensionTelefono(extensionTelefono);
         //establecimiento.setPersona(persona);
         establecimiento.setTelefonoCelular(telefonoCelular);

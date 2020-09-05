@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.BodegaFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.BodegaPermisoTransferencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
@@ -60,6 +61,15 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
                 {
                     entity.setSucursal(null);
                     entity.setEmpresa(null);
+                }
+                
+                //grabar los detalles de las bodegas con permiso 
+                if(entity.getBodegasPermisoTransfereciaList()!=null)
+                {
+                    for (BodegaPermisoTransferencia bodegaPermiso : entity.getBodegasPermisoTransfereciaList()) 
+                    {
+                        entityManager.persist(bodegaPermiso);
+                    }
                 }
                 
                 entity.setEstadoEnum(GeneralEnumEstado.ACTIVO); //Por Defecto grabo con estado activo

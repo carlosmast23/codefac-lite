@@ -7,7 +7,7 @@
       xmlns:c="http://xmlns.jcp.org/jsf/composite/componentes">
 
     <ui:composition  template="/template/codefac_template.xhtml">
-        
+
         <ui:define name="opciones" >
             <p:menuitem oncomplete="PF('btnCargarProforma').jq.click();" value="Cargar desde la proforma"  icon="pi pi-clone"  />
         </ui:define>
@@ -84,14 +84,26 @@
                         <div class="p-col-12 p-md-6 p-lg-3">
                             <h:outputLabel  value="Nombre Contacto:"/>
                         </div>
+
                         <div class="p-col-12 p-md-6 p-lg-3">
                             <h:inputText  required="false" value="#{clienteMb.cliente.contactoClienteNombre}" style="width: 90%" />
                         </div>
+                        
+                        <div class="p-col-12 p-md-12 p-lg-6">
+                            <!--<h:outputLabel  value="Nombre Contacto:"/>-->
+                        </div>
+                        
                         <div class="p-col-12 p-md-6 p-lg-3">
                             <h:outputLabel  value="Dirección:"/>
                         </div>
                         <div class="p-col-12 p-md-6 p-lg-3">
                             <h:inputText required="false" value="#{clienteMb.establecimientoDefecto.direccion}"  style="width: 90%"/> 
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:outputLabel  value="Referencia Dirección:"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <h:inputText required="false" value="#{clienteMb.establecimientoDefecto.referenciaDireccion}"  style="width: 90%"/> 
                         </div>
                         <div class="p-col-12 p-md-6 p-lg-3">
                             <h:outputLabel  value="Teléfono Convencional:"/>
