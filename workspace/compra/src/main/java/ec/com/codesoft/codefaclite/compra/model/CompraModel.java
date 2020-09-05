@@ -350,7 +350,8 @@ public class CompraModel extends CompraPanel{
         this.getLblSubtotalSinImpuestoSinDescuento().setText(compra.getSubtotalSinImpuestosSinDescuentos().toString());
         
         this.getCmbDocumento().setSelectedItem(DocumentoEnum.obtenerDocumentoPorCodigo(compra.getCodigoDocumento()));
-        this.getCmbSustentoComprobante().setSelectedItem(compra.getCodigoSustentoSriEnum());
+        //this.getCmbSustentoComprobante().setSelectedItem(compra.getCodigoSustentoSriEnum());
+        getCmbSustentoComprobante().setSelectedItem(0);
         this.getCmbTipoDocumento().setSelectedItem(compra.getCodigoTipoDocumentoEnum());
         
         
@@ -483,6 +484,7 @@ public class CompraModel extends CompraPanel{
         }
         
         getTxtDiasCredito().setValue(0);
+        getCmbSustentoComprobante().setSelectedIndex(0); //Selecionar el primer sustento despues de agregar
     }
     
     private void cargarCatalogoRetencionesDefecto()
