@@ -136,6 +136,11 @@ public class ParametroCodefac implements Serializable {
     public static final String FACTURACION_RIDE_RAZON_SOCIAL_EMPLEADO="facturacion_ride_razon_social_empleado";
     public static final String FACTURACION_RIDE_DIRECCION_EMPLEADO="facturacion_ride_direccion_empleado";
     public static final String FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO="facturacion_ride_punto_emision_empleado";
+    public static final String FACTURACION_RIDE_REFERENCIA_DIRECCION="facturacion_ride_referencia_direccion";
+    public static final String FACTURACION_RIDE_CODIGO_PERSONALIZADO="facturacion_ride_codigo_personalizado";
+    
+    
+    
     public static final String HABILITAR_RETENCION_COMPRAS="habilitar_retencion_compras";
     
     public static final String DIAS_ALERTA_PAGO="dias_alerta_pago";

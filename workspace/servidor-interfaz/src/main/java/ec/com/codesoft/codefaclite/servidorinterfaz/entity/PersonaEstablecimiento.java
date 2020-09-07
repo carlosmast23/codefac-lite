@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal.TipoSucursalEnum;
+import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -213,6 +214,10 @@ public class PersonaEstablecimiento implements  Serializable{
         this.referenciaDireccion = referenciaDireccion;
     }
     
+    public String getUrlGoogleMaps()
+    {
+        return UtilidadesWeb.construirUrlGoogleMaps(latitud, longitud);
+    }
     
 
     @Override
@@ -256,6 +261,7 @@ public class PersonaEstablecimiento implements  Serializable{
     {
         return this.persona.getRazonSocial();
     }
+    
     
     
     public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String codigo,String nombreComercial,String direccion,String referenciadireccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum,Zona zona,TipoEstablecimiento tipoEstablecimiento)

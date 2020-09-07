@@ -110,4 +110,19 @@ public class UtilidadesWeb {
          return true;
 
     }
+    public static String construirUrlGoogleMaps(BigDecimal latitud , BigDecimal longitud)
+    {
+        final String urlBase="https://www.google.com/maps/search/?api=1&?1,?2";
+        
+        if(latitud==null || longitud==null)
+        {
+            return urlBase;
+        }
+        
+        String urlFinal=urlBase
+                .replace("?1",latitud.toString())
+                .replace("?2",longitud.toString());
+        
+        return urlFinal;
+    }
 }

@@ -39,7 +39,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import java.math.BigDecimal;
 import java.util.Map;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -249,7 +251,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         {
             establecimientoDefecto.setCodigoSucursal("1");
             establecimientoDefecto.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
-            cliente.addEstablecimiento(establecimientoDefecto); 
+            cliente.addEstablecimiento(establecimientoDefecto);      
         }
         
 
@@ -264,13 +266,18 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
                 return Persona.TipoIdentificacionEnum.RUC;
             } else //Caso contrario asumo que es cedula
             {
-                return Persona.TipoIdentificacionEnum.CEDULA;
+                return Persona.TipoIdentificacionEnum.CEDULA;   
             }
         }
     }
+    
+    public void abrirGoogleMapsUbicacion()
+    {
+        UtilidadesWeb.redirigirPaginaExterna(establecimientoDefecto.getUrlGoogleMaps());      
+    }
 
     private boolean validarDatosVista() {
-        return true;
+        return true; 
     }
 
     public Boolean getIdentificacionPasaporte() {
@@ -423,7 +430,20 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-
+    public void remoteAction() 
+    {        
+        String longitud = FacesContext.getCurrentInstance().getExternalContext()
+                .getRequestParameterMap().get("longitud");   
+        
+        String latitud = FacesContext.getCurrentInstance().getExternalContext()
+                .getRequestParameterMap().get("latitud");
+        
+        establecimientoDefecto.setLatitud(new BigDecimal(latitud));  
+        establecimientoDefecto.setLongitud(new BigDecimal(longitud));
+        
+        System.out.println("Latitud: "+latitud+", Longitud: "+longitud); 
+                
+    }
     
     
 

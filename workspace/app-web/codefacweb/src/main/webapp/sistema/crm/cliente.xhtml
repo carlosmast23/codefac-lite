@@ -88,11 +88,11 @@
                         <div class="p-col-12 p-md-6 p-lg-3">
                             <h:inputText  required="false" value="#{clienteMb.cliente.contactoClienteNombre}" style="width: 90%" />
                         </div>
-                        
+
                         <div class="p-col-12 p-md-12 p-lg-6">
                             <!--<h:outputLabel  value="Nombre Contacto:"/>-->
                         </div>
-                        
+
                         <div class="p-col-12 p-md-6 p-lg-3">
                             <h:outputLabel  value="Dirección:"/>
                         </div>
@@ -130,41 +130,119 @@
                         <div class="p-col-12 p-md-6 p-lg-3">
                             <h:inputText  required="false" value="#{clienteMb.cliente.correoElectronico}" style="width: 80%" />
                         </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:remoteCommand name="passToJSFMB"
+                                             action="#{clienteMb.remoteAction()}"
+                                             id="remote_action" 
+                                             process="@this"
+                                             update="formulario:j_idt48:ubicacionPanel:latitudId,formulario:j_idt48:ubicacionPanel:longitudId"
+                                             />
+
+                            <script>
+                                function getLocation()
+                                {
+                                    //alert('ejecutando');
+                                    if (navigator.geolocation) {
+                                        navigator.geolocation.getCurrentPosition(showPosition,
+                                            function(error){
+                                                alert(error.message);
+                                            }, {
+                                                enableHighAccuracy: true
+                                                     ,timeout : 5000
+                                            });
+                                            
+                                    } else {
+                                        alert('Geolocation no soportada');
+                                        x.innerHTML = "Geolocation is not supported by this browser.";
+                                    }
+                                }
+
+                                function showPosition(position) {
+                                    //alert('x=' + position.coords.latitude + ',y=' + position.coords.longitude);
+
+                                    parametros = [
+                                        {
+                                            name: 'longitud',
+                                            value: position.coords.longitude
+                                        },
+                                        {
+                                            name: 'latitud',
+                                            value: position.coords.latitude
+                                        }
+                                    ];
+
+                                    passToJSFMB(parametros);
+
+                                    /*passToJSFMB([ {
+                                     name : 'longitud',
+                                     value : position.coords.latitude
+                                     } ]);
+                                     
+                                     passToJSFMB([ {
+                                     name : 'latitud',
+                                     value : position.coords.longitude
+                                     } ]);*/
+                                }
+                            </script>
+                        </div>
                     </div>
+
+                    <p:accordionPanel id="ubicacionPanel">
+                        <p:tab title="Ubicación">
+                            <div class="p-grid" style="text-align: left" >
+                                <div class="p-col-12 p-md-6 p-lg-4">
+                                    Latitud:
+                                    <h:inputText id="latitudId" value="#{clienteMb.establecimientoDefecto.latitud}" required="false" />
+                                </div>
+                                <div class="p-col-12 p-md-6 p-lg-4">
+                                    Longitud:
+                                    <h:inputText id="longitudId" value="#{clienteMb.establecimientoDefecto.longitud}" required="false"  />
+                                </div>
+                                <div class="p-col-12 p-md-6 p-lg-4">
+                                    <p:commandButton value="Actualizar" onclick="getLocation();" />
+                                    <p:commandButton value="Ver" action="#{clienteMb.abrirGoogleMapsUbicacion()}" style="margin-right:20px;"/>
+                                </div>
+                            </div>
+
+
+                        </p:tab>
+                    </p:accordionPanel>
+
 
 
                 </p:tab>
                 <p:tab title="Datos Adicionales">
 
                     <div class="p-grid" style="text-align: left" >
-                        <div class="p-col-12 p-md-6 p-lg-3" >
-                            <h:outputLabel   value="Tipo Cliente:"/>
+                        
+                        <div class="p-col-12 p-md-12 p-lg-12" >
+                            <div><h:outputLabel   value="Código Personalizado:"/></div>
+                            <h:inputText id="codigoPersonalizadoId" value="#{clienteMb.establecimientoDefecto.codigoPersonalizado}" required="false"  />
                         </div>
-                        <div class="p-col-12 p-md-6 p-lg-3" >
+                        
+                        <div class="p-col-12 p-md-6 p-lg-6" >
+                            <div><h:outputLabel   value="Tipo Cliente:"/></div>
                             <p:selectOneMenu  value="#{clienteMb.cliente.tipCliente}"  style="width:125px" converter="stringConverter" >
                                 <f:selectItems var="tipo" value="#{clienteMb.tiposClientes}" itemValue="#{tipo}"    />
                             </p:selectOneMenu>
                         </div>
-                        <div class="p-col-12 p-md-6 p-lg-3" >
-                            <h:outputLabel   value="Tipo :"/>
-                        </div>
-                        <div class="p-col-12 p-md-6 p-lg-3" >
+
+                        <div class="p-col-12 p-md-6 p-lg-6" >
+                            <div><h:outputLabel   value="Tipo :"/></div>
                             <p:selectOneMenu  value="#{clienteMb.operadorNegocioSeleccionado}"  style="width:125px" converter="operadorNegocioConverter">
                                 <f:selectItems var="operador" value="#{clienteMb.operadoresNegocio}" itemValue="#{operador.letra}"    />
                             </p:selectOneMenu>
                         </div>
-                        <div class="p-col-12 p-md-6 p-lg-3" >
-                            <h:outputLabel   value="Forma pago por defecto :"/>
-                        </div>
-                        <div class="p-col-12 p-md-6 p-lg-3" >
+
+                        <div class="p-col-12 p-md-6 p-lg-6" >
+                            <div><h:outputLabel   value="Forma pago por defecto :"/></div>
                             <p:selectOneMenu id="cmbFormaPago"   style="width:125px" value="#{clienteMb.sriFormaPagoSeleccionada}" converter="formaPagoConverter">
                                 <f:selectItems var="formaPago" value="#{clienteMb.sriFormaPagoList}" itemValue="#{formaPago.id.toString()}"    />
                             </p:selectOneMenu>
                         </div>
-                        <div class="p-col-12 p-md-6 p-lg-3" >
-                            <h:outputLabel   value="Dias crédito cobro :"/>
-                        </div>
-                        <div class="p-col-12 p-md-6 p-lg-3" >
+
+                        <div class="p-col-12 p-md-6 p-lg-6" >
+                            <div><h:outputLabel   value="Dias crédito cobro :"/></div>
                             <h:inputText required="false" value="#{clienteMb.cliente.diasCreditoCliente}"  style="width: 20%"/> 
                         </div>
                     </div>
@@ -184,6 +262,7 @@
 
         </ui:define>
     </ui:composition>
+
 
 </html>
 

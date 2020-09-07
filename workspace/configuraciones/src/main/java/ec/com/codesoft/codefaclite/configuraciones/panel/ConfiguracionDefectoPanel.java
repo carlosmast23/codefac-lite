@@ -104,6 +104,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbDocumentoDefectoVistaFactura = new javax.swing.JComboBox<>();
         jLabel34 = new javax.swing.JLabel();
         cmbReporteDefectoVenta = new javax.swing.JComboBox<>();
+        jLabel37 = new javax.swing.JLabel();
+        jLabel38 = new javax.swing.JLabel();
+        cmbDatoAdicionalRideCodigoPersonalizado = new javax.swing.JComboBox<>();
+        cmbDatoAdicionalRideReferenciaDireccion = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         lblEspacioVertical1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -300,8 +304,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 18;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -461,10 +465,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(jLabel23, gridBagConstraints);
 
         jLabel24.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel24.setText("Punto de Emisión Facturado:");
+        jLabel24.setText("Referencia Dirección:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel24, gridBagConstraints);
@@ -580,6 +584,40 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbReporteDefectoVenta, gridBagConstraints);
+
+        jLabel37.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel37.setText("Código Personalizado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel37, gridBagConstraints);
+
+        jLabel38.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel38.setText("Punto de Emisión Facturado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel38, gridBagConstraints);
+
+        cmbDatoAdicionalRideCodigoPersonalizado.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbDatoAdicionalRideCodigoPersonalizado, gridBagConstraints);
+
+        cmbDatoAdicionalRideReferenciaDireccion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbDatoAdicionalRideReferenciaDireccion, gridBagConstraints);
 
         jTabbedPane1.addTab("Facturas", jPanel4);
 
@@ -881,9 +919,11 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<ConfiguracionImpresoraEnum> cmbConfiguracionImpresora;
     private javax.swing.JComboBox<EnumSiNo> cmbConstruirEnsamblesFacturar;
     private javax.swing.JComboBox<EnumSiNo> cmbCreditoDefectoFacturas;
+    private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideCodigoPersonalizado;
     private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideDireccionEmpledo;
     private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRidePuntoEmisionEmpleado;
     private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideRazoSocialEmpledo;
+    private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideReferenciaDireccion;
     private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideRucEmpledo;
     private javax.swing.JComboBox<EnumSiNo> cmbDatosCompartidosEmpresas;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumentoDefectoVistaFactura;
@@ -931,6 +971,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1197,6 +1239,22 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbCreditoDefectoFacturas(JComboBox<EnumSiNo> cmbCreditoDefectoFacturas) {
         this.cmbCreditoDefectoFacturas = cmbCreditoDefectoFacturas;
+    }
+
+    public JComboBox<EnumSiNo> getCmbDatoAdicionalRideCodigoPersonalizado() {
+        return cmbDatoAdicionalRideCodigoPersonalizado;
+    }
+
+    public void setCmbDatoAdicionalRideCodigoPersonalizado(JComboBox<EnumSiNo> cmbDatoAdicionalRideCodigoPersonalizado) {
+        this.cmbDatoAdicionalRideCodigoPersonalizado = cmbDatoAdicionalRideCodigoPersonalizado;
+    }
+
+    public JComboBox<EnumSiNo> getCmbDatoAdicionalRideReferenciaDireccion() {
+        return cmbDatoAdicionalRideReferenciaDireccion;
+    }
+
+    public void setCmbDatoAdicionalRideReferenciaDireccion(JComboBox<EnumSiNo> cmbDatoAdicionalRideReferenciaDireccion) {
+        this.cmbDatoAdicionalRideReferenciaDireccion = cmbDatoAdicionalRideReferenciaDireccion;
     }
    
     

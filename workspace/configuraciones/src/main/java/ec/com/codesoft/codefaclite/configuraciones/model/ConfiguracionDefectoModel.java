@@ -212,6 +212,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRidePuntoEmisionEmpleado(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideRazoSocialEmpledo(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideRucEmpledo(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideReferenciaDireccion(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideCodigoPersonalizado(),EnumSiNo.values());
         
         
         //Cargar las opciones en las configuraciones
@@ -407,6 +409,14 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
             getCmbDatoAdicionalRidePuntoEmisionEmpleado().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            parametroDatoAdicionalRide= parametrosTodos.get(ParametroCodefac.FACTURACION_RIDE_REFERENCIA_DIRECCION);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
+            getCmbDatoAdicionalRideReferenciaDireccion().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
+            parametroDatoAdicionalRide= parametrosTodos.get(ParametroCodefac.FACTURACION_RIDE_CODIGO_PERSONALIZADO);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
+            getCmbDatoAdicionalRideCodigoPersonalizado().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             parametroDatoAdicionalRide= parametrosTodos.get(ParametroCodefac.FACTURACION_RIDE_RAZON_SOCIAL_EMPLEADO);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
             getCmbDatoAdicionalRideRazoSocialEmpledo().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
@@ -598,6 +608,14 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbDatoAdicionalRidePuntoEmisionEmpleado().getSelectedItem();
         agregarParametro(ParametroCodefac.FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO);
+        
+        enumSiNo = (EnumSiNo) getCmbDatoAdicionalRideReferenciaDireccion().getSelectedItem();
+        agregarParametro(ParametroCodefac.FACTURACION_RIDE_REFERENCIA_DIRECCION, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.FACTURACION_RIDE_REFERENCIA_DIRECCION);
+        
+        enumSiNo = (EnumSiNo) getCmbDatoAdicionalRideCodigoPersonalizado().getSelectedItem();
+        agregarParametro(ParametroCodefac.FACTURACION_RIDE_CODIGO_PERSONALIZADO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.FACTURACION_RIDE_CODIGO_PERSONALIZADO);
         
         enumSiNo = (EnumSiNo) getCmbDatoAdicionalRideRazoSocialEmpledo().getSelectedItem();
         agregarParametro(ParametroCodefac.FACTURACION_RIDE_RAZON_SOCIAL_EMPLEADO, (enumSiNo != null) ? enumSiNo.getLetra() : null);

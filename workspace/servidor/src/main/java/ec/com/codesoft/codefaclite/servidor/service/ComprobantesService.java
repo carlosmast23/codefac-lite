@@ -1963,9 +1963,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             {
                 ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Razón Social",empleado.getNombresCompletos());
                 comprobante.addDatoAdicional(comprobanteAdicional);
-            }
-            
-        
+            }        
         }
         
         if (ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO, EnumSiNo.SI)) {
@@ -1973,6 +1971,27 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             String puntosEmisionFormato = comprobante.getUsuario().formatoPuntoEmisionActivos();
             ComprobanteAdicional comprobanteAdicional = construirDatoAdicionalSinTransaccion(comprobante, "*Punto de Emisión", puntosEmisionFormato);
             comprobante.addDatoAdicional(comprobanteAdicional);
+        }
+        
+        //Datos adicionales solo para cuando el documento es una factura
+        if (comprobante.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA)) 
+        {
+            Factura factura = (Factura) comprobante;
+            if (ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.FACTURACION_RIDE_REFERENCIA_DIRECCION, EnumSiNo.SI)) {
+                String direccionReferencia = factura.getSucursal().getReferenciaDireccion();
+                if (direccionReferencia != null && !direccionReferencia.trim().isEmpty()) {
+                    ComprobanteAdicional comprobanteAdicional = construirDatoAdicionalSinTransaccion(comprobante, "*Referencia Dirección", direccionReferencia);
+                    comprobante.addDatoAdicional(comprobanteAdicional);
+                }
+            }
+
+            if (ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.FACTURACION_RIDE_CODIGO_PERSONALIZADO, EnumSiNo.SI)) {
+                String codigoPersonalizado = factura.getSucursal().getCodigoPersonalizado();
+                if (codigoPersonalizado != null && !codigoPersonalizado.trim().isEmpty()) {
+                    ComprobanteAdicional comprobanteAdicional = construirDatoAdicionalSinTransaccion(comprobante, "Código Personalizado", codigoPersonalizado);
+                    comprobante.addDatoAdicional(comprobanteAdicional);
+                }
+            }
         }
         
     }
