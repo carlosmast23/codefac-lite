@@ -11,7 +11,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -166,6 +168,49 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         
         return query.getResultList();
 
+    }
+    
+    public List<KardexDetalle> consultarMovimientosTransferenciaFacade(java.util.Date fechaInicial, java.util.Date fechaFinal) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        //KardexDetalle kd;
+        //kd.setCodigoTipoDocumento(usuarioDb);
+        //TipoDocumentoEnum.TRANSFERENCIA_MERCADERIA_ORIGEN;
+        //kd.getFechaIngreso()
+        //kd.getKardex().getEstado();
+        
+        String fechaInicialWhere="";
+        if(fechaInicial!=null)
+        {
+            fechaInicialWhere=" AND kd.kardex.fechaIngreso>=?2  ";
+        }
+        
+        String fechaFinalWhere="";
+        if(fechaFinal!=null)
+        {
+            fechaFinalWhere=" AND kd.kardex.fechaIngreso<=?3  ";
+        }
+        
+        
+        
+        String queryString=" SELECT kd FROM KardexDetalle kd WHERE kd.kardex.estado=?1 AND kd.codigoTipoDocumento=?4 "+fechaInicialWhere+fechaFinalWhere;
+        
+        Query query = getEntityManager().createQuery(queryString);
+        
+        query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
+        
+        query.setParameter(4,TipoDocumentoEnum.TRANSFERENCIA_MERCADERIA_ORIGEN.getCodigo());
+        
+        if(fechaInicial!=null)
+        {
+            query.setParameter(2,fechaInicial);
+        }
+        
+        if(fechaFinal!=null)
+        {
+            query.setParameter(3,fechaFinal);
+        }
+    
+        return query.getResultList();
     }
 
 }

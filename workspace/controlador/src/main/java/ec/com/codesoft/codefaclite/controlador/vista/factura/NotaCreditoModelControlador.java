@@ -60,7 +60,7 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
     {
         notaCredito.setFactura(factura);
         notaCredito.setNumDocModificado(factura.getPreimpreso());
-        setearDatosProveedor(factura.getCliente(),notaCredito);
+        setearDatosProveedor(factura.getCliente(),notaCredito); 
         cargarDatosNotaCredito(notaCredito);
         cargarDatosAdicionales(notaCredito);
         //cargarTablaDatosAdicionales();

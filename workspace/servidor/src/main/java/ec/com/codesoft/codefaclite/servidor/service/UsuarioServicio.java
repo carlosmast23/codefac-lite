@@ -219,9 +219,12 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     
     private Usuario verificarCredencialesUsuario(String nick,String clave,Empresa empresa)
     {
+        Usuario usaurio;
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("nick",nick);
         mapParametros.put("empresa",empresa);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        
         List<Usuario> usuarios=usuarioFacade.findByMap(mapParametros);
         
         if(usuarios.size()>0)

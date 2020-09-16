@@ -53,6 +53,7 @@ public enum VentanaEnum implements Serializable{
     ASOCIAR_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel", "ASOP", "Asociar Producto", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,null),
     BODEGA("ec.com.codesoft.codefaclite.inventario.model.BodegaModel", "BODG", "Bodega", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.GESTIONAR,null),
     CATEGORIA_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.CategoriaProductoModel", "CATG", "Categoria", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.GRATIS,null),
+    TRANSFERENCIAS_REPORTE("ec.com.codesoft.codefaclite.inventario.model.TransferenciaReporteModel", "TRRE", "Transferencias Reporte", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,null),
     INGRESO_INVENTARIO("ec.com.codesoft.codefaclite.inventario.model.IngresoInventarioModel", "ININ", "Ingreso Inventario", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,null),
     KARDEX("ec.com.codesoft.codefaclite.inventario.model.KardexModel", "KARD", "Kardex", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,null),
     INVENTARIO_ENSAMBLE("ec.com.codesoft.codefaclite.inventario.model.InventarioEnsambleModel", "INVE", "Inventario Ensamble", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,null),
@@ -135,6 +136,7 @@ public enum VentanaEnum implements Serializable{
     CAJA_PERMISO("ec.com.codesoft.codefaclite.pos.model.CajaPermisoModel", "CAPE", "Caja Permiso", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
     TURNO("ec.com.codesoft.codefaclite.pos.model.TurnoModel", "TURN", "Turno", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
     TURNO_ASIGNADO("ec.com.codesoft.codefaclite.pos.model.TurnoAsignadoModel", "TURA", "Turno Asignado", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null);
+    
 
     
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,Integer teclaAtajo) {

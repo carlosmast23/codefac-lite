@@ -109,7 +109,7 @@ import java.util.Arrays;
 @ManagedBean
 @ViewScoped
 public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,NotaCreditoModelInterface {
-    private static final String ID_COMPONENTE_MONITOR="monitor";       
+    private static final String ID_COMPONENTE_MONITOR="monitor";  
     
     private NotaCredito notaCredito;        
     
@@ -1024,6 +1024,19 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
 
     public void setFacturaSeleccionada(Factura facturaSeleccionada) {
         this.facturaSeleccionada = facturaSeleccionada;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    ///                        METODOS PERSONALIZADOS
+    ////////////////////////////////////////////////////////////////////////////
+    public void imprimirEjemplo()
+    {
+        System.out.println("Ejemplo imprimir ............. ");   
+        System.out.println(notaCredito);
+        System.out.println(notaCredito.getCliente().getRazonSocial());
+        System.out.println(notaCredito.getRazonSocial()); 
+        System.out.println(notaCredito.getDireccion());
+        
     }
     
     

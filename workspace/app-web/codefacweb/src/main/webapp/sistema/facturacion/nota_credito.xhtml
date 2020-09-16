@@ -11,31 +11,31 @@
         <ui:define name="opciones" >
 
         </ui:define>
+        
+        <ui:define name="vistaControlador" >
+            <f:event type="preRenderComponent" listener="#{controllerCodefacMb.agregarVista(notaCreditoMb)}" />                 
+        </ui:define>
 
         <ui:define name="contenido" >
-            <f:metadata>
-                <!--<f:viewParam name="tipo" value="#{notaCreditoMb.tipoPagina}"/>-->
-                <f:event type="preRenderComponent" listener="#{notaCreditoMb.verificarPagina()}"/>
-            </f:metadata>
 
             <p:panel>
                 <div class="p-grid div-resposive" >
                     <div class="p-col-12 p-md-12 p-lg-6 "  >
                         <p:outputLabel value="Motivo Anulación:" class="label-responsive"/>
-                        <p:inputText  value="#{notaCreditoMb.notaCredito.razonModificado}" class="componente-responsive"/>
+                        <p:inputText  value="#{notaCreditoMb.notaCredito.razonModificado}" class="componente-responsive"/>                        
                     </div>
                 </div>
             </p:panel>
 
-            <p:accordionPanel multiple="true">
+            <p:accordionPanel multiple="true" id="acordionPanelId">
                 <p:tab title="Datos Cabecera">
                     <div class="p-grid div-resposive"  >
                         <div class="p-col-12 p-md-6 p-lg-3" >
                             <p:outputLabel value="Seleccione la Factura:" class="label-responsive"/>
                             <p:inputText id="txtFactura" placeholder="Factura" value="#{notaCreditoMb.facturaSeleccionada.secuencial}" class="componente-responsive" />                    
                             <p:commandButton process="@this" icon="fa fa-search"  action="#{notaCreditoMb.abrirDialogoBuscarFactura}">
-                                <p:ajax event="dialogReturn" listener="#{notaCreditoMb.seleccionarFactura}" update="txtFactura,datosCliente,formulario:tabDatosFactura:tblDatosAdicional,:formulario:tblProductoDetalles,"  />
-                            </p:commandButton>  
+                                <p:ajax event="dialogReturn" listener="#{notaCreditoMb.seleccionarFactura}" update="formulario:acordionPanelId:datosCliente,txtFactura,formulario:tabDatosFactura:tblDatosAdicional,:formulario:tblProductoDetalles,"  />
+                            </p:commandButton>                              
                         </div>
 
                         <div class="p-col-12 p-md-6 p-lg-3" >
@@ -85,7 +85,7 @@
             </p:accordionPanel>
 
 
-            <f:event listener="#{controllerCodefacMb.agregarVista(notaCreditoMb)}" type="preRenderView" />
+            <!--<f:event listener="#{controllerCodefacMb.agregarVista(notaCreditoMb)}" type="preRenderView" />-->
             <p:remoteCommand name="updateDataTable" update=":formulario:tblProductoDetalles"/>
 
 

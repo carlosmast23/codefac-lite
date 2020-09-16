@@ -218,6 +218,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     PrestamoService prestamoService=new PrestamoService();
                     prestamoService.grabarSinTransaccion(prestamo, factura);
                 }
+                
                 //Despues de grabar genero inmediatamente un flush para evitar perder la transacción por causas como perdida de energia
                 entityManager.flush();
             }
@@ -370,7 +371,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     break;
 
             }
-
+            
+            //Hacer persistir los detalles porque sucedio un caso que por algun motivo no se grabaron
+            entityManager.flush();
+            detalle.setFactura(factura); //Hago este seteo por que si viene de una referencia anterior como una proforma puede generar errores
+            entityManager.merge(detalle);
+            
         }
 
             

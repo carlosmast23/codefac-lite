@@ -42,8 +42,11 @@ public class LoginRespuesta implements Serializable{
     public String obtenerAlertasConFormato()
     {
         String mensaje="";
-        for (String alerta : alertas) {
-            mensaje="- "+alerta+"\n";
+        if(alertas!=null)
+        {
+            for (String alerta : alertas) {
+                mensaje="- "+alerta+"\n";
+            }
         }
         //String nl = System.getProperty("line.separator");
 

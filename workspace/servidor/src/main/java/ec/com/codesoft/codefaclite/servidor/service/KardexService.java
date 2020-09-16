@@ -432,9 +432,19 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                         TipoDocumentoEnum.TRANSFERENCIA_MERCADERIA_DESTINO, 
                         precio, 
                         cantidad);
-                
+                                
                 entityManager.persist(kardexDetalleOrigen);
                 entityManager.persist(kardexDetalleDestino);
+                
+                //Ejecuto la actualizacion para saber los id de los otro documento
+                entityManager.flush();
+                
+                kardexDetalleOrigen.setReferenciaDocumentoId(kardexDetalleDestino.getId());
+                kardexDetalleDestino.setReferenciaDocumentoId(kardexDetalleOrigen.getId());
+                
+                //actualizar los nuevos valores de la referencias de las transferencias
+                entityManager.merge(kardexDetalleOrigen);
+                entityManager.merge(kardexDetalleDestino);
                 
                 kardexOrigen.addDetalleKardex(kardexDetalleOrigen);
                 kardexDestino.addDetalleKardex(kardexDetalleDestino);                
@@ -536,6 +546,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         movimientoOrigen.setCodigoTipoDocumentoEnum(tipoDocumentoEnum);
         movimientoOrigen.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         movimientoOrigen.setFechaIngreso(UtilidadesFecha.getFechaHoy());
+        movimientoOrigen.setFechaDocumento(UtilidadesFecha.getFechaHoy());
+        
         movimientoOrigen.setKardex(kardex);
         //movimientoOrigen.setNombreLegal("");
         movimientoOrigen.setPrecioTotal(total);
@@ -992,6 +1004,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         //kardexNuevo.se
         return kardexNuevo;
     }
+    
+    public void consultarMovimientosTransferencia(java.util.Date fechaInicial, java.util.Date fechaFinal) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        //KardexDetalle kd;
+        //kd.setCodigoTipoDocumentoEnum(TipoDocumentoEnum.transfe);
+    }   
             
 }
 
