@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.inventario.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.DateComboBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import org.jdesktop.swingx.JXDatePicker;
@@ -170,6 +171,7 @@ public abstract class TransferenciasReportePanel extends ControladorCodefacInter
         this.cmbFechaInicial = cmbFechaInicial;
     }
 
+    @ComboBoxBinding(source = "bodegaOrigenList", valueSelect = "bodegaSeleccionada" )
     public JComboBox<String> getCmbTipoReporte() {
         return cmbTipoReporte;
     }

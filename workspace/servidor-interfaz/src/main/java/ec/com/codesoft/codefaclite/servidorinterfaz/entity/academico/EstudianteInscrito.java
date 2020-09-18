@@ -109,7 +109,7 @@ public class EstudianteInscrito implements Serializable{
 
     @Override
     public String toString() {
-        return estudiante.getNombres()+" "+estudiante.getApellidos();
+        return estudiante.getApellidos()+" "+estudiante.getNombres();
     }
     
     

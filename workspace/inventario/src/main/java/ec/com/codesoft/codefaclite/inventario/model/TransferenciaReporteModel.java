@@ -9,10 +9,15 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.inventario.panel.TransferenciasReportePanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,10 +27,24 @@ public class TransferenciaReporteModel extends TransferenciasReportePanel{
     
     private java.util.Date fechaInicial;
     private java.util.Date fechaFinal;
+    private List<Bodega> bodegaOrigenList;
+    private Bodega bodegaSeleccionada;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+    }
+    
+    private void datosIniciales()
+    {
+        try {
+            bodegaOrigenList = ServiceFactory.getFactory().getBodegaServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(TransferenciaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(TransferenciaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -90,6 +109,7 @@ public class TransferenciaReporteModel extends TransferenciasReportePanel{
     
     public void btnListenerConsulta()
     {
+        //ServiceFactory.getFactory().getBodegaServiceIf().grabar("");
         //ServiceFactory.getFactory().getKardexServiceIf().consultarStock(null,null);
     }
     
@@ -112,7 +132,22 @@ public class TransferenciaReporteModel extends TransferenciasReportePanel{
     public void setFechaFinal(Date fechaFinal) {
         this.fechaFinal = fechaFinal;
     }
-    
+
+    public List<Bodega> getBodegaOrigenList() {
+        return bodegaOrigenList;
+    }
+
+    public void setBodegaOrigenList(List<Bodega> bodegaOrigenList) {
+        this.bodegaOrigenList = bodegaOrigenList;
+    }
+
+    public Bodega getBodegaSeleccionada() {
+        return bodegaSeleccionada;
+    }
+
+    public void setBodegaSeleccionada(Bodega bodegaSeleccionada) {
+        this.bodegaSeleccionada = bodegaSeleccionada;
+    }
     
     
 }

@@ -234,7 +234,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             //Map<String,Object> mapParametros=new HashMap<String,Object>();
             //mapParametros.put("producto", producto);
             KardexService kardexService=new KardexService();
-            Kardex kardexProducto=kardexService.buscarKardexPorProductoyBodega(bodega, producto);
+            //Kardex kardexProducto=kardexService.buscarKardexPorProductoyBodega(bodega, producto);
+            Kardex kardexProducto=ServiceFactory.getFactory().getKardexServiceIf().consultarOCrearStockSinPersistencia(producto, bodega);
             //List<Kardex> kardexs= kardexService.getFacade().findByMap(mapParametros);
             //TODO: Definir especificamente cual es la bodega principal
             //if(kardexProducto!=null && kardexProducto.size()>0)
@@ -266,6 +267,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             //}
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         }
     
     }

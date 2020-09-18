@@ -32,6 +32,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -270,7 +271,8 @@ public class MatriculaModel extends MatriculaPanel {
         
         DefaultTableModel tablaModelo=(DefaultTableModel) getTblAlumnosConMatricula().getModel();
         
-        for (int i = 0; i < tablaModelo.getRowCount(); i++) {
+        for (int i = 0; i < tablaModelo.getRowCount(); i++) 
+        {
             Boolean seleccion=(Boolean) tablaModelo.getValueAt(i,0);
             
             //Agregar solo datos que estan seleccionados
@@ -422,10 +424,25 @@ public class MatriculaModel extends MatriculaPanel {
         }
     }
     
+   public static Comparator<EstudianteInscrito> comparadorOrdenarAlfabeticamente=new Comparator<EstudianteInscrito>() {
+        @Override
+        public int compare(EstudianteInscrito o1, EstudianteInscrito o2) {
+            int comparacion=o1.getEstudiante().getApellidos().compareTo(o2.getEstudiante().getApellidos());
+            
+            //Si la comparacion es igual a 0 significa que los apellidos son iguales y me toca comparar por otro argumento
+            if(comparacion==0)
+            {
+                comparacion=o1.getEstudiante().getNombres().compareTo(o2.getEstudiante().getNombres());
+            }
+            
+            return comparacion;
+        }
+    };
+    
     private void ingresarEstudianteMapMatricula(NivelAcademico nivelAcademico,EstudianteInscrito estudianteInscrito)
     {
         List<EstudianteInscrito> estudiantesInscritos = estudiantesInscritosMap.get(nivelAcademico);
-
+        
         if (estudiantesInscritos == null) {
             estudiantesInscritos = new ArrayList<EstudianteInscrito>();
             estudiantesInscritos.add(estudianteInscrito);
@@ -433,6 +450,7 @@ public class MatriculaModel extends MatriculaPanel {
         } else {
             estudiantesInscritos.add(estudianteInscrito);
         }
+        
     }
     /**
      * Metodo que se encarga de verificar si existe el estudiante inscrito en el map
@@ -638,10 +656,11 @@ public class MatriculaModel extends MatriculaPanel {
         DefaultTableModel modeloTabla= UtilidadesTablas.crearModeloTabla(titulos,new Class[]{Boolean.class,EstudianteInscrito.class});
         
         List<EstudianteInscrito> estudiantesInscritosNivel=estudiantesInscritosMap.get(nivelAcademico);
-        
+                
         //Agregando los estudiantes que ya estan matriculados
         if(estudiantesInscritosNivel!=null)
         {
+            UtilidadesLista.ordenarLista(estudiantesInscritosNivel,comparadorOrdenarAlfabeticamente);
             for (EstudianteInscrito estudianteInscrito : estudiantesInscritosNivel) {
                 
                 //Solo agrego si no esta en la lista para eliminar
