@@ -5,11 +5,17 @@
  */
 package ec.com.codesoft.codefaclite.inventario.data;
 
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class TransferenciaReporteData {
+public class TransferenciaReporteData implements ExcelDatosInterface{
     private String producto;
     private String bodegaDestino;
     private String bodegaOrigen;
@@ -82,6 +88,21 @@ public class TransferenciaReporteData {
 
     public void setTipoTransaccion(String tipoTransaccion) {
         this.tipoTransaccion = tipoTransaccion;
+    }
+
+    @Override
+    public List<TipoDato> getDatos() {
+        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
+        
+        tiposDatos.add(new TipoDato(this.producto,Excel.TipoDataEnum.TEXTO));        
+        tiposDatos.add(new TipoDato(this.tipoTransaccion, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.bodegaDestino,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.bodegaOrigen, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.empresa, Excel.TipoDataEnum.TEXTO));        
+        tiposDatos.add(new TipoDato(this.fechaIngreso,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.cantidad,Excel.TipoDataEnum.NUMERO));
+        
+        return tiposDatos;
     }
     
     

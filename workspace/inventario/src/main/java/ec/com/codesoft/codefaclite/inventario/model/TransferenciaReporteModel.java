@@ -7,6 +7,9 @@ package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBindingAddData;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -91,7 +94,31 @@ public class TransferenciaReporteModel extends TransferenciasReportePanel{
         InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream("transferenciaReporte.jrxml");
         Map parameters = new HashMap();
         
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, datosReporte, panelPadre, "Transferencia de Inventarios");
+        DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try{
+                        Excel excel = new Excel();
+                        String nombreCabeceras[] = (String[]) obtenerCabeceraDatos().toArray(new String[0]);
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, datosReporte);
+                        excel.abrirDocumento();
+                    }
+                    catch(Exception exc)
+                    {
+                        exc.printStackTrace();
+                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }  
+                }
+
+                @Override
+                public void pdf() {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, datosReporte, panelPadre,"Transferencia de Bodegas");
+                    dispose();
+                    setVisible(false);
+                }
+            });
+        
+        //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, datosReporte, panelPadre, "Transferencia de Inventarios");
         
     }
 
@@ -137,10 +164,30 @@ public class TransferenciaReporteModel extends TransferenciasReportePanel{
         return permisos;
     }
     
-        public void crearModeloTabla()
+    public List<String> obtenerCabeceraDatos()
+    {
+
+        return new ArrayList<String>()
+        {
+            {
+                add("Producto");
+                add("Tipo");
+                add("Bodega Origen");
+                add("Bodega Destino");
+                add("Empresa");
+                add("Fecha");
+                add("Cantidad");
+                
+            }
+        };
+    }
+    
+    public void crearModeloTabla()
     {   
-        String titulo[]=new String[]{"Objeto","Producto","Bodega Destino","Fecha ingreso","Cantidad","Empresa"};
-        DefaultTableModel modelo=UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class,Object.class,Object.class,Object.class,Object.class,Object.class});
+        List<String> cabecera=obtenerCabeceraDatos();
+        cabecera.add(0,"");
+        String titulo[]=(String[]) cabecera.toArray(new String[0]);
+        DefaultTableModel modelo=UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class,Object.class,Object.class,Object.class,Object.class,Object.class,Object.class,Object.class});
         getTblDatos().setModel(modelo);
         UtilidadesTablas.definirTamanioColumnas(getTblDatos(),new Integer[]{0});
     }
@@ -153,10 +200,12 @@ public class TransferenciaReporteModel extends TransferenciasReportePanel{
                 return new Object[]{
                     value,
                     value.getProducto(),
+                    value.getTipoTransaccion(),
+                    value.getBodegaOrigen(),
                     value.getBodegaDestino(),
+                    value.getEmpresa(),
                     value.getFechaIngreso(),
-                    value.getCantidad(),
-                    value.getEmpresa()
+                    value.getCantidad(),                    
                 };
             }
 
