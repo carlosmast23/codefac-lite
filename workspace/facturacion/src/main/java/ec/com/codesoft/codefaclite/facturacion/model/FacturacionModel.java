@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControl
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadReportes;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
@@ -169,11 +170,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
+import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
@@ -1192,6 +1196,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         try {
             //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
             validacionesGrabar();
+            PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
             
             Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Esta seguro que desea facturar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (!respuesta) {
@@ -1214,7 +1219,45 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         getChkHabilitarCredito().isSelected(), 
                         (Integer) getTxtDiasCredito().getValue());
                 
-                factura=servicio.grabar(factura,crearDatosPrestamo(),carteraParametro);
+                
+                if(puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
+                {
+                    //List<FacturaParametro> facturasProcesar=new ArrayList<FacturaParametro>();
+                    ///facturasProcesar.add(new FacturaParametro(factura, carteraParametro, prestamo));
+                           
+                    List<FacturaParametro> facturasProcesar =obtenerFacturasManualesProcesar(factura);
+                    FacturaLoteRespuesta respuestaManual=ServiceFactory.getFactory().getFacturacionServiceIf().grabarLote(facturasProcesar);
+                    //Imprmir facturas manuales cuando son más de 1 factura o continua con el proceso normal
+                    if(facturasProcesar.size()==1)
+                    {
+                        factura=respuestaManual.procesadosList.get(0);
+                    }
+                    else if(facturasProcesar.size()>1)
+                    {
+                        if(respuestaManual.procesadosList.size()==0)
+                        {
+                            String mensaje=UtilidadesLista.castListToString(respuestaManual.noProcesadosList,"\br");
+                            DialogoCodefac.mensaje("Error ","No se puede grabar: \nCausa: "+mensaje, DialogoCodefac.MENSAJE_INCORRECTO);            
+                            throw new ExcepcionCodefacLite("Error al grabar: "+mensaje);
+                        }
+                        
+                        List<JasperPrint> reportesPendientes=new ArrayList<JasperPrint>();
+                        for (Factura facturaProcesada : respuestaManual.procesadosList) 
+                        {
+                           DocumentoEnum documentoEnum=factura.getCodigoDocumentoEnum();
+                           JasperPrint jasperPrint=facturaManual(facturaProcesada, documentoEnum, true,true);
+                           reportesPendientes.add(jasperPrint);
+                           //facturaManual(facturaProcesada,documentoEnum,true);
+                        }
+                        UtilidadReportes.visualizarReporteVentanaExterna(UtilidadReportes.unificarReportes(reportesPendientes));
+                        return;
+                    }
+                    
+                }
+                else                
+                {
+                    factura=servicio.grabar(factura,crearDatosPrestamo(),carteraParametro);
+                }
             }
             
             facturaProcesando = factura;
@@ -1233,14 +1276,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
             else
             {
-                PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
+                
                 if((documentoEnum.equals(DocumentoEnum.LIQUIDACION_COMPRA) || documentoEnum.equals(DocumentoEnum.FACTURA)) && puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {
                     facturarElectricamente(facturaProcesando);
                 }
                 else if(puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
                 {
-                    facturaManual(documentoEnum,true);
+                    facturaManual(factura,documentoEnum,true,false);
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 }
                 
@@ -1259,6 +1302,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
+    }
+    
+    private List<FacturaParametro> obtenerFacturasManualesProcesar(Factura factura)
+    {
+        List<FacturaParametro> respuestaList=new ArrayList<FacturaParametro>();
+        
+        String numeroDetallesTxt=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.NUMERO_MAXIMO_DETALLES_FACTURA);
+        if(numeroDetallesTxt!=null)
+        {
+            Integer numeroMaxDetalleFactura=Integer.parseInt(numeroDetallesTxt);
+            List<Factura> facturasDividas=factura.dividirFactura(numeroMaxDetalleFactura);
+            for (Factura facturaTmp : facturasDividas) 
+            {
+                respuestaList.add(new FacturaParametro(facturaTmp,null, crearDatosPrestamo()));
+            }        
+        }    
+        return respuestaList;
     }
     
     private Prestamo crearDatosPrestamo()
@@ -1334,7 +1394,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //imprimirComprobanteVenta(factura);
     }
     
-    private void facturaManual(DocumentoEnum documentoEnum,Boolean activarConfiguracionesImpresion) throws ServicioCodefacException
+    private JasperPrint facturaManual(Factura factura,DocumentoEnum documentoEnum,Boolean activarConfiguracionesImpresion,Boolean getJasperPrint) throws ServicioCodefacException
     {
         try 
         {
@@ -1362,7 +1422,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             InputStream reporteNuevo = manager.generarNuevoDocumento();
             
-            Map<String, Object> parametros = getParametroReporte(documentoEnum);
+            Map<String, Object> parametros = getParametroReporte(factura,documentoEnum);
             
             //Llenar los datos de los detalles
             List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
@@ -1384,6 +1444,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 configuracion = obtenerConfiguracionImpresora();
             }
             
+            //TODO: Cambio temporal para la Julieta
+            if(getJasperPrint.booleanValue())
+            {
+                return ReporteCodefac.generarReporteInternalFrameJasperPrint(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa",configuracion);
+            }            
             ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa",configuracion);
             
         } catch (RemoteException ex) {
@@ -1392,12 +1457,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             throw  ex; //Relanza el error al proceso principal
             
         }
+        return null;
     
     }
     
     
     
-    public Map<String, Object> getParametroReporte(DocumentoEnum documento)
+    public Map<String, Object> getParametroReporte(Factura factura,DocumentoEnum documento)
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("fechaEmision", factura.getFechaEmision().toString());
@@ -1596,7 +1662,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                      * Imprimir facturas manuales
                      */
                     try {
-                        facturaManual(factura.getCodigoDocumentoEnum(),false);
+                        facturaManual(factura,factura.getCodigoDocumentoEnum(),false,false);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }

@@ -173,6 +173,11 @@ public class ParametroCodefac implements Serializable {
      * Activar credito por defecto para la pantalla de ventas para saber si tiene que ir las ventas a cartera o no
      */
     public static final String CREDITO_DEFECTO_VENTAS="credito_defecto_venta";
+    
+    /**
+     * Permite establecer cual es el limite de items en el detalle cuando se hace facturación manual
+     */
+    public static final String NUMERO_MAXIMO_DETALLES_FACTURA="numero_max_det_factura";
 
     @Id
     @Column(name = "ID")

@@ -168,6 +168,24 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
         return bodegas;
     }
     
+    public List<Bodega> obtenerTodosActivos() throws ServicioCodefacException,RemoteException
+    {        
+        List<Bodega> bodegas=(List<Bodega>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                Bodega bodega=new Bodega();
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+               
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                List<Bodega> resultadoConsulta=getFacade().findByMap(mapParametros);
+                
+                return resultadoConsulta;
+                
+            }
+        });
+        return bodegas;
+    }
+    
     public List<Bodega> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException,RemoteException
     {        
         List<Bodega> bodegas=(List<Bodega>) ejecutarConsulta(new MetodoInterfaceConsulta() {

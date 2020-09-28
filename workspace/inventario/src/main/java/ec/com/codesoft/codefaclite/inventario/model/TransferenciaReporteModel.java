@@ -5,19 +5,32 @@
  */
 package ec.com.codesoft.codefaclite.inventario.model;
 
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBindingAddData;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.inventario.data.TransferenciaReporteData;
 import ec.com.codesoft.codefaclite.inventario.panel.TransferenciasReportePanel;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RutaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TransferenciaBodegaRespuesta;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -27,18 +40,24 @@ public class TransferenciaReporteModel extends TransferenciasReportePanel{
     
     private java.util.Date fechaInicial;
     private java.util.Date fechaFinal;
-    private List<Bodega> bodegaOrigenList;
-    private Bodega bodegaSeleccionada;
+    private List<Bodega> bodegaDestinoList;
+        
+    private Bodega bodegaDestinoSeleccionado;
+    
+    private List<TransferenciaReporteData> datosReporte;
+    private TransferenciaReporteData datoSeleccionado;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        
+        crearModeloTabla();
+        datosIniciales();
     }
     
     private void datosIniciales()
     {
         try {
-            bodegaOrigenList = ServiceFactory.getFactory().getBodegaServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+            bodegaDestinoList = ServiceFactory.getFactory().getBodegaServiceIf().obtenerTodosActivos();
+            //bodegaDestinoList.add(0,null);
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(TransferenciaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -69,7 +88,11 @@ public class TransferenciaReporteModel extends TransferenciasReportePanel{
 
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream("transferenciaReporte.jrxml");
+        Map parameters = new HashMap();
+        
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, datosReporte, panelPadre, "Transferencia de Inventarios");
+        
     }
 
     @Override
@@ -104,13 +127,96 @@ public class TransferenciaReporteModel extends TransferenciasReportePanel{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, false);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
+    
+        public void crearModeloTabla()
+    {   
+        String titulo[]=new String[]{"Objeto","Producto","Bodega Destino","Fecha ingreso","Cantidad","Empresa"};
+        DefaultTableModel modelo=UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class,Object.class,Object.class,Object.class,Object.class,Object.class});
+        getTblDatos().setModel(modelo);
+        UtilidadesTablas.definirTamanioColumnas(getTblDatos(),new Integer[]{0});
+    }
+    
+    public ITableBindingAddData getTableBindingAddData()
+    {
+        return new ITableBindingAddData<TransferenciaReporteData>() {
+            @Override
+            public Object[] addData(TransferenciaReporteData value) {
+                return new Object[]{
+                    value,
+                    value.getProducto(),
+                    value.getBodegaDestino(),
+                    value.getFechaIngreso(),
+                    value.getCantidad(),
+                    value.getEmpresa()
+                };
+            }
+
+            @Override
+            public void setData(TransferenciaReporteData objetoOriginal, Object objetoModificado, Integer columnaModificada) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+    };
     
     public void btnListenerConsulta()
     {
-        //ServiceFactory.getFactory().getBodegaServiceIf().grabar("");
-        //ServiceFactory.getFactory().getKardexServiceIf().consultarStock(null,null);
+        try {
+            System.out.println("Boton consultar ...");
+            //ServiceFactory.getFactory().getBodegaServiceIf().obtenerUnicaBodegaPorSucursal
+            List<TransferenciaBodegaRespuesta> respuestaList=ServiceFactory.getFactory().getKardexServiceIf().consultarMovimientosTransferencia(fechaInicial,fechaFinal,bodegaDestinoSeleccionado);
+            cargarDatosModelReporte(respuestaList);
+            
+            //ServiceFactory.getFactory().getBodegaServiceIf().grabar("");
+            //ServiceFactory.getFactory().getKardexServiceIf().consultarStock(null,null);
+        } catch (RemoteException ex) {
+            Logger.getLogger(TransferenciaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(TransferenciaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void cargarDatosModelReporte(List<TransferenciaBodegaRespuesta> respuestaList)
+    {
+        datosReporte=new ArrayList<TransferenciaReporteData>();
+        
+        for (TransferenciaBodegaRespuesta respuesta : respuestaList) 
+        {
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+            
+            String bodegaDestino="Sin referencia";
+            String empresaNombre="";
+            
+            
+            if(respuesta.kardexDetalleBodegaDestinoTransferencia!=null)
+            {
+                bodegaDestino=respuesta.kardexDetalleBodegaDestinoTransferencia.getKardex().getBodega().getNombre();
+                empresaNombre=respuesta.kardexDetalleBodegaDestinoTransferencia.getKardex().getBodega().getEmpresa().getNombreLegal();
+            }
+            
+            TransferenciaReporteData reportData=new TransferenciaReporteData(
+                    respuesta.kardexDetalle.getKardex().getProducto().getNombre(),                     
+                    bodegaDestino, 
+                    respuesta.kardexDetalle.getKardex().getBodega().getNombre(),
+                    simpleDateFormat.format(respuesta.kardexDetalle.getFechaIngreso()), 
+                    respuesta.kardexDetalle.getCantidad()+"", 
+                    empresaNombre,
+                    respuesta.kardexDetalle.getCodigoTipoDocumentoEnum().getNombre()
+            );  
+            
+            datosReporte.add(reportData);
+            
+        }
+        
+        
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -133,21 +239,39 @@ public class TransferenciaReporteModel extends TransferenciasReportePanel{
         this.fechaFinal = fechaFinal;
     }
 
-    public List<Bodega> getBodegaOrigenList() {
-        return bodegaOrigenList;
+    public List<Bodega> getBodegaDestinoList() {
+        return bodegaDestinoList;
     }
 
-    public void setBodegaOrigenList(List<Bodega> bodegaOrigenList) {
-        this.bodegaOrigenList = bodegaOrigenList;
+    public void setBodegaDestinoList(List<Bodega> bodegaDestinoList) {
+        this.bodegaDestinoList = bodegaDestinoList;
     }
 
-    public Bodega getBodegaSeleccionada() {
-        return bodegaSeleccionada;
+    public Bodega getBodegaDestinoSeleccionado() {
+        return bodegaDestinoSeleccionado;
     }
 
-    public void setBodegaSeleccionada(Bodega bodegaSeleccionada) {
-        this.bodegaSeleccionada = bodegaSeleccionada;
+    public void setBodegaDestinoSeleccionado(Bodega bodegaDestinoSeleccionado) {
+        this.bodegaDestinoSeleccionado = bodegaDestinoSeleccionado;
     }
+    
+
+    public List<TransferenciaReporteData> getDatosReporte() {
+        return datosReporte;
+    }
+
+    public void setDatosReporte(List<TransferenciaReporteData> datosReporte) {
+        this.datosReporte = datosReporte;
+    }
+
+    public TransferenciaReporteData getDatoSeleccionado() {
+        return datoSeleccionado;
+    }
+
+    public void setDatoSeleccionado(TransferenciaReporteData datoSeleccionado) {
+        this.datoSeleccionado = datoSeleccionado;
+    }
+    
     
     
 }

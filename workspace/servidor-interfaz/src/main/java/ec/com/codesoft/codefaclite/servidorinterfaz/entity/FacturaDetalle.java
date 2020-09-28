@@ -28,7 +28,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FACTURA_DETALLE")
-public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract{
+public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements Cloneable{
 
     @Id
     @Column(name = "ID")
@@ -80,8 +80,10 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract{
         this.precioSinSubsidio = precioSinSubsidio;
     }
 
-   
-    
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
 
 
     @Override

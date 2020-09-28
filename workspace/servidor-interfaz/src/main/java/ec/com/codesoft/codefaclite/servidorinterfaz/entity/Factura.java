@@ -21,6 +21,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -642,5 +644,71 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         return super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
             
+    /**
+     * Metodo que me prmite obtener facturas dividas especialmente util en la facturación manual cuando necesito
+     * facturar una cantidad más grande de detalles que la que permite la hoja fisica
+     * @param limiteDetalle
+     * @return 
+     */
+    public List<Factura> dividirFactura(int limiteDetalle)
+    {
+        List<Factura> nuevasFacturasDivididas=new ArrayList<Factura>();
+        for (int i = 0; i < this.detalles.size(); i=i+limiteDetalle) 
+        {
+            Factura nuevaFactura=nuevaFacturaConLimite(i,i+limiteDetalle);
+            nuevasFacturasDivididas.add(nuevaFactura);
+        }
+        return nuevasFacturasDivididas;
+    }
+    
+    public Factura nuevaFacturaConLimite(int limiteInicia, int limiteFinal)
+    {
+        if(limiteFinal>detalles.size())
+        {
+            limiteFinal=detalles.size();
+        }
+        
+        Factura facturaNueva=null;
+        try {
+            facturaNueva=(Factura) clone();
+            facturaNueva.setCliente(null);
+            facturaNueva.setCliente(getCliente());
+            
+            facturaNueva.detalles=new ArrayList<>();
+                        
+            List<FacturaDetalle> detallesTmp=new ArrayList<FacturaDetalle>(detalles.subList(limiteInicia,limiteFinal));
+            //List<FacturaDetalle> detallesNuevos=new ArrayList<FacturaDetalle>();
+            
+            for (FacturaDetalle detalleTmp : detallesTmp) {
+                //detalleTmp.setFactura(facturaNueva);
+                facturaNueva.addDetalle(detalleTmp);
+            }
+            
+            ///////////////////////////////////////////////////
+            facturaNueva.datosAdicionales=new ArrayList<>();
+            
+            /*List<FacturaAdicional> facturaAdicionalListTmp=new ArrayList<FacturaAdicional>(datosAdicionales);
+            
+            for (FacturaAdicional detalleTmp : facturaAdicionalListTmp) {
+                //detalleTmp.setFactura(facturaNueva);
+                facturaNueva.addDatoAdicional(detalleTmp);
+            }*/
+                        
+            //////////////////////////////////////////////////
+            facturaNueva.formaPagos=new ArrayList<>();
+            
+            /*List<FormaPago> formaPagoTmpList =new ArrayList<FormaPago>(formaPagos);
+            
+            for (FormaPago detalleTmp : formaPagoTmpList) {
+                //detalleTmp.setFactura(facturaNueva);
+                facturaNueva.addFormaPago(detalleTmp);
+            }*/
+            facturaNueva.calcularTotalesDesdeDetalles();
+            
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Factura.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return facturaNueva;
+    }
     
 }

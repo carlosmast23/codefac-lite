@@ -337,6 +337,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroMotivoGuiaRemisions = parametrosTodos.get(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION);
             String motivoGuiaRemision = (parametroMotivoGuiaRemisions != null) ? parametroMotivoGuiaRemisions.getValor() : "";
             getTxtMotivoTrasladoGuiaRemision().setText(motivoGuiaRemision);
+            
+            ParametroCodefac parametroNumMaxDetalleFactura = parametrosTodos.get(ParametroCodefac.NUMERO_MAXIMO_DETALLES_FACTURA);
+            String numMaxDetalleFactura = (parametroNumMaxDetalleFactura != null) ? parametroNumMaxDetalleFactura.getValor() : "0";
+            getTxtNumeroMaximoDetalleFactura().setText(numMaxDetalleFactura);
+            
                        
             //==========> CARGAR VALOR DE LAS RETENCIONES
             ParametroCodefac parametro = parametrosTodos.get(ParametroCodefac.VALOR_DEFECTO_RETENCION_IVA);
@@ -569,6 +574,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
 
         agregarParametro(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION, getTxtMotivoTrasladoGuiaRemision().getText());
         agregarParametroEditar(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION);
+        
+        agregarParametro(ParametroCodefac.NUMERO_MAXIMO_DETALLES_FACTURA, getTxtNumeroMaximoDetalleFactura().getText());
+        agregarParametroEditar(ParametroCodefac.NUMERO_MAXIMO_DETALLES_FACTURA);        
         
         SriRetencionIva sriRetencionIva=(SriRetencionIva) getCmbRetencionIva().getSelectedItem();
         agregarParametro(ParametroCodefac.VALOR_DEFECTO_RETENCION_IVA,(sriRetencionIva!=null)?sriRetencionIva.getId().toString():"");

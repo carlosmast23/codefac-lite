@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TransferenciaBodegaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.ObtenerFecha;
@@ -439,6 +440,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 //Ejecuto la actualizacion para saber los id de los otro documento
                 entityManager.flush();
                 
+                //Enlazar las referencias de los kardex
                 kardexDetalleOrigen.setReferenciaDocumentoId(kardexDetalleDestino.getId());
                 kardexDetalleDestino.setReferenciaDocumentoId(kardexDetalleOrigen.getId());
                 
@@ -1005,10 +1007,48 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return kardexNuevo;
     }
     
-    public void consultarMovimientosTransferencia(java.util.Date fechaInicial, java.util.Date fechaFinal) throws java.rmi.RemoteException,ServicioCodefacException
+    /**
+     * Otimizar metodo para hacer una consulta filtrando las bodegas de destino 
+     * @param fechaInicial
+     * @param fechaFinal
+     * @param bodegaDestino
+     * @return
+     * @throws java.rmi.RemoteException
+     * @throws ServicioCodefacException 
+     */
+    public List<TransferenciaBodegaRespuesta> consultarMovimientosTransferencia(java.util.Date fechaInicial, java.util.Date fechaFinal,Bodega bodegaDestino) throws java.rmi.RemoteException,ServicioCodefacException
     {
+        List<KardexDetalle> kardexDetalleList=getFacade().consultarMovimientosTransferenciaFacade(fechaInicial, fechaFinal);
+        
+        List<TransferenciaBodegaRespuesta> resultado=new ArrayList<TransferenciaBodegaRespuesta>();
+        
+        
+        for (KardexDetalle kardexDetalle : kardexDetalleList) 
+        {
+            KardexDetalle kardexDetalleDestino=null;
+            if(kardexDetalle.getReferenciaDocumentoId()!=null)
+            {
+                KardexDetalleService kardexDetalleService=new KardexDetalleService();
+                kardexDetalleDestino=kardexDetalleService.buscarPorId(kardexDetalle.getReferenciaDocumentoId());
+            }
+            
+            //Si existe un filtro de bodega destino primero la comparo o si no lo agrego directo
+            if(bodegaDestino!=null)
+            {
+                if(kardexDetalleDestino.getKardex()!=null && kardexDetalleDestino.getKardex().getBodega().equals(bodegaDestino))
+                {
+                    resultado.add(new TransferenciaBodegaRespuesta(kardexDetalle, kardexDetalleDestino));                
+                }
+            }
+            else
+            {
+                resultado.add(new TransferenciaBodegaRespuesta(kardexDetalle, kardexDetalleDestino));                
+            }
+        }
+        
         //KardexDetalle kd;
         //kd.setCodigoTipoDocumentoEnum(TipoDocumentoEnum.transfe);
+        return resultado;
     }   
             
 }

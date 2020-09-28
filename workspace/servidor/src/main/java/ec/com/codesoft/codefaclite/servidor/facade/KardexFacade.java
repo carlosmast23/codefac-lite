@@ -173,6 +173,9 @@ public class KardexFacade extends AbstractFacade<Kardex> {
     public List<KardexDetalle> consultarMovimientosTransferenciaFacade(java.util.Date fechaInicial, java.util.Date fechaFinal) throws java.rmi.RemoteException,ServicioCodefacException
     {
         //KardexDetalle kd;
+        //kd.getKardex().getProducto().getNombre();
+        //kd.getFechaCreacion()
+        //kd.getKardex().getFechaCreacion()
         //kd.setCodigoTipoDocumento(usuarioDb);
         //TipoDocumentoEnum.TRANSFERENCIA_MERCADERIA_ORIGEN;
         //kd.getFechaIngreso()
@@ -181,18 +184,20 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         String fechaInicialWhere="";
         if(fechaInicial!=null)
         {
-            fechaInicialWhere=" AND kd.kardex.fechaIngreso>=?2  ";
+            fechaInicialWhere=" AND kd.fechaCreacion>=?2  ";
         }
         
         String fechaFinalWhere="";
         if(fechaFinal!=null)
         {
-            fechaFinalWhere=" AND kd.kardex.fechaIngreso<=?3  ";
+            fechaFinalWhere=" AND kd.fechaCreacion<=?3  ";
         }
         
         
         
         String queryString=" SELECT kd FROM KardexDetalle kd WHERE kd.kardex.estado=?1 AND kd.codigoTipoDocumento=?4 "+fechaInicialWhere+fechaFinalWhere;
+        //Ordenar por nombre de producto
+        queryString+=" ORDER BY kd.kardex.producto.nombre ";
         
         Query query = getEntityManager().createQuery(queryString);
         

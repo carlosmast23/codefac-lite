@@ -7,10 +7,12 @@ package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.DateComboBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TableBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JTable;
 import org.jdesktop.swingx.JXDatePicker;
 
 /**
@@ -43,9 +45,9 @@ public abstract class TransferenciasReportePanel extends ControladorCodefacInter
         txtEspacio124 = new javax.swing.JLabel();
         txtEspacio125 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblDatos = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        cmbTipoReporte = new javax.swing.JComboBox<>();
+        cmbBodegaDestino = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         bntBuscar = new javax.swing.JButton();
 
@@ -57,7 +59,7 @@ public abstract class TransferenciasReportePanel extends ControladorCodefacInter
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Bodega Origen:");
+        jLabel1.setText("Bodega Destino:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -89,7 +91,7 @@ public abstract class TransferenciasReportePanel extends ControladorCodefacInter
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(txtEspacio125, gridBagConstraints);
 
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblDatos);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -106,6 +108,7 @@ public abstract class TransferenciasReportePanel extends ControladorCodefacInter
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel3, gridBagConstraints);
 
@@ -114,7 +117,7 @@ public abstract class TransferenciasReportePanel extends ControladorCodefacInter
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbTipoReporte, gridBagConstraints);
+        jPanel1.add(cmbBodegaDestino, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Fecha Final:");
@@ -140,15 +143,15 @@ public abstract class TransferenciasReportePanel extends ControladorCodefacInter
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bntBuscar;
+    private javax.swing.JComboBox<String> cmbBodegaDestino;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFinal;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicial;
-    private javax.swing.JComboBox<String> cmbTipoReporte;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblDatos;
     private javax.swing.JLabel txtEspacio124;
     private javax.swing.JLabel txtEspacio125;
     // End of variables declaration//GEN-END:variables
@@ -171,15 +174,6 @@ public abstract class TransferenciasReportePanel extends ControladorCodefacInter
         this.cmbFechaInicial = cmbFechaInicial;
     }
 
-    @ComboBoxBinding(source = "bodegaOrigenList", valueSelect = "bodegaSeleccionada" )
-    public JComboBox<String> getCmbTipoReporte() {
-        return cmbTipoReporte;
-    }
-
-    public void setCmbTipoReporte(JComboBox<String> cmbTipoReporte) {
-        this.cmbTipoReporte = cmbTipoReporte;
-    }
-
     @ButtonBinding(actionListener = "btnListenerConsulta")
     public JButton getBntBuscar() {
         return bntBuscar;
@@ -187,6 +181,24 @@ public abstract class TransferenciasReportePanel extends ControladorCodefacInter
 
     public void setBntBuscar(JButton bntBuscar) {
         this.bntBuscar = bntBuscar;
+    }
+
+    @TableBinding(source = "datosReporte",tableAddDataInterface = "tableBindingAddData",selectValue = "datoSeleccionado")
+    public JTable getTblDatos() {
+        return tblDatos;
+    }
+
+    public void setTblDatos(JTable tblDatos) {
+        this.tblDatos = tblDatos;
+    }
+
+    @ComboBoxBinding(source = "bodegaDestinoList",valueSelect = "bodegaDestinoSeleccionado")
+    public JComboBox<String> getCmbBodegaDestino() {
+        return cmbBodegaDestino;
+    }
+
+    public void setCmbBodegaDestino(JComboBox<String> cmbBodegaDestino) {
+        this.cmbBodegaDestino = cmbBodegaDestino;
     }
 
     

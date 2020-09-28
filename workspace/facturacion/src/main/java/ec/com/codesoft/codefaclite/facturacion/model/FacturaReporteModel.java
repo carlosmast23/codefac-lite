@@ -129,10 +129,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
             ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
             String estadoStr = estadoFactura.getEstado();
             
-            if (getDateFechaInicio().getDate() != null) {
+            if (getDateFechaInicio().getDate() != null) 
+            {
                 fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
             }
-            if (getDateFechaFin().getDate() != null) {
+            
+            if (getDateFechaFin().getDate() != null) 
+            {
                 fechaFin = new Date(getDateFechaFin().getDate().getTime());
             }
             
@@ -147,9 +150,12 @@ public class FacturaReporteModel extends FacturaReportePanel {
             ParametroCodefac siNofiltrarFacturaPorUsuario = session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO);
             EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((siNofiltrarFacturaPorUsuario != null ) ? siNofiltrarFacturaPorUsuario.getValor() : null);
             //session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO).compararEnumSiNo(EnumSiNo.SI))
-            if(enumSiNo != null && enumSiNo.equals(EnumSiNo.SI)){
+            if(enumSiNo != null && enumSiNo.equals(EnumSiNo.SI))
+            {
                 controladorReporte = crearControladorPorPuntoEmision();    
-            }else{
+            }
+            else
+            {
                 controladorReporte =crearControlador();
             }
             //Seteando datos para el controlador         

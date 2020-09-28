@@ -201,8 +201,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    public Factura grabar(Factura factura,Prestamo prestamo,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException {
+    public Factura grabar(final Factura factura,Prestamo prestamo,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 validacionInicialFacturar(factura);
@@ -275,7 +276,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
     }
     
-    public void grabarSinTransaccion(Factura factura,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
+    public Factura grabarSinTransaccion(Factura factura,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
         //TODO:Este codigo de documento ya no debo setear porque desde la factura ya mando el documento
         //factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
@@ -301,6 +302,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);
         grabarDetallesFacturaSinTransaccion(factura);
         grabarCarteraSinTransaccion(factura,carteraParametro);
+        return factura;
     }
     
     /**

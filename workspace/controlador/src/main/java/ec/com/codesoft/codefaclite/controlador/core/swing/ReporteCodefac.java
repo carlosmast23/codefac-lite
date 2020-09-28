@@ -106,6 +106,22 @@ public class ReporteCodefac {
         }
     }
     
+    //Metodo temporal para generar varios reportes
+    @Deprecated
+    public static JasperPrint generarReporteInternalFrameJasperPrint(InputStream pathReporte,Map parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,ConfiguracionImpresoraEnum configuracionImpresora)
+    {
+        try {
+            JasperReport report =JasperCompileManager.compileReport(pathReporte);
+            JRBeanCollectionDataSource dataReport= new JRBeanCollectionDataSource(datos);
+            JasperPrint print =JasperFillManager.fillReport(report, parametros,dataReport);
+            //JasperViewer.viewReport(print,false);
+            return print;
+        } catch (JRException ex) {
+            Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public static Map<String,Object> agregarMapPlantilla(Map<String,Object> parametros,String tituloReporte,InterfazComunicacionPanel panelPadre)
     {
             Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla(OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.A4));            

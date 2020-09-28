@@ -109,6 +109,11 @@ public abstract class ComponentBindingAbstract<T,A> {
 
             if(set)
             {
+                if(nombrePropiedad.equals("bodegaOrigenList"))
+                {
+                    System.out.println("Analizar");
+                }
+                
                 //Obtiene le valor que alamacena la propiedad en la vista
                 Object valorPropiedadControlador = getValorCampoControlador(nombrePropiedad);
                 
@@ -170,7 +175,11 @@ public abstract class ComponentBindingAbstract<T,A> {
                 if(propiedad.toLowerCase().equals("controlador"))
                 {
                     Logger.getLogger(ComponentBindingAbstract.class.getName()).log(Level.SEVERE, "NO SE ENCONTRO CONTROLADOR");
-                }                
+                }          
+                else
+                {
+                    Logger.getLogger(ComponentBindingAbstract.class.getName()).log(Level.SEVERE, "ADVERTENCIA: NO SE ENCUENTRA LA PROPIEDAD: "+propiedad);
+                }
                 break;
             }
             
