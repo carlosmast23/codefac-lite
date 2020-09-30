@@ -83,6 +83,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
@@ -2837,6 +2838,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         parametros.put("pl_usuario", sessionCodefac.getUsuario().getNick());
         parametros.put("pl_direccion", sessionCodefac.getSucursal().getDirecccion()); //TODO: Ver si agregar la direccion general de la matriz
         parametros.put("pl_razon_social", sessionCodefac.getEmpresa().getRazonSocial());
+        
+        String contribuyenteMicroempresas=EnumSiNo.NO.getLetra();
+        if(sessionCodefac.getEmpresa().getContribuyenteRegimenMicroempresasEnum()!=null)
+        {
+            if(sessionCodefac.getEmpresa().getContribuyenteRegimenMicroempresasEnum().equals(EnumSiNo.SI))
+            {
+                contribuyenteMicroempresas=EnumSiNo.SI.getLetra();
+            }
+        }
+        
+        parametros.put("pl_contribuyenteRegimenMicroempresas", contribuyenteMicroempresas);
         
         String nombreComercial=sessionCodefac.getEmpresa().getNombreLegal();
         if(nombreComercial==null || nombreComercial.trim().isEmpty())

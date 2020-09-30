@@ -1780,7 +1780,16 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         } else {
             parametros.put("pl_adicional",(empresa.getAdicional()!=null)?empresa.getAdicional():"");
         } 
-
+        
+        //Agregar el campo para saber si es regimen microempresas
+        EnumSiNo regimenMicroEmpresasEnum=(empresa.getContribuyenteRegimenMicroempresasEnum()!=null)?empresa.getContribuyenteRegimenMicroempresasEnum():EnumSiNo.NO;
+        parametros.put("pl_contribuyenteRegimenMicroempresas", regimenMicroEmpresasEnum.getLetra());
+        
+        if(empresa.getAgenteRetencionResolucion()!=null)
+        {
+            parametros.put("pl_agenteRetencionResolucion", empresa.getAgenteRetencionResolucion());
+        }
+        
 
         InputStream input=null;
         

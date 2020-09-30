@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="2.357947691000022"/>
-	<property name="ireport.x" value="136"/>
-	<property name="ireport.y" value="1082"/>
+	<property name="ireport.zoom" value="2.3579476910000303"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="627"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -74,6 +74,8 @@
 	<parameter name="pl_adicional" class="java.lang.String"/>
 	<parameter name="pl_celular" class="java.lang.String"/>
 	<parameter name="ice" class="java.lang.String"/>
+	<parameter name="pl_contribuyenteRegimenMicroempresas" class="java.lang.String"/>
+	<parameter name="pl_agenteRetencionResolucion" class="java.lang.String"/>
 	<field name="codigo" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="precio_unitario" class="java.lang.String"/>
@@ -183,56 +185,56 @@
 			<staticText>
 				<reportElement x="5" y="233" width="95" height="20" uuid="c22337eb-1915-4f01-8262-ca7581251ac2"/>
 				<textElement>
-					<font size="9" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección Matriz:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="100" y="233" width="187" height="20" uuid="369ab1d6-f0d1-4c79-90e5-a828e3fe1cf9"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="5" y="253" width="95" height="20" uuid="d79b8839-4ba0-410e-9c87-8c0ca43e2bf3"/>
 				<textElement>
-					<font size="9" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección Sucursal:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="100" y="252" width="187" height="20" uuid="c6e18b02-c339-4ac2-a0ef-df874a62768c"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{direccion_sucursal}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="273" width="95" height="30" uuid="fb1587ca-fa20-4e4d-83ee-31037db32eda"/>
+				<reportElement x="5" y="273" width="125" height="15" uuid="fb1587ca-fa20-4e4d-83ee-31037db32eda"/>
 				<textElement>
-					<font size="9" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Contribuyente Especial No]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="100" y="272" width="187" height="20" uuid="f9902681-6a04-4d2b-9fa1-d968cd848025"/>
+				<reportElement x="130" y="272" width="157" height="15" uuid="f9902681-6a04-4d2b-9fa1-d968cd848025"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{contribuyente_especial}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="303" width="95" height="26" uuid="f86ce2f5-8b93-4b73-b0fb-84039e154190"/>
+				<reportElement x="5" y="288" width="125" height="15" uuid="f86ce2f5-8b93-4b73-b0fb-84039e154190"/>
 				<textElement>
-					<font size="9" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Obligado a llevar Contabilidad]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="100" y="303" width="187" height="20" uuid="830f3c58-e5f5-41be-850d-110f21ea3892"/>
+				<reportElement x="130" y="288" width="157" height="15" uuid="830f3c58-e5f5-41be-850d-110f21ea3892"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{obligado_contabilidad}]]></textFieldExpression>
 			</textField>
@@ -321,6 +323,31 @@
 			<textField>
 				<reportElement x="477" y="385" width="70" height="20" uuid="3271bbcb-cfd1-4bf6-b643-ec780923d17f"/>
 				<textFieldExpression><![CDATA[$P{fechaDocumentoModificado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="303" width="287" height="12" uuid="e9c7456f-568c-436f-9f1e-f01ef5f90523">
+					<printWhenExpression><![CDATA[new Boolean($P{pl_contribuyenteRegimenMicroempresas}.equals("s"))]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Contribuyente Régimen Microempresas]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="315" width="287" height="13" uuid="54826fe7-cadd-4b96-8b00-ad492d0e7d61">
+					<printWhenExpression><![CDATA[new Boolean(!$P{pl_agenteRetencionResolucion}.equals(""))]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Dashed"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Agente de Retención Resolución "+$P{pl_agenteRetencionResolucion}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

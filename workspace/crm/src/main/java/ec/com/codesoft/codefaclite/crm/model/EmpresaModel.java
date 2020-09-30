@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
@@ -112,6 +113,7 @@ public class EmpresaModel extends EmpresaForm
             getTxtFacebook().setText(e.getFacebook());
             getTxtAdicional().setText(e.getAdicional());
             getjTextNumContribuyente().setText(e.getContribuyenteEspecial());
+            getTxtAgenteRetencionResolucion().setText(e.getAgenteRetencionResolucion());
             
             if(e.getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
             {
@@ -221,6 +223,8 @@ public class EmpresaModel extends EmpresaForm
     public void limpiar() {
         getjTextLogo().setText("");    
         getTxtOrden().setValue(0);
+        getChkContribuyenteRegimenMicroempresas().setSelected(false);
+        getjCheckBLlevaContabilidad().setSelected(false);
     }
 
 //    @Override
@@ -257,6 +261,7 @@ public class EmpresaModel extends EmpresaForm
         //empresa.setDireccion(getTxtDireccion().getText());
         empresa.setIdentificacion(getjTextRuc().getText());
         empresa.setContribuyenteEspecial(getjTextNumContribuyente().getText());
+        empresa.setAgenteRetencionResolucion(getTxtAgenteRetencionResolucion().getText());
         //empresa.setCelular(getTxtCelular().getText());
         empresa.setFacebook(getTxtFacebook().getText());
         empresa.setAdicional(getTxtAdicional().getText());
@@ -270,6 +275,18 @@ public class EmpresaModel extends EmpresaForm
         {
             empresa.setObligadoLlevarContabilidad(Empresa.NO_LLEVA_CONTABILIDAD);
         }
+        
+        
+        if(getChkContribuyenteRegimenMicroempresas().isSelected())
+        {
+            empresa.setContribuyenteRegimenMicroempresasEnum(EnumSiNo.SI);
+        }
+        else
+        {
+            empresa.setContribuyenteRegimenMicroempresasEnum(EnumSiNo.NO);
+        }
+        
+        
         empresa.setImagenLogoPath(getjTextLogo().getText());
         //empresa.setContribuyenteEspecial("");
         empresa.setEstado(((GeneralEnumEstado)getjComboEstado().getSelectedItem()).getEstado());
@@ -388,15 +405,18 @@ public class EmpresaModel extends EmpresaForm
         getjTextNombreSocial().setText(empresa.getRazonSocial());
         getjTextNombreComercial().setText(empresa.getNombreLegal());
         getjTextNumContribuyente().setText(empresa.getContribuyenteEspecial());
+        getTxtAgenteRetencionResolucion().setText(empresa.getAgenteRetencionResolucion());
         getjCheckBLlevaContabilidad().setSelected(empresa.getObligadoLlevarContabilidadEnum().getBool());
         getjTextLogo().setText(empresa.getImagenLogoPath());
         getTxtFacebook().setText(empresa.getFacebook());
         getTxtAdicional().setText(empresa.getAdicional());
         getjTextCodigoEmpresa().setText(empresa.getCodigo());
+        getChkContribuyenteRegimenMicroempresas().setSelected(empresa.getContribuyenteRegimenMicroempresasEnum().getBool());
         
         if (empresa.getOrden() != null) {
             getTxtOrden().setValue(empresa.getOrden());
         }
+        
     }
 
     

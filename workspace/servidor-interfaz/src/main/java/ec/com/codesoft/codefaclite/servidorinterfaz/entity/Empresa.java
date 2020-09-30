@@ -69,6 +69,12 @@ public class Empresa implements Serializable {
     @Column(name = "ORDEN")
     private Integer orden;
     
+    @Column(name = "CONTRIBUYENTE_REGIMEN_MICROEMPRESAS")
+    private String contribuyenteRegimenMicroempresas;
+
+    @Column(name = "AGENTE_RETENCION_RESOLUCION")
+    private String agenteRetencionResolucion;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa",fetch = FetchType.EAGER)
     private List<Sucursal> sucursales;
 
@@ -206,13 +212,36 @@ public class Empresa implements Serializable {
         this.estado = estadoEnum.getEstado();
     }
     
-    
     public Integer getOrden() {
         return orden;
     }
 
     public void setOrden(Integer orden) {
         this.orden = orden;
+    }
+
+    public String getContribuyenteRegimenMicroempresas() {
+        return contribuyenteRegimenMicroempresas;
+    }
+
+    public void setContribuyenteRegimenMicroempresas(String contribuyenteRegimenMicroempresas) {
+        this.contribuyenteRegimenMicroempresas = contribuyenteRegimenMicroempresas;
+    }
+    
+    public EnumSiNo getContribuyenteRegimenMicroempresasEnum() {
+        return EnumSiNo.getEnumByLetra(contribuyenteRegimenMicroempresas);
+    }
+
+    public void setContribuyenteRegimenMicroempresasEnum(EnumSiNo contribuyenteRegimenMicroempresasEnum) {
+        this.contribuyenteRegimenMicroempresas = contribuyenteRegimenMicroempresasEnum.getLetra();
+    }
+
+    public String getAgenteRetencionResolucion() {
+        return agenteRetencionResolucion;
+    }
+
+    public void setAgenteRetencionResolucion(String agenteRetencionResolucion) {
+        this.agenteRetencionResolucion = agenteRetencionResolucion;
     }
     
     
