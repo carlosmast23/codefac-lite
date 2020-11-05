@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 public abstract class UtilidadVarios {
     
     private static String[] excepcionesMac={
+        "Virtual Ethernet Adapter",
         "VirtualBox Host-Only Ethernet Adapter",
         "Microsoft Wi-Fi Direct Virtual Adapter",
         "Bluetooth Device (Personal Area Network)"};

@@ -107,10 +107,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         List<ComprobanteVentaData> dataReporte = new ArrayList<ComprobanteVentaData>();
 
         for (FacturaDetalle detalle : facturaProcesando.getDetalles()) {
-
+            
             ComprobanteVentaData data = new ComprobanteVentaData();
             data.setCantidad(detalle.getCantidad().toString());
-            data.setCodigo(detalle.getId().toString());
+            data.setCodigo(detalle.getCodigoPrincipal());
             data.setNombre(detalle.getDescripcion().toString());
             data.setPrecioUnitario(detalle.getPrecioUnitario().toString());
             data.setTotal(detalle.getTotal().toString());
