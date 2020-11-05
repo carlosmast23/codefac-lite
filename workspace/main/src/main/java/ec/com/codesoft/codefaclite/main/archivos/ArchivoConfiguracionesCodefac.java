@@ -153,11 +153,14 @@ public class ArchivoConfiguracionesCodefac {
     
     public void setSucursalPorDefecto(Sucursal sucursal)
     {
-        agregarCampo(ArchivoConfiguracionesCodefac.CAMPO_SUCURSAL_INICIAL_ID,sucursal.getId().toString());
-        try {
-            guardar();
-        } catch (IOException ex) {
-            Logger.getLogger(ArchivoConfiguracionesCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        if(sucursal!=null)
+        {
+            agregarCampo(ArchivoConfiguracionesCodefac.CAMPO_SUCURSAL_INICIAL_ID,sucursal.getId().toString());
+            try {
+                guardar();
+            } catch (IOException ex) {
+                Logger.getLogger(ArchivoConfiguracionesCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

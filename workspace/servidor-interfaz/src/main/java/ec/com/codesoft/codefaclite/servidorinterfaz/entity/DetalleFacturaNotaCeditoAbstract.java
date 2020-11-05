@@ -79,6 +79,12 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     }
 
     public void setCantidad(BigDecimal cantidad) {
+        
+        if(cantidad==null)
+        {
+            cantidad=BigDecimal.ZERO;
+        }
+        
         this.cantidad = cantidad;
     }
 
@@ -87,6 +93,12 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     }
 
     public void setPrecioUnitario(BigDecimal precioUnitario) {
+        
+        if(precioUnitario==null)
+        {
+            precioUnitario=BigDecimal.ZERO;
+        }
+        
         this.precioUnitario = precioUnitario;
     }
 
@@ -95,6 +107,11 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     }
 
     public void setDescuento(BigDecimal descuento) {
+        if(descuento==null)
+        {
+            descuento=BigDecimal.ZERO;
+        }
+        
         this.descuento = descuento;
     }
 
@@ -226,9 +243,13 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         calcularValorIce(icePorcentaje);
     }
 
-    public void calcularTotalDetalle() {
+    public void calcularTotalDetalle() {        
+        total = getCalcularTotalDetalle();
+    }
+    
+    public BigDecimal getCalcularTotalDetalle() {
         BigDecimal setTotal = getCantidad().multiply(getPrecioUnitario()).subtract(getDescuento());
-        total = setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     public BigDecimal totalSinImpuestosConIce() {

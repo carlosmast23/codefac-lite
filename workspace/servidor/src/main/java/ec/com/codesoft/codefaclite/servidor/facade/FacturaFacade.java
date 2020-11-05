@@ -340,6 +340,23 @@ public class FacturaFacade extends AbstractFacade<Factura> {
 
     }
     
+    public Boolean verificarFacturaActivaIngresadaConPedido(Factura proforma)
+    {
+        //Factura f;
+        //f.getProforma().
+        String queryString = "SELECT count(u) FROM Factura u WHERE u.estado<>?1 AND u.estado<>?2 AND u.proforma=?3  ";
+            Query query = getEntityManager().createQuery(queryString);
+            query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+            query.setParameter(2, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+            query.setParameter(3, proforma);
+            Long numeroFacturas=(Long) query.getSingleResult();
+            if(numeroFacturas>0)
+            {
+                return true;
+            }
+            return false;
+    }
+    
       public Long getSecuencialProforma(Empresa empresa) {
         try {
             //Factura f;

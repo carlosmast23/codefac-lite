@@ -280,13 +280,24 @@ public class ControladorReporteFactura {
                          *      CONSTRUIR EL MODELO PARA EL REPORTE
                          * ======================================================
                          */
+                        if(factura.getCliente()==null)
+                        {
+                            Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.WARNING,"Factura con problema de identificación: "+factura.getPreimpreso()+", id="+factura.getId());
+                        }
+                        
+                        String nombreComercial="";
+                        if(factura.getSucursal()!=null)
+                        {
+                            nombreComercial=factura.getSucursal().getNombreComercial();
+                        }
+                        
                         ReporteFacturaData reporteData = new ReporteFacturaData(
                                 factura.getPreimpreso(),
                                 dateFormat.format(factura.getFechaEmision()),
                                 (factura.getFechaAutorizacionSri()!=null)?dateFormat.format(factura.getFechaAutorizacionSri()):"",
-                                factura.getCliente().getIdentificacion(),
-                                factura.getCliente().getRazonSocial(),
-                                ((factura.getSucursal().getNombreComercial()) != null) ? factura.getSucursal().getNombreComercial() : "",
+                                (factura.getCliente()!=null)?factura.getCliente().getIdentificacion():"",
+                                (factura.getCliente()!=null)?factura.getCliente().getRazonSocial():"",
+                                nombreComercial,
                                 (factura.getEstadoEnum() != null) ? factura.getEstadoEnum().getNombre() : "Sin estado",
                                 (factura.getTipoFacturacionEnum() != null) ? factura.getTipoFacturacionEnum().getNombre() : "Sin definir",
                                 (factura.getCodigoDocumentoEnum() != null) ? factura.getCodigoDocumentoEnum().getNombre() : "",

@@ -20,7 +20,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.2.8.4.7";
+    public static final String VERSION="1.2.8.5.0";
     /**
      * El modo de configuracion del sistema
      */
@@ -136,4 +136,5 @@ public abstract class ParametrosSistemaCodefac {
     
     public static final String NOMBRE_SISTEMA="Codefac";
     
+    public static final String CODIGO_NO_APLICA_RETENCIONES="000";
 }

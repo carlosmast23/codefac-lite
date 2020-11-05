@@ -120,6 +120,13 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
             throw new ServicioCodefacException("No se puede crear el registro sin establecimientos");
         }
         
+        //Si se esta grabando e editando un consumidor final no se puede editar el consumidor final
+        if(p.getIdentificacion().equals("9999999999999"))
+        {
+            //Si cambian este dato el sistema por defecto lo deja como el original
+            p.setRazonSocial(Usuario.CONSUMIDOR_FINAL_NOMBRE);            
+        }
+        
         //NOTA: Esta validacion siempre debe ir al ultimo de este metodo
         //Si es un crud verifico sin los datos editados y consultados son los mismos
         if(crudEnum.equals(CrudEnum.EDITAR))

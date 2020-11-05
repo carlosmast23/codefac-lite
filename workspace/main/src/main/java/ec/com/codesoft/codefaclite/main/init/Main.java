@@ -822,6 +822,13 @@ public class Main {
         try {
             ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS, empresa);
             String directorioUsuario = UtilidadesDirectorios.buscarDirectorio();
+            
+            //Si el  nuevo directorio seleccionado es null o no se seleccciona entonces no modifico nada
+            if(directorioUsuario==null || directorioUsuario.trim().isEmpty())
+            {
+                return;
+            }
+            
             if(parametroDirectorioRecursos==null)
             {
                 parametroDirectorioRecursos = new ParametroCodefac();            

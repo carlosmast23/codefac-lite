@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.SriRetencionRentaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -25,5 +26,16 @@ public class SriRetencionRentaService extends ServiceAbstract<SriRetencionRenta,
     {
         return getFacade().obtenerTodosOrdenadoPorCodigoFacade();
     }
+
+    @Override
+    public void editar(SriRetencionRenta entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.merge(entity);
+            }
+        });
+    }
+    
     
 }

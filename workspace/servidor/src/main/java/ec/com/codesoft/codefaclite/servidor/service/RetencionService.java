@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import static ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac.CODIGO_NO_APLICA_RETENCIONES;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -89,9 +90,21 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 }
                 */
 
-                for (RetencionDetalle retencionDetalle : entity.getDetalles()) {
-                    entityManager.persist(retencionDetalle);
+                List<RetencionDetalle> detallesEliminar=new ArrayList<>();
+                for (RetencionDetalle retencionDetalle : entity.getDetalles()) 
+                {
+                    if(retencionDetalle.getCodigoRetencionSri().equals(CODIGO_NO_APLICA_RETENCIONES))
+                    {
+                        detallesEliminar.add(retencionDetalle);
+                    }
+                    else
+                    {
+                        entityManager.persist(retencionDetalle);
+                    }
                 }
+                
+                //Detalles a eliminar
+                entity.getDetalles().removeAll(detallesEliminar);
                 
 
                 entityManager.persist(entity);

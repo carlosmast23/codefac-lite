@@ -180,10 +180,10 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
             //TODO: Ver si estos calculos los puede hacer internamente en la clase FacturaDetalle
             if (detalle.getIvaPorcentaje().equals(0)) {
                 subTotalSinImpuestos = subTotalSinImpuestos.add(detalle.getPrecioUnitario().multiply(detalle.getCantidad()));
-                descuentoSinImpuestos = descuentoSinImpuestos.add(detalle.getDescuento());
+                descuentoSinImpuestos = descuentoSinImpuestos.add((detalle.getDescuento()!=null)?detalle.getDescuento():BigDecimal.ZERO);
             } else {
                 subTotalConImpuestos = subTotalConImpuestos.add(detalle.getPrecioUnitario().multiply(detalle.getCantidad()));
-                descuentoConImpuestos = descuentoConImpuestos.add(detalle.getDescuento());
+                descuentoConImpuestos = descuentoConImpuestos.add((detalle.getDescuento()!=null)?detalle.getDescuento():BigDecimal.ZERO);
 
                 ivaDecimal = new BigDecimal(detalle.getIvaPorcentaje().toString()).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
                 impuestoIva = subTotalConImpuestos.add(ice).subtract(descuentoConImpuestos).multiply(ivaDecimal);

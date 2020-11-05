@@ -183,6 +183,47 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
         }
     }
     
+    
+    public void editar() throws ExcepcionCodefacLite {
+    
+        NotaCredito notaCredito=interfaz.obtenerNotaCredito();
+                
+        try {
+            NotaCredito notaCreditoGrabada;
+            NotaCreditoServiceIf servicio = ServiceFactory.getFactory().getNotaCreditoServiceIf();
+            setearValoresNotaCredito();
+
+            if (!validarDatosNotaCredito()) {
+                throw new ExcepcionCodefacLite("Error Validación");
+            }
+
+            servicio.editarNotaCredito(notaCredito);
+            mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+            //notaCreditoGrabada = notaCredito;//graba una referencia con ambiento del metodo para los listener
+
+            //ComprobanteDataNotaCredito comprobanteData = new ComprobanteDataNotaCredito(notaCredito);
+
+            //comprobanteData.setMapInfoAdicional(getMapAdicional(notaCredito));
+
+            //ClienteInterfaceComprobante cic = interfaz.obtenerClienteInterfaceComprobante(notaCreditoGrabada);
+
+            //if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+            //    cic = null;
+            //}
+
+            //ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+            //comprobanteServiceIf.procesarComprobante(comprobanteData, notaCredito, session.getUsuario(), cic);
+
+            //interfaz.procesarMonitor(notaCreditoGrabada);
+
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(NotaCreditoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            mostrarMensaje(new CodefacMsj("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));            
+            throw new ExcepcionCodefacLite(ex.getMessage());
+        } catch (RemoteException ex) {
+            Logger.getLogger(NotaCreditoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     private void setearValoresNotaCredito()
     {
         NotaCredito notaCredito=interfaz.obtenerNotaCredito();

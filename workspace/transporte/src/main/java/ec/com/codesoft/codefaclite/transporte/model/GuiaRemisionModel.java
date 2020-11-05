@@ -60,6 +60,7 @@ import ec.com.codesoft.codefaclite.transporte.data.ConsolidadoCargaData;
 import ec.com.codesoft.codefaclite.transporte.nocallback.GuiaRemisionNoCallBack;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiaRemisionPanel;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
@@ -74,6 +75,7 @@ import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -191,28 +193,53 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             return ;
         }
         
-        Map<String,ConsolidadoCargaData> mapResulados=new HashMap<String,ConsolidadoCargaData>();
+        Map<Long,ConsolidadoCargaData> mapResulados=new HashMap<Long,ConsolidadoCargaData>();
         
         for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
             for (DetalleProductoGuiaRemision detallesProducto : destinatario.getDetallesProductos()) {
                 
-                ConsolidadoCargaData data=mapResulados.get(detallesProducto.getCodigoInterno());
+                FacturaDetalle facturaDetalle= consultarFacturaDetalle(detallesProducto.getReferenciaId());
+                ConsolidadoCargaData data=mapResulados.get(facturaDetalle.getReferenciaId());
                 if(data==null)
                 {
                     data=new ConsolidadoCargaData(detallesProducto);                    
-                    mapResulados.put(detallesProducto.getCodigoInterno(),data);
+                    mapResulados.put(facturaDetalle.getReferenciaId(),data);
                 }
                 else
                 {
                     data.agregarCantidad(detallesProducto.getCantidad());
                 }
+                
+                //Agregar el valor total del detalle                
+                data.setTotal(data.getTotal().add(facturaDetalle.calcularTotalFinal()));
+                
             }
         }
         
         ////////////////////////////////////////////////////////////////////////
         //Transformar en una lista el map
-        List<ConsolidadoCargaData> listaReporte=new ArrayList<ConsolidadoCargaData>(mapResulados.values());        
+        List<ConsolidadoCargaData> listaReporte=new ArrayList<ConsolidadoCargaData>(mapResulados.values());  
+        UtilidadesLista.ordenarLista(listaReporte,new Comparator<ConsolidadoCargaData>() {
+            @Override
+            public int compare(ConsolidadoCargaData o1, ConsolidadoCargaData o2) {
+                return o1.getDescripcion().compareTo(o2.getDescripcion());
+            }
+        });
+        
         ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_TRANSPORTE,"consolidadoCarga.jrxml", new HashMap(), listaReporte, panelPadre, "Consolidado de Carga", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4, ConfiguracionImpresoraEnum.NINGUNA);
+    }
+    
+    private FacturaDetalle consultarFacturaDetalle(Long referenciaId)
+    {
+        try {
+            FacturaDetalle facturaDetalle= ServiceFactory.getFactory().getFacturaDetalleServiceIf().buscarPorId(referenciaId);
+            return facturaDetalle;
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(ConsolidadoCargaData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+         
     }
     
     private Map<String,String> getMapAdicional(GuiaRemision guiaRemision)
@@ -750,11 +777,24 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         String.class,
         String.class});
 
-
         if(guiaRemision!=null && guiaRemision.getDestinatarios()!=null)
         {
+            List<DetalleProductoGuiaRemision> listaProductosTmp=new ArrayList<DetalleProductoGuiaRemision>();
+            
             for (DestinatarioGuiaRemision destinatarios : guiaRemision.getDestinatarios()) {
                 for (DetalleProductoGuiaRemision detalle : destinatarios.getDetallesProductos()) {
+                   listaProductosTmp.add(detalle);
+                }            
+            }
+            
+            UtilidadesLista.ordenarLista(listaProductosTmp,new Comparator<DetalleProductoGuiaRemision>() {
+                @Override
+                public int compare(DetalleProductoGuiaRemision o1, DetalleProductoGuiaRemision o2) {
+                    return o1.getDestinatario().getPreimpreso().compareTo(o2.getDestinatario().getPreimpreso());
+                }
+            });
+            
+            for (DetalleProductoGuiaRemision detalle : listaProductosTmp) {
                     modeloTabla.addRow(new Object[]{
                         detalle,
                         detalle.getDestinatario().getPreimpreso(),
@@ -765,8 +805,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                         detalle.getCantidad(),
                     });
 
-                }            
-            }
+            }            
+            
             //Imprimir el total de la cantidad de productos a transportar
             getLblCantidadProductos().setText(guiaRemision.obtenerTotalProductos().toString());
         

@@ -34,6 +34,7 @@ public class KardexData implements ExcelDatosInterface{
     private String saldo_total;
     
     private String fechaDocumento;
+    private String documentoTransaccion;
 
     public KardexData() {
     }
@@ -148,6 +149,14 @@ public class KardexData implements ExcelDatosInterface{
 
     public void setFechaDocumento(String fechaDocumento) {
         this.fechaDocumento = fechaDocumento;
+    }
+
+    public String getDocumentoTransaccion() {
+        return documentoTransaccion;
+    }
+
+    public void setDocumentoTransaccion(String documentoTransaccion) {
+        this.documentoTransaccion = documentoTransaccion;
     }
     
     

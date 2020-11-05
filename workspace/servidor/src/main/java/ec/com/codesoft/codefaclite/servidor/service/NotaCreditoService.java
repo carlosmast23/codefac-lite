@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -59,17 +60,92 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         this.notaCreditoDetalleFacade = new NotaCreditoDetalleFacade();
         parametroCodefacService = new ParametroCodefacService();
     }
+    
+    private void validacion(NotaCredito notaCredito,CrudEnum tipo) throws ServicioCodefacException,  RemoteException
+    {
+        if (notaCredito.getCliente().isClienteFinal()) {
+            throw new ServicioCodefacException("No se puede emitir Notas de Crédito al Consumidor Final , Anule la factura en el Portal del Sri");
+        }
+        
+        if(notaCredito.getRazonModificado()==null || notaCredito.getRazonModificado().trim().isEmpty())
+        {
+            throw new ServicioCodefacException("No se puede grabar sin un motivo de anulación");
+        }
+        
+        if(tipo.equals(CrudEnum.EDITAR))
+        {
+             if(!notaCredito.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
+                {
+                    throw new ServicioCodefacException("Solo se pueden editar Notas de Crédito Sin Autorizar");
+                }
+        }
+        
+        
+    }
+    
+
+    @Override
+    public void editarNotaCredito(NotaCredito entity) throws ServicioCodefacException,  RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+
+                   //Validacion para evitar hacer notas de credito al consumidor final lo que no permite el Sri
+
+                validacion(entity, CrudEnum.EDITAR);
+               
+                //notaCredito.setCodigoDocumento(DocumentoEnum.NOTA_CREDITO.getCodigo());
+
+               // ComprobantesService servicioComprobante = new ComprobantesService();
+                //servicioComprobante.setearSecuencialComprobanteSinTransaccion(notaCredito);
+
+                //notaCredito.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                entityManager.merge(entity);
+
+                /**
+                 * Actualizar la logica de cada modulo dependiendo del tipo de
+                 * documento de cada detalle
+                 */
+                //for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {
+                //    anularProcesoNotCredito(detalle);
+
+                //}
+
+                /**
+                 * Actualizar el estado de la nota de credito de la factura
+                 * dependiendo del tipo anuluacion parcial o total Y validando
+                 * si tiene referencia a la factura o fue creada en la modalidad
+                 * libre
+                 */
+                /*if (notaCredito.getTipoDocumento() != null && notaCredito.getTipoDocumentoEnum().equals(TipoDocumentoEnum.VENTA)) {
+                    if (notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal()) < 0) {
+                        notaCredito.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.ANULADO_PARCIAL.getEstado());
+                    } else {
+                        notaCredito.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.getEstado());
+                    }
+                    //Actualizar la referencia de la factura con el nuevo estado
+                    entityManager.merge(notaCredito.getFactura());
+                }*/
+                
+                //Actualizar la cartera cuando se hacen notas de credito
+                //grabarCarteraSinTransaccion(notaCredito);
+
+
+            }
+        });
+    }
+    
+    
 
     public NotaCredito grabar(NotaCredito notaCredito) throws ServicioCodefacException {      
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                validacion(notaCredito, CrudEnum.CREAR);
 
                    //Validacion para evitar hacer notas de credito al consumidor final lo que no permite el Sri
-                if (notaCredito.getCliente().isClienteFinal()) {
-                    throw new ServicioCodefacException("No se puede emitir Notas de Crédito al Consumidor Final , Anule la factura en el Portal del Sri");
-                }
 
                 notaCredito.setCodigoDocumento(DocumentoEnum.NOTA_CREDITO.getCodigo());
 
@@ -113,6 +189,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         
         return notaCredito;
     }
+    
+    
     
     private void grabarCarteraSinTransaccion(NotaCredito notaCredito) throws RemoteException, ServicioCodefacException
     {
@@ -287,9 +365,6 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         return "";
     }*/
 
-    public void editar(NotaCredito notaCredito) {
-        notaCreditoFacade.edit(notaCredito);
-    }
 
     public List<NotaCredito> obtenerTodos() {
         return notaCreditoFacade.findAll();

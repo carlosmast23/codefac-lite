@@ -57,10 +57,10 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
     public QueryDialog getConsulta(String filter) {
         
         String mostrarFacturadosStr="";
-        if(mostrarFacturados)
-        {
+        //if(mostrarFacturados)
+        //{
             mostrarFacturadosStr=" or u.estado=?5 ";
-        }
+        //}
         //Factura factura;
         //factura.getEmpresa();
         String queryString = "SELECT u FROM Factura u WHERE u.empresa=?4 and ( u.estado=?1 "+mostrarFacturadosStr+" ) ";
@@ -73,10 +73,10 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, ComprobanteEnumEstado.AUTORIZADO.getEstado());
         
-        if(mostrarFacturados)
-        {
+        //if(mostrarFacturados)
+        //{
             queryDialog.agregarParametro(5, ComprobanteEnumEstado.FACTURADO_PROFORMA.getEstado());
-        }
+        //}
         
         queryDialog.agregarParametro(2, filter);
         queryDialog.agregarParametro(3, DocumentoEnum.PROFORMA.getCodigo());

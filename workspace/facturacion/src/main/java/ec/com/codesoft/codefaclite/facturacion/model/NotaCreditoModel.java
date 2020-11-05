@@ -147,7 +147,12 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Boolean pregunta = DialogoCodefac.dialogoPregunta("Alerta", "Esta seguro que desea editar la Nota de Crédito", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        if (!pregunta) {
+            throw new ExcepcionCodefacLite("cancelar el metodo editar ...");
+        }
+        
+        controlador.editar();
     }
 
     @Override
@@ -754,6 +759,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         
         //Cargar los datos de la seccion de libre
         getTxtProveedor().setText(notaCredito.getCliente().toString());
+        getjDateFechaEmision().setDate(notaCredito.getFechaEmision());
         getCmbFechaCompra().setDate(notaCredito.getFechaEmisionDocSustento());
         getTxtPreimpresoProveedor().setText(notaCredito.getNumDocModificado());
         

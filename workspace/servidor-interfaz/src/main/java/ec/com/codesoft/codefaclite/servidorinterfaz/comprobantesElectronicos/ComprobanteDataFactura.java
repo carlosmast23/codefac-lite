@@ -229,12 +229,14 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                 */
                 detalle.setDescripcion(facturaDetalle.getDescripcion()); //Supuestamente ya no tengo que validar porque esta validad en el ingreso de los detalles
                 //Establecer el descuento en el aplicativo
-                detalle.setDescuento(facturaDetalle.getDescuento());
+                detalle.setDescuento((facturaDetalle.getDescuento()!=null)?facturaDetalle.getDescuento():BigDecimal.ZERO);
                 detalle.setPrecioTotalSinImpuesto(facturaDetalle.getTotal());
                 
                 //Todo: redondear valor porque en los comprobantes electronicos no me permite enviar con mas de 2 decimales aunque en los archivos xsd si permite
-                detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2, RoundingMode.HALF_UP));
-                detalle.setDescuento(detalle.getDescuento().setScale(2,RoundingMode.HALF_UP));
+                //detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2, RoundingMode.HALF_UP));
+                detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario());
+                //detalle.setDescuento(detalle.getDescuento().setScale(2,RoundingMode.HALF_UP));
+                detalle.setDescuento(detalle.getDescuento());
 
                 /**
                  * Agregado impuesto que se cobran a cada detalle individual

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
 
@@ -22,8 +23,9 @@ public interface NotaCreditoServiceIf extends ServiceAbstractIf<NotaCredito>
 {
     public NotaCredito grabar(NotaCredito notaCredito) throws ServicioCodefacException,java.rmi.RemoteException;;
     //public String getPreimpresoSiguiente() throws java.rmi.RemoteException;;
-    public void editar(NotaCredito notaCredito) throws java.rmi.RemoteException;
+    //public void editar(NotaCredito notaCredito) throws java.rmi.RemoteException;
     public List<NotaCredito> obtenerTodos() throws java.rmi.RemoteException;
     public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa) throws java.rmi.RemoteException;
-
+    public void editarNotaCredito(NotaCredito entity) throws ServicioCodefacException,  RemoteException;
+    
 }

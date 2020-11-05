@@ -38,8 +38,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
@@ -131,7 +133,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     
     public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
-    {
+    {            
+            validacionInicialFacturar(proforma,CrudEnum.CREAR);
         
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
@@ -171,6 +174,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public Factura editarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {
+        validacionInicialFacturar(proforma,CrudEnum.EDITAR);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
@@ -206,7 +210,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                validacionInicialFacturar(factura);
+                validacionInicialFacturar(factura,CrudEnum.CREAR);
                 grabarSinTransaccion(factura,carteraParametro);
                 
                 /**
@@ -232,7 +236,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                validacionInicialFacturar(factura);
+                validacionInicialFacturar(factura,CrudEnum.CREAR);
                 grabarSinTransaccion(factura,null);
                 
             }
@@ -263,7 +267,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }
     
-    public void validacionInicialFacturar(Factura factura) throws ServicioCodefacException, RemoteException
+    public void validacionInicialFacturar(Factura factura,CrudEnum modo) throws ServicioCodefacException, RemoteException
     {
         if(factura.getCliente()==null)
         {
@@ -273,6 +277,43 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         if(factura.getCliente().getRazonSocial()==null || factura.getCliente().getRazonSocial().trim().isEmpty())
         {
             throw new ServicioCodefacException("No se puede emitir una factura sin la razón social del cliente ");
+        }
+        
+        if(!factura.getCliente().validarIdentificacion().equals(Persona.ValidacionCedulaEnum.VALIDACION_CORRECTA))
+        {
+            //DialogoCodefac.mensaje("Error con el cliente", factura.getCliente().validarIdentificacion().getMensaje(), DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ServicioCodefacException("Error con la identificacion del cliente seleccionado");
+        }
+        
+        //Validacion para los detalles
+        for (FacturaDetalle detalle : factura.getDetalles()) 
+        {
+            if(detalle.getDescuento()==null)
+            {
+                throw new ServicioCodefacException("Error al grabar un descuento null en el pedido");
+            }
+        }
+        
+        //validar que los totales coincidan o si tiene inconsistencias no grabar
+        for (FacturaDetalle detalle : factura.getDetalles()) 
+        {
+            BigDecimal totalDetalle=detalle.getTotal();
+            BigDecimal totalDetalleCalculado=detalle.getCalcularTotalDetalle();
+            BigDecimal diferencia=totalDetalle.subtract(totalDetalleCalculado).abs();
+            
+            if(diferencia.compareTo(new BigDecimal("0.01"))>0)
+            {
+                throw new ServicioCodefacException("Error de inconsistencia en los valores de los detalles");
+            }
+        }
+        
+        if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
+        {
+            if(modo.equals(CrudEnum.CREAR))
+            {
+                validacionInicialProforma(factura.getProforma());            
+            }
+            
         }
     }
     
@@ -481,18 +522,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
 
         Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
-        //Map<String,Object> mapParametros=new HashMap<String,Object>();
-        //mapParametros.put("producto", producto);
-        /*KardexService kardexService = new KardexService();
-        List<Kardex> kardexs = kardexService.buscarPorProductoYBodega(producto, bodega);
 
-        Kardex kardex = null;
-        if (kardexs == null || kardexs.size() == 0) {
-            kardex = kardexService.crearObjeto(bodega, producto);
-            entityManager.persist(kardex);
-        } else {
-            kardex = kardexs.get(0);
-        }*/
         Kardex kardex =ServiceFactory.getFactory().getKardexServiceIf().consultarOCrearStockSinPersistencia(producto, bodega);
         //Kardex kardex = consultarOCrearStock(producto, bodega);
 
@@ -528,37 +558,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             }
         }
         
-        /*ParametroCodefacService parametroService = new ParametroCodefacService();
-        ParametroCodefac parametroFacturarStockNegativo = parametroService.getParametroByNombre(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, detalle.getFactura().getEmpresa());
-        if (parametroFacturarStockNegativo != null) {
-            EnumSiNo enumFacturarStockNegativo = EnumSiNo.getEnumByLetra(parametroFacturarStockNegativo.valor);
-            
-            //Cuando no quieren facturar con stock negativo verifico que exista la cantidad necesaria para facturar
-            if (enumFacturarStockNegativo!=null && enumFacturarStockNegativo.equals(EnumSiNo.NO)) {
-                //Si el stock que queremos facturar es mayor del existe lanzo una excepcion                
-                if (detalle.getCantidad().compareTo(new BigDecimal(kardex.getStock())) > 0) {
-                    
-                    int cantidadFaltante=detalle.getCantidad().intValue()-kardex.getStock();                    
-                    
-                    //Solo para ensambles rerifica si tiene que construir el ensamble no importaria si no tiene el stock suficiente y mando a construir
-                    if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(),ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
-                    {
-                        //No valida nada porque si este proceso falla automaticamente debe generar la excepcion interior, por ejemplo cuando no existe la cantidad necesaria de los componentes para construir el ensamble                    
-                        verificarConstruirEnsamble(kardex,cantidadFaltante);
-                    }
-                    else
-                    {
-                        //Si es un producto normal sin ensamble mando la excepcion que no tiene stock
-                        throw new ServicioCodefacException("No existe el stock sufiente para facturar el producto "+kardex.getProducto().getNombre()+", faltan "+cantidadFaltante+" productos");
-                    }
-                }
-            }
-        }
-        else
-        {
-            
-        }*/
 
+        //detalle.getTipoDocumentoEnum().
         /**
          * ============================== FIN VALIDACION DE FACTURAR CON STOCK
          * NEGATIVO ======================
@@ -804,5 +805,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
             
         return respuesta;
+    }
+    
+    private void validacionInicialProforma(Factura proforma) throws RemoteException,ServicioCodefacException 
+    {
+        if(proforma==null)
+        {
+                return;
+        }
+        
+        if(getFacade().verificarFacturaActivaIngresadaConPedido(proforma))
+        {
+            throw new ServicioCodefacException("No se puede hacer más de 2 facturas con el mismo pedido");
+        }
     }
 }

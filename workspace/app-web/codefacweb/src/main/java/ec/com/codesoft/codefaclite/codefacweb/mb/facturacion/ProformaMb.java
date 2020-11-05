@@ -229,6 +229,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             }
 
             setearDatosAdicionales();
+            correcionesAdicionales();
 
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
 
@@ -548,9 +549,9 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
          * Redondeo los valores de los precios unitario de los detalles de la factura
          * Nota: este proceso lo hago al final porque para los totales necesitaba tener los valores exactos de los precios unitarios, pero como ya va a generar la factura puedo redondeal los valores unitario
          */
-        for (FacturaDetalle facturaDetalle : factura.getDetalles()) {
-            facturaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2,RoundingMode.HALF_UP));
-        }
+        //for (FacturaDetalle facturaDetalle : factura.getDetalles()) {
+        //    facturaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2,RoundingMode.HALF_UP));
+        //}
 
     }
 
@@ -1056,6 +1057,29 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public Map<Integer, Boolean> permisosFormulario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void correcionesAdicionales() {
+        //Correcion temporal que cuando borran un descuento se graba con null si pasa ese caso toca setear con cero
+        //TODO: Toca ver como hacer estas correciones desde la propia vista
+        
+        for (FacturaDetalle detalle : factura.getDetalles()) {
+            if(detalle.getDescuento()==null)
+            {
+                detalle.setDescuento(BigDecimal.ZERO);
+            }
+            
+            if(detalle.getCantidad()==null)
+            {
+                detalle.setCantidad(BigDecimal.ZERO);
+            }
+            
+            if(detalle.getPrecioUnitario()==null)
+            {
+                detalle.setPrecioUnitario(BigDecimal.ZERO);
+            }
+        }
+        
     }
 
     /**

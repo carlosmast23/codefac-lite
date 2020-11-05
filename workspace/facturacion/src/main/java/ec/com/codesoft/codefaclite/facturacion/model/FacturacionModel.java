@@ -1132,11 +1132,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
         }
         
-        if(!factura.getCliente().validarIdentificacion().equals(Persona.ValidacionCedulaEnum.VALIDACION_CORRECTA))
+        /*if(!factura.getCliente().validarIdentificacion().equals(Persona.ValidacionCedulaEnum.VALIDACION_CORRECTA))
         {
             DialogoCodefac.mensaje("Error con el cliente", factura.getCliente().validarIdentificacion().getMensaje(), DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("Error con la identificacion del cliente seleccionado");
-        }
+        }*/
 
         if (factura.getDetalles().isEmpty()) {
             DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -1560,7 +1560,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
-            DialogoCodefac.dialogoPregunta(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite(ex.getMessage());
             
@@ -1702,8 +1702,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void cargarDatosBuscar()
     {
+        TipoDocumentoEnum tipoReferenciaEnum =null;
         ///Cargar los datos de la factura segun el tipo de datos del primer detalle
-        TipoDocumentoEnum tipoReferenciaEnum = factura.getDetalles().get(0).getTipoDocumentoEnum();
+        if(factura.getDetalles().size()==0)
+        {
+            DialogoCodefac.mensaje(new CodefacMsj("La factura no tiene detalles", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            return;
+        }
+        else
+        {
+            tipoReferenciaEnum = factura.getDetalles().get(0).getTipoDocumentoEnum();
+        }        
+        
         controlador.setTipoDocumentoEnumSeleccionado(tipoReferenciaEnum);
         //getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
         seleccionarPanelTipoDocumento(tipoReferenciaEnum);
@@ -2099,7 +2109,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
                 fila.add(detalle.getCantidad().toString());
                 fila.add(detalle.getDescripcion());
-                fila.add(detalle.getDescuento().toString());
+                fila.add((detalle.getDescuento()!=null)?detalle.getDescuento().toString():"");
                 fila.add(detalle.getTotal().toString());
                 fila.add("Eliminar"); //Boton de eliminar para la tabla
                 modeloTablaDetallesProductos.addRow(fila);
@@ -2179,26 +2189,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     }
 
-    
-    public void calcularTotalDescuento(List<FacturaDetalle> facturaDetalles) {
-        /*
-        //this.descuento = new BigDecimal(0);
-        this.subTotalDescuentoConImpuesto = new BigDecimal(0);
-        this.subTotalDescuentoSinImpuesto = new BigDecimal(0);
-        //this.subtotalSinImpuestosDescuento = new BigDecimal(0);
-        facturaDetalles.forEach((facturaDetalle)
-                -> {
-            //this.descuento = this.descuento.add(facturaDetalle.getDescuento());
-            if (facturaDetalle.getProducto().getIva().getTarifa() == 12) {
-                this.subTotalDescuentoConImpuesto = this.subTotalDescuentoConImpuesto.add(facturaDetalle.getDescuento());
-            } else {
-                this.subTotalDescuentoSinImpuesto = this.subTotalDescuentoSinImpuesto.add(facturaDetalle.getDescuento());
-            }
-        });
-        //this.descuento = this.descuento.setcale(2, BigDecimal.ROUND_HALF_UP);
-        this.subTotalDescuentoConImpuesto = this.subTotalDescuentoConImpuesto.setcale(2, BigDecimal.ROUND_HALF_UP);
-        this.subTotalDescuentoSinImpuesto = this.subTotalDescuentoSinImpuesto.setcale(2, BigDecimal.ROUND_HALF_UP);*/
-    }
 
     
     public void calcularSubtotales() {
