@@ -267,7 +267,7 @@ public abstract class ServiceFactory {
                 
                 
             } catch (RemoteException ex) {
-                JOptionPane.showMessageDialog(null,"Error de conexión con el servidor","Error",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Error de conexión con el servidor\n\nPosibles Causas: \n - Verifique que el equipo tiene conexión a internet. \n - Verifique que la IP DEL SERVIDOR está ingresada correctamente. \n - Verifique que el sistema esta abierto en el servidor. \n - Otros problemas de red. ","Error",JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
                 System.exit(0);
             } catch (NotBoundException ex) {
