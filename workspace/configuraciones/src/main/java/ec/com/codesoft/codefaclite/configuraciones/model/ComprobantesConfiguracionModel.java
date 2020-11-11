@@ -550,7 +550,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             String desc = "Bienvenido a Codefac-Lite. <br>"
                     + "Estimado/a usuario le informamos que su cuenta en Codefac-Lite ha sido activada exitosamente. Ahora ya puedes aprovechar los beneficios de nuestro sistema de facturación electrónica.\n"
                     + "<br><br> <b>NOTA.- Este mensaje fue enviado automáticamente por el sistema, por favor no responda a este correo.</b>";
-            CorreoElectronico correoElectronico = new CorreoElectronico(getTxtCorreoElectronico().getText(), new String(getTxtPasswordCorreo().getPassword()), desc, correos, "Notificación Codefac",obtenerPropiedadesCorreo());
+            CorreoElectronico correoElectronico = new CorreoElectronico(getTxtCorreoElectronico().getText(),"Sistema Codefac" ,new String(getTxtPasswordCorreo().getPassword()), desc, correos, "Notificación Codefac",obtenerPropiedadesCorreo());
             correoElectronico.sendMail();
             //TODO: Verificar si se va a dar uso de esta funcionalidad
             //TODO: Agregar una variable para la informacion del consumidor final

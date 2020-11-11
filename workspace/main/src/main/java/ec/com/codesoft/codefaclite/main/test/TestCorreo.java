@@ -24,7 +24,7 @@ public class TestCorreo {
         try {
             List<String> correos=new ArrayList<String>();
             correos.add("carlosmast2301@hotmail.es");
-            CorreoElectronico correoElectronico=new CorreoElectronico("carlosmast2301@hotmail.es","codesoft2302","hola",correos, "Prueba",null);
+            CorreoElectronico correoElectronico=new CorreoElectronico("carlosmast2301@hotmail.es","Empresa ABC","codesoft2302","hola",correos, "Prueba",null);
             correoElectronico.sendMail();
         } catch (AuthenticationFailedException ex) {
             System.out.println("Fallo al autentificar el usuario");

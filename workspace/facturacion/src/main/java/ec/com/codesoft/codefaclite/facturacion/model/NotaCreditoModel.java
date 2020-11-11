@@ -197,7 +197,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             crearDetalleTabla();
             this.notaCredito = notaCreditoTmp;
             controlador.setearDatosProveedor(this.notaCredito.getCliente(),this.notaCredito);
-            mostrarDatosNotaCredito(); 
+            mostrarDatosNotaCredito();
             cargarDatosDetalles();
             cargarTablaDatosAdicionales();
             getPnlDatosAdicionales().habiliarBotonAutorizar();
@@ -732,8 +732,8 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                 buscarDialogoModel.setVisible(true);
                 Factura factura = (Factura) buscarDialogoModel.getResultado();
                 if (factura != null) {
-                    controlador.setearDatosFacturaEnNotaCredito(factura, notaCredito);
-                    
+                    notaCredito.setFechaEmision(new java.sql.Date(getjDateFechaEmision().getDate().getTime()));
+                    controlador.setearDatosFacturaEnNotaCredito(factura, notaCredito);                    
                     /**
                      * =======================================
                      *     ACTUALIZAR DATOS EN LA VISTA
@@ -1176,7 +1176,10 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.NOTA_CREDITO,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+                if(estadoFormulario.equals(ESTADO_GRABAR))
+                {
+                    ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.NOTA_CREDITO,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
+                }
             }
         });
         

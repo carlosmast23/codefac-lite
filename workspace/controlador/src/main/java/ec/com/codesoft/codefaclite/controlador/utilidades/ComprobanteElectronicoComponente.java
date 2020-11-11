@@ -27,6 +27,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
@@ -136,7 +137,19 @@ public class ComprobanteElectronicoComponente {
         try {
             PuntoEmision puntoEmision = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerPorCodigo(Integer.valueOf(comprobante.getPuntoEmision()), comprobante.getSucursalEmpresa());
 
-            cmbPuntoEmision.setSelectedItem((PuntoEmision) puntoEmision); //TODO: Analizar para todos los casos porque aveces no me va a permitir cargagar cuando pertenece a otra sucursal
+            //cmbPuntoEmision.setSelectedItem((PuntoEmision) puntoEmision); //TODO: Analizar para todos los casos porque aveces no me va a permitir cargagar cuando pertenece a otra sucursal
+            DefaultComboBoxModel modelCombo=(DefaultComboBoxModel)cmbPuntoEmision.getModel();
+            //Si no tiene permisos seleciono con null para que no pueda editar y no genere inconsistencias
+            if(modelCombo.getIndexOf(puntoEmision)<0)
+            {
+                cmbPuntoEmision.addItem(puntoEmision);
+                cmbPuntoEmision.setSelectedItem(puntoEmision);                
+            }
+            else
+            {
+                cmbPuntoEmision.setSelectedItem(puntoEmision);
+            }
+            
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
             PuntoEmision puntoEmisionTmp = new PuntoEmision();

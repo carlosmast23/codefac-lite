@@ -137,7 +137,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         try {
             List<String> correos = new ArrayList<String>();
             correos.add(ParametrosSistemaCodefac.CORREO_COMPROBACION_CORREOS);
-            CorreoElectronico correoElectronico = new CorreoElectronico(correo, new String(clave),textoVerificacion, correos, "Validación Correo Codefac",propiedadCorreo);
+            CorreoElectronico correoElectronico = new CorreoElectronico(correo,"Codefac Sistema", new String(clave),textoVerificacion, correos, "Validación Correo Codefac",propiedadCorreo);
             correoElectronico.sendMail();
             //Grabar la fecha de la ultima validación correcta del correo
             ServiceFactory.getFactory().getParametroCodefacServiceIf().grabarOEditar(

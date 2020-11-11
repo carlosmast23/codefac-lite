@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.email;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,11 @@ import javax.mail.internet.MimeMultipart;
  */
 public class CorreoElectronico {
 
+    /**
+     * Es el nombre alterno para que le llegue en vez del nombre del emisor al cliente
+     * Nota: Esto por lo general puede ser el nombre de la empresa
+     */
+    private String alias;
     private String usuario;
     private String clave;
 
@@ -44,8 +50,9 @@ public class CorreoElectronico {
     private Map<String,String> pathFiles;
     private PropiedadCorreo propiedadCorreo;
 
-    public CorreoElectronico(String usuario, String clave, String mensaje, List<String> to, String subject,PropiedadCorreo propiedadCorreo) {
+    public CorreoElectronico(String usuario,String alias, String clave, String mensaje, List<String> to, String subject,PropiedadCorreo propiedadCorreo) {
         this.usuario = usuario;
+        this.alias=alias;
         this.clave = clave;
         this.mensaje = mensaje;
         this.to = to;
@@ -54,8 +61,9 @@ public class CorreoElectronico {
         setearPropiedad(propiedadCorreo);
     }
     
-    public CorreoElectronico(String usuario, String clave, String mensaje, List<String> to, String subject,Map<String,String> pathFiles,PropiedadCorreo propiedadCorreo) {
+    public CorreoElectronico(String usuario,String alias, String clave, String mensaje, List<String> to, String subject,Map<String,String> pathFiles,PropiedadCorreo propiedadCorreo) {
         this.usuario = usuario;
+        this.alias=alias;
         this.clave = clave;
         this.mensaje = mensaje;
         this.to = to;
@@ -122,7 +130,7 @@ public class CorreoElectronico {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(usuario));
+            message.setFrom(new InternetAddress(usuario,alias));
             
             /**
              * Agregar varios destinatarios
@@ -216,6 +224,8 @@ public class CorreoElectronico {
             throw e;
         } catch (MessagingException ex) {
             throw ex;
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(CorreoElectronico.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

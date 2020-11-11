@@ -59,9 +59,16 @@ public abstract class CorreoCodefac {
             if(!smtpHost.isEmpty() && !smtpPort.isEmpty())
             {
                 propiedadCorreo=new PropiedadCorreo(smtpHost,new Integer(smtpPort));
-            }  
+            } 
             
-            correoElectronico=new CorreoElectronico(correo,clave, getMensaje(), getDestinatorios(), getTitulo(),propiedadCorreo);
+            //Agregar el nombre de la empresa o la razon social
+            String alias=empresa.getNombreLegal();
+            if(alias==null || alias.trim().isEmpty())
+            {
+                alias=empresa.getRazonSocial();
+            }
+            
+            correoElectronico=new CorreoElectronico(correo,alias,clave, getMensaje(), getDestinatorios(), getTitulo(),propiedadCorreo);
             correoElectronico.setPathFiles(getPathFiles());
             
             try
