@@ -106,6 +106,13 @@ public class ReporteCodefac {
         }
     }
     
+    public static void generarReporteInternalFrame(JasperPrint print,InterfazComunicacionPanel panelPadre,String tituloReporte,ConfiguracionImpresoraEnum configuracionImpresora)
+    {
+        //JasperPrint print =JasperFillManager.fillReport(report, parametros,dataReport);
+        //JasperViewer.viewReport(print,false);
+        panelPadre.crearReportePantalla(print,tituloReporte,configuracionImpresora);
+    }
+    
     //Metodo temporal para generar varios reportes
     @Deprecated
     public static JasperPrint generarReporteInternalFrameJasperPrint(InputStream pathReporte,Map parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,ConfiguracionImpresoraEnum configuracionImpresora)

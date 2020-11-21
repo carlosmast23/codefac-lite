@@ -1250,7 +1250,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                            reportesPendientes.add(jasperPrint);
                            //facturaManual(facturaProcesada,documentoEnum,true);
                         }
-                        UtilidadReportes.visualizarReporteVentanaExterna(UtilidadReportes.unificarReportes(reportesPendientes));
+                        
+                        ConfiguracionImpresoraEnum configuracion=obtenerConfiguracionImpresora();
+                        //ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa",configuracion);
+                        ReporteCodefac.generarReporteInternalFrame(UtilidadReportes.unificarReportes(reportesPendientes), panelPadre, "Comprobantes de Ventas", configuracion);
+                        //UtilidadReportes.visualizarReporteVentanaExterna(UtilidadReportes.unificarReportes(reportesPendientes));
                         return;
                     }
                     

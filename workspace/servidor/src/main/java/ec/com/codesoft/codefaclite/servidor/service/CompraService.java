@@ -125,6 +125,10 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             mapParametros.put("secuencial",compra.getSecuencial());
             mapParametros.put("empresa",compra.getEmpresa());
             mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+            mapParametros.put("codigoDocumento", compra.getCodigoDocumentoEnum().getCodigo());
+            mapParametros.put("proveedor", compra.getProveedor());
+            
+            //compra.get
 
             List<Compra> resultadoCompra= getFacade().findByMap(mapParametros);
             if(resultadoCompra.size()>0)
@@ -136,10 +140,10 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         /**
          * Validar que este ingresando una compra repetida
          */
-        if(getFacade().verificarCompraRepetida(compra))
-        {
-            throw new ServicioCodefacException("No se puede ingresar compras repetidas");
-        }
+        //if(getFacade().verificarCompraRepetida(compra))
+        //{
+        //    throw new ServicioCodefacException("No se puede ingresar compras repetidas");
+        //}
         
         
     }

@@ -61,6 +61,8 @@ public class LoginMb extends GeneralPublicoAbstractMb{
     public void init() {
         System.out.println("PostConstruct ...");
         iniciarDatos();
+        
+        
     }
 
     public String login() {
