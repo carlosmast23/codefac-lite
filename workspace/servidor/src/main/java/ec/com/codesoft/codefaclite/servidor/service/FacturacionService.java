@@ -51,6 +51,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionService
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
@@ -291,6 +293,15 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             if(detalle.getDescuento()==null)
             {
                 throw new ServicioCodefacException("Error al grabar un descuento null en el pedido");
+            }
+            else
+            {
+                //Verificar que los detalles de los descuentos no tenga más de 2 decimales
+                int numeroDecimales=UtilidadesNumeros.numeroDecimales(detalle.getDescuento()+"");
+                if(numeroDecimales>2)
+                {
+                    throw new ServicioCodefacException("Error con el descuento que tiene más de 2 decimales en el producto "+detalle.getDescripcion()+" ");
+                }
             }
         }
         

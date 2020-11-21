@@ -218,7 +218,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     {
         porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
         BigDecimal total = getCantidad().multiply(getPrecioUnitario().setScale(5, BigDecimal.ROUND_HALF_UP)); //Escala a 2 decimales el valor del valor unitario porque algunos proveedores tienen 3 decimales
-        descuento = total.multiply(porcentajeDescuento); //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
+        descuento = total.multiply(porcentajeDescuento).setScale(2,BigDecimal.ROUND_HALF_UP); //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
         if (incluidoIvaSiNo.equals(EnumSiNo.SI)) {
             descuento = UtilidadesImpuestos.quitarValorIva(ivaDefecto, descuento, 6);
         }

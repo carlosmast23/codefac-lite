@@ -491,8 +491,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             }
             
             //Redonde a 2 decimales porque en el Sri no permite con mas decimales
-            //facturaDetalle.setDescuento(descuento.setScale(2,BigDecimal.ROUND_HALF_UP));
-            facturaDetalle.setDescuento(descuento);
+            facturaDetalle.setDescuento(descuento.setScale(2,BigDecimal.ROUND_HALF_UP));
+            //facturaDetalle.setDescuento(descuento);
         } else { //Cuando es porcentaje se calcula primero el valor en procentaje
             if (!interfaz.obtenerTxtDescuento().isEmpty()) {
                 BigDecimal porcentajeDescuento = new BigDecimal(interfaz.obtenerTxtDescuento());
