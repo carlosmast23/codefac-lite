@@ -243,7 +243,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                  */
                 //List<ImpuestoComprobante> listaComprobantes = new ArrayList<ImpuestoComprobante>();
 
-                //calcularImpuestos(mapTotalImpuestos, facturaDetalle);
+                //calcularImpuestos(mapTotalImpuestos, facturaDetalle);                
                 detalle.setImpuestos(calcularImpuestos(mapTotalImpuestos, facturaDetalle));
                 
                 /**

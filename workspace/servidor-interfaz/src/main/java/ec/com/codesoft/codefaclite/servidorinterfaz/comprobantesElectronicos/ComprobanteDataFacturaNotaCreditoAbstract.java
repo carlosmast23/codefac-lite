@@ -84,13 +84,23 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             impuesto.setCodigo(catalogoProducto.getIva().getImpuesto().getCodigoSri());
             impuesto.setCodigoPorcentaje(catalogoProducto.getIva().getCodigo() + "");
             impuesto.setTarifa(new BigDecimal(catalogoProducto.getIva().getTarifa() + ""));
-            impuesto.setBaseImponible(comprobanteDetalle.totalSinImpuestosConIce().setScale(2, RoundingMode.HALF_UP));
-            impuesto.setValor(comprobanteDetalle.getIva().setScale(2, RoundingMode.HALF_UP));
-
+            impuesto.setBaseImponible(comprobanteDetalle.totalSinImpuestosConIce());
+            
+            //Obtengo nuevamente el iva calculado por que necesito todos los decimales para tener el valor exacto y en la base de datos esta grabado solo con 2 decimales y eso puede generar problemas
+            impuesto.setValor(comprobanteDetalle.recalcularIva());
+            
             /**
              * Verificar valores para el total de impuesto
              */
             sumarizarTotalesImpuestos(mapTotalImpuestos, catalogoProducto.getIva(), impuesto);
+            
+            /**
+             * Redondedo los impuestos despues de hacer los calculos para tener un valor exacto de los impuestos totales
+             */
+            impuesto.setValor(impuesto.getValor().setScale(2, RoundingMode.HALF_UP));
+            impuesto.setBaseImponible(impuesto.getBaseImponible().setScale(2, RoundingMode.HALF_UP));
+            
+            
             listaComprobantes.add(impuesto);
 
             /**
@@ -141,6 +151,9 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
     
     public List<TotalImpuesto> crearImpuestosTotales(Map<Integer, TotalImpuesto> mapTotalImpuestos)
     {
+        //Primero redondeo los valores totales
+        redondearMapImpuestos(mapTotalImpuestos);
+        
         List<TotalImpuesto> totalImpuestos = new ArrayList<TotalImpuesto>();
         for (Map.Entry<Integer, TotalImpuesto> entry : mapTotalImpuestos.entrySet()) {
             Integer key = entry.getKey();
@@ -161,6 +174,17 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    protected void redondearMapImpuestos(Map<Integer, TotalImpuesto> mapImpuestos)
+    {
+        for (Map.Entry<Integer, TotalImpuesto> entry : mapImpuestos.entrySet()) {
+            Integer codigoImpuesto = entry.getKey();
+            TotalImpuesto totalImpuesto = entry.getValue();
+            
+            totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().setScale(2,BigDecimal.ROUND_HALF_UP));
+            totalImpuesto.setValor(totalImpuesto.getValor().setScale(2,BigDecimal.ROUND_HALF_UP));
+        }
     }
     
     public interface InfoComprobanteInterface

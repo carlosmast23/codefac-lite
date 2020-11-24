@@ -231,12 +231,26 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public void calculaIva() {
         //Verifico que el valor del ice no cea null para no tener errores
         //TODO: Mejorar esta parte de setear el valor del Ice
+        /*if (valorIce == null) {
+            valorIce = BigDecimal.ZERO;
+        }
+
+        BigDecimal valorIvaDecimal = new BigDecimal(ivaPorcentaje.toString()).divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+        iva = getTotal().add(valorIce).multiply(valorIvaDecimal).setScale(2, BigDecimal.ROUND_HALF_UP); //Para calcular el iva tomo en cuenta el vlaor del Ice*/
+        iva=recalcularIva().setScale(2, BigDecimal.ROUND_HALF_UP); //Para calcular el iva tomo en cuenta el vlaor del Ice;
+    }
+    
+    public BigDecimal recalcularIva()
+    {
+        //Verifico que el valor del ice no cea null para no tener errores
+        //TODO: Mejorar esta parte de setear el valor del Ice
         if (valorIce == null) {
             valorIce = BigDecimal.ZERO;
         }
 
         BigDecimal valorIvaDecimal = new BigDecimal(ivaPorcentaje.toString()).divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-        iva = getTotal().add(valorIce).multiply(valorIvaDecimal).setScale(2, BigDecimal.ROUND_HALF_UP); //Para calcular el iva tomo en cuenta el vlaor del Ice
+        BigDecimal iva = getTotal().add(valorIce).multiply(valorIvaDecimal);
+        return iva;
     }
 
     public void calcularValorIce() {
