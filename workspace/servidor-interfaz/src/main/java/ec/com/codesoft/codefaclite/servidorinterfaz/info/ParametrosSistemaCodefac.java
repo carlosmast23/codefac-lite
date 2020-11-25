@@ -137,4 +137,9 @@ public abstract class ParametrosSistemaCodefac {
     public static final String NOMBRE_SISTEMA="Codefac";
     
     public static final String CODIGO_NO_APLICA_RETENCIONES="000";
+    
+    /***
+     * Variable que establece la cantidad maxima de días previos que se pueden emitir una factura
+     */
+    public static final Integer MAX_DIAS_FACURAR=30;
 }

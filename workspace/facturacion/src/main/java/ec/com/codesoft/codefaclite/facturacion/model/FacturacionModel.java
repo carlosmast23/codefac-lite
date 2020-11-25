@@ -641,7 +641,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(estadoFormulario.equals(ESTADO_GRABAR))
                 {
                     java.util.Date fecha = getjDateFechaEmision().getDate();
-                    if (!ComprobarRangoDeFechaPermitido(fecha)) {
+                    if (!ComprobarRangoDeFechaPermitido(fecha)) 
+                    {
                         DialogoCodefac.mensaje("Advertencia fecha", "La fecha seleccionada esta fuera del rango de autorizaciòn del SRI", DialogoCodefac.MENSAJE_ADVERTENCIA);
                         getjDateFechaEmision().setDate(UtilidadesFecha.getFechaHoy()); //volver a setear la fecha de hoy para que no puedan grabar con un fecha incorrecta
                     }
@@ -2484,7 +2485,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(this.fechaMax);
-        calendar.add(Calendar.DAY_OF_MONTH, -30);
+        calendar.add(Calendar.DAY_OF_MONTH, - ParametrosSistemaCodefac.MAX_DIAS_FACURAR);
         this.fechaMin = calendar.getTime();
 
     }

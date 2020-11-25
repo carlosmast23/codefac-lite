@@ -88,12 +88,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.math.RoundingMode;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.Timestamp;
 import java.util.Arrays;
 
 /**
@@ -514,7 +516,13 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             MensajeMb.mostrarMensajeDialogo("Error Validación", "No se puede grabar sin detalles", FacesMessage.SEVERITY_WARN);
             return false;
         }
-
+        
+        if(!UtilidadesFecha.validarfechaDentroDeRango(UtilidadesFecha.castDateToTimeStamp(fechaEmision),ParametrosSistemaCodefac.MAX_DIAS_FACURAR))
+        {
+            MensajeMb.mostrarMensajeDialogo("Error Validación", "La fecha de emisión es superior a la fecha de autorización del Sri", FacesMessage.SEVERITY_WARN);
+            return false;
+        }
+        
         return true;
     }
 

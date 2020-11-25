@@ -347,5 +347,30 @@ public class UtilidadesFecha {
         
         return UtilidadesFecha.castDateUtilToSql(dateUtil);
     }
+    
+    public static Timestamp castDateToTimeStamp(java.sql.Date fecha)
+    {
+        return new Timestamp(fecha.getTime());
+    }
+    
+    public static Timestamp castDateToTimeStamp(java.util.Date fecha)
+    {
+        return new Timestamp(fecha.getTime());
+    }
+    
+    /**
+     * Metodo que me permite verificar si una fecha esta dentro de una cantidad de dias previos
+     * @return 
+     */
+    public static Boolean validarfechaDentroDeRango(Timestamp fechaEmision,Integer diasTolerancia)
+    {
+        int distanciaDias=obtenerDistanciaConLaFechaActual(fechaEmision);
+        if(distanciaDias>diasTolerancia)
+        {
+            return false;
+        }
+        return true;
+    
+    }
 
 }
