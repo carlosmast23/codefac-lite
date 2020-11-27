@@ -1619,87 +1619,24 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         servicio.setPathRetencionJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("retencion.jrxml"));
         servicio.setPathGuiaRemisionJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("guiaRemision.jrxml"));
         
-        //TODO:Optimizar esta parte para que sola cargue cuando necesite cargar las guias de remision
-        InputStream inputStreamGuiaRemision;
-        try {
-            JasperReport reporteDetalleGuiaRemision=ReporteProxy.buscar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "guiaRemisionDetalle.jrxml");
-            if(reporteDetalleGuiaRemision==null)
-            {
-                inputStreamGuiaRemision = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "guiaRemisionDetalle.jrxml"));
-                reporteDetalleGuiaRemision = JasperCompileManager.compileReport(inputStreamGuiaRemision);
-                ReporteProxy.agregar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"guiaRemisionDetalle.jrxml",reporteDetalleGuiaRemision);
-            }
-            
-            servicio.setJasperSubReporteGuiaRemision(reporteDetalleGuiaRemision);
-        } catch (IOException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JRException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //Cargar el reporte para las guias de remision
+        JasperReport reporteDetalleGuiaRemision=cargarRecursoJasperProxy(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"guiaRemisionDetalle.jrxml");
+        servicio.setJasperSubReporteGuiaRemision(reporteDetalleGuiaRemision);
         
-        //String imagenLogo=session.getParametrosCodefac().get(ParametroCodefac.LOGO_EMPRESA).getValor();
-        //TODO Este parametro debe ser configurable cuando se la version de pago para que permita seleccionar la imagen del cliente
-        //servicio.setLogoImagen(DirectorioCodefac.IMAGENES.getArchivoStream(session,imagenLogo));
-        //BufferedImage image = ImageIO.read(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
-        //servicio.setLogoImagen(image);
+        
         servicio.setPathParentJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcesParentPath("facturaReporte.jrxml"));
         
-        InputStream inputStreamJasper=null;    
-        JasperReport reportFormaPago=null;
-        try {
-            reportFormaPago=ReporteProxy.buscar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "forma_pago.jrxml");
-            if(reportFormaPago==null)
-            {
-                inputStreamJasper = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "forma_pago.jrxml"));
-                reportFormaPago = JasperCompileManager.compileReport(inputStreamJasper);
-                ReporteProxy.agregar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "forma_pago.jrxml", reportFormaPago);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JRException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        JasperReport reportFormaPago=cargarRecursoJasperProxy(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"forma_pago.jrxml");
         servicio.setReporteFormaPago(reportFormaPago);
-        //servicio.setReporteFormaPago(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("forma_pago.jasper"));
         
-        JasperReport reportDatosAdicionales=null;
-        try {
-            reportDatosAdicionales=ReporteProxy.buscar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionales.jrxml");
-            if(reportDatosAdicionales==null)
-            {
-                inputStreamJasper = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionales.jrxml"));
-                reportDatosAdicionales = JasperCompileManager.compileReport(inputStreamJasper);
-                ReporteProxy.agregar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionales.jrxml", reportDatosAdicionales);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JRException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        JasperReport reportDatosAdicionales=cargarRecursoJasperProxy(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"forma_pago.jrxml");
         servicio.setReporteInfoAdicional(reportDatosAdicionales);
         
-        //Agregar el reporte para los otros datos adicionales
-        JasperReport reportDatoOtrosAdicionales=null;
-        try {
-            reportDatoOtrosAdicionales=ReporteProxy.buscar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionalesA4.jrxml");
-            if(reportDatoOtrosAdicionales==null)
-            {
-                inputStreamJasper = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionalesA4.jrxml"));
-                reportDatoOtrosAdicionales = JasperCompileManager.compileReport(inputStreamJasper);
-                ReporteProxy.agregar(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionalesA4.jrxml", reportDatoOtrosAdicionales);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JRException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        JasperReport reportDatoOtrosAdicionales=cargarRecursoJasperProxy(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionalesA4.jrxml");
         servicio.setReporteInfoOtroAdicional(reportDatoOtrosAdicionales);
         
         
-        
-        servicio.setMapAdicionalReporte(mapReportePlantilla(empresa)); //Todo: revisar si esto esta bien
+        servicio.setMapAdicionalReporte(mapReportePlantilla(empresa)); //Todo: revisar si esto esta biena
         //servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg").getPath();
         //Segun el tipo de licencia cargar los recursos
         servicio.pathLogoImagen = UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
@@ -1749,8 +1686,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     private Map<String, Object> mapReportePlantilla(Empresa empresa) throws RemoteException {
         RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
         ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
-        //EmpresaService empresaService = new EmpresaService();
-        //Empresa empresa = empresaService.obtenerTodos().get(0);
+        
         Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap(empresa);
         
         //TODO:Revisar esta parte porque va a salir con la informacion de la matriz princiapl ,talvez deberia salir con la informacion de la sucursal que estan usando
@@ -1765,15 +1701,10 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
         Map<String, Object> parametros = new HashMap<String, Object>();
-        //parametros.put("pl_fecha_hora", formateador.format(new Date()));
-        //parametros.put("pl_usuario", (usuario==null)?"":usuario.getNick());
-        //parametros.put("pl_direccion",(matriz==null)?"SIN DIRECCION" :matriz.getDirecccion());
-        //parametros.put("pl_nombre_empresa", empresa.getNombreLegal());
-        parametros.put("pl_telefonos",(matriz.getTelefono()!=null)?matriz.getTelefono():matriz.getTelefono());
-        
+        parametros.put("pl_telefonos",(matriz.getTelefono()!=null)?matriz.getTelefono():matriz.getTelefono());        
         parametros.put("pl_celular", (matriz.getCelular()!=null)?matriz.getCelular():matriz.getCelular());
         parametros.put("pl_facebook",(empresa.getFacebook()!=null)?empresa.getFacebook():"");
-        //parametros.put("pl_adicional", empresa.getAdicional());
+        
         
         if (UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa.equals(TipoLicenciaEnum.GRATIS)) {
             parametros.put("pl_adicional",ParametrosSistemaCodefac.MensajesSistemaCodefac.MENSAJE_PIE_PAGINA_GRATIS);
@@ -1798,7 +1729,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         {
             input=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
         }
-        else //Si la licencia es de pago entonces carga la imagen del 
+        else //Si la licencia es de pago entonces carga la imagen de la empresa
         {
             //Verifica si esta guardado el path de la imagen 
             if(empresa.getImagenLogoPath()!=null && !empresa.getImagenLogoPath().equals("") )
@@ -1826,24 +1757,30 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         
         parametros.put("pl_url_img1", UtilidadImagen.castInputStreamToImage(input));
-        //parametros.put("pl_url_img1", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codefac-logotipo.png")));
-        
         parametros.put("pl_img_facebook", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png"))));
         parametros.put("pl_img_whatsapp", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png"))));
         parametros.put("pl_img_telefono", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png"))));
-        //parametros.put("pl_img_logo_pie", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codesoft-logo.png")));
         
-        //parametros.put("pl_url_cabecera", RecursoCodefac.JASPER.getResourceURL("encabezado.jasper"));
+        JasperReport reportPiePagina=cargarRecursoJasperProxy(RecursoCodefac.JASPER,"pie_pagina.jrxml");
+        parametros.put("pl_url_piepagina", reportPiePagina);
         
+        return parametros;
+    }
+    
+    private JasperReport cargarRecursoJasperProxy(RecursoCodefac recursoCodefac,String nombreReporteJrxml)
+    {
+        RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
         InputStream inputStream=null;
-        JasperReport reportPiePagina=null;
+        JasperReport reportJasper=null;
         try {
-            reportPiePagina=ReporteProxy.buscar(RecursoCodefac.JASPER, "pie_pagina.jrxml");
-            if(reportPiePagina==null)
+            //reportPiePagina=ReporteProxy.buscar(RecursoCodefac.JASPER, "pie_pagina.jrxml");
+            reportJasper=ReporteProxy.buscar(recursoCodefac, nombreReporteJrxml);
+            if(reportJasper==null)
             {
-                inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "pie_pagina.jrxml"));
-                reportPiePagina = JasperCompileManager.compileReport(inputStream);
-                ReporteProxy.agregar(RecursoCodefac.JASPER, "pie_pagina.jrxml", reportPiePagina);
+                //inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "pie_pagina.jrxml"));
+                inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(recursoCodefac, nombreReporteJrxml));
+                reportJasper = JasperCompileManager.compileReport(inputStream);
+                ReporteProxy.agregar(recursoCodefac, nombreReporteJrxml, reportJasper);
             }
             
         } catch (IOException ex) {
@@ -1852,13 +1789,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        parametros.put("pl_url_piepagina", reportPiePagina);
-        //parametros.put("pl_url_piepagina", RecursoCodefac.JASPER.getResourceURL("pie_pagina.jasper"));
-        
-        
-
-        //System.out.println(parametros.get("SUBREPORT_DIR"));
-        return parametros;
+        return reportJasper;
     }
     
     private void cargarConfiguracionesSms(ComprobanteElectronicoService servicio)
