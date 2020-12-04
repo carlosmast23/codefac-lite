@@ -79,7 +79,7 @@ create table FACTURA_DETALLE
     REFERENCIA_ID BIGINT,
     TIPO_REFERENCIA varchar(5),
     FACTURA_ID BIGINT,
-    CANTIDAD integer ,
+    CANTIDAD decimal(13,5),
     PRECIO_UNITARIO decimal(13,3),
     DESCUENTO decimal(13,2),
     VALOR_ICE decimal(13,2),
