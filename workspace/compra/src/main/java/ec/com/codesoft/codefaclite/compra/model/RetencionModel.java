@@ -816,7 +816,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
     private void setearDatos() {
         //retencion=new Retencion();
         //retencion.setCompra(compra);
-        retencion.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        retencion.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
         retencion.setFechaEmision(new java.sql.Date(getjDateFechaEmision().getDate().getTime()));
         retencion.setProveedor(retencion.getProveedor());
         retencion.setIdentificacion(retencion.getProveedor().getIdentificacion());

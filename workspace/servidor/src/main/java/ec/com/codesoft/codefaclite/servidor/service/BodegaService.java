@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -107,7 +108,8 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
                 List<Kardex> kardexResultado=kardexService.buscarPorBodega(b);
                 
                 for (Kardex kardex : kardexResultado) {
-                    if(kardex.getStock()>0)
+                    //if(kardex.getStock()>0)
+                    if(kardex.getStock().compareTo(BigDecimal.ZERO)==0)
                     {
                         throw new ServicioCodefacException("No se puede eliminar porque el kardex "+kardex.getProducto().getNombre()+" tiene stock positivo");
                     }

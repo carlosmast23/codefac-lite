@@ -186,7 +186,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     private void setearVariables()
     {
         kardexDetalle=new KardexDetalle();
-        kardexDetalle.setCantidad(Integer.parseInt(getTxtCantidad().getText()));
+        kardexDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
         //Si no tiene ingresado un precio unitario grabo como null
         String precioUnitarioTxt=(!getTxtPrecio().getText().isEmpty())?getTxtPrecio().getText():"0";
         kardexDetalle.setPrecioUnitario(new BigDecimal(precioUnitarioTxt));

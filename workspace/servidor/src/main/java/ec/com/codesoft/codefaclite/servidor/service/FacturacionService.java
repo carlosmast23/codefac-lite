@@ -541,11 +541,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
          * Validacion pára verificar que exista un stock superior o igual en el
          * kardex segun lo que quieran facturar
          */
-        int cantidadFaltante = detalle.getCantidad().intValue() - kardex.getStock();
+        BigDecimal cantidadFaltante = detalle.getCantidad().subtract(kardex.getStock());
         if(ParametroUtilidades.comparar(detalle.getFactura().getEmpresa(), ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO,EnumSiNo.NO))
         {
             //Si el stock que queremos facturar es mayor del existe lanzo una excepcion                
-            if (detalle.getCantidad().compareTo(new BigDecimal(kardex.getStock())) > 0) 
+            if (detalle.getCantidad().compareTo(kardex.getStock()) > 0) 
             {
                 //Solo para ensambles rerifica si tiene que construir el ensamble no importaria si no tiene el stock suficiente y mando a construir
                 if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI)) 
@@ -578,7 +578,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //TODO: Definir especificamente cual es la bodega principal
         //TODO: Analizar caso cuando se resta un producto especifico
         KardexService kardexService = new KardexService();
-        KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO, detalle.getPrecioUnitario(), detalle.getCantidad().intValue());;
+        KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO, detalle.getPrecioUnitario(), detalle.getCantidad());;
         //Agregando datos adicionales del movimiento en la factura
         kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
         kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision().toString());
@@ -603,7 +603,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     /**
      * Metodo para verificar si tiene la opcion activa de generar ensamble y ver si se puede construir en ese momento
      */
-    public void verificarConstruirEnsamble(Kardex kardex,int cantidadFaltante,Boolean validarStockComponentes) throws RemoteException, ServicioCodefacException
+    public void verificarConstruirEnsamble(Kardex kardex,BigDecimal cantidadFaltante,Boolean validarStockComponentes) throws RemoteException, ServicioCodefacException
     {
         if(ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(),ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
         {

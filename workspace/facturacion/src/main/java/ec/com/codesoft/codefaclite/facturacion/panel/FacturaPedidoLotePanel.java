@@ -332,7 +332,14 @@ public abstract class FacturaPedidoLotePanel extends ControladorCodefacInterface
         this.cmbFechaInicial = cmbFechaInicial;
     }
 
-    @TableBinding(source = "controlador.ventasList",tableAddDataInterface = "tableBindingAddData",selectValue = "controlador.facturaSeleccionada",listSelected = "controlador.ventasSeleccionadasList",componenteCheckSelect = "cmbSeleccionarTodo",modeCheck = true)
+    @TableBinding(
+            source = "controlador.ventasList",
+            tableAddDataInterface = "tableBindingAddData",
+            selectValue = "controlador.facturaSeleccionada",
+            listSelected = "controlador.ventasSeleccionadasList",
+            componenteCheckSelect = "cmbSeleccionarTodo",
+            modeCheck = true,
+            controlador = "controlador.tableBindingControlador")    
     public JTable getTblDatos() {
         return tblDatos;
     }

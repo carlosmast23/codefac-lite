@@ -106,6 +106,15 @@ public class Producto implements Serializable, Comparable<Producto> {
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
     
+    @Column(name = "PVP_4")
+    private BigDecimal pvp4;
+        
+    @Column(name = "PVP_5")
+    private BigDecimal pvp5;
+            
+    @Column(name = "PVP_6")
+    private BigDecimal pvp6;
+    
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     @ManyToOne    
     private CatalogoProducto catalogoProducto;
@@ -419,11 +428,58 @@ public class Producto implements Serializable, Comparable<Producto> {
             valores.add(precioVenta);
         }
         
+        if(pvp4!=null && pvp4.compareTo(BigDecimal.ZERO)!=0)
+        {
+            PrecioVenta precioVenta=new PrecioVenta();
+            precioVenta.alias=PrecioVenta.PV4;
+            precioVenta.precio=pvp4;
+            valores.add(precioVenta);
+        }
+        
+        if(pvp5!=null && pvp5.compareTo(BigDecimal.ZERO)!=0)
+        {
+            PrecioVenta precioVenta=new PrecioVenta();
+            precioVenta.alias=PrecioVenta.PV5;
+            precioVenta.precio=pvp5;
+            valores.add(precioVenta);
+        }
+        
+        if(pvp6!=null && pvp6.compareTo(BigDecimal.ZERO)!=0)
+        {
+            PrecioVenta precioVenta=new PrecioVenta();
+            precioVenta.alias=PrecioVenta.PV6;
+            precioVenta.precio=pvp6;
+            valores.add(precioVenta);
+        }
+        
         return valores;
+    }
+
+    public BigDecimal getPvp4() {
+        return pvp4;
+    }
+
+    public void setPvp4(BigDecimal pvp4) {
+        this.pvp4 = pvp4;
+    }
+
+    public BigDecimal getPvp5() {
+        return pvp5;
+    }
+
+    public void setPvp5(BigDecimal pvp5) {
+        this.pvp5 = pvp5;
+    }
+
+    public BigDecimal getPvp6() {
+        return pvp6;
+    }
+
+    public void setPvp6(BigDecimal pvp6) {
+        this.pvp6 = pvp6;
     }
     
     
-        
 
     /**
      * Metodos personalizados
@@ -515,6 +571,9 @@ public class Producto implements Serializable, Comparable<Producto> {
         public static final String PV1="pv1";
         public static final String PV2="pv2";
         public static final String PV3="pv3";
+        public static final String PV4="pv4";
+        public static final String PV5="pv5";
+        public static final String PV6="pv6";
         
         public String alias;
         public BigDecimal precio;

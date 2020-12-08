@@ -140,6 +140,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setPrecioDistribuidor(new BigDecimal(getTxtPrecioDistribuidor().getText()));
         producto.setPrecioTarjeta(new BigDecimal(getTxtPrecioTarjeta().getText()));
         producto.setPrecioSinSubsidio(new BigDecimal(getTxtPrecio1SinSubsidio().getText()));
+        
+        producto.setPvp4(new BigDecimal(getTxtPV4().getText()));
+        producto.setPvp5(new BigDecimal(getTxtPV5().getText()));
+        producto.setPvp6(new BigDecimal(getTxtPV6().getText()));
+        
         //producto.setStockInicial(Long.parseLong(getTxtStockInicial().getText()));
         producto.setMarca(getTxtMarca().getText());
         producto.setImagen(getTxtImagenProducto().getText());
@@ -292,6 +297,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         mapDatosIngresadosDefault.put(getTxtCantidadMinima(),"0");
         mapDatosIngresadosDefault.put(getTxtPrecioDistribuidor(),"0");
         mapDatosIngresadosDefault.put(getTxtPrecioTarjeta(),"0");
+        mapDatosIngresadosDefault.put(getTxtPV4(),"0");
+        mapDatosIngresadosDefault.put(getTxtPV5(),"0");
+        mapDatosIngresadosDefault.put(getTxtPV6(),"0");
         //mapDatosIngresadosDefault.put(getTxtStockInicial(),"0");
         
         productoService = ServiceFactory.getFactory().getProductoServiceIf();
@@ -411,6 +419,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtPrecioDistribuidor().setText("0");
         getTxtPrecioTarjeta().setText("0");
         getTxtPrecio1SinSubsidio().setText("0");
+        getTxtPV4().setText("0");
+        getTxtPV5().setText("0");
+        getTxtPV6().setText("0");
         //getTxtStockInicial().setText("0");
     }
     
@@ -453,7 +464,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtCaracteristica().setText((controlador.producto.getCaracteristicas() != null) ? controlador.producto.getCaracteristicas() + "" : "");
         getTxtObservaciones().setText((controlador.producto.getObservaciones() != null) ? controlador.producto.getObservaciones() + "" : "");
         //getCmbTipoProducto().setSelectedItem(controlador.producto.getTipoProductoEnum());
-        
+        getTxtPV4().setText((controlador.producto.getPvp4()!= null) ? controlador.producto.getPvp4() + "" : "");
+        getTxtPV5().setText((controlador.producto.getPvp5()!= null) ? controlador.producto.getPvp5() + "" : "");
+        getTxtPV6().setText((controlador.producto.getPvp6()!= null) ? controlador.producto.getPvp6() + "" : "");
         /**
          * Cargar datos de la entidad catalogo producto
          */

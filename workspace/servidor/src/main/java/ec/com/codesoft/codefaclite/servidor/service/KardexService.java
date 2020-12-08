@@ -111,7 +111,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * Obtiene los valores modificos del stock y la reserva para grabar en el Kardex
      * @return 
      */
-    public List<Kardex> getKardexModificados(Producto productoEnsamble,Integer cantidadEnsamble,Bodega bodega,ProductoEnsamble.EnsambleAccionEnum accion) throws java.rmi.RemoteException,ServicioCodefacException
+    public List<Kardex> getKardexModificados(Producto productoEnsamble,BigDecimal cantidadEnsamble,Bodega bodega,ProductoEnsamble.EnsambleAccionEnum accion) throws java.rmi.RemoteException,ServicioCodefacException
     {
         //Integer cantidadEnsamble=Integer.parseInt(getTxtCantidad().getText());
         
@@ -141,7 +141,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 
                 if(kardexComponente!=null)
                 {
-                    Integer cantidadTotal=cantidadEnsamble*cantidadProducto;
+                    BigDecimal cantidadTotal=cantidadEnsamble.multiply(new BigDecimal(cantidadProducto));
                     //Kardex kardexComponente=listaKardex.get(0);
                     //Este paso lo hago porque cuando seteo un valor a una entidad cuando esta asociado automaticamente se refleja en la base de datos
                     //ServiceAbstract.desasociarEntidadRecursivo(kardexComponente);
@@ -149,13 +149,13 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     if(accion.equals(ProductoEnsamble.EnsambleAccionEnum.AGREGAR) 
                             || accion.equals(ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA))
                     {
-                        kardexComponente.setReserva(kardexComponente.getReserva()+cantidadTotal);
-                        kardexComponente.setStock(kardexComponente.getStock()-cantidadTotal);
+                        kardexComponente.setReserva(new BigDecimal(kardexComponente.getReserva()).add(cantidadTotal).intValue());
+                        kardexComponente.setStock(kardexComponente.getStock().subtract(cantidadTotal));
                     }
                     else
                     {
-                        kardexComponente.setReserva(kardexComponente.getReserva() - cantidadTotal);
-                        kardexComponente.setStock(kardexComponente.getStock() + cantidadTotal);
+                        kardexComponente.setReserva(new BigDecimal(kardexComponente.getReserva()).subtract(cantidadTotal).intValue());
+                        kardexComponente.setStock(kardexComponente.getStock().add(cantidadTotal));
                     }
                     
                     //Agregar el detalle de kardex
@@ -172,7 +172,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                         kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.ENSAMBLE_INGRESO.getCodigo());
                     }
                     
-                    kardexDetalle.setPrecioTotal(new BigDecimal(cantidadTotal).multiply(kardexComponente.getPrecioUltimo()));
+                    kardexDetalle.setPrecioTotal(cantidadTotal.multiply(kardexComponente.getPrecioUltimo()));
                     kardexDetalle.setPrecioUnitario(kardexComponente.getPrecioUltimo());
                     kardexDetalle.setReferenciaDocumentoId(null);
                     kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoy());
@@ -216,7 +216,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     
     
-    public void ingresoEgresoInventarioEnsamble(Bodega bodega, Producto productoEnsamble,Integer cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException
+    public void ingresoEgresoInventarioEnsamble(Bodega bodega, Producto productoEnsamble,BigDecimal cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
@@ -228,7 +228,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
     }
     
-    public void ingresoEgresoInventarioEnsambleSinTransaccion(Bodega bodega, Producto productoEnsamble,Integer cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException
+    public void ingresoEgresoInventarioEnsambleSinTransaccion(Bodega bodega, Producto productoEnsamble,BigDecimal cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException
     {
         /**
          * ===============> Buscar el Ensamble de producto o crear
@@ -334,7 +334,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * @throws java.rmi.RemoteException
      * @throws ServicioCodefacException 
      */
-    private void validarEnsambleComponentes( Producto productoEnsamble,Bodega bodega,int cantidad) throws java.rmi.RemoteException,ServicioCodefacException
+    private void validarEnsambleComponentes( Producto productoEnsamble,Bodega bodega,BigDecimal cantidad) throws java.rmi.RemoteException,ServicioCodefacException
     {        
   
         for(ProductoEnsamble componenteProducto: productoEnsamble.getDetallesEnsamble())
@@ -349,12 +349,15 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             }
             else
             {
-                Integer productosFaltantes=kardexResultado.getStock()-componenteProducto.getCantidad()*cantidad;
+                BigDecimal productosFaltantes=kardexResultado.getStock().subtract(new BigDecimal(componenteProducto.getCantidad()).multiply(cantidad));
+                //Integer productosFaltantes=kardexResultado.getStock()-componenteProducto.getCantidad()*cantidad;
                 //boolean disponible=
                 //TODO:Si no existe la cantidad disponible del producto lanza una exceptcion
-                if(productosFaltantes<0)
+                
+                //if(productosFaltantes<0)
+                if(productosFaltantes.compareTo(BigDecimal.ZERO)<0)                
                 {
-                    throw new ServicioCodefacException("El producto "+productoEnsamble.getNombre()+" no tiene sufiente stock de "+componente.getNombre()+"para construir, faltante = "+Math.abs(productosFaltantes));
+                    throw new ServicioCodefacException("El producto "+productoEnsamble.getNombre()+" no tiene sufiente stock de "+componente.getNombre()+"para construir, faltante = "+Math.abs(productosFaltantes.floatValue()));
                 }
             }
             
@@ -371,13 +374,14 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         });
     }
     
-    public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,Integer cantidad,BigDecimal precio,Date fechaTransaccion) throws java.rmi.RemoteException,ServicioCodefacException
+        public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,BigDecimal cantidad,BigDecimal precio,Date fechaTransaccion) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 ///========> Validaciones basicas de los datos ingresados <=========================//
-                if(cantidad<=0)
+                //if(cantidad<=0)
+                if(cantidad.compareTo(BigDecimal.ZERO)<=0)
                 {
                     throw new ServicioCodefacException("Solo se puede hacer transferencias de cantidades positivas");
                 }
@@ -399,7 +403,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 
                 //==============> Verificar si tiene la cantidad disponible para transferir <============//
                 Kardex kardexOrigen=kardexResultado.get(0);
-                if(cantidad>kardexOrigen.getStock())
+                
+                if(cantidad.compareTo(kardexOrigen.getStock())>0)
+                //if(cantidad>kardexOrigen.getStock())
                 {
                     throw new ServicioCodefacException("Cantidad insuficiente para hacer la transferencia");
                 }
@@ -487,14 +493,22 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             //ALMACENA EL ULTIMO VALOR INGRESADO SIEMPRE QUE SEA UNA COMPRA
             kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
             //Calcular el precio promedio con respecto al nuevo valor
-            costoPonderado=calcularPrecioPonderado(kardex,kardexDetalle);
-            kardex.setPrecioPromedio(costoPonderado);            
+            if(kardex.getPrecioPromedio().compareTo(BigDecimal.ZERO)>0)
+            {
+                costoPonderado=calcularPrecioPonderado(kardex,kardexDetalle);
+                kardex.setPrecioPromedio(costoPonderado);            
+            }
+            else
+            {
+                kardex.setPrecioPromedio(kardexDetalle.getPrecioUnitario());
+            }
             
             
         }
          
-        Integer signo=kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero();
-        Integer stockFinal=kardex.getStock()+signo*kardexDetalle.getCantidad();
+        BigDecimal signo=new BigDecimal(kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero());
+        //Integer stockFinal=kardex.getStock()+signo.intValue()*kardexDetalle.getCantidad().intValue();
+        BigDecimal stockFinal=kardex.getStock().add(signo.multiply(kardexDetalle.getCantidad()));
         kardex.setStock(stockFinal);
         
         //CALCULAR EL PRECIO CON EL STOCK FINAL
@@ -515,7 +529,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
          * =================> VALIDACIONES PARA EVITAR ERROES <===============
          */
         //S no existe stock no se hace el calculo del precio promedio porque eso solo va a generar errores
-         if(kardex.getStock()<=0)
+        
+        if(kardex.getStock().compareTo(BigDecimal.ZERO)<=0)
+         //if(kardex.getStock()<=0)
          {
              return kardex.getPrecioPromedio(); 
          }
@@ -525,22 +541,22 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
          * Para calculoar el stock se utiliza la siguiente formular
          * costo=(stock*costoActual)*(cantidad*precioUnit)/(stock+cantidad)
          */
-        Integer stock=kardex.getStock();
+        BigDecimal stock=kardex.getStock();
         BigDecimal costoPonderado=kardex.getPrecioPromedio();
         
-        Integer cantidadUnitaria=kardexDetalle.getCantidad();
+        BigDecimal cantidadUnitaria=kardexDetalle.getCantidad();
         BigDecimal precioUnitario=kardexDetalle.getPrecioUnitario();
         
         //Primero calculo el numerador 
-        BigDecimal resultadoCosto= costoPonderado.multiply(new BigDecimal(stock)).add(precioUnitario.multiply(new BigDecimal(cantidadUnitaria)));
-        BigDecimal cantidadTotal=new BigDecimal(stock+cantidadUnitaria);
+        BigDecimal resultadoCosto= costoPonderado.multiply(stock).add(precioUnitario.multiply(cantidadUnitaria));
+        BigDecimal cantidadTotal=stock.add(cantidadUnitaria);
         //Calculo el denominador que es dividir para el total de productos
         resultadoCosto=resultadoCosto.divide(cantidadTotal,4,RoundingMode.HALF_UP); //Por defecto dejo 4 decimales porque puede ser que para productos de centavos el calculo sea muy impresiso
         
         return resultadoCosto;
     }
     
-    public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,Integer cantidad) throws java.rmi.RemoteException,ServicioCodefacException
+    public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,BigDecimal cantidad) throws java.rmi.RemoteException,ServicioCodefacException
     {
         KardexDetalle movimientoOrigen = new KardexDetalle();
         BigDecimal total=precioUnitario.multiply(new BigDecimal(cantidad.toString()));
@@ -564,7 +580,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         /**
          * Validaciones del Stock
          */
-        if(kardex.getStock()==0)
+        //if(kardex.getStock()==0)
+        if(kardex.getStock().compareTo(BigDecimal.ZERO)==0)
         {
             throw new ServicioCodefacException("No se puede eliminar porque el Stock esta en 0");
         }
@@ -572,18 +589,19 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                Integer stockAnular= kardex.getStock()*-1;
+                BigDecimal stockAnular= kardex.getStock().multiply(new BigDecimal("-1"));
                 KardexDetalle kardexDetalle=new KardexDetalle();                
                 kardexDetalle.setPrecioUnitario(kardex.getPrecioPromedio());
                 
-                if(stockAnular>0)
+                if(stockAnular.compareTo(BigDecimal.ZERO)>0)
+                //if(stockAnular>0)
                 {
                     kardexDetalle.setCantidad(stockAnular);
                     kardexDetalle.setCodigoTipoDocumentoEnum(TipoDocumentoEnum.ANULAR_MERCADERIA_POSITIVO);
                 }
                 else
                 {
-                    kardexDetalle.setCantidad(stockAnular*-1);
+                    kardexDetalle.setCantidad(stockAnular.multiply(new BigDecimal("-1")));
                     kardexDetalle.setCodigoTipoDocumentoEnum(TipoDocumentoEnum.ANULAR_MERCADERIA_NEGATIVO);
                 }
                 kardexDetalle.recalcularTotalSinGarantia();
@@ -645,7 +663,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             kardex.setPrecioTotal(BigDecimal.ZERO);
             kardex.setPrecioUltimo(BigDecimal.ZERO);
             //kardex.setProducto(value.getProductoProveedor().getProducto());
-            kardex.setStock(0);
+            kardex.setStock(BigDecimal.ZERO);
             kardex.setReserva(0);
             kardex.setEstadoEnum(GeneralEnumEstado.ACTIVO);
             em.persist(kardex); //grabando la persistencia
@@ -702,7 +720,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             throw new ServicioCodefacException("No se puede grabar sin referencia de Kardex vacio");
         }
         
-        if(detalle.getCantidad()==null || detalle.getCantidad()==0)
+        if(detalle.getCantidad()==null || detalle.getCantidad().compareTo(BigDecimal.ZERO)==0)
+        //if(detalle.getCantidad()==null || detalle.getCantidad()==0)
         {
             throw new ServicioCodefacException("No se puede ingresar cantidad negativas de stock o que sean 0");
         }
@@ -799,7 +818,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         //Invertir la lista porque los resultados estan invertidos
         //Collections.reverse(datosConsulta);
         
-        Integer cantidadSaldo = 0;
+        BigDecimal cantidadSaldo = BigDecimal.ZERO;
         BigDecimal precioUnitarioSaldo = BigDecimal.ZERO;
         BigDecimal precioTotalSaldo = BigDecimal.ZERO;
         
@@ -816,12 +835,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 
                 if(valorAnterior.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO))
                 {
-                    cantidadSaldo+=valorAnterior.getCantidad();
+                    cantidadSaldo=cantidadSaldo.add(valorAnterior.getCantidad());
                     precioTotalSaldo=precioTotalSaldo.add(valorAnterior.getPrecioTotal());
                 }
                 else
                 {
-                    cantidadSaldo-=valorAnterior.getCantidad();
+                    cantidadSaldo=cantidadSaldo.add(valorAnterior.getCantidad());
                     precioTotalSaldo=precioTotalSaldo.subtract(valorAnterior.getPrecioTotal());
                 }                
                 
@@ -836,7 +855,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             
             for (Object[] saldosAnterior : saldosAnteriores) {
                 String codigoTipoDocumento=(String) saldosAnterior[0];
-                Integer cantidad=((Long) saldosAnterior[1]).intValue();
+                //Integer cantidad=((Long) saldosAnterior[1]).intValue();
+                BigDecimal cantidad=new BigDecimal(saldosAnterior[1]+"");
                 BigDecimal precioUnitario=(BigDecimal) saldosAnterior[2];
                 BigDecimal precioTotal=(BigDecimal) saldosAnterior[3];
                 
@@ -844,20 +864,21 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 
                 if(tipoDocumento.getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO))
                 {
-                    cantidadSaldo+=cantidad;
+                    cantidadSaldo=cantidadSaldo.add(cantidad);
                     precioTotalSaldo=precioTotalSaldo.add(precioTotal);                    
                 }
                 else
                 {
-                    cantidadSaldo-=cantidad;
+                    cantidadSaldo=cantidadSaldo.subtract(cantidad);
                     precioTotalSaldo=precioTotalSaldo.subtract(precioTotal);
                 }
                 
-                precioUnitarioSaldo=precioTotalSaldo.divide(new BigDecimal(cantidadSaldo),2,BigDecimal.ROUND_HALF_UP); //Todo: Ver si esta varible se elimina porque el precio promedio puedo calcular del total       
+                precioUnitarioSaldo=precioTotalSaldo.divide(cantidadSaldo,2,BigDecimal.ROUND_HALF_UP); //Todo: Ver si esta varible se elimina porque el precio promedio puedo calcular del total       
             }                        
         }
         
-        if(cantidadSaldo>0)
+        if(cantidadSaldo.compareTo(BigDecimal.ZERO)>0)
+        //if(cantidadSaldo>0)
         {
             ///////////////======================> CONSTRUIR KARDEX DETALLE ADICIONAL DE LOS SALDOS <==============================//////////////////
             KardexDetalle kardexDetalle = new KardexDetalle();
@@ -957,13 +978,13 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         kardex.setPrecioUltimo(BigDecimal.ZERO);
         kardex.setProducto(producto);
         kardex.setReserva(0);
-        kardex.setStock(0);
+        kardex.setStock(BigDecimal.ZERO);
         kardex.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         return kardex;
         
     }
     
-    public boolean obtenerSiNoExisteStockProducto(Bodega bodega, Producto producto, int cantidad)
+    public boolean obtenerSiNoExisteStockProducto(Bodega bodega, Producto producto, BigDecimal cantidad)
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("bodega",bodega);
@@ -973,9 +994,13 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         if(listaKardex!=null && listaKardex.size()>0)
         {
             Kardex kardex = listaKardex.get(0);
-            if(kardex.getStock()>= cantidad){
+            if(kardex.getStock().compareTo(cantidad)>0)
+            {
+            //if(kardex.getStock()>= cantidad){
                 return true;
-            }else{
+            }
+            else
+            {
                 return false;
             }
         }
@@ -999,7 +1024,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     public Kardex construirKardexVacioSinPersistencia() throws java.rmi.RemoteException,ServicioCodefacException
     {
         Kardex kardexNuevo=new Kardex();
-        kardexNuevo.setStock(0);
+        kardexNuevo.setStock(BigDecimal.ZERO);
         kardexNuevo.setPrecioTotal(BigDecimal.ZERO);
         kardexNuevo.setPrecioPromedio(BigDecimal.ZERO);
         kardexNuevo.setPrecioUltimo(BigDecimal.ZERO);
@@ -1050,6 +1075,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         //kd.setCodigoTipoDocumentoEnum(TipoDocumentoEnum.transfe);
         return resultado;
     }   
+
             
 }
 

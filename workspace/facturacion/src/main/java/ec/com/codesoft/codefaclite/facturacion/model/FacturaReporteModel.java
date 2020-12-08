@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorRe
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaReportePanel;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DataEjemploReporte;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ReporteFacturaData;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteData;
@@ -633,10 +634,11 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 int filasSeleccionada[]=getTblDocumentos().getSelectedRows();
                 if(filasSeleccionada.length>=0)
                 {
-                    if(filasSeleccionada.length==1)
+                    /*if(filasSeleccionada.length==1)
                     {
                         int filaSeleccionada=filasSeleccionada[0];
                         panelPadre.cambiarCursorEspera();
+                        
                         try {
                             //controladorReporte.getData().get
                             String claveAcceso=controladorReporte.getData().get(filaSeleccionada).getClaveAcceso();//                    String claveAcceso = this.factura.getClaveAcceso();
@@ -654,6 +656,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         panelPadre.cambiarCursorNormal();
                     }
                     else
+                    {*/
+                    DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                    if(documentoSeleccionado.equals(DocumentoEnum.FACTURA))
                     {
                         List<String> clavesAcceso=new ArrayList<String>();
                         for (int fila : filasSeleccionada) 
@@ -661,7 +666,19 @@ public class FacturaReporteModel extends FacturaReportePanel {
                             clavesAcceso.add(controladorReporte.getData().get(fila).getClaveAcceso());//  
                         }
                         generarReporteUnificado(clavesAcceso);
+                    } else if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+                    {
+                        List<Factura> facturas=new ArrayList<Factura>();
+                        for (int fila : filasSeleccionada) 
+                        {
+                            Factura factura= controladorReporte.getDatafact().get(fila);
+                            facturas.add(factura);
+                        }
+                        
+                        FacturaModelControlador.imprimirComprobanteVentaLote(facturas, "Notas de venta",true, session, panelPadre);
+                        
                     }
+                    //}
                 }
             }
         });
@@ -676,6 +693,12 @@ public class FacturaReporteModel extends FacturaReportePanel {
         if(comprobantes!=null)
         {
         for (String claveAcceso : comprobantes) {
+            
+            if(claveAcceso==null || claveAcceso.isEmpty())
+            {
+                continue;
+            }
+            
             try {
                     byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,session.getEmpresa());
                     JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
@@ -706,6 +729,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
             JasperViewer.viewReport(reporteUnido,false);
         }
     }
+    
+    
     
     private JasperPrint obtenerJasperPrint(String claveAcceso) throws RemoteException, IOException, ClassNotFoundException
     {

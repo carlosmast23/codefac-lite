@@ -83,7 +83,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                 KardexServiceIf kardexService=ServiceFactory.getFactory().getKardexServiceIf();
                 Bodega bodega=(Bodega) getCmbBodega().getSelectedItem();
                 String accion=getCmbAccion().getSelectedItem().toString();
-                Integer cantidad=Integer.parseInt(getTxtCantidad().getText());
+                BigDecimal cantidad=new BigDecimal(getTxtCantidad().getText());
                 //List<Kardex> kardexList=getKardexModificados();
                 Boolean ingreso=(accion.equals(InventarioEnsamblePanel.OPCION_AGREGAR)?true:false);
                 
@@ -341,7 +341,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                     fila.add(componenteProducto.getCantidad()+"");
                     fila.add(componenteProducto.getCantidad()*cantidad+"");
                     fila.add(kardexComponente.getStock()+"");
-                    boolean disponible=componenteProducto.getCantidad()*cantidad<=kardexComponente.getStock();
+                    boolean disponible=componenteProducto.getCantidad()*cantidad<=kardexComponente.getStock().intValue();
                     
                     if(disponible)
                     {

@@ -460,7 +460,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
         //notaCredito.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
 
         notaCredito.setEmpresa(sessionMb.getSession().getEmpresa());
-        notaCredito.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        notaCredito.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
         notaCredito.setFechaEmision(new java.sql.Date(fechaEmision.getTime()));
 
         notaCredito.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());

@@ -50,4 +50,10 @@ public @interface TableBinding {
      * @return 
      */
     public String componenteCheckSelect() default "";
+    
+    /**
+     * Metodo que me permite establecer la referencia del controlador del mvc con la vista para tener mayor control de las acciones
+     * @return 
+     */
+    public String controlador() default "";
 }

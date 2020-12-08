@@ -229,9 +229,10 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
         NotaCredito notaCredito=interfaz.obtenerNotaCredito();
         notaCredito.setEmpresa(session.getEmpresa());
         //notaCredito.setEstado(Factura.ESTADO_FACTURADO);
-        notaCredito.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        notaCredito.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
         notaCredito.setRazonModificado(interfaz.obtenerTxtMotivoAnulacion());
-        notaCredito.setFechaEmision(new Date(interfaz.obtenerDateFechaEmision().getTime()));
+        
+        UtilidadesFecha.castDateToTimeStamp(interfaz.obtenerDateFechaEmision());
         
         PuntoEmision puntoEmisionSeleccionado= interfaz.obtenerPuntoEmisionSeleccionado();
         //notaCredito.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);

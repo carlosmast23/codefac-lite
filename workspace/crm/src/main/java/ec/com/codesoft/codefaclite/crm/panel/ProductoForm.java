@@ -129,6 +129,12 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         txtPrecioDistribuidor = new javax.swing.JTextField();
         jLabel26 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        txtPV5 = new javax.swing.JTextField();
+        txtPV6 = new javax.swing.JTextField();
+        txtPV4 = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDatosEnsamble = new javax.swing.JTable();
@@ -416,13 +422,13 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel16.setText("Marca:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(jLabel16, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -433,7 +439,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel17.setText("Caracteristicas:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(jLabel17, gridBagConstraints);
@@ -444,7 +450,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -456,13 +462,13 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel18.setText("Imagen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(jLabel18, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -473,7 +479,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         btnBuscarImagen.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(btnBuscarImagen, gridBagConstraints);
 
@@ -481,7 +487,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel19.setText("Observaciones:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(jLabel19, gridBagConstraints);
@@ -492,7 +498,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -515,7 +521,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel34.setText("                    ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 7;
         jPanel5.add(jLabel34, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -585,13 +591,67 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jPanel5.add(jLabel26, gridBagConstraints);
 
         jLabel25.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel25.setText("P.Venta Distribuidor (PV2):");
+        jLabel25.setText("PV4:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jLabel25, gridBagConstraints);
+
+        jLabel30.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel30.setText("PV5:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jLabel30, gridBagConstraints);
+
+        jLabel32.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel32.setText("PV6:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jLabel32, gridBagConstraints);
+
+        jLabel33.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel33.setText("P.Venta Distribuidor (PV2):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel5.add(jLabel25, gridBagConstraints);
+        jPanel5.add(jLabel33, gridBagConstraints);
+
+        txtPV5.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(txtPV5, gridBagConstraints);
+
+        txtPV6.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(txtPV6, gridBagConstraints);
+
+        txtPV4.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(txtPV4, gridBagConstraints);
 
         tabMenu.addTab("Info Adicional", jPanel5);
 
@@ -894,7 +954,10 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -937,6 +1000,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JTextField txtImagenProducto;
     private javax.swing.JTextField txtMarca;
     private javax.swing.JTextArea txtObservaciones;
+    private javax.swing.JTextField txtPV4;
+    private javax.swing.JTextField txtPV5;
+    private javax.swing.JTextField txtPV6;
     private javax.swing.JTextField txtPrecio1SinSubsidio;
     private javax.swing.JTextField txtPrecioDistribuidor;
     private javax.swing.JTextField txtPrecioTarjeta;
@@ -1254,7 +1320,35 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         return btnTemporal;
     }
 
-        
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+([.][0-9]+)?$", nombre = "PVP4", expresionRegularMensaje = "Solo se permite numeros enteros y decimales")
+    public JTextField getTxtPV4() {
+        return txtPV4;
+    }
+
+    public void setTxtPV4(JTextField txtPV4) {
+        this.txtPV4 = txtPV4;
+    }
+
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+([.][0-9]+)?$", nombre = "PVP5", expresionRegularMensaje = "Solo se permite numeros enteros y decimales")
+    public JTextField getTxtPV5() {
+        return txtPV5;
+    }
+
+    public void setTxtPV5(JTextField txtPV5) {
+        this.txtPV5 = txtPV5;
+    }
+
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+([.][0-9]+)?$", nombre = "PVP6", expresionRegularMensaje = "Solo se permite numeros enteros y decimales")
+    public JTextField getTxtPV6() {
+        return txtPV6;
+    }
+
+    public void setTxtPV6(JTextField txtPV6) {
+        this.txtPV6 = txtPV6;
+    }
+
+    
     
     
 

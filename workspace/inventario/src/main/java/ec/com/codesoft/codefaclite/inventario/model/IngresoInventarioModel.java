@@ -39,6 +39,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -246,7 +247,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             kardexDetalle.setPuntoEmision(compraInventario.getPuntoEmision().toString());
             kardexDetalle.setSecuencial(compraInventario.getSecuencial());
             
-            kardexDetalle.setCantidad(detalle.getCantidad().intValue()); //TODO: ESTA PARTE SE DEBE MEJORAR PARA QUE EL KARDEX TERMINE CON VALORES DECIMALES
+            kardexDetalle.setCantidad(detalle.getCantidad()); //TODO: ESTA PARTE SE DEBE MEJORAR PARA QUE EL KARDEX TERMINE CON VALORES DECIMALES
             kardexDetalle.setCodigoTipoDocumento(compraInventario.getCodigoTipoDocumento());
             kardexDetalle.setReferenciaDocumentoId(compraInventario.getId());
             kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
@@ -563,10 +564,10 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         /***
          * RECALCULAR LOS SALDOS DEL KARDEX ANTIGUO Y EL NUEVO 
          */
-        kardexDetalleAntiguo.setCantidad(kardexDetalleAntiguo.getDetallesEspecificos().size());
+        kardexDetalleAntiguo.setCantidad(new BigDecimal(kardexDetalleAntiguo.getDetallesEspecificos().size()));
         kardexDetalleAntiguo.recalcularTotal();
         
-        kardexDetalleNuevo.setCantidad(kardexDetalleNuevo.getDetallesEspecificos().size());
+        kardexDetalleNuevo.setCantidad(new BigDecimal(kardexDetalleNuevo.getDetallesEspecificos().size()));
         kardexDetalleNuevo.recalcularTotal();
         
         /**

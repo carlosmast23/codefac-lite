@@ -64,7 +64,7 @@ public class Kardex implements Serializable,Cloneable {
      * Cantidad disponible del producto en esa bodega
      */
     @Column(name = "STOCK")
-    private Integer stock;
+    private BigDecimal stock;
     
     /**
      * Variable que me permite almacenar stock reservado cuando se crean
@@ -138,11 +138,11 @@ public class Kardex implements Serializable,Cloneable {
         this.precioTotal = precioTotal;
     }
 
-    public Integer getStock() {
+    public BigDecimal getStock() {
         return stock;
     }
 
-    public void setStock(Integer stock) {
+    public void setStock(BigDecimal stock) {
         this.stock = stock;
     }
 
@@ -212,7 +212,7 @@ public class Kardex implements Serializable,Cloneable {
     
     public void calcularPrecioTotal()
     {
-        this.precioTotal=precioPromedio.multiply(new BigDecimal(stock));
+        this.precioTotal=precioPromedio.multiply(stock);
     }
     
     /**
@@ -221,13 +221,14 @@ public class Kardex implements Serializable,Cloneable {
      */
     public BigDecimal calcularPrecioPromedio()
     {
-        if(stock==0)
+        //if(stock==0)
+        if(stock.compareTo(BigDecimal.ZERO)==0)
         {
             return BigDecimal.ZERO;
         }
         else
         {
-            return this.precioTotal.divide(new BigDecimal(this.stock),2,BigDecimal.ROUND_HALF_UP);
+            return this.precioTotal.divide(this.stock,2,BigDecimal.ROUND_HALF_UP);
         }
     }
 

@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -209,8 +210,8 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         return fechaFactura;
     }
 
-    public Date getFechaCreacion() {
-        return fechaCreacion;
+    public Timestamp getFechaCreacion() {
+        return UtilidadesFecha.castDateToTimeStamp(fechaCreacion);
     }
 
     /**

@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ProformaDetalleData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
@@ -169,16 +170,16 @@ public class ProformaModel extends FacturacionModel{
     }
     
 
-    @Override
+    //@Override
     public List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando) {
-        return super.getDetalleDataReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
+        return FacturaModelControlador.getDetalleDataReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
     }
     
     
 
-    @Override
+    //@Override
     public Map<String, Object> getMapParametrosReporte(Factura facturaProcesando) {
-        Map<String, Object> mapParametros= super.getMapParametrosReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
+        Map<String, Object> mapParametros= FacturaModelControlador.getMapParametrosReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
         mapParametros.put("estado",factura.getEnumEstadoProforma().getNombre());        
         //subtotal_cero
         //Datos adicionales para las proformas

@@ -237,7 +237,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 Bodega bodega=obtenerBodegaAfecta(facturaDetalle.getFactura());
                 afectarInventario(
                         bodega,
-                        facturaDetalle.getCantidad().intValue(), 
+                        facturaDetalle.getCantidad(), 
                         facturaDetalle.getPrecioUnitario(),
                         facturaDetalle.getTotal(), 
                         facturaDetalle.getId(),
@@ -284,7 +284,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 Bodega bodega=obtenerBodegaAfecta(notaDetalle.getNotaCredito());
                 afectarInventario(
                         bodega,
-                        notaDetalle.getCantidad().intValue(), 
+                        notaDetalle.getCantidad(), 
                         notaDetalle.getPrecioUnitario(),
                         notaDetalle.getTotal(), 
                         notaDetalle.getId(),
@@ -304,7 +304,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
      * TODO: Unificar este metodo con la de factura que existe un metodo similar
      * @param detalle 
      */
-    private void afectarInventario(Bodega bodega,int cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento)
+    private void afectarInventario(Bodega bodega,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento)
     {
         try {
             Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(referenciaProductoId);
@@ -336,7 +336,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 kardex.addDetalleKardex(kardexDetalle);
                 
                 //Actualizar los valores del kardex
-                kardex.setStock(kardex.getStock() + kardexDetalle.getCantidad());
+                kardex.setStock(kardex.getStock().add(kardexDetalle.getCantidad()));
                 //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
                 kardex.setPrecioTotal(kardex.getPrecioTotal().add(kardexDetalle.getPrecioTotal()));
                 //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());

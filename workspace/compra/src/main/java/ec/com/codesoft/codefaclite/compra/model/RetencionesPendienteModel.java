@@ -282,7 +282,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
     private void setearDatos() {
         //retencion=new Retencion();
         //retencion.setCompra(compra);
-        retencion.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        retencion.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
         retencion.setFechaEmision(new java.sql.Date(getjDateFechaEmision().getDate().getTime()));
         retencion.setProveedor(retencion.getCompra().getProveedor());
         retencion.setEmpresa(session.getEmpresa());

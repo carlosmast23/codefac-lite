@@ -22,7 +22,7 @@ create table FACTURA
     PUNTO_ESTABLECIMIENTO decimal,
     PUNTO_EMISION decimal,
     FECHA_EMISION date,
-    FECHA_CREACION date,
+    FECHA_CREACION TIMESTAMP,
     DESCUENTO_IVA decimal(13,2),
     DESCUENTO_IVA_CERO decimal(13,2),
     SUBTOTAL_IVA decimal(13,2),

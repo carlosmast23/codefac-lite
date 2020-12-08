@@ -449,7 +449,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
         factura.setDireccion(estudianteInscrito.getEstudiante().getRepresentante().getEstablecimientos().get(0).getDireccion());
         factura.setEmpresa(session.getEmpresa());
         //factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
-        factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
         factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
         factura.setIdentificacion(estudianteInscrito.getEstudiante().getRepresentante().getIdentificacion());
 

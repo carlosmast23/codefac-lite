@@ -29,7 +29,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
@@ -129,7 +128,8 @@ public class MigrarProductoModel extends MigrarModel {
                             if(stock>0)
                             {
                                 kardexDetalle = new KardexDetalle();
-                                kardexDetalle.setCantidad(stock.intValue());
+                                //kardexDetalle.setCantidad(stock.intValue());
+                                kardexDetalle.setCantidad(new BigDecimal(stock));
                                 kardexDetalle.setPrecioUnitario(BigDecimal.ZERO);
                                 kardexDetalle.recalcularTotalSinGarantia();
 

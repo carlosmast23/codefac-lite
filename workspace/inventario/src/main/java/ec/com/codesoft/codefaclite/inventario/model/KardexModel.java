@@ -285,7 +285,7 @@ public class KardexModel extends KardexPanel {
     }
 
     private void cargarTablaKardex() {
-        Integer cantidadAcumulada = 0;
+        BigDecimal cantidadAcumulada = BigDecimal.ZERO;
         BigDecimal precioUnitarioPromedio = BigDecimal.ZERO;
         BigDecimal precioTotalAcumulado = BigDecimal.ZERO;
 
@@ -313,7 +313,7 @@ public class KardexModel extends KardexPanel {
                 //Cuando el inventario afecta de forma positiva
                 if (kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO)) {
 
-                    cantidadAcumulada += kardexDetalle.getCantidad();
+                    cantidadAcumulada = cantidadAcumulada.add(kardexDetalle.getCantidad());
                     precioTotalAcumulado = precioTotalAcumulado.add(kardexDetalle.getPrecioTotal());
 
                     if (i == 0) //Si es el primer registro el precio es el mismo
@@ -321,9 +321,10 @@ public class KardexModel extends KardexPanel {
                         precioUnitarioPromedio = kardexDetalle.getPrecioUnitario();
                     } else //Cuando es el segundo registro empiezo a calcular el promedio
                     {
-                        if(cantidadAcumulada>0)
+                        //if(cantidadAcumulada>0)
+                        if(cantidadAcumulada.compareTo(BigDecimal.ZERO)>0)
                         {
-                            precioUnitarioPromedio = precioTotalAcumulado.divide(new BigDecimal(cantidadAcumulada),2,BigDecimal.ROUND_HALF_UP);
+                            precioUnitarioPromedio = precioTotalAcumulado.divide(cantidadAcumulada,2,BigDecimal.ROUND_HALF_UP);
                         }
                     }
 
@@ -331,7 +332,8 @@ public class KardexModel extends KardexPanel {
                 } else //Cuando afecta de forma negativa
                 {
 
-                    cantidadAcumulada -= kardexDetalle.getCantidad();
+                    //cantidadAcumulada -= kardexDetalle.getCantidad();
+                    cantidadAcumulada=cantidadAcumulada.subtract(kardexDetalle.getCantidad());
                     precioTotalAcumulado = precioTotalAcumulado.subtract(kardexDetalle.getPrecioTotal());
                     
                     if (i == 0) //Si es el primer registro el precio es el mismo
@@ -339,9 +341,10 @@ public class KardexModel extends KardexPanel {
                         precioUnitarioPromedio = kardexDetalle.getPrecioUnitario();
                     } else //Cuando es el segundo registro empiezo a calcular el promedio
                     {
-                        if(cantidadAcumulada>0)
+                        if(cantidadAcumulada.compareTo(BigDecimal.ZERO)>0)
+                        //if(cantidadAcumulada>0)
                         {
-                            precioUnitarioPromedio = precioTotalAcumulado.divide(new BigDecimal(cantidadAcumulada),2,BigDecimal.ROUND_HALF_UP);
+                            precioUnitarioPromedio = precioTotalAcumulado.divide(cantidadAcumulada,2,BigDecimal.ROUND_HALF_UP);
                         }
                     }
                     
@@ -475,7 +478,7 @@ public class KardexModel extends KardexPanel {
 
     }
 
-    private void completarFila(KardexData kardexData, ModuloCodefacEnum moduloEnum, KardexDetalle kardexDetalle, Integer cantidadAcumulada, BigDecimal precioUnitarioAcumulado, BigDecimal precioTotalAcumulado, boolean agregar) {
+    private void completarFila(KardexData kardexData, ModuloCodefacEnum moduloEnum, KardexDetalle kardexDetalle, BigDecimal cantidadAcumulada, BigDecimal precioUnitarioAcumulado, BigDecimal precioTotalAcumulado, boolean agregar) {
         //Agregar la fecha UtilidadesFecha
         if (kardexDetalle.getFechaIngreso() != null) {
             kardexData.setFecha(UtilidadesFecha.formatoDiaMesAño(kardexDetalle.getFechaIngreso()));

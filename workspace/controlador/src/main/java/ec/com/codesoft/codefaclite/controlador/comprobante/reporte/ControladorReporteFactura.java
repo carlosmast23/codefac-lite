@@ -89,6 +89,7 @@ public class ControladorReporteFactura {
     private Sucursal sucursal;
     protected Empresa empresa;
     private Usuario usuario;
+    private List<Factura> datafact;
     
 
     public ControladorReporteFactura(Empresa empresa) {
@@ -143,7 +144,7 @@ public class ControladorReporteFactura {
              *              OBTENER TODAS LAS FACTURAS POR FILTROS
              * ===============================================================
              */
-            List<Factura> datafact;
+            //datafact;
             if(usuario != null)
             {
                 datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,sucursal, usuario);
@@ -998,6 +999,15 @@ public class ControladorReporteFactura {
     public void setReporteConDetallesFactura(Boolean reporteConDetallesFactura) {
         this.reporteConDetallesFactura = reporteConDetallesFactura;
     }
+
+    public List<Factura> getDatafact() {
+        return datafact;
+    }
+
+    public void setDatafact(List<Factura> datafact) {
+        this.datafact = datafact;
+    }
+    
     
     
     

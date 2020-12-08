@@ -40,6 +40,12 @@ create table PRODUCTO
     OCULTAR_DETALLE_VENTA varchar(1),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.2.5)*/
     PRECIO_SIN_SUBSIDIO decimal(13,5),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.5.3)*/
+    PVP_4 decimal(13,5),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.5.3)*/
+    PVP_5 decimal(13,5),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.5.3)*/
+    PVP_6 decimal(13,5),
  
 
     primary key (ID_PRODUCTO)

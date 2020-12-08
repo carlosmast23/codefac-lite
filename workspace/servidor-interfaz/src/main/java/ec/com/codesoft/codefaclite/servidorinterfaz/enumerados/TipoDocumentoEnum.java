@@ -122,13 +122,13 @@ public enum TipoDocumentoEnum implements ParametroUtilidades.ComparadorInterface
             "AMM",
             "Ingreso Manual",
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO,
-            false),
+            true),
     
     ANULAR_MERCADERIA_POSITIVO(ModuloCodefacEnum.INVENTARIO,
             "AMP",
             "Anulado Stock Positivo",
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO,
-            false),
+            true),
     
     ANULAR_MERCADERIA_NEGATIVO(ModuloCodefacEnum.INVENTARIO,
             "AMN",

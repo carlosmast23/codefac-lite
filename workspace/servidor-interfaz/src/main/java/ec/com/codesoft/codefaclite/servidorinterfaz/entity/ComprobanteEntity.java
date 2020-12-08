@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -49,7 +50,7 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     //protected Long usuarioId;
 
     @Column(name = "FECHA_CREACION")
-    protected Date fechaCreacion;
+    protected Timestamp fechaCreacion;
 
     @Column(name = "FECHA_EMISION")
     protected Date fechaEmision;
@@ -173,11 +174,11 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         this.usuario = usuario;
     }
 
-    public Date getFechaCreacion() {
+    public Timestamp getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(Date fechaCreacion) {
+    public void setFechaCreacion(Timestamp fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 

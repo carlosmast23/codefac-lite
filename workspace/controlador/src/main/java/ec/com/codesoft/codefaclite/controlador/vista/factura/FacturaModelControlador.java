@@ -5,8 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
+import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
@@ -22,8 +26,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
@@ -32,8 +38,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -42,6 +52,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JRPrintPage;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -81,49 +94,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
     }
     
-    public Map<String,Object> getMapParametrosReporte(Factura facturaProcesando)
-    {
-        //map de los parametros faltantes
-            Map<String,Object> mapParametros=new HashMap<String, Object>();
-            mapParametros.put("codigo", facturaProcesando.getPreimpreso());
-            mapParametros.put("cedula", facturaProcesando.getIdentificacion());
-            mapParametros.put("cliente", facturaProcesando.getRazonSocial());
-            mapParametros.put("direccion", facturaProcesando.getDireccion());
-            mapParametros.put("telefonos", facturaProcesando.getTelefono());
-            mapParametros.put("fechaIngreso", facturaProcesando.getFechaEmision().toString());
-            mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().add(facturaProcesando.getSubtotalSinImpuestos()).toString());
-            mapParametros.put("iva", facturaProcesando.getIva().toString());
-            mapParametros.put("ice", facturaProcesando.getIce().toString());
-            mapParametros.put("total", facturaProcesando.getTotal().toString());
-            mapParametros.put("autorizacion", facturaProcesando.getClaveAcceso());
-            
-            
-            return mapParametros;
-            
-    }
     
-    public List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando)
-    {
-        List<ComprobanteVentaData> dataReporte = new ArrayList<ComprobanteVentaData>();
-
-        for (FacturaDetalle detalle : facturaProcesando.getDetalles()) {
-            
-            ComprobanteVentaData data = new ComprobanteVentaData();
-            data.setCantidad(detalle.getCantidad().toString());
-            data.setCodigo(detalle.getCodigoPrincipal());
-            data.setNombre(detalle.getDescripcion().toString());
-            data.setPrecioUnitario(detalle.getPrecioUnitario().toString());
-            data.setTotal(detalle.getTotal().toString());
-            
-            //Datos adicionales para las proformas
-            data.setDescuento(detalle.getDescuento().toString());
-            data.setDescripcion(detalle.getDescripcion());
-
-            dataReporte.add(data);
-        }
-        return dataReporte;
-    }
     
+        
     
     public List<DocumentoEnum>  buscarDocumentosFactura()
     {
@@ -427,7 +400,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         Producto producto=productoServiceIf.buscarPorId(facturaDetalle.getReferenciaId());
         
         //verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta,interfaz.obtenerProductoSeleccionado(), facturaDetalle.getCantidad().intValue());
-        verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta,producto, facturaDetalle.getCantidad().intValue());
+        verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta,producto, facturaDetalle.getCantidad());
         return verificadorStock;
     }
     
@@ -833,6 +806,184 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    
+    public static void imprimirComprobanteVenta(Factura facturaProcesando,String nombre,Boolean activarConfiguracionesImpresion,SessionCodefacInterface session,InterfazComunicacionPanel panelPadre)
+    {
+
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);
+        
+        Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
+        //InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
+        String nombreReporte="comprobante_venta.jrxml";
+        
+        
+        //TODO: Ver si esta parte se puede mejorar para imprimir
+        ParametroCodefac parametroCodefac = session.getParametrosCodefac().get(ParametroCodefac.IMPRESORA_TICKETS_VENTAS);
+        FormatoHojaEnum formatoEnum=FormatoHojaEnum.A5;
+        
+        if (parametroCodefac !=null) 
+        {
+            if(parametroCodefac.getValor()!=null)
+            {
+                EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(parametroCodefac.getValor());
+                if(enumSiNo!=null && enumSiNo.getBool())
+                {
+                    formatoEnum=FormatoHojaEnum.TICKET;
+                    //nombreReporte = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
+                    nombreReporte = "comprobante_venta_ticket.jrxml";
+                    //TODO:Terminar de implementar para los demas comprobantes
+                    TipoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, TipoReporteEnum.A2);
+                    if(tipoReporteEnum!=null)
+                    {
+                        nombreReporte=tipoReporteEnum.getReporteJasperNombre();
+                    }
+                    
+                }
+            }
+        }
+        
+        ConfiguracionImpresoraEnum configuracion=null;        
+        if(activarConfiguracionesImpresion)
+        {
+            configuracion=obtenerConfiguracionImpresora(session);
+        }
+        //ReporteCodefac.generarReporteInternalFramePlantilla(parametro, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
+        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, panelPadre, nombre, OrientacionReporteEnum.VERTICAL,formatoEnum,configuracion);
+
+    }
+    
+    /**
+     * TODO: Metodo temporal para separar por lote e individual pero toca unir 
+     * @param facturas
+     * @param nombre
+     * @param activarConfiguracionesImpresion
+     * @param session
+     * @param panelPadre 
+     */
+    public static void imprimirComprobanteVentaLote(List<Factura> facturas,String nombre,Boolean activarConfiguracionesImpresion,SessionCodefacInterface session,InterfazComunicacionPanel panelPadre)
+    {
+        List<JasperPrint> jasperList=new ArrayList<JasperPrint>();
+        for (Factura factura : facturas) 
+        {
+            Factura facturaProcesando=factura;
+            List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);
+        
+            Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
+            //InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
+            String nombreReporte="comprobante_venta.jrxml";
+
+
+            //TODO: Ver si esta parte se puede mejorar para imprimir
+            ParametroCodefac parametroCodefac = session.getParametrosCodefac().get(ParametroCodefac.IMPRESORA_TICKETS_VENTAS);
+            FormatoHojaEnum formatoEnum=FormatoHojaEnum.A5;
+
+            if (parametroCodefac !=null) 
+            {
+                if(parametroCodefac.getValor()!=null)
+                {
+                    EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(parametroCodefac.getValor());
+                    if(enumSiNo!=null && enumSiNo.getBool())
+                    {
+                        formatoEnum=FormatoHojaEnum.TICKET;
+                        //nombreReporte = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
+                        nombreReporte = "comprobante_venta_ticket.jrxml";
+                        //TODO:Terminar de implementar para los demas comprobantes
+                        TipoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, TipoReporteEnum.A2);
+                        if(tipoReporteEnum!=null)
+                        {
+                            nombreReporte=tipoReporteEnum.getReporteJasperNombre();
+                        }
+
+                    }
+                }
+            }
+
+            ConfiguracionImpresoraEnum configuracion=null;        
+            if(activarConfiguracionesImpresion)
+            {
+                configuracion=obtenerConfiguracionImpresora(session);
+            }
+            //ReporteCodefac.generarReporteInternalFramePlantilla(parametro, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
+            
+            InputStream reporte=RecursoCodefac.JASPER_FACTURACION.getResourceInputStream(nombreReporte);
+            JasperPrint reporteNuevo=ReporteCodefac.generarReporteInternalFramePlantillaReturn(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, panelPadre, nombre, OrientacionReporteEnum.VERTICAL,formatoEnum,configuracion);
+            
+            //JasperPrint reporteNuevo=ReporteCodefac.generarReporteInternalFrameJasperPrint(reporte, mapParametros, dataReporte, panelPadre, nombreReporte, configuracion);
+            jasperList.add(reporteNuevo);
+        }
+        
+        generarReporteUnificadoJasper(jasperList);
+
+    }
+    
+    public static void generarReporteUnificadoJasper(List<JasperPrint> jasperList)
+    {
+        JasperPrint reporteUnido=null;
+        for (JasperPrint jasperPrint : jasperList) {
+            if (reporteUnido == null) {
+                reporteUnido = jasperPrint;
+            } else {
+                List pages = jasperPrint.getPages();
+                for (int j = 0; j < pages.size(); j++) {
+                    JRPrintPage nuevasPaginas = (JRPrintPage) pages.get(j);
+                    reporteUnido.addPage(nuevasPaginas);
+                }
+                //reporteUnido.addPage(page);
+            }
+        }
+        JasperViewer.viewReport(reporteUnido,false);
+        
+   
+    }
+        
+    public static ConfiguracionImpresoraEnum obtenerConfiguracionImpresora(SessionCodefacInterface session)
+    {
+        return ParametroUtilidades.<ConfiguracionImpresoraEnum>obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,ConfiguracionImpresoraEnum.NINGUNA);
+        //return null;
+    }
+
+        
+    public static Map<String,Object> getMapParametrosReporte(Factura facturaProcesando)
+    {
+        //map de los parametros faltantes
+            Map<String,Object> mapParametros=new HashMap<String, Object>();
+            mapParametros.put("codigo", facturaProcesando.getPreimpreso());
+            mapParametros.put("cedula", facturaProcesando.getIdentificacion());
+            mapParametros.put("cliente", facturaProcesando.getRazonSocial());
+            mapParametros.put("direccion", facturaProcesando.getDireccion());
+            mapParametros.put("telefonos", facturaProcesando.getTelefono());
+            mapParametros.put("fechaIngreso", facturaProcesando.getFechaEmision().toString());
+            mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().add(facturaProcesando.getSubtotalSinImpuestos()).toString());
+            mapParametros.put("iva", facturaProcesando.getIva().toString());
+            mapParametros.put("ice", facturaProcesando.getIce().toString());
+            mapParametros.put("total", facturaProcesando.getTotal().toString());
+            mapParametros.put("autorizacion", facturaProcesando.getClaveAcceso());
+            
+            return mapParametros;
+            
+    }
+        
+    public static List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando)
+    {
+        List<ComprobanteVentaData> dataReporte = new ArrayList<ComprobanteVentaData>();
+
+        for (FacturaDetalle detalle : facturaProcesando.getDetalles()) {
+            
+            ComprobanteVentaData data = new ComprobanteVentaData();
+            data.setCantidad(detalle.getCantidad().toString());
+            data.setCodigo(detalle.getCodigoPrincipal());
+            data.setNombre(detalle.getDescripcion().toString());
+            data.setPrecioUnitario(detalle.getPrecioUnitario().toString());
+            data.setTotal(detalle.getTotal().toString());
+            
+            //Datos adicionales para las proformas
+            data.setDescuento(detalle.getDescuento().toString());
+            data.setDescripcion(detalle.getDescripcion());
+
+            dataReporte.add(data);
+        }
+        return dataReporte;
     }
 
     ////////////////////////////////////////////////////////////////////////////

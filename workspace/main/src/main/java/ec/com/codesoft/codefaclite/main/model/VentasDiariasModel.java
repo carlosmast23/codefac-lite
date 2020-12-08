@@ -241,7 +241,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         factura = new Factura();
         fila = -1;
         banderaProducto = false;
-        factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
         
         //Agregar los 2 tipos de documentos disponibles para ventas diarias
         getCmbTipoDocumento().removeAllItems();
@@ -373,7 +373,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     
     public void cargarFecha()
     {
-        factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
         factura.setFechaEmision((Date) UtilidadesFecha.hoy());
     }
     

@@ -211,7 +211,7 @@ public class StockReporteModel extends StockMinimoPanel{
                      for (Object[] objeto : listaStock) 
                      {
                         Producto producto = (Producto) objeto[0];
-                        Integer cantidad = (Integer) objeto[1];
+                        BigDecimal cantidad = (BigDecimal) objeto[1];
                         BigDecimal costoPromedio=(BigDecimal)objeto[2];
                         //Kardex kardexTemp = (Kardex) objeto[2];
                         

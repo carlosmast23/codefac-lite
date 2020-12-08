@@ -68,7 +68,7 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
                     bodegaOrigen, 
                     bodegaDestino, 
                     getTxtDescripcion().getText(), 
-                    Integer.parseInt(getTxtCantidad().getText()),
+                    new BigDecimal(getTxtCantidad().getText()),
                     new BigDecimal(getTxtPrecio().getText()), 
                     new java.sql.Date(getCmbFechaIngreso().getDate().getTime()));
             

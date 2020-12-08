@@ -37,6 +37,8 @@ public class TableBindingImp extends ComponentBindingAbstract<JTable, TableBindi
 
     private static final Integer COLUMNA_OBJETO = 0;
     private static final Integer COLUMNA_CHECK = 1;
+    
+    private  final TableBindingImp ref=this;
 
     /**
      * Esta variable temporal me permite saber o controlar que solo se agregue una
@@ -381,6 +383,30 @@ public class TableBindingImp extends ComponentBindingAbstract<JTable, TableBindi
         }
 
     };
+    
+    public ComponentBindingIf controlador = new ComponentBindingIf<Object, TableBinding>() 
+    {
+        @Override
+        public void getAccion(String nombrePropiedadControlador, ConverterSwingMvvc converter) {
+            setValoresAlControlador(ref, nombrePropiedadControlador, converter);
+        }
+
+        @Override
+        public void setAccion(Object value,String nombrePropiedadControlador,ConverterSwingMvvc converter) {
+            //getComponente().getSele
+        }
+
+        @Override
+        public String getNombrePropiedadControlador(TableBinding componente) {
+            return componente.controlador();
+        }
+
+        @Override
+        public Class getConverterClass(TableBinding anotacion) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+    };
 
     @Override
     public void getAccionesComponente(List<ComponentBindingIf> lista) {
@@ -398,6 +424,8 @@ public class TableBindingImp extends ComponentBindingAbstract<JTable, TableBindi
         lista.add(checkBoxSelection);
         // Implementacion para poder setear un valor cuando se modifica el modelo en la tabla
         lista.add(eventoCambiarPropiedadTabla);
+        //Implementacion que me permite pasar la  referencia de este controlador a la vista para que tenga mayor control
+        lista.add(controlador);
 
     }
 

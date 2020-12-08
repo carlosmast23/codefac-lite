@@ -50,7 +50,7 @@ public class KardexDetalle implements Serializable ,Cloneable {
     private String codigoTipoDocumento;
     
     @Column(name = "CANTIDAD")
-    private Integer cantidad;
+    private BigDecimal cantidad;
     
     @Column(name = "PRECIO_UNITARIO")
     private BigDecimal precioUnitario;
@@ -130,11 +130,11 @@ public class KardexDetalle implements Serializable ,Cloneable {
         this.codigoTipoDocumento = codigoTipoDocumentoEnum.getCodigo();
     }
 
-    public Integer getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -267,14 +267,15 @@ public class KardexDetalle implements Serializable ,Cloneable {
     
     public void recalcularTotal()
     {
-        this.cantidad=(getDetallesEspecificos()!=null)?getDetallesEspecificos().size():0;
-        this.precioTotal=precioUnitario.multiply(new BigDecimal(cantidad));
+        this.cantidad=(getDetallesEspecificos()!=null)?new BigDecimal(getDetallesEspecificos().size()):BigDecimal.ZERO;
+        
+        this.precioTotal=precioUnitario.multiply(cantidad);
     }
     
     public void recalcularTotalSinGarantia()
     {
         //this.cantidad=(getDetallesEspecificos()!=null)?getDetallesEspecificos().size():0;
-        this.precioTotal=precioUnitario.multiply(new BigDecimal(cantidad));
+        this.precioTotal=precioUnitario.multiply(cantidad);
     }
     
     

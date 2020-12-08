@@ -170,6 +170,10 @@ public class ReporteCodefac {
         generarReporte(recursoCodefac,nombre, parametros, datos, panelPadre, tituloReporte, orientacionEnum,formatoReporte,configuracionImpresora);
     }
     
+    public static JasperPrint generarReporteInternalFramePlantillaReturn(RecursoCodefac recursoCodefac,String nombre, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,ConfiguracionImpresoraEnum configuracionImpresora) {
+        return construirReporte(recursoCodefac,nombre, parametros, datos, panelPadre, tituloReporte, orientacionEnum, formatoReporte);
+    }
+    
     public static void generarReporteInternalFramePlantillaArchivo(InputStream pathReporte, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,String path) {
         try {
             JasperPrint jasperPrint=construirReporte(pathReporte, parametros, datos, panelPadre, tituloReporte, orientacionEnum, formatoReporte);

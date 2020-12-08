@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
@@ -170,6 +171,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.Tip
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
@@ -1252,7 +1254,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                            //facturaManual(facturaProcesada,documentoEnum,true);
                         }
                         
-                        ConfiguracionImpresoraEnum configuracion=obtenerConfiguracionImpresora();
+                        ConfiguracionImpresoraEnum configuracion=FacturaModelControlador.obtenerConfiguracionImpresora(session);
                         //ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa",configuracion);
                         ReporteCodefac.generarReporteInternalFrame(UtilidadReportes.unificarReportes(reportesPendientes), panelPadre, "Comprobantes de Ventas", configuracion);
                         //UtilidadReportes.visualizarReporteVentanaExterna(UtilidadReportes.unificarReportes(reportesPendientes));
@@ -1278,7 +1280,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             {
                 DialogoCodefac.mensaje("Correcto", "La nota de venta interna se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                 //facturaManual(factura.getCodigoDocumentoEnum());
-                imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA,true);
+                FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA,true,session,panelPadre);
             }
             else
             {
@@ -1447,7 +1449,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             ConfiguracionImpresoraEnum configuracion = null;
             if (activarConfiguracionesImpresion) {
-                configuracion = obtenerConfiguracionImpresora();
+                configuracion = FacturaModelControlador.obtenerConfiguracionImpresora(session);
             }
             
             //TODO: Cambio temporal para la Julieta
@@ -1646,7 +1648,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 break;
 
                             case 1: //opcion para comprobantes Venta
-                                imprimirComprobanteVenta(factura, NOMBRE_REPORTE_FACTURA_ELECTRONICA,false);
+                                FacturaModelControlador.imprimirComprobanteVenta(factura, NOMBRE_REPORTE_FACTURA_ELECTRONICA,false,session,panelPadre);
                                 break;
 
                             case 2: //Cancelar
@@ -1676,16 +1678,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
             }else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
             {
-                imprimirComprobanteVenta(factura, FacturacionModel.NOMBRE_REPORTE_FACTURA_INTERNA,false);
+                FacturaModelControlador.imprimirComprobanteVenta(factura, FacturacionModel.NOMBRE_REPORTE_FACTURA_INTERNA,false,session,panelPadre);
             }
         }
     }
     
-    private ConfiguracionImpresoraEnum obtenerConfiguracionImpresora()
-    {
-        return ParametroUtilidades.<ConfiguracionImpresoraEnum>obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,ConfiguracionImpresoraEnum.NINGUNA);
-        //return null;
-    }
 
     @Override
     public void actualizar() {
@@ -2353,7 +2350,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
         factura.setEmpresa(session.getEmpresa());
         //factura.setEstado(Factura.ESTADO_FACTURADO);
-        factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
         factura.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));
         //factura.setIvaSriId(iva);
         factura.setPuntoEmision(getPuntoEmisionSeleccionado().getPuntoEmision());
@@ -3349,62 +3346,22 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
     }
     
+    
+
+    
     /**
      * TODO: Por el momento dejo de esta manera porque en proforma como herada sobrescribe estos metodos y causa conflicto toca ver como corregir ese probelma
      * @param facturaProcesando
      * @return 
      */
-    public List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando) {
-        return controlador.getDetalleDataReporte(facturaProcesando);
-    }    
+    //public static List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando) 
+    //{
+    //    return getDetalleDataReporte(facturaProcesando);
+    //}    
     
-    public Map<String, Object> getMapParametrosReporte(Factura facturaProcesando) {
-        return controlador.getMapParametrosReporte(facturaProcesando);
-    }
-    
-    public  void imprimirComprobanteVenta(Factura facturaProcesando,String nombre,Boolean activarConfiguracionesImpresion)
-    {
-
-        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);
-        Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
-        //InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
-        String nombreReporte="comprobante_venta.jrxml";
-        
-        
-        //TODO: Ver si esta parte se puede mejorar para imprimir
-        ParametroCodefac parametroCodefac = session.getParametrosCodefac().get(ParametroCodefac.IMPRESORA_TICKETS_VENTAS);
-        FormatoHojaEnum formatoEnum=FormatoHojaEnum.A5;
-        
-        if (parametroCodefac !=null) 
-        {
-            if(parametroCodefac.getValor()!=null)
-            {
-                EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(parametroCodefac.getValor());
-                if(enumSiNo!=null && enumSiNo.getBool())
-                {
-                    formatoEnum=FormatoHojaEnum.TICKET;
-                    //nombreReporte = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
-                    nombreReporte = "comprobante_venta_ticket.jrxml";
-                    //TODO:Terminar de implementar para los demas comprobantes
-                    TipoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, TipoReporteEnum.A2);
-                    if(tipoReporteEnum!=null)
-                    {
-                        nombreReporte=tipoReporteEnum.getReporteJasperNombre();
-                    }
-                    
-                }
-            }
-        }
-        
-        ConfiguracionImpresoraEnum configuracion=null;        
-        if(activarConfiguracionesImpresion)
-        {
-            configuracion=obtenerConfiguracionImpresora();
-        }
-        //ReporteCodefac.generarReporteInternalFramePlantilla(parametro, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
-        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, this.panelPadre, nombre, OrientacionReporteEnum.VERTICAL,formatoEnum,configuracion);
-
-    }
+    //public Map<String, Object> getMapParametrosReporte(Factura facturaProcesando) {
+    //    return controlador.getMapParametrosReporte(facturaProcesando);
+    //}
 
     @Override
     public void eventoCambiarEstado() {
@@ -3788,6 +3745,5 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         setearCodigoDetalleTxt("");
         
     }
-    
 
 }

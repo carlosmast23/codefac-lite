@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.RutaBu
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.controlador.vista.transporte.GuiaRemisionLoteControlador;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.TableBindingImp;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -68,6 +69,8 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
     private Boolean seleccionTodosVendedor;
     private Boolean seleccionTodosRuta;
     
+    private TableBindingImp tableBindingControlador;
+    
     public FacturaPedidoLoteModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);                
     }
@@ -111,9 +114,32 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
             
             if(respuesta.procesadosList.size()>0)
             {
-                ///Procesar las facturas de forma electronica
-                ClienteInterfaceComprobanteLote cic = getInterazEscritorio().getInterfaceCallBack();
-                ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(ComprobanteElectronicoService.ETAPA_GENERAR, ComprobanteElectronicoService.ETAPA_AUTORIZAR, null,obtenerComprobantesParaProcesarElectronicamente(respuesta), session.getEmpresa().getIdentificacion(),cic,true,session.getEmpresa(),false);
+                List<ComprobanteDataInterface> comprobantes=obtenerComprobantesParaProcesarElectronicamente(respuesta);
+                //Verifica si existen comprobantes electrónicos para procesar primero
+                if(comprobantes.size()>0)
+                {
+                    ///Procesar las facturas de forma electronica
+                    ClienteInterfaceComprobanteLote cic = getInterazEscritorio().getInterfaceCallBack();
+                    ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(
+                            ComprobanteElectronicoService.ETAPA_GENERAR, 
+                            ComprobanteElectronicoService.ETAPA_AUTORIZAR, 
+                            null,
+                            comprobantes, 
+                            session.getEmpresa().getIdentificacion(),
+                            cic,
+                            true,
+                            session.getEmpresa(),
+                            false
+                    );
+                }
+                
+            }
+            
+            //imprmir las notas de venta en la misma pantalla
+            List<Factura> notaVentaList=obtenerNotasVentaProcesadas(respuesta);
+            if(notaVentaList.size()>0)
+            {
+                getInterazEscritorio().generarNotasVentaInterna(notaVentaList);
             }
             
             //volver a consultar los datos con la ultima consulta
@@ -128,14 +154,30 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
         
     }
     
+    private List<Factura> obtenerNotasVentaProcesadas(FacturaLoteRespuesta respuesta)
+    {
+        List<Factura> notaVentaList=new ArrayList<Factura>();
+        for (Factura factura : respuesta.procesadosList) {
+            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+            {
+                notaVentaList.add(factura);
+            }
+        }
+        return notaVentaList;
+    }
+    
     private List<ComprobanteDataInterface> obtenerComprobantesParaProcesarElectronicamente(FacturaLoteRespuesta respuesta)
     {
         List<ComprobanteDataInterface> comprobantesProcesarList=new ArrayList<ComprobanteDataInterface>();
         
         for (Factura factura : respuesta.procesadosList) {
-            ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
-            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
-            comprobantesProcesarList.add(comprobanteData);
+            //Solo procesar los documentos que son de tipo facturas
+            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+            {
+                ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+                comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+                comprobantesProcesarList.add(comprobanteData);
+            }
         }
                 
         return comprobantesProcesarList;
@@ -228,7 +270,7 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
     {
         ventasList=new ArrayList<FacturaDataTable>();
         for (Factura factura : ventasListTmp) {
-            ventasList.add(new FacturaDataTable(factura,true, 0));
+            ventasList.add(new FacturaDataTable(factura,true, 0,DocumentoEnum.FACTURA));
         }
     }
     
@@ -293,6 +335,15 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
         if(seleccionTodosRuta)
         {
             rutaSeleccionada=null;
+        }
+    }
+    
+    public void editarDocumentoPopUp(DocumentoEnum documentoEnum)
+    {
+        if(facturaSeleccionada!=null)
+        {
+            facturaSeleccionada.documentoEnum=documentoEnum;
+            tableBindingControlador.actualizarBindingVista();
         }
     }
     
@@ -388,6 +439,15 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
     public void setPuntoEmisionSeleccionado(PuntoEmision puntoEmisionSeleccionado) {
         this.puntoEmisionSeleccionado = puntoEmisionSeleccionado;
     }
+
+    public TableBindingImp getTableBindingControlador() {
+        return tableBindingControlador;
+    }
+
+    public void setTableBindingControlador(TableBindingImp tableBindingControlador) {
+        this.tableBindingControlador = tableBindingControlador;
+    }
+    
     
     
 
@@ -398,7 +458,7 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
                 Factura proforma=proformaTmp.factura;
                 Factura facturaNueva = (Factura) proforma.clone();
                 facturaNueva.setId(null);
-                facturaNueva.setCodigoDocumentoEnum(DocumentoEnum.FACTURA);
+                facturaNueva.setCodigoDocumentoEnum(proformaTmp.documentoEnum);
                 facturaNueva.setProforma(proforma);
                 facturaNueva.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision());
                 facturaNueva.setPuntoEstablecimiento(new BigDecimal(session.getSucursal().getCodigoSucursal().toString()));
@@ -440,6 +500,7 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
         //TODO: Implementacion de las interfaces solo necesarias para Swing
         public void abrirGuiaRemision(GuiaRemision guiaRemision);
         public ClienteInterfaceComprobanteLote getInterfaceCallBack();
+        public void generarNotasVentaInterna(List<Factura> facturas);
     }
 
     public interface WebIf extends CommonIf {
@@ -452,15 +513,17 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
     public class FacturaDataTable
     {
 
-        public FacturaDataTable(Factura factura, Boolean credito, Integer dias) {
+        public FacturaDataTable(Factura factura, Boolean credito, Integer dias,DocumentoEnum documentoEnum) {
             this.factura = factura;
             this.credito = credito;
             this.dias = dias;
+            this.documentoEnum=documentoEnum;
         }
         
         public Factura factura;
         public Boolean credito;
-        public Integer dias;                
+        public Integer dias; 
+        public DocumentoEnum documentoEnum;
     }
     
     

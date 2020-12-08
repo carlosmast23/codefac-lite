@@ -197,11 +197,11 @@ public class NotaCredito extends ComprobanteVentaNotaCreditoAbstract<NotaCredito
         this.fechaNotaCredito = fechaNotaCredito;
     }*/
 
-    public Date getFechaCreacion() {
+    public java.sql.Timestamp getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(Date fechaCreacion) {
+    public void setFechaCreacion(java.sql.Timestamp fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 

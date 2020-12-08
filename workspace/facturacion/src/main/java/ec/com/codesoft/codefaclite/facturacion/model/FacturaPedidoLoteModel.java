@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaPedidoLoteModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.transporte.GuiaRemisionLoteControlador;
@@ -22,9 +23,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -32,6 +38,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -172,7 +181,7 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
                     Object.class,
                     Object.class,
                     Object.class,
-                    Object.class,
+                    DocumentoEnum.class,
                     Object.class,
                     Boolean.class,
                     Integer.class,
@@ -180,8 +189,41 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
         );
         
         getTblDatos().setModel(modelo);
+        
+        JPopupMenu popup = new JPopupMenu();        
+        JMenuItem jMenuItemCambiarDocumento = new JMenuItem("Cambiar Documento"); 
+        popup.add(jMenuItemCambiarDocumento);
+        jMenuItemCambiarDocumento.addActionListener(itemListener);
+        
+        getTblDatos().setComponentPopupMenu(popup);
+        
+
         UtilidadesTablas.definirTamanioColumnas(getTblDatos(),new Integer[]{0});
     }
+    
+    private ActionListener itemListener=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            DocumentoEnum seleccion = (DocumentoEnum) JOptionPane.showInputDialog(
+                    null,
+                    "Seleccione el documento ",
+                    "Selector de opciones",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null, // null para icono defecto
+                    new DocumentoEnum[]{DocumentoEnum.FACTURA,DocumentoEnum.NOTA_VENTA_INTERNA},
+                    "opcion 1");
+            
+            if(seleccion!=null)
+            {
+                controlador.editarDocumentoPopUp(seleccion);
+                getTblDatos().updateUI();
+            }
+        }
+    };
+    
+   
+    
+    
     
     public ITableBindingAddData getTableBindingAddData()
     {
@@ -200,7 +242,7 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
                     nombreComercial,
                     vendedor,
                     "",//Ruta                    
-                    value.getCodigoDocumentoEnum().getNombre(),
+                    valueTmp.documentoEnum,
                     value.getTotal(),
                     valueTmp.credito,
                     valueTmp.dias
@@ -300,6 +342,12 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
 
             JasperViewer.viewReport(reporteUnido,false);
         }
+    }
+
+    @Override
+    public void generarNotasVentaInterna(List<Factura> facturas) 
+    {
+        FacturaModelControlador.imprimirComprobanteVentaLote(facturas, "Notas de venta",true, session, panelPadre);
     }
 
 }

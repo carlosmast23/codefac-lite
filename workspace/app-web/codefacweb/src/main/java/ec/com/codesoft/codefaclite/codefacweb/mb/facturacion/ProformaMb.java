@@ -532,7 +532,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         factura.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
 
         factura.setEmpresa(sessionMb.getSession().getEmpresa());
-        factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
         factura.setFechaEmision(new java.sql.Date(fechaEmision.getTime()));
 
         factura.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());

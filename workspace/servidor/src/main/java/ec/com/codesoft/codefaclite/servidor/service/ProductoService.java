@@ -161,7 +161,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                     
                     if(kardex.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
                     {                        
-                        if (kardex.getStock() > 0) 
+                        //if (kardex.getStock() > 0) 
+                        if (kardex.getStock().compareTo(BigDecimal.ZERO)==0) 
                         {
                             //Agrego a la lista la bodega con el kardex que tiene problema antes de eliminar
                             stockPositivoBodega.add(kardex.getBodega().getNombre());                    
