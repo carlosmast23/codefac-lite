@@ -585,6 +585,10 @@ public class ControladorReporteFactura {
         String titulo = "Ventas Agrupado por Producto";
         InputStream path=getReportePorProductos();
         ordenarListaPorProducto(data);
+        
+        /*for (ReporteFacturaData report : data) {
+            System.out.println("claveAcceso="+report.getClaveAcceso()+" , cantidad="+report.getCantidad());
+        }*/
         ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     

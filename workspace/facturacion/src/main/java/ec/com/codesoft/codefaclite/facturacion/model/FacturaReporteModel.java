@@ -198,13 +198,14 @@ public class FacturaReporteModel extends FacturaReportePanel {
     
     protected void imprimirReporte()
     {
+        TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
         DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
 
             @Override
             public void excel() {
                 try {
                     Excel excel = new Excel();
-                    Vector<String> titulosVector = crearCabezeraExcel();
+                    Vector<String> titulosVector = crearCabezeraExcel(tipoReporteEnum);
                     String nombreCabeceras[] = titulosVector.toArray(new String[titulosVector.size()]); //Convertir en array
                     excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
                     excel.abrirDocumento();
@@ -216,7 +217,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
             @Override
             public void pdf() {
-                TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
+                
                 switch(tipoReporteEnum)
                 {
                     case AGRUPADO_POR_PUNTO_EMISION:
@@ -333,13 +334,19 @@ public class FacturaReporteModel extends FacturaReportePanel {
         return titulo;
     }
     
-    protected Vector<String>  crearCabezeraExcel()
+    protected Vector<String>  crearCabezeraExcel(TipoReporteEnum tipoReporteEnum)
     {
         Vector<String> titulos=crearCabezeraTabla();
         titulos.add(titulos.size(),"Costo");
         titulos.add(0,"Clave de Acceso");
         titulos.add(1,"Fecha Max Pago");
         titulos.add(2,"Vendedor");
+        
+        if(tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO))
+        {
+            titulos.add(3,"Producto");
+        }
+        
         return titulos;
     }
     

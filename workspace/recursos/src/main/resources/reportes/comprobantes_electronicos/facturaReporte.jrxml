@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="2.143588810000059"/>
+	<property name="ireport.zoom" value="1.000000000000027"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="460"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -276,9 +276,9 @@
 				<textFieldExpression><![CDATA[$P{obligado_contabilidad}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="5" y="162" width="293" height="18" uuid="20edfeb2-f06d-4a3b-a278-010049807845"/>
+				<reportElement x="5" y="147" width="293" height="33" uuid="20edfeb2-f06d-4a3b-a278-010049807845"/>
 				<textElement textAlignment="Center">
-					<font size="11" isItalic="true"/>
+					<font size="11" isBold="true" isItalic="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombre_legal}]]></textFieldExpression>
 			</textField>
@@ -289,9 +289,9 @@
 				</jr:Code128>
 			</componentElement>
 			<textField>
-				<reportElement x="0" y="127" width="305" height="35" uuid="6e491e25-7c7e-4daf-ab1c-7340453eb3ed"/>
+				<reportElement x="0" y="127" width="305" height="20" uuid="6e491e25-7c7e-4daf-ab1c-7340453eb3ed"/>
 				<textElement textAlignment="Center">
-					<font size="11" isBold="true"/>
+					<font size="9" isBold="true" isItalic="true"/>
 					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{razon_social}]]></textFieldExpression>

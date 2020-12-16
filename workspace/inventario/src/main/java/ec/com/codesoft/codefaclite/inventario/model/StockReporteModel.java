@@ -202,7 +202,12 @@ public class StockReporteModel extends StockMinimoPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Bodega bodegaSeleccionada=(Bodega) getCmbBodega().getSelectedItem();                    
+                    Bodega bodegaSeleccionada=(Bodega) getCmbBodega().getSelectedItem();             
+                    
+                    if(getChkTodasBodega().isSelected())
+                    {
+                        bodegaSeleccionada=null;
+                    }
                     
                     listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,categoriaProducto);
                     
@@ -213,6 +218,8 @@ public class StockReporteModel extends StockMinimoPanel{
                         Producto producto = (Producto) objeto[0];
                         BigDecimal cantidad = (BigDecimal) objeto[1];
                         BigDecimal costoPromedio=(BigDecimal)objeto[2];
+                        Bodega bodega=(Bodega)objeto[3];
+                        
                         //Kardex kardexTemp = (Kardex) objeto[2];
                         
                         /*if(producto==null)
@@ -238,6 +245,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         data.setUbicacion(producto.getUbicacion());
                         data.setCantidadMinima(producto.getCantidadMinima().toString());
                         data.setCosto(costoPromedio.toString());
+                        data.setBodega(bodega.getNombre());
                         
                         listaData.add(data);                        
                     }
@@ -259,6 +267,7 @@ public class StockReporteModel extends StockMinimoPanel{
     {
         String[] titulo={
             "Código",
+            "Bodega",
             "Producto",
             "Categoria",
             "Ubicación",
@@ -273,6 +282,7 @@ public class StockReporteModel extends StockMinimoPanel{
             String[] datos=
             {
                 stockMinimo.getCodigo(),
+                stockMinimo.getBodega(),
                 stockMinimo.getProducto(),
                 stockMinimo.getCategoria(),
                 stockMinimo.getUbicacion(),
