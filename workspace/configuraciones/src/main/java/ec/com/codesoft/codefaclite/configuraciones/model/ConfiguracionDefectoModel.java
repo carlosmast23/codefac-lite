@@ -453,8 +453,15 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             getCmbDocumentoDefectoVistaFactura().setSelectedItem((documentoEnumVistaFactura!=null)?documentoEnumVistaFactura:null);
             
             parametroDato= parametrosTodos.get(ParametroCodefac.MODO_FACTURACION_GUIA_REMISION);
-            ComprobanteEntity.ComprobanteEnumEstado modoFacturacionGuiaRemision= ComprobanteEntity.ComprobanteEnumEstado.getEnum(parametroDato.valor);
-            getCmbModoFacturasGuiaRemision().setSelectedItem(modoFacturacionGuiaRemision);
+            if(parametroDato!=null)
+            {
+                ComprobanteEntity.ComprobanteEnumEstado modoFacturacionGuiaRemision= ComprobanteEntity.ComprobanteEnumEstado.getEnum(parametroDato.valor);
+                getCmbModoFacturasGuiaRemision().setSelectedItem(modoFacturacionGuiaRemision);
+            }
+            else
+            {
+                getCmbModoFacturasGuiaRemision().setSelectedItem(null);
+            }
                         
             ParametroCodefac parametroFormaPago= parametrosTodos.get(ParametroCodefac.FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE);
             
