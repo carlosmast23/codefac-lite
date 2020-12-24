@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service.cartera;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import ec.com.codesoft.codefaclite.servidor.facade.cartera.CarteraFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
@@ -142,6 +143,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
          Map<Long, CarteraDetalle> mapDetallesGrabados = new HashMap<Long, CarteraDetalle>();
         //grabar los detalles de la cartera
         long idAuxiliar=-1;
+        List<CarteraDetalle> detallesCarteraTmp=new ArrayList<CarteraDetalle>();
+        
         for (CarteraDetalle detalle : cartera.getDetalles()) {
             
             /*if((cruces!=null && cruces.size()>0) && detalle.getId()==null)
@@ -174,6 +177,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 //entityManager.flush();
                 //Grabar los antiguos id con los nuevos que despues me sirve para poder grabar los cruces
                 mapDetallesGrabados.put(idTemporal, carteraDetalleTmp);
+                //grabo la nueva referencia en la cartera para no tener problemas luego
+                detallesCarteraTmp.add(carteraDetalleTmp);
+                //cartera.getDetalles().remove(detalle);
+                //cartera.getDetalles().add(carteraDetalleTmp);
+                
             }
             else
             {
@@ -181,6 +189,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             }
 
         }
+        
+        //Grabo la nueva referencia de los datos ya modificados
+        cartera.setDetalles(detallesCarteraTmp);
 
         //Grabar los cruces con al referencia de los nuevos detalles ya grabados
         for (CarteraCruce carteraCruce : cruces) {
