@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
@@ -259,6 +260,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getjComboFiltrarFacturaPorUsuario(), EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbReporteDefectoVenta(),TipoReporteEnum.values());
+        
+        //Llenar modo de facturas paras las guias de remision
+        getCmbModoFacturasGuiaRemision().removeAllItems();
+        getCmbModoFacturasGuiaRemision().addItem(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
+        getCmbModoFacturasGuiaRemision().addItem(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
     }
 
     private void cargarDatos() {
@@ -445,6 +451,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             parametroDato= parametrosTodos.get(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA);
             DocumentoEnum documentoEnumVistaFactura = DocumentoEnum.obtenerDocumentoPorCodigo((parametroDato != null) ? parametroDato.getValor() : null);
             getCmbDocumentoDefectoVistaFactura().setSelectedItem((documentoEnumVistaFactura!=null)?documentoEnumVistaFactura:null);
+            
+            parametroDato= parametrosTodos.get(ParametroCodefac.MODO_FACTURACION_GUIA_REMISION);
+            ComprobanteEntity.ComprobanteEnumEstado modoFacturacionGuiaRemision= ComprobanteEntity.ComprobanteEnumEstado.getEnum(parametroDato.valor);
+            getCmbModoFacturasGuiaRemision().setSelectedItem(modoFacturacionGuiaRemision);
                         
             ParametroCodefac parametroFormaPago= parametrosTodos.get(ParametroCodefac.FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE);
             
@@ -492,6 +502,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         DocumentoEnum documentoDefectoVistaFactura =(DocumentoEnum) getCmbDocumentoDefectoVistaFactura().getSelectedItem();
         agregarParametro(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA,documentoDefectoVistaFactura.getCodigo());
         agregarParametroEditar(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA);
+        
+        ComprobanteEntity.ComprobanteEnumEstado modoFacturasGuiaRemision =(ComprobanteEntity.ComprobanteEnumEstado) getCmbModoFacturasGuiaRemision().getSelectedItem();
+        agregarParametro(ParametroCodefac.MODO_FACTURACION_GUIA_REMISION,modoFacturasGuiaRemision.getEstado());
+        agregarParametroEditar(ParametroCodefac.MODO_FACTURACION_GUIA_REMISION);
         
         TipoReporteEnum reporteDefectoVenta =(TipoReporteEnum) getCmbReporteDefectoVenta().getSelectedItem();
         agregarParametro(ParametroCodefac.REPORTE_DEFECTO_VENTA,(reporteDefectoVenta!=null)?reporteDefectoVenta.getNombre():null);
@@ -694,6 +708,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             }
         });
     }
+    
     
 
 }

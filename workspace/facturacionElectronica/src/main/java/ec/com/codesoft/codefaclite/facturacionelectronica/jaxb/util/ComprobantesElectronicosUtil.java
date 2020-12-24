@@ -342,6 +342,18 @@ public abstract class ComprobantesElectronicosUtil {
                 nombreRide = nombreRide.replace(".pdf", ".xml");
             }
            
+            //cortar el tamaño de la clave de acceso si tiene un tamaño superior
+            //TODO: cambio temporal para la notaria
+
+            /*int tamanioNombre=nombreRide.length();
+            int tamanioDefecto=53;
+            String nombreRideCorregido="";
+            if(tamanioNombre>tamanioDefecto)
+            {
+                nombreRideCorregido=nombreRide.substring(tamanioNombre-tamanioDefecto, tamanioNombre);
+            }*/
+            
+            
             ClaveAcceso claveAcceso=new ClaveAcceso(nombreRide.replace(".xml",""));
             JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

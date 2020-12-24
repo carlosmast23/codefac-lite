@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -394,7 +395,7 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         return ComprobanteEntity.ComprobanteEnumEstado.getEnum(estado);
     }
 
-    public enum ComprobanteEnumEstado {
+    public enum ComprobanteEnumEstado implements ParametroUtilidades.ComparadorInterface<ComprobanteEnumEstado>{
         /**
          * Cuando la factura se grabo y se autorizo en el SRI y no aplica
          * ninguna nota de credito
@@ -437,6 +438,11 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
 
         public static ComprobanteEnumEstado getEnum(String estado) {
 
+            if(estado==null)
+            {
+                return null;
+            }
+            
             for (ComprobanteEnumEstado enumerador : ComprobanteEnumEstado.values()) {
                 if (enumerador.estado.equals(estado)) {
                     return enumerador;
@@ -464,6 +470,11 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         @Override
         public String toString() {
             return nombre;
+        }
+
+        @Override
+        public ComprobanteEnumEstado consultarParametro(String nombreParametro) {
+            return getEnum(nombreParametro);
         }
 
     }

@@ -163,6 +163,11 @@ public class ParametroCodefac implements Serializable {
     public static final String DOCUMENTO_DEFECTO_VISTA_FACTURA="documento_defecto_vista_factura";
     
     /**
+     * Parametro que me permite identificar si las facturas para generar las guias de remision deben estar autorizadas o sin autrorizar
+     */
+    public static final String MODO_FACTURACION_GUIA_REMISION="modo_factura_guia_remision";
+    
+    /**
      * Esta variable me permite filtrar las facturas por el usuario ingresado
      */
     public static final String FILTRAR_FACTURAS_POR_USUARIO="filtar_facturas_por_usuario" ;

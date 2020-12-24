@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.TipoReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
@@ -116,6 +118,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbActivarReporteSimpleGuiaRemision = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         txtMotivoTrasladoGuiaRemision = new javax.swing.JTextField();
+        jLabel40 = new javax.swing.JLabel();
+        cmbModoFacturasGuiaRemision = new javax.swing.JComboBox<>();
         jPanel10 = new javax.swing.JPanel();
         jLabel31 = new javax.swing.JLabel();
         cmbFormaPagoDefecto = new javax.swing.JComboBox<>();
@@ -646,10 +650,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel5.add(lblEspacioVertical1, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Motivo Traslado Por Defecto:");
+        jLabel6.setText("Modo factura para guias de remisión:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(jLabel6, gridBagConstraints);
@@ -676,6 +680,22 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.ipadx = 300;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(txtMotivoTrasladoGuiaRemision, gridBagConstraints);
+
+        jLabel40.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel40.setText("Motivo Traslado Por Defecto:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jLabel40, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(cmbModoFacturasGuiaRemision, gridBagConstraints);
 
         jTabbedPane1.addTab("Transporte", jPanel5);
 
@@ -949,6 +969,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<FormatoHojaEnum> cmbFormatoHojas;
     private javax.swing.JComboBox<EnumSiNo> cmbHabilitarRetencionesEnCompras;
+    private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbModoFacturasGuiaRemision;
     private javax.swing.JComboBox<TipoReporteEnum> cmbReporteDefectoVenta;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
@@ -990,6 +1011,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1281,5 +1303,16 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setTxtNumeroMaximoDetalleFactura(JTextField txtNumeroMaximoDetalleFactura) {
         this.txtNumeroMaximoDetalleFactura = txtNumeroMaximoDetalleFactura;
     }
+
+    public JComboBox<ComprobanteEnumEstado> getCmbModoFacturasGuiaRemision() {
+        return cmbModoFacturasGuiaRemision;
+    }
+
+    public void setCmbModoFacturasGuiaRemision(JComboBox<ComprobanteEnumEstado> cmbModoFacturasGuiaRemision) {
+        this.cmbModoFacturasGuiaRemision = cmbModoFacturasGuiaRemision;
+    }
+
+    
+    
    
 }

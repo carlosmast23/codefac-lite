@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
@@ -26,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -156,7 +158,15 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
     public void listenerConsultarGuiasRemision()
     {        
         try {
-            ventasList=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporte(
+            
+            ventasList=consultarFacturas(fechaInicial, fechaFin, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO, DocumentoEnum.FACTURA, vendedorSeleccionado);
+            
+            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.MODO_FACTURACION_GUIA_REMISION,ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
+            {
+                ventasList.addAll(consultarFacturas(fechaInicial, fechaFin, ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR, DocumentoEnum.FACTURA, vendedorSeleccionado));
+            }
+            
+            /*ventasList=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporte(
                     null,
                     new java.sql.Date(fechaInicial.getTime()),
                     new java.sql.Date(fechaFin.getTime()),
@@ -170,11 +180,35 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
                     null,
                     null,
                     vendedorSeleccionado,
-                    EnumSiNo.NO);
+                    EnumSiNo.NO);*/
             
         } catch (RemoteException ex) {
             Logger.getLogger(GuiaRemisionLoteControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private List<Factura> consultarFacturas(Date fechaInicial,Date fechaFin,ComprobanteEntity.ComprobanteEnumEstado comprobanteEstado,DocumentoEnum documentoEnum,Empleado vendedorSeleccionado)
+    {
+        try {
+            return ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporte(
+                    null,
+                    new java.sql.Date(fechaInicial.getTime()),
+                    new java.sql.Date(fechaFin.getTime()),
+                    comprobanteEstado,
+                    Boolean.FALSE,
+                    null,
+                    Boolean.FALSE,
+                    null,
+                    session.getEmpresa(),
+                    documentoEnum,
+                    null,
+                    null,
+                    vendedorSeleccionado,
+                    EnumSiNo.NO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(GuiaRemisionLoteControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<Factura>();
     }
     
     private boolean validarDatosIngresados()

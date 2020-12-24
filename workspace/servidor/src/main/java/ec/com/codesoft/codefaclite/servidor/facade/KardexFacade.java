@@ -53,6 +53,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
     public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega, Integer cantidadMovimientos) {
         try {
             //KardexDetalle kd;
+            //kd.getFechaDocumento();
 
             //kd.getFechaIngreso();
             String queryString = "SELECT kd FROM KardexDetalle kd WHERE kd.kardex.bodega=?3 and kd.kardex.producto=?4 ";
@@ -64,6 +65,9 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             if (fechaFinal != null) {
                 queryString += " and kd.fechaIngreso<=?2 ";
             }
+            
+            //ordenar kardex por fechas de los movimientos
+            queryString+=" order by kd.fechaDocumento ";
 
             //Agregar orden y un limite de la consulta
             //queryString+=" order by kd.id desc ";
