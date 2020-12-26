@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.000000000000027"/>
+	<property name="ireport.zoom" value="1.210000000000033"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="240"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -595,14 +595,14 @@
 				<reportElement x="0" y="3" width="397" height="130" uuid="4c480e46-a4e3-400a-b74b-706a025f3078"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="10" y="12" width="191" height="20" uuid="72acdd4c-a8e5-4703-9a75-cddfeb3b5ef8"/>
+				<reportElement x="10" y="3" width="191" height="20" uuid="72acdd4c-a8e5-4703-9a75-cddfeb3b5ef8"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Información Adicional]]></text>
 			</staticText>
 			<subreport>
-				<reportElement stretchType="RelativeToTallestObject" x="10" y="32" width="191" height="89" uuid="78a52071-cfc2-461a-a6c3-299d9151537a">
+				<reportElement stretchType="RelativeToTallestObject" x="10" y="23" width="191" height="108" uuid="78a52071-cfc2-461a-a6c3-299d9151537a">
 					<printWhenExpression><![CDATA[$P{informacionAdicionalList}!=null]]></printWhenExpression>
 				</reportElement>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{informacionAdicionalList})]]></dataSourceExpression>
@@ -744,7 +744,7 @@
 				<subreportExpression><![CDATA[$P{SUBREPORT_INFO_OTRO}]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="212" y="12" width="175" height="20" backcolor="#999999" uuid="65f96240-7058-4342-91f3-d9c9700bef7d"/>
+				<reportElement x="212" y="3" width="175" height="20" backcolor="#999999" uuid="65f96240-7058-4342-91f3-d9c9700bef7d"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -800,7 +800,7 @@
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<subreport>
-				<reportElement stretchType="RelativeToTallestObject" x="212" y="32" width="175" height="89" uuid="ebd202b3-6874-41a9-9c99-ea4c4aad56c5">
+				<reportElement stretchType="RelativeToTallestObject" x="212" y="23" width="175" height="108" uuid="ebd202b3-6874-41a9-9c99-ea4c4aad56c5">
 					<printWhenExpression><![CDATA[$P{formaPagoList}!=null]]></printWhenExpression>
 				</reportElement>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{formaPagoList})]]></dataSourceExpression>

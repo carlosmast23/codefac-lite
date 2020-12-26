@@ -1629,7 +1629,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         JasperReport reportFormaPago=cargarRecursoJasperProxy(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"forma_pago.jrxml");
         servicio.setReporteFormaPago(reportFormaPago);
         
-        JasperReport reportDatosAdicionales=cargarRecursoJasperProxy(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"forma_pago.jrxml");
+        JasperReport  reportDatosAdicionales=cargarRecursoJasperProxy(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionales.jrxml");
         servicio.setReporteInfoAdicional(reportDatosAdicionales);
         
         JasperReport reportDatoOtrosAdicionales=cargarRecursoJasperProxy(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionalesA4.jrxml");
@@ -1946,6 +1946,36 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             
             parametroCodefac.getValor();
         }
+        agregarParametrosConfiguracionEmpresa(comprobante);
+    }
+    
+    /**
+     * Agregar datos adiucionales que fueron configurados en la empresa como regimen impositivo y otras cosas
+     */
+    private void agregarParametrosConfiguracionEmpresa(ComprobanteEntity comprobante)
+    {
+        //Leyenda del regimen de microempresa
+        EnumSiNo contribuyenteMicorempresas=comprobante.getEmpresa().getContribuyenteRegimenMicroempresasEnum();
+        if(contribuyenteMicorempresas!=null && contribuyenteMicorempresas.equals(EnumSiNo.SI))
+        {
+            construirDatoAdicionalSinTransaccion(comprobante, "Contribuyente Régimen Microempresas"," ");
+            //ComprobanteAdicional campoAdicional=new ComprobanteAdicional("Contribuyente Régimen Microempresas"," ", ComprobanteAdicional.Tipo.TIPO_OTRO);
+            //comprobante.addDatoAdicional(campoAdicional);
+        }
+        
+        //Leyenda de las personas que son agentes de retención
+        String agenteRetencion=comprobante.getEmpresa().getAgenteRetencionResolucion();                
+        if(agenteRetencion!=null && !agenteRetencion.trim().isEmpty())
+        {
+            String numeroRetencionStr[]=agenteRetencion.split("-");
+            Integer numeroResolucion=Integer.parseInt(numeroRetencionStr[numeroRetencionStr.length-1]);
+            construirDatoAdicionalSinTransaccion(comprobante, "Agente de Retención","No. Resolución: "+numeroResolucion);
+            //ComprobanteAdicional campoAdicional=new ComprobanteAdicional("Agente de Retención","No. Resolución: "+numeroResolucion, ComprobanteAdicional.Tipo.TIPO_OTRO);
+            //comprobante.addDatoAdicional(campoAdicional);
+        }
+        
+        
+        
     }
     
     private void agregarParametroComprobante(ComprobanteEntity comprobante,String txtJson)
@@ -2052,6 +2082,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
          * Agregado datos adicionales de configuracion general
          */
         agregarParametrosGenerales(comprobante);
+        
         
         /**
          * Agregado datos adicionales de cada usuario
@@ -2505,6 +2536,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
     }
     
+    /**
+     * TODO:Falta agregar para liquidaciones de compra
+     * @param comprobante
+     * @param campo
+     * @param valor
+     * @return 
+     */
     public ComprobanteAdicional construirDatoAdicionalSinTransaccion(ComprobanteEntity comprobante,String campo,String valor)
     {
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
