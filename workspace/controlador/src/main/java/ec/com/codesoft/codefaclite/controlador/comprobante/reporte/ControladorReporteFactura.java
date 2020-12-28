@@ -91,11 +91,14 @@ public class ControladorReporteFactura {
     private Usuario usuario;
     private List<Factura> datafact;
     
+    private Boolean agregarCostos;
+    
 
     public ControladorReporteFactura(Empresa empresa) {
         this.empresa=empresa;
         this.data = new ArrayList<ReporteFacturaData>();
         this.reporteConDetallesFactura=false;
+        this.agregarCostos=false;
     }
     
     public ControladorReporteFactura(Empresa empresa, Usuario usuario){
@@ -103,6 +106,7 @@ public class ControladorReporteFactura {
         this.usuario = usuario;
         this.data = new ArrayList<ReporteFacturaData>();
         this.reporteConDetallesFactura=false;
+        this.agregarCostos=false;
     }
     
     
@@ -121,6 +125,7 @@ public class ControladorReporteFactura {
         this.data = new ArrayList<ReporteFacturaData>();
         this.sucursal=sucursal;
         this.reporteConDetallesFactura=false;
+        this.agregarCostos=false;
     }
     
     /**
@@ -158,7 +163,12 @@ public class ControladorReporteFactura {
              * ===============================================================
              * TODO: Este metodo solo es temporal hasta ver una forma mucha mas optima
              */
-            Map<Factura,BigDecimal> mapCostos=fs.obtenerCostoFacturas(datafact);
+            //Map<Factura,BigDecimal> mapCostos=fs.obtenerCostoFacturas(datafact);
+            Map<Factura,BigDecimal> mapCostos=new HashMap<Factura,BigDecimal>();
+            if(agregarCostos)
+            {
+                mapCostos=fs.obtenerCostoFacturas(datafact);
+            }
             
             /**
              * =====================================================================
@@ -1010,6 +1020,14 @@ public class ControladorReporteFactura {
 
     public void setDatafact(List<Factura> datafact) {
         this.datafact = datafact;
+    }
+
+    public Boolean getAgregarCostos() {
+        return agregarCostos;
+    }
+
+    public void setAgregarCostos(Boolean agregarCostos) {
+        this.agregarCostos = agregarCostos;
     }
     
     

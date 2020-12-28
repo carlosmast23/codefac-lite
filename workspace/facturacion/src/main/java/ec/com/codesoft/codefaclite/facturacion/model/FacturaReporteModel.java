@@ -65,6 +65,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenuItem;
@@ -174,6 +175,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             PuntoEmision puntoEmisionReporte=((getChkPuntoEmisionTodos().isSelected())?null:(PuntoEmision)getCmbPuntoEmision().getSelectedItem());
             
             controladorReporte.setPuntoEmision(puntoEmisionReporte);
+            controladorReporte.setAgregarCostos(getChkAgregarCostos().isSelected());
             
             //Cuando se quiere agrupar por produto activo la opcion de Agrupado por Producto
             TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
@@ -183,8 +185,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
             {
                 controladorReporte.setReporteConDetallesFactura(true);
             }
-            
+                                    
+            Long tiempoInicial=System.nanoTime();
             controladorReporte.generarReporte();
+            long endTime = System.nanoTime() - tiempoInicial;
+            long segundosDemora=TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS);
+            System.out.println("El tiempo en generar el reporte es: "+segundosDemora);
+            
             data=controladorReporte.getData();
             
             imprimirTabla();      

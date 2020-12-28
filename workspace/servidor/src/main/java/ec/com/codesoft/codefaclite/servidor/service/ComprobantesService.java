@@ -1756,7 +1756,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
         
         
-        parametros.put("pl_url_img1", UtilidadImagen.castInputStreamToImage(input));
+        parametros.put("pl_url_img1", UtilidadImagen.castInputStreamToImage(input)); 
         parametros.put("pl_img_facebook", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png"))));
         parametros.put("pl_img_whatsapp", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png"))));
         parametros.put("pl_img_telefono", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png"))));

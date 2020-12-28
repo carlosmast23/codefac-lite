@@ -80,6 +80,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         panelOpciones = new javax.swing.JPanel();
         chkAfectaNotaDebito = new javax.swing.JCheckBox();
         chkAfectaNotaCredito = new javax.swing.JCheckBox();
+        chkAgregarCostos = new javax.swing.JCheckBox();
         lblReferido = new javax.swing.JLabel();
         txtReferido = new javax.swing.JTextField();
         btnBuscarReferido = new javax.swing.JButton();
@@ -426,12 +427,23 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         panelOpciones.add(chkAfectaNotaDebito, gridBagConstraints);
 
         chkAfectaNotaCredito.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         chkAfectaNotaCredito.setSelected(true);
         chkAfectaNotaCredito.setText("Afectar Notas de Crédito");
-        panelOpciones.add(chkAfectaNotaCredito, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        panelOpciones.add(chkAfectaNotaCredito, gridBagConstraints);
+
+        chkAgregarCostos.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkAgregarCostos.setText("Agregar Costos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        panelOpciones.add(chkAgregarCostos, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
@@ -585,6 +597,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnLimpiarFechaInicio;
     private javax.swing.JCheckBox chkAfectaNotaCredito;
     private javax.swing.JCheckBox chkAfectaNotaDebito;
+    private javax.swing.JCheckBox chkAgregarCostos;
     private javax.swing.JCheckBox chkPuntoEmisionTodos;
     private javax.swing.JCheckBox chkReporteAgrupadoReferido;
     private javax.swing.JCheckBox chkSucursalTodos;
@@ -821,6 +834,14 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
 
     public JComboBox<ComprobanteEntity.ComprobanteEnumEstado> getCmbSucursal() {
         return cmbSucursal;
+    }
+
+    public JCheckBox getChkAgregarCostos() {
+        return chkAgregarCostos;
+    }
+
+    public void setChkAgregarCostos(JCheckBox chkAgregarCostos) {
+        this.chkAgregarCostos = chkAgregarCostos;
     }
 
     
