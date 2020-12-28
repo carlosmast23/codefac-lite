@@ -78,7 +78,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         List<Sucursal> sucursales=sucursalService.consultarActivosPorEmpresa(empresa);
         //ats.setNumEstabRuc(UtilidadesTextos.llenarCarateresIzquierda(sucursales.size()+"",3,"0")); 
         ats.setNumEstabRuc("001");  //Todo: por el momento dejo seteado
-        ats.setRazonSocial(empresa.getRazonSocial());
+        ats.setRazonSocial(UtilidadesTextos.quitaDiacriticos(empresa.getRazonSocial()));
         ats.setTipoIDInformante("R"); //Todo: Ver que opciones existen para ese campo
         
         
