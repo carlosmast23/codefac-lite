@@ -37,6 +37,18 @@ public enum DocumentoEnum implements ParametroUtilidades.ComparadorInterface{
             "01"),
     
     /**
+     * Factura de Reembolso
+     * todo: verificar codigo del sri
+     */
+    FACTURA_REEMBOLSO("Factura Reembolso",
+            "FAR",
+            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION,ModuloCodefacEnum.COMPRA},
+            true,
+            true,
+            "01"),
+    
+    /**
      * TODO: Ver si utilizar factura manual
      */
     /*FACTURA_MANUAL("Factura Manual",

@@ -374,6 +374,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         //TODO: Mandar una alerta o una excepcion cuando no este configurado para algun documento
         List<CarteraCruce> cruces=new ArrayList<CarteraCruce>();
         switch (documentoEnum) {
+            case FACTURA_REEMBOLSO:
             case NOTA_VENTA_INTERNA:
             case NOTA_VENTA:
             case FACTURA:
@@ -387,6 +388,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             case NOTA_CREDITO:
                 crearCarteraNotaCredito(comprobante, cartera, cruces);
                 break;
+            default:
+                throw new ServicioCodefacException("Documento no configurado en cartera");
+                
         }
         
         
