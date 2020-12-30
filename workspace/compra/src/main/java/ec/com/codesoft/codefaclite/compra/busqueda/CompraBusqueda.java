@@ -41,9 +41,9 @@ public class CompraBusqueda implements InterfaceModelFind<Compra>
     @Override
     public QueryDialog getConsulta(String filter) {
         //Compra c;
-        //c.getId();
+        //c.getRazonSocial();
         String queryString = "SELECT c FROM Compra c WHERE c.empresa=?3 AND c.estado=?2 AND ";
-        queryString+=" ( LOWER(c.secuencial) like ?1 ) order by c.id desc ";
+        queryString+=" ( LOWER(c.secuencial) like ?1 OR  LOWER(c.razonSocial) like ?1 ) order by c.id desc ";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
         queryDialog.agregarParametro(2,GeneralEnumEstado.ACTIVO.getEstado());
