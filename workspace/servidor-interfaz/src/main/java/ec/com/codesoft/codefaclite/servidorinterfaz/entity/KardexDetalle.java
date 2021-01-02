@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -59,10 +60,10 @@ public class KardexDetalle implements Serializable ,Cloneable {
     private BigDecimal precioTotal;
     
     @Column(name = "FECHA_CREACION")
-    private Date fechaCreacion;
+    private Timestamp fechaCreacion;
     
     @Column(name = "FECHA_INGRESO")
-    private Date fechaIngreso;
+    private Timestamp fechaIngreso;
     
     @Column(name = "RAZON_SOCIAL")
     private String razonSocial;
@@ -170,19 +171,19 @@ public class KardexDetalle implements Serializable ,Cloneable {
         this.detallesEspecificos = detallesEspecificos;
     }
 
-    public Date getFechaCreacion() {
+    public Timestamp getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(Date fechaCreacion) {
+    public void setFechaCreacion(Timestamp fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public Date getFechaIngreso() {
+    public Timestamp getFechaIngreso() {
         return fechaIngreso;
     }
 
-    public void setFechaIngreso(Date fechaIngreso) {
+    public void setFechaIngreso(Timestamp fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
 

@@ -175,9 +175,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     kardexDetalle.setPrecioTotal(cantidadTotal.multiply(kardexComponente.getPrecioUltimo()));
                     kardexDetalle.setPrecioUnitario(kardexComponente.getPrecioUltimo());
                     kardexDetalle.setReferenciaDocumentoId(null);
-                    kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+                    kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
                     kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
-                    kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
+                    kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
                     
                     kardexComponente.addDetalleKardex(kardexDetalle);
                     
@@ -315,9 +315,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         kardexDetalle.setPrecioTotal(costoIndividualEnsamble.multiply(new BigDecimal(cantidad.toString())));
         kardexDetalle.setPrecioUnitario(costoIndividualEnsamble);
         kardexDetalle.setReferenciaDocumentoId(null);
-        kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
         kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
-        kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
+        kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
 
         kardex.addDetalleKardex(kardexDetalle);
         recalcularValoresKardex(kardex, kardexDetalle);
@@ -562,8 +562,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         BigDecimal total=precioUnitario.multiply(new BigDecimal(cantidad.toString()));
         movimientoOrigen.setCantidad(cantidad);
         movimientoOrigen.setCodigoTipoDocumentoEnum(tipoDocumentoEnum);
-        movimientoOrigen.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-        movimientoOrigen.setFechaIngreso(UtilidadesFecha.getFechaHoy());
+        movimientoOrigen.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
+        movimientoOrigen.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
         movimientoOrigen.setFechaDocumento(UtilidadesFecha.getFechaHoy());
         
         movimientoOrigen.setKardex(kardex);
@@ -605,7 +605,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     kardexDetalle.setCodigoTipoDocumentoEnum(TipoDocumentoEnum.ANULAR_MERCADERIA_NEGATIVO);
                 }
                 kardexDetalle.recalcularTotalSinGarantia();
-                kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
+                kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
                 kardexDetalle.setKardex(kardex);
                 
                 grabarKardexDetallSinTransaccion(kardexDetalle);
@@ -672,6 +672,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             kardex = kardexList.get(0);
         }
 
+        //Agregar la fecha de creacion del sistema
+        detalle.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
         detalle.setKardex(kardex);
         kardex.addDetalleKardex(detalle);
         em.persist(detalle);
@@ -725,6 +727,18 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         {
             throw new ServicioCodefacException("No se puede ingresar cantidad negativas de stock o que sean 0");
         }
+        
+        if(detalle.getFechaDocumento()==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar sin fecha del documento");
+        }
+        
+        if(detalle.getFechaIngreso()==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar sin fecha de ingreso");
+        }
+        
+        
     }
     
     /**
@@ -885,8 +899,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             kardexDetalle.setCantidad(cantidadSaldo);
             kardexDetalle.setPrecioUnitario(precioUnitarioSaldo);
             kardexDetalle.setPrecioTotal(precioTotalSaldo);
-            kardexDetalle.setFechaCreacion(fechaInicial);
-            kardexDetalle.setFechaIngreso(fechaInicial);
+            kardexDetalle.setFechaCreacion(UtilidadesFecha.castDateSqlToTimeStampSql(fechaInicial));
+            kardexDetalle.setFechaIngreso(UtilidadesFecha.castDateSqlToTimeStampSql(fechaInicial));
             kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.SALDO_ANTERIOR.getCodigo());
             //kardexDetalle.set            
             datosConsulta.add(0, kardexDetalle);

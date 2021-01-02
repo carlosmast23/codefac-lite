@@ -53,6 +53,12 @@ public class UtilidadesFecha {
         java.util.Date fechaHoy = new java.util.Date();
         return new java.sql.Date(fechaHoy.getTime());
     }
+    
+    public static Timestamp getFechaHoyTimeStamp()
+    {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        return timestamp;
+    }
 
     public static java.util.Date fechaFinMes(java.util.Date fecha) {
         Calendar calendar = Calendar.getInstance();
@@ -291,6 +297,13 @@ public class UtilidadesFecha {
     }
     
     public static Timestamp castDateSqlToTimeStampSql(Date date){
+        if(date == null){
+            return null;
+        }
+        return new Timestamp(date.getTime());
+    }
+    
+    public static Timestamp castDateSqlToTimeStampSql(java.util.Date date){
         if(date == null){
             return null;
         }

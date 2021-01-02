@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
+import org.apache.commons.net.ntp.TimeStamp;
 
 /**
  *
@@ -197,9 +198,10 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         kardexDetalle.setCodigoTipoDocumento(tipoDocumentoEnum.getCodigo());
         
         //Fecha de ingreso 
-        java.util.Date fechaUtil=getCmbFechaIngreso().getDate();
-        kardexDetalle.setFechaIngreso(new java.sql.Date(fechaUtil.getTime()));
         
+        java.util.Date fechaUtil=getCmbFechaIngreso().getDate();
+        kardexDetalle.setFechaIngreso(UtilidadesFecha.castDateToTimeStamp(fechaUtil));
+        kardexDetalle.setFechaDocumento(new java.sql.Date(fechaUtil.getTime()));
         
         
         Kardex kardex=new Kardex();

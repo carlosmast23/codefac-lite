@@ -321,8 +321,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 //TODO: Analizar caso cuando se resta un producto especifico
                 Kardex kardex= kardexProducto;
                 KardexDetalle kardexDetalle=new KardexDetalle();
-                kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-                kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
+                kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
+                kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
                 kardexDetalle.setCantidad(cantidad);
                 kardexDetalle.setCodigoTipoDocumento(tipoDocumento.getCodigo());
                 kardexDetalle.setPrecioTotal(total);

@@ -34,12 +34,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.event.ActionEvent;
@@ -481,11 +484,11 @@ public class KardexModel extends KardexPanel {
     private void completarFila(KardexData kardexData, ModuloCodefacEnum moduloEnum, KardexDetalle kardexDetalle, BigDecimal cantidadAcumulada, BigDecimal precioUnitarioAcumulado, BigDecimal precioTotalAcumulado, boolean agregar) {
         //Agregar la fecha UtilidadesFecha
         if (kardexDetalle.getFechaIngreso() != null) {
-            kardexData.setFecha(UtilidadesFecha.formatoDiaMesAño(kardexDetalle.getFechaIngreso()));
+            kardexData.setFecha(UtilidadesFecha.formatoDiaMesAño(UtilidadesFecha.getFechaDeTimeStamp(kardexDetalle.getFechaIngreso())));
         }
 
-        if (agregar) {
-            kardexData.setIngreso_cantidad(kardexDetalle.getCantidad() + "");
+        if (agregar) {            
+            kardexData.setIngreso_cantidad(kardexDetalle.getCantidad().setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO)+"");
             kardexData.setIngreso_precio(kardexDetalle.getPrecioUnitario() + "");
             kardexData.setIngreso_total(kardexDetalle.getPrecioTotal() + "");
 
@@ -498,7 +501,7 @@ public class KardexModel extends KardexPanel {
             kardexData.setIngreso_precio("");
             kardexData.setIngreso_total("");
 
-            kardexData.setEgreso_cantidad(kardexDetalle.getCantidad() + "");
+            kardexData.setEgreso_cantidad(kardexDetalle.getCantidad().setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO) + "");
             kardexData.setEgreso_precio(kardexDetalle.getPrecioUnitario() + "");
             kardexData.setEgreso_total(kardexDetalle.getPrecioTotal() + "");
           
@@ -506,7 +509,7 @@ public class KardexModel extends KardexPanel {
         }
 
         //Agregar los saldos
-        kardexData.setSaldo_cantidad(cantidadAcumulada + "");
+        kardexData.setSaldo_cantidad(cantidadAcumulada.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO) + "");
         kardexData.setSaldo_precio(precioUnitarioAcumulado + "");
         kardexData.setSaldo_total(precioTotalAcumulado + "");
         /*fila.add(cantidadAcumulada + "");

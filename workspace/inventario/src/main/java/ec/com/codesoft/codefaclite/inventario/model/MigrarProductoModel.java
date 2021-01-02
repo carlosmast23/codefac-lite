@@ -137,7 +137,7 @@ public class MigrarProductoModel extends MigrarModel {
                                 kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.STOCK_INICIAL.getCodigo());
 
                                 //Fecha de ingreso                             
-                                kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
+                                kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
 
                                 Kardex kardex = new Kardex();
                                 kardex.setBodega(bodega);
