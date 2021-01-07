@@ -16,21 +16,22 @@ import java.util.List;
  * @author CARLOS_CODESOFT
  */
 public class CarteraDocumentoData implements ExcelDatosInterface {
-    private String codigo;
-    private String descripcion;
-    private String valor;
-    private String saldo;
-    private String preimpreso;
-    private String fechaEmision;
-    private String persona;
-    private String documento;
+    protected String codigo;
+    protected String descripcion;
+    protected String valor;
+    protected String saldo;
+    protected String preimpreso;
+    protected String fechaEmision;
+    protected String persona;
+    protected String documento;
     
-    private String codigoDetalleDocumento;
-    private String nombreDetalleDocumento;
-    private String subtotalDetalle;
-    private String saldoDetalle;
+    protected String codigoDetalleDocumento;
+    protected String nombreDetalleDocumento;
+    protected String subtotalDetalle;
+    protected String saldoDetalle;
     
-    public CarteraDocumentoData(String codigo, String descripcion, String valor, String saldo, String preimpreso, String fechaEmision, String persona, String documento, String codigoDetalleDocumento, String nombreDetalleDocumento, String subtotalDetalle, String saldoDetalle) {
+    public CarteraDocumentoData(String codigo, String descripcion, String valor, String saldo, String preimpreso, String fechaEmision, String persona, String documento, String codigoDetalleDocumento, String nombreDetalleDocumento, String subtotalDetalle, String saldoDetalle) 
+    {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.valor = valor;
@@ -44,12 +45,6 @@ public class CarteraDocumentoData implements ExcelDatosInterface {
         this.subtotalDetalle = subtotalDetalle;
         this.saldoDetalle = saldoDetalle;
     }
-    
-    
-    
-    
-
-    
 
     public String getCodigo() {
         return codigo;
@@ -163,6 +158,7 @@ public class CarteraDocumentoData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.saldo,Excel.TipoDataEnum.NUMERO));
         return tiposDatos; 
     }
+    
 
     public static final String[] TITULO_REPORTE={
         "Código",
@@ -174,7 +170,4 @@ public class CarteraDocumentoData implements ExcelDatosInterface {
         "Valor",
         "Saldo"
     };
-    
-    
-    
 }

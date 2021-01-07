@@ -5,7 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.cartera.model;
 
+import ec.com.codesoft.codefaclite.cartera.model.ReporteCarteraModel.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.cartera.panel.ReporteCarteraPanel;
+import ec.com.codesoft.codefaclite.cartera.reportdata.CarteraDataDetalle;
 import ec.com.codesoft.codefaclite.cartera.reportdata.CarteraDocumentoData;
 import ec.com.codesoft.codefaclite.cartera.reportdata.CuentasPorCobrarData;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
@@ -51,7 +53,7 @@ import javax.swing.table.DefaultTableModel;
 public class ReporteCarteraModel extends ReporteCarteraPanel {
 
     private List<CarteraDocumentoData> resultadoData;
-    private List<CarteraDocumentoData> resultadoDataDetalle;
+    private List<CarteraDataDetalle> resultadoDataDetalle;
     private Persona personaBusqueda;
 
     @Override
@@ -92,6 +94,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
         
         if(resultadoData!=null)
         {
+            TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
             
             DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
                 @Override
@@ -99,8 +102,19 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                     try{
                         Excel excel = new Excel();
                         String nombreCabeceras[] = CarteraDocumentoData.TITULO_REPORTE;
-                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, resultadoData);
+                        
+                        
+                        if(TipoReporteEnum.GENERAL.equals(tipoReporteEnum))
+                        {
+                            excel.gestionarIngresoInformacionExcel(nombreCabeceras, resultadoData);                            
+                        }else if(TipoReporteEnum.DETALLADO.equals(tipoReporteEnum))
+                        {
+                            nombreCabeceras = CarteraDataDetalle.TITULO_REPORTE_DETALLE;
+                            excel.gestionarIngresoInformacionExcel(nombreCabeceras, resultadoDataDetalle);
+                        }
+                        
                         excel.abrirDocumento();
+                        
                     }
                     catch(Exception exc)
                     {
@@ -111,7 +125,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
 
                 @Override
                 public void pdf() {
-                    TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
+                    //TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
                     Cartera.CarteraCategoriaEnum carteraCategoriaEnum =(Cartera.CarteraCategoriaEnum) getCmbDocumentoCategoriaCartera().getSelectedItem();
                     if(TipoReporteEnum.GENERAL.equals(tipoReporteEnum))
                     {
@@ -199,7 +213,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
     
     private void construirResultadoDataDetalle(List<Cartera> datos) {
         if (datos != null) {
-            resultadoDataDetalle = new ArrayList<CarteraDocumentoData>();
+            resultadoDataDetalle = new ArrayList<CarteraDataDetalle>();
 
             for (Cartera dato : datos) 
             {
@@ -217,7 +231,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                         nombreDetalleDocumento=documentoDetalle.getNombre();
                     }
                     
-                    resultadoDataDetalle.add(new CarteraDocumentoData(
+                    resultadoDataDetalle.add(new CarteraDataDetalle(
                         dato.getCodigo(),
                         dato.obtenerDescripciones(),
                         dato.getTotal().toString(),
@@ -238,7 +252,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
         ordenarPorDocumentoDetalle(resultadoDataDetalle);
     }
     
-    private void ordenarPorDocumentoDetalle(List<CarteraDocumentoData> detalles)
+    private void ordenarPorDocumentoDetalle(List<CarteraDataDetalle> detalles)
     {
         Collections.sort(detalles, new Comparator<CarteraDocumentoData>() {
             public int compare(CarteraDocumentoData o1, CarteraDocumentoData o2) {

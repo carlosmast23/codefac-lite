@@ -18,6 +18,7 @@ import java.util.List;
 public class CompraDataReporte  implements ExcelDatosInterface
 {
     private String preimpreso;
+    private String documento;
     private String identificacion;
     private String nombre;
     private String fecha;
@@ -138,6 +139,14 @@ public class CompraDataReporte  implements ExcelDatosInterface
     public void setAutorizacion(String autorizacion) {
         this.autorizacion = autorizacion;
     }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
     
     
 
@@ -146,6 +155,7 @@ public class CompraDataReporte  implements ExcelDatosInterface
     {
         List<TipoDato> tiposDatos = new ArrayList<>();
         tiposDatos.add(new TipoDato(this.preimpreso,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.documento,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.autorizacion,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.identificacion,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombre,Excel.TipoDataEnum.TEXTO));
