@@ -1312,7 +1312,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
     }
     
-    private List<FacturaParametro> obtenerFacturasManualesProcesar(Factura factura)
+    private List<FacturaParametro> obtenerFacturasManualesProcesar(Factura factura) throws ServicioCodefacException
     {
         List<FacturaParametro> respuestaList=new ArrayList<FacturaParametro>();
         
@@ -1435,6 +1435,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //Llenar los datos de los detalles
             List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
             
+            //TODO: Agregado cabezera temporal
+            DetalleFacturaFisicaData detalleCabecera = new DetalleFacturaFisicaData();
+            detalleCabecera.setCantidad("Cantidad");
+            detalleCabecera.setCodigoPrincipal("Código");
+            detalleCabecera.setDescripcion("Descripción");
+            detalleCabecera.setDescuento("Descuento");
+            detalleCabecera.setValorTotal("Total");
+            detalleCabecera.setValorUnitario("Val. Unit");
+            detalles.add(detalleCabecera);
+            
+            
+            
             for (FacturaDetalle detalleFactura : factura.getDetalles()) {
                 DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
                 
@@ -1474,31 +1486,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public Map<String, Object> getParametroReporte(Factura factura,DocumentoEnum documento)
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("fechaEmision", factura.getFechaEmision().toString());
-        parametros.put("razonSocial", factura.getRazonSocial());
-        parametros.put("direccion", factura.getDireccion());
-        parametros.put("telefono", factura.getTelefono());
+        parametros.put("fechaEmision","Fecha: "+factura.getFechaEmision().toString());
+        parametros.put("razonSocial","Razón Social: "+ factura.getRazonSocial());
+        parametros.put("direccion","Dirección: "+ factura.getDireccion());
+        parametros.put("telefono","Telefono: "+ factura.getTelefono());
         parametros.put("correoElectronico", (factura.getCliente().getCorreoElectronico() != null) ? factura.getCliente().getCorreoElectronico() : "");
-        parametros.put("identificacion", factura.getIdentificacion());
+        parametros.put("identificacion","Identificación: "+ factura.getIdentificacion());
 
         //Datos cuando es una nota de venta
         if(DocumentoEnum.NOTA_VENTA.equals(documento))
         {
-            parametros.put("subtotal", factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
-            parametros.put("descuento", factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
-            parametros.put("total", factura.getTotal() + "");        
+            parametros.put("subtotal","Subtotal: "+ factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
+            parametros.put("descuento","Descuento: "+ factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
+            parametros.put("total","Total: "+ factura.getTotal() + "");        
         }
         else
         {   //Datos cuando es una factura
-            parametros.put("subtotalAntesImpuestos", factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
-            parametros.put("subtotalImpuesto", factura.getSubtotalImpuestos().toString());
-            parametros.put("subtotalSinImpuesto", factura.getSubtotalSinImpuestos().toString());
-            parametros.put("descuento", factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
-            parametros.put("subtotalConDescuento", factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).subtract((factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()))).toString());
-            parametros.put("valorIva", factura.getIva().toString());
-            parametros.put("total", factura.getTotal() + "");
+            parametros.put("subtotalAntesImpuestos","Subtotal 1: "+ factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
+            parametros.put("subtotalImpuesto","Subtotal 2: "+ factura.getSubtotalImpuestos().toString());
+            parametros.put("subtotalSinImpuesto","Subtotal 3: "+ factura.getSubtotalSinImpuestos().toString());
+            parametros.put("descuento","Descuento: "+ factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
+            parametros.put("subtotalConDescuento","Subt Desc: "+ factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).subtract((factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()))).toString());
+            parametros.put("valorIva","Val Iva: "+ factura.getIva().toString());
+            parametros.put("total","Total: "+ factura.getTotal() + "");
             String ivaStr = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
-            parametros.put("iva", ivaStr);
+            parametros.put("iva","Iva: "+ ivaStr);
         
         }
         

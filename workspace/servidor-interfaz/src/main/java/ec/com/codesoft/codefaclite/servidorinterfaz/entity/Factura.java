@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional.CampoDefectoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -650,8 +651,13 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
      * @param limiteDetalle
      * @return 
      */
-    public List<Factura> dividirFactura(int limiteDetalle)
+    public List<Factura> dividirFactura(int limiteDetalle) throws ServicioCodefacException
     {
+        if(limiteDetalle==0)
+        {
+            throw new ServicioCodefacException("No se tiene configurado un límite para los detalles de las facturas físicas");
+        }
+        
         List<Factura> nuevasFacturasDivididas=new ArrayList<Factura>();
         for (int i = 0; i < this.detalles.size(); i=i+limiteDetalle) 
         {
