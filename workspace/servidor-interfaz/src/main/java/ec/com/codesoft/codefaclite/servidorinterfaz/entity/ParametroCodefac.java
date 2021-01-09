@@ -183,6 +183,11 @@ public class ParametroCodefac implements Serializable {
      * Permite establecer cual es el limite de items en el detalle cuando se hace facturación manual
      */
     public static final String NUMERO_MAXIMO_DETALLES_FACTURA="numero_max_det_factura";
+    
+    /**
+     * Mostrar titulo facturacion fisica
+     */
+    public static final String MOSTRAR_TITULO_FACT_FISICA="mostrar_titulo_fact_fisica";
 
     @Id
     @Column(name = "ID")

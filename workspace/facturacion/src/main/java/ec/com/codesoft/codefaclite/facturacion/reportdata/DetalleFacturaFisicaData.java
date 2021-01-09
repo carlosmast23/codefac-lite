@@ -69,7 +69,4 @@ public class DetalleFacturaFisicaData {
         this.descuento = descuento;
     }
     
-    
-    
-    
 }

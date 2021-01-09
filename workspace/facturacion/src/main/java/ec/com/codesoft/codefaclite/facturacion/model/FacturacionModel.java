@@ -45,6 +45,7 @@ import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFac
 import ec.com.codesoft.codefaclite.facturacion.other.RenderPersonalizadoCombo;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaFisicaDataMap;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FacturaModelInterface;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
@@ -1430,22 +1431,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             InputStream reporteNuevo = manager.generarNuevoDocumento();
             
-            Map<String, Object> parametros = getParametroReporte(factura,documentoEnum);
+            Boolean imprimirTitulos=false;
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_TITULO_FACT_FISICA,EnumSiNo.SI))
+            {
+                imprimirTitulos=true;
+            }
+            
+            Map<String, Object> parametros = getParametroReporte(factura,documentoEnum,imprimirTitulos);
             
             //Llenar los datos de los detalles
             List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
             
+            
             //TODO: Agregado cabezera temporal
-            DetalleFacturaFisicaData detalleCabecera = new DetalleFacturaFisicaData();
-            detalleCabecera.setCantidad("Cantidad");
-            detalleCabecera.setCodigoPrincipal("Código");
-            detalleCabecera.setDescripcion("Descripción");
-            detalleCabecera.setDescuento("Descuento");
-            detalleCabecera.setValorTotal("Total");
-            detalleCabecera.setValorUnitario("Val. Unit");
-            detalles.add(detalleCabecera);
-            
-            
+            if(imprimirTitulos)
+            {
+                DetalleFacturaFisicaData detalleCabecera = new DetalleFacturaFisicaData();
+                detalleCabecera.setCantidad("<b>Cantidad</b>");
+                detalleCabecera.setCodigoPrincipal("<b>Código</b>");
+                detalleCabecera.setDescripcion("<b>Descripción</b>");
+                detalleCabecera.setDescuento("<b>Descuento</b>");
+                detalleCabecera.setValorTotal("<b>Total</b>");
+                detalleCabecera.setValorUnitario("<b>Val. Unit</b>");                
+                detalles.add(detalleCabecera);
+                
+            }
             
             for (FacturaDetalle detalleFactura : factura.getDetalles()) {
                 DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
@@ -1483,41 +1493,45 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     
     
-    public Map<String, Object> getParametroReporte(Factura factura,DocumentoEnum documento)
+    public Map<String, Object> getParametroReporte(Factura factura,DocumentoEnum documento,Boolean imprimirTitulos)
     {
-        Map<String, Object> parametros = new HashMap<String, Object>();
+        FacturaFisicaDataMap dataMap=new FacturaFisicaDataMap(imprimirTitulos);
+        String ivaStr = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
+        return dataMap.getMap(factura, documento, ivaStr);
+        /*Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("fechaEmision","Fecha: "+factura.getFechaEmision().toString());
         parametros.put("razonSocial","Razón Social: "+ factura.getRazonSocial());
         parametros.put("direccion","Dirección: "+ factura.getDireccion());
         parametros.put("telefono","Telefono: "+ factura.getTelefono());
         parametros.put("correoElectronico", (factura.getCliente().getCorreoElectronico() != null) ? factura.getCliente().getCorreoElectronico() : "");
         parametros.put("identificacion","Identificación: "+ factura.getIdentificacion());
-
+        
         //Datos cuando es una nota de venta
         if(DocumentoEnum.NOTA_VENTA.equals(documento))
         {
-            parametros.put("subtotal","Subtotal: "+ factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
-            parametros.put("descuento","Descuento: "+ factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
-            parametros.put("total","Total: "+ factura.getTotal() + "");        
+        parametros.put("subtotal","Subtotal: "+ factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
+        parametros.put("descuento","Descuento: "+ factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
+        parametros.put("total","Total: "+ factura.getTotal() + "");
         }
         else
         {   //Datos cuando es una factura
-            parametros.put("subtotalAntesImpuestos","Subtotal 1: "+ factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
-            parametros.put("subtotalImpuesto","Subtotal 2: "+ factura.getSubtotalImpuestos().toString());
-            parametros.put("subtotalSinImpuesto","Subtotal 3: "+ factura.getSubtotalSinImpuestos().toString());
-            parametros.put("descuento","Descuento: "+ factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
-            parametros.put("subtotalConDescuento","Subt Desc: "+ factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).subtract((factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()))).toString());
-            parametros.put("valorIva","Val Iva: "+ factura.getIva().toString());
-            parametros.put("total","Total: "+ factura.getTotal() + "");
-            String ivaStr = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
-            parametros.put("iva","Iva: "+ ivaStr);
+        parametros.put("subtotalAntesImpuestos","Subtotal 1: "+ factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
+        parametros.put("subtotalImpuesto","Subtotal 2: "+ factura.getSubtotalImpuestos().toString());
+        parametros.put("subtotalSinImpuesto","Subtotal 3: "+ factura.getSubtotalSinImpuestos().toString());
+        parametros.put("descuento","Descuento: "+ factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
+        parametros.put("subtotalConDescuento","Subt Desc: "+ factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).subtract((factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()))).toString());
+        parametros.put("valorIva","Val Iva: "+ factura.getIva().toString());
+        parametros.put("total","Total: "+ factura.getTotal() + "");
+        String ivaStr = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
+        parametros.put("iva","Iva: "+ ivaStr);
         
         }
         
         //Agregar forma de pago
         parametros.putAll(getMapFormaPagoReporteFacturaFisica(factura));
         
-        return parametros;
+        return parametros;*/
+        //return null;
     }
     
     /**
@@ -1526,7 +1540,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      * @param venta
      * @return 
      */
-    private Map<String,Object> getMapFormaPagoReporteFacturaFisica(Factura venta)
+    /*private Map<String,Object> getMapFormaPagoReporteFacturaFisica(Factura venta)
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
         
@@ -1562,7 +1576,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             parametros.put("formaPagoEfectivo","X");
         }
         return parametros;
-    }
+    }*/
 
     @Override
     public void editar() throws ExcepcionCodefacLite {

@@ -215,6 +215,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideRucEmpledo(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideReferenciaDireccion(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideCodigoPersonalizado(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbMostrarTituloFactFisica(),EnumSiNo.values());
         
         
         //Cargar las opciones en las configuraciones
@@ -310,6 +311,19 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroActivarCarteras = parametrosTodos.get(ParametroCodefac.ACTIVAR_CARTERA);
             EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((parametroActivarCarteras != null) ? parametroActivarCarteras.getValor() : null);
             getCmbActivarModuloCartera().setSelectedItem(enumSiNo);
+            
+            ParametroCodefac parametroMostrarTituloFactFisica = parametrosTodos.get(ParametroCodefac.MOSTRAR_TITULO_FACT_FISICA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroMostrarTituloFactFisica != null) ? parametroMostrarTituloFactFisica.getValor() : null);
+            
+            //Si el valor es null entonces por defecto queda seleccionado en no
+            if(enumSiNo==null)
+            {
+                enumSiNo=EnumSiNo.NO;
+            }
+            getCmbMostrarTituloFactFisica().setSelectedItem(enumSiNo);
+            
+            
+            
             //getTxtOrdenTrabajoReporte().setText((parametroFormtaOrdenTrabajo!=null)?parametroFormtaOrdenTrabajo.getValor():"");
             
             ParametroCodefac parametroCreditoDefectoVentas = parametrosTodos.get(ParametroCodefac.CREDITO_DEFECTO_VENTAS);
@@ -667,6 +681,13 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getjComboFiltrarFacturaPorUsuario().getSelectedItem();
         agregarParametro(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO);
+        
+        /**
+         * Mostrar titulo facturacion fisica
+         */
+        enumSiNo = (EnumSiNo) getCmbMostrarTituloFactFisica().getSelectedItem();
+        agregarParametro(ParametroCodefac.MOSTRAR_TITULO_FACT_FISICA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.MOSTRAR_TITULO_FACT_FISICA);
 
     }
     
