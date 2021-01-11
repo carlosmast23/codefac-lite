@@ -380,6 +380,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     Factura proforma = (Factura) buscarDialogoModel.getResultado();
                     //Metodo para actualizar las referencias editadas , ene este caso el cliente cuando cambios los datos
+                    
+                    
                     //Todo: Ver como se puede optimizar
                     try {
                         factura=(Factura) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(proforma);
@@ -388,6 +390,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     }
                     
                     factura.setId(null); //Con este artificio no tengo que copiar a un nuevo objeto y al grabar me reconoce como un nuevo dato
+                    //TODO: Este artificio sirve para poder establecer la fecha actual del sistema y no la fecha del pedido
+                    factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
                     factura.setProforma(proforma);
 
                     //Todo: revisar que el cambio sea correcto
