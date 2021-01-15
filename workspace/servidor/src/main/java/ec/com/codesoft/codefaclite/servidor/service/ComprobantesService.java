@@ -1704,6 +1704,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         parametros.put("pl_telefonos",(matriz.getTelefono()!=null)?matriz.getTelefono():matriz.getTelefono());        
         parametros.put("pl_celular", (matriz.getCelular()!=null)?matriz.getCelular():matriz.getCelular());
         parametros.put("pl_facebook",(empresa.getFacebook()!=null)?empresa.getFacebook():"");
+        parametros.put("pl_instagram",(empresa.getFacebook()!=null)?empresa.getFacebook():"");
         
         
         if (UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa.equals(TipoLicenciaEnum.GRATIS)) {
@@ -1757,6 +1758,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         
         parametros.put("pl_url_img1", UtilidadImagen.castInputStreamToImage(input)); 
+        parametros.put("pl_img_instagram", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("instagram.png"))));
         parametros.put("pl_img_facebook", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png"))));
         parametros.put("pl_img_whatsapp", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png"))));
         parametros.put("pl_img_telefono", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png"))));

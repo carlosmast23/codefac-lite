@@ -226,6 +226,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     prestamoService.grabarSinTransaccion(prestamo, factura);
                 }
                 
+                
                 //Despues de grabar genero inmediatamente un flush para evitar perder la transacción por causas como perdida de energia
                 entityManager.flush();
             }

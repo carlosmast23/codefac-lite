@@ -31,6 +31,7 @@ public class DialogoCopiarArchivos {
         jFileChooser.setFileFilter(new FileNameExtensionFilter(nombreFormato,formatos));        
     }
     
+    @Deprecated //TODO: Metodo que solo sirve para mover dentro del mismo servidor una imagen
     public void establecerDondeMoverArchivo(String rutaArchivo, String rutaDestino) 
     {
         this.origen = FileSystems.getDefault().getPath(rutaArchivo);

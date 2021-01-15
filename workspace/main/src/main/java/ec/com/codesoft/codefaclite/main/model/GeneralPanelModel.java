@@ -2905,6 +2905,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
             parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
             
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "instagram.png"));
+            parametros.put("pl_img_instagram",UtilidadImagen.castInputStreamToImage(inputStream));
+            
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
             parametros.put("pl_img_facebook",UtilidadImagen.castInputStreamToImage(inputStream));
             

@@ -385,5 +385,10 @@ public class UtilidadesFecha {
         return true;
     
     }
+    
+    public static int obtenerAnioActual()
+    {
+        return obtenerAnio(getFechaHoy());
+    }
 
 }
