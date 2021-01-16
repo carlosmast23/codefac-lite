@@ -913,6 +913,12 @@ public class ComprobanteElectronicoService implements Runnable {
             String key = entry.getKey();
             Object value = entry.getValue();
             
+            //Si tiene un valor null no lo tomo en cuenta y continuo con el siguiente
+            if(value==null)
+            {
+                continue;
+            }
+            
             if(value.getClass().equals(URL.class))
             {
                 try {

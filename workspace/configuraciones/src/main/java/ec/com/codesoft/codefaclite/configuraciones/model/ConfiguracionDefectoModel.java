@@ -405,6 +405,16 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             getTxtCodigoHtml().setText((parametro != null) ? parametro.getValor() : "");    
             getjEditorPanelVistaPrevia().setText(getTxtCodigoHtml().getText());
             
+            parametro = parametrosTodos.get(ParametroCodefac.LEYENDA_FIRMA_FACTURA_1);
+            getTxtLeyendaFirmaFactura1().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro = parametrosTodos.get(ParametroCodefac.LEYENDA_FIRMA_FACTURA_2);
+            getTxtLeyendaFirmaFactura2().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro = parametrosTodos.get(ParametroCodefac.LEYENDA_FIRMA_FACTURA_3);
+            getTxtLeyendaFirmaFactura3().setText((parametro != null) ? parametro.getValor():"");
+            
+            
             ParametroCodefac parametroEditarDescripcionFactura = parametrosTodos.get(ParametroCodefac.EDITAR_DESCRIPCION_FACTURA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroEditarDescripcionFactura != null) ? parametroEditarDescripcionFactura.getValor() : null);
             getCmbEditarDescripcionFactura().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
@@ -609,6 +619,15 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
 
         agregarParametro(ParametroCodefac.FORMATO_ORDEN_TRABAJO, formatoHojaEnum.getLetra());
         agregarParametroEditar(ParametroCodefac.FORMATO_ORDEN_TRABAJO);
+        
+        agregarParametro(ParametroCodefac.LEYENDA_FIRMA_FACTURA_1,getTxtLeyendaFirmaFactura1().getText());
+        agregarParametroEditar(ParametroCodefac.LEYENDA_FIRMA_FACTURA_1);
+        
+        agregarParametro(ParametroCodefac.LEYENDA_FIRMA_FACTURA_2,getTxtLeyendaFirmaFactura2().getText());
+        agregarParametroEditar(ParametroCodefac.LEYENDA_FIRMA_FACTURA_2);
+        
+        agregarParametro(ParametroCodefac.LEYENDA_FIRMA_FACTURA_3,getTxtLeyendaFirmaFactura3().getText());
+        agregarParametroEditar(ParametroCodefac.LEYENDA_FIRMA_FACTURA_3);
 
         agregarParametro(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION, getTxtMotivoTrasladoGuiaRemision().getText());
         agregarParametroEditar(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION);

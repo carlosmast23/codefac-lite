@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.210000000000033"/>
+	<property name="ireport.zoom" value="1.210000000000034"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="269"/>
+	<property name="ireport.y" value="550"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -80,6 +80,10 @@
 	<parameter name="pl_agenteRetencionResolucion" class="java.lang.String"/>
 	<parameter name="pl_instagram" class="java.lang.String"/>
 	<parameter name="pl_img_instagram" class="java.lang.Object"/>
+	<parameter name="pl_firmas_factura" class="java.lang.Object"/>
+	<parameter name="campoFirma1" class="java.lang.String"/>
+	<parameter name="campoFirma2" class="java.lang.String"/>
+	<parameter name="campoFirma3" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -551,17 +555,17 @@
 				<subreportParameter name="pl_img_instagram">
 					<subreportParameterExpression><![CDATA[$P{pl_img_instagram}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="pl_telefonos">
-					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
-				</subreportParameter>
 				<subreportParameter name="pl_img_whatsapp">
 					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="pl_facebook">
-					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_img_logo_pie">
 					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_img_telefono">
 					<subreportParameterExpression><![CDATA[$P{pl_img_telefono}]]></subreportParameterExpression>
@@ -598,7 +602,7 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="227">
+		<band height="279">
 			<rectangle radius="10">
 				<reportElement x="0" y="3" width="397" height="130" uuid="4c480e46-a4e3-400a-b74b-706a025f3078"/>
 			</rectangle>
@@ -881,6 +885,20 @@
 				</textElement>
 				<text><![CDATA[Valor total sin subsidio]]></text>
 			</staticText>
+			<subreport isUsingCache="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="227" width="555" height="50" uuid="12493d25-f0d9-47a1-aeb8-e2ecef0d8d39"/>
+				<subreportParameter name="campoFirma3">
+					<subreportParameterExpression><![CDATA[$P{campoFirma3}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="campoFirma1">
+					<subreportParameterExpression><![CDATA[$P{campoFirma1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="campoFirma2">
+					<subreportParameterExpression><![CDATA[$P{campoFirma2}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{pl_firmas_factura}]]></subreportExpression>
+			</subreport>
 		</band>
 	</summary>
 </jasperReport>

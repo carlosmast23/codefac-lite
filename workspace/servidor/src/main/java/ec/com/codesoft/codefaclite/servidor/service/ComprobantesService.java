@@ -1704,7 +1704,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         parametros.put("pl_telefonos",(matriz.getTelefono()!=null)?matriz.getTelefono():matriz.getTelefono());        
         parametros.put("pl_celular", (matriz.getCelular()!=null)?matriz.getCelular():matriz.getCelular());
         parametros.put("pl_facebook",(empresa.getFacebook()!=null)?empresa.getFacebook():"");
-        parametros.put("pl_instagram",(empresa.getFacebook()!=null)?empresa.getFacebook():"");
+        parametros.put("pl_instagram",(empresa.getInstagram()!=null)?empresa.getInstagram():"");
         
         
         if (UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa.equals(TipoLicenciaEnum.GRATIS)) {
@@ -1756,6 +1756,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             
         }
         
+        //Agregar datos de las leyendas para las firmas
+        parametros.put("campoFirma1",ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.LEYENDA_FIRMA_FACTURA_1));
+        parametros.put("campoFirma2",ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.LEYENDA_FIRMA_FACTURA_2));
+        parametros.put("campoFirma3",ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.LEYENDA_FIRMA_FACTURA_3));
+        
         
         parametros.put("pl_url_img1", UtilidadImagen.castInputStreamToImage(input)); 
         parametros.put("pl_img_instagram", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("instagram.png"))));
@@ -1764,7 +1769,10 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         parametros.put("pl_img_telefono", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png"))));
         
         JasperReport reportPiePagina=cargarRecursoJasperProxy(RecursoCodefac.JASPER,"pie_pagina.jrxml");
+        JasperReport reportFirmaFactura=cargarRecursoJasperProxy(RecursoCodefac.JASPER,"firmas_factura.jrxml");
+        
         parametros.put("pl_url_piepagina", reportPiePagina);
+        parametros.put("pl_firmas_factura", reportFirmaFactura);
         
         return parametros;
     }

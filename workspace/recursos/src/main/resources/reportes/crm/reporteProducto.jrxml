@@ -22,6 +22,8 @@
 	<parameter name="pl_celular" class="java.lang.String"/>
 	<parameter name="pl_adicional" class="java.lang.String"/>
 	<parameter name="pl_facebook" class="java.lang.String"/>
+	<parameter name="pl_instagram" class="java.lang.String"/>
+	<parameter name="pl_img_instagram" class="java.lang.Object"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -217,8 +219,17 @@
 		<band height="54" splitType="Stretch">
 			<subreport>
 				<reportElement x="0" y="0" width="555" height="54" uuid="7968d49c-a764-40cd-8900-3f9f7f1947c8"/>
+				<subreportParameter name="pl_img_instagram">
+					<subreportParameterExpression><![CDATA[$P{pl_img_instagram}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="pl_img_whatsapp">
 					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_img_logo_pie">
 					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
@@ -232,11 +243,8 @@
 				<subreportParameter name="pl_celular">
 					<subreportParameterExpression><![CDATA[$P{pl_celular}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="pl_telefonos">
-					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="pl_facebook">
-					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
+				<subreportParameter name="pl_instagram">
+					<subreportParameterExpression><![CDATA[$P{pl_instagram}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_adicional">
 					<subreportParameterExpression><![CDATA[$P{pl_adicional}]]></subreportParameterExpression>
