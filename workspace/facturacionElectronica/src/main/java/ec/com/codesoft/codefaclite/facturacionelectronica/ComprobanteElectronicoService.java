@@ -833,36 +833,23 @@ public class ComprobanteElectronicoService implements Runnable {
         }
     }
     
-    private void generarRideIndividual(String claveAccesoTemp,String carpetaOrigenXml) throws ComprobanteElectronicoException
+    public void generarRideManual()
     {
-        try {            
-            //COPIAR RECURSOS//
-            //InputStream reporteInfoAdicional = this.reporteInfoAdicional.openStream();
-            //InputStream reporteFormaPago = this.reporteFormaPago.openStream();
-            //InputStream pathLogoImagen = this.pathLogoImagen.openStream();
-
-            //FIN COPIA ARCHIVOS
-            
-            //Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp), null, null);
-            ClaveAcceso claveAcceso=new ClaveAcceso(claveAccesoTemp);
-            
-            //StringReader reader = new StringReader(mapComprobante.get("comprobante"));
-            
-            
-            String pathComprobanteFirmado=getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, claveAccesoTemp);
-            File file=new File(pathComprobanteFirmado);
-            
-            JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                        
-            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
+        comprobante.getInformacionTributaria().setClaveAcceso(comprobante.getInformacionTributaria().getPreimpreso());
+        generarRideIndividual(comprobante, null,null);
+    }
+    
+    public void generarRideIndividual( ComprobanteElectronico comprobante,String carpetaOrigenXml,ClaveAcceso claveAcceso)
+    {
+        //ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
 
             ComprobanteElectronicoReporte reporte =getComprobanteReporte(comprobante);
             
             String fechaHoraAutorizacion="";
             String estado="";
+            
             //Si la carpeta que se quiere obtene es desde la autorizada consulto los otros datos que faltan
-            if(carpetaOrigenXml.equals(CARPETA_AUTORIZADOS))
+            if(carpetaOrigenXml!=null && carpetaOrigenXml.equals(CARPETA_AUTORIZADOS))
             {
                 ComprobanteElectronicoAutorizado comprobanteAutorizado=new ComprobanteElectronicoAutorizado();
                 comprobanteAutorizado.construirDesdeArchivo(getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS, claveAcceso.clave));
@@ -888,14 +875,59 @@ public class ComprobanteElectronicoService implements Runnable {
 
             datosMap.put("imagen_logo",pathLogoImagen);
             
-            UtilidadesComprobantes.generarReporteJasper(getPathJasper(comprobante), datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)));
+            UtilidadesComprobantes.generarReporteJasper(getPathJasper(comprobante), datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)));            
+    }
+    
+    private void generarRideIndividual(String claveAccesoTemp,String carpetaOrigenXml) throws ComprobanteElectronicoException
+    {
+        try {            
             
-            //Resetear variables input stream para volver a usar
-            //reporteInfoAdicional.close();
-            //reporteFormaPago.close();
-            //pathLogoImagen.close();
+            ClaveAcceso claveAcceso=new ClaveAcceso(claveAccesoTemp);
             
-
+            String pathComprobanteFirmado=getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, claveAccesoTemp);
+            File file=new File(pathComprobanteFirmado);
+            
+            JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                        
+            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
+            generarRideIndividual(comprobante, carpetaOrigenXml, claveAcceso);
+            
+//
+//            ComprobanteElectronicoReporte reporte =getComprobanteReporte(comprobante);
+//            
+//            String fechaHoraAutorizacion="";
+//            String estado="";
+//            
+//            //Si la carpeta que se quiere obtene es desde la autorizada consulto los otros datos que faltan
+//            if(carpetaOrigenXml.equals(CARPETA_AUTORIZADOS))
+//            {
+//                ComprobanteElectronicoAutorizado comprobanteAutorizado=new ComprobanteElectronicoAutorizado();
+//                comprobanteAutorizado.construirDesdeArchivo(getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS, claveAcceso.clave));
+//                fechaHoraAutorizacion=comprobanteAutorizado.getFechaAutorizacion();
+//                estado=comprobanteAutorizado.getEstado();
+//            }
+//            
+//            List<Object> informacionAdiciona = reporte.getDetalles();
+//            Map<String, Object> datosMap = reporte.getMapReporte();
+//            datosMap.put("SUBREPORT_DIR", pathParentJasper);
+//            datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
+//            datosMap.put("SUBREPORT_INFO_OTRO", reporteInfoOtroAdicional);
+//            datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
+//            datosMap.put("fecha_hora_autorizacion",fechaHoraAutorizacion);
+//            datosMap.put("estado",estado);
+//            
+//            /**
+//             * Agregar datos adicionales como por ejemplo los datos del pide de
+//             * pagina
+//             */
+//            //datosMap.putAll(mapAdicionalReporte);
+//            datosMap.putAll(getMapCopyAdicionalReporte());
+//
+//            datosMap.put("imagen_logo",pathLogoImagen);
+//            
+//            UtilidadesComprobantes.generarReporteJasper(getPathJasper(comprobante), datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)));            
+            
         } catch (JAXBException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ComprobanteElectronicoException(ex.getMessage(), "Generando RIDE", ComprobanteElectronicoException.ERROR_COMPROBANTE);
@@ -988,6 +1020,57 @@ public class ComprobanteElectronicoService implements Runnable {
     private void preValidacion() {
 
     }
+    
+    public JasperPrint getPrintJasperComprobante(ComprobanteElectronico comprobante,ClaveAcceso claveAcceso)
+    {
+            //ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
+            ComprobanteElectronicoReporte reporte = getComprobanteReporte(comprobante);
+
+            List<Object> informacionAdicional = reporte.getDetalles();
+            
+            //InputStream reporteInfoAdicional = this.reporteInfoAdicional.openStream();
+            //InputStream reporteFormaPago = this.reporteFormaPago.openStream();
+            //InputStream pathLogoImagen = this.pathLogoImagen.openStream();
+            
+            
+            String fechaHoraAutorizacion="";
+            //String estado="";
+            //Si la carpeta que se quiere obtene es desde la autorizada consulto los otros datos que faltan
+            //if(carpetaOrigenXml.equals(CARPETA_AUTORIZADOS))
+            //{
+            //Intenta verificar si existe el dato de la fecha y hora de autorizacion
+            if(claveAcceso!=null)
+            {
+                ComprobanteElectronicoAutorizado comprobanteAutorizado=new ComprobanteElectronicoAutorizado();
+                comprobanteAutorizado.construirDesdeArchivo(getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS, claveAcceso.clave));
+                fechaHoraAutorizacion=comprobanteAutorizado.getFechaAutorizacion();
+            }
+                //estado=comprobanteAutorizado.getEstado();
+            //}
+
+            Map<String, Object> datosMap = reporte.getMapReporte();
+            datosMap.put("SUBREPORT_DIR", pathParentJasper);
+            datosMap.put("fecha_hora_autorizacion",fechaHoraAutorizacion);
+            datosMap.put("estado","");
+            
+            datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
+            datosMap.put("SUBREPORT_INFO_OTRO", reporteInfoOtroAdicional);
+            datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
+            datosMap.put("imagen_logo", pathLogoImagen);
+
+            /**
+             * Agregar datos adicionales como por ejemplo los datos del pide de
+             * pagina
+             */
+            //datosMap.putAll(mapAdicionalReporte);
+            datosMap.putAll(getMapCopyAdicionalReporte());
+
+            //datosMap.put("imagen_logo",is);
+            //datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
+            //datosMap.put("imagen_logo",pathLogoImagen.openStream());
+
+            return UtilidadesComprobantes.generarReporteJasperPrint(getPathJasper(comprobante), datosMap, informacionAdicional);
+    }
 
     /**
      * TODO: Unir este codigo con el de generarRideIndividual que son similares
@@ -1004,7 +1087,8 @@ public class ComprobanteElectronicoService implements Runnable {
             File file = new File(pathComprobanteFirmado);
             
             ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
-            ComprobanteElectronicoReporte reporte = getComprobanteReporte(comprobante);
+            return getPrintJasperComprobante(comprobante, claveAcceso);
+            /*ComprobanteElectronicoReporte reporte = getComprobanteReporte(comprobante);
 
             List<Object> informacionAdicional = reporte.getDetalles();
             
@@ -1035,10 +1119,10 @@ public class ComprobanteElectronicoService implements Runnable {
             datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
             datosMap.put("imagen_logo", pathLogoImagen);
 
-            /**
-             * Agregar datos adicionales como por ejemplo los datos del pide de
-             * pagina
-             */
+            //
+            // Agregar datos adicionales como por ejemplo los datos del pide de
+            // pagina
+            //
             //datosMap.putAll(mapAdicionalReporte);
             datosMap.putAll(getMapCopyAdicionalReporte());
 
@@ -1046,7 +1130,7 @@ public class ComprobanteElectronicoService implements Runnable {
             //datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
             //datosMap.put("imagen_logo",pathLogoImagen.openStream());
 
-            return UtilidadesComprobantes.generarReporteJasperPrint(getPathJasper(comprobante), datosMap, informacionAdicional);
+            return UtilidadesComprobantes.generarReporteJasperPrint(getPathJasper(comprobante), datosMap, informacionAdicional);*/
 
         } catch (JAXBException ex) {
             ex.printStackTrace();
@@ -1649,7 +1733,13 @@ public class ComprobanteElectronicoService implements Runnable {
                     }
                     else
                     {
-                        //TODO: Falta implentar para el ultimo documento que son las notas de debito si algun rato alguien nos pide
+                        if(ComprobanteEnum.NOTA_VENTA_INTERNA.getCodigo().equals(comprobante.getInformacionTributaria().getCodigoDocumento())) {
+                            prefijo=ComprobanteEnum.NOTA_VENTA_INTERNA.getPrefijo();
+                        }
+                        else
+                        {
+                            //TODO: Falta implentar para el ultimo documento que son las notas de debito si algun rato alguien nos pide
+                        }
                     }
                 }
             }
@@ -1839,26 +1929,41 @@ public class ComprobanteElectronicoService implements Runnable {
     public URL getPathJasper(ComprobanteElectronico comprobanteElectronico)
     {
         URL path = null;
-        ClaveAcceso clave = new ClaveAcceso(claveAcceso);
-        if (ComprobanteEnum.FACTURA.getCodigo().equals(clave.tipoComprobante)) {
+        
+        //Primero intenta obtener los datos del comprobante en memoria y si no encuentra busca con la clave de acceso
+        String tipoComprobanteCodigo="";
+        if(comprobanteElectronico!=null && comprobanteElectronico.getInformacionTributaria()!=null)
+        {
+            tipoComprobanteCodigo=comprobanteElectronico.getInformacionTributaria().getCodigoDocumento();
+        }
+        else
+        {
+            ClaveAcceso clave = new ClaveAcceso(claveAcceso);
+            tipoComprobanteCodigo=clave.tipoComprobante;
+        }
+        
+        if (ComprobanteEnum.FACTURA.getCodigo().equals(tipoComprobanteCodigo)) {
             //path = pathFacturaJasper.openStream();
             path = pathFacturaJasper;
             
-        } else if (ComprobanteEnum.NOTA_CREDITO.getCodigo().equals(clave.tipoComprobante)) {
+        } else if (ComprobanteEnum.NOTA_CREDITO.getCodigo().equals(tipoComprobanteCodigo)) {
             //path = pathNotaCreditoJasper.openStream();
             path = pathNotaCreditoJasper;
-        } else if (ComprobanteEnum.COMPROBANTE_RETENCION.getCodigo().equals(clave.tipoComprobante))
+        } else if (ComprobanteEnum.COMPROBANTE_RETENCION.getCodigo().equals(tipoComprobanteCodigo))
         {
             //path=pathRetencionJasper.openStream();
             path=pathRetencionJasper;
         }
-        else if (ComprobanteEnum.GUIA_REMISION.getCodigo().equals(clave.tipoComprobante))
+        else if (ComprobanteEnum.GUIA_REMISION.getCodigo().equals(tipoComprobanteCodigo))
         {
             //path=pathGuiaRemisionJasper.openStream();
             path=pathGuiaRemisionJasper;
-        }else if(ComprobanteEnum.LIQUIDACION_COMPRA.getCodigo().equals(clave.tipoComprobante))
+        }else if(ComprobanteEnum.LIQUIDACION_COMPRA.getCodigo().equals(tipoComprobanteCodigo))
         {
             path = pathFacturaJasper; //TODO: Por el momento utilio el mismo comprobante que de la factura
+        }else if(ComprobanteEnum.NOTA_VENTA_INTERNA.getCodigo().equals(tipoComprobanteCodigo)) 
+        {
+            path=pathFacturaJasper;
         }
         //comprobante.getTipoDocumento();
         //return path + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";

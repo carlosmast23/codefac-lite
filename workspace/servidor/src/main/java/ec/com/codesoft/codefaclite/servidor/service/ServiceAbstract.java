@@ -301,7 +301,6 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     public static void desasociarEntidadRecursivo(Object entidad)
     {
         AbstractFacade.detachRecursive(entidad);
-    }
-    
+    }    
     
 }

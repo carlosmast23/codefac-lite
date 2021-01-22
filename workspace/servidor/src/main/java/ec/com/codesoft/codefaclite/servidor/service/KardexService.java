@@ -485,7 +485,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     public void recalcularValoresKardex(Kardex kardex,KardexDetalle kardexDetalle) throws java.rmi.RemoteException,ServicioCodefacException
     {
 
-        BigDecimal costoPonderado=kardex.getPrecioPromedio(); 
+        BigDecimal costoPonderado=kardex.getCostoPromedio(); 
         
         //Si el movimiento del kardex detalle esta clasificado como que afecta a el inventario entonces hago el resto de calculos
         if(kardexDetalle.getCodigoTipoDocumentoEnum().getAfectaCostoInventario())
@@ -493,14 +493,14 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             //ALMACENA EL ULTIMO VALOR INGRESADO SIEMPRE QUE SEA UNA COMPRA
             kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
             //Calcular el precio promedio con respecto al nuevo valor
-            if(kardex.getPrecioPromedio().compareTo(BigDecimal.ZERO)>0)
+            if(kardex.getCostoPromedio().compareTo(BigDecimal.ZERO)>0)
             {
                 costoPonderado=calcularPrecioPonderado(kardex,kardexDetalle);
-                kardex.setPrecioPromedio(costoPonderado);            
+                kardex.setCostoPromedio(costoPonderado);            
             }
             else
             {
-                kardex.setPrecioPromedio(kardexDetalle.getPrecioUnitario());
+                kardex.setCostoPromedio(kardexDetalle.getPrecioUnitario());
             }
             
             
@@ -533,7 +533,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         if(kardex.getStock().compareTo(BigDecimal.ZERO)<=0)
          //if(kardex.getStock()<=0)
          {
-             return kardex.getPrecioPromedio(); 
+             return kardex.getCostoPromedio(); 
          }
         
         /**
@@ -542,7 +542,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
          * costo=(stock*costoActual)*(cantidad*precioUnit)/(stock+cantidad)
          */
         BigDecimal stock=kardex.getStock();
-        BigDecimal costoPonderado=kardex.getPrecioPromedio();
+        BigDecimal costoPonderado=kardex.getCostoPromedio();
         
         BigDecimal cantidadUnitaria=kardexDetalle.getCantidad();
         BigDecimal precioUnitario=kardexDetalle.getPrecioUnitario();
@@ -591,7 +591,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 BigDecimal stockAnular= kardex.getStock().multiply(new BigDecimal("-1"));
                 KardexDetalle kardexDetalle=new KardexDetalle();                
-                kardexDetalle.setPrecioUnitario(kardex.getPrecioPromedio());
+                kardexDetalle.setPrecioUnitario(kardex.getCostoPromedio());
                 
                 if(stockAnular.compareTo(BigDecimal.ZERO)>0)
                 //if(stockAnular>0)
@@ -659,7 +659,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             //kardex.setBodega(bodega);
             kardex.setFechaCreacion(UtilidadesFecha.getFechaHoy());
             kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
-            kardex.setPrecioPromedio((kardex.getPrecioPromedio()!=null)?kardex.getPrecioPromedio():BigDecimal.ZERO);
+            kardex.setCostoPromedio((kardex.getCostoPromedio()!=null)?kardex.getCostoPromedio():BigDecimal.ZERO);
             kardex.setPrecioTotal(BigDecimal.ZERO);
             kardex.setPrecioUltimo(BigDecimal.ZERO);
             //kardex.setProducto(value.getProductoProveedor().getProducto());
@@ -987,7 +987,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         kardex.setBodega(bodega);
         kardex.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
-        kardex.setPrecioPromedio(BigDecimal.ZERO);
+        kardex.setCostoPromedio(BigDecimal.ZERO);
         kardex.setPrecioTotal(BigDecimal.ZERO);
         kardex.setPrecioUltimo(BigDecimal.ZERO);
         kardex.setProducto(producto);
@@ -1040,7 +1040,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         Kardex kardexNuevo=new Kardex();
         kardexNuevo.setStock(BigDecimal.ZERO);
         kardexNuevo.setPrecioTotal(BigDecimal.ZERO);
-        kardexNuevo.setPrecioPromedio(BigDecimal.ZERO);
+        kardexNuevo.setCostoPromedio(BigDecimal.ZERO);
         kardexNuevo.setPrecioUltimo(BigDecimal.ZERO);
         //kardexNuevo.se
         return kardexNuevo;

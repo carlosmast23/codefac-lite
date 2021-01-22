@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.model.MigrarModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
@@ -65,11 +66,11 @@ public class MigrarProductoModel extends MigrarModel {
                     Double precioVentaPublico = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PUBLICO).valor;
                     
                                         
-                    Object precioVentaPromedioObj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
+                    /*Object precioVentaPromedioObj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
                     if(precioVentaPromedioObj!=null && !precioVentaPromedioObj.toString().isEmpty())
                     {   
                         Double precioVentaPromedio = (Double) precioVentaPromedioObj;
-                    }
+                    }*/
                     
                     /**
                      * ==========> BUSCAR O CREAR LA CATEGORIA SI NO EXISTE PARA CREAR <=======
@@ -138,16 +139,22 @@ public class MigrarProductoModel extends MigrarModel {
 
                                 //Fecha de ingreso                             
                                 kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
+                                kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
 
                                 Kardex kardex = new Kardex();
                                 kardex.setBodega(bodega);
-                                if(precioVentaPublico>0)
+                                
+                                //Obtener costo de la plantilla
+                                Double costo=(Double) obtenerDatoPlantilla(fila, ExcelMigrarProductos.Enum.COSTO);
+                                if(costo!=null)
                                 {
-                                    kardex.setPrecioPromedio(new BigDecimal(precioVentaPublico.toString()));
+                                    kardex.setCostoPromedio(new BigDecimal(costo+""));
                                 }
+                                
 
                                 kardex.setProducto(producto);
                                 kardexDetalle.setKardex(kardex);
+                                
                             }
                             
                         }
@@ -170,6 +177,51 @@ public class MigrarProductoModel extends MigrarModel {
                             producto.setPrecioDistribuidor(new BigDecimal(precioVentaOferta.toString()));
                         }
                     }
+                                        ///PVP4
+                    Object PVP3Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
+                    if(PVP3Obj!=null && !PVP3Obj.toString().isEmpty())
+                    {
+                        Double PVP3 = (Double) PVP3Obj;
+                        if(PVP3>0)
+                        {
+                            producto.setPrecioTarjeta(new BigDecimal(PVP3.toString()));
+                        }
+                    }
+                    
+                    
+                    ///PVP4
+                    Object PVP4Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_4).valor;
+                    if(PVP4Obj!=null && !PVP4Obj.toString().isEmpty())
+                    {
+                        Double PVP4 = (Double) PVP4Obj;
+                        if(PVP4>0)
+                        {
+                            producto.setPvp4(new BigDecimal(PVP4.toString()));
+                        }
+                    }
+                    
+                    ///PVP5
+                    Object PVP5Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_5).valor;
+                    if(PVP5Obj!=null && !PVP5Obj.toString().isEmpty())
+                    {
+                        Double PVP5 = (Double) PVP5Obj;
+                        if(PVP5>0)
+                        {
+                            producto.setPvp5(new BigDecimal(PVP5.toString()));
+                        }
+                    }
+                    
+                    ///PVP6
+                    Object PVP6Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_6).valor;
+                    if(PVP6Obj!=null && !PVP6Obj.toString().isEmpty())
+                    {
+                        Double PVP6 = (Double) PVP6Obj;
+                        if(PVP6>0)
+                        {
+                            producto.setPvp6(new BigDecimal(PVP6.toString()));
+                        }
+                    }
+
                     
                     
                     producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
@@ -207,7 +259,7 @@ public class MigrarProductoModel extends MigrarModel {
                         producto.setStockInicial(0l);
                         producto.setMarca(marca);
                         //producto.setPrecioDistribuidor(BigDecimal.ZERO);
-                        producto.setPrecioTarjeta(BigDecimal.ZERO);
+                        //producto.setPrecioTarjeta(BigDecimal.ZERO);
                         producto.setGarantia(EnumSiNo.NO.getLetra());
                         producto.setTipoProductoCodigo(TipoProductoEnum.PRODUCTO.getLetra());
                         producto.setManejarInventario(manejaInventarioEnumSiNo.getLetra()); //TODO:Cambiar para setear un enum
@@ -228,6 +280,8 @@ public class MigrarProductoModel extends MigrarModel {
             }
         };
     }
+    
+    
 
     @Override
     public ExcelMigrar getExcelMigrar() {
@@ -296,7 +350,8 @@ public class MigrarProductoModel extends MigrarModel {
 
     @Override
     public InputStream getInputStreamExcel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return RecursoCodefac.PLANTILLAS_EXCEL.getResourceInputStream("productos.xlsx");
     }
+    
 
 }

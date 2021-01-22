@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.210000000000034"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="550"/>
+	<property name="ireport.zoom" value="1.7715610000000501"/>
+	<property name="ireport.x" value="49"/>
+	<property name="ireport.y" value="775"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -289,7 +289,9 @@
 				<textFieldExpression><![CDATA[$P{nombre_legal}]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="315" y="192" width="238" height="42" uuid="40b8dc45-f9bd-4178-84ea-1fab32e8b949"/>
+				<reportElement x="315" y="192" width="238" height="42" uuid="40b8dc45-f9bd-4178-84ea-1fab32e8b949">
+					<printWhenExpression><![CDATA[new Boolean($P{autorizacion}!=null && !$P{autorizacion}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
 				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="none">
 					<jr:codeExpression><![CDATA[$P{autorizacion}]]></jr:codeExpression>
 				</jr:Code128>
@@ -819,7 +821,9 @@
 				<subreportExpression><![CDATA[$P{SUBREPORT_FORMA_PAGO}]]></subreportExpression>
 			</subreport>
 			<textField>
-				<reportElement x="486" y="116" width="69" height="15" uuid="92476382-c423-4894-b58f-6e176d8a9fa3"/>
+				<reportElement x="486" y="116" width="69" height="15" uuid="92476382-c423-4894-b58f-6e176d8a9fa3">
+					<printWhenExpression><![CDATA[new Boolean($P{ahorroPorSubsidio}!=null && !$P{ahorroPorSubsidio}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineStyle="Dotted"/>
 					<topPen lineWidth="0.75" lineStyle="Dotted"/>
@@ -834,7 +838,9 @@
 				<textFieldExpression><![CDATA[$P{ahorroPorSubsidio}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="486" y="101" width="69" height="15" uuid="ca917d5b-ab9e-44f6-9945-37b218aae331"/>
+				<reportElement x="486" y="101" width="69" height="15" uuid="ca917d5b-ab9e-44f6-9945-37b218aae331">
+					<printWhenExpression><![CDATA[new Boolean($P{valorTotalSinSubsidio}!=null && !$P{valorTotalSinSubsidio}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineStyle="Dotted"/>
 					<topPen lineWidth="0.75" lineStyle="Dotted"/>
@@ -849,7 +855,9 @@
 				<textFieldExpression><![CDATA[$P{valorTotalSinSubsidio}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="401" y="116" width="85" height="15" uuid="39c9b00f-81cf-4654-8df6-33c9c276452d"/>
+				<reportElement x="401" y="116" width="85" height="15" uuid="39c9b00f-81cf-4654-8df6-33c9c276452d">
+					<printWhenExpression><![CDATA[new Boolean($P{ahorroPorSubsidio}!=null && !$P{ahorroPorSubsidio}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineStyle="Dotted"/>
 					<topPen lineWidth="0.75" lineStyle="Dotted"/>
@@ -871,7 +879,9 @@
 				<text><![CDATA[Nota : Incluye Iva cuando aplique]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="401" y="101" width="85" height="15" uuid="9d743f21-5f09-4468-a2e7-1c4ec8f1469b"/>
+				<reportElement x="401" y="101" width="85" height="15" uuid="9d743f21-5f09-4468-a2e7-1c4ec8f1469b">
+					<printWhenExpression><![CDATA[new Boolean($P{valorTotalSinSubsidio}!=null && !$P{valorTotalSinSubsidio}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineStyle="Dotted"/>
 					<topPen lineWidth="0.75" lineStyle="Dotted"/>

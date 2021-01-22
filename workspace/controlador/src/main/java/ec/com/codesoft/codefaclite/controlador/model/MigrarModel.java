@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.controlador.model;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
 import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarEstudiantes;
+import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarProductos;
 import ec.com.codesoft.codefaclite.controlador.panel.MigrarPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -24,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -259,6 +261,16 @@ public abstract class MigrarModel extends MigrarPanel{
         getPnlCamposRequeridos().revalidate();
         getPnlCamposRequeridos().repaint();
 
+    }
+    
+    public Object obtenerDatoPlantilla(ExcelMigrar.FilaResultado fila,ExcelMigrarProductos.Enum productoEnum)
+    {
+        Object precioVentaOfertaObj = fila.getByEnum(productoEnum).valor;
+        if (precioVentaOfertaObj != null && !precioVentaOfertaObj.toString().isEmpty()) 
+        {
+            return precioVentaOfertaObj;
+        }
+        return null;
     }
     
     

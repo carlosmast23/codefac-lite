@@ -21,7 +21,12 @@ public enum ComprobanteEnum {
     NOTA_CREDITO("NOTA DE CRÉDITO","04","CRE",NotaCreditoComprobante.class),
     NOTA_DEBITO("NOTA DEBITO","05","",null),
     GUIA_REMISION("GUIA REMISION","06","GUI",GuiaRemisionComprobante.class),
-    COMPROBANTE_RETENCION("COMPROBANTE RETENCION","07","RET",RetencionComprobante.class);
+    COMPROBANTE_RETENCION("COMPROBANTE RETENCION","07","RET",RetencionComprobante.class),
+    /**
+     * Documentos no oficiales para generar otros tipos de reportes
+     */
+    NOTA_VENTA_INTERNA("NOTA DE VENTA INTERNA","99","NVI",FacturaComprobante.class);
+    
     
     private String nombre;
     private String codigo;
@@ -42,22 +47,34 @@ public enum ComprobanteEnum {
     public static ComprobanteEnum getEnumByCodigo(String codigo)
     {
         if(FACTURA.codigo.equals(codigo))
+        {
             return FACTURA;
-        else
-            if(NOTA_CREDITO.codigo.equals(codigo))
-                return NOTA_CREDITO;
-            else
-                if(COMPROBANTE_RETENCION.codigo.equals(codigo))
-                    return COMPROBANTE_RETENCION;
-                else
-                    if(GUIA_REMISION.codigo.equals(codigo))
-                        return GUIA_REMISION;
-                    else
-                        if(NOTA_DEBITO.codigo.equals(codigo))
-                            return NOTA_DEBITO;
-                        else
-                            if(LIQUIDACION_COMPRA.codigo.equals(codigo))
-                                return LIQUIDACION_COMPRA;
+        }
+        else if(NOTA_CREDITO.codigo.equals(codigo))
+        {
+            return NOTA_CREDITO;
+        }
+        else if(COMPROBANTE_RETENCION.codigo.equals(codigo))
+        {
+            return COMPROBANTE_RETENCION;
+        }
+        else if(GUIA_REMISION.codigo.equals(codigo))
+        {
+            return GUIA_REMISION;
+        }
+        else if(NOTA_DEBITO.codigo.equals(codigo))
+        {
+            return NOTA_DEBITO;
+        }
+        else if(LIQUIDACION_COMPRA.codigo.equals(codigo))
+        {
+            return LIQUIDACION_COMPRA;
+        }
+        else if(NOTA_VENTA_INTERNA.codigo.equals(codigo))
+        {
+            return NOTA_VENTA_INTERNA;
+        }
+                                 
         
         return null;
     }

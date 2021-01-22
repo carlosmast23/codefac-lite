@@ -100,7 +100,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
          */
         validacionCartera(cartera,cruces);
         
-        //TODO: Solucion para tener problemas con las referencias de datos similares
+        //TODO: Solucion para no tener problemas con las referencias de datos similares
         clonarCruces(cruces);
         
         /**
@@ -116,7 +116,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
          *              GRABAR LOS DETALLES Y CRUCES NUEVOS
          * ==================================================================
          */
-        grabarDetallesCarteraSinTransaccion(cartera, cruces);        
+        grabarDetallesCarteraSinTransaccion(cartera, cruces);
        
         //Actualizar reerencias de los cruces
         //grabar la cartera
@@ -707,6 +707,32 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         });
     }
     
+    
+    private void procesarEliminacionesSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws RemoteException
+    {        
+        CarteraDetalleService serviceDetalle=new CarteraDetalleService();
+        
+        List<CarteraDetalle> detalleEditado=cartera.getDetalles();
+        List<CarteraDetalle> detalleEliminados=serviceDetalle.consultarPorcartera(cartera);
+        
+        //quitar los detalles editados para si existe alguno eliminado
+        detalleEliminados.removeAll(detalleEditado);
+        
+        //Si el detalle es mayor que cero entonces se tiene que eliminar
+        if(detalleEliminados.size()>0)
+        {
+            
+        }        
+    }
+    
+    /**
+     * Eliminar el detalle de una cartera
+     * @param carteraDetalle 
+     */
+    private void eliminarDetalleCartera(CarteraDetalle carteraDetalle)
+    {
+        carteraDetalle.getCartera();
+    }
     
 
     @Override

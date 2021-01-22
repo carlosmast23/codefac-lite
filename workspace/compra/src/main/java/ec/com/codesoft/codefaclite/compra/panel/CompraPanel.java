@@ -569,7 +569,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jPanel1.add(txtDescuentoSinImpuestos, gridBagConstraints);
 
         jLabel20.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel20.setText("Subtotal Inpuestos:");
+        jLabel20.setText("Subtotal Impuestos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;

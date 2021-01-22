@@ -1183,21 +1183,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return comprobanteData;
     }*/
     
-    public ComprobanteDataInterface obtenerComprobanteData()
-    {
-        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
-        {
-            ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
-            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
-            return comprobanteData;
-        } else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
-        {
-            ComprobanteDataLiquidacionCompra comprobanteData=new ComprobanteDataLiquidacionCompra(factura);
-            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
-            return comprobanteData;
-        }
-        return null;
-    }
+    
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
@@ -1356,7 +1342,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void facturarElectricamente(Factura facturaProcesando) throws RemoteException
     {
-        ComprobanteDataInterface comprobanteData = obtenerComprobanteData();
+        ComprobanteDataInterface comprobanteData = FacturaModelControlador.obtenerComprobanteData(facturaProcesando);
         //comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
         //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
         
@@ -3774,6 +3760,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         setearDescuentoTxt("0");
         setearCodigoDetalleTxt("");
         
+    }
+
+    @Override
+    public ComprobanteDataInterface obtenerComprobanteData() {
+        return FacturaModelControlador.obtenerComprobanteData(factura);
     }
 
 }

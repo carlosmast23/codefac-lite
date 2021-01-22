@@ -353,6 +353,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             proforma.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
             entityManager.merge(proforma);
         }
+        
+        //Si es nota de venta generar un número de autorización cualquiera
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            factura.setClaveAcceso(factura.getPuntoEstablecimiento()+""+factura.getPuntoEmision()+""+factura.getSecuencial()+"");
+        }
 
         ComprobantesService servicioComprobante = new ComprobantesService();
         servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);
@@ -676,7 +682,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         Kardex kardexTemp=kardexService.buscarKardexPorProducto(producto);
                         if(kardexTemp!=null)
                         {
-                            BigDecimal costoTotalDetalle=kardexTemp.getPrecioPromedio().multiply(detalle.getCantidad());
+                            BigDecimal costoTotalDetalle=kardexTemp.getCostoPromedio().multiply(detalle.getCantidad());
                             costoFactura=costoFactura.add(costoTotalDetalle);
                         }
                     }
