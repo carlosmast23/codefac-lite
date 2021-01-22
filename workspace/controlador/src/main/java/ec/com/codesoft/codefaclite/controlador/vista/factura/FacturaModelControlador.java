@@ -843,7 +843,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     {
         TipoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, TipoReporteEnum.A2);
         
-        if(tipoReporteEnum.equals(tipoReporteEnum.A4) && facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        if(tipoReporteEnum!=null && tipoReporteEnum.equals(tipoReporteEnum.A4) && facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
         {
             try {
                 ComprobanteDataInterface dataFactura= obtenerComprobanteData(facturaProcesando);
