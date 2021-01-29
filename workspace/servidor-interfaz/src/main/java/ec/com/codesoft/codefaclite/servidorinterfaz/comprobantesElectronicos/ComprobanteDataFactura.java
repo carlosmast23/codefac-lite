@@ -139,7 +139,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobante = null;
 
         InformacionComprobanteAbstract informacionComprobante = null;
-        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
         {
             informacionComprobante = new InformacionFactura();
             comprobante=new FacturaComprobante();

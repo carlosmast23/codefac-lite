@@ -67,7 +67,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             }
             
             //ordenar kardex por fechas de los movimientos
-            queryString+=" order by kd.fechaCreacion ";
+            queryString+=" order by kd.fechaIngreso ";
 
             //Agregar orden y un limite de la consulta
             //queryString+=" order by kd.id desc ";

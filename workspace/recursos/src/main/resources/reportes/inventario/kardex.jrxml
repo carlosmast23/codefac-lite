@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="2.3538212825407903"/>
-	<property name="ireport.x" value="328"/>
-	<property name="ireport.y" value="180"/>
+	<property name="ireport.zoom" value="1.3286707500000228"/>
+	<property name="ireport.x" value="17"/>
+	<property name="ireport.y" value="18"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -89,7 +89,7 @@
 				<text><![CDATA[#]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="0" width="45" height="30" uuid="d16d6502-9449-42b9-bc2e-3561a7109a32"/>
+				<reportElement x="25" y="0" width="51" height="30" uuid="d16d6502-9449-42b9-bc2e-3561a7109a32"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -100,7 +100,7 @@
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="70" y="0" width="79" height="30" uuid="7d1672f1-16fe-4427-95e1-86a7a7544b21"/>
+				<reportElement x="76" y="0" width="75" height="30" uuid="7d1672f1-16fe-4427-95e1-86a7a7544b21"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -111,7 +111,7 @@
 				<text><![CDATA[Documento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="149" y="0" width="85" height="30" uuid="dc3e6b9a-58d5-440e-b672-bb1bb2c5312d"/>
+				<reportElement x="151" y="0" width="83" height="30" uuid="dc3e6b9a-58d5-440e-b672-bb1bb2c5312d"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -318,7 +318,7 @@
 				<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="25" y="0" width="45" height="15" uuid="337d6509-ba43-4bcd-bef4-f648d9c508b7"/>
+				<reportElement x="25" y="0" width="51" height="15" uuid="337d6509-ba43-4bcd-bef4-f648d9c508b7"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -332,7 +332,7 @@
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="0" width="79" height="15" uuid="9b291f70-83ef-4c9f-b5cb-e7f837a7b1ae"/>
+				<reportElement x="76" y="0" width="75" height="15" uuid="9b291f70-83ef-4c9f-b5cb-e7f837a7b1ae"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -346,7 +346,7 @@
 				<textFieldExpression><![CDATA[$F{documento}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="149" y="0" width="85" height="15" uuid="e5875c9c-ecd4-45d8-bd9e-fd49d1d3bc26"/>
+				<reportElement x="151" y="0" width="83" height="15" uuid="e5875c9c-ecd4-45d8-bd9e-fd49d1d3bc26"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>

@@ -442,7 +442,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             return false;
         }
 
-            
+        facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));    
         //Validacion personalizada dependiendo de la logica de cada tipo de documento
         if (!validacionPersonalizadaPorModulos(facturaDetalle,documentoEnum)) {
                 return false;
@@ -452,7 +452,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         facturaDetalle.setTipoDocumentoEnum(tipoDocumentoEnumSeleccionado);
         
        
-        facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));
+        //facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));
         facturaDetalle.setDescripcion(interfaz.obtenerTxtDescripcion());
         //Calcula los valores dependiendo del iva para tener el valor unitario
         BigDecimal valorTotalUnitario = new BigDecimal(interfaz.obtenerTxtValorUnitario());

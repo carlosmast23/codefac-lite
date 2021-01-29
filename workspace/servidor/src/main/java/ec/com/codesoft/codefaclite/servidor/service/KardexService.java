@@ -1008,7 +1008,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         if(listaKardex!=null && listaKardex.size()>0)
         {
             Kardex kardex = listaKardex.get(0);
-            if(kardex.getStock().compareTo(cantidad)>0)
+            System.out.println(kardex.getStock());
+            System.out.println(cantidad);
+            if(kardex.getStock().compareTo(cantidad)>=0)
             {
             //if(kardex.getStock()>= cantidad){
                 return true;
