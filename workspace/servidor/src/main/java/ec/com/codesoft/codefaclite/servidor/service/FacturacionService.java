@@ -456,6 +456,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         });
     }
     
+    /**
+     * Metodo que permite grabar la cartera y generar el cruce automatico si es el caso para cerrar la cuenta
+     * @param factura documento a procesar
+     * @param carteraParametro objecto que tiene datos de configuracion para el cruce
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
     private void grabarCarteraSinTransaccion(Factura factura,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
