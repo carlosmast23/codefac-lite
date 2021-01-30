@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -84,7 +85,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             @Override
             public void transaccion() throws RemoteException, ServicioCodefacException {
                 
-                grabarCarteraSinTransaccion(cartera, cruces);
+                grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR);
             }
         });
         
@@ -98,7 +99,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      * @throws ServicioCodefacException
      * @throws java.rmi.RemoteException 
      */
-    private void grabarCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
+    private void grabarCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces,CrudEnum crudEnum) throws ServicioCodefacException,java.rmi.RemoteException
     {
         /**
          * ===========================================================
@@ -116,8 +117,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
          * OBTENER EL NUEVO CODIGO DE LA CARTERA
          * =================================================================
          */
-        String codigoCartera = generarCodigoCartera(cartera.getSucursal(), cartera.getCodigoDocumento());
-        cartera.setCodigo(codigoCartera);
+        if(crudEnum.equals(CrudEnum.CREAR))
+        {
+            String codigoCartera = generarCodigoCartera(cartera.getSucursal(), cartera.getCodigoDocumento());
+            cartera.setCodigo(codigoCartera);
+        }
 
         /**
          * ==================================================================
@@ -406,7 +410,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         }
         
         //Grabar el documento con los cruces generados
-        grabarCarteraSinTransaccion(cartera, cruces);
+        grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR);
 
     }
     
@@ -518,7 +522,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 carteraAbono.addDetalle(carteraDetalleAbono);
                 
                 //Grabar la NUEVA CARTERA DEL ABONO
-                grabarCarteraSinTransaccion(carteraAbono, new ArrayList<CarteraCruce>());
+                grabarCarteraSinTransaccion(carteraAbono, new ArrayList<CarteraCruce>(),CrudEnum.CREAR);
                 
                 
                 //TODO: Este artificio toca hacer porque aunque se supone que el detalle debe estar relacionado por referencia al mismo objeto
@@ -732,7 +736,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 //Falta agregar validaciones porque no siempre se puede editar cualquier dato
-                grabarCarteraSinTransaccion(entity, cruces);
+                grabarCarteraSinTransaccion(entity, cruces,CrudEnum.EDITAR);
             }
         });
     }

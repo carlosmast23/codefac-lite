@@ -302,6 +302,7 @@ public class CarteraModel extends CarteraPanel{
     public void cargarDatosPantalla(Object entidad) {
         Cartera cartera=(Cartera) entidad;
         this.cartera=cartera;
+        this.cruces=cartera.getCruces();
         
         getCmbTipoCartera().setSelectedItem(this.cartera.getTipoCarteraEnum());
         CarteraCategoriaEnum carteraCategoria=CarteraCategoriaEnum.buscarPorTipoYDocumentoCategoria(this.cartera.getTipoCarteraEnum(),this.cartera.getCarteraDocumentoEnum().getCategoria());
