@@ -129,12 +129,9 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         btnAgregarDocumentoCruzar = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         cmbFechaCruzar = new com.toedter.calendar.JDateChooser();
-        jLabel19 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblCruceDetalles = new javax.swing.JTable();
-        jToolBar4 = new javax.swing.JToolBar();
-        btnEliminarCruce = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
 
@@ -582,12 +579,6 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(cmbFechaCruzar, gridBagConstraints);
 
-        jLabel19.setText("jLabel19");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        jPanel5.add(jLabel19, gridBagConstraints);
-
         tabDetalles.addTab("Cruce Documentos", jPanel5);
 
         jPanel6.setLayout(new java.awt.GridBagLayout());
@@ -599,16 +590,6 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel6.add(jScrollPane4, gridBagConstraints);
-
-        jToolBar4.setRollover(true);
-
-        btnEliminarCruce.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon2.png"))); // NOI18N
-        btnEliminarCruce.setFocusable(false);
-        btnEliminarCruce.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnEliminarCruce.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar4.add(btnEliminarCruce);
-
-        jPanel6.add(jToolBar4, new java.awt.GridBagConstraints());
 
         tabDetalles.addTab("Cruce Detalles", jPanel6);
 
@@ -631,7 +612,6 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarPersona;
     private javax.swing.JButton btnCruzar;
     private javax.swing.JButton btnEditarDetalle;
-    private javax.swing.JButton btnEliminarCruce;
     private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JComboBox<DocumentoDetalleEnum > cmbDetalleDocumento;
     private javax.swing.JComboBox<DocumentoEnum > cmbDocumentoCartera;
@@ -651,7 +631,6 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -673,7 +652,6 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
-    private javax.swing.JToolBar jToolBar4;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
@@ -880,13 +858,6 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         this.tblCruceDetalles = tblCruceDetalles;
     }
 
-    public JButton getBtnEliminarCruce() {
-        return btnEliminarCruce;
-    }
-
-    public void setBtnEliminarCruce(JButton btnEliminarCruce) {
-        this.btnEliminarCruce = btnEliminarCruce;
-    }
 
     public JTextField getTxtPreimpreso() {
         return txtPreimpreso;

@@ -257,7 +257,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             try
             {
                 //´TODO: Por el momento todas las facturas en lote se van a facturar con la fecha actual
-                factura.factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
+                //factura.factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
                 
                 Factura facturaGrabada=grabar(factura.factura,factura.prestamo,factura.carteraPrestamo);
                 respuesta.agregarFacturaProcesada(factura.factura);

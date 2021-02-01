@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.Carte
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
@@ -57,6 +58,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
@@ -380,6 +384,8 @@ public class CarteraModel extends CarteraPanel{
         for (Cartera.TipoCarteraEnum carteraEnum : Cartera.TipoCarteraEnum.values()) {
             getCmbTipoCartera().addItem(carteraEnum);
         }
+        
+        getCmbFechaCruzar().setDate(UtilidadesFecha.getFechaHoy());
     }
 
     private void listenerCombos() {
@@ -514,7 +520,7 @@ public class CarteraModel extends CarteraPanel{
         //Validaciones
         if(mapDetalles.size()==0)
         {
-            DialogoCodefac.mensaje("Adveretencia","No existen valores para cruzar con el documento",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            DialogoCodefac.mensaje("Advertencia","No existen valores para cruzar con el documento",DialogoCodefac.MENSAJE_ADVERTENCIA);
             return false;
         }
         
@@ -601,7 +607,7 @@ public class CarteraModel extends CarteraPanel{
     
     private void listenerBotones() {
         
-        getBtnEliminarCruce().addActionListener(new ActionListener() {
+        /*getBtnEliminarCruce().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CarteraCruce cruce=UtilidadesTablas.obtenerDatoSeleccionado(getTblCruceDetalles(),0);
@@ -611,7 +617,7 @@ public class CarteraModel extends CarteraPanel{
                     actualizarTablaCrucesDetalle();
                 }
             }
-        });
+        });*/
         
         getBtnCruzar().addActionListener(new ActionListener() {
             @Override
@@ -666,7 +672,7 @@ public class CarteraModel extends CarteraPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 CarteraDetalle carteraDetalle=new CarteraDetalle();
-                if( setearDatosDetalle(carteraDetalle,false))
+                if( setearDatosDetalle(carteraDetalle,CrudEnum.CREAR))
                 {
                     cartera.addDetalle(carteraDetalle);
 
@@ -683,7 +689,7 @@ public class CarteraModel extends CarteraPanel{
             public void actionPerformed(ActionEvent e) {
                 if(detalleEditar!=null)
                 {
-                    setearDatosDetalle(detalleEditar,true);
+                    setearDatosDetalle(detalleEditar,CrudEnum.EDITAR);
                     actualizaVistaTablaDetalles();
                 }
             }
@@ -706,7 +712,7 @@ public class CarteraModel extends CarteraPanel{
         });
     }
     
-    private boolean setearDatosDetalle(CarteraDetalle carteraDetalle,Boolean editar)
+    private boolean setearDatosDetalle(CarteraDetalle carteraDetalle,CrudEnum crudEnum)
     {
         /**
          * TODO: Analziar para seprar esto en otra funcion
@@ -746,7 +752,7 @@ public class CarteraModel extends CarteraPanel{
             carteraDetalle.setCodigoDetalleDocumentoEnum(documentoDetalleEnum);
         }
         
-        if(!editar)
+        if(crudEnum.equals(CrudEnum.CREAR))
         {
             carteraDetalle.setSaldo(total);
             carteraDetalle.setId(Long.parseLong(System.identityHashCode(carteraDetalle)*-1+"")); //Cuando creo un objeto por primera vez creo un hashCode para despues poder relacionar con los cruces
@@ -825,11 +831,11 @@ public class CarteraModel extends CarteraPanel{
                 
                 modelTabla.addRow(new Object[]{
                     carteraDetalle,
-                    false,
+                    true,
                     carteraDetalle.getDescripcion(),
                     carteraDetalle.getTotal().toString(),
                     carteraDetalle.getSaldo().subtract(valorCruzado).toString(),
-                    "0"});                
+                    carteraDetalle.getSaldo().subtract(valorCruzado).toString()});                
             }
         } 
         
@@ -880,7 +886,10 @@ public class CarteraModel extends CarteraPanel{
     
     public void actualizaVistaTablaDetalles()
     {
-        if(cartera.getDetalles()==null)return; //validar que existan datos
+        if(cartera.getDetalles()==null)
+        {
+            return; //validar que existan datos        
+        }
         String[] tituloTabla={"","Descripción","Valor"};
         
                 
@@ -952,7 +961,41 @@ public class CarteraModel extends CarteraPanel{
             public void mouseExited(MouseEvent e) {}
         });
         
+        //Agregar PopUp para eliminar cruce a la vista de la tabla
+        JPopupMenu popupMenu=new JPopupMenu();
+        JMenuItem itemEliminar=new JMenuItem("Eliminar Cruce");
+        itemEliminar.addActionListener(listenerEliminarCruce);
+        popupMenu.add(itemEliminar);
+        getTblCruceDetalles().setComponentPopupMenu(popupMenu);
+        
     }
+    
+    ActionListener listenerEliminarCruce=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            Boolean respuesta=DialogoCodefac.dialogoPregunta(new CodefacMsj("Está seguro que quiere eliminar el cruce ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            if(respuesta)
+            {
+                int filaSeleccionada=getTblCruceDetalles().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    CarteraCruce cruce=(CarteraCruce) UtilidadesTablas.obtenerDatoSeleccionado(getTblCruceDetalles(),0);
+                    
+                    //Si la cartera detalle no se encuentra guardado es más facil solo tengo que eliminar de la variable cruces
+                    if(cruce.getCarteraDetalle().getId()==null || cruce.getCarteraDetalle().getId()<0 )
+                    {
+                        cruces.remove(cruce);
+                    }
+                    
+                    //Actualizar los datos de las tablas
+                    actualizarTablaDocumentosCruzar();
+                    actualizarTablaCruces();
+                    actualizarTablaCrucesDetalle();
+                }
+            }
+        }
+    };
     
     private void calcularTotalVista()
     {
