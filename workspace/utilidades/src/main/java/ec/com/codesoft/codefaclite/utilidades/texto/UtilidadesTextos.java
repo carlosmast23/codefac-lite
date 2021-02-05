@@ -34,6 +34,7 @@ import org.w3c.dom.Document;
  */
 public abstract class UtilidadesTextos {
     
+    
     /**
      * Cuando un texto es muy grande lo puede acortar
      * @param texto

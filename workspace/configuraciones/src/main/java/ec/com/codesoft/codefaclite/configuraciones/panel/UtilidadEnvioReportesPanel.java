@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoAtsEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -68,6 +69,8 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         jCheckBox1 = new javax.swing.JCheckBox();
         cmbMesAts = new javax.swing.JComboBox<>();
         txtAnioAts = new javax.swing.JSpinner();
+        jLabel4 = new javax.swing.JLabel();
+        cmbTipoAts = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -293,7 +296,7 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         jCheckBox1.setSelected(true);
         jCheckBox1.setText("Enviar Ats");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -313,6 +316,22 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtAnioAts, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText("Tipo ATS:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbTipoAts, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -338,12 +357,14 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
     private org.jdesktop.swingx.JXDatePicker cmbFechaFinal;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicial;
     private javax.swing.JComboBox<MesEnum> cmbMesAts;
+    private javax.swing.JComboBox<TipoAtsEnum> cmbTipoAts;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbTipoEstadoReporte;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -448,12 +469,13 @@ public abstract class UtilidadEnvioReportesPanel extends ControladorCodefacInter
         return jCheckBox1;
     }
 
-    
-    
-    
-    
+    public JComboBox<TipoAtsEnum> getCmbTipoAts() {
+        return cmbTipoAts;
+    }
 
-    
-    
+    public void setCmbTipoAts(JComboBox<TipoAtsEnum> cmbTipoAts) {
+        this.cmbTipoAts = cmbTipoAts;
+    }
+
 }
 

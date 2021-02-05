@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.impuestos.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -21,15 +23,19 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoAtsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.UtilidadesServidorXml;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -66,6 +72,7 @@ public class AtsModel extends AtsPanel {
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         listenerBotones();
+        listenerComboBox();
         valoresIniciales();
         iniciarValores();
     }
@@ -168,10 +175,18 @@ public class AtsModel extends AtsPanel {
                     Integer anio=(Integer)getTxtAnio().getValue();
                     MesEnum mesEnum=(MesEnum)getCmbMes().getSelectedItem();
                     String establecimiento=session.getSucursal().getCodigoSucursalFormatoTexto();
-                    atsJaxb = ServiceFactory.getFactory().getAtsServiceIf().consultarAts(anio,mesEnum,session.getEmpresa(),establecimiento,getRdbCompras().isSelected(),getRdbVentas().isSelected(),getRdbAnulados().isSelected());
+                    TipoAtsEnum tipoAts=(TipoAtsEnum) getCmbTipoAts().getSelectedItem();
+        
+                    atsJaxb = ServiceFactory.getFactory().getAtsServiceIf().consultarAts(tipoAts,anio,mesEnum,session.getEmpresa(),establecimiento,getRdbCompras().isSelected(),getRdbVentas().isSelected(),getRdbAnulados().isSelected());
+                    if(atsJaxb.getAlertas().size()>0)
+                    {
+                        DialogoCodefac.mensaje(new CodefacMsj("El Ats se genero pero tiene advertencias", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    }
+                    
                     construirTablaVenta();
                     construirTablaCompra();
                     construirTablaAnulados();
+                    mostrarAlertasVista();
 
                 } catch (RemoteException ex) {
                     Logger.getLogger(AtsModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -354,6 +369,26 @@ public class AtsModel extends AtsPanel {
         });
     }
     
+    private void mostrarAlertasVista()
+    {
+        String alertaTxt="";
+        if(atsJaxb!=null)
+        {            
+            for (String alerta : atsJaxb.getAlertas()) 
+            {
+                if(alertaTxt.isEmpty())
+                {
+                    alertaTxt+=alerta;
+                }
+                else
+                {
+                    alertaTxt+="\n"+alerta;
+                }
+            }
+        }
+        getTxtAlertasArea().setText(alertaTxt);
+    }
+    
     private void construirTablaAnulados() {
         String titulo[] = {
             "",
@@ -430,6 +465,9 @@ public class AtsModel extends AtsPanel {
     }
 
     private void valoresIniciales() {
+        
+        //Cargar los valores por defecto de los ats
+        UtilidadesComboBox.llenarComboBox(getCmbTipoAts(),TipoAtsEnum.values());
 
         getCmbMes().removeAllItems();
         MesEnum[] meses = MesEnum.values();
@@ -458,5 +496,26 @@ public class AtsModel extends AtsPanel {
         getCmbMes().setSelectedItem(mesEnum);
         
     }
+
+    private void listenerComboBox() {
+        getCmbTipoAts().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) 
+            {
+                TipoAtsEnum tipoAtsEnum= (TipoAtsEnum) getCmbTipoAts().getSelectedItem();
+                if(tipoAtsEnum.equals(TipoAtsEnum.MENSUAL))
+                {
+                    getCmbMes().setEnabled(true);
+                }
+                else
+                {
+                    getCmbMes().setEnabled(false);
+                }
+                
+            }
+        });
+    }
+
+    
 
 }

@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SriEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoAtsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
@@ -66,31 +67,67 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         return mes.toString();
     }
     
-    public AtsJaxb consultarAts(Integer anio, MesEnum mes,Empresa empresa,String numeroSucursal,boolean  comprasBool, boolean  ventasBool,boolean anuladosBool) throws  RemoteException,ServicioCodefacException
+    /**
+     * Cambiar al formato establecido para los ats la razon social de la empresa
+     * @param razonSocial
+     * @return 
+     */
+    private String formatearRazonSocialAts(String razonSocial)
     {
+        razonSocial=UtilidadesTextos.quitaDiacriticos(razonSocial);
+        razonSocial=razonSocial.replace("."," ");
+        return razonSocial;
+    }
+    
+    public AtsJaxb consultarAts(TipoAtsEnum tipoAtsEnum,Integer anio, MesEnum mes,Empresa empresa,String numeroSucursal,boolean  comprasBool, boolean  ventasBool,boolean anuladosBool) throws  RemoteException,ServicioCodefacException
+    {
+        List<String> alertas=new ArrayList<String>();
+        
         AtsJaxb ats=new AtsJaxb();
         ats.setAnio(anio);
         ats.setCodigoOperativo("IVA"); //Todo: Por el momento dejo en IVA como en el ejemplo del SRI
-        ats.setIdInformante(empresa.getIdentificacion());
-        ats.setMes(formatearMes(mes.getNumero()));
+        ats.setIdInformante(empresa.getIdentificacion());        
+        
         //Todo: Es el numero de establecimientos activos que voy a realizar el ats
         SucursalService sucursalService=new SucursalService();
         List<Sucursal> sucursales=sucursalService.consultarActivosPorEmpresa(empresa);
         //ats.setNumEstabRuc(UtilidadesTextos.llenarCarateresIzquierda(sucursales.size()+"",3,"0")); 
         ats.setNumEstabRuc("001");  //Todo: por el momento dejo seteado
-        ats.setRazonSocial(UtilidadesTextos.quitaDiacriticos(empresa.getRazonSocial()));
+        ats.setRazonSocial(formatearRazonSocialAts(empresa.getRazonSocial()));
         ats.setTipoIDInformante("R"); //Todo: Ver que opciones existen para ese campo
         
         
-        java.sql.Date fechaInicial=new java.sql.Date(UtilidadesFecha.getPrimerDiaMes(anio,mes.getNumero()-1).getTime());
-        java.sql.Date fechaFinal=new java.sql.Date(UtilidadesFecha.getUltimoDiaMes(anio,mes.getNumero()-1).getTime());
+        java.sql.Date fechaInicial=null;
+        java.sql.Date fechaFinal=null;
+        ////////////////////////////////////////////////////////////
+        if(tipoAtsEnum.equals(tipoAtsEnum.PRIMER_SEMESTRE))
+        {
+            ats.setRegimenMicroempresa("SI");
+            ats.setMes("06");
+            fechaInicial=new java.sql.Date(UtilidadesFecha.getPrimerDiaMes(anio,0).getTime());
+            fechaFinal=new java.sql.Date(UtilidadesFecha.getUltimoDiaMes(anio,5).getTime());            
+        }
+        else if(tipoAtsEnum.equals(tipoAtsEnum.SEGUNDO_SEMESTRE))
+        {
+            ats.setRegimenMicroempresa("SI");
+            ats.setMes("12");
+            fechaInicial=new java.sql.Date(UtilidadesFecha.getPrimerDiaMes(anio,6).getTime());
+            fechaFinal=new java.sql.Date(UtilidadesFecha.getUltimoDiaMes(anio,11).getTime());            
+        }
+        else if(tipoAtsEnum.equals(tipoAtsEnum.MENSUAL))
+        {
+            ats.setMes(formatearMes(mes.getNumero()));
+            fechaInicial=new java.sql.Date(UtilidadesFecha.getPrimerDiaMes(anio,mes.getNumero()-1).getTime());
+            fechaFinal=new java.sql.Date(UtilidadesFecha.getUltimoDiaMes(anio,mes.getNumero()-1).getTime());            
+        }
+        
         
         /**
          * ===================> COMPRAS <==========================
          */
         if(comprasBool)
         {
-            List<CompraAts> compras=consultarComprasAts(fechaInicial, fechaFinal,empresa);
+            List<CompraAts> compras=consultarComprasAts(fechaInicial, fechaFinal,empresa,alertas);
             ats.setCompras(compras);
         }
         
@@ -127,6 +164,9 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             ats.setAnuladosAts(anulados);
         }
         
+        //Agregar las alertas al resultado del ATS
+        ats.setAlertas(alertas);
+        
         return ats;
         
     }
@@ -153,7 +193,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
     }
    
     
-    public List<CompraAts> consultarComprasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
+    public List<CompraAts> consultarComprasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,List<String> alertas) throws  RemoteException,ServicioCodefacException
     {
         SriRetencionService sriRetencionService=new SriRetencionService();
         SriRetencion sriRetencionIva=sriRetencionService.consultarPorNombre(SriRetencion.NOMBRE_RETENCION_IVA);//Variable que necesito para las retenciones
@@ -280,11 +320,48 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             //compraAts.setSecRetencion1(codigoSri); //Secuecual de la retencion
             //compraAts.setAutRetencion1("");
             //compraAts.setFechaEmiRet1("");
-            comprasAts.add(compraAts);
+            if(validarCompraAts(compraAts, alertas))
+            {
+                comprasAts.add(compraAts);
+            }
         }
         
         return comprasAts;
         
+    }
+    
+    private Boolean validarCompraAts(CompraAts compraAts,List<String> alertas)
+    {
+        DocumentoEnum documentoEnum=DocumentoEnum.obtenerPorCodigoSri(compraAts.getTipoComprobante());
+        SriSustentoComprobanteEnum sustentoSriEnum=SriSustentoComprobanteEnum.obtenerPorCodigo(compraAts.getCodSustento());
+        
+        if(documentoEnum==null)
+        {
+            alertas.add(generarFormatoAlerta(documentoEnum.getNombre(),compraAts.getPreimpreso(),"Documento vacio"));
+            return false;
+        }
+        
+        //System.out.println(compraAts.getPreimpreso()+" -> "+documentoEnum.getNombre()+" -> "+sustentoSriEnum.getDescripcionCorta());
+        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA) && sustentoSriEnum.equals(SriSustentoComprobanteEnum.CREDITO_TRIBUTARIO_IVA))
+        {
+            //TODO: Esta validación debe ir al momento de ingresar las compras para evitar tener problemas posteriores
+            alertas.add(generarFormatoAlerta(documentoEnum.getNombre(),compraAts.getPreimpreso(),"El documento Nota de Venta no puede estar clasificada como sustento tributario para crédito tributario"));
+            return false;
+        }
+        
+        if(documentoEnum.equals(DocumentoEnum.FACTURA) && sustentoSriEnum.equals(SriSustentoComprobanteEnum.CONVENIO_DEBITO))
+        {
+            //TODO: Esta validación debe ir al momento de ingresar las compras para evitar tener problemas posteriores
+            alertas.add(generarFormatoAlerta(documentoEnum.getNombre(),compraAts.getPreimpreso(),"El documento Factura no puede estar clasificada como sustento tributario para Convenio Debito"));
+            return false;
+        }
+                
+        return true;
+    }
+    
+    private String generarFormatoAlerta(String documento,String preimpreso,String mensaje)
+    {
+        return "El documento "+documento+" con preimpreso "+preimpreso+" tiene la siguiente advertencia: "+mensaje;        
     }
     
     private void agregarAirAts(List<AirAts> retencionesAts,AirAts retencionRentaAts)

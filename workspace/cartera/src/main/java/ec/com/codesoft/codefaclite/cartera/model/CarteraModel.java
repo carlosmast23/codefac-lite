@@ -267,6 +267,7 @@ public class CarteraModel extends CarteraPanel{
         getTxtValorDetalle().setText("");
         getTxtDescripcionDetalle().setText("");
         getTxtPreimpreso().setText("");
+        getTxtAutorizacion().setText("");
     }
 
     //@Override

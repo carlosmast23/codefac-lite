@@ -286,7 +286,7 @@ public class DestinatarioGuiaRemision implements Serializable{
     public static DestinatarioGuiaRemision crearDestinatario(GuiaRemision guiaRemision,Factura factura,String autorizacion,Persona destinatarioCliente,String direccionDestino,java.util.Date fechaFactura,String motivoTraslado,String preimpresoFactura,Integer codigoSucursal) throws ServicioCodefacException
     {
         //Validaciones previas para agregar el destinatario
-        if(autorizacion.isEmpty())
+        if(autorizacion==null || autorizacion.isEmpty())
         {            
             throw new ServicioCodefacException("No se puede agregar facturas sin autorización");
             //return null;
