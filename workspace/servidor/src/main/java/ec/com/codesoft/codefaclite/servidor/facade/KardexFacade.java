@@ -7,9 +7,11 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -134,8 +136,8 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @return
      * @throws java.rmi.RemoteException 
      */
-    public List<Object[]> consultarStockFacade(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException {
-        //Kardex k;k.getProducto().getEstado();
+    public List<Object[]> consultarStockFacade(Bodega bodega,CategoriaProducto categoria,Empresa empresa) throws java.rmi.RemoteException {
+        //Kardex k;k.getBodega().getEmpresa();
         //k.getProducto().getCatalogoProducto().getCategoriaProducto();
         //k.getProducto().getNombre()
         
@@ -153,8 +155,10 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
         
         //Talvez agregar condicion para buscar solo por kardex activos
-        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega FROM Kardex k WHERE 1=1 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) "+whereBodega+whereCategoria+" ORDER BY k.producto.nombre asc";
+        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega FROM Kardex k WHERE k.bodega.empresa=?5 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) "+whereBodega+whereCategoria+" ORDER BY k.producto.nombre asc";
         Query query = getEntityManager().createQuery(queryString);
+        
+        query.setParameter(5,empresa);
         
         if(bodega!=null)
         {

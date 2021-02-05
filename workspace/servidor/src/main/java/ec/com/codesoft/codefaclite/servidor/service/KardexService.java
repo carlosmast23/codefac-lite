@@ -938,14 +938,14 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return datosConsulta;
     }
     
-    public List<Object[]> consultarStockMinimo(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException
+    public List<Object[]> consultarStockMinimo(Bodega bodega,CategoriaProducto categoria,Empresa empresa) throws java.rmi.RemoteException
     {
         return getFacade().consultarStockMinimoFacade(bodega,categoria);
     }
     
-    public List<Object[]> consultarStock(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException
+    public List<Object[]> consultarStock(Bodega bodega,CategoriaProducto categoria,Empresa empresa) throws java.rmi.RemoteException
     {
-        return getFacade().consultarStockFacade(bodega,categoria);
+        return getFacade().consultarStockFacade(bodega,categoria,empresa);
     }
 
     public List<Kardex> buscarPorProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException

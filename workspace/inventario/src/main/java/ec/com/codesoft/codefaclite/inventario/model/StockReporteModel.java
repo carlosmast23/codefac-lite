@@ -209,7 +209,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         bodegaSeleccionada=null;
                     }
                     
-                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,categoriaProducto);
+                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,categoriaProducto,session.getEmpresa());
                     
                     listaData=new ArrayList<StockMinimoData>();
                     
