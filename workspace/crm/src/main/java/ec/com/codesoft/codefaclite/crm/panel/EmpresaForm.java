@@ -176,6 +176,8 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         lblEspacio23 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txtOrden = new javax.swing.JSpinner();
+        jLabel15 = new javax.swing.JLabel();
+        txtInstagram = new javax.swing.JTextField();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -388,7 +390,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jLabel5.setText("Orden:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel5, gridBagConstraints);
@@ -416,7 +418,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jLabel11.setText("Texto Adicional:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel11, gridBagConstraints);
@@ -427,7 +429,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -437,26 +439,41 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jPanel1.add(jScrollPane2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio23, gridBagConstraints);
 
-        jLabel12.setText("Facebook:");
+        jLabel12.setText("Instagram:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel12, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtOrden, gridBagConstraints);
+
+        jLabel15.setText("Facebook:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel15, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 100;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtInstagram, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos adicionales", jPanel1);
 
@@ -517,6 +534,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -543,6 +561,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JTextField txtAgenteRetencionResolucion;
     private javax.swing.JTextField txtCelular;
     private javax.swing.JTextField txtFacebook;
+    private javax.swing.JTextField txtInstagram;
     private javax.swing.JSpinner txtOrden;
     // End of variables declaration//GEN-END:variables
 
@@ -592,6 +611,16 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     public void setTxtAgenteRetencionResolucion(JTextField txtAgenteRetencionResolucion) {
         this.txtAgenteRetencionResolucion = txtAgenteRetencionResolucion;
     }
+
+    @LimpiarAnotacion
+    public JTextField getTxtInstagram() {
+        return txtInstagram;
+    }
+
+    public void setTxtInstagram(JTextField txtInstagram) {
+        this.txtInstagram = txtInstagram;
+    }
+    
     
     
 }

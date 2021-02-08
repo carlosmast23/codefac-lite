@@ -2864,6 +2864,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         parametros.put("pl_telefonos", sessionCodefac.getMatriz().getTelefono());
         parametros.put("pl_celular", sessionCodefac.getMatriz().getCelular());
         parametros.put("pl_facebook", sessionCodefac.getEmpresa().getFacebook());
+        parametros.put("pl_instagram",(sessionCodefac.getEmpresa().getInstagram()!=null)?sessionCodefac.getEmpresa().getInstagram():"");
         parametros.put("pl_ruc", sessionCodefac.getEmpresa().getIdentificacion());        
         
         /**
@@ -2904,6 +2905,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
 
             parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "instagram.png"));
+            parametros.put("pl_img_instagram",UtilidadImagen.castInputStreamToImage(inputStream));
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
             parametros.put("pl_img_facebook",UtilidadImagen.castInputStreamToImage(inputStream));

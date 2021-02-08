@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -84,23 +85,31 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             @Override
             public void transaccion() throws RemoteException, ServicioCodefacException {
                 
-                grabarCarteraSinTransaccion(cartera, cruces);
+                grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR);
             }
         });
         
         return cartera;
     }
     
-    private void grabarCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
+    /**
+     * Metodo generico que me permite grabar una cartera 
+     * @param cartera
+     * @param cruces
+     * @throws ServicioCodefacException
+     * @throws java.rmi.RemoteException 
+     */
+    private void grabarCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces,CrudEnum crudEnum) throws ServicioCodefacException,java.rmi.RemoteException
     {
         /**
          * ===========================================================
          *                   VALIDAR LA CARTERA
          * ===========================================================
-         */
+         */        
         validacionCartera(cartera,cruces);
         
-        //TODO: Solucion para tener problemas con las referencias de datos similares
+        //TODO: Solucion para no tener problemas con las referencias de datos similares
+        //TODO: Analizar el por que se hace esto ??????????
         clonarCruces(cruces);
         
         /**
@@ -108,18 +117,35 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
          * OBTENER EL NUEVO CODIGO DE LA CARTERA
          * =================================================================
          */
-        String codigoCartera = generarCodigoCartera(cartera.getSucursal(), cartera.getCodigoDocumento());
-        cartera.setCodigo(codigoCartera);
+        if(crudEnum.equals(CrudEnum.CREAR))
+        {
+            String codigoCartera = generarCodigoCartera(cartera.getSucursal(), cartera.getCodigoDocumento());
+            cartera.setCodigo(codigoCartera);
+        }
 
         /**
          * ==================================================================
          *              GRABAR LOS DETALLES Y CRUCES NUEVOS
          * ==================================================================
          */
-        grabarDetallesCarteraSinTransaccion(cartera, cruces);        
+        grabarDetallesCarteraSinTransaccion(cartera, cruces);
+        
        
-        //Actualizar reerencias de los cruces
-        //grabar la cartera
+        //Actuaizar Saldo de las entidades de cartera afectada en los cruces
+        actualizarSaldosCarteraSinTrasaccion(cruces);
+        
+        //TODO:Metodo temporal para actualizar las referencias de los cruces y que esten actualizadas las listas que tienen referencias
+        actualizarReferenciasCartera(cartera);
+    }
+    
+    private void grabarDetallesCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        //BigDecimal valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(cartera);
+        List<CarteraDetalle> detallesOriginalTemporalCartera=cartera.getDetalles();
+        cartera.setDetalles(null); //Elimino temporalmente los detalles para no grabar 
+        cartera.setCruces(null); //Anulo la referencia a los cruces por que se estan grabando 2 veces los cruces
+        
+        //Grabo o edito la cartera dependiendo si tiene o no un id generado porque necesito para enlazar los detalles
         if(cartera.getId()==null)
         {           
             entityManager.persist(cartera);
@@ -128,100 +154,94 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             entityManager.merge(cartera);
         }
         
-        //TODO: Actualizo las referencias de datos persitentes por que la actualiza los saldo utiloiza el modo flush automatico y si previamente no estan persistentes las entidades en la consulta genera error
+        //TODO: Actualizo las referencias de los datos guardos
         entityManager.flush();
+        //valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(cartera);
 
-        //Actuaizar Saldo de las entidades de cartera afectada en los cruces
-        actualizarSaldosCarteraSinTrasaccion(cruces);
-
-        //TODO:Metodo temporal para actualizar las referencias de los cruces y que esten actualizadas las listas que tienen referencias
-        actualizarReferenciasCartera(cartera);
-    }
-    
-    private void grabarDetallesCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
-    {
+        
          Map<Long, CarteraDetalle> mapDetallesGrabados = new HashMap<Long, CarteraDetalle>();
+         
         //grabar los detalles de la cartera
-        long idAuxiliar=-1;
+        
+        long idAuxiliar=-1;        
         List<CarteraDetalle> detallesCarteraTmp=new ArrayList<CarteraDetalle>();
         
-        for (CarteraDetalle detalle : cartera.getDetalles()) {
-            
-            /*if((cruces!=null && cruces.size()>0) && detalle.getId()==null)
-            {
-                throw new ServicioCodefacException("No se puede relacionar sin un id fijo o temporal en la cartera");
-            }*/
-            
+        for (CarteraDetalle detalle : detallesOriginalTemporalCartera) {
+                                    
             /**
              * Esto funciona de esta manera porque cuando se usan cruces tienes ids negativos auxiliares , pero cuando vienen desde otro modulos tiene id null porque son nuevos
-             * asd
              */
-            Long idTemporal=idAuxiliar--;// en caso de no tener referencia le asigno una
+            Long idTemporal=idAuxiliar--;// en caso de no tener un id porque no viene de cruces le genero uno automatico
             if(detalle.getId()!=null)
             {
-                idTemporal=detalle.getId();
+                idTemporal=detalle.getId(); //Si tiene previamente un id utilizo para luego enlazar los cruces
             }
             else
             {
-                detalle.setId(idTemporal);
-            }
-            
-            //Long idTemporal=(detalle.getId()!=null)?detalle.getId():idAuxiliar--; //Valor de id temporal para poder guardar los cruces , este artificio se usa porque el id de los nuevos detales viene con npumeros negativos
-            
+                detalle.setId(idTemporal); //Si no tiene ningun id le grabo un negativo temporal
+            }                        
             
             if(idTemporal<0)
             {
-                CarteraDetalle carteraDetalleTmp= detalle.clone();
-                carteraDetalleTmp.setId(null); //Esta variable dejo en null para que al grabar genere el nuevo objeto
-                entityManager.persist(carteraDetalleTmp);
-                //entityManager.flush();
+                CarteraDetalle carteraDetalleTmp= detalle.clone(); //Grabo una copia del detalle para saber como enlazar con los id temporales en los cruces
+                carteraDetalleTmp.setId(null); //Queda en null para poder grabar con un nuevo Id en la base de datos
+                entityManager.persist(carteraDetalleTmp); //grabo el nuevo detalle
+                entityManager.flush();
                 //Grabar los antiguos id con los nuevos que despues me sirve para poder grabar los cruces
                 mapDetallesGrabados.put(idTemporal, carteraDetalleTmp);
-                //grabo la nueva referencia en la cartera para no tener problemas luego
+                
+                //granbo en una nueva lista los datos persistentes para luego enlazar con la cartera
                 detallesCarteraTmp.add(carteraDetalleTmp);
-                //cartera.getDetalles().remove(detalle);
-                //cartera.getDetalles().add(carteraDetalleTmp);
                 
             }
             else
             {
-                mapDetallesGrabados.put(detalle.getId(),detalle); //Si ya existe grabado solo agrego para luego poder grabar la referencia mas abajao
+                mapDetallesGrabados.put(detalle.getId(),detalle); //Si ya existe grabado el detallo solo agrego al mapa para luego terminazar de hacer los cruces
             }
 
         }
+        
+        //valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(cartera);
         
         //Grabo la nueva referencia de los datos ya modificados
         cartera.setDetalles(detallesCarteraTmp);
 
         //Grabar los cruces con al referencia de los nuevos detalles ya grabados
-        for (CarteraCruce carteraCruce : cruces) {
+        for (CarteraCruce carteraCruce : cruces) 
+        {
             CarteraDetalle carteraDetalleGrabada = mapDetallesGrabados.get(carteraCruce.getCarteraDetalle().getId());
+            
             //Solo grabo una nueva referencia si es distinta de null porque puede ser que este enviando una cartera que ya estaba grabada
             if(carteraDetalleGrabada!=null)
             {
                 carteraCruce.setCarteraDetalle(carteraDetalleGrabada);
             }
             
+            //Despues de terminar de actualizar las referencias de los cruces edito o grabo segun el caso
             if(carteraCruce.getId()==null)
             {
                 entityManager.persist(carteraCruce); //Si no existe la referencia solo le grabo
+                entityManager.flush();
             }
             else
             {
                 entityManager.merge(carteraCruce); //Si existe la referencia solo le edito
-            }   
-
-            ////Actualizar en los detalles de la cartera TODO: Revisar
-            //carteraCruce.getCarteraAfectada().getCruces().add(carteraCruce);
+            }
         }
+        //valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(cartera);
         
     }
     
     private void  clonarCruces(List<CarteraCruce> cruces) throws RemoteException, ServicioCodefacException
     {
-        for (CarteraCruce cruce : cruces) {
-            cruce.setCarteraDetalle(cruce.getCarteraDetalle().clone());
+        for (CarteraCruce cruce : cruces) 
+        {
+            if(cruce.getCarteraDetalle().getId()==null || cruce.getCarteraDetalle().getId()<0 )
+            {
+                cruce.setCarteraDetalle(cruce.getCarteraDetalle().clone());
+            }
         }
+        
     }
     
     private void actualizarReferenciasCartera(Cartera cartera) throws RemoteException, ServicioCodefacException
@@ -275,6 +295,13 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         return codigo;        
     }
     
+    /**
+     * Validaciones generales que toda cartera debe cumplir para poder grabar
+     * @param cartera
+     * @param cruces
+     * @throws ServicioCodefacException
+     * @throws java.rmi.RemoteException 
+     */
     private void validacionCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException 
     {
         if(cartera.getDetalles()==null || cartera.getDetalles().size()==0)
@@ -360,18 +387,18 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         cartera.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
         cartera.setSucursal(comprobante.getSucursalEmpresa());
         cartera.setDíasCredito((carteraParametro!=null)?carteraParametro.diasCredito:null);
+        //Calculando el campo de fecha de credito si esta activado esa opción para facturar
         if(carteraParametro!=null && carteraParametro.diasCredito!=null)
         {
             java.util.Date fechaFinCredito=UtilidadesFecha.sumarDiasFecha(
                     cartera.getFechaEmision(),
                     carteraParametro.diasCredito);            
             cartera.setFechaFinCredito(UtilidadesFecha.castDateUtilToSql(fechaFinCredito));
-        }
-        
-        
+        }               
 
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
-        //TODO: Mandar una alerta o una excepcion cuando no este configurado para algun documento
+        
+        //Documento que tiene la referencia de los cruces si tiene que ser automatico
         List<CarteraCruce> cruces=new ArrayList<CarteraCruce>();
         switch (documentoEnum) {
             case FACTURA_REEMBOLSO:
@@ -393,17 +420,27 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 
         }
         
-        
-        grabarCarteraSinTransaccion(cartera, cruces);
+        //Grabar el documento con los cruces generados
+        grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR);
 
     }
     
+    /**
+     * Permite crear cruces automaticos cuando no se quiere generar la cuenta por cobrar en la venta
+     * @param factura documento facturar
+     * @param carteraFactura cartera de la factura
+     * @param cruces referencia donde se van a ir grabando los cruces generados
+     * @param carteraParametro parametro donde especifica si se debe generar un cruce automatico
+     * @throws ServicioCodefacException
+     * @throws RemoteException 
+     */
     private void crearCrucesFactura(Factura factura,Cartera carteraFactura,List<CarteraCruce> cruces,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
         /**
          * =====================================================================
          * CREAR CRUCE DE LA FACTURA CUANDO SE PAGA CON CREDITO CARTERA
          * Esto aplica cuando se quiere pagar con algun abono de los clientes
+         * TODO: MODULO DE FINANCIAMIENTO PERO NO ESTA ACTIVO
          * =====================================================================
          */
         
@@ -468,13 +505,12 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         if(carteraParametro!=null && carteraParametro.habilitarCredito)
             return;
         
-        
+        //Si no esta habilitado se genera un CRUCE AUTOMATICO como ABONO
         List<FormaPago> formasPagoOtros = factura.buscarListaFormasPagoDistintaDeCartera();
         for (FormaPago formaPago : formasPagoOtros) {
-            //Verificar si no tiene asignado un plazo de deuda en la forma de pago entonces creo los cruces
-            //if (formaPago.getPlazo() == null || formaPago.getPlazo().toString().isEmpty() || formaPago.getPlazo().toString().equals("0")) {
-                //Crear la cartera
-                Cartera carteraFormaPago = new Cartera(
+                
+                //Crear la cartera para los abonos
+                Cartera carteraAbono = new Cartera(
                         factura.getCliente(),
                         formaPago.getTotal(),
                         formaPago.getTotal(),
@@ -486,20 +522,27 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                         factura.getUsuario(),
                         GeneralEnumEstado.ACTIVO);
 
-                //Crear la cartera detalle
-                CarteraDetalle carteraDetalle = new CarteraDetalle();
-                carteraDetalle.setCartera(carteraFormaPago);
-                carteraDetalle.setCruces(new ArrayList<CarteraCruce>());
-                carteraDetalle.setDescripcion("cruce automatica");
-                carteraDetalle.setSaldo(formaPago.getTotal());
-                carteraDetalle.setTotal(formaPago.getTotal());
+                //Crear la cartera detalle del abono
+                CarteraDetalle carteraDetalleAbono = new CarteraDetalle();
+                carteraDetalleAbono.setCartera(carteraAbono);
+                carteraDetalleAbono.setCruces(new ArrayList<CarteraCruce>());
+                carteraDetalleAbono.setDescripcion("cruce automatica");
+                carteraDetalleAbono.setSaldo(formaPago.getTotal());
+                carteraDetalleAbono.setTotal(formaPago.getTotal());
                 
-                carteraFormaPago.addDetalle(carteraDetalle);
-
-                grabarCarteraSinTransaccion(carteraFormaPago, new ArrayList<CarteraCruce>());
-                //entityManager.flush();
-
-                CarteraCruce cruce = new CarteraCruce(formaPago.getTotal(), carteraFactura, carteraDetalle);
+                carteraAbono.addDetalle(carteraDetalleAbono);
+                
+                //Grabar la NUEVA CARTERA DEL ABONO
+                grabarCarteraSinTransaccion(carteraAbono, new ArrayList<CarteraCruce>(),CrudEnum.CREAR);
+                
+                
+                //TODO: Este artificio toca hacer porque aunque se supone que el detalle debe estar relacionado por referencia al mismo objeto
+                //internamienta el metodo grabarCarteraSinTransaccion hace clonar los detalles y se pierde la referencia y los detalles dejan de estar enlazados 
+                //TODO: Tambien obtengo el primer dato con la seguridad que para este caso siempre solo agrega un detalle
+                carteraDetalleAbono=carteraAbono.getDetalles().get(0);
+                
+                //grabo la referencia del CRUCE AUTOMATICO con la Factura
+                CarteraCruce cruce = new CarteraCruce(formaPago.getTotal(), carteraFactura, carteraDetalleAbono);
                 cruces.add(cruce);
             //}
         }
@@ -507,6 +550,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     
     private void crearCarteraFactura(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
+        //Termina de generar los campos restantes para facturas de venta y compra
         //TODO: Unir la misma logica tanto para facturas de venta como de compra
         if (tipo.equals(tipo.CLIENTE)) {
             
@@ -523,7 +567,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 carteraDetalle.setTotal(detalle.getTotal());
                 cartera.addDetalle(carteraDetalle);
             }
-                
+            
+            //Metodo que permite crear los cruces automaticos cuando sea el caso
             crearCrucesFactura(factura, cartera, cruces,carteraParametro);
             
         } else if (tipo.equals(tipo.PROVEEDORES)) {
@@ -702,11 +747,37 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 //Falta agregar validaciones porque no siempre se puede editar cualquier dato
-                grabarCarteraSinTransaccion(entity, cruces);
+                grabarCarteraSinTransaccion(entity, cruces,CrudEnum.EDITAR);
             }
         });
     }
     
+    
+    private void procesarEliminacionesSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws RemoteException
+    {        
+        CarteraDetalleService serviceDetalle=new CarteraDetalleService();
+        
+        List<CarteraDetalle> detalleEditado=cartera.getDetalles();
+        List<CarteraDetalle> detalleEliminados=serviceDetalle.consultarPorcartera(cartera);
+        
+        //quitar los detalles editados para si existe alguno eliminado
+        detalleEliminados.removeAll(detalleEditado);
+        
+        //Si el detalle es mayor que cero entonces se tiene que eliminar
+        if(detalleEliminados.size()>0)
+        {
+            
+        }        
+    }
+    
+    /**
+     * Eliminar el detalle de una cartera
+     * @param carteraDetalle 
+     */
+    private void eliminarDetalleCartera(CarteraDetalle carteraDetalle)
+    {
+        carteraDetalle.getCartera();
+    }
     
 
     @Override

@@ -5,12 +5,15 @@
  */
 package ec.com.codesoft.codefaclite.controlador.excel;
 
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -111,7 +114,7 @@ public abstract class ExcelMigrar {
                     //System.out.println(celda.getStringCellValue());
                     if(!tiposDatosCabecera.get(i).equals(String.class))
                     {
-                       throw new ExcepcionMigrar("Se esperaba un tipo String pero la columna "+i+" tiene un tipo de dato diferente de "+tiposDatosCabecera.get(i).getName());
+                       throw new ExcepcionMigrar("Se esperaba un tipo String pero la columna con valor <"+celda.getStringCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
                     }
                     break;
 
@@ -121,13 +124,13 @@ public abstract class ExcelMigrar {
                     {
                         if(!tiposDatosCabecera.get(i).equals(Date.class))
                         {
-                            throw new ExcepcionMigrar("Se esperaba un tipo Date pero la columna "+i+" tiene un tipo de dato diferente de "+tiposDatosCabecera.get(i).getName());
+                            throw new ExcepcionMigrar("Se esperaba un tipo Date pero la columna con valor <"+celda.getStringCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
                         }
                     }else
                     {
                         if(!tiposDatosCabecera.get(i).equals(Double.class))
                         {
-                           throw new ExcepcionMigrar("Se esperaba un tipo Double pero la columna "+i+" tiene un tipo de dato diferente de "+tiposDatosCabecera.get(i).getName());
+                           throw new ExcepcionMigrar("Se esperaba un tipo Double pero la columna con valor <" +celda.getStringCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
                         }
                     }
                     break;
@@ -144,9 +147,18 @@ public abstract class ExcelMigrar {
     {
         List<Class> tiposDatos=new ArrayList<Class>() ;
 
-        for (CampoMigrarInterface dato : obtenerCampos()) 
-        {
-            tiposDatos.add(dato.getPosicion(),dato.getTipoDato());
+        CampoMigrarInterface[] datos=obtenerCampos();
+        List<CampoMigrarInterface> datosList=Arrays.asList(datos);;
+        UtilidadesLista.ordenarLista(datosList, new Comparator<CampoMigrarInterface>() {
+            @Override
+            public int compare(CampoMigrarInterface o1, CampoMigrarInterface o2) {
+                return new Integer(o1.getPosicion()).compareTo(new Integer(o2.getPosicion()));
+            }
+        });
+        
+        for (CampoMigrarInterface dato : datosList) 
+        {            
+            tiposDatos.add(dato.getTipoDato());
         }
         
         return tiposDatos;

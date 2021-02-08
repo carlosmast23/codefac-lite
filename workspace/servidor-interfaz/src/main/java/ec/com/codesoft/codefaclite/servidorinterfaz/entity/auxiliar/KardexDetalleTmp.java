@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.Serializable;
 
 /**
@@ -25,6 +26,7 @@ public class KardexDetalleTmp extends KardexDetalle implements Serializable{
         kardexDetalle.setCodigoTipoDocumento(this.getCodigoTipoDocumento());
         kardexDetalle.setFechaCreacion(this.getFechaCreacion());
         kardexDetalle.setFechaIngreso(this.getFechaIngreso());
+        kardexDetalle.setFechaDocumento(UtilidadesFecha.castDateUtilToSql(this.getFechaIngreso()));
         kardexDetalle.setKardex(this.getKardex());
         kardexDetalle.setPrecioTotal(this.getPrecioTotal());
         kardexDetalle.setPrecioUnitario(this.getPrecioUnitario());

@@ -111,6 +111,7 @@ public class EmpresaModel extends EmpresaForm
             //getjTextTelefono().setText(e.getTelefonos());
             //getTxtCelular().setText(e.getCelular());
             getTxtFacebook().setText(e.getFacebook());
+            getTxtInstagram().setText(e.getInstagram());
             getTxtAdicional().setText(e.getAdicional());
             getjTextNumContribuyente().setText(e.getContribuyenteEspecial());
             getTxtAgenteRetencionResolucion().setText(e.getAgenteRetencionResolucion());
@@ -264,6 +265,7 @@ public class EmpresaModel extends EmpresaForm
         empresa.setAgenteRetencionResolucion(getTxtAgenteRetencionResolucion().getText());
         //empresa.setCelular(getTxtCelular().getText());
         empresa.setFacebook(getTxtFacebook().getText());
+        empresa.setInstagram(getTxtInstagram().getText());
         empresa.setAdicional(getTxtAdicional().getText());
         empresa.setCodigo(getjTextCodigoEmpresa().getText());
         empresa.setOrden((Integer) getTxtOrden().getValue());
@@ -409,6 +411,7 @@ public class EmpresaModel extends EmpresaForm
         getjCheckBLlevaContabilidad().setSelected(empresa.getObligadoLlevarContabilidadEnum().getBool());
         getjTextLogo().setText(empresa.getImagenLogoPath());
         getTxtFacebook().setText(empresa.getFacebook());
+        getTxtInstagram().setText(empresa.getInstagram());
         getTxtAdicional().setText(empresa.getAdicional());
         getjTextCodigoEmpresa().setText(empresa.getCodigo());
         getChkContribuyenteRegimenMicroempresas().setSelected(empresa.getContribuyenteRegimenMicroempresasEnum().getBool());

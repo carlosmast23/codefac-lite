@@ -404,7 +404,7 @@ public enum DocumentoEnum implements ParametroUtilidades.ComparadorInterface{
         if(codigoSri==null)return null;
             
         for (DocumentoEnum value : DocumentoEnum.values()) {
-            if(value!=null && value.getCodigoSri().equals(codigoSri))
+            if(value!=null && value.getCodigoSri()!=null && value.getCodigoSri().equals(codigoSri))
             {
                 return value;
             }

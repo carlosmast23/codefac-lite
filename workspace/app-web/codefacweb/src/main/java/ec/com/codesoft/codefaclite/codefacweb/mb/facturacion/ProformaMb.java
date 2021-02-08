@@ -678,6 +678,32 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         }
         return dataReporte;
     }
+    
+    private JasperReport buscarReporteDatosAdicionales(RecursoCodefac recursoCodefac,String nombreReporte)
+    {
+        
+        InputStream inputStream= null;
+        try {
+            RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(recursoCodefac,nombreReporte));
+            JasperReport reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
+            //mapParametros.put("SUBREPORT_INFO_OTRO",reportDatosAdicionales);
+            return reportDatosAdicionales;
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
 
     /**
      * TODO: Ver alguna forma de unir con el metodo de factura de escritorio
@@ -699,8 +725,18 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         mapParametros.put("descuento", facturaProcesando.getDescuentoImpuestos().add(facturaProcesando.getDescuentoSinImpuestos()).toString());
         mapParametros.put("iva_porcentaje", sessionMb.getSession().obtenerIvaActual().toString());
         mapParametros.put("informacionAdicionalList", obtenerDatosAdicionales());
+        
+        JasperReport reportDatosAdicionales =buscarReporteDatosAdicionales(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionalesA4.jrxml");
+        mapParametros.put("SUBREPORT_INFO_OTRO",reportDatosAdicionales);
+        
+        reportDatosAdicionales=buscarReporteDatosAdicionales(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionales.jrxml");
+        mapParametros.put("SUBREPORT_INFO_ADICIONAL",reportDatosAdicionales);
+        
+        reportDatosAdicionales=buscarReporteDatosAdicionales(RecursoCodefac.JASPER, "pl_firmas_factura.jrxml");
+        mapParametros.put("pl_firmas_factura",reportDatosAdicionales);
+        
 
-        try {
+        /*try {
             RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
             InputStream inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionalesA4.jrxml"));
             JasperReport reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
@@ -715,7 +751,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
 
         //SUBREPORT_INFO_ADICIONAL
         // mapParametros.put("estado",facturaProcesando.getEstadoEnum());
@@ -735,6 +771,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         mapParametros.put("iva", facturaProcesando.getIva().toString());
         mapParametros.put("total", facturaProcesando.getTotal().toString());
         mapParametros.put("autorizacion", facturaProcesando.getClaveAcceso());
+        
 
         return mapParametros;
 

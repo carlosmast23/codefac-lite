@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
     "razonSocial",
     "anio",
     "mes",
+    "regimenMicroempresa",
     "numEstabRuc",
     "totalVentas",
     "codigoOperativo",
@@ -40,6 +41,11 @@ public class AtsJaxb implements Serializable
     private String razonSocial;
     private Integer anio;
     private String mes;
+    
+    /**
+     * Este campo va a permitir especificar si el cliente esta en el regimen microempresa
+     */
+    private String regimenMicroempresa;
     /**
      * Corresponde al numero de establecimientos activos que voy a realizar el ats
      */
@@ -52,6 +58,10 @@ public class AtsJaxb implements Serializable
     private List<VentasEstablecimientoAts> ventasEstablecimiento;
     private List<AnuladoAts> anuladosAts;
     
+    /**
+     * Variable adicional solo para informar de alertas al momento de generar los ats
+     */
+    private List<String> alertas;
     
     
     /**
@@ -111,6 +121,11 @@ public class AtsJaxb implements Serializable
     public String getMes() {
         return mes;
     }
+    
+    @XmlElement(name = "regimenMicroempresa")
+    public String getRegimenMicroempresa() {
+        return regimenMicroempresa;
+    }
 
     @XmlElement(name = "numEstabRuc")
     public String getNumEstabRuc() {
@@ -125,6 +140,11 @@ public class AtsJaxb implements Serializable
     @XmlElement(name = "codigoOperativo")
     public String getCodigoOperativo() {
         return codigoOperativo;
+    }
+    
+    @XmlTransient
+    public List<String> getAlertas() {
+        return alertas;
     }
 
     public void setTipoIDInformante(String tipoIDInformante) {
@@ -174,8 +194,14 @@ public class AtsJaxb implements Serializable
     public void setAnuladosAts(List<AnuladoAts> anuladosAts) {
         this.anuladosAts = anuladosAts;
     }
-    
-    
+
+    public void setRegimenMicroempresa(String regimenMicroempresa) {
+        this.regimenMicroempresa = regimenMicroempresa;
+    }
+
+    public void setAlertas(List<String> alertas) {
+        this.alertas = alertas;
+    }
     
     
     

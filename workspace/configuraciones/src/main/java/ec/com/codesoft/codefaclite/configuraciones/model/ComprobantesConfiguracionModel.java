@@ -68,6 +68,7 @@ import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -82,6 +83,11 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private ImpuestoDetalleServiceIf impuestoDetalleService;
     private JFileChooser jFileChooser;
     private Path origen = null;
+    
+    /**
+     * Path que me permite guardar la imagen de fondo
+     */
+    private Path origenImagen=null;
     //private Path destino = null;
     private Persona cliente;
     private PersonaServiceIf clienteService;
@@ -98,7 +104,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         try {
             //getTxtClaveFirma().setEnabled(true);
             actualizarDatosVista();
-            moverArchivo();
+            moverTodosArchivos();
             
             /**
              * Grabar el fondo de escritorio
@@ -257,9 +263,10 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             getTxtCorreoElectronico().setText(parametros.get(ParametroCodefac.CORREO_USUARIO).getValor());
             getTxtPasswordCorreo().setText(UtilidadesEncriptar.desencriptar(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             getTxtNombreFirma().setText(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor());
+            //getTxtFondoEscritorio().setText(parametros.get(ParametroCodefac.IMAGEN_FONDO).getValor());
             
             getTxtClaveFirma().setText(UtilidadesEncriptar.desencriptar(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-            if(parametros.get(parametros.get(ParametroCodefac.IMAGEN_FONDO))!=null)
+            if(parametros.get(ParametroCodefac.IMAGEN_FONDO)!=null)
             {
                 getTxtFondoEscritorio().setText(parametros.get(ParametroCodefac.IMAGEN_FONDO).getValor());
             }
@@ -361,25 +368,33 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         }
     }
 
-    public void cargarDatosArchivos(File archivoEscogido) {
+    public Path cargarDatosArchivos(File archivoEscogido,JTextField textField) {
         File archivo = archivoEscogido;
         String rutaArchivo = archivo.getPath();
         String nombreArchivo = archivo.getName();
-        getTxtNombreFirma().setText(nombreArchivo);
+        textField.setText(nombreArchivo);
         //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
         //rutaDestino += nombreArchivo;
-        establecerDondeMoverArchivo(rutaArchivo/*, rutaDestino*/);
+        return establecerDondeMoverArchivo(rutaArchivo/*, rutaDestino*/);
     }
 
-    public void establecerDondeMoverArchivo(String rutaArchivo/*,String rutaDestino*/) {
-        this.origen = FileSystems.getDefault().getPath(rutaArchivo);
+    public Path establecerDondeMoverArchivo(String rutaArchivo/*,String rutaDestino*/) {
+        return FileSystems.getDefault().getPath(rutaArchivo);
         //this.destino = FileSystems.getDefault().getPath(rutaDestino);
+    }
+    
+    public void moverTodosArchivos()
+    {
+        moverArchivo(origen, getTxtDirectorioRecurso().getText(), DirectorioCodefac.CONFIGURACION, ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
+        moverArchivo(origenImagen, getTxtFondoEscritorio().getText(), DirectorioCodefac.IMAGENES,ParametroCodefac.IMAGEN_FONDO);
+        
     }
 
     /**
+     * TODO: Mover a un metodo general por que se puede reutilizar esta funcionalidad
      * Metodo para mover las firmas
      */
-    public void moverArchivo() {
+    public void moverArchivo(Path origen,String directorio,DirectorioCodefac directorioCodefac,String nombreParametro) {
         try {
             //Verifica que solo cuando exista un origen y destino exista se copien los datos
             //if (origen == null || destino == null) {
@@ -391,13 +406,13 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
                     new FileInputStream(origen.toFile()));
             
-            String directorioServidor=(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS)!=null)?parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor:getTxtDirectorioRecurso().getText();
-            ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(directorioServidor,DirectorioCodefac.CONFIGURACION, istream,origen.getFileName().toString());
+            String directorioServidor=(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS)!=null)?parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor:directorio;
+            ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(directorioServidor,directorioCodefac, istream,origen.getFileName().toString());
             
             //getTxtNombreFirma().setText("" + destino.getFileName());
             getTxtNombreFirma().setText("" + origen.getFileName());
             
-            setearParametro(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA,origen.getFileName().toString());
+            setearParametro(nombreParametro,origen.getFileName().toString());
             //ParametroCodefac parametro = parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
             //parametro.setValor(destino.getFileName().toString());            
             //parametro.setValor(origen.getFileName().toString());            
@@ -409,6 +424,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
 
     private void addListenerButtons() {
         
@@ -423,10 +440,15 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         getBtnFirmaElectronica().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
+                jFileChooser = new JFileChooser();
+                jFileChooser.setDialogTitle("Elegir archivo");
+                jFileChooser.setFileFilter(new FileNameExtensionFilter("Firma Electronica SRI", "p12"));
+                
                 int seleccion = jFileChooser.showDialog(null, "Abrir");
                 switch (seleccion) {
                     case JFileChooser.APPROVE_OPTION:
-                        cargarDatosArchivos(jFileChooser.getSelectedFile());
+                        origen=cargarDatosArchivos(jFileChooser.getSelectedFile(),getTxtNombreFirma());
                         break;
                     case JFileChooser.CANCEL_OPTION:
 
@@ -482,15 +504,24 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         getBtnBuscarImagen().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                File archivo=dialogoCopiarFondoEscritorio.abrirDialogo();
-                String rutaArchivo = archivo.getPath();
-                String nombreArchivo = archivo.getName();
-                getTxtFondoEscritorio().setText(nombreArchivo);
-                //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
-                String rutaDestino ="";
-                rutaDestino += nombreArchivo;
-                dialogoCopiarFondoEscritorio.establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
                 
+                jFileChooser = new JFileChooser();
+                jFileChooser.setDialogTitle("Elegir imagen");
+                int seleccion = jFileChooser.showDialog(null, "Abrir");
+                
+                switch (seleccion) 
+                {
+                    case JFileChooser.APPROVE_OPTION:
+                        origenImagen=cargarDatosArchivos(jFileChooser.getSelectedFile(),getTxtFondoEscritorio());
+                        break;
+                    case JFileChooser.CANCEL_OPTION:
+
+                        break;
+                    case JFileChooser.ERROR_OPTION:
+
+                        break;
+                }
+
             }
         });
         

@@ -253,6 +253,8 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
             kardexDetalle.setPrecioTotal(detalle.getTotal());
             kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp()); //Setear por defecto con la fecha de hoy
+            kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
+            
             kardexDetalle.seleccion=true;
                                     
             if (detalle.getProductoProveedor().getProducto().getGarantiaEnum().equals(EnumSiNo.SI)) {
@@ -371,6 +373,8 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                     case COLUMNA_FECHA:
                         java.sql.Date fechaModificada=(java.sql.Date) tablaModelo.getValueAt(filaModificada,ColumnaDetalleCompraEnum.COLUMNA_FECHA.numero);
                         kardexDetalle.setFechaIngreso(UtilidadesFecha.castDateSqlToTimeStampSql(fechaModificada));
+                        kardexDetalle.setFechaDocumento(UtilidadesFecha.castDateUtilToSql(fechaModificada));
+                        break;
                 }
                         
             }
@@ -391,6 +395,8 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                     case COLUMNA_FECHA:
                         java.sql.Date fechaModificada = (java.sql.Date) tablaModelo.getValueAt(filaModificada, ColumnaDetalleCompraEnum.COLUMNA_FECHA.numero);
                         kardexDetalle.setFechaIngreso(UtilidadesFecha.castDateSqlToTimeStampSql(fechaModificada));
+                        kardexDetalle.setFechaDocumento(UtilidadesFecha.castDateUtilToSql(fechaModificada));
+                        break;
                 }            
             }
             
@@ -688,6 +694,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                         KardexDetalleTmp kardexDetalle = entry.getKey();
                         //CompraDetalle compraDetalle = entry.getValue();
                         kardexDetalle.setFechaIngreso(UtilidadesFecha.castDateSqlToTimeStampSql(fechaSeleccionada));
+                        kardexDetalle.setFechaDocumento(UtilidadesFecha.castDateUtilToSql(fechaSeleccionada));
 
                     }
                     construirTablaDetalleCompra();
@@ -764,6 +771,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 
                 KardexDetalle kardexDetalleNuevo=kardexDetalle.obtenerObjetoOriginal();                
                 kardexDetalleNuevo.setKardex(kardex);
+                
                 
                detallesKardexFinal.add(kardexDetalleNuevo);
                 

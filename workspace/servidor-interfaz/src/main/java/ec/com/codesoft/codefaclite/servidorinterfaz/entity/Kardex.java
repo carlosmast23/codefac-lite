@@ -44,7 +44,7 @@ public class Kardex implements Serializable,Cloneable {
     private Date fechaModificacion;
     
     @Column(name = "PRECIO_PROMEDIO")
-    private BigDecimal precioPromedio;
+    private BigDecimal costoPromedio;
     
     /**
      * Almacena el ultimo valor de costo utilizado 
@@ -114,12 +114,12 @@ public class Kardex implements Serializable,Cloneable {
         this.fechaModificacion = fechaModificacion;
     }
 
-    public BigDecimal getPrecioPromedio() {
-        return precioPromedio;
+    public BigDecimal getCostoPromedio() {
+        return costoPromedio;
     }
 
-    public void setPrecioPromedio(BigDecimal precioPromedio) {
-        this.precioPromedio = precioPromedio;
+    public void setCostoPromedio(BigDecimal costoPromedio) {
+        this.costoPromedio = costoPromedio;
     }
 
     public BigDecimal getPrecioUltimo() {
@@ -212,7 +212,7 @@ public class Kardex implements Serializable,Cloneable {
     
     public void calcularPrecioTotal()
     {
-        this.precioTotal=precioPromedio.multiply(stock);
+        this.precioTotal=costoPromedio.multiply(stock);
     }
     
     /**

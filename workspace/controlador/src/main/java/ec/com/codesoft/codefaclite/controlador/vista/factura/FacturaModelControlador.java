@@ -11,6 +11,9 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataLiquidacionCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
@@ -35,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -95,7 +99,26 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     }
     
     
-    
+    public static ComprobanteDataInterface obtenerComprobanteData(Factura factura)
+    {
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        {
+            ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+            return comprobanteData;
+        } else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
+        {
+            ComprobanteDataLiquidacionCompra comprobanteData=new ComprobanteDataLiquidacionCompra(factura);
+            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+            return comprobanteData;
+        } else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+            return comprobanteData;
+        }
+        return null;
+    }
         
     
     public List<DocumentoEnum>  buscarDocumentosFactura()
@@ -419,7 +442,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             return false;
         }
 
-            
+        facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));    
         //Validacion personalizada dependiendo de la logica de cada tipo de documento
         if (!validacionPersonalizadaPorModulos(facturaDetalle,documentoEnum)) {
                 return false;
@@ -429,7 +452,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         facturaDetalle.setTipoDocumentoEnum(tipoDocumentoEnumSeleccionado);
         
        
-        facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));
+        //facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));
         facturaDetalle.setDescripcion(interfaz.obtenerTxtDescripcion());
         //Calcula los valores dependiendo del iva para tener el valor unitario
         BigDecimal valorTotalUnitario = new BigDecimal(interfaz.obtenerTxtValorUnitario());
@@ -808,13 +831,43 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
     }
     
-    public static void imprimirComprobanteVenta(Factura facturaProcesando,String nombre,Boolean activarConfiguracionesImpresion,SessionCodefacInterface session,InterfazComunicacionPanel panelPadre)
+    /**
+     * TODO: Falta organizar mejor este codigo
+     * @param facturaProcesando
+     * @param nombre
+     * @param activarConfiguracionesImpresion
+     * @param session
+     * @param panelPadre 
+     */
+    public static void imprimirComprobanteVenta(Factura facturaProcesando,String nombre,Boolean activarConfiguracionesImpresion,SessionCodefacInterface session,InterfazComunicacionPanel panelPadre) 
     {
-
-        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);
+        TipoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, TipoReporteEnum.A2);
         
+        if(tipoReporteEnum!=null && tipoReporteEnum.equals(tipoReporteEnum.A4) && facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            try {
+                ComprobanteDataInterface dataFactura= obtenerComprobanteData(facturaProcesando);
+                ComprobanteServiceIf comprobanteService=ServiceFactory.getFactory().getComprobanteServiceIf();
+                byte[] byteReporte=comprobanteService.getReporteComprobanteComprobante(dataFactura, session.getUsuario(),facturaProcesando.getPreimpreso());
+                JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                panelPadre.crearReportePantalla(jasperPrint,facturaProcesando.getPreimpreso());
+                
+                //ComprobanteDataInterface dataFactura= obtenerComprobanteData(facturaProcesando);
+                //comprobanteService.generarRideComprobanteNoLegal(facturaProcesando,dataFactura, session.getUsuario());
+                
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
+        }
+
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);        
         Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
-        //InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
+        
         String nombreReporte="comprobante_venta.jrxml";
         
         
@@ -833,7 +886,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     //nombreReporte = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
                     nombreReporte = "comprobante_venta_ticket.jrxml";
                     //TODO:Terminar de implementar para los demas comprobantes
-                    TipoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, TipoReporteEnum.A2);
+                    
                     if(tipoReporteEnum!=null)
                     {
                         nombreReporte=tipoReporteEnum.getReporteJasperNombre();

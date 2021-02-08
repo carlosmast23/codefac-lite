@@ -57,6 +57,10 @@ public class Empresa implements Serializable {
     //private String celular;
     @Column(name = "FACEBOOK")
     private String facebook;
+    
+    @Column(name = "INSTAGRAM")
+    private String instagram;
+    
     @Column(name = "TEXTO1")
     private String adicional;
     
@@ -242,6 +246,14 @@ public class Empresa implements Serializable {
 
     public void setAgenteRetencionResolucion(String agenteRetencionResolucion) {
         this.agenteRetencionResolucion = agenteRetencionResolucion;
+    }
+
+    public String getInstagram() {
+        return instagram;
+    }
+
+    public void setInstagram(String instagram) {
+        this.instagram = instagram;
     }
     
     

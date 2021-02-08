@@ -122,7 +122,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-/**
+/**UtilidadesRmi.deserializar(byteReporte);
  *
  * @author Carlos
  */
@@ -743,6 +743,35 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         return null;
     }
     
+    public byte[] getReporteComprobanteComprobante(ComprobanteDataInterface comprobanteData,Usuario usuario,String claveAccesoPersonalizada) throws RemoteException
+    {
+        try {
+            //Metodos para obtener la empresa para hacer el pie de pagina con esos datos
+            //ClaveAcceso claveAccesoObj=new ClaveAcceso(claveAcceso);
+            //EmpresaService empresaService=new EmpresaService();
+            //Empresa empresa=empresaService.buscarPorIdentificacion( claveAccesoObj.identificacion);
+            //Empresa empresa=empresaService.buscarPorId(empresa.getId());
+            
+            //ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
+            //Cargar recursos para el reporte
+            //cargarDatosRecursos(comprobanteElectronico,empresa);
+            //mapReportePlantilla(empresa);
+            //cargarConfiguraciones(comprobanteElectronico,empresa);a
+            //comprobanteElectronico.setClaveAcceso(claveAcceso);
+            ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantes(comprobanteData, usuario);
+            if(claveAccesoPersonalizada!=null)
+            {
+                //comprobanteElectronico.setClaveAcceso(claveAccesoPersonalizada);
+                comprobanteElectronico.getComprobante().getInformacionTributaria().setClaveAcceso(claveAccesoPersonalizada);
+            }
+            JasperPrint jasperPrint=comprobanteElectronico.getPrintJasperComprobante(comprobanteElectronico.getComprobante(), null);
+            return UtilidadesRmi.serializar(jasperPrint);
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
       
     private Integer obtenerSecuencialLote(Empresa empresa) throws RemoteException,ServicioCodefacException
     {
@@ -1133,6 +1162,16 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantes(comprobanteData, usuario);
         procesarComprobanteExtend(comprobanteElectronico, comprobante, callbackClientObject);
 
+    }
+    
+    /**
+     * Artificio para poder generar otros documentos con el formato de los ride pero no legales por ejemplo notas de venta interna
+     */
+    public void generarRideComprobanteNoLegal(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobante,ComprobanteDataInterface comprobanteData,Usuario usuario) throws RemoteException
+    {
+        //comprobanteData.getComprobante().getInformacionTributaria().setClaveAcceso(comprobante.getPreimpreso());
+        ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantes(comprobanteData, usuario);
+        comprobanteElectronico.generarRideManual();
     }
     
     private void procesarComprobanteExtend(ComprobanteElectronicoService comprobanteElectronico,ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobanteOriginal,ClienteInterfaceComprobante callbackClientObject)
@@ -1704,6 +1743,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         parametros.put("pl_telefonos",(matriz.getTelefono()!=null)?matriz.getTelefono():matriz.getTelefono());        
         parametros.put("pl_celular", (matriz.getCelular()!=null)?matriz.getCelular():matriz.getCelular());
         parametros.put("pl_facebook",(empresa.getFacebook()!=null)?empresa.getFacebook():"");
+        parametros.put("pl_instagram",(empresa.getInstagram()!=null)?empresa.getInstagram():"");
         
         
         if (UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa.equals(TipoLicenciaEnum.GRATIS)) {
@@ -1755,14 +1795,23 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             
         }
         
+        //Agregar datos de las leyendas para las firmas
+        parametros.put("campoFirma1",ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.LEYENDA_FIRMA_FACTURA_1));
+        parametros.put("campoFirma2",ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.LEYENDA_FIRMA_FACTURA_2));
+        parametros.put("campoFirma3",ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.LEYENDA_FIRMA_FACTURA_3));
+        
         
         parametros.put("pl_url_img1", UtilidadImagen.castInputStreamToImage(input)); 
+        parametros.put("pl_img_instagram", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("instagram.png"))));
         parametros.put("pl_img_facebook", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png"))));
         parametros.put("pl_img_whatsapp", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png"))));
         parametros.put("pl_img_telefono", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png"))));
         
         JasperReport reportPiePagina=cargarRecursoJasperProxy(RecursoCodefac.JASPER,"pie_pagina.jrxml");
+        JasperReport reportFirmaFactura=cargarRecursoJasperProxy(RecursoCodefac.JASPER,"firmas_factura.jrxml");
+        
         parametros.put("pl_url_piepagina", reportPiePagina);
+        parametros.put("pl_firmas_factura", reportFirmaFactura);
         
         return parametros;
     }

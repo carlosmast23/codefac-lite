@@ -8,11 +8,13 @@ package ec.com.codesoft.codefaclite.impuestos.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoAtsEnum;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -52,8 +54,14 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
         tblCompras = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblAnulados = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        txtAlertasArea = new javax.swing.JTextArea();
         txtAnio = new javax.swing.JSpinner();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        cmbTipoAts = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
 
         btnGenerarXml.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnGenerarXml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/xml.png"))); // NOI18N
@@ -71,52 +79,55 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
         rdbVentas.setText("Ventas");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(rdbVentas, gridBagConstraints);
 
         rdbAnulados.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         rdbAnulados.setText("Anulados");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(rdbAnulados, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Año:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Mes:");
+        jLabel2.setText("Tipo ATS:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
 
         rdbCompras.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         rdbCompras.setText("Compras");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(rdbCompras, gridBagConstraints);
 
         btnConsultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnConsultar.setText("Consultar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnConsultar, gridBagConstraints);
 
         jScrollPane1.setViewportView(tblVentas);
@@ -131,9 +142,19 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
 
         jTabbedPane1.addTab("Anulados", jScrollPane3);
 
+        jPanel2.setLayout(new java.awt.GridLayout());
+
+        txtAlertasArea.setColumns(20);
+        txtAlertasArea.setRows(5);
+        jScrollPane4.setViewportView(txtAlertasArea);
+
+        jPanel2.add(jScrollPane4);
+
+        jTabbedPane1.addTab("Alertas", jPanel2);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -142,19 +163,43 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
         jPanel1.add(jTabbedPane1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtAnio, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jComboBox1, gridBagConstraints);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel3.setText("Mes:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbTipoAts, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText("Mes:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel4, gridBagConstraints);
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -163,13 +208,18 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultar;
     private javax.swing.JButton btnGenerarXml;
+    private javax.swing.JComboBox<TipoAtsEnum> cmbTipoAts;
     private javax.swing.JComboBox<MesEnum> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JRadioButton rdbAnulados;
     private javax.swing.JRadioButton rdbCompras;
@@ -177,6 +227,7 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
     private javax.swing.JTable tblAnulados;
     private javax.swing.JTable tblCompras;
     private javax.swing.JTable tblVentas;
+    private javax.swing.JTextArea txtAlertasArea;
     private javax.swing.JSpinner txtAnio;
     // End of variables declaration//GEN-END:variables
 
@@ -220,12 +271,23 @@ public abstract class AtsPanel extends ControladorCodefacInterface {
     public JRadioButton getRdbVentas() {
         return rdbVentas;
     }
-    
-    
-    
-    
-    
-    
 
+    public JComboBox<TipoAtsEnum> getCmbTipoAts() {
+        return cmbTipoAts;
+    }
+
+    public void setCmbTipoAts(JComboBox<TipoAtsEnum> cmbTipoAts) {
+        this.cmbTipoAts = cmbTipoAts;
+    }
+
+    public JTextArea getTxtAlertasArea() {
+        return txtAlertasArea;
+    }
+
+    public void setTxtAlertasArea(JTextArea txtAlertasArea) {
+        this.txtAlertasArea = txtAlertasArea;
+    }
+    
+    
     
 }

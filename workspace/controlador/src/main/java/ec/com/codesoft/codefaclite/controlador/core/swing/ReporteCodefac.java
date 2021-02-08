@@ -323,6 +323,7 @@ public class ReporteCodefac {
         parametros.put("pl_telefonos", sessionCodefac.getMatriz().getTelefono());
         parametros.put("pl_celular", sessionCodefac.getMatriz().getCelular());
         parametros.put("pl_facebook", sessionCodefac.getEmpresa().getFacebook());
+        parametros.put("pl_instagram",(sessionCodefac.getEmpresa().getInstagram()!=null)?sessionCodefac.getEmpresa().getInstagram():"");
         parametros.put("pl_ruc", sessionCodefac.getEmpresa().getIdentificacion());
         
         /**

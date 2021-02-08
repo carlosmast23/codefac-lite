@@ -565,7 +565,8 @@ public class Cartera implements Serializable{
     public enum TipoOrdenamientoEnum
     {
         POR_PREIMPRESO,
-        POR_RAZON_SOCIAL;
+        POR_RAZON_SOCIAL,
+        POR_FECHA;
     }
     
     /**

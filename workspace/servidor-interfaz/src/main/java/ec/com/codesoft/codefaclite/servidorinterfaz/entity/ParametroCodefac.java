@@ -188,6 +188,14 @@ public class ParametroCodefac implements Serializable {
      * Mostrar titulo facturacion fisica
      */
     public static final String MOSTRAR_TITULO_FACT_FISICA="mostrar_titulo_fact_fisica";
+    
+    /**
+     * Parametros para la firma de la factura
+     */
+    public static final String LEYENDA_FIRMA_FACTURA_1 = "leyenda_firma_factura_1";
+    public static final String LEYENDA_FIRMA_FACTURA_2 = "leyenda_firma_factura_2";
+    public static final String LEYENDA_FIRMA_FACTURA_3 = "leyenda_firma_factura_3";
+    
 
     @Id
     @Column(name = "ID")

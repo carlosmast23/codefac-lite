@@ -84,6 +84,9 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         }else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
         {
             return ComprobanteEnum.LIQUIDACION_COMPRA.getCodigo();
+        }else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            return ComprobanteEnum.NOTA_VENTA_INTERNA.getCodigo();
         }
         return null;
     }
@@ -132,10 +135,11 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
 
     @Override
     public ComprobanteElectronico getComprobante() {
+                
         ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobante = null;
 
         InformacionComprobanteAbstract informacionComprobante = null;
-        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
         {
             informacionComprobante = new InformacionFactura();
             comprobante=new FacturaComprobante();
@@ -144,7 +148,6 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
             informacionComprobante=new InformacionLiquidacionCompra();
             comprobante=new LiquidacionCompraComprobante();
         }
-        
         
         llenarInformacionComprobante(new InfoComprobante(informacionComprobante) , factura);
         

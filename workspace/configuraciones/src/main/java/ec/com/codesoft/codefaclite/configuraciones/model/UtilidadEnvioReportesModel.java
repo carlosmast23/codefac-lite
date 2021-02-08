@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoArchivoEnu
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoAtsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.UtilidadesServidorXml;
@@ -283,8 +284,10 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
             String establecimiento=session.getSucursal().getCodigoSucursalFormatoTexto();
             int anio=(int)(getTxtAnioAts().getValue());
             MesEnum mesEnum=(MesEnum)(getCmbMesAts().getSelectedItem());
+            TipoAtsEnum tipoAtsEnum= (TipoAtsEnum) getCmbTipoAts().getSelectedItem();
             
             AtsJaxb atsJaxb = ServiceFactory.getFactory().getAtsServiceIf().consultarAts(
+                    tipoAtsEnum,
                     anio,
                     mesEnum,
                     session.getEmpresa(),

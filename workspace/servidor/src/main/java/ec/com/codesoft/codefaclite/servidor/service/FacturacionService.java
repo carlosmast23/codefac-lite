@@ -227,6 +227,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     prestamoService.grabarSinTransaccion(prestamo, factura);
                 }
                 
+                
                 //Despues de grabar genero inmediatamente un flush para evitar perder la transacción por causas como perdida de energia
                 entityManager.flush();
             }
@@ -257,7 +258,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             try
             {
                 //´TODO: Por el momento todas las facturas en lote se van a facturar con la fecha actual
-                factura.factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
+                //factura.factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
                 
                 Factura facturaGrabada=grabar(factura.factura,factura.prestamo,factura.carteraPrestamo);
                 respuesta.agregarFacturaProcesada(factura.factura);
@@ -352,6 +353,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         {
             proforma.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
             entityManager.merge(proforma);
+        }
+        
+        //Si es nota de venta generar un número de autorización cualquiera
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            factura.setClaveAcceso(factura.getPuntoEstablecimiento()+""+factura.getPuntoEmision()+""+factura.getSecuencial()+"");
         }
 
         ComprobantesService servicioComprobante = new ComprobantesService();
@@ -450,6 +457,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         });
     }
     
+    /**
+     * Metodo que permite grabar la cartera y generar el cruce automatico si es el caso para cerrar la cuenta
+     * @param factura documento a procesar
+     * @param carteraParametro objecto que tiene datos de configuracion para el cruce
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
     private void grabarCarteraSinTransaccion(Factura factura,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
@@ -676,7 +690,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         Kardex kardexTemp=kardexService.buscarKardexPorProducto(producto);
                         if(kardexTemp!=null)
                         {
-                            BigDecimal costoTotalDetalle=kardexTemp.getPrecioPromedio().multiply(detalle.getCantidad());
+                            BigDecimal costoTotalDetalle=kardexTemp.getCostoPromedio().multiply(detalle.getCantidad());
                             costoFactura=costoFactura.add(costoTotalDetalle);
                         }
                     }

@@ -92,9 +92,12 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         }else if(tipoOrdenamientoEnum.equals(tipoOrdenamientoEnum.POR_RAZON_SOCIAL))
         {
             orderBy=" ORDER BY c.persona.razonSocial ";
+        }else if(tipoOrdenamientoEnum.equals(tipoOrdenamientoEnum.POR_FECHA))
+        {
+            orderBy=" ORDER BY c.fechaEmision desc ";
         }
-        /*Cartera c;
-        c.getPuntoEmision();
+        //Cartera c; c.getFechaEmision()
+        /*c.getPuntoEmision();
         c.getPuntoEstablecimiento();
         c.getSecuencial();
         c.getPersona().getRazonSocial();*/
@@ -212,7 +215,14 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(1, cartera);
         Number sumatoria=(Number) query.getSingleResult();
-        return new BigDecimal(sumatoria.toString());
+        if(sumatoria==null)
+        {
+            return BigDecimal.ZERO;
+        }
+        else
+        {
+            return new BigDecimal(sumatoria.toString());
+        }
     }
     
     public List<Cartera> obtenerCarteraPorCobrarFacade(Persona cliente,Empresa empresa)
