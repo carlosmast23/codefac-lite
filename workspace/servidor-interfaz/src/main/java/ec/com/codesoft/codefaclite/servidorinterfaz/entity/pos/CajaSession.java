@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -86,14 +88,6 @@ public class CajaSession implements Serializable
         this.id = id;
     }
 
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
     public Timestamp getFechaHoraApertura() {
         return fechaHoraApertura;
     }
@@ -126,14 +120,6 @@ public class CajaSession implements Serializable
         this.valorCierre = valorCierre;
     }
 
-    public String getEstadoCierreCaja() {
-        return estadoCierreCaja;
-    }
-
-    public void setEstadoCierreCaja(String estadoCierreCaja) {
-        this.estadoCierreCaja = estadoCierreCaja;
-    }
-
     public Caja getCaja() {
         return caja;
     }
@@ -164,6 +150,54 @@ public class CajaSession implements Serializable
 
     public void setVenta(Venta venta) {
         this.venta = venta;
+    }
+    
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    public CajaEnum getEstadoEnum(){
+        return CajaEnum.getEnum(estado);
+    }
+    
+    public void setEstadoEnum(CajaEnum estadoCajaEnum){
+        if(estadoCajaEnum == null)
+        {
+            this.estado = null;
+        }
+        else
+        {
+            this.estado = estadoCajaEnum.getEstado();
+        }
+    }
+            
+     public String getEstadoCierreCaja() {
+        return estadoCierreCaja;
+    }
+
+    public void setEstadoCierreCaja(String estadoCierreCaja) {
+        this.estadoCierreCaja = estadoCierreCaja;
+    }
+    
+    public CajaSessionEnum getEstadoSessionEnum()
+    {
+        return CajaSessionEnum.getEnum(estadoCierreCaja);
+    }
+    
+    public void setEstadoSessionEnum(CajaSessionEnum estadoCajaSessionEnum)
+    {
+        if(estadoCajaSessionEnum == null)
+        {
+            estadoCierreCaja = null;
+        }
+        else
+        {
+            estadoCierreCaja = estadoCajaSessionEnum.getEstado();
+        }
     }
     
     /*

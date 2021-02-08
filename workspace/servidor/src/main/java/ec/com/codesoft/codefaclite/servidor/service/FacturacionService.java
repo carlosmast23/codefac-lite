@@ -213,6 +213,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 validacionInicialFacturar(factura,CrudEnum.CREAR);
+                agregarDatosParaCajaSession();
                 grabarSinTransaccion(factura,carteraParametro);
                 
                 /**
@@ -832,5 +833,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         {
             throw new ServicioCodefacException("No se puede hacer más de 2 facturas con el mismo pedido");
         }
+    }
+    
+    private void agregarDatosParaCajaSession()
+    {
+        
     }
 }

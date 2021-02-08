@@ -14,11 +14,13 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -33,7 +35,17 @@ import java.util.logging.Logger;
  */
 public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSesionModelControlador.CommonIf, CajaSesionModelControlador.SwingIf, CajaSesionModelControlador.WebIf> implements VistaCodefacIf
 {
-
+    private CajaSession cajaSession;
+    
+    private List<CajaEnum> estadosList;
+    private List<CajaSessionEnum> estadoCajaSessionList;
+    private List<CajaPermiso> cajasList;
+    
+    public java.util.Date fechaApertura;
+    public java.util.Date horaApertura;
+    public java.util.Date fechaCierre;
+    public java.util.Date horaCierre;
+    
     public CajaSesionModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CajaSesionModelControlador.CommonIf interfaz, TipoVista tipoVista) 
     {
         super(mensajeVista, session, interfaz, tipoVista);
@@ -41,26 +53,33 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        getInterfaz().setCajaSession(new CajaSession());
-        CajaEnum[] estadosCaja = CajaEnum.values();
+        cajaSession = new CajaSession();
+        
+        cajaSession.setUsuario(this.session.getUsuario());
+        cajaSession.setEstadoEnum(CajaEnum.ACTIVO);
+        cajaSession.setEstadoSessionEnum(CajaSessionEnum.ACTIVO);
+        
+        estadosList = UtilidadesLista.arrayToList(CajaEnum.values());
+        estadoCajaSessionList = UtilidadesLista.arrayToList(CajaSessionEnum.values());
+        
+        if(this.session.getUsuario().getCajasPermisoUsuario() != null)
+        {
+            cajasList = this.session.getUsuario().getCajasPermisoUsuario();
+        }
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
-        getInterfaz().setCajaSession(new CajaSession());
+        this.iniciar();
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-         try
+        try
         {
-            if(getInterfaz().getCajaSession()== null){
-                throw new ServicioCodefacException("Caja sesión nula");
-            }         
-            //Datos
-            obtenerDatos();
             //Grabar
-            ServiceFactory.getFactory().getCajaSesionServiceIf().grabar(getInterfaz().getCajaSession());
+            setearDatos();
+            ServiceFactory.getFactory().getCajaSesionServiceIf().grabar(cajaSession);
             //Mensaje
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         }
@@ -72,7 +91,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }   
+        }      
     }
 
     @Override
@@ -81,7 +100,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
             //Datos
             obtenerDatos();
             //Editar
-            ServiceFactory.getFactory().getCajaSesionServiceIf().editar(getInterfaz().getCajaSession());
+            ServiceFactory.getFactory().getCajaSesionServiceIf().editar(cajaSession);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(CajaSesionModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -92,7 +111,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         try {
-            ServiceFactory.getFactory().getCajaSesionServiceIf().eliminar(getInterfaz().getCajaSession());
+            ServiceFactory.getFactory().getCajaSesionServiceIf().eliminar(cajaSession);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(CajaSesionModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -141,55 +160,126 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     }
     
     public void obtenerDatos(){
-        //this.interfaz.getCajaSession().setArqueoCaja();
-        //this.interfaz.getCajaSession().setCaja();
-        this.getInterfaz().getCajaSession().setEstado(this.getInterfaz().getCajaSession().getEstado());
-        this.getInterfaz().getCajaSession().setEstadoCierreCaja(this.getInterfaz().getCajaSession().getEstadoCierreCaja());
-        //this.interfaz.getCajaSession().setFechaHoraApertura();
-        //this.interfaz.getCajaSession().setUsuario(usuario);
-        this.getInterfaz().getCajaSession().setValorApertura(this.getInterfaz().getValorApertura());
-        this.getInterfaz().getCajaSession().setValorCierre(this.getInterfaz().getValorCierre());
+        //this.getInterfaz().getCajaSession().setEstado(this.getInterfaz().getCajaSession().getEstado());
+        //this.getInterfaz().getCajaSession().setEstadoCierreCaja(this.getInterfaz().getCajaSession().getEstadoCierreCaja());
+        //this.getInterfaz().getCajaSession().setValorApertura(this.getInterfaz().getValorApertura());
+        //this.getInterfaz().getCajaSession().setValorCierre(this.getInterfaz().getValorCierre());
     }
-    
+   
     /**
      * Agregado interfaces 
      */
     public interface CommonIf
     {
-        public void iniciar();
-        
-        public CajaSession getCajaSession();
-        public void setCajaSession(CajaSession cajaSession);
-        
-        public BigDecimal getValorApertura();
-        public void setValorApertura(BigDecimal valorApertura);
-        public BigDecimal getValorCierre();
-        public void setValorCierre(BigDecimal valorCierre);
-        
-        public Date getFechaApertura();
-        public void setFechaApertura(Date fechaApertura);
-        public Date getHoraApertura();
-        public void setHoraApertura(Date fechaApertura);
-        public Date getFechaCierre();
-        public void setFechaCierre(Date fechaCierre);
-        public Date getHoraCierre();
-        public void setHoraCierre(Date fechaCierre);
-        
-        public CajaSessionEnum getEstadoCajaSesion();
-        public void setEstadoCajaSesion(CajaSessionEnum cajaSessionEnum);
-        public CajaSessionEnum getEstadoCierreCajaSesion();
-        public void setEstadoCierreCajaSesion(CajaSessionEnum cajaSessionEnum);
         
     }
     
     public interface SwingIf extends CajaSesionModelControlador.CommonIf
     {
-        
     }
     
     public interface WebIf extends CajaSesionModelControlador.CommonIf
     {
-        
     }
     
+    ////////////////////////////////////////////////////////////////////////////
+    //                      GET AND SET
+    ////////////////////////////////////////////////////////////////////////////
+
+    public CajaSession getCajaSession() {
+        return cajaSession;
+    }
+
+    public void setCajaSession(CajaSession cajaSession) {
+        this.cajaSession = cajaSession;
+    }
+
+    public List<CajaEnum> getEstadosList() {
+        return estadosList;
+    }
+
+    public void setEstadosList(List<CajaEnum> estadosList) {
+        this.estadosList = estadosList;
+    }
+
+    public List<CajaSessionEnum> getEstadoCajaSessionList() {
+        return estadoCajaSessionList;
+    }
+
+    public void setEstadoCajaSessionList(List<CajaSessionEnum> estadoCajaSessionList) {
+        this.estadoCajaSessionList = estadoCajaSessionList;
+    }
+
+    public List<CajaPermiso> getCajasList() {
+        return cajasList;
+    }
+
+    public void setCajasList(List<CajaPermiso> cajasList) {
+        this.cajasList = cajasList;
+    }
+
+    public java.util.Date getFechaApertura() {
+        return fechaApertura;
+    }
+
+    public void setFechaApertura(java.util.Date fechaApertura) {
+        this.fechaApertura = fechaApertura;
+    }
+
+    public java.util.Date getHoraApertura() {
+        return horaApertura;
+    }
+
+    public void setHoraApertura(java.util.Date horaApertura) {
+        this.horaApertura = horaApertura;
+    }
+
+    public java.util.Date getFechaCierre() {
+        return fechaCierre;
+    }
+
+    public void setFechaCierre(java.util.Date fechaCierre) {
+        this.fechaCierre = fechaCierre;
+    }
+
+    public java.util.Date getHoraCierre() {
+        return horaCierre;
+    }
+
+    public void setHoraCierre(java.util.Date horaCierre) {
+        this.horaCierre = horaCierre;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Funciones
+    ////////////////////////////////////////////////////////////////////////////
+    
+    public void iniciarCajaSesion() 
+    {
+        if(cajaSession.getEstadoEnum() == null)
+        {
+            fechaApertura = new java.util.Date();
+            horaApertura = new java.util.Date(); 
+            cajaSession.setFechaHoraApertura(UtilidadesFecha.castDateSqlToTimeStampSql(UtilidadesFecha.FechaHoraPorUnion( UtilidadesFecha.castDateUtilToSql(fechaApertura),  UtilidadesFecha.castDateUtilToSql(horaApertura))));
+            
+            cajaSession.setEstadoSessionEnum(CajaSessionEnum.ACTIVO);
+        }
+    }
+
+    public void cerrarCajaSesion() 
+    {
+        if(cajaSession.getEstadoEnum().equals(CajaEnum.ACTIVO))
+        {
+            fechaCierre = new java.util.Date();
+            horaCierre = new java.util.Date();
+            cajaSession.setFechaHoraApertura(UtilidadesFecha.castDateSqlToTimeStampSql(UtilidadesFecha.FechaHoraPorUnion( UtilidadesFecha.castDateUtilToSql(fechaApertura),  UtilidadesFecha.castDateUtilToSql(horaApertura))));
+            
+            cajaSession.setEstadoSessionEnum(CajaSessionEnum.FINALIZADO);
+        }
+    }
+    
+    private void setearDatos() 
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
@@ -20,13 +21,15 @@ import java.util.Vector;
  *
  * @author Robert
  */
-public class CajaBusquedaDialogo implements InterfaceModelFind<Caja>, InterfacesPropertisFindWeb
+public class CajaBusquedaDialogo implements InterfaceModelFind<Caja>
 {
     //private Sucursal sucursal;
     //private PuntoEmision puntoEmision;
+    private SessionCodefacInterface session;
     
-    public CajaBusquedaDialogo(SessionCodefacInterface sessionCodefac) {
-        
+    public CajaBusquedaDialogo(SessionCodefacInterface session) 
+    {
+        this.session = session;
     }
 
     @Override
@@ -42,10 +45,12 @@ public class CajaBusquedaDialogo implements InterfaceModelFind<Caja>, Interfaces
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT c FROM Caja c WHERE ";
-        queryString+=" ( LOWER(c.nombre) like ?1 and (c.estado) like ?2 )";
+        //queryString+=" ( LOWER(c.nombre) like ?1 and (c.estado) like ?2 and (c.sucursal.empresa) = ?3)";
+        queryString+=" ( LOWER(c.nombre) like ?1 and (c.estado) like ?2)";
         QueryDialog queryDialog=new QueryDialog(queryString);
-        queryDialog.agregarParametro(1,filter);
-        queryDialog.agregarParametro(2,GeneralEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1, filter);
+        queryDialog.agregarParametro(2, GeneralEnumEstado.ACTIVO.getEstado());
+        //queryDialog.agregarParametro(3, this.session.getEmpresa());
         return queryDialog;
     }
 

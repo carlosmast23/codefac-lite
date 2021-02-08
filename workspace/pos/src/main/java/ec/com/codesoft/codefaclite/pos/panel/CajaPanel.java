@@ -221,7 +221,7 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
         this.jTextNombre = jTextNombre;
     }
     
-    //@ComboBoxBinding(source = "", valueSelect = "controlador.Caja.PuntoEmision")
+    @ComboBoxBinding(source = "", valueSelect = "controlador.Caja.PuntoEmision")
     public JComboBox<PuntoEmision> getjComboPuntoEmision() {
         return jComboPuntoEmision;
     }

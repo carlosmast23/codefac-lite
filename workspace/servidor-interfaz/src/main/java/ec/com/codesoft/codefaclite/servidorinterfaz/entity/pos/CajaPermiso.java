@@ -129,7 +129,6 @@ public class CajaPermiso implements Serializable
 
     @Override
     public String toString() {
-        return "" + caja.getNombre();
+        return "" + caja.getNombre() + " - " + (caja.getDescripcion() != null ? caja.getDescripcion(): "");
     }
-
 }

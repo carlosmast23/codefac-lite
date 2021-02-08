@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.configuraciones.busqueda.PerfilBusquedaDialog
 import ec.com.codesoft.codefaclite.configuraciones.busqueda.PerfilUsuarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.busqueda.PuntoEmisionBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.panel.PerfilUsuarioPanel;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CajaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -23,6 +24,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
@@ -46,7 +49,6 @@ import javax.swing.DefaultListModel;
 public class PerfilUsuarioModel extends PerfilUsuarioPanel{
     
     private Usuario usuario;
-    
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -240,6 +242,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getTxtParametrosComprobantesElectronicos().setText(usuario.getParametrosComprobatesElectronicos());
         cargarListaPerfilesUsuario();
         cargarListaPuntosEmision();
+        cargarListaCajaPermiso();
         /**
          * Filtrar factura por usuario
          */
@@ -256,6 +259,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getTxtParametrosComprobantesElectronicos().setText("");
         cargarListaPerfilesUsuario();
         cargarListaPuntosEmision();
+        cargarListaCajaPermiso();
         getCmbEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
         
     }
@@ -326,7 +330,6 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             }
         });
         
-        
         getBtnAgregarPerfil().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -349,6 +352,28 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                     }
                 }
                 
+            }
+        });
+        
+        getBtnAgregarCaja().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CajaBusquedaDialogo cajaDialogo = new CajaBusquedaDialogo(session);
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(cajaDialogo);
+                buscarDialogoModel.setVisible(true);
+                Caja cajaTemp = (Caja) buscarDialogoModel.getResultado();
+                if(cajaTemp != null)
+                {
+                    if(usuario != null)
+                    {
+                        CajaPermiso cajaPermiso = new CajaPermiso();
+                        cajaPermiso.setCaja(cajaTemp);
+                        cajaPermiso.setUsuario(usuario);
+                        cajaPermiso.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                        usuario.addCajaPermisoUsuario(cajaPermiso);
+                        cargarListaCajaPermiso();
+                    }
+                }
             }
         });
         
@@ -380,6 +405,19 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                 
             }
         });
+        
+        getBtnQuitarCaja().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CajaPermiso cajaPermisoUsuario = getjListCajaPermiso().getSelectedValue();
+                if(cajaPermisoUsuario != null)
+                {
+                    cajaPermisoUsuario.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                    cargarListaCajaPermiso();
+                }
+            }
+        });
+        
     }
             
     private void cargarListaPuntosEmision()
@@ -398,6 +436,22 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         }
         
         getjListPuntoEmision().setModel(listaModel);
+    }
+    
+    private void cargarListaCajaPermiso()
+    {
+        DefaultListModel listaModelCajaPermiso = new DefaultListModel();
+        if(usuario != null && usuario.getCajasPermisoUsuario() != null)
+        {
+            usuario.getCajasPermisoUsuario().forEach( cp ->
+            {
+                if(cp.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                {
+                    listaModelCajaPermiso.addElement(cp);
+                }
+            });
+        }
+        getjListCajaPermiso().setModel(listaModelCajaPermiso);
     }
     
     private void cargarListaPerfilesUsuario()

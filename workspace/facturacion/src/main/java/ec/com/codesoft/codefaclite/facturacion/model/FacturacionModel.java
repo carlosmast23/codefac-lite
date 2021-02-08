@@ -171,6 +171,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
@@ -213,7 +214,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private java.util.Date fechaMax;
     private java.util.Date fechaMin;
     //private Empleado vendedor;
-
+    
     /**
      * Mapa de datos adicionales que se almacenan temporalmente y sirven para la
      * facturacion electronica como por ejemplo el correo
@@ -253,9 +254,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
         initModelTablaDatoAdicional();
-           
         //setearVariablesIniciales();
-
     }
 
     public Factura getFactura() {
@@ -953,7 +952,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
     }
     
-    private void agregarRubroAcademico()
+    private void agregarRubroAcademico() 
     {
         RubroEstudianteBusqueda rubroBusquedaDialogo = new RubroEstudianteBusqueda(estudiante);
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(rubroBusquedaDialogo);

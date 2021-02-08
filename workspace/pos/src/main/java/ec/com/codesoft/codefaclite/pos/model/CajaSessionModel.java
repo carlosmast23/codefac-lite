@@ -6,6 +6,9 @@
 package ec.com.codesoft.codefaclite.pos.model;
 
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaSesionModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -26,9 +29,10 @@ import java.util.Map;
  * @author Robert
  */
 //public class CajaSessionModel extends CajaSessionPanel implements CajaSesionModelControlador.Interface
-public class CajaSessionModel extends CajaSessionPanel
+public class CajaSessionModel extends CajaSessionPanel implements ControladorVistaIf, CajaSesionModelControlador.SwingIf
 {
-
+    private CajaSesionModelControlador controlador = new CajaSesionModelControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
+    
     @Override
     public void iniciar() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -101,6 +105,9 @@ public class CajaSessionModel extends CajaSessionPanel
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public ModelControladorAbstract getControladorVista() {
+        return controlador;
+    }
 
-    
 }

@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import javax.swing.JButton;
@@ -79,6 +80,13 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         jScrollPane2 = new javax.swing.JScrollPane();
         jListPuntoEmision = new javax.swing.JList<>();
         lblEspacio3 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jListCajaPermiso = new javax.swing.JList<>();
+        btnAgregarCaja = new javax.swing.JButton();
+        btnQuitarCaja = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
 
         jLabel7.setText("jLabel7");
 
@@ -369,6 +377,62 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
 
         jTabbedPane1.addTab("Puntos de Emisión Permisos", jPanel2);
 
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel12.setText("Caja:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel12, gridBagConstraints);
+
+        jListCajaPermiso.setMinimumSize(new java.awt.Dimension(100, 80));
+        jListCajaPermiso.setPreferredSize(new java.awt.Dimension(100, 80));
+        jScrollPane3.setViewportView(jListCajaPermiso);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jScrollPane3, gridBagConstraints);
+
+        btnAgregarCaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarCaja.setToolTipText("Agregar un perfil al usuario");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(btnAgregarCaja, gridBagConstraints);
+
+        btnQuitarCaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
+        btnQuitarCaja.setToolTipText("Quitar el peril");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(btnQuitarCaja, gridBagConstraints);
+
+        jLabel13.setText("             ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.ipady = 1;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel4.add(jLabel13, gridBagConstraints);
+
+        jTabbedPane1.addTab("Caja Permisos", jPanel4);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -376,9 +440,11 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarCaja;
     private javax.swing.JButton btnAgregarPerfil;
     private javax.swing.JButton btnAgregarPuntoEmision;
     private javax.swing.JButton btnBuscarEmpleado;
+    private javax.swing.JButton btnQuitarCaja;
     private javax.swing.JButton btnQuitarPerfil;
     private javax.swing.JButton btnQuitarPuntoEmision;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
@@ -386,6 +452,8 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -394,13 +462,16 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JList<CajaPermiso> jListCajaPermiso;
     private javax.swing.JList<String> jListPerfiles;
     private javax.swing.JList<PuntoEmisionUsuario> jListPuntoEmision;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblBlanco;
     private javax.swing.JLabel lblClaveAnterior;
@@ -554,5 +625,29 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
 
     public void setjComboBoxFiltrarFacturas(JComboBox<EnumSiNo> jComboBoxFiltrarFacturas) {
         this.jComboBoxFiltrarFacturas = jComboBoxFiltrarFacturas;
+    }
+
+    public JButton getBtnAgregarCaja() {
+        return btnAgregarCaja;
+    }
+
+    public void setBtnAgregarCaja(JButton btnAgregarCaja) {
+        this.btnAgregarCaja = btnAgregarCaja;
+    }
+
+    public JButton getBtnQuitarCaja() {
+        return btnQuitarCaja;
+    }
+
+    public void setBtnQuitarCaja(JButton btnQuitarCaja) {
+        this.btnQuitarCaja = btnQuitarCaja;
+    }
+
+    public JList<CajaPermiso> getjListCajaPermiso() {
+        return jListCajaPermiso;
+    }
+
+    public void setjListCajaPermiso(JList<CajaPermiso> jListCajaPermiso) {
+        this.jListCajaPermiso = jListCajaPermiso;
     }
 }
