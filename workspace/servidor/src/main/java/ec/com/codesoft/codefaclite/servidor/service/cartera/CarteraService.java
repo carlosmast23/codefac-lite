@@ -105,7 +105,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
          * ===========================================================
          *                   VALIDAR LA CARTERA
          * ===========================================================
-         */
+         */        
         validacionCartera(cartera,cruces);
         
         //TODO: Solucion para no tener problemas con las referencias de datos similares
@@ -129,6 +129,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
          * ==================================================================
          */
         grabarDetallesCarteraSinTransaccion(cartera, cruces);
+        
        
         //Actuaizar Saldo de las entidades de cartera afectada en los cruces
         actualizarSaldosCarteraSinTrasaccion(cruces);
@@ -139,8 +140,10 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     
     private void grabarDetallesCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
     {
+        //BigDecimal valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(cartera);
         List<CarteraDetalle> detallesOriginalTemporalCartera=cartera.getDetalles();
         cartera.setDetalles(null); //Elimino temporalmente los detalles para no grabar 
+        cartera.setCruces(null); //Anulo la referencia a los cruces por que se estan grabando 2 veces los cruces
         
         //Grabo o edito la cartera dependiendo si tiene o no un id generado porque necesito para enlazar los detalles
         if(cartera.getId()==null)
@@ -153,6 +156,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
         //TODO: Actualizo las referencias de los datos guardos
         entityManager.flush();
+        //valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(cartera);
 
         
          Map<Long, CarteraDetalle> mapDetallesGrabados = new HashMap<Long, CarteraDetalle>();
@@ -197,6 +201,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
 
         }
         
+        //valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(cartera);
+        
         //Grabo la nueva referencia de los datos ya modificados
         cartera.setDetalles(detallesCarteraTmp);
 
@@ -215,12 +221,14 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             if(carteraCruce.getId()==null)
             {
                 entityManager.persist(carteraCruce); //Si no existe la referencia solo le grabo
+                entityManager.flush();
             }
             else
             {
                 entityManager.merge(carteraCruce); //Si existe la referencia solo le edito
             }
         }
+        //valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(cartera);
         
     }
     
@@ -228,7 +236,10 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     {
         for (CarteraCruce cruce : cruces) 
         {
-            cruce.setCarteraDetalle(cruce.getCarteraDetalle().clone());
+            if(cruce.getCarteraDetalle().getId()==null || cruce.getCarteraDetalle().getId()<0 )
+            {
+                cruce.setCarteraDetalle(cruce.getCarteraDetalle().clone());
+            }
         }
         
     }

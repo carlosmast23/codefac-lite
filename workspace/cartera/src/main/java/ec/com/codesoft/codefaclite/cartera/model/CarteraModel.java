@@ -139,9 +139,11 @@ public class CarteraModel extends CarteraPanel{
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (RemoteException ex) {
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         }
     }
 
