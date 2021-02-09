@@ -1320,7 +1320,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             {
                 respuestaList.add(new FacturaParametro(facturaTmp,null, crearDatosPrestamo()));
             }        
-        }    
+        }
+        else
+        {
+            throw new ServicioCodefacException("Falta configurar el número de detalles para facturas manuales");
+        }
         return respuestaList;
     }
     
