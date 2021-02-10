@@ -188,7 +188,7 @@ public class StockMinimoModel extends StockMinimoPanel{
                      for (Object[] objeto : listaStock) 
                      {
                         Producto producto = (Producto) objeto[0];
-                        Integer cantidad = (Integer) objeto[1];
+                        BigDecimal cantidad = (BigDecimal) objeto[1];
                         
                         StockMinimoData data=new StockMinimoData();
                         
