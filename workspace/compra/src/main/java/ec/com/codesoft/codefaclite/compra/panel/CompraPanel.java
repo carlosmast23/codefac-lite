@@ -1074,7 +1074,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = ExpresionRegular.soloNumeros,nombre = "Autorización")
+    //@ValidacionCodefacAnotacion(requerido=true ,expresionRegular = ExpresionRegular.soloNumeros,nombre = "Autorización")
     public JTextField getTxtAutorizacion() {
         return txtAutorizacion;
     }
@@ -1238,17 +1238,17 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         this.btnCrearProducto = btnCrearProducto;
     }
 
-    @ValidacionCodefacAnotacion(requerido = true)
+    //@ValidacionCodefacAnotacion(requerido = true)
     public JTextField getTxtEstablecimientoCompra() {
         return txtEstablecimientoCompra;
     }
 
-    @ValidacionCodefacAnotacion(requerido = true)
+    //@ValidacionCodefacAnotacion(requerido = true)
     public JTextField getTxtPuntoEmisionCompra() {
         return txtPuntoEmisionCompra;
     }
 
-    @ValidacionCodefacAnotacion(requerido = true)
+    //@ValidacionCodefacAnotacion(requerido = true)
     public JTextField getTxtSecuencialCompra() {
         return txtSecuencialCompra;
     }

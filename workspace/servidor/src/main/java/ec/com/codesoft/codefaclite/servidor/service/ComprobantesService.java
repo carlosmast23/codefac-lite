@@ -1504,6 +1504,19 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         infoTributaria.setRuc(empresa.getIdentificacion());
         infoTributaria.setSecuencial(comprobanteData.getSecuencial());
         infoTributaria.setTipoEmision(ComprobanteElectronico.MODO_FACTURACION_NORMAL);
+        
+        //Asignar datos cuando es microempresa
+        if(empresa.getContribuyenteRegimenMicroempresasEnum()!=null && empresa.getContribuyenteRegimenMicroempresasEnum().equals(EnumSiNo.SI))
+        {
+            infoTributaria.asignarRegimenMicroempresas();
+        }
+        
+        //Asignar dato cuando es agente de retencion
+        if(empresa.getAgenteRetencionResolucion()!=null && !empresa.getAgenteRetencionResolucion().trim().isEmpty())
+        {
+            infoTributaria.setAgenteRetencion(empresa.getAgenteRetencionResolucion());
+        }
+        
         return infoTributaria;
     }
 

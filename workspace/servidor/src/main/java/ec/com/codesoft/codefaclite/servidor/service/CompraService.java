@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.sri.ComprobantesElectronicosParametros;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
@@ -71,6 +72,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     @Override
     public void grabarCompra(Compra compra,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
+        llenarDatosPorDefecto(compra);
         validarDatosCompra(compra);
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -95,8 +97,86 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         //TODO: Falta retornar el tipo de dato por ejemplo en los dialogos necesita obtener el nuevo dato modificado.
     }
     
+    private void llenarDatosPorDefecto(Compra compra) throws RemoteException, ServicioCodefacException
+    {
+        //Para documento de nota de venta interna ingreso unos datos adicionales automaticos
+        DocumentoEnum documentoEnum=compra.getCodigoDocumentoEnum();
+        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            if(compra.getAutorizacion()==null)
+            {
+                compra.setAutorizacion("000000");
+            }
+            
+            if(compra.getPuntoEstablecimiento()==null)
+            {
+                compra.setPuntoEstablecimiento(new BigDecimal("999"));
+            }
+            
+            if(compra.getPuntoEmision()==null)
+            {
+                compra.setPuntoEmision(999);
+            }
+            
+            if(compra.getSecuencial()==null)
+            {
+                Integer secuencial=getFacade().obtenerMaximoCodigoNotaVentaInterna(compra.getPuntoEmision(),compra.getPuntoEstablecimiento(),compra.getEmpresa());
+                compra.setSecuencial(secuencial);
+            }
+            
+        }
+    }
+    
     private void validarDatosCompra(Compra compra) throws RemoteException, ServicioCodefacException
     {
+        if (compra.getPuntoEstablecimiento() == null) 
+        {
+            throw new ServicioCodefacException("El establecimiento no puede ser vacio");
+        }
+        
+        if (compra.getPuntoEmision() == null) 
+        {
+            throw new ServicioCodefacException("EL punto de emisión no puede ser vacio");
+        }
+        
+        if (compra.getSecuencial() == null) 
+        {
+            throw new ServicioCodefacException("El secuencial no puede ser vacio");
+        }
+        
+                
+        //La validacion de los secuenciales solo debe funcionar cuando no es un documento interno por que puede ser que no tenga datos de secuenciales
+        DocumentoEnum documentoEnum=compra.getCodigoDocumentoEnum();
+        if(!documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+                        
+            if (compra.getPuntoEstablecimiento().compareTo(BigDecimal.ZERO) == 0) 
+            {
+                throw new ServicioCodefacException("El establecimiento no puede ser 0");
+            }
+            if (compra.getPuntoEmision() == 0) 
+            {
+                throw new ServicioCodefacException("EL punto de emisión no puede ser 0");
+            }
+            if (compra.getSecuencial() == 0) 
+            {
+                throw new ServicioCodefacException("El secuencial no puede ser 0");
+            }
+            
+            if (compra.getAutorizacion()== null) {
+                throw new ServicioCodefacException("La autorización no puede ser vacio");
+            }
+            
+            if (compra.getAutorizacion().toString().trim().isEmpty()) {
+                throw new ServicioCodefacException("La autorización no puede estar vacia");
+            }
+            
+            if(compra.getPuntoEstablecimiento().toString().length()>3 && compra.getPuntoEmision().toString().length()>3 && compra.getPuntoEmision().toString().length()>9)
+            {
+                throw new ServicioCodefacException("Revise el formato del secuencial de la compra que es incorrecto");
+            }
+        }
+        
         /**
          * =====================================================================
          *          VALIDAR EL TAMANIO DE LA AUTORIZACION

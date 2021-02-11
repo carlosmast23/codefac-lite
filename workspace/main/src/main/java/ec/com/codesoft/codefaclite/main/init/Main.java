@@ -129,6 +129,8 @@ public class Main {
     public static Integer modoAplicativo;
 
     public static void main(String[] args) {
+        
+        System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
         //Desabilito para que no se veo nada de la pantalla que contiene el proceso de inicio
         frameAplicacion.setUndecorated(true);
         frameAplicacion.setIconImage(ParametrosSistemaCodefac.iconoSistema);
