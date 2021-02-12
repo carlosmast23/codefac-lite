@@ -266,6 +266,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         getCmbModoFacturasGuiaRemision().removeAllItems();
         getCmbModoFacturasGuiaRemision().addItem(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
         getCmbModoFacturasGuiaRemision().addItem(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
+        
+        getTxtDiasAlertaPago().setValue(2);
     }
 
     private void cargarDatos() {
@@ -399,6 +401,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             
             parametro = parametrosTodos.get(ParametroCodefac.DIAS_ALERTA_PAGO);
             getTxtDiasAlertaPago().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 7);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.NUMERO_DECIMALES_RIDE);
+            getTxtNumeroDecimalesRide().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 2);
             //getTxtMotivoTrasladoGuiaRemision().setText(motivoGuiaRemision);
             
             parametro = parametrosTodos.get(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
@@ -661,7 +666,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametroEditar(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
         
         agregarParametro(ParametroCodefac.DIAS_ALERTA_PAGO, getTxtDiasAlertaPago().getValue().toString());
-        agregarParametroEditar(ParametroCodefac.DIAS_ALERTA_PAGO);        
+        agregarParametroEditar(ParametroCodefac.DIAS_ALERTA_PAGO);   
+        
+        agregarParametro(ParametroCodefac.NUMERO_DECIMALES_RIDE, getTxtNumeroDecimalesRide().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.NUMERO_DECIMALES_RIDE);    
 
         /**
          * @author Carlos Sanchez

@@ -34,9 +34,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
@@ -177,7 +179,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         //informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
         //informacionComprobante.setTipoIdentificacion(getSriIdentificacion(factura).getCodigo());
         
-         informacionComprobante.setImporteTotal(factura.getTotal());
+        informacionComprobante.setImporteTotal(factura.getTotal());
 
         BigDecimal descuentoTotal = factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos());
         informacionComprobante.setTotalDescuento(descuentoTotal);
@@ -237,7 +239,21 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                 
                 //Todo: redondear valor porque en los comprobantes electronicos no me permite enviar con mas de 2 decimales aunque en los archivos xsd si permite
                 //detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2, RoundingMode.HALF_UP));
-                detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario());
+                                
+                Integer decimalesRedondear=ParametroUtilidades.obtenerValorBaseDatos(factura.getEmpresa(),ParametroCodefac.NUMERO_DECIMALES_RIDE,new ParametroUtilidades.ComparadorInterface() {
+                    @Override
+                    public Object consultarParametro(String nombreParametro) {
+                        return Integer.parseInt(nombreParametro);
+                    }
+                });
+                
+                if(decimalesRedondear==null)
+                {
+                    decimalesRedondear=2;
+                }
+                
+                
+                detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(decimalesRedondear,BigDecimal.ROUND_HALF_UP));
                 //detalle.setDescuento(detalle.getDescuento().setScale(2,RoundingMode.HALF_UP));
                 detalle.setDescuento(detalle.getDescuento());
 
