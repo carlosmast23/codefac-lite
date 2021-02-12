@@ -349,10 +349,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
         titulos.add(1,"Fecha Max Pago");
         titulos.add(2,"Vendedor");
         
-        if(tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO))
-        {
-            titulos.add(3,"Producto");
-        }
+        //if(tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO))
+        //{
+        titulos.add(3,"Producto");
+        //}
         
         return titulos;
     }
