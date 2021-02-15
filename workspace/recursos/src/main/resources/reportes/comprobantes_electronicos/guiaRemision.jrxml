@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.9487171000000647"/>
+	<property name="ireport.zoom" value="1.1000000000000365"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="336"/>
+	<property name="ireport.y" value="40"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -72,6 +72,7 @@
 	<parameter name="pl_url_detalle" class="java.lang.Object"/>
 	<parameter name="pl_contribuyenteRegimenMicroempresas" class="java.lang.String"/>
 	<parameter name="pl_agenteRetencionResolucion" class="java.lang.String"/>
+	<parameter name="nombre_documento" class="java.lang.String"/>
 	<field name="fechaEmision" class="java.lang.String"/>
 	<field name="productos" class="java.lang.Object"/>
 	<field name="preimpreso" class="java.lang.String"/>
@@ -105,13 +106,6 @@
 					<jr:codeExpression><![CDATA[$P{autorizacion}]]></jr:codeExpression>
 				</jr:Code128>
 			</componentElement>
-			<staticText>
-				<reportElement x="333" y="56" width="212" height="32" uuid="f80e499f-05b1-47f6-9d9d-2328839da831"/>
-				<textElement>
-					<font size="13" isBold="true"/>
-				</textElement>
-				<text><![CDATA[GUÍA DE REMISIÓN]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="333" y="36" width="36" height="20" uuid="eb119e44-1fd0-4d1a-a344-b88c7bfc3494"/>
 				<textElement>
@@ -353,6 +347,13 @@
 				</textElement>
 				<text><![CDATA[Contribuyente Régimen Microempresas]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="333" y="62" width="212" height="20" uuid="e085b688-e3e0-4876-8f48-9da5e0cb60f2"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nombre_documento}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<detail>

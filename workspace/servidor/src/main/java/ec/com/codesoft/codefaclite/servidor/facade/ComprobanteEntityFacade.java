@@ -116,6 +116,7 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
                  nombreTabla="NotaCredito";
                 break;
 
+            case GUIA_REMISION_INTERNA:
             case GUIA_REMISION:
                  nombreTabla="GuiaRemision";
                 break;

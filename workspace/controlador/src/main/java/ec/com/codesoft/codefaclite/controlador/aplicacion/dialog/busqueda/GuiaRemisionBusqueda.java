@@ -26,11 +26,12 @@ public class GuiaRemisionBusqueda implements InterfaceModelFind<GuiaRemision>
         Vector<ColumnaDialogo> titulo = new Vector<>();
         //titulo.add(new ColumnaDialogo("Id", 0.2d));
         titulo.add(new ColumnaDialogo("preimpreso", 0.2d));
-        titulo.add(new ColumnaDialogo("Identificación", 0.2d));
+        titulo.add(new ColumnaDialogo("Identificación", 0.15d));
         titulo.add(new ColumnaDialogo("Razón Social", 0.3d));
+        titulo.add(new ColumnaDialogo("Documento", 0.2d));
         titulo.add(new ColumnaDialogo("Estado", 0.15d));
-        titulo.add(new ColumnaDialogo("fecha Inicio", 0.15d));
-        titulo.add(new ColumnaDialogo("fecha Fin", 0.15d));
+        //titulo.add(new ColumnaDialogo("fecha", 0.15d));
+        
         return titulo;
     }
 
@@ -54,11 +55,9 @@ public class GuiaRemisionBusqueda implements InterfaceModelFind<GuiaRemision>
         dato.add(t.getPreimpreso());
         dato.add((t.getIdentificacion()!=null)?t.getIdentificacion():"");
         dato.add(t.getRazonSocial().toString());
-        dato.add(t.getEstado());
-        dato.add(t.getFechaIniciaTransporte());
-        dato.add(t.getFechaFinTransporte());
-        
-        
+        dato.add(t.getCodigoDocumentoEnum().getNombre());
+        dato.add(t.getEstadoEnum().getNombre());
+        //dato.add(t.getFechaEmision());
     }
 
     @Override

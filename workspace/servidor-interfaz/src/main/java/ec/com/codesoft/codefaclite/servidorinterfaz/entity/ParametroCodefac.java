@@ -197,6 +197,8 @@ public class ParametroCodefac implements Serializable {
     public static final String LEYENDA_FIRMA_FACTURA_3 = "leyenda_firma_factura_3";
     public static final String NUMERO_DECIMALES_RIDE = "numero_decimales_ride";
     
+    public static final String DOCUMENTO_GUIA_REMISION_DEFECTO = "documento_guia_remision_defecto";
+    
 
     @Id
     @Column(name = "ID")

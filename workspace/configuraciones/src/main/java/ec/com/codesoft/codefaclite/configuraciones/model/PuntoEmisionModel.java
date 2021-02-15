@@ -109,6 +109,7 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
         getTxtNotaVenta().setValue(new Integer(1));
         getTxtNotaVentaInterna().setValue(new Integer(1));
         getTxtLiquidacionCompra().setValue(new Integer(1));
+        getTxtGuiaRemisionInterna().setValue(new Integer(1));
         
         
     }
@@ -154,6 +155,7 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
         getTxtNotaVenta().setValue(puntoEmision.getSecuencialNotaVenta());
         getTxtNotaVentaInterna().setValue(puntoEmision.getSecuencialNotaVentaInterna());
         getTxtLiquidacionCompra().setValue(puntoEmision.getSecuencialLiquidacionCompra());
+        getTxtGuiaRemisionInterna().setValue(puntoEmision.getSecuencialGuiaRemisionInterna());
         
         getCmbSucursal().setSelectedItem(puntoEmision.getSucursal());
         getCmbTipoFacturacion().setSelectedItem(puntoEmision.getTipoFacturacionEnum());
@@ -195,6 +197,7 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
         puntoEmision.setSecuencialNotaVenta((Integer) getTxtNotaVenta().getValue());
         puntoEmision.setSecuencialNotaVentaInterna((getTxtNotaVentaInterna().getValue()!=null)?(Integer)getTxtNotaVentaInterna().getValue():new Integer(0));
         puntoEmision.setSecuencialLiquidacionCompra((Integer) getTxtLiquidacionCompra().getValue());
+        puntoEmision.setSecuencialGuiaRemisionInterna((Integer) getTxtGuiaRemisionInterna().getValue());
         
         Sucursal sucursal=(Sucursal) getCmbSucursal().getSelectedItem();
         puntoEmision.setSucursal(sucursal);

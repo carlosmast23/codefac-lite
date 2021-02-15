@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundar
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -53,10 +54,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jLabel38 = new javax.swing.JLabel();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        lblRuc = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        lblNombreComercial = new javax.swing.JLabel();
         jToolBar6 = new javax.swing.JToolBar();
         lblEstablecimiento = new javax.swing.JLabel();
         cmbPuntoEmision = new javax.swing.JComboBox<>();
@@ -64,6 +61,8 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jLabel36 = new javax.swing.JLabel();
         chkEnviarCorreoClientes = new javax.swing.JCheckBox();
         chkEnviarCorreoTransportista = new javax.swing.JCheckBox();
+        jLabel37 = new javax.swing.JLabel();
+        cmbDocumento = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         jToolBar2 = new javax.swing.JToolBar();
         txtIdentificacionDestinatario = new javax.swing.JTextField();
@@ -167,44 +166,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         panelDatosGenerales.add(lblEspacio2, gridBagConstraints);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel1.setText("Ruc:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelDatosGenerales.add(jLabel1, gridBagConstraints);
-
-        lblRuc.setBackground(new java.awt.Color(255, 255, 255));
-        lblRuc.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblRuc.setText("jLabel5");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelDatosGenerales.add(lblRuc, gridBagConstraints);
-
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel2.setText("Nombre Comercial:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelDatosGenerales.add(jLabel2, gridBagConstraints);
-
-        lblNombreComercial.setBackground(new java.awt.Color(255, 255, 255));
-        lblNombreComercial.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblNombreComercial.setText("jLabel6");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelDatosGenerales.add(lblNombreComercial, gridBagConstraints);
-
         jToolBar6.setBorder(null);
         jToolBar6.setRollover(true);
 
@@ -226,9 +187,9 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         panelDatosGenerales.add(jToolBar6, gridBagConstraints);
 
         jLabel36.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel36.setText("Secuencial:");
+        jLabel36.setText("Documento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelDatosGenerales.add(jLabel36, gridBagConstraints);
@@ -236,7 +197,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         chkEnviarCorreoClientes.setSelected(true);
         chkEnviarCorreoClientes.setText("Enviar correos a los clientes");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -244,11 +205,25 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
 
         chkEnviarCorreoTransportista.setText("Enviar correos al transportista");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         panelDatosGenerales.add(chkEnviarCorreoTransportista, gridBagConstraints);
+
+        jLabel37.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel37.setText("Secuencial:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelDatosGenerales.add(jLabel37, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelDatosGenerales.add(cmbDocumento, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -742,13 +717,13 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkEnviarCorreoClientes;
     private javax.swing.JCheckBox chkEnviarCorreoTransportista;
     private javax.swing.JComboBox<DestinatarioGuiaRemision> cmbDestinatarios;
+    private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private com.toedter.calendar.JDateChooser cmbFechaFactura;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFin;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicio;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision> cmbPuntoEmision;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
@@ -756,9 +731,9 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
@@ -785,11 +760,9 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblEstablecimiento;
-    private javax.swing.JLabel lblNombreComercial;
     private javax.swing.JLabel lblNombresCompletosDestinatarios;
     private javax.swing.JLabel lblNombresTransportista;
     private javax.swing.JLabel lblPlacaTransportista;
-    private javax.swing.JLabel lblRuc;
     private javax.swing.JLabel lblSecuencial;
     private javax.swing.JPanel panelDatosGenerales;
     private javax.swing.JTable tblGuiaRemision;
@@ -866,13 +839,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         return cmbFechaFactura;
     }
 
-    public JLabel getLblNombreComercial() {
-        return lblNombreComercial;
-    }
-
-    public JLabel getLblRuc() {
-        return lblRuc;
-    }
 
     public JLabel getLblSecuencial() {
         return lblSecuencial;
@@ -981,7 +947,16 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     public void setChkEnviarCorreoTransportista(JCheckBox chkEnviarCorreoTransportista) {
         this.chkEnviarCorreoTransportista = chkEnviarCorreoTransportista;
     }
-     
+
+    public JComboBox<DocumentoEnum> getCmbDocumento() {
+        return cmbDocumento;
+    }
+
+    public void setCmbDocumento(JComboBox<DocumentoEnum> cmbDocumento) {
+        this.cmbDocumento = cmbDocumento;
+    }
+
+
     
     
 

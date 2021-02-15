@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
@@ -49,7 +50,14 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
     
     @Override
     public String getCodigoComprobante() {
-        return ComprobanteEnum.GUIA_REMISION.getCodigo();
+        if(guiaRemision.getCodigoDocumentoEnum().equals(DocumentoEnum.GUIA_REMISION))
+        {
+            return ComprobanteEnum.GUIA_REMISION.getCodigo();
+        }else if(guiaRemision.getCodigoDocumentoEnum().equals(DocumentoEnum.GUIA_REMISION_INTERNA))
+        {
+            return ComprobanteEnum.GUIA_REMISION_INTERNA.getCodigo();
+        }
+        return null;
     }
 
     @Override

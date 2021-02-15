@@ -177,9 +177,12 @@ public class ComprobanteElectronicoComponente {
             if (puntosEmisionUsuario != null) {
                 for (PuntoEmisionUsuario puntoUsuario : puntosEmisionUsuario) {
                     //Cargar solo los puntos de emision que estan relacionados con la sucursal
-                    if (puntoUsuario.getPuntoEmision().getSucursal() != null) {
-                        if (puntoUsuario.getPuntoEmision().getSucursal().equals(sucursal)) {
-                            cmbPuntoEmision.addItem(puntoUsuario.getPuntoEmision());
+                    if(puntoUsuario.getPuntoEmision()!=null)
+                    {
+                        if (puntoUsuario.getPuntoEmision().getSucursal() != null) {
+                            if (puntoUsuario.getPuntoEmision().getSucursal().equals(sucursal)) {
+                                cmbPuntoEmision.addItem(puntoUsuario.getPuntoEmision());
+                            }
                         }
                     }
                 }

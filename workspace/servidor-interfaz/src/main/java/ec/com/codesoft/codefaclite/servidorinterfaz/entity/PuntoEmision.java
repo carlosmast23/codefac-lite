@@ -66,6 +66,9 @@ public class PuntoEmision implements Serializable{
     @Column(name = "SECUENCIAL_NOTA_VENTA_INTERNA")
     private Integer secuencialNotaVentaInterna;
     
+    @Column(name = "SECUENCIAL_GUIA_REMISION_INTERNA")
+    private Integer secuencialGuiaRemisionInterna;
+    
     @Column(name = "SECUENCIAL_LIQUIDACION_COMPRA")
     private Integer secuencialLiquidacionCompra;
     
@@ -178,6 +181,15 @@ public class PuntoEmision implements Serializable{
     public void setSecuencialLiquidacionCompra(Integer secuencialLiquidacionCompra) {
         this.secuencialLiquidacionCompra = secuencialLiquidacionCompra;
     }
+
+    public Integer getSecuencialGuiaRemisionInterna() {
+        return secuencialGuiaRemisionInterna;
+    }
+
+    public void setSecuencialGuiaRemisionInterna(Integer secuencialGuiaRemisionInterna) {
+        this.secuencialGuiaRemisionInterna = secuencialGuiaRemisionInterna;
+    }
+    
     
     
     
@@ -271,6 +283,9 @@ public class PuntoEmision implements Serializable{
                 
             case LIQUIDACION_COMPRA:
                 return getSecuencialLiquidacionCompra();
+                
+            case GUIA_REMISION_INTERNA:
+                return getSecuencialGuiaRemisionInterna();
         }
         return null;
     }
@@ -303,6 +318,10 @@ public class PuntoEmision implements Serializable{
                 
             case LIQUIDACION_COMPRA:
                 setSecuencialLiquidacionCompra(secuencial);
+                break;
+                
+            case GUIA_REMISION_INTERNA:
+                setSecuencialGuiaRemisionInterna(secuencial);
                 break;
         }
     }

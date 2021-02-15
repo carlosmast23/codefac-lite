@@ -161,12 +161,23 @@ public enum DocumentoEnum implements ParametroUtilidades.ComparadorInterface{
             true,
             false),
     
-    GUIA_REMISION("Guía Remisión",
+    GUIA_REMISION(
+            "Guía Remisión",
             "GIR",
             DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS,
             new ModuloCodefacEnum[]{},
             true,
-            false),;
+            true),
+    
+    GUIA_REMISION_INTERNA(
+            "Guía Remisión Interna",
+            "GRI",
+            DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS,
+            new ModuloCodefacEnum[]{},
+            true,
+            false,
+            "999",
+            false);
     
     
     
@@ -203,7 +214,7 @@ public enum DocumentoEnum implements ParametroUtilidades.ComparadorInterface{
         this.codigoSri=codigoSri;
         this.documentoLegal=documentoLegal;
     }
-    
+        
     /**
      * Nombre del documento
      */

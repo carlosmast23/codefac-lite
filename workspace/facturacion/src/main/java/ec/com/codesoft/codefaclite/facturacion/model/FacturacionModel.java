@@ -2955,7 +2955,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(documentoNuevo.equals(DocumentoEnum.NOTA_VENTA_INTERNA)
                         || documentoAnterior.equals(DocumentoEnum.NOTA_VENTA_INTERNA) )
                 {
-                    if(factura.getDetalles()!=null && factura.getDetalles().size()>0)
+                    if(factura!=null && factura.getDetalles()!=null && factura.getDetalles().size()>0)
                     {
                         if(DialogoCodefac.dialogoPregunta("Si cambia el tipo de documento los detalles ingresados se perderan , desea continuar ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
                         {   

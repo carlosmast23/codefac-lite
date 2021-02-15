@@ -41,22 +41,43 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
     public GuiaRemisionService() throws RemoteException {
         super(GuiaRemisionFacade.class);
     }
-
-    public GuiaRemision grabar(GuiaRemision entity) throws ServicioCodefacException, RemoteException {
-        //Validaciones previas antes de grabar
+    
+    private void validarGuiaRemision(GuiaRemision entity) throws ServicioCodefacException, RemoteException
+    {
+        if(entity.getCodigoDocumentoEnum()==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar sin selecciona un Documento");
+        }
+        
         for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {
             if(destinatario.getAutorizacionNumero()==null || destinatario.getAutorizacionNumero().isEmpty())
             {
                 throw new ServicioCodefacException("No se puede grabar una guia de remisión sin autorización de la factura");
             }
+        }   
+        
+        if(entity.getCodigoDocumentoEnum().equals(DocumentoEnum.GUIA_REMISION))
+        {
+            for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) 
+            {
+                if(!destinatario.getFacturaReferencia().getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+                {
+                    throw new ServicioCodefacException("No se puede grabar una Guía de Remisión con detalles de otros documentos diferentes de Facturas");
+                }
+            }
         }
+    }
+
+    public GuiaRemision grabar(GuiaRemision entity) throws ServicioCodefacException, RemoteException {
+        //Validaciones previas antes de grabar
+        validarGuiaRemision(entity);
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() {
                 try {
                     ComprobantesService servicioComprobante = new ComprobantesService();
-                    entity.setCodigoDocumento(DocumentoEnum.GUIA_REMISION.getCodigo());
+                    //entity.setCodigoDocumento(DocumentoEnum.GUIA_REMISION.getCodigo());
                     
                     servicioComprobante.setearSecuencialComprobanteSinTransaccion(entity);
                     

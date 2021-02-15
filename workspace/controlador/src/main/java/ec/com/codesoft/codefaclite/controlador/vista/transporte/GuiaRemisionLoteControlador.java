@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -50,6 +51,9 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
     private List<Factura> ventasList;
     private List<Factura> ventasSeleccionadasList;
     
+    private List<DocumentoEnum> documentosFiltroList;
+    private DocumentoEnum documentoFiltro;
+    
     private Factura facturaSeleccionada;
     private String motivoTraslado;
     
@@ -65,7 +69,24 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.documentosFiltroList=new ArrayList<DocumentoEnum>();
+        this.documentosFiltroList.add(DocumentoEnum.FACTURA);
+        this.documentosFiltroList.add(DocumentoEnum.NOTA_VENTA_INTERNA);
+        
+        //Cargar el tipo de documento segun la guia de remision tenga seleccionado el tipo de documento
+        this.documentoFiltro=DocumentoEnum.FACTURA;
+        
+        DocumentoEnum documentoConfigurado=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.DOCUMENTO_GUIA_REMISION_DEFECTO, DocumentoEnum.GUIA_REMISION);
+        if(documentoConfigurado!=null)
+        {
+            if(documentoConfigurado.equals(DocumentoEnum.GUIA_REMISION))
+            {
+                this.documentoFiltro=DocumentoEnum.FACTURA;
+            }else if(documentoConfigurado.equals(DocumentoEnum.GUIA_REMISION_INTERNA))
+            {
+                this.documentoFiltro=DocumentoEnum.NOTA_VENTA_INTERNA;
+            }
+        }
     }
 
     @Override
@@ -160,7 +181,14 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
     {        
         try {
             
-            ventasList=consultarFacturas(fechaInicial, fechaFin, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO, DocumentoEnum.FACTURA, vendedorSeleccionado);
+            //Si el estado de los documento es nota de venta interna entonce filtro por el estado sin autorizar
+            ComprobanteEnumEstado comprobanteEnum=ComprobanteEnumEstado.AUTORIZADO;
+            if(documentoFiltro.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+            {
+                comprobanteEnum=ComprobanteEnumEstado.SIN_AUTORIZAR;
+            }
+            
+            ventasList=consultarFacturas(fechaInicial, fechaFin, comprobanteEnum, documentoFiltro, vendedorSeleccionado);
             
             if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.MODO_FACTURACION_GUIA_REMISION,ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
             {
@@ -400,6 +428,22 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
 
     public void setSeleccionTodosRuta(Boolean seleccionTodosRuta) {
         this.seleccionTodosRuta = seleccionTodosRuta;
+    }
+
+    public List<DocumentoEnum> getDocumentosFiltroList() {
+        return documentosFiltroList;
+    }
+
+    public void setDocumentosFiltroList(List<DocumentoEnum> documentosFiltroList) {
+        this.documentosFiltroList = documentosFiltroList;
+    }
+
+    public DocumentoEnum getDocumentoFiltro() {
+        return documentoFiltro;
+    }
+
+    public void setDocumentoFiltro(DocumentoEnum documentoFiltro) {
+        this.documentoFiltro = documentoFiltro;
     }
 
     

@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import static ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.obtenerComprobanteData;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -53,6 +54,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.transporte.callback.GuiaRemisionImplComprobante;
 import ec.com.codesoft.codefaclite.transporte.data.ComprobanteGuiaTransporteData;
 import ec.com.codesoft.codefaclite.transporte.data.ComprobanteGuiaTransporteDetalleData;
@@ -159,24 +161,35 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             
             guiaRemision=ServiceFactory.getFactory().getGuiaRemisionServiceIf().grabar(guiaRemision);            
             
-            ComprobanteDataGuiaRemision comprobanteData = new ComprobanteDataGuiaRemision(this.guiaRemision);
-            comprobanteData.setMapInfoAdicional(getMapAdicional(guiaRemision));
-            //comprobanteData.setMapInfoAdicional(new HashMap<String, String>());
-            
-            GuiaRemisionImplComprobante gic=new GuiaRemisionImplComprobante(this, guiaRemision);            
-            
-            //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
-            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
-                gic = null;
-                GuiaRemisionNoCallBack respuestaNoCallBack = new GuiaRemisionNoCallBack(guiaRemision, this);
-                respuestaNoCallBack.iniciar();
+            //Solo procesar los documentos de comprobantes que son electrónicos
+            if(guiaRemision.getCodigoDocumentoEnum().getComprobanteElectronico())
+            {
+                ComprobanteDataGuiaRemision comprobanteData =obtenerComprobanteData(guiaRemision);
+                GuiaRemisionImplComprobante gic=new GuiaRemisionImplComprobante(this, guiaRemision);           
+
+                if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) 
+                {
+                    gic = null;
+                    GuiaRemisionNoCallBack respuestaNoCallBack = new GuiaRemisionNoCallBack(guiaRemision, this);
+                    respuestaNoCallBack.iniciar();
+                }
+
+                ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+                comprobanteServiceIf.procesarComprobante(comprobanteData, guiaRemision, session.getUsuario(), gic);
             }
+            else //Proceso para el resto de documentos que no son electrónicos
+            {
+                //Si el documento es una guia de remisión interna dejo imprimiendo directamente el documento
+                if(guiaRemision.getCodigoDocumentoEnum().equals(DocumentoEnum.GUIA_REMISION_INTERNA))
+                {
+                    imprimirGuiaRemision(guiaRemision);
+                }
+            }     
             
-            ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
-            comprobanteServiceIf.procesarComprobante(comprobanteData, guiaRemision, session.getUsuario(), gic);
-            
+            //Pongo el mensaje por que hasta que acepte se puede procesar en segundo plano la guia de remision
             DialogoCodefac.mensaje("Correcto","Los datos de la guia de remisión fueron grabados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             imprimirConsolidadoCarga(guiaRemision);
+            
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -184,6 +197,13 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         }
         
         
+    }
+    
+    private ComprobanteDataGuiaRemision obtenerComprobanteData(GuiaRemision guiaRemision)
+    {
+        ComprobanteDataGuiaRemision comprobanteData = new ComprobanteDataGuiaRemision(guiaRemision);
+        comprobanteData.setMapInfoAdicional(getMapAdicional(guiaRemision));
+        return comprobanteData;
     }
     
     private void imprimirConsolidadoCarga(GuiaRemision guiaRemision)
@@ -283,32 +303,48 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         if (this.guiaRemision != null && estadoFormulario.equals(ESTADO_EDITAR)) {
-            try {
-                
-                String[] opciones = {"Ride", "Consolidado de Carga", "Cancelar"};
-                int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Por favor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_CORRECTO, opciones);
-                switch (opcionSeleccionada) {
-                    case 0:
-                        String claveAcceso = this.guiaRemision.getClaveAcceso();
-                        byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,guiaRemision.getEmpresa());
-                        JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
-                        panelPadre.crearReportePantalla(jasperPrint, guiaRemision.getPreimpreso());
-                        break;
-
-                    case 1:
-                        imprimirConsolidadoCarga(guiaRemision);
-                        break;
-                }
-                
-                
-            } catch (RemoteException ex) {
-                Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+            String[] opciones = {"Ride", "Consolidado de Carga", "Cancelar"};
+            int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Por favor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_CORRECTO, opciones);
+            switch (opcionSeleccionada) {
+                case 0:
+                    imprimirGuiaRemision(guiaRemision);
+                case 1:
+                    imprimirConsolidadoCarga(guiaRemision);
+                    break;
             }
         }
+    }
+    
+    private void imprimirGuiaRemision(GuiaRemision guiaRemision)
+    {
+        try {
+            
+            if(guiaRemision.getCodigoDocumentoEnum().equals(DocumentoEnum.GUIA_REMISION))
+            {            
+                String claveAcceso = guiaRemision.getClaveAcceso();
+                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,guiaRemision.getEmpresa());
+                JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                panelPadre.crearReportePantalla(jasperPrint, guiaRemision.getPreimpreso());
+                
+            }
+            //Volver a generar el Ride
+            else if(guiaRemision.getCodigoDocumentoEnum().equals(DocumentoEnum.GUIA_REMISION_INTERNA))
+            {
+                ComprobanteDataInterface dataFactura= obtenerComprobanteData(guiaRemision);
+                ComprobanteServiceIf comprobanteService=ServiceFactory.getFactory().getComprobanteServiceIf();
+                byte[] byteReporte=comprobanteService.getReporteComprobanteComprobante(dataFactura, session.getUsuario(),guiaRemision.getPreimpreso());
+                JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                panelPadre.crearReportePantalla(jasperPrint,guiaRemision.getPreimpreso());
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                        
     }
 
     @Override
@@ -318,9 +354,9 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
 
     @Override
     public void limpiar() {
-        getLblRuc().setText(session.getEmpresa().getIdentificacion());
+        //getLblRuc().setText(session.getEmpresa().getIdentificacion());
         //getLblTelefonos().setText(session.getSucursal().getTelefono());
-        getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
+        //getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         //getLblDireccion().setText(session.getSucursal().getDirecccion());
         getLblCantidadProductos().setText("0");
         ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
@@ -418,6 +454,22 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
 
     private void iniciarComponentesPantalla() {
         agregarPlaceHolder();
+        iniciarComponentesComboBox();
+        
+        
+    }
+    
+    private void iniciarComponentesComboBox()
+    {
+        getCmbDocumento().addItem(DocumentoEnum.GUIA_REMISION);
+        getCmbDocumento().addItem(DocumentoEnum.GUIA_REMISION_INTERNA);
+        
+        //Seleccionar el documento segun la configuracion por defecto
+        DocumentoEnum documentoConfigurado=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.DOCUMENTO_GUIA_REMISION_DEFECTO, DocumentoEnum.GUIA_REMISION);
+        if(documentoConfigurado!=null)
+        {
+            getCmbDocumento().setSelectedItem(documentoConfigurado);
+        }
     }
 
     private void agregarPlaceHolder() {
@@ -843,6 +895,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             guiaRemision.setPlaca(transportista.getPlacaVehiculo());
         }
 
+        DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+        guiaRemision.setCodigoDocumentoEnum(documentoEnum);
         guiaRemision.setDireccionPartida(getTxtDireccionPartida().getText());
         guiaRemision.setRise("");
         guiaRemision.setFechaIniciaTransporte(new java.sql.Date(getCmbFechaInicio().getDate().getTime()));
@@ -890,6 +944,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                 ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),DocumentoEnum.GUIA_REMISION,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
             }
         });
+        
+        
     }
     
     public void imprimirComprobanteGuiaRemision(GuiaRemision guiaRemision) {
