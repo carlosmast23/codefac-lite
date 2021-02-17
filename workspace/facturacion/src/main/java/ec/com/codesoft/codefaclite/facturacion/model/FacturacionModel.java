@@ -1229,16 +1229,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     //Imprmir facturas manuales cuando son más de 1 factura o continua con el proceso normal
                     if(facturasProcesar.size()==1)
                     {
+                        mostrarErrorFacturaLote(respuestaManual);
                         factura=respuestaManual.procesadosList.get(0);
                     }
                     else if(facturasProcesar.size()>1)
                     {
-                        if(respuestaManual.procesadosList.size()==0)
+                        /*if(respuestaManual.procesadosList.size()==0)
                         {
                             String mensaje=UtilidadesLista.castListToString(respuestaManual.noProcesadosList,"\br");
                             DialogoCodefac.mensaje("Error ","No se puede grabar: \nCausa: "+mensaje, DialogoCodefac.MENSAJE_INCORRECTO);            
                             throw new ExcepcionCodefacLite("Error al grabar: "+mensaje);
-                        }
+                        }*/
+                        mostrarErrorFacturaLote(respuestaManual);
                         
                         List<JasperPrint> reportesPendientes=new ArrayList<JasperPrint>();
                         for (Factura facturaProcesada : respuestaManual.procesadosList) 
@@ -1305,6 +1307,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
+    }
+    
+    private void mostrarErrorFacturaLote(FacturaLoteRespuesta respuestaManual) throws ExcepcionCodefacLite
+    {
+        if (respuestaManual.procesadosList.size() == 0) 
+        {
+            String mensaje ="";
+            for (FacturaLoteRespuesta.Error error : respuestaManual.noProcesadosList) 
+            {
+                mensaje+=error.error+"\n";
+            }
+            //String mensaje = UtilidadesLista.castListToString(respuestaManual.noProcesadosList, "\br");
+            DialogoCodefac.mensaje("Error ", "No se puede grabar: \nCausa: " + mensaje, DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite("Error al grabar: " + mensaje);
+        }
     }
     
     private List<FacturaParametro> obtenerFacturasManualesProcesar(Factura factura) throws ServicioCodefacException

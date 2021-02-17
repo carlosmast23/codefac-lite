@@ -252,7 +252,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 {
                     //Obtener las retenciones asociadas
                     String retencionesStr="";
-                    for (Retencion retencionesAsociada : retencionesAsociadas) {
+                    for (Retencion retencionesAsociada : retencionesAsociadas) 
+                    {
                         retencionesStr+=retencionesAsociada.getPreimpreso()+"  ";                        
                     }
                     //retencionesStr=UtilidadesTextos.quitarUltimaLetra(retencionesStr);
