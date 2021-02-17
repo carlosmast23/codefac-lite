@@ -32,5 +32,6 @@ public interface  CarteraServiceIf extends ServiceAbstractIf<Cartera>{
     public void editar(Cartera entity,List<CarteraCruce> cruces) throws ServicioCodefacException, RemoteException;
     public List<Cartera> obtenerCarteraPorCobrar(Persona cliente,Empresa empresa) throws ServicioCodefacException, RemoteException;
     public BigDecimal obtenerSaldoDisponibleCruzar(Persona cliente,Empresa empresa) throws ServicioCodefacException, RemoteException;
+    public void eliminarCarteraSinTransaccion(Cartera entity,ModoProcesarEnum modo) throws ServicioCodefacException, RemoteException ;
     
 }

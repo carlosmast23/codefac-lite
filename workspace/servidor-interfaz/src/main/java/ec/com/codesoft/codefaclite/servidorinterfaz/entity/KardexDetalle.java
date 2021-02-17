@@ -38,7 +38,7 @@ public class KardexDetalle implements Serializable ,Cloneable {
     private Long id;
 
     /**
-     * ID del documento que hacer e
+     * Referencia del documento que se grabo COMPRAS-VENTAS-ETC
      */
     @Column(name = "REFERENCIA_DOCUMENTO_ID")
     private Long referenciaDocumentoId;
@@ -83,6 +83,12 @@ public class KardexDetalle implements Serializable ,Cloneable {
     @Column(name = "FECHA_DOCUMENTO")
     private Date fechaDocumento;
     
+    /**
+     * Variable para almacenar el tipo de documento de la referencia para luego poder hacar una consulta
+     */
+    //@Column(name = "CODIGO_TIPO_DOCUMENTO_REFERENCIA")
+    //private String codigoTipoDocumentoReferencia;
+    
 
     @JoinColumn(name = "KARDEX_ID")
     @ManyToOne
@@ -90,6 +96,7 @@ public class KardexDetalle implements Serializable ,Cloneable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "kardexDetalle")
     private List<KardexItemEspecifico> detallesEspecificos;
+    
     
 
     public KardexDetalle() {
@@ -234,12 +241,23 @@ public class KardexDetalle implements Serializable ,Cloneable {
     public void setFechaDocumento(Date fechaDocumento) {
         this.fechaDocumento = fechaDocumento;
     }
+
+    /*public String getCodigoTipoDocumentoReferencia() {
+        return codigoTipoDocumentoReferencia;
+    }
+
+    public void setCodigoTipoDocumentoReferencia(String codigoTipoDocumentoReferencia) {
+        this.codigoTipoDocumentoReferencia = codigoTipoDocumentoReferencia;
+    }
     
-    
-    
-    
-    
-    
+    public TipoDocumentoEnum getCodigoTipoDocumentoReferenciaEnum() {
+        return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(codigoTipoDocumentoReferencia);
+    }
+
+    public void setCodigoTipoDocumentoReferenciaEnum(TipoDocumentoEnum codigoTipoDocumentoEnum) {
+        this.codigoTipoDocumentoReferencia = codigoTipoDocumentoEnum.getCodigo();
+    }*/
+        
         /**
      * Aregando datos adicionales de los item de los kardex
      */

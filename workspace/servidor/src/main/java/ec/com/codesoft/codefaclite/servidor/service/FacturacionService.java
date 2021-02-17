@@ -467,7 +467,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(factura, Cartera.TipoCarteraEnum.CLIENTE,carteraParametro);
+        carteraService.grabarDocumentoCartera(factura, Cartera.TipoCarteraEnum.CLIENTE,carteraParametro,CrudEnum.CREAR);
     }
     
     private void afectarPresupuesto(FacturaDetalle detalle) throws RemoteException
@@ -546,6 +546,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
 
     }*/
     
+    /***
+     * Ver si este metodo se une con el que esta en KardexService
+     * @param detalle
+     * @param bodega
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
     private void afectarInventario(FacturaDetalle detalle,Bodega bodega) throws RemoteException, ServicioCodefacException
     {
 

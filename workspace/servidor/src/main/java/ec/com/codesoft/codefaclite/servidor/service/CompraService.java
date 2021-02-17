@@ -11,14 +11,21 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
@@ -232,37 +239,102 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(compra, Cartera.TipoCarteraEnum.PROVEEDORES,carteraParametro);
+        carteraService.grabarDocumentoCartera(compra, Cartera.TipoCarteraEnum.PROVEEDORES,carteraParametro,CrudEnum.CREAR);
     }
 
     public void eliminarCompra(Compra compra) throws ServicioCodefacException,RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                RetencionService retencionService=new RetencionService();
-                List<Retencion> retencionesAsociadas= retencionService.obtenerRetencionesPorCompra(compra);
-                
-                if(retencionesAsociadas.size()==0)
-                {
-                    compra.setEstado(GeneralEnumEstado.ELIMINADO.getEstado()); //Cambiar el estado de la compra
-                    entityManager.merge(compra);                    
-                }
-                else
-                {
-                    //Obtener las retenciones asociadas
-                    String retencionesStr="";
-                    for (Retencion retencionesAsociada : retencionesAsociadas) 
-                    {
-                        retencionesStr+=retencionesAsociada.getPreimpreso()+"  ";                        
-                    }
-                    //retencionesStr=UtilidadesTextos.quitarUltimaLetra(retencionesStr);
-                    
-                    throw new ServicioCodefacException("No se puede eliminar porque existe retenciones asociadas "+retencionesStr);
-                }
-                
+            public void transaccion() throws ServicioCodefacException, RemoteException {                
+                eliminarCompraSinTransaccion(compra);
             }
         });
+    }
+    
+    public void eliminarCompraSinTransaccion(Compra compra) throws ServicioCodefacException, RemoteException {
+        eliminarRetencionCompraSinTransaccion(compra);
+
+        //Solo crear movimiento de egreso de mercaderia cuando ya fueron ingresados al inventario
+        if (compra.getInventarioIngresoEnum().equals(EnumSiNo.SI)) {
+            for (CompraDetalle detalle : compra.getDetalles()) {
+                eliminarDetalleCompra(detalle);
+            }
+        }
+
+        /**
+         * ==================================================================================
+         * ELIMINACION EN CARTERA DE LAS COMPRAS
+         * ==================================================================================
+         */
+        eliminarCarteraCompra(compra);
+    }
+    
+    private void eliminarCarteraCompra(Compra entity) throws RemoteException, ServicioCodefacException
+    {        
+        //Cartera cartera;
+        //cartera.
+        CarteraService carteraService=new CarteraService();
+        Cartera carteraCompra=carteraService.buscarCarteraPorReferencia(entity.getId(),entity.getCodigoDocumentoEnum(), GeneralEnumEstado.ACTIVO, Cartera.TipoCarteraEnum.PROVEEDORES,entity.getSucursalEmpresa());                
+        if(carteraCompra!=null)
+        {
+            carteraService.eliminarCarteraSinTransaccion(carteraCompra,ModoProcesarEnum.NORMAL);
+            
+        }
+    }
+    
+
+    private void eliminarDetalleCompra(CompraDetalle compraDetalle) throws RemoteException, ServicioCodefacException
+    {   
+        
+        Bodega bodega = obtenerBodegaDevolucion(compraDetalle);
+        KardexService kardexService=new KardexService();
+        kardexService.afectarInventario(
+                bodega,
+                compraDetalle.getCantidad(),
+                compraDetalle.getPrecioUnitario(),
+                compraDetalle.getTotal(),
+                compraDetalle.getId(),
+                compraDetalle.getProductoProveedor().getProducto().getIdProducto(),
+                TipoDocumentoEnum.ELIMINADO_COMPRA,
+                compraDetalle.getCompra().getPuntoEmision().toString(),
+                compraDetalle.getCompra().getPuntoEstablecimiento().toString(),
+                compraDetalle.getCompra().getSecuencial(),
+                compraDetalle.getCompra().getFechaEmision()
+        );
+
+        
+    }
+    
+    private Bodega obtenerBodegaDevolucion(CompraDetalle compraDetalle) throws RemoteException, ServicioCodefacException
+    {
+        KardexDetalleService kardexDetalleService=new KardexDetalleService();
+        KardexDetalle kardexDetalle=kardexDetalleService.consultarPorReferencia(compraDetalle.getCompra().getCodigoTipoDocumentoEnum(),compraDetalle.getCompra().getId(),compraDetalle.getProductoProveedor().getProducto());
+        if(kardexDetalle!=null)
+        {
+            return kardexDetalle.getKardex().getBodega();
+        }
+        return null;
+    }
+    
+    private void eliminarRetencionCompraSinTransaccion(Compra compra) throws ServicioCodefacException, RemoteException
+    {
+        RetencionService retencionService = new RetencionService();
+        List<Retencion> retencionesAsociadas = retencionService.obtenerRetencionesPorCompra(compra);
+
+        if (retencionesAsociadas.size() == 0) {
+            compra.setEstado(GeneralEnumEstado.ELIMINADO.getEstado()); //Cambiar el estado de la compra
+            entityManager.merge(compra);
+        } else {
+            //Obtener las retenciones asociadas
+            String retencionesStr = "";
+            for (Retencion retencionesAsociada : retencionesAsociadas) {
+                retencionesStr += retencionesAsociada.getPreimpreso() + "  ";
+            }
+            //retencionesStr=UtilidadesTextos.quitarUltimaLetra(retencionesStr);
+
+            throw new ServicioCodefacException("No se puede eliminar porque existe retenciones asociadas " + retencionesStr);
+        }
     }
     
     
