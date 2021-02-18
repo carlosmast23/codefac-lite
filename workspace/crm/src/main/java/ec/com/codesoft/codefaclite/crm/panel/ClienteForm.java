@@ -119,6 +119,9 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         cmbZona = new javax.swing.JComboBox<>();
         jLabel37 = new javax.swing.JLabel();
         cmbTipoCliente = new javax.swing.JComboBox<>();
+        jLabel40 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtObservaciones = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         chkContacto = new javax.swing.JCheckBox();
@@ -439,9 +442,9 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Código Personalizado:");
+        jLabel5.setText("Observaciones:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -550,6 +553,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel29, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel1.add(txtCodigoPersonalizado, gridBagConstraints);
 
@@ -582,6 +587,28 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel1.add(cmbTipoCliente, gridBagConstraints);
+
+        jLabel40.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel40.setText("Código Personalizado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel40, gridBagConstraints);
+
+        txtObservaciones.setColumns(20);
+        txtObservaciones.setRows(5);
+        jScrollPane2.setViewportView(txtObservaciones);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jScrollPane2, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Adicionales", jPanel1);
 
@@ -939,6 +966,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -950,6 +978,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanelCaracteristicasGenerales1;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextApellidos;
     private javax.swing.JTextField jTextAreaDireccion;
@@ -988,6 +1017,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JTextField txtNombreContacto;
     private javax.swing.JTextField txtNombreLegal;
     private javax.swing.JTextField txtNombreLegalEstablecimiento;
+    private javax.swing.JTextArea txtObservaciones;
     private javax.swing.JTextField txtPorcentajeComision;
     // End of variables declaration//GEN-END:variables
 
@@ -1317,6 +1347,15 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     public void setjTextReferenciaDireccionEstablecimiento(JTextField jTextReferenciaDireccionEstablecimiento) {
         this.jTextReferenciaDireccionEstablecimiento = jTextReferenciaDireccionEstablecimiento;
+    }
+
+    @LimpiarAnotacion
+    public JTextArea getTxtObservaciones() {
+        return txtObservaciones;
+    }
+
+    public void setTxtObservaciones(JTextArea txtObservaciones) {
+        this.txtObservaciones = txtObservaciones;
     }
 
     

@@ -184,6 +184,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setDiasCreditoProveedor((Integer)getTxtDiasCreditoProveedor().getValue());
         persona.setContactoClienteNombre(getTxtNombreContacto().getText());
         persona.setEmpresa(session.getEmpresa());
+        persona.setObservaciones(getTxtObservaciones().getText());
                 
         
         //Grabar la variable de obligado a llevar contabilidad
@@ -366,6 +367,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getCmbNacionalidad().setSelectedItem(persona.getNacionalidad());
         getCmbFormaPagoDefecto().setSelectedItem(persona.getSriFormaPago());
         getTxtNombreContacto().setText(persona.getContactoClienteNombre());
+        getTxtObservaciones().setText(persona.getObservaciones());
         
         if(persona.getDiasCreditoCliente()!=null)
             getTxtDiasCredito().setValue(persona.getDiasCreditoCliente());
