@@ -336,13 +336,30 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     }
 
-    private void cargarDatosIva() {
+    private void cargarDatosIva() 
+    {
+        
         try {
             ImpuestoServiceIf impuestoService = ServiceFactory.getFactory().getImpuestoServiceIf();
             Impuesto iva = impuestoService.obtenerImpuestoPorCodigo(Impuesto.IVA);
-            for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
-                getCmbIvaDefault().addItem(impuesto);
+            ImpuestoDetalle impuestoDefecto=null;
+            
+            String ivaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
+            
+            Integer ivaPorDefecto=new Integer(ivaStr);
+            
+            for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) 
+            {
+                getCmbIvaDefault().addItem(impuesto);                
+                if(ivaPorDefecto.equals(impuesto.getTarifa()))
+                {
+                    impuestoDefecto=impuesto;
+                }                
             }
+            
+            //Seleccionar por defecto el iva actual que se encuentra en vigencia
+            getCmbIvaDefault().setSelectedItem(impuestoDefecto);
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }

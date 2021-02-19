@@ -922,12 +922,12 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     {
         if (modo.NORMAL.equals(modo)) {
             if (entity.getCruces() != null && entity.getCruces().size() > 0) {
-                throw new ServicioCodefacException("No se puede eliminar el documentos porque le afectan cruces");
+                throw new ServicioCodefacException("No se puede eliminar el documento porque le afectan cruces");
             }
 
             for (CarteraDetalle detalle : entity.getDetalles()) {
                 if (detalle.getCruces() != null && detalle.getCruces().size() > 0) {
-                    throw new ServicioCodefacException("No se puede eliminar el documentos porque afecta cruces a otro documento");
+                    throw new ServicioCodefacException("No se puede eliminar el documento porque afecta cruces a otro documento");
                 }
             }
         }
