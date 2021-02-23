@@ -220,7 +220,8 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                             getTipoCarteraEnum(),
                             Cartera.TipoSaldoCarteraEnum.CON_SALDO,
                             Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO, 
-                            (CarteraEstadoReporteEnum) getCmbTipoReporteCartera().getSelectedItem());
+                            (CarteraEstadoReporteEnum) getCmbTipoReporteCartera().getSelectedItem(),
+                            session.getSucursal());
                     
                     carteraResultado=carteras;
                     mostrarDatosTabla(carteras);

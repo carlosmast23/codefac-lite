@@ -254,6 +254,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     private void cargarDatosConfiguraciones() {
         try {
+            ParametroCodefac parametroCodefac=null;
             parametros = parametroCodefacService.getParametrosMap(session.getEmpresa());
             //ParametroCodefac param = parametros.get(ParametroCodefac.SECUENCIAL_FACTURA);
             
@@ -262,7 +263,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             
             getTxtCorreoElectronico().setText(parametros.get(ParametroCodefac.CORREO_USUARIO).getValor());
             getTxtPasswordCorreo().setText(UtilidadesEncriptar.desencriptar(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-            getTxtNombreFirma().setText(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor());
+            
+            parametroCodefac=parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
+            if(parametroCodefac!=null)
+            {
+                getTxtNombreFirma().setText(parametroCodefac.getValor());
+            }
             //getTxtFondoEscritorio().setText(parametros.get(ParametroCodefac.IMAGEN_FONDO).getValor());
             
             getTxtClaveFirma().setText(UtilidadesEncriptar.desencriptar(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
@@ -298,8 +304,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             String firmaFechaEmisionStr=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.FIRMA_FECHA_EMISION);
             if(firmaFechaEmisionStr!=null)
             {
-                Date fechaEmisionFirma=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.parse(parametros.get(ParametroCodefac.FIRMA_FECHA_EMISION).getValor());
-                getCmbFechaEmisionFirma().setDate(fechaEmisionFirma);
+                parametroCodefac=parametros.get(ParametroCodefac.FIRMA_FECHA_EMISION);
+                if(parametroCodefac!=null && parametroCodefac.getValor()!=null && !parametroCodefac.getValor().trim().isEmpty())
+                {
+                    Date fechaEmisionFirma=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.parse(parametroCodefac.getValor());
+                    getCmbFechaEmisionFirma().setDate(fechaEmisionFirma);   
+                }
             }
             else
             {
@@ -321,7 +331,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             }
             
             
-            ParametroCodefac parametroCodefac=parametros.get(ParametroCodefac.TIPO_ENVIO_COMPROBANTE);
+            parametroCodefac=parametros.get(ParametroCodefac.TIPO_ENVIO_COMPROBANTE);
             if(parametroCodefac!=null)
             {
                 getCmbTipoEnvioComprobante().setSelectedItem(TipoEnvioComprobanteEnum.buscarPorLetra(parametroCodefac.valor));

@@ -82,6 +82,8 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     @Column(name = "FECHA_VENCIMIENTO_FACTURA")
     protected Date fechaVencimiento;
     
+    @Column(name = "COD_ORIGEN_TRANSACCION")
+    private String codigoOrigenTransaccion;
     
     @JoinColumn(name = "REFERIDO_ID")
     @ManyToOne    
@@ -232,6 +234,22 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     public void setEstadoEnviadoGuiaRemisionEnum(EnumSiNo estadoEnviadoGuiaRemisionEnum) {
         this.estadoEnviadoGuiaRemision = estadoEnviadoGuiaRemisionEnum.getLetra();
+    }
+
+    public String getCodigoOrigenTransaccion() {
+        return codigoOrigenTransaccion;
+    }
+
+    public void setCodigoOrigenTransaccion(String codigoOrigenTransaccion) {
+        this.codigoOrigenTransaccion = codigoOrigenTransaccion;
+    }
+    
+    public OrigenTransaccionEnum getCodigoOrigenTransaccionEnum() {
+        return OrigenTransaccionEnum.buscarPorCodigo(codigoOrigenTransaccion);
+    }
+
+    public void setCodigoOrigenTransaccionEnum(OrigenTransaccionEnum codigoOrigenTransaccionEnum) {
+        this.codigoOrigenTransaccion = codigoOrigenTransaccionEnum.getCodigo();
     }
 
     
@@ -585,6 +603,47 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         return (List<DetalleFacturaNotaCeditoAbstract>)(List<?>)detalles;
     }
     
+    /**
+     * Estados que me permiten distinger en que seccion del programa se esta generando la factura o pedido
+     */
+    public enum OrigenTransaccionEnum
+    {
+        ESCRITORIO("Escritorio","esc"),
+        APLICACION_WEB("Web","web"),
+        WIDGETS_VENTA_DIARIA("Venta Diaria Widget","wvd");
+        
+        private String nombre;
+        private String codigo;
+
+        private OrigenTransaccionEnum(String nombre, String codigo) {
+            this.nombre = nombre;
+            this.codigo = codigo;
+        }
+
+        public String getCodigo() {
+            return codigo;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        
+        
+        public static OrigenTransaccionEnum buscarPorCodigo(String codigo)
+        {
+            for (OrigenTransaccionEnum value : OrigenTransaccionEnum.values()) {
+                if(value.getCodigo().equals(codigo))
+                {
+                    return value;
+                }
+            }
+            return null;
+        }
+        
+        
+        
+    }
     
     
     public enum EstadoNotaCreditoEnum

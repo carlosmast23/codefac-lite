@@ -513,7 +513,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         this.txtClaveFirma = txtClaveFirma;
     }
 
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.email, nombre = "Correo Electronico")
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.email, nombre = "Correo Electronico")
     public JTextField getTxtCorreoElectronico() {
         return txtCorreoElectronico;
     }
@@ -538,7 +538,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         this.txtNombreFirma = txtNombreFirma;
     }
 
-    @ValidacionCodefacAnotacion(requerido = true, min = 0, nombre = "Contraseña del correo")
+    @ValidacionCodefacAnotacion(requerido = false, min = 0, nombre = "Contraseña del correo")
     public JPasswordField getTxtPasswordCorreo() {
         return txtPasswordCorreo;
     }

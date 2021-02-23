@@ -854,4 +854,22 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             throw new ServicioCodefacException("No se puede hacer más de 2 facturas con el mismo pedido");
         }
     }
+    
+    public Factura obtenerPedidoVentaDiariaActivo(Sucursal sucursal) throws RemoteException,ServicioCodefacException 
+    {
+        //Factura factura;
+        //factura.setCodigoDocumento(codigoDocumento);
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("sucursalEmpresa",sucursal);
+        mapParametros.put("codigoOrigenTransaccion", Factura.OrigenTransaccionEnum.WIDGETS_VENTA_DIARIA.getCodigo());
+        mapParametros.put("codigoDocumento", DocumentoEnum.PROFORMA.getCodigo());
+        mapParametros.put("estado", Factura.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+        
+        List<Factura> resultado=getFacade().findByMap(mapParametros);
+        if(resultado.size()>0)
+        {
+            return resultado.get(0);
+        }
+        return null;
+    }
 }

@@ -2423,7 +2423,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             int xVd=100;
             int yVd=200;
             
-            widgetVentasDiarias = new VentasDiariasModel(getjDesktopPane1(),sessionCodefac.getEmpresa());
+            widgetVentasDiarias = new VentasDiariasModel(getjDesktopPane1(),sessionCodefac);
             widgetVentasDiarias.panelPadre=this;
             widgetVentasDiarias.setPreferredSize(new Dimension(xVd,yVd));
             widgetVentasDiarias.setBounds(xVd,yVd,250,330);

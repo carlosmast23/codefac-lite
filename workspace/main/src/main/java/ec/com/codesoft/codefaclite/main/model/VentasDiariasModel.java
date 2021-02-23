@@ -7,11 +7,13 @@ package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
+import ec.com.codesoft.codefaclite.facturacion.model.ProformaModel;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -27,9 +29,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -62,11 +66,12 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     private Producto productoSeleccionado;
     private int fila;
     private boolean banderaProducto;
-    private Empresa empresa;
+    //private Empresa empresa;
+    private SessionCodefac session;
     
-    public VentasDiariasModel(JDesktopPane parentPanel,Empresa empresa) {
+    public VentasDiariasModel(JDesktopPane parentPanel,SessionCodefac session) {
         super(parentPanel);
-        this.empresa=empresa;
+        this.session=session;
         iniciarValores();
         agregarListenerBotones();
         agregarListenerMovimiento();
@@ -84,7 +89,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
      */
     private void agregarProducto(EnumSiNo manejaInventario)
     {
-        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,empresa);
+        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
@@ -173,7 +178,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                             fila = -1;
                             procesarTotales();
                             cargarDatosDetalles();
-                            
+                            actualizarVentaDiariaComoPedido();
                         }
                         else{
                             DialogoCodefac.mensaje("Detalles Producto", "Seleccione el objeto a eliminar", DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -238,18 +243,40 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     
     public void iniciarValores()
     {
-        factura = new Factura();
-        fila = -1;
-        banderaProducto = false;
-        factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
-        
-        //Agregar los 2 tipos de documentos disponibles para ventas diarias
-        getCmbTipoDocumento().removeAllItems();
-        List<TipoDocumentoEnum> tipoDocumentos= new ArrayList<>();
-        tipoDocumentos.add(TipoDocumentoEnum.LIBRE);
-        tipoDocumentos.add(TipoDocumentoEnum.INVENTARIO);
-        for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
-            getCmbTipoDocumento().addItem(tipoDocumento);
+        try {
+            fila = -1;
+            banderaProducto = false;            
+            
+            //Agregar los 2 tipos de documentos disponibles para ventas diarias
+            getCmbTipoDocumento().removeAllItems();
+            List<TipoDocumentoEnum> tipoDocumentos= new ArrayList<>();
+            tipoDocumentos.add(TipoDocumentoEnum.LIBRE);
+            tipoDocumentos.add(TipoDocumentoEnum.INVENTARIO);
+            for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
+                getCmbTipoDocumento().addItem(tipoDocumento);
+            }
+            
+            //Buscar si previamente existe un pedido de venta diaria pendiente para cargar
+            Factura facturaTemp=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerPedidoVentaDiariaActivo(session.getSucursal());
+            if(facturaTemp!=null)
+            {
+                factura=facturaTemp;
+                //TODO: Agrupar estos tres metodos que sirven para actualizar la vista
+                limpiarValoresCamposTextos();
+                cargarDatosDetalles();
+                procesarTotales();
+                
+            }
+            else
+            {
+                factura = new Factura();
+                factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -308,11 +335,51 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                 cargarDatosDetalles();
                 procesarTotales();
             } 
+            
+            //Agregar o actualizar el nuevo pedido;
+            actualizarVentaDiariaComoPedido();
         } catch (RemoteException ex) {
             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
        
         return true;
+    }
+    
+    private void actualizarVentaDiariaComoPedido()
+    {        
+        try {
+            //Cuando es una factura le grabo 
+            if(factura.getId()==null)
+            {
+                PersonaServiceIf cliente = ServiceFactory.getFactory().getPersonaServiceIf();
+                Persona persona = cliente.buscarConsumidorFinal(session.getEmpresa());
+                if (persona == null) {
+                    DialogoCodefac.mensaje("Advertencia", "No existe creado un consumidor final para facturar", DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+
+                this.factura.setCliente(persona);
+                this.factura.setSucursalEmpresa(this.session.getSucursal());
+                this.factura.setSucursal(persona.getEstablecimientos().get(0));//Se refiere a la sucursal del cliente
+                //Le grabo como una proforma
+                factura.setCodigoDocumentoEnum(DocumentoEnum.PROFORMA);
+                factura.setEmpresa(this.session.getEmpresa());
+                factura.setUsuario(session.getUsuario());
+                factura.setCodigoOrigenTransaccionEnum(Factura.OrigenTransaccionEnum.WIDGETS_VENTA_DIARIA);
+                factura=ServiceFactory.getFactory().getFacturacionServiceIf().grabarProforma(factura);
+            }
+            else
+            {
+                factura=ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura);
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(),CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
     
 
@@ -348,6 +415,8 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         getLblValorTotal().setText("");
     }
     
+    
+    
     public void cargarCliente()
     {
         try {
@@ -355,7 +424,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             //Map<String,Object> clienteMap = new HashMap<String, Object>();
             //clienteMap.put("razonSocial", "Consumidor Final");
             //this.factura.setCliente(cliente.buscarPorRazonSocial("Consumidor Final",empresa));
-            Persona persona=cliente.buscarConsumidorFinal(empresa);
+            Persona persona=cliente.buscarConsumidorFinal(session.getEmpresa());
             if(persona==null)
             {
                 DialogoCodefac.mensaje("Advertencia","No existe creado un consumidor final para facturar",DialogoCodefac.MENSAJE_INCORRECTO);
