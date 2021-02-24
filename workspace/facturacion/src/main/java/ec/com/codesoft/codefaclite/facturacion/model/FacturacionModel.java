@@ -337,6 +337,28 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         return correos;
     }
+    
+    public void cargarFacturaDesdeProforma(Factura proforma) 
+    {
+        //Metodo para actualizar las referencias editadas , ene este caso el cliente cuando cambios los datos
+        //Todo: Ver como se puede optimizar
+        try {
+            factura = (Factura) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(proforma);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        factura.setId(null); //Con este artificio no tengo que copiar a un nuevo objeto y al grabar me reconoce como un nuevo dato
+        //TODO: Este artificio sirve para poder establecer la fecha actual del sistema y no la fecha del pedido
+        factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
+        factura.setProforma(proforma);
+
+        //Todo: revisar que el cambio sea correcto
+        //Actualizo con los nuevo valores del cliente si se modifico y viene de un presupuesto
+        //setearValoresCliente();
+        cargarDatosBuscar();
+        //DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO)
+    }
 
     private void addListenerButtons() { 
         
@@ -368,7 +390,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
         
-               
+        
                        
         getBtnCargarProforma().addActionListener(new ActionListener() {
             @Override
@@ -379,27 +401,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(buscarDialogoModel.getResultado()!=null)
                 {
                     Factura proforma = (Factura) buscarDialogoModel.getResultado();
-                    //Metodo para actualizar las referencias editadas , ene este caso el cliente cuando cambios los datos
-                    
-                    
-                    //Todo: Ver como se puede optimizar
-                    try {
-                        factura=(Factura) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(proforma);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                    factura.setId(null); //Con este artificio no tengo que copiar a un nuevo objeto y al grabar me reconoce como un nuevo dato
-                    //TODO: Este artificio sirve para poder establecer la fecha actual del sistema y no la fecha del pedido
-                    factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
-                    factura.setProforma(proforma);
-
-                    //Todo: revisar que el cambio sea correcto
-                    //Actualizo con los nuevo valores del cliente si se modifico y viene de un presupuesto
-                    //setearValoresCliente();
-                    
-                    cargarDatosBuscar();
-                    //DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO)
+                    cargarFacturaDesdeProforma(proforma);
                 }
             }
         });
@@ -2384,7 +2386,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     protected void setearValoresDefaultFactura() {
         /**
-         * Todo: Carlos Pato
+         * Todo: Carlos 
          */
         Persona.TipoIdentificacionEnum tipoIdentificacionEnum=factura.getCliente().getTipoIdentificacionEnum();
         String codigoSri=tipoIdentificacionEnum.getCodigoSriVenta();

@@ -222,13 +222,16 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                 }
                 if(permitirFacturar && respuesta)
                 {
-                    cargarCliente();
-                    definirFechaFacturacion();
-                    FacturacionModel facturacionModel = new FacturacionModel();
+                        cargarCliente();
+                        definirFechaFacturacion();
+                        FacturacionModel facturacionModel = new FacturacionModel();                    
                         panelPadre.crearVentanaCodefac(facturacionModel, true);
                         try {
-                            facturacionModel.setFactura(factura);
-                            facturacionModel.cargarSecuencial();
+                            facturacionModel.iniciar();
+                            facturacionModel.cargarFacturaDesdeProforma(factura);
+                            //facturacionModel.setFactura(factura);
+                            //facturacionModel.cargarSecuencial();
+                            
                         } catch (ExcepcionCodefacLite ex) {
                             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -243,28 +246,34 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     
     public void iniciarValores()
     {
+        fila = -1;
+        banderaProducto = false;
+        //Agregar los 2 tipos de documentos disponibles para ventas diarias
+        getCmbTipoDocumento().removeAllItems();
+        List<TipoDocumentoEnum> tipoDocumentos= new ArrayList<>();
+        tipoDocumentos.add(TipoDocumentoEnum.LIBRE);
+        tipoDocumentos.add(TipoDocumentoEnum.INVENTARIO);
+        for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
+            getCmbTipoDocumento().addItem(tipoDocumento);
+        }
+        crearOCargarPedidoVentaDiaria(true);
+    }
+    
+    private void crearOCargarPedidoVentaDiaria(Boolean iniciar)
+    {
         try {
-            fila = -1;
-            banderaProducto = false;            
-            
-            //Agregar los 2 tipos de documentos disponibles para ventas diarias
-            getCmbTipoDocumento().removeAllItems();
-            List<TipoDocumentoEnum> tipoDocumentos= new ArrayList<>();
-            tipoDocumentos.add(TipoDocumentoEnum.LIBRE);
-            tipoDocumentos.add(TipoDocumentoEnum.INVENTARIO);
-            for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
-                getCmbTipoDocumento().addItem(tipoDocumento);
-            }
-            
             //Buscar si previamente existe un pedido de venta diaria pendiente para cargar
             Factura facturaTemp=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerPedidoVentaDiariaActivo(session.getSucursal());
             if(facturaTemp!=null)
             {
                 factura=facturaTemp;
                 //TODO: Agrupar estos tres metodos que sirven para actualizar la vista
-                limpiarValoresCamposTextos();
-                cargarDatosDetalles();
-                procesarTotales();
+                if(iniciar)
+                {
+                    limpiarValoresCamposTextos();
+                    cargarDatosDetalles();
+                    procesarTotales();
+                }
                 
             }
             else
@@ -272,7 +281,6 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                 factura = new Factura();
                 factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
             }
-            
         } catch (RemoteException ex) {
             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
@@ -282,7 +290,9 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     
     public boolean agregarDetallesFactura (FacturaDetalle facturaDetalle)
     {
-
+        //Primero verifica o crea si existe o no una venta diaria pendiente
+        crearOCargarPedidoVentaDiaria(false);
+        
         try {
             boolean agregar = true;
             if (facturaDetalle != null) {
@@ -297,8 +307,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             
             switch (tipoDocumentoEnum) 
             {
-                case INVENTARIO: 
-                    
+                case INVENTARIO:
                 case LIBRE:
                     facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
                     catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
@@ -348,6 +357,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     private void actualizarVentaDiariaComoPedido()
     {        
         try {
+            
             //Cuando es una factura le grabo 
             if(factura.getId()==null)
             {

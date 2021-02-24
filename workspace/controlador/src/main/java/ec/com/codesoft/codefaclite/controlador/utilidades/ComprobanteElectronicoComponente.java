@@ -135,7 +135,11 @@ public class ComprobanteElectronicoComponente {
     public static void cargarSecuencialConsulta(ComprobanteEntity comprobante, JComboBox<PuntoEmision> cmbPuntoEmision, JLabel lblEstablecimiento, JLabel lblSecuencial) {
 
         try {
-            PuntoEmision puntoEmision = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerPorCodigo(Integer.valueOf(comprobante.getPuntoEmision()), comprobante.getSucursalEmpresa());
+            PuntoEmision puntoEmision=null;
+            if(comprobante.getPuntoEmision()!=null)
+            {
+                puntoEmision = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerPorCodigo(Integer.valueOf(comprobante.getPuntoEmision()), comprobante.getSucursalEmpresa());
+            }
 
             //cmbPuntoEmision.setSelectedItem((PuntoEmision) puntoEmision); //TODO: Analizar para todos los casos porque aveces no me va a permitir cargagar cuando pertenece a otra sucursal
             DefaultComboBoxModel modelCombo=(DefaultComboBoxModel)cmbPuntoEmision.getModel();
@@ -158,8 +162,16 @@ public class ComprobanteElectronicoComponente {
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
         }
-        lblEstablecimiento.setText(ComprobantesUtilidades.formatoEstablecimiento(comprobante.getPuntoEstablecimiento().toString()));
-        lblSecuencial.setText(ComprobantesUtilidades.formatoSecuencial(comprobante.getSecuencial().toString()));
+        
+        if(comprobante.getPuntoEstablecimiento()!=null)
+        {
+            lblEstablecimiento.setText(ComprobantesUtilidades.formatoEstablecimiento(comprobante.getPuntoEstablecimiento().toString()));
+        }
+        
+        if(comprobante.getSecuencial()!=null)
+        {
+            lblSecuencial.setText(ComprobantesUtilidades.formatoSecuencial(comprobante.getSecuencial().toString()));
+        }
 
     }
 
