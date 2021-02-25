@@ -10,21 +10,20 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.ArqueoCajaModelControlador;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.pos.panel.ArqueoCajaPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
-import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,16 +31,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.eclipse.persistence.internal.sessions.UnitOfWorkImpl;
 
 /**
  *
  * @author Robert
  */
-public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVistaIf, ArqueoCajaModelControlador.SwingIf
+public class ArqueoCajaModel extends ArqueoCajaPanel implements DialogInterfacePanel<ArqueoCaja>, InterfazPostConstructPanel, ControladorVistaIf, ArqueoCajaModelControlador.SwingIf
 {       
     private ArqueoCajaModelControlador controlador = new ArqueoCajaModelControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
 
+    @Override
     public void iniciar() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -177,4 +176,36 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements ControladorVista
         java.util.Date hora = UtilidadesFecha.castDateSqlToUtil(horaRevision);
         getjTimeHoraRevision().setValue(hora);
     }
+
+    @Override
+    public ArqueoCaja getResult() throws ExcepcionCodefacLite 
+    {
+        try {
+            controlador.grabar();
+            return controlador.getArqueoCaja();
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ArqueoCajaModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (RemoteException ex) {
+            Logger.getLogger(ArqueoCajaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public void postConstructorExterno(Object[] parametros) 
+    {
+        try {
+            CajaSession cajaSession = null;
+            PuntoEmision puntoEmision = (PuntoEmision) parametros[0];
+            cajaSession = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorPuntoEmisionYUsuario(puntoEmision.getPuntoEmision(), (Usuario) parametros[1]);
+            this.controlador.getArqueoCaja().setCajaSession(cajaSession);
+            this.controlador.getArqueoCaja().setUsuario((Usuario) parametros[1]);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ArqueoCajaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }    
+    
 }
+
+

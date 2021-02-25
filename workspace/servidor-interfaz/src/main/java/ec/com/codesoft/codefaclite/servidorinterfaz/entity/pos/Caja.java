@@ -9,14 +9,18 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -50,6 +54,12 @@ public class Caja implements Serializable {
     
     @JoinColumn(name = "PUNTO_EMISION_ID")
     private PuntoEmision puntoEmision;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "caja", fetch = FetchType.EAGER)
+    private List<CajaPermiso> cajasPermiso;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "caja", fetch = FetchType.EAGER)
+    private List<CajaSession> cajasSession;
 
     public Caja() {
     }
@@ -116,6 +126,22 @@ public class Caja implements Serializable {
     public void setPuntoEmision(PuntoEmision puntoEmision) {
         this.puntoEmision = puntoEmision;
     }
+
+    public List<CajaPermiso> getCajasPermiso() {
+        return cajasPermiso;
+    }
+
+    public void setCajasPermiso(List<CajaPermiso> cajasPermiso) {
+        this.cajasPermiso = cajasPermiso;
+    }
+
+    public List<CajaSession> getCajasSession() {
+        return cajasSession;
+    }
+
+    public void setCajasSession(List<CajaSession> cajasSession) {
+        this.cajasSession = cajasSession;
+    }  
     
     /*
     * Equals and Hascode
@@ -147,6 +173,6 @@ public class Caja implements Serializable {
 
     @Override
     public String toString() {
-        return "Caja{" + "nombre=" + nombre + "}";
+        return "" + nombre + " - Punto Emisión: " + puntoEmision.getPuntoEmision();
     }
 }

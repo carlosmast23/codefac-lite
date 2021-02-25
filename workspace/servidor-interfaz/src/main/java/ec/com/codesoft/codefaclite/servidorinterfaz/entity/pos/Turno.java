@@ -7,14 +7,19 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.criteria.Fetch;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -40,6 +45,9 @@ public class Turno implements Serializable
     
     @Column(name = "HORA_FINAL")
     private Time horaFinal;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "turno", fetch = FetchType.EAGER)
+    private List<TurnoAsignado> turnoAsignadoList;
 
     public Turno() {
     }
@@ -74,6 +82,14 @@ public class Turno implements Serializable
 
     public void setHoraFinal(Time horaFinal) {
         this.horaFinal = horaFinal;
+    }
+
+    public List<TurnoAsignado> getTurnoAsignadoList() {
+        return turnoAsignadoList;
+    }
+
+    public void setTurnoAsignadoList(List<TurnoAsignado> turnoAsignadoList) {
+        this.turnoAsignadoList = turnoAsignadoList;
     }
 
     @Override

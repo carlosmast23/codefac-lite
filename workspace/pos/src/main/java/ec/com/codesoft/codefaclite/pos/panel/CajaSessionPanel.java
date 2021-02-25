@@ -6,12 +6,20 @@
 package ec.com.codesoft.codefaclite.pos.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
+import javax.xml.ws.BindingType;
 import org.jdesktop.swingx.JXDatePicker;
 
 /**
@@ -37,28 +45,24 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jDateFechaCierre = new org.jdesktop.swingx.JXDatePicker();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jDateFechaApertura = new org.jdesktop.swingx.JXDatePicker();
-        Date dateHoraCierre = new Date();
-        SpinnerDateModel sm2 = new SpinnerDateModel(dateHoraCierre, null, null, Calendar.HOUR_OF_DAY);
-        jTimeHoraCierre = new javax.swing.JSpinner(sm2);
-        Date dateHoraApertura = new Date();
-        SpinnerDateModel sm1 = new SpinnerDateModel(dateHoraApertura, null, null, Calendar.HOUR_OF_DAY);
-        jTimeHoraApertura = new javax.swing.JSpinner(sm1);
         jTextValorApertura = new javax.swing.JTextField();
         jTextValorCierre = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jComboBoxEstadoCierre = new javax.swing.JComboBox<>();
-        jComboBoxEstado = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        jCmbCajaPermiso = new javax.swing.JComboBox<>();
+        jTextFechaApertura = new javax.swing.JTextField();
+        jTextHoraApertura = new javax.swing.JTextField();
+        jTextFechaCierre = new javax.swing.JTextField();
+        jTextHoraCierre = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -66,13 +70,6 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         setResizable(true);
         setTitle("Caja Sesión");
         getContentPane().setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 40;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jDateFechaCierre, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Fecha Apertura:");
@@ -86,8 +83,8 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Fecha Cierre:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel2, gridBagConstraints);
@@ -104,8 +101,8 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Hora Cierre:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
@@ -122,39 +119,11 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("Valor Cierre:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel6, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 40;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jDateFechaApertura, gridBagConstraints);
-
-        JSpinner.DateEditor de2 = new javax.swing.JSpinner.DateEditor(jTimeHoraCierre, "HH:mm:ss");
-        jTimeHoraCierre.setEditor(de2);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 80;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jTimeHoraCierre, gridBagConstraints);
-
-        JSpinner.DateEditor de1 = new javax.swing.JSpinner.DateEditor(jTimeHoraApertura, "HH:mm:ss");
-        jTimeHoraApertura.setEditor(de1);
-        jTimeHoraApertura.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 80;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jTimeHoraApertura, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -165,68 +134,94 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
 
         jTextValorCierre.setInheritsPopupMenu(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jTextValorCierre, gridBagConstraints);
-
-        jLabel7.setText("      ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         getContentPane().add(jLabel7, gridBagConstraints);
 
         jLabel8.setText("      ");
-        getContentPane().add(jLabel8, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        getContentPane().add(jLabel8, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel9.setText("Estado Cierre:");
+        jLabel9.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel9, gridBagConstraints);
 
-        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel10.setText("Estado:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel10, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jComboBoxEstadoCierre, gridBagConstraints);
 
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel11.setText("Caja:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel11, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jCmbCajaPermiso, gridBagConstraints);
+
+        jTextFechaApertura.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jComboBoxEstado, gridBagConstraints);
+        getContentPane().add(jTextFechaApertura, gridBagConstraints);
+
+        jTextHoraApertura.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jTextHoraApertura, gridBagConstraints);
+
+        jTextFechaCierre.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jTextFechaCierre, gridBagConstraints);
+
+        jTextHoraCierre.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jTextHoraCierre, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public JComboBox<String> getjComboBoxEstado() {
-        return jComboBoxEstado;
-    }
-
-    public void setjComboBoxEstado(JComboBox<String> jComboBoxEstado) {
-        this.jComboBoxEstado = jComboBoxEstado;
-    }
-
+    @ComboBoxBinding(source = "controlador.estadoCajaSessionList", valueSelect = "controlador.cajaSession.estadoCierreCaja")
     public JComboBox<String> getjComboBoxEstadoCierre() {
         return jComboBoxEstadoCierre;
     }
@@ -234,23 +229,9 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     public void setjComboBoxEstadoCierre(JComboBox<String> jComboBoxEstadoCierre) {
         this.jComboBoxEstadoCierre = jComboBoxEstadoCierre;
     }
-
-    public JXDatePicker getjDateFechaApertura() {
-        return jDateFechaApertura;
-    }
-
-    public void setjDateFechaApertura(JXDatePicker jDateFechaApertura) {
-        this.jDateFechaApertura = jDateFechaApertura;
-    }
-
-    public JXDatePicker getjDateFechaCierre() {
-        return jDateFechaCierre;
-    }
-
-    public void setjDateFechaCierre(JXDatePicker jDateFechaCierre) {
-        this.jDateFechaCierre = jDateFechaCierre;
-    }
-
+   
+    @LimpiarAnotacion 
+    @TextFieldBinding(value = "controlador.cajaSession.valorApertura")
     public JTextField getjTextValorApertura() {
         return jTextValorApertura;
     }
@@ -259,6 +240,8 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         this.jTextValorApertura = jTextValorApertura;
     }
 
+    @LimpiarAnotacion
+    @TextFieldBinding(value = "controlador.cajaSession.valorCierre")
     public JTextField getjTextValorCierre() {
         return jTextValorCierre;
     }
@@ -267,29 +250,53 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         this.jTextValorCierre = jTextValorCierre;
     }
 
-    public JSpinner getjTimeHoraApertura() {
-        return jTimeHoraApertura;
+    public JTextField getjTextFechaApertura() {
+        return jTextFechaApertura;
     }
 
-    public void setjTimeHoraApertura(JSpinner jTimeHoraApertura) {
-        this.jTimeHoraApertura = jTimeHoraApertura;
+    public void setjTextFechaApertura(JTextField jTextFechaApertura) {
+        this.jTextFechaApertura = jTextFechaApertura;
     }
 
-    public JSpinner getjTimeHoraCierre() {
-        return jTimeHoraCierre;
+    public JTextField getjTextFechaCierre() {
+        return jTextFechaCierre;
     }
 
-    public void setjTimeHoraCierre(JSpinner jTimeHoraCierre) {
-        this.jTimeHoraCierre = jTimeHoraCierre;
+    public void setjTextFechaCierre(JTextField jTextFechaCierre) {
+        this.jTextFechaCierre = jTextFechaCierre;
     }
+
+    public JTextField getjTextHoraApertura() {
+        return jTextHoraApertura;
+    }
+
+    public void setjTextHoraApertura(JTextField jTextHoraApertura) {
+        this.jTextHoraApertura = jTextHoraApertura;
+    }
+
+    public JTextField getjTextHoraCierre() {
+        return jTextHoraCierre;
+    }
+
+    public void setjTextHoraCierre(JTextField jTextHoraCierre) {
+        this.jTextHoraCierre = jTextHoraCierre;
+    }
+
+     
+    @ComboBoxBinding(source = "controlador.cajasList",valueSelect = "controlador.cajaSession.caja")
+    public JComboBox<Caja> getjCmbCajaPermiso() {
+        return jCmbCajaPermiso;
+    }
+
+    public void setjCmbCajaPermiso(JComboBox<Caja> jCmbCajaPermiso) {
+        this.jCmbCajaPermiso = jCmbCajaPermiso;
+    }   
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBoxEstado;
+    private javax.swing.JComboBox<Caja> jCmbCajaPermiso;
     private javax.swing.JComboBox<String> jComboBoxEstadoCierre;
-    private org.jdesktop.swingx.JXDatePicker jDateFechaApertura;
-    private org.jdesktop.swingx.JXDatePicker jDateFechaCierre;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -298,9 +305,11 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField jTextFechaApertura;
+    private javax.swing.JTextField jTextFechaCierre;
+    private javax.swing.JTextField jTextHoraApertura;
+    private javax.swing.JTextField jTextHoraCierre;
     private javax.swing.JTextField jTextValorApertura;
     private javax.swing.JTextField jTextValorCierre;
-    private javax.swing.JSpinner jTimeHoraApertura;
-    private javax.swing.JSpinner jTimeHoraCierre;
     // End of variables declaration//GEN-END:variables
 }

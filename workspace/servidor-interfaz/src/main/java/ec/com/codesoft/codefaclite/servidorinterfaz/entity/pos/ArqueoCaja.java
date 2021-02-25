@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,6 +17,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -39,11 +42,22 @@ public class ArqueoCaja implements Serializable
     @Column(name = "FECHA_HORA")
     private Timestamp fechaHora;
     @Column(name = "VALOR_TEORICO")
-    private BigDecimal valorTeorico;
+    private String valorTeorico;
     @Column(name = "VALOR_FISICO")
     private BigDecimal valorFisico;
     @Column(name = "ESTADO")
     private String estado;
+    
+    /*
+    * Foreing Key
+    */
+    @JoinColumn(name = "CAJA_SESSION_ID")
+    @ManyToOne
+    private CajaSession cajaSession;
+    
+    @JoinColumn(name = "USUARIO_ID")
+    @ManyToOne
+    private Usuario usuario;
     
     /*
     * Constructor
@@ -71,11 +85,11 @@ public class ArqueoCaja implements Serializable
         this.fechaHora = fechaHora;
     }
 
-    public BigDecimal getValorTeorico() {
+    public String getValorTeorico() {
         return valorTeorico;
     }
 
-    public void setValorTeorico(BigDecimal valorTeorico) {
+    public void setValorTeorico(String valorTeorico) {
         this.valorTeorico = valorTeorico;
     }
 
@@ -109,7 +123,23 @@ public class ArqueoCaja implements Serializable
     public void setEstado(String estado) {
         this.estado = estado;
     }
-    
+
+    public CajaSession getCajaSession() {
+        return cajaSession;
+    }
+
+    public void setCajaSession(CajaSession cajaSession) {
+        this.cajaSession = cajaSession;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     /*
     * Equals
     */

@@ -6,6 +6,9 @@
 package ec.com.codesoft.codefaclite.pos.model;
 
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaSesionModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -13,7 +16,9 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.pos.panel.CajaSessionPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -26,12 +31,13 @@ import java.util.Map;
  * @author Robert
  */
 //public class CajaSessionModel extends CajaSessionPanel implements CajaSesionModelControlador.Interface
-public class CajaSessionModel extends CajaSessionPanel
+public class CajaSessionModel extends CajaSessionPanel implements ControladorVistaIf, CajaSesionModelControlador.SwingIf
 {
-
+    private CajaSesionModelControlador controlador;
+    
     @Override
     public void iniciar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        controlador = new CajaSesionModelControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
     }
 
     @Override
@@ -93,14 +99,39 @@ public class CajaSessionModel extends CajaSessionPanel
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CajaSession cajaSession = (CajaSession)entidad;
+        
+        getjTextFechaApertura().setText("" + UtilidadesFecha.castDateSqlToUtil(UtilidadesFecha.getFechaDeTimeStamp(cajaSession.getFechaHoraApertura())));
+        getjTextHoraApertura().setText("" + UtilidadesFecha.castDateSqlToUtil(UtilidadesFecha.getFechaDeTimeStamp(cajaSession.getFechaHoraApertura())));
+        
+        getjTextValorApertura().setText("" + cajaSession.getValorApertura());
+        getjTextValorCierre().setText("" + (cajaSession.getValorCierre() == null ? BigDecimal.ZERO : cajaSession.getValorCierre()));
+        
+        getjCmbCajaPermiso().setSelectedItem(cajaSession.getCaja());
+        getjComboBoxEstadoCierre().setSelectedItem(cajaSession.getEstadoSessionEnum());
+        
     }
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.controlador.obtenerDialogoBusqueda();
     }
 
-
+    @Override
+    public ModelControladorAbstract getControladorVista() {
+        return controlador;
+    }
     
+    /**
+     * Get and Setter
+     * @return 
+     */
+    
+    public CajaSesionModelControlador getControlador() {
+        return controlador;
+    }
+
+    public void setControlador(CajaSesionModelControlador controlador) {
+        this.controlador = controlador;
+    }
 }

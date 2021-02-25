@@ -8,14 +8,18 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -45,7 +49,10 @@ public class CajaPermiso implements Serializable
     
     @JoinColumn(name = "CAJA_ID")
     private Caja caja;
-
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cajaPermiso", fetch = FetchType.EAGER)
+    private List<TurnoAsignado> turnoAsignadoList; 
+   
     public CajaPermiso() {
     }
 
@@ -99,8 +106,14 @@ public class CajaPermiso implements Serializable
     public void setCaja(Caja caja) {
         this.caja = caja;
     }
-    
-    
+
+    public List<TurnoAsignado> getTurnoAsignadoList() {
+        return turnoAsignadoList;
+    }
+
+    public void setTurnoAsignadoList(List<TurnoAsignado> turnoAsignadoList) {
+        this.turnoAsignadoList = turnoAsignadoList;
+    }
     
     @Override
     public int hashCode() {
@@ -129,7 +142,8 @@ public class CajaPermiso implements Serializable
 
     @Override
     public String toString() {
-        return "" + caja.getNombre();
+        return "" + caja.getNombre() + 
+               " - " + caja.getPuntoEmision() +
+               " - " + turnoAsignadoList;
     }
-
 }

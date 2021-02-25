@@ -54,7 +54,7 @@ public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaMode
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
-        //this.controlador.eliminar();
+        this.controlador.editar();
     }
 
     @Override
@@ -134,8 +134,7 @@ public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaMode
             Sucursal sucursal = (Sucursal) getjComboSucursal().getSelectedItem();
             List<PuntoEmision> puntoEmisionLista;
             puntoEmisionLista = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sucursal);
-            UtilidadesComboBox.llenarComboBox(getjComboPuntoEmision(), puntoEmisionLista);
-            //puntoEmision = (PuntoEmision) getjComboPuntoEmision().getSelectedItem();    
+            UtilidadesComboBox.llenarComboBox(getjComboPuntoEmision(), puntoEmisionLista);  
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(CajaModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {

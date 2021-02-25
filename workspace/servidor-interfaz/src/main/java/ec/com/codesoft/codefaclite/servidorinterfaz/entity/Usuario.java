@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
@@ -84,7 +86,12 @@ public class Usuario implements Serializable{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
     private List<PuntoEmisionUsuario> puntosEmisionUsuario;
     
-
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER)
+    private List<CajaPermiso> cajasPermisoUsuario;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER)
+    private List<CajaSession> cajasSessionUsuario;
+    
     public Usuario(String nick, String clave) {
         this.nick = nick;
         this.clave = clave;
@@ -197,6 +204,22 @@ public class Usuario implements Serializable{
         this.filtrarFactura = enumSiNo.getLetra();
     }
 
+    public List<CajaPermiso> getCajasPermisoUsuario() {
+        return cajasPermisoUsuario;
+    }
+
+    public void setCajasPermisoUsuario(List<CajaPermiso> cajasPermisoUsuario) {
+        this.cajasPermisoUsuario = cajasPermisoUsuario;
+    }
+
+    public List<CajaSession> getCajasSessionUsuario() {
+        return cajasSessionUsuario;
+    }
+
+    public void setCajasSessionUsuario(List<CajaSession> cajasSessionUsuario) {
+        this.cajasSessionUsuario = cajasSessionUsuario;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -259,6 +282,36 @@ public class Usuario implements Serializable{
         
     }
     
+    public void addCajaPermisoUsuario(CajaPermiso cajaPermiso){
+        if(this.cajasPermisoUsuario == null)
+        {
+            this.cajasPermisoUsuario = new ArrayList<>();
+        }
+        if(!NoRepetirCajaPermisoUsuario(cajaPermiso))
+        {
+            cajaPermiso.setUsuario(this);
+            this.cajasPermisoUsuario.add(cajaPermiso);
+        }
+    }
+    
+    public void addCajaSessionUsuario(CajaSession cajaSession)
+    {
+        if(this.cajasSessionUsuario == null)
+        {
+            this.cajasSessionUsuario = new ArrayList<>();
+        }
+        cajaSession.setUsuario(this);
+        this.cajasSessionUsuario.add(cajaSession);
+    }
+    
+    public boolean NoRepetirCajaPermisoUsuario(CajaPermiso cajaPermiso){
+        for (CajaPermiso cp : this.cajasPermisoUsuario) {
+            if(cp.getCaja().equals(cajaPermiso.getCaja()))
+                return true;
+        }
+        return false;
+    }
+       
     public String formatoPuntoEmisionActivos()
     {
         List<String> puntosActivos=new  ArrayList<String>();

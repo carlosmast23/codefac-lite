@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
@@ -21,13 +22,13 @@ import java.util.Vector;
  *
  * @author Robert
  */
-public class CajaPermisoBusquedaDialogo implements InterfaceModelFind<CajaPermiso>, InterfacesPropertisFindWeb
+public class CajaPermisoBusquedaDialogo implements InterfaceModelFind<CajaPermiso>
 {
-    //private Sucursal sucursal;
-    //private PuntoEmision puntoEmision;
+    private SessionCodefacInterface session;
     
-    public CajaPermisoBusquedaDialogo(SessionCodefacInterface sessionCodefac) {
-        
+    public CajaPermisoBusquedaDialogo(SessionCodefacInterface session) 
+    {
+        this.session = session;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class CajaPermisoBusquedaDialogo implements InterfaceModelFind<CajaPermis
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT cp FROM CajaPermiso cp WHERE ";
-        queryString+=" ( LOWER(cp.usuario.nick) like ?1 or LOWER(cp.caja.nombre) like ?2 and (cp.estado) like ?3 )";
+        queryString+=" ( LOWER(cp.usuario.nick) like ?1 or LOWER(cp.caja.nombre) like ?2 and (cp.estado) like ?3)";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
         queryDialog.agregarParametro(2,filter);
@@ -52,9 +53,9 @@ public class CajaPermisoBusquedaDialogo implements InterfaceModelFind<CajaPermis
 
     @Override
     public void agregarObjeto(CajaPermiso cp, Vector dato) {
-        dato.add(cp.getUsuario().getNick().toString());
-        dato.add(cp.getCaja().getNombre().toString());
-        dato.add(cp.getDescripcion().toString());
+        dato.add(cp.getUsuario().getNick());
+        dato.add(cp.getCaja().getNombre());
+        dato.add(cp.getDescripcion());
     }
 
     @Override

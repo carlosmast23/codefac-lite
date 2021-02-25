@@ -52,7 +52,7 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
         
         arqueoCaja=new ArqueoCaja();
         arqueoCaja.setValorFisico(BigDecimal.ZERO);
-        arqueoCaja.setValorTeorico(BigDecimal.ZERO);
+        arqueoCaja.setValorTeorico("Cero");
         arqueoCaja.setEstadoEnum(GeneralEnumEstado.ACTIVO);        
         
         

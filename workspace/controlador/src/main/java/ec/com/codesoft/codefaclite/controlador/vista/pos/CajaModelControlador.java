@@ -48,6 +48,10 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     private List<Sucursal> sucursalList;
     /**
      * Controlador Generico
+     * @param mensajeVista
+     * @param session
+     * @param interfaz
+     * @param tipoVista
      */
     public CajaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CajaModelControlador.CommonIf interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);
@@ -56,7 +60,6 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     /**
     * Metodo iniciar
     * @throws java.rmi.RemoteException
-    * @throws ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException
     */ 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
