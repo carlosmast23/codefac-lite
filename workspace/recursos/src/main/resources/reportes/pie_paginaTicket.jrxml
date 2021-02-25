@@ -15,8 +15,8 @@
 		<band height="70" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="170" height="13" uuid="2493a00c-db4f-407e-8462-4afde06650b2"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true" isItalic="true" isUnderline="false"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="true" isItalic="true" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_adicional}]]></textFieldExpression>
 			</textField>
@@ -62,8 +62,8 @@
 					<bottomPen lineWidth="0.75" lineStyle="Dashed"/>
 					<rightPen lineStyle="Dashed"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font size="7" isBold="false" isItalic="true"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="false" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Generado con CODEFAC  www.cf.codesoft.com]]></text>
 			</staticText>

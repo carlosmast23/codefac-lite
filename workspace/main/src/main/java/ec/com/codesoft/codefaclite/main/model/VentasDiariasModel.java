@@ -202,14 +202,17 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             public void actionPerformed(ActionEvent e) {
                 Boolean permitirFacturar = false;
                 Boolean respuesta = null;
-                if (factura.getDetalles() == null) {
+                if (factura.getDetalles() == null) 
+                {
                     DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     try {
                         throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
                     } catch (ExcepcionCodefacLite ex) {
                         Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }else{
+                }
+                else
+                {
                     permitirFacturar = true;
                     respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea continuar con la facturación?", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     if (!respuesta) {
@@ -220,6 +223,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                         }
                     }
                 }
+                
                 if(permitirFacturar && respuesta)
                 {
                         cargarCliente();

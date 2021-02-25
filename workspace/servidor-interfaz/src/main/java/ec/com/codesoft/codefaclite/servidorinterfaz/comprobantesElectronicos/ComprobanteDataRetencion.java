@@ -93,7 +93,7 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
         InformacionRetencion info=new InformacionRetencion();
         
         //TODO:Revisar que codigo debe ir aqui , aunque en el SRI dice que es opcional
-        info.setContribuyenteEspecial("123");
+        //info.setContribuyenteEspecial("123");
         info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(retencion.getDireccionEstablecimiento()));
         info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(retencion.getFechaEmision()));
         
