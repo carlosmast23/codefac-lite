@@ -237,13 +237,20 @@ public class StockReporteModel extends StockMinimoPanel{
                         {
                             codigoPersonalizado=producto.getCodigoPersonalizado();
                         }
-                        
+                        //System.out.println(producto.getNombre());
                         data.setCodigo(codigoPersonalizado);
                         data.setProducto(producto.getNombre());
                         data.setStock(cantidad.toString());
                         data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto()!=null)?producto.getCatalogoProducto().getCategoriaProducto().getNombre():"");
                         data.setUbicacion(producto.getUbicacion());
-                        data.setCantidadMinima(producto.getCantidadMinima().toString());
+                        if(producto.getCantidadMinima()!=null)
+                        {
+                            data.setCantidadMinima(producto.getCantidadMinima().toString());
+                        }
+                        else
+                        {
+                            data.setCantidadMinima("0");
+                        }
                         data.setCosto(costoPromedio.toString());
                         data.setBodega(bodega.getNombre());
                         

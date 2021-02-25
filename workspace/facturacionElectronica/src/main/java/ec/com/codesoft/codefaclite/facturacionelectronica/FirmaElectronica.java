@@ -165,7 +165,7 @@ public class FirmaElectronica {
         //return null;
     }
     
-    private void guardarDocumento(Document documento, String rutaArchivo)
+    /*private void guardarDocumento(Document documento, String rutaArchivo)
             throws Exception {
         File file = new File(rutaArchivo);
         //crear toda la ruta si no existe
@@ -187,7 +187,7 @@ public class FirmaElectronica {
         } catch (FileNotFoundException e) {
             throw new Exception("Error al salvar el documento");
         }
-    }
+    }*/
     
     protected DataToSign createDataToSign(String recursoParaFirmar) throws Exception {
         DataToSign datosParaFirmar = new DataToSign();

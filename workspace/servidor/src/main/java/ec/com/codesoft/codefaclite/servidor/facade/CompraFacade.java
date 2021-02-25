@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -140,6 +141,38 @@ public class CompraFacade extends AbstractFacade<Compra>{
             return null;
         }
 
+    }
+    
+    /**
+     * TODO: Falta tomar en cuenta el estado para tener resultados mas exactos
+     * @param puntoEmision
+     * @param puntoEstablecimiento
+     * @return 
+     */
+    public Integer obtenerMaximoCodigoNotaVentaInterna(Integer puntoEmision,BigDecimal puntoEstablecimiento,Empresa empresa)
+    {   
+        //Compra compra;
+        //compra.getEmpresa();
+        //compra.getPuntoEmision()
+        //c.getEstado();
+        //c.getPuntoEmision();
+        //c.getPuntoEstablecimiento();
+        //c.getCodigoDocumento();
+        //c.getSecuencial()
+        
+        String queryString="SELECT max(c.secuencial) FROM Compra c WHERE c.puntoEmision=?1 AND c.puntoEstablecimiento=?2 AND c.codigoDocumento=?3 AND c.empresa=?4 ";
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1,puntoEmision);
+        query.setParameter(2,puntoEstablecimiento);
+        query.setParameter(3,DocumentoEnum.NOTA_VENTA_INTERNA.getCodigo());
+        query.setParameter(4,empresa);
+        
+        Integer secuencialMaximo=(Integer) query.getSingleResult();
+        if(secuencialMaximo!=null)
+        {
+            return secuencialMaximo+1;
+        }        
+        return 1;        
     }
     
 }

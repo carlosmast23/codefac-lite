@@ -1738,7 +1738,15 @@ public class ComprobanteElectronicoService implements Runnable {
                         }
                         else
                         {
-                            //TODO: Falta implentar para el ultimo documento que son las notas de debito si algun rato alguien nos pide
+                            if(ComprobanteEnum.GUIA_REMISION_INTERNA.getCodigo().equals(comprobante.getInformacionTributaria().getCodigoDocumento())) 
+                            {
+                                prefijo=ComprobanteEnum.GUIA_REMISION_INTERNA.getPrefijo();
+                            }
+                            else
+                            {
+                                //TODO: Falta implentar para el ultimo documento que son las notas de debito si algun rato alguien nos pide
+                            }
+                            
                         }
                     }
                 }
@@ -1964,6 +1972,9 @@ public class ComprobanteElectronicoService implements Runnable {
         }else if(ComprobanteEnum.NOTA_VENTA_INTERNA.getCodigo().equals(tipoComprobanteCodigo)) 
         {
             path=pathFacturaJasper;
+        }else if(ComprobanteEnum.GUIA_REMISION_INTERNA.getCodigo().equals(tipoComprobanteCodigo)) 
+        {
+            path=pathGuiaRemisionJasper;
         }
         //comprobante.getTipoDocumento();
         //return path + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";

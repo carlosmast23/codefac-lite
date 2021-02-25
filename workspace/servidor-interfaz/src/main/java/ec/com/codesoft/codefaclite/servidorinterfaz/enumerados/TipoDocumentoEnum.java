@@ -172,6 +172,12 @@ public enum TipoDocumentoEnum implements ParametroUtilidades.ComparadorInterface
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO,
             false),
     
+    ELIMINADO_COMPRA(ModuloCodefacEnum.INVENTARIO,
+            "COE",
+            "Compra eliminada",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO,
+            false),
+    
     QUITAR_MERCADERIA_MANUAL(ModuloCodefacEnum.INVENTARIO,
             "QMM",
             "Eliminar Manual",

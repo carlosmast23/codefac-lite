@@ -16,8 +16,26 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Carlos
  */
-@XmlType(propOrder = {"ambiente","tipoEmision","razonSocial","nombreComercial","ruc","claveAcceso","codigoDocumento","establecimiento","puntoEmision","secuencial","direcionMatriz"})
+@XmlType(propOrder = {
+    "ambiente",
+    "tipoEmision",
+    "razonSocial",
+    "nombreComercial",
+    "ruc",
+    "claveAcceso",
+    "codigoDocumento",
+    "establecimiento",
+    "puntoEmision",
+    "secuencial",
+    "direcionMatriz",
+    "regimenMicroempresas",
+    "agenteRetencion"}
+)
+
 public class InformacionTributaria implements Serializable{
+    
+    private static final String REGIMEN_MICROEMPRESAS="CONTRIBUYENTE RÉGIMEN MICROEMPRESAS";
+    
     private String ambiente;
     private String tipoEmision;
     private String razonSocial;
@@ -29,6 +47,9 @@ public class InformacionTributaria implements Serializable{
     private String puntoEmision;
     private String secuencial;
     private String direcionMatriz;
+    
+    private String regimenMicroempresas;
+    private String agenteRetencion;
 
     public InformacionTributaria() {
     }
@@ -131,6 +152,26 @@ public class InformacionTributaria implements Serializable{
     public void setDirecionMatriz(String direcionMatriz) {
         this.direcionMatriz = direcionMatriz;
     }
+
+    @XmlElement(name="regimenMicroempresas")
+    public String getRegimenMicroempresas() {
+        return regimenMicroempresas;
+    }
+
+    public void setRegimenMicroempresas(String regimenMicroempresas) {
+        this.regimenMicroempresas = regimenMicroempresas;
+    }
+
+    @XmlElement(name="agenteRetencion")
+    public String getAgenteRetencion() {
+        return agenteRetencion;
+    }
+
+    public void setAgenteRetencion(String agenteRetencion) {
+        this.agenteRetencion = agenteRetencion;
+    }
+    
+    
     
     public String getPreimpreso()
     {
@@ -145,5 +186,11 @@ public class InformacionTributaria implements Serializable{
     {
         return ComprobanteEnum.getEnumByCodigo(codigoDocumento);
     }
+    
+    public void asignarRegimenMicroempresas()
+    {
+        this.regimenMicroempresas=REGIMEN_MICROEMPRESAS;
+    }
+    
 
 }

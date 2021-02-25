@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.facade.cartera;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import java.sql.Date;
 import java.util.List;
@@ -36,7 +37,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         super(Cartera.class);
     }
       
-    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum)
+    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal)
     {
         String cliente = "";
         String fecha = "";
@@ -96,14 +97,15 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         {
             orderBy=" ORDER BY c.fechaEmision desc ";
         }
-        //Cartera c; c.getFechaEmision()
+        
+        //Cartera c; c.getSucursal();
         /*c.getPuntoEmision();
         c.getPuntoEstablecimiento();
         c.getSecuencial();
         c.getPersona().getRazonSocial();*/
         
         try {
-            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +whereTipoCarteraVencida+" AND ("+whereDocumentos+") AND c.tipoCartera=?4 AND c.estado=?5  "+orderBy;            
+            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +whereTipoCarteraVencida+" AND ("+whereDocumentos+") AND c.sucursal =?6 AND c.tipoCartera=?4 AND c.estado=?5  "+orderBy;            
             //System.out.println("QUERY==> "+queryString);
             Query query = getEntityManager().createQuery(queryString);
             if (persona != null) {
@@ -122,6 +124,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
             }
             
             query.setParameter(5,GeneralEnumEstado.ACTIVO.getEstado());
+            query.setParameter(6,sucursal);
             
             return query.getResultList();
         } catch (NoResultException e) {

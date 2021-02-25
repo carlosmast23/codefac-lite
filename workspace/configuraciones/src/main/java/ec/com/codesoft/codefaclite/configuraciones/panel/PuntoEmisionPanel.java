@@ -69,6 +69,8 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         jLabel11 = new javax.swing.JLabel();
         txtNotaVentaInterna = new javax.swing.JSpinner();
         lblEspacio5 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        txtGuiaRemisionInterna = new javax.swing.JSpinner();
 
         setClosable(true);
         setIconifiable(true);
@@ -279,26 +281,42 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel11.setText("Secuencial Nota Venta Interna:");
+        jLabel11.setText("Secuencial Guía Remisión Interna:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(30, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel11, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 40;
-        gridBagConstraints.insets = new java.awt.Insets(30, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(txtNotaVentaInterna, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel2.add(lblEspacio5, gridBagConstraints);
+
+        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel12.setText("Secuencial Nota Venta Interna:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel12, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtGuiaRemisionInterna, gridBagConstraints);
 
         jTabbedPane1.addTab("Documentos Internos", jPanel2);
 
@@ -314,6 +332,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -334,6 +353,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JSpinner txtFactura;
     private javax.swing.JSpinner txtGuiaRemision;
+    private javax.swing.JSpinner txtGuiaRemisionInterna;
     private javax.swing.JSpinner txtLiquidacionCompra;
     private javax.swing.JSpinner txtNotaCredito;
     private javax.swing.JSpinner txtNotaDebito;
@@ -399,6 +419,14 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
 
     public void setTxtLiquidacionCompra(JSpinner txtLiquidacionCompra) {
         this.txtLiquidacionCompra = txtLiquidacionCompra;
+    }
+
+    public JSpinner getTxtGuiaRemisionInterna() {
+        return txtGuiaRemisionInterna;
+    }
+
+    public void setTxtGuiaRemisionInterna(JSpinner txtGuiaRemisionInterna) {
+        this.txtGuiaRemisionInterna = txtGuiaRemisionInterna;
     }
     
     

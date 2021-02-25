@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.test;
 
-import ec.com.codesoft.codefaclite.servicios.controller.ControllerServiceUtil;
+//import ec.com.codesoft.codefaclite.servicios.controller.ControllerServiceUtil;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
@@ -111,7 +111,7 @@ public class TestPruebaRMI {
             mapRecursos.put(UtilidadesService.class,UtilidadesServiceIf.class);
             */
             System.setProperty("java.rmi.server.hostname","186.4.212.15");
-            ControllerServiceUtil.cargarRecursosServidor("192.168.100.2");
+            //ControllerServiceUtil.cargarRecursosServidor("192.168.100.2");
             //ServiceControllerServer.cargarRecursos(mapRecursos,"1099");
             System.out.println("servidor iniciado");
             /*

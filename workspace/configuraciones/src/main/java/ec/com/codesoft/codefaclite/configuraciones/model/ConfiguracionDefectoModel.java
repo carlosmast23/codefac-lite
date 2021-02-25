@@ -266,6 +266,12 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         getCmbModoFacturasGuiaRemision().removeAllItems();
         getCmbModoFacturasGuiaRemision().addItem(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
         getCmbModoFacturasGuiaRemision().addItem(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
+        
+        getTxtDiasAlertaPago().setValue(2);
+        
+        //Cargar Documentos de guias de remision por defecto
+        getCmbDocumentoGuiaRemisionDefecto().addItem(DocumentoEnum.GUIA_REMISION);
+        getCmbDocumentoGuiaRemisionDefecto().addItem(DocumentoEnum.GUIA_REMISION_INTERNA);
     }
 
     private void cargarDatos() {
@@ -286,6 +292,13 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             {
                 TipoDocumentoEnum tipoDocumentoCompraEnum = TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroTipoDocumentoCompra.getValor());
                 getCmbTipoDocumentoCompra().setSelectedItem(tipoDocumentoCompraEnum);
+            }
+            
+            ParametroCodefac parametroGuiaRemisionDefecto = parametrosTodos.get(ParametroCodefac.DOCUMENTO_GUIA_REMISION_DEFECTO);
+            if(parametroGuiaRemisionDefecto!=null)
+            {
+                DocumentoEnum documentoEnum=DocumentoEnum.obtenerDocumentoPorCodigo(parametroGuiaRemisionDefecto.getValor());
+                getCmbDocumentoGuiaRemisionDefecto().setSelectedItem(documentoEnum);
             }
             
             ParametroCodefac parametroConfiguracionImpresora = parametrosTodos.get(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA);
@@ -399,6 +412,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             
             parametro = parametrosTodos.get(ParametroCodefac.DIAS_ALERTA_PAGO);
             getTxtDiasAlertaPago().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 7);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.NUMERO_DECIMALES_RIDE);
+            getTxtNumeroDecimalesRide().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 2);
             //getTxtMotivoTrasladoGuiaRemision().setText(motivoGuiaRemision);
             
             parametro = parametrosTodos.get(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
@@ -525,6 +541,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         TipoDocumentoEnum tipoDocumentoCompra = (TipoDocumentoEnum) getCmbTipoDocumentoCompra().getSelectedItem();
         agregarParametro(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA,tipoDocumentoCompra.getCodigo());        
         agregarParametroEditar(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA);
+        
+        DocumentoEnum documentoGuiaRemision = (DocumentoEnum) getCmbDocumentoGuiaRemisionDefecto().getSelectedItem();
+        agregarParametro(ParametroCodefac.DOCUMENTO_GUIA_REMISION_DEFECTO,documentoGuiaRemision.getCodigo());        
+        agregarParametroEditar(ParametroCodefac.DOCUMENTO_GUIA_REMISION_DEFECTO);
         
         ConfiguracionImpresoraEnum configuracionImpresoraEnum =(ConfiguracionImpresoraEnum) getCmbConfiguracionImpresora().getSelectedItem();
         agregarParametro(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,configuracionImpresoraEnum.getLetra());
@@ -661,7 +681,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametroEditar(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
         
         agregarParametro(ParametroCodefac.DIAS_ALERTA_PAGO, getTxtDiasAlertaPago().getValue().toString());
-        agregarParametroEditar(ParametroCodefac.DIAS_ALERTA_PAGO);        
+        agregarParametroEditar(ParametroCodefac.DIAS_ALERTA_PAGO);   
+        
+        agregarParametro(ParametroCodefac.NUMERO_DECIMALES_RIDE, getTxtNumeroDecimalesRide().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.NUMERO_DECIMALES_RIDE);    
 
         /**
          * @author Carlos Sanchez

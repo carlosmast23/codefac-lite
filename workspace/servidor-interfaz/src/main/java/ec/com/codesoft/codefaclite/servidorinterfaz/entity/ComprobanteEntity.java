@@ -375,6 +375,16 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         if (puntoEmision == null) {
             puntoEmision = 0;
         }
+        
+        if(puntoEstablecimiento==null)
+        {
+            puntoEstablecimiento=BigDecimal.ZERO;
+        }
+        
+        if(secuencial==null)
+        {
+            secuencial=0;
+        }
 
         return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento.toString(), 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.toString(), 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(secuencial + "", 9, "0");
     }

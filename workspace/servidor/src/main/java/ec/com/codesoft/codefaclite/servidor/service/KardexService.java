@@ -1091,6 +1091,57 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         //kd.setCodigoTipoDocumentoEnum(TipoDocumentoEnum.transfe);
         return resultado;
     }   
+    
+     /**     *
+     * TODO: Unificar este metodo con la de factura que existe un metodo similar
+     * @param detalle 
+     */
+    public void afectarInventario(Bodega bodega,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento) throws RemoteException,ServicioCodefacException
+    {
+        try {
+            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(referenciaProductoId);
+            
+            //Map<String,Object> mapParametros=new HashMap<String,Object>();
+            //mapParametros.put("producto", producto);
+            KardexService kardexService=new KardexService();
+            //Kardex kardexProducto=kardexService.buscarKardexPorProductoyBodega(bodega, producto);
+            Kardex kardexProducto=ServiceFactory.getFactory().getKardexServiceIf().consultarOCrearStockSinPersistencia(producto, bodega);
+            //List<Kardex> kardexs= kardexService.getFacade().findByMap(mapParametros);
+            //TODO: Definir especificamente cual es la bodega principal
+            //if(kardexProducto!=null && kardexProducto.size()>0)
+            //{
+                //TODO: Analizar caso cuando se resta un producto especifico
+                Kardex kardex= kardexProducto;
+                KardexDetalle kardexDetalle=new KardexDetalle();
+                kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
+                kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
+                kardexDetalle.setCantidad(cantidad);
+                kardexDetalle.setCodigoTipoDocumento(tipoDocumento.getCodigo());
+                kardexDetalle.setPrecioTotal(total);
+                kardexDetalle.setPrecioUnitario(precioUnitario);
+                kardexDetalle.setReferenciaDocumentoId(referenciaKardexId);
+                kardexDetalle.setPuntoEmision(puntoEmision);
+                kardexDetalle.setPuntoEstablecimiento(puntoEstablecimiento);
+                kardexDetalle.setSecuencial(secuencial);
+                kardexDetalle.setFechaDocumento(fechaDocumento);
+                
+                kardex.addDetalleKardex(kardexDetalle);
+                
+                //Actualizar los valores del kardex
+                kardex.setStock(kardex.getStock().add(kardexDetalle.getCantidad()));
+                //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
+                kardex.setPrecioTotal(kardex.getPrecioTotal().add(kardexDetalle.getPrecioTotal()));
+                //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+                
+                entityManager.merge(kardex);
+            //}
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    }
 
             
 }

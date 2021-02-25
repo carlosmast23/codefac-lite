@@ -45,12 +45,14 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.net.ntp.TimeStamp;
 
 /**
  *
@@ -132,7 +134,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
        
         //Actuaizar Saldo de las entidades de cartera afectada en los cruces
-        actualizarSaldosCarteraSinTrasaccion(cruces);
+        actualizarSaldosCarteraSinTrasaccion(cruces);        
         
         //TODO:Metodo temporal para actualizar las referencias de los cruces y que esten actualizadas las listas que tienen referencias
         actualizarReferenciasCartera(cartera);
@@ -363,49 +365,33 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     /**
      * Metodo que me permite almacenar los documentos en la tabla de cartera
      */
-    public void grabarDocumentoCartera(ComprobanteEntity comprobante,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException 
+    public void grabarDocumentoCartera(ComprobanteEntity comprobante,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro,CrudEnum crudEnum) throws RemoteException, ServicioCodefacException 
     {
         //Si no esta activo el modulo de cartera no continua
         if(!ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.ACTIVAR_CARTERA, EnumSiNo.SI))
         {
             return;
         }
+        //CarteraRe
+        //comprobante.getFechaEmision()
+        Cartera cartera=crearCarteraSinTransaccion(tipo, carteraParametro, comprobante.getSucursalEmpresa(),comprobante.getCodigoDocumento(), comprobante.getFechaCreacion(), comprobante.getFechaEmision(), comprobante.getPuntoEmision().toString(), comprobante.getPuntoEstablecimiento().toString(), comprobante.getSecuencial());
         
-        /**
-         * ====================================================================
-         *      CREANDO EL DOCUMENTO DE LA FACTURA EN LA CARTERA
-         * ====================================================================
-         */
-        Cartera cartera = new Cartera();
-        cartera.setCodigoDocumento(comprobante.getCodigoDocumento());
-        cartera.setFechaCreacion(UtilidadesFecha.getFechaDeTimeStamp(comprobante.getFechaCreacion()));
-        cartera.setFechaEmision(new java.sql.Date(comprobante.getFechaEmision().getTime()));
-        cartera.setPuntoEmision(comprobante.getPuntoEmision().toString());
-        cartera.setPuntoEstablecimiento(comprobante.getPuntoEstablecimiento().toString());
-        cartera.setSecuencial(comprobante.getSecuencial());
-        cartera.setTipoCartera(tipo.getLetra());
-        cartera.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-        cartera.setSucursal(comprobante.getSucursalEmpresa());
-        cartera.setDíasCredito((carteraParametro!=null)?carteraParametro.diasCredito:null);
-        //Calculando el campo de fecha de credito si esta activado esa opción para facturar
-        if(carteraParametro!=null && carteraParametro.diasCredito!=null)
-        {
-            java.util.Date fechaFinCredito=UtilidadesFecha.sumarDiasFecha(
-                    cartera.getFechaEmision(),
-                    carteraParametro.diasCredito);            
-            cartera.setFechaFinCredito(UtilidadesFecha.castDateUtilToSql(fechaFinCredito));
-        }               
-
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
         
-        //Documento que tiene la referencia de los cruces si tiene que ser automatico
         List<CarteraCruce> cruces=new ArrayList<CarteraCruce>();
         switch (documentoEnum) {
             case FACTURA_REEMBOLSO:
             case NOTA_VENTA_INTERNA:
             case NOTA_VENTA:
             case FACTURA:
-                crearCarteraFactura(comprobante, cartera, cruces, tipo,carteraParametro);
+                //if(crudEnum.equals(CrudEnum.CREAR))
+                //{
+                    crearCarteraFactura(comprobante, cartera, cruces, tipo,carteraParametro);
+                //}
+                //else if (crudEnum.equals(CrudEnum.ELIMINAR))
+                //{
+                //    crearCarteraEliminarVenta(comprobante, cartera, cruces, tipo, carteraParametro);
+                //}
                 break;
 
             case RETENCIONES:
@@ -415,14 +401,53 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             case NOTA_CREDITO:
                 crearCarteraNotaCredito(comprobante, cartera, cruces);
                 break;
+                
             default:
                 throw new ServicioCodefacException("Documento no configurado en cartera");
                 
         }
         
         //Grabar el documento con los cruces generados
+        
         grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR);
-
+    }
+    
+    
+    private Cartera crearCarteraSinTransaccion(
+            Cartera.TipoCarteraEnum tipo,
+            CarteraParametro carteraParametro,
+            Sucursal sucursal,
+            String codigoDocumento,
+            Timestamp fechaCreacion,
+            Date fechaEmision,
+            String puntoEmision,
+            String puntoEstablecimiento,
+            Integer secuencial)
+    {
+    /**
+         * ====================================================================
+         *      CREANDO EL DOCUMENTO DE LA FACTURA EN LA CARTERA
+         * ====================================================================
+         */
+        Cartera cartera = new Cartera();
+        cartera.setCodigoDocumento(codigoDocumento);
+        cartera.setFechaCreacion(UtilidadesFecha.getFechaDeTimeStamp(fechaCreacion));
+        cartera.setFechaEmision(new java.sql.Date(fechaEmision.getTime()));
+        cartera.setPuntoEmision(puntoEmision);
+        cartera.setPuntoEstablecimiento(puntoEstablecimiento);
+        cartera.setSecuencial(secuencial);
+        cartera.setTipoCartera(tipo.getLetra());
+        cartera.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+        cartera.setSucursal(sucursal);
+        cartera.setDíasCredito((carteraParametro != null) ? carteraParametro.diasCredito : null);
+        //Calculando el campo de fecha de credito si esta activado esa opción para facturar
+        if (carteraParametro != null && carteraParametro.diasCredito != null) {
+            java.util.Date fechaFinCredito = UtilidadesFecha.sumarDiasFecha(
+                    cartera.getFechaEmision(),
+                    carteraParametro.diasCredito);
+            cartera.setFechaFinCredito(UtilidadesFecha.castDateUtilToSql(fechaFinCredito));
+        }
+        return cartera;
     }
     
     /**
@@ -590,7 +615,107 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         }
     }
     
+    private void crearCarteraEliminarVenta(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
+    {
+        //Termina de generar los campos restantes para facturas de venta y compra
+        //TODO: Unir la misma logica tanto para facturas de venta como de compra
+        if (tipo.equals(tipo.CLIENTE)) {
+            
+            Factura factura = (Factura) comprobante;
+            cartera.setPersona(factura.getCliente());
+            cartera.setReferenciaID(factura.getId());
+            cartera.setSaldo(factura.getTotal());
+            cartera.setTotal(factura.getTotal());
+
+            for (FacturaDetalle detalle : factura.getDetalles()) {
+                CarteraDetalle carteraDetalle = new CarteraDetalle();
+                carteraDetalle.setDescripcion(detalle.getDescripcion());
+                carteraDetalle.setSaldo(detalle.getTotal());
+                carteraDetalle.setTotal(detalle.getTotal());
+                cartera.addDetalle(carteraDetalle);
+            }
+            
+            //Metodo que permite crear los cruces automaticos cuando sea el caso
+            //crearCrucesFactura(factura, cartera, cruces,carteraParametro);
+            
+        } else if (tipo.equals(tipo.PROVEEDORES)) {
+            
+            entityManager.flush();
+            Compra compra = (Compra) comprobante;
+            cartera.setPersona(compra.getProveedor());
+            cartera.setReferenciaID(compra.getId());
+            cartera.setSaldo(compra.getTotal());
+            cartera.setTotal(compra.getTotal());
+
+            for (CompraDetalle detalle : compra.getDetalles()) {
+                CarteraDetalle carteraDetalle = new CarteraDetalle();
+                carteraDetalle.setDescripcion(detalle.getDescripcion());
+                carteraDetalle.setSaldo(detalle.getTotal());
+                carteraDetalle.setTotal(detalle.getTotal());
+                cartera.addDetalle(carteraDetalle);
+            }
+        }
+                
+    }
+    
     private void crearCarteraNotaCredito(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces)
+    {
+        try {
+            NotaCredito notaCredito = (NotaCredito) comprobante;
+            cartera.setPersona(notaCredito.getCliente());
+            cartera.setReferenciaID(notaCredito.getId());
+            cartera.setSaldo(notaCredito.getTotal());
+            cartera.setTotal(notaCredito.getTotal());
+            
+            /**
+             * ==========================================================================
+             * Buscar la factura de la cartera para poder hacer el cruce
+             * ==========================================================================
+             */
+            CarteraService carteraService = new CarteraService();
+            //carteraService.buscarCarteraPorReferencia(Long.MIN_VALUE, documentoEnum, GeneralEnumEstado.ACTIVO, tipo, sucursal)
+            Cartera carteraFactura = null;
+            if (notaCredito.getFactura() != null) {
+                carteraFactura = carteraService.buscarCarteraPorReferencia(
+                        notaCredito.getFactura().getId(),
+                        notaCredito.getFactura().getCodigoDocumentoEnum(),
+                        GeneralEnumEstado.ACTIVO,
+                        Cartera.TipoCarteraEnum.CLIENTE,
+                        notaCredito.getSucursalEmpresa());
+            }
+            
+            for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {
+                CarteraDetalle carteraDetalle = new CarteraDetalle();
+                carteraDetalle.setDescripcion(detalle.getDescripcion());
+                carteraDetalle.setSaldo(detalle.getTotal());
+                carteraDetalle.setTotal(detalle.getTotal());
+                carteraDetalle.setId(carteraDetalle.hashCode() * -1l);
+                cartera.addDetalle(carteraDetalle);
+                
+                /**
+                 * ==========================================================================
+                 * CREAR EL CRUCE DE LA FACTURA
+                 * ==========================================================================
+                 * Solo hacer un cruce si existe la referencia de la factura en el
+                 * sistema
+                 */
+                if (carteraFactura != null) {
+                    CarteraCruce carteraCruceRenta = new CarteraCruce();
+                    carteraCruceRenta.setCarteraAfectada(carteraFactura);
+                    carteraCruceRenta.setCarteraDetalle(carteraDetalle);
+                    carteraCruceRenta.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+                    carteraCruceRenta.setFechaCruce(UtilidadesFecha.getFechaHoy());
+                    carteraCruceRenta.setValor(detalle.calcularTotalFinal());
+                    cruces.add(carteraCruceRenta);
+                }
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(CarteraService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+    }
+    
+    private void crearCarteraAnularCompra(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces)
     {
         try {
             NotaCredito notaCredito = (NotaCredito) comprobante;
@@ -732,8 +857,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      * @throws ServicioCodefacException
      * @throws RemoteException 
      */
-    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum) throws ServicioCodefacException, RemoteException {
-        return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum);
+    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal) throws ServicioCodefacException, RemoteException {
+        return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum,sucursal);
     }
     
     /*public List<Cartera> listaCartera(Empresa empresa,Date fechaInicial,Date fechaFinal,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,)
@@ -787,33 +912,35 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 
-                if(modo.NORMAL.equals(modo))
-                {
-                    if(entity.getCruces()!=null && entity.getCruces().size()>0)
-                    {
-                        throw new ServicioCodefacException("No se puede eliminar el documentos porque le afectan cruces");
-                    }
-
-                    for (CarteraDetalle detalle : entity.getDetalles()) 
-                    {
-                        if(detalle.getCruces()!=null && detalle.getCruces().size()>0)
-                        {
-                            throw new ServicioCodefacException("No se puede eliminar el documentos porque afecta cruces a otro documento");
-                        }
-                    }
-                }
-                
-                //Elimino la cartera principal cambiando de estado           
-                entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
-                entityManager.merge(entity);
-                
-                //TODO: Ver alguna manera de identificar cuales son carteras principales (factura) y cuales son cartera que afectan (abonos)
-                quitarCruceCarteraPrincipal(entity);
-                quitarCruceCarteraAfectan(entity);
-                entityManager.flush();
+                eliminarCarteraSinTransaccion(entity, modo);
                 
             }
         });
+    }
+    
+    public void eliminarCarteraSinTransaccion(Cartera entity,ModoProcesarEnum modo) throws ServicioCodefacException, RemoteException 
+    {
+        if (modo.NORMAL.equals(modo)) {
+            if (entity.getCruces() != null && entity.getCruces().size() > 0) {
+                throw new ServicioCodefacException("No se puede eliminar el documento porque le afectan cruces");
+            }
+
+            for (CarteraDetalle detalle : entity.getDetalles()) {
+                if (detalle.getCruces() != null && detalle.getCruces().size() > 0) {
+                    throw new ServicioCodefacException("No se puede eliminar el documento porque afecta cruces a otro documento");
+                }
+            }
+        }
+
+        //Elimino la cartera principal cambiando de estado           
+        entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+        entityManager.merge(entity);
+
+        //TODO: Ver alguna manera de identificar cuales son carteras principales (factura) y cuales son cartera que afectan (abonos)
+        quitarCruceCarteraPrincipal(entity);
+        quitarCruceCarteraAfectan(entity);
+        entityManager.flush();                
+                
     }
     
     /**

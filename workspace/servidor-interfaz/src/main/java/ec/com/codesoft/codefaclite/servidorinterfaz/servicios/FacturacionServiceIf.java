@@ -68,4 +68,6 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     
     public FacturaLoteRespuesta grabarLote(List<FacturaParametro> facturaList) throws RemoteException,ServicioCodefacException;
     
+    public Factura obtenerPedidoVentaDiariaActivo(Sucursal sucursal) throws RemoteException,ServicioCodefacException;
+    
 }

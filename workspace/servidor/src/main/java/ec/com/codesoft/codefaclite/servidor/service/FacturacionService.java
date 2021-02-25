@@ -482,7 +482,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(factura, Cartera.TipoCarteraEnum.CLIENTE,carteraParametro);
+        carteraService.grabarDocumentoCartera(factura, Cartera.TipoCarteraEnum.CLIENTE,carteraParametro,CrudEnum.CREAR);
     }
     
     private void afectarPresupuesto(FacturaDetalle detalle) throws RemoteException
@@ -561,6 +561,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
 
     }*/
     
+    /***
+     * Ver si este metodo se une con el que esta en KardexService
+     * @param detalle
+     * @param bodega
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
     private void afectarInventario(FacturaDetalle detalle,Bodega bodega) throws RemoteException, ServicioCodefacException
     {
 
@@ -918,4 +925,22 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         entityManager.merge(ingresoCaja);
     }
+    
+    public Factura obtenerPedidoVentaDiariaActivo(Sucursal sucursal) throws RemoteException,ServicioCodefacException 
+    {
+        //Factura factura;
+        //factura.setCodigoDocumento(codigoDocumento);
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("sucursalEmpresa",sucursal);
+        mapParametros.put("codigoOrigenTransaccion", Factura.OrigenTransaccionEnum.WIDGETS_VENTA_DIARIA.getCodigo());
+        mapParametros.put("codigoDocumento", DocumentoEnum.PROFORMA.getCodigo());
+        mapParametros.put("estado", Factura.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+        
+        List<Factura> resultado=getFacade().findByMap(mapParametros);
+        if(resultado.size()>0)
+        {
+            return resultado.get(0);
+        }
+        return null;
+    }    
 }

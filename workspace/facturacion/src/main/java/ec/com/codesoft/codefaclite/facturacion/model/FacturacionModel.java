@@ -340,6 +340,28 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         return correos;
     }
+    
+    public void cargarFacturaDesdeProforma(Factura proforma) 
+    {
+        //Metodo para actualizar las referencias editadas , ene este caso el cliente cuando cambios los datos
+        //Todo: Ver como se puede optimizar
+        try {
+            factura = (Factura) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(proforma);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        factura.setId(null); //Con este artificio no tengo que copiar a un nuevo objeto y al grabar me reconoce como un nuevo dato
+        //TODO: Este artificio sirve para poder establecer la fecha actual del sistema y no la fecha del pedido
+        factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
+        factura.setProforma(proforma);
+
+        //Todo: revisar que el cambio sea correcto
+        //Actualizo con los nuevo valores del cliente si se modifico y viene de un presupuesto
+        //setearValoresCliente();
+        cargarDatosBuscar();
+        //DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO)
+    }
 
     private void addListenerButtons() { 
         
@@ -371,7 +393,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
         
-               
+        
                        
         getBtnCargarProforma().addActionListener(new ActionListener() {
             @Override
@@ -382,27 +404,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(buscarDialogoModel.getResultado()!=null)
                 {
                     Factura proforma = (Factura) buscarDialogoModel.getResultado();
-                    //Metodo para actualizar las referencias editadas , ene este caso el cliente cuando cambios los datos
-                    
-                    
-                    //Todo: Ver como se puede optimizar
-                    try {
-                        factura=(Factura) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(proforma);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                    factura.setId(null); //Con este artificio no tengo que copiar a un nuevo objeto y al grabar me reconoce como un nuevo dato
-                    //TODO: Este artificio sirve para poder establecer la fecha actual del sistema y no la fecha del pedido
-                    factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
-                    factura.setProforma(proforma);
-
-                    //Todo: revisar que el cambio sea correcto
-                    //Actualizo con los nuevo valores del cliente si se modifico y viene de un presupuesto
-                    //setearValoresCliente();
-                    
-                    cargarDatosBuscar();
-                    //DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO)
+                    cargarFacturaDesdeProforma(proforma);
                 }
             }
         });
@@ -1263,16 +1265,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     //Imprmir facturas manuales cuando son más de 1 factura o continua con el proceso normal
                     if(facturasProcesar.size()==1)
                     {
+                        mostrarErrorFacturaLote(respuestaManual);
                         factura=respuestaManual.procesadosList.get(0);
                     }
                     else if(facturasProcesar.size()>1)
                     {
-                        if(respuestaManual.procesadosList.size()==0)
+                        /*if(respuestaManual.procesadosList.size()==0)
                         {
                             String mensaje=UtilidadesLista.castListToString(respuestaManual.noProcesadosList,"\br");
                             DialogoCodefac.mensaje("Error ","No se puede grabar: \nCausa: "+mensaje, DialogoCodefac.MENSAJE_INCORRECTO);            
                             throw new ExcepcionCodefacLite("Error al grabar: "+mensaje);
-                        }
+                        }*/
+                        mostrarErrorFacturaLote(respuestaManual);
                         
                         List<JasperPrint> reportesPendientes=new ArrayList<JasperPrint>();
                         for (Factura facturaProcesada : respuestaManual.procesadosList) 
@@ -1341,6 +1345,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
     }
     
+    private void mostrarErrorFacturaLote(FacturaLoteRespuesta respuestaManual) throws ExcepcionCodefacLite
+    {
+        if (respuestaManual.procesadosList.size() == 0) 
+        {
+            String mensaje ="";
+            for (FacturaLoteRespuesta.Error error : respuestaManual.noProcesadosList) 
+            {
+                mensaje+=error.error+"\n";
+            }
+            //String mensaje = UtilidadesLista.castListToString(respuestaManual.noProcesadosList, "\br");
+            DialogoCodefac.mensaje("Error ", "No se puede grabar: \nCausa: " + mensaje, DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite("Error al grabar: " + mensaje);
+        }
+    }
+    
     private List<FacturaParametro> obtenerFacturasManualesProcesar(Factura factura) throws ServicioCodefacException
     {
         List<FacturaParametro> respuestaList=new ArrayList<FacturaParametro>();
@@ -1354,7 +1373,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             {
                 respuestaList.add(new FacturaParametro(facturaTmp,null, crearDatosPrestamo()));
             }        
-        }    
+        }
+        else
+        {
+            throw new ServicioCodefacException("Falta configurar el número de detalles para facturas manuales");
+        }
         return respuestaList;
     }
     
@@ -2397,7 +2420,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     protected void setearValoresDefaultFactura() {
         /**
-         * Todo: Carlos Pato
+         * Todo: Carlos 
          */
         Persona.TipoIdentificacionEnum tipoIdentificacionEnum=factura.getCliente().getTipoIdentificacionEnum();
         String codigoSri=tipoIdentificacionEnum.getCodigoSriVenta();
@@ -2985,7 +3008,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(documentoNuevo.equals(DocumentoEnum.NOTA_VENTA_INTERNA)
                         || documentoAnterior.equals(DocumentoEnum.NOTA_VENTA_INTERNA) )
                 {
-                    if(factura.getDetalles()!=null && factura.getDetalles().size()>0)
+                    if(factura!=null && factura.getDetalles()!=null && factura.getDetalles().size()>0)
                     {
                         if(DialogoCodefac.dialogoPregunta("Si cambia el tipo de documento los detalles ingresados se perderan , desea continuar ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
                         {   

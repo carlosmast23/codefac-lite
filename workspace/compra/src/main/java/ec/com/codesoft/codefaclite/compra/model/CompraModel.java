@@ -54,6 +54,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaS
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
@@ -199,17 +200,10 @@ public class CompraModel extends CompraPanel{
         compra.setRazonSocial(compra.getProveedor().getRazonSocial());
         compra.setTelefono(compra.getProveedor().getEstablecimientos().get(0).getTelefonoCelular()); //Todo: ver si se modifica para trabajar por sucursales
         compra.setDireccion(compra.getProveedor().getEstablecimientos().get(0).getDireccion());//Todo: ver si se modifica para trabajar por sucursales
-        //compra.setProveedor(proveedor);
-        
-//        compra.setPuntoEmision(getTxtPuntoEmision().getText());
-//        compra.setPuntoEstablecimiento(getTxtEstablecimiento().getText());
-//        compra.setSecuencial(Integer.parseInt(getTcmbTipoDocumentoxtSecuencial().getText()));
-        //compra.setPuntoEmision(getTxtFPreimpreso().getText().substring(0,3));
-        //compra.setPuntoEstablecimiento(getTxtFPreimpreso().getText().substring(4,7));
-        //compra.setSecuencial(Integer.parseInt(getTxtFPreimpreso().getText().substring(8, 17)));
-        compra.setPuntoEmision(Integer.parseInt(getTxtPuntoEmisionCompra().getText()));
-        compra.setPuntoEstablecimiento(new BigDecimal(getTxtEstablecimientoCompra().getText()));
-        compra.setSecuencial(Integer.parseInt(getTxtSecuencialCompra().getText()));
+       
+        compra.setPuntoEmision(UtilidadesNumeros.castStringToInteger(getTxtPuntoEmisionCompra().getText()));
+        compra.setPuntoEstablecimiento(UtilidadesNumeros.castStringToBigDecimal(getTxtEstablecimientoCompra().getText()));
+        compra.setSecuencial(UtilidadesNumeros.castStringToInteger(getTxtSecuencialCompra().getText()));
         
         compra.setTipoFacturacion(""); //TODO: Establecer el metodo de facturacion manual y electronica
         //compra.setInventarioIngreso(EnumSiNo.NO.getLetra());
@@ -1236,34 +1230,39 @@ public class CompraModel extends CompraPanel{
             return false;
         }
         
-        try
+        //La validacion de los secuenciales solo debe funcionar cuando no es un documento interno por que puede ser que no tenga datos de secuenciales
+        /*DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
         {
-            if((new BigDecimal(getTxtEstablecimientoCompra().getText())).compareTo(BigDecimal.ZERO)==0)
+            try
             {
-                DialogoCodefac.mensaje("Formato error","El establecimiento no puede ser 0",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if((new BigDecimal(getTxtEstablecimientoCompra().getText())).compareTo(BigDecimal.ZERO)==0)
+                {
+                    DialogoCodefac.mensaje("Formato error","El establecimiento no puede ser 0",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return false;
+                }
+                if((new BigDecimal(getTxtPuntoEmisionCompra().getText())).compareTo(BigDecimal.ZERO)==0)
+                {
+                    DialogoCodefac.mensaje("Formato error","EL punto de emisión no puede ser 0",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return false;
+                }
+                if((new BigDecimal(getTxtSecuencialCompra().getText())).compareTo(BigDecimal.ZERO)==0)
+                {
+                    DialogoCodefac.mensaje("Formato error","El secuencial no puede ser 0",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return false;
+                }
+            } catch(java.lang.NumberFormatException nfe)
+            {
+                DialogoCodefac.mensaje("Formato error","El secuencial solo pueden ser numeros",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 return false;
             }
-            if((new BigDecimal(getTxtPuntoEmisionCompra().getText())).compareTo(BigDecimal.ZERO)==0)
-            {
-                DialogoCodefac.mensaje("Formato error","EL punto de emisión no puede ser 0",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                return false;
-            }
-            if((new BigDecimal(getTxtSecuencialCompra().getText())).compareTo(BigDecimal.ZERO)==0)
-            {
-                DialogoCodefac.mensaje("Formato error","El secuencial no puede ser 0",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                return false;
-            }
-        } catch(java.lang.NumberFormatException nfe)
-        {
-            DialogoCodefac.mensaje("Formato error","El secuencial solo pueden ser numeros",DialogoCodefac.MENSAJE_ADVERTENCIA);
-            return false;
-        }
 
-        if(!(getTxtEstablecimientoCompra().getText().length()==3 && getTxtPuntoEmisionCompra().getText().length()==3 && getTxtSecuencialCompra().getText().length()==9))
-        {
-            DialogoCodefac.mensaje("Formato error","Revise el formato del secuencial de la compra que es incorrecto",DialogoCodefac.MENSAJE_ADVERTENCIA);
-            return false;
-        }
+            if(!(getTxtEstablecimientoCompra().getText().length()==3 && getTxtPuntoEmisionCompra().getText().length()==3 && getTxtSecuencialCompra().getText().length()==9))
+            {
+                DialogoCodefac.mensaje("Formato error","Revise el formato del secuencial de la compra que es incorrecto",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return false;
+            }
+        }*/
         
        return true;
 

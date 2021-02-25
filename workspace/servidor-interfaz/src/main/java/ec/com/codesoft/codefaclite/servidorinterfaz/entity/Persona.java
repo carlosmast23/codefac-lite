@@ -119,6 +119,9 @@ public class Persona implements Serializable, Comparable<Persona> {
      */
     @Column(name = "TIPO_OPERADOR")
     private String tipo;
+    
+    @Column(name = "OBSERVACIONES")
+    private String observaciones;
 
     /**
      * Este variable solo es informativa para saber el nombre de la persona que
@@ -129,6 +132,7 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
+    
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona", fetch = FetchType.EAGER)
     private List<PersonaEstablecimiento> establecimientos;
@@ -440,6 +444,14 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     public void setDiasCreditoProveedor(Integer diasCreditoProveedor) {
         this.diasCreditoProveedor = diasCreditoProveedor;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
     
     

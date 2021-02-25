@@ -196,7 +196,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(notaCredito, Cartera.TipoCarteraEnum.CLIENTE,null);
+        carteraService.grabarDocumentoCartera(notaCredito, Cartera.TipoCarteraEnum.CLIENTE,null,CrudEnum.CREAR);
     }
     
     private void anularRubroEstudiante(Long referenciaId,BigDecimal total) throws RemoteException
@@ -235,7 +235,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 
             case INVENTARIO:
                 Bodega bodega=obtenerBodegaAfecta(facturaDetalle.getFactura());
-                afectarInventario(
+                KardexService kardexService=new KardexService();
+                kardexService.afectarInventario(
                         bodega,
                         facturaDetalle.getCantidad(), 
                         facturaDetalle.getPrecioUnitario(),
@@ -282,7 +283,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 
             case INVENTARIO:
                 Bodega bodega=obtenerBodegaAfecta(notaDetalle.getNotaCredito());
-                afectarInventario(
+                KardexService kardexService=new KardexService();
+                kardexService.afectarInventario(
                         bodega,
                         notaDetalle.getCantidad(), 
                         notaDetalle.getPrecioUnitario(),
@@ -300,11 +302,11 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     
     }
     
-    /**
+    /**     *
      * TODO: Unificar este metodo con la de factura que existe un metodo similar
      * @param detalle 
      */
-    private void afectarInventario(Bodega bodega,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento)
+    /*private void afectarInventario(Bodega bodega,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento)
     {
         try {
             Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(referenciaProductoId);
@@ -349,7 +351,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         }
     
-    }
+    }*/
     
     /*
     public String getPreimpresoSiguiente() {

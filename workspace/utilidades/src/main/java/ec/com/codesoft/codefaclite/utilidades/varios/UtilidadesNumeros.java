@@ -26,5 +26,39 @@ public abstract class UtilidadesNumeros {
         return 0;
     }
     
+    public static Integer castStringToInteger(String numeroStr)
+    {
+        if(numeroStr!=null && !numeroStr.trim().isEmpty())
+        {
+            try
+            {
+                return Integer.parseInt(numeroStr);
+            }
+            catch(Exception e)
+            {
+                System.out.println("Error casting Integer: "+e.getMessage());
+                return null;
+            }
+        }
+        return null;
+    }
+    
+    public static BigDecimal castStringToBigDecimal(String numeroStr)
+    {
+        if(numeroStr!=null && !numeroStr.trim().isEmpty())
+        {
+            try
+            {
+                return new BigDecimal(numeroStr);
+            }
+            catch(Exception e)
+            {
+                System.out.println("Error casting Integer: "+e.getMessage());
+                return null;
+            }
+        }
+        return null;
+    }
+    
     
 }

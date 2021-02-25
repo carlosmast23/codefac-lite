@@ -335,7 +335,8 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                             (Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem(),
                             saldoCarteraEnum,
                             Cartera.TipoOrdenamientoEnum.POR_RAZON_SOCIAL,
-                            CarteraEstadoReporteEnum.TODO);
+                            CarteraEstadoReporteEnum.TODO,
+                            session.getSucursal());
 
                     construirResultadoData(resultado);
                     construirResultadoDataDetalle(resultado);
