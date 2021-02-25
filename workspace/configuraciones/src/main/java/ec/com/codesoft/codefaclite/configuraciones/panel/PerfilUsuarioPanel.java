@@ -431,7 +431,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         jPanel4.add(jLabel13, gridBagConstraints);
 
-        jTabbedPane1.addTab("Caja Permisos", jPanel4);
+        jTabbedPane1.addTab("Caja", jPanel4);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 

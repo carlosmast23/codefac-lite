@@ -37,6 +37,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_EDITAR;
 import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_GRABAR;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.controlador.model.LoginArqueoCajalModel;
+import ec.com.codesoft.codefaclite.controlador.panel.LoginArqueoCajaDialog;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadReportes;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
@@ -170,7 +172,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
@@ -714,6 +718,37 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     
                     //factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(),factura.getVendedor().getNombresCompletos());
                     cargarTablaDatosAdicionales();
+                }
+
+            }
+        });
+        
+        getBtnArqueoCaja().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try 
+                {
+                    LoginArqueoCajalModel loginArqueoCajalModel = new LoginArqueoCajalModel(session);
+                    loginArqueoCajalModel.setVisible(true);
+                    
+                    if(loginArqueoCajalModel.getUsuario() == null)
+                    {
+                        DialogoCodefac.mensaje("Advertencia", "Verifique sus credenciales", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        throw new ExcepcionCodefacLite("Verifique las credenciales para la autentificación");
+                        
+                    }
+                    
+                    if(loginArqueoCajalModel.getUsuario().getEmpleado() == null)
+                    {
+                        DialogoCodefac.mensaje("Advertencia", "Necesita tener un empleado ligado", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        throw new ExcepcionCodefacLite("Usuario no contiene ligado un empleado");
+                    }
+                    
+                    btnListenerArqueoCaja(loginArqueoCajalModel.getUsuario());
+                } 
+                catch (ExcepcionCodefacLite | RemoteException | ServicioCodefacException ex) 
+                {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
@@ -3518,6 +3553,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
             }
         });
+    }
+    
+    private void btnListenerArqueoCaja(Usuario usuario) throws ExcepcionCodefacLite, RemoteException, ServicioCodefacException
+    {
+        if(!usuario.getEmpleado().getDepartamento().getTipoEnum().equals(Departamento.TipoEnum.Supervisor))
+        {
+            DialogoCodefac.mensaje("Advertencia", "NO tiene autorización para realizar arqueo de caja", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Usuario no tiene autorización para realizar el arqueo de caja");
+        }
+        
+        CajaSession cajaSession = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorPuntoEmisionYUsuario(getPuntoEmisionSeleccionado().getPuntoEmision(), session.getUsuario());
+        if(cajaSession == null)
+        {
+            DialogoCodefac.mensaje("Advertencia", "No exite una sesión de caja activa", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ServicioCodefacException("No exite una sesión de caja activa");
+        }
+        Object[] parametros={getPuntoEmisionSeleccionado(),usuario};
+        panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<ArqueoCaja>() 
+        {
+            @Override
+            public void updateInterface(ArqueoCaja entity) 
+            {
+                DialogoCodefac.mensaje("Se realizo un arqueo de caja exitoso", DialogoCodefac.MENSAJE_CORRECTO);
+            }
+        },VentanaEnum.ARQUEO_CAJA, false,parametros,this);
     }
 
     private void listenerComponentes() {

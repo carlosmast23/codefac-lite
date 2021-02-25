@@ -38,6 +38,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.TurnoAsignado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -48,8 +55,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.IngresoCajaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.hora.UtilidadesHora;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
@@ -57,6 +66,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -213,7 +223,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 validacionInicialFacturar(factura,CrudEnum.CREAR);
-                agregarDatosParaCajaSession();
+                
+                //TODO Esta validación la realizo porque no existe una variable global que me permita saber si se realiza POS
+                if(factura.getUsuario().getCajasPermisoUsuario() != null && !factura.getUsuario().getCajasPermisoUsuario().isEmpty())
+                    agregarDatosParaCajaSession(factura);
+                
                 grabarSinTransaccion(factura,carteraParametro);
                 
                 /**
@@ -849,8 +863,59 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
     }
     
-    private void agregarDatosParaCajaSession()
+    private void agregarDatosParaCajaSession(Factura factura) throws ServicioCodefacException, RemoteException
     {
+        CajaSession cajaSession = null;
+        CajaPermiso cajaPermisoParaUsuario = null;
         
+        Usuario usuario = factura.getUsuario();
+        
+        //Verifico si el usuario tiene cajas con permisos para el método POS
+        if(usuario.getCajasPermisoUsuario().isEmpty())
+        {
+            throw new ServicioCodefacException("No tiene permisos asignados en cajas");
+        }
+        
+        //Busco la caja, dentro de la cajas que tiene permiso el usuario con el respectivo punto de emision que eligio en la factura       
+        for(CajaPermiso cajaPermiso : usuario.getCajasPermisoUsuario()) 
+        {
+            if(cajaPermiso.getCaja().getPuntoEmision().getPuntoEmision().equals(factura.getPuntoEmision()))
+            {
+                for(TurnoAsignado turnoAsignado : cajaPermiso.getTurnoAsignadoList())
+                {
+                    if(UtilidadesHora.comprobarHoraEnRangoDeTiempo(turnoAsignado.getTurno().getHoraInicial(), turnoAsignado.getTurno().getHoraFinal(), UtilidadesHora.horaActual()))
+                    {
+                       cajaPermisoParaUsuario = cajaPermiso;
+                       break;
+                    }
+                }
+            }
+        }
+        
+        if(cajaPermisoParaUsuario == null)
+        {
+            throw new ServicioCodefacException("No tiene permisos asignos en el punto de emision para este horario");
+        }
+        
+        if(usuario.getCajasSessionUsuario().isEmpty())
+        {
+            throw new ServicioCodefacException("No se activado una caja para el procedimiento POS");
+        }
+        
+        //TODO preguntar donde puedo
+        cajaSession = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorPuntoEmisionYUsuario(factura.getPuntoEmision(), factura.getUsuario());
+        
+        if(cajaSession == null)
+        {
+            throw new ServicioCodefacException("No se encontro ninguna session para el punto de emisión");
+        }
+        
+        //Grabar el valor de la venta para contavilizar cuando se termine la session de la 
+        IngresoCaja ingresoCaja = new IngresoCaja();
+        ingresoCaja.setCajaSession(cajaSession);
+        ingresoCaja.setValor(factura.getTotal());
+        ingresoCaja.setFactura(factura);
+        
+        entityManager.merge(ingresoCaja);
     }
 }

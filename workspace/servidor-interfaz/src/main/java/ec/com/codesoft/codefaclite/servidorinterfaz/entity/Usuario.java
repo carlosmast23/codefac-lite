@@ -311,7 +311,7 @@ public class Usuario implements Serializable{
         }
         return false;
     }
-    
+       
     public String formatoPuntoEmisionActivos()
     {
         List<String> puntosActivos=new  ArrayList<String>();

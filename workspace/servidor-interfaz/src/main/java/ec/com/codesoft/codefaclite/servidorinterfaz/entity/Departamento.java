@@ -137,7 +137,8 @@ public class Departamento implements Serializable
     public enum TipoEnum
     {
         Otros("Otros","o"),
-        Ventas("Ventas","v");
+        Ventas("Ventas","v"),
+        Supervisor("Supervisor","s");
 
         private TipoEnum(String nombre, String letra) {
             this.nombre = nombre;

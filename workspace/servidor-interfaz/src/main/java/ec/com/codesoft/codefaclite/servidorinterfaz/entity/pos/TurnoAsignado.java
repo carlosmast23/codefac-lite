@@ -112,6 +112,9 @@ public class TurnoAsignado implements Serializable
         }
         return true;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return " " + turno.getHoraInicial() + " - " + turno.getHoraFinal();
+    }    
 }

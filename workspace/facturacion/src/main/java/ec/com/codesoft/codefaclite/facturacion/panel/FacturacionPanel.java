@@ -95,6 +95,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnCargarPedido = new javax.swing.JButton();
         btnCargarProforma = new javax.swing.JButton();
         btnGenerarCartera = new javax.swing.JButton();
+        btnArqueoCaja = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         PanelDetalleFactura = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -257,6 +258,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnGenerarCartera.setFocusable(false);
         btnGenerarCartera.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnGenerarCartera.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
+        btnArqueoCaja.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnArqueoCaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/admin-icon.png"))); // NOI18N
+        btnArqueoCaja.setToolTipText("Arqueo de caja");
+        btnArqueoCaja.setFocusable(false);
+        btnArqueoCaja.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnArqueoCaja.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnArqueoCaja.getAccessibleContext().setAccessibleName("");
 
         setClosable(true);
         setIconifiable(true);
@@ -1498,6 +1507,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarDetalleFactura;
     private javax.swing.JButton btnAgregarFormaPago;
     private javax.swing.JButton btnAgregarProducto;
+    private javax.swing.JButton btnArqueoCaja;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnBuscarEstudiante;
     private javax.swing.JButton btnBuscarReferenciaContacto;
@@ -1999,7 +2009,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         return btnGenerarCartera;
     }
 
-
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Otros", visible = false)
+    public JButton getBtnArqueoCaja() {
+        return btnArqueoCaja;
+    }
+        
     public JComboBox<PuntoEmision> getCmbPuntoEmision() {
         return cmbPuntoEmision;
     }

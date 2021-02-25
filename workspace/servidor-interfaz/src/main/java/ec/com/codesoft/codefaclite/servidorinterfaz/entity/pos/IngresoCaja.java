@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -53,14 +53,10 @@ public class IngresoCaja implements Serializable
     @ManyToOne
     private CajaSession cajaSession;
     
-    @JoinColumn(name = "VENTA_ID")
+    @JoinColumn(name = "FACTURA_ID")
     @ManyToOne
-    private Venta venta;
+    private Factura factura;
     
-    @JoinColumn(name = "FORMA_PAGO_ID")
-    @ManyToOne
-    private FormaPago formaPago;
-            
     /*
     * Get and Set
     */
@@ -88,23 +84,14 @@ public class IngresoCaja implements Serializable
         this.cajaSession = cajaSession;
     }
 
-    public Venta getVenta() {
-        return venta;
+    public Factura getFactura() {
+        return factura;
     }
 
-    public void setVenta(Venta venta) {
-        this.venta = venta;
-    }   
-
-    public FormaPago getFormaPago() {
-        return formaPago;
+    public void setFactura(Factura factura) {
+        this.factura = factura;
     }
-
-    public void setFormaPago(FormaPago formaPago) {
-        this.formaPago = formaPago;
-    }
-    
-    
+   
     /*
     * Equals
     */

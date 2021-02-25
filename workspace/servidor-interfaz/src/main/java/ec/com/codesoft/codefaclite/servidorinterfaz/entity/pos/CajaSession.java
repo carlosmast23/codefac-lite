@@ -12,15 +12,19 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -60,16 +64,20 @@ public class CajaSession implements Serializable
     @JoinColumn(name = "CAJA_ID")
     @ManyToOne
     private Caja caja;
-    @JoinColumn(name = "ARQUEO_CAJA_ID")
-    @ManyToOne
-    private ArqueoCaja arqueoCaja;
+    
     @JoinColumn(name = "USUARIO_ID")
     @ManyToOne
     private Usuario usuario;
+    
     @JoinColumn(name = "VENTA_ID")
     @ManyToOne
     private Venta venta;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cajaSession", fetch = FetchType.EAGER)
+    private List<ArqueoCaja> arqueosCaja;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cajaSession", fetch = FetchType.EAGER)
+    private List<IngresoCaja> ingresosCaja;
     /*
     * Constructor
     */
@@ -126,14 +134,6 @@ public class CajaSession implements Serializable
 
     public void setCaja(Caja caja) {
         this.caja = caja;
-    }
-
-    public ArqueoCaja getArqueoCaja() {
-        return arqueoCaja;
-    }
-
-    public void setArqueoCaja(ArqueoCaja arqueoCaja) {
-        this.arqueoCaja = arqueoCaja;
     }
 
     public Usuario getUsuario() {
@@ -198,6 +198,22 @@ public class CajaSession implements Serializable
         {
             estadoCierreCaja = estadoCajaSessionEnum.getEstado();
         }
+    }
+
+    public List<ArqueoCaja> getArqueosCaja() {
+        return arqueosCaja;
+    }
+
+    public void setArqueosCaja(List<ArqueoCaja> arqueosCaja) {
+        this.arqueosCaja = arqueosCaja;
+    }
+
+    public List<IngresoCaja> getIngresosCaja() {
+        return ingresosCaja;
+    }
+
+    public void setIngresosCaja(List<IngresoCaja> ingresosCaja) {
+        this.ingresosCaja = ingresosCaja;
     }
     
     /*

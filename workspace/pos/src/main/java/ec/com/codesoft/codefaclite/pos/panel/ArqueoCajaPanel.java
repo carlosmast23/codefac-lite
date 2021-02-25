@@ -197,7 +197,7 @@ public abstract class ArqueoCajaPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @TextFieldBinding(value = "controlador.arqueoCaja.ValorTeorico", converter = StringToBigDecimalConverter.class)
+    @TextFieldBinding(value = "controlador.arqueoCaja.ValorTeorico")
     public JTextField getjTextValorTeorico() {
         return jTextValorTeorico;
     }
