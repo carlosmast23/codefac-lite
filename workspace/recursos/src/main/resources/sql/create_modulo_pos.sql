@@ -8,7 +8,7 @@
  * Created: 14/02/2020
  */
 
-/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.2.4)*/
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.6.4)*/
 create table CAJA( 
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1), 
     SUCURSAL_ID BIGINT,
@@ -22,13 +22,13 @@ create table CAJA(
     CONSTRAINT id_caja_punto_emision_fk FOREIGN KEY (PUNTO_EMISION_ID) REFERENCES PUNTO_EMISION(ID)
 );
 
-/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.2.9)*/
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.6.4)*/
 create table VENTA(
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     primary key(ID)
 );
 
-/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.2.9)*/
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.6.4)*/
 create table ARQUEO_CAJA(
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
 
@@ -41,7 +41,7 @@ create table ARQUEO_CAJA(
 );
 
 
-/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.2.9)*/
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.6.4)*/
 create table CAJA_SESSION(
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) ,
     
@@ -64,7 +64,7 @@ create table CAJA_SESSION(
     constraint id_caja_session_venta_fk foreign key(VENTA_ID) references VENTA(ID)
 );
 
-/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.2.9)*/
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.6.4)*/
 create table INGRESO_CAJA(
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     
@@ -76,7 +76,7 @@ create table INGRESO_CAJA(
     constraint id_ingreso_caja_venta_fk foreign key(VENTA_ID) references VENTA(ID)
 );
 
-/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.4.0)*/
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.6.4)*/
 create table CAJA_PERMISO(
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
 
@@ -91,7 +91,7 @@ create table CAJA_PERMISO(
     constraint id_caja_permiso_usuario_session_fk foreign key(USUARIO_ID) references USUARIO(ID)
 );
 
-/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.4.0)*/
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.6.4)*/
 create table TURNO(
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     
@@ -102,7 +102,7 @@ create table TURNO(
     primary key(ID)
 );
 
-/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.4.0)*/
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.8.6.4)*/
 create table TURNO_ASIGNADO(
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     

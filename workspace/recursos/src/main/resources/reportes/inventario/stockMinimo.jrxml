@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.3286707500000055"/>
+	<property name="ireport.zoom" value="1.9453068450750086"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -87,7 +87,7 @@
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="157" y="0" width="157" height="15" uuid="c4e63977-442f-4270-a25a-b9852f4bf0ff"/>
+				<reportElement x="140" y="0" width="157" height="15" uuid="c4e63977-442f-4270-a25a-b9852f4bf0ff"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -110,10 +110,10 @@
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Cant Minima]]></text>
+				<text><![CDATA[Min]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="314" y="0" width="66" height="15" uuid="d8ff0833-b1a1-437b-81b2-4abd21d5df59"/>
+				<reportElement x="297" y="0" width="83" height="15" uuid="d8ff0833-b1a1-437b-81b2-4abd21d5df59"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -165,7 +165,7 @@
 				<text><![CDATA[Costo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="44" y="0" width="113" height="15" uuid="8a28b40a-9f6a-4e39-870c-a437d513eef8"/>
+				<reportElement x="44" y="0" width="96" height="15" uuid="8a28b40a-9f6a-4e39-870c-a437d513eef8"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -196,7 +196,7 @@
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="157" y="0" width="157" height="15" uuid="86505e3e-c386-4ba6-836c-4243f9571225"/>
+				<reportElement x="140" y="0" width="157" height="15" uuid="86505e3e-c386-4ba6-836c-4243f9571225"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -238,7 +238,7 @@
 				<textFieldExpression><![CDATA[$F{stock}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="314" y="0" width="66" height="15" uuid="2e757c5f-ccf2-4523-af35-397ded2315ed"/>
+				<reportElement x="297" y="0" width="83" height="15" uuid="2e757c5f-ccf2-4523-af35-397ded2315ed"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -280,7 +280,7 @@
 				<textFieldExpression><![CDATA[$F{costo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="44" y="0" width="113" height="15" uuid="86480613-120b-4da3-a9e1-87849e20c0e4"/>
+				<reportElement x="44" y="0" width="96" height="15" uuid="86480613-120b-4da3-a9e1-87849e20c0e4"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>

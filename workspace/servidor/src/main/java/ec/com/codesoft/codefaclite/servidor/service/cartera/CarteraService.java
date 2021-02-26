@@ -327,7 +327,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      * Metodo que me permite actualizar los saldos de los cruces
      * @param cruces 
      */
-    private void actualizarSaldosCarteraSinTrasaccion(List<CarteraCruce> cruces)
+    private void actualizarSaldosCarteraSinTrasaccion(List<CarteraCruce> cruces) throws ServicioCodefacException
     {
         if(cruces.size()>0)
         {
@@ -339,12 +339,16 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 
                 ///Generar el valor del saldo 
                 BigDecimal valorCruzadoCarteraAfectada=  getFacade().obtenerValorCruceCarteraAfecta(carteraAfectada);
+                BigDecimal saldocarteraAfectada=carteraAfectada.getTotal().subtract(valorCruzadoCarteraAfectada);
+                validarSaldoNegativo(saldocarteraAfectada);
                 carteraAfectada.setSaldo(carteraAfectada.getTotal().subtract(valorCruzadoCarteraAfectada));            
                 entityManager.merge(carteraAfectada);
 
                 //Generar el valor del saldo del documento que esta afectando
                 BigDecimal valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(carteraQueAfecta);
-                carteraQueAfecta.setSaldo(carteraQueAfecta.getTotal().subtract(valorCruzadoCarteraQueAfecta));            
+                BigDecimal saldoCarteraQueAfecta=carteraQueAfecta.getTotal().subtract(valorCruzadoCarteraQueAfecta);
+                validarSaldoNegativo(saldoCarteraQueAfecta);
+                carteraQueAfecta.setSaldo(saldoCarteraQueAfecta);            
                 entityManager.merge(carteraQueAfecta);
             }
             
@@ -353,13 +357,23 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             {
                 //Recalcular los saldo de cada detalle
                 BigDecimal valorCruzadoDetalle=getFacade().obtenerValorCruceCarteraDetalle(cruce.getCarteraDetalle());
-                cruce.getCarteraDetalle().setSaldo(cruce.getCarteraDetalle().getTotal().subtract(valorCruzadoDetalle));
+                BigDecimal saldoCarteraDetalle=cruce.getCarteraDetalle().getTotal().subtract(valorCruzadoDetalle);
+                validarSaldoNegativo(saldoCarteraDetalle);
+                cruce.getCarteraDetalle().setSaldo(saldoCarteraDetalle);
                 entityManager.merge(cruce.getCarteraDetalle());
                 
             }
             
         }
         
+    }
+    
+    private void validarSaldoNegativo(BigDecimal saldo) throws ServicioCodefacException 
+    {
+        if(saldo.compareTo(BigDecimal.ZERO)<0)
+        {
+            throw new ServicioCodefacException("Error al procesar la cartera .Motivo: saldo negativo [ "+saldo+" ]");
+        }
     }
     
     /**
