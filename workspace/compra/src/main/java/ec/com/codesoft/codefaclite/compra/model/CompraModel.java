@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.compra.model;
 
+import ec.com.codesoft.codefaclite.compra.busqueda.CompraBusquedaDialogo;
 import ec.com.codesoft.codefaclite.compra.panel.CompraPanel;
 import java.awt.Color;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -13,7 +14,6 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.compra.busqueda.CompraBusqueda;
 import ec.com.codesoft.codefaclite.compra.busqueda.OrdenCompraBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
@@ -302,7 +302,7 @@ public class CompraModel extends CompraPanel{
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        CompraBusqueda compraBusqueda = new CompraBusqueda(session.getEmpresa());
+        CompraBusquedaDialogo compraBusqueda = new CompraBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(compraBusqueda);
         buscarDialogoModel.setVisible(true);
         Compra compra = (Compra)buscarDialogoModel.getResultado();

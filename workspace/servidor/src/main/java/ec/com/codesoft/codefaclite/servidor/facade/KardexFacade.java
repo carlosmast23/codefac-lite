@@ -14,8 +14,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -223,6 +227,120 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
     
         return query.getResultList();
+    }
+    
+    /**
+     * Obtiene el total de ventas en el inventario desde una fecha dado hasta una fecha final
+     * @param fechaInicio
+     * @param fechaFinal
+     * @return 
+     */
+    public Map<Producto,BigDecimal> obtenerCantidadVentas(Date fechaInicio,Date fechaFinal,Sucursal sucursal)
+    {
+        //KardexDetalle kd;
+        //kd.getKardex().getProducto();
+        //kd.getCantidad();
+        //kd.getCodigoTipoDocumento();
+        //kd.getCodigoTipoDocumentoEnum().VENTA_INVENTARIO;
+        
+        /*kd.getCodigoTipoDocumentoEnum().VENTA
+        kd.;*/
+        String queryString="SELECT kd.kardex.producto,sum(kd.cantidad) FROM KardexDetalle kd WHERE kd.codigoTipoDocumento=?1 and kd.fechaIngreso>=?2 and kd.fechaIngreso<=?3 and kd.kardex.bodega.sucursal=?4 group by kd.kardex.producto ";        
+        Query query = getEntityManager().createQuery(queryString);
+               
+        query.setParameter(1,TipoDocumentoEnum.VENTA_INVENTARIO);
+        query.setParameter(2,fechaInicio);
+        query.setParameter(3,fechaFinal);
+        query.setParameter(4,sucursal);
+        
+        List<Object[]> resultadoList= query.getResultList();
+        
+        Map<Producto,BigDecimal> mapResultado= UtilidadesMap.crearMapDesdeList(resultadoList, new UtilidadesMap.MapCastListIf<Producto,BigDecimal,Object[]>() 
+        {
+            @Override
+            public Producto getClave(Object[] dato) {
+                return (Producto) dato[0];
+            }
+
+            @Override
+            public BigDecimal getValor(Object[] dato) {
+                return (BigDecimal) dato[1];
+            }            
+        });
+        
+        return mapResultado;
+    }
+    
+    /**
+     * Obtiene solo los movimientos en el kardes de los movimientos de las compras , que son las que generan movimientos
+     * @param fechaInicio
+     * @param fechaFinal
+     * @param sucursal
+     * @return 
+     */
+    public Map<Producto,StockPromedioYCantidadRespuesta> obtenerStockComprasPromedioYCantidad(Date fechaInicio,Date fechaFinal,Sucursal sucursal)
+    {
+        String queryString="SELECT kd.kardex.producto,avg(kd.cantidad),count(kd.id) FROM KardexDetalle kd WHERE kd.codigoTipoDocumento=?1 and kd.fechaIngreso>=?2 and kd.fechaIngreso<=?3 and kd.kardex.bodega.sucursal=?4 group by kd.kardex.producto ";        
+        Query query = getEntityManager().createQuery(queryString);
+               
+        query.setParameter(1,TipoDocumentoEnum.COMPRA_INVENTARIO);
+        query.setParameter(2,fechaInicio);
+        query.setParameter(3,fechaFinal);
+        query.setParameter(4,sucursal);
+        
+        List<Object[]> resultadoList= query.getResultList();
+        
+        Map<Producto,StockPromedioYCantidadRespuesta> mapResultado= UtilidadesMap.crearMapDesdeList(resultadoList, new UtilidadesMap.MapCastListIf<Producto,StockPromedioYCantidadRespuesta,Object[]>() 
+        {
+            @Override
+            public Producto getClave(Object[] dato) {
+                return (Producto) dato[0];
+            }
+
+            @Override
+            public StockPromedioYCantidadRespuesta getValor(Object[] dato) {
+                return new StockPromedioYCantidadRespuesta((BigDecimal)dato[1],(BigDecimal)dato[2]);
+            }            
+        });
+        
+        return mapResultado;
+        
+        
+    }
+    
+    public List<Producto> obtenerListaProductosInventario(Empresa empresa)
+    {
+        Producto producto;
+        //producto.getEstado();
+        //producto.getManejarInventario();
+        //producto.setEmpresa(empresa);
+                
+        String queryString="SELECT p FROM Producto p WHERE p.estado=?1 and p.manejarInventario=?2 and p.empresa=?3 ";
+        Query query = getEntityManager().createQuery(queryString);
+        
+        query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
+        query.setParameter(2,EnumSiNo.SI.getLetra());
+        query.setParameter(3, empresa);
+        return query.getResultList();
+        
+    }
+    
+    /**
+     * =============================================================================
+     *                          CLASES ADICIONALES
+     * =============================================================================
+     */
+    
+    public static class StockPromedioYCantidadRespuesta
+    {
+        public BigDecimal promedio;
+        public BigDecimal cantidad;
+
+        public StockPromedioYCantidadRespuesta(BigDecimal promedio, BigDecimal cantidad) {
+            this.promedio = promedio;
+            this.cantidad = cantidad;
+        }
+        
     }
 
 }

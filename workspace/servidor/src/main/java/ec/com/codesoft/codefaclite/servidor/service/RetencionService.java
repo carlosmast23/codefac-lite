@@ -107,6 +107,11 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 //Detalles a eliminar
                 entity.getDetalles().removeAll(detallesEliminar);
                 
+                //Validacion para evitar que la retención se quede sin ningun detalle
+                if(entity.getDetalles().size()==0)
+                {
+                    throw new ServicioCodefacException("No existen detalles de retenciones disponibles para procesar.\nNota:Verifique los códigos que no aplican en las retenciones");
+                }
 
                 entityManager.persist(entity);
                 entityManager.flush();

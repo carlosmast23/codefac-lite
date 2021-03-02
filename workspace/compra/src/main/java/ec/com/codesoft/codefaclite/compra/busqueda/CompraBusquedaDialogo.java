@@ -21,9 +21,16 @@ import java.util.Vector;
 public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
 {
     private Empresa empresa;
+    private Boolean filtrarComprasSinProcesarRetencion;
 
     public CompraBusquedaDialogo(Empresa empresa) {
         this.empresa = empresa;
+        this.filtrarComprasSinProcesarRetencion=false;
+    }
+    
+    public CompraBusquedaDialogo(Empresa empresa,Boolean filtrarComprasSinProcesarRetencion) {
+        this.empresa = empresa;
+        this.filtrarComprasSinProcesarRetencion=filtrarComprasSinProcesarRetencion;
     }
     
     @Override
@@ -46,11 +53,22 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
         //c.getEstadoEnum().ELIMINADO;
         
         String queryString = "SELECT c FROM Compra c WHERE c.empresa=?4 and c.estado<>?3 and ";
-        queryString+= " ( LOWER(c.secuencial) like ?1 )";
-        queryString+= " and c.estadoRetencion=?2"; 
+        queryString+= " ( LOWER(c.secuencial) like ?1 OR  LOWER(c.razonSocial) like ?1 )";
+        if(filtrarComprasSinProcesarRetencion)
+        {
+            queryString+= " and c.estadoRetencion=?2"; 
+        }
+        
+        queryString+=" order by c.id desc";
+        
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
-        queryDialog.agregarParametro(2,Compra.RetencionEnumCompras.NO_EMITIDO.getEstado());
+        
+        if(filtrarComprasSinProcesarRetencion)
+        {
+            queryDialog.agregarParametro(2,Compra.RetencionEnumCompras.NO_EMITIDO.getEstado());
+        }
+        
         queryDialog.agregarParametro(3,GeneralEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(4,empresa);
         return queryDialog;
