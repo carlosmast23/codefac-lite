@@ -2447,6 +2447,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
         factura.setCodigoDocumento(documentoEnum.getCodigo());
+                
+        factura.setContribuyenteEspecial(session.getEmpresa().getContribuyenteEspecial());
         
         factura.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
         factura.setDireccionEstablecimiento(session.getSucursal().getDirecccion());

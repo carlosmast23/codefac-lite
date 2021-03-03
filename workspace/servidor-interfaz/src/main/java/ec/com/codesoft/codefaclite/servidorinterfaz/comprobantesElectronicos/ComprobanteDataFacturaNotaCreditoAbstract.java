@@ -66,6 +66,11 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         informacionComprobante.setObligadoContabilidad(comprobante.getObligadoLlevarContabilidad());
         //informacionComprobante.setRazonSocial(comprobante.getCliente().getRazonSocial()); /TODO: NO se puede generaliar porque solo tiene la factura
         informacionComprobante.setTipoIdentificacion(getSriIdentificacion(comprobante).getCodigo());
+        
+        if(comprobante.getContribuyenteEspecial()!=null && !comprobante.getContribuyenteEspecial().trim().isEmpty())
+        {
+            informacionComprobante.setContribuyenteEspecial(comprobante.getContribuyenteEspecial());
+        }
         //informacionComprobante.setTotalDescuento(BigDecimal.ONE); TODO: No se puede generalizar
         //informacionComprobante.setTotalSinImpuestos(BigDecimal.ONE);
         //informacionComprobante.setTotalImpuestos(list);
@@ -193,6 +198,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         public void setDirEstablecimiento(String dirEstablecimiento);
         public void setIdentificacion(String identificacion);
         public void setObligadoContabilidad(String obligadoContabilidad);
+        public void setContribuyenteEspecial(String contribuyenteEspecial);
         public void setTipoIdentificacion(String tipoIdentificacion);
         
         

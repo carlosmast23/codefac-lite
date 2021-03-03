@@ -96,5 +96,17 @@ public class FacturaComprobante extends ComprobanteElectronicoFacturaAndLiquidac
     public void setInformacionComprobante(InformacionComprobanteAbstract informacionFactura) {
         this.informacionFactura=(InformacionFactura) informacionFactura;
     }
+
+    @Override
+    public String getObligadoLlevarContabilidad() {
+        return informacionFactura.getObligadoContabilidad();
+    }
+
+    @Override
+    public String getContribuyenteEspecial() {
+        return informacionFactura.getContribuyenteEspecial();
+    }
+
+
     
 }

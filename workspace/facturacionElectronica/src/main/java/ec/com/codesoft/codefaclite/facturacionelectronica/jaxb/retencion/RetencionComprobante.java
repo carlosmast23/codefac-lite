@@ -72,6 +72,16 @@ public class RetencionComprobante extends ComprobanteElectronico {
     public String getDireccionEstablecimiento() {
         return infoRetencion.getDirEstablecimiento();
     }
+
+    @Override
+    public String getObligadoLlevarContabilidad() {
+        return infoRetencion.getObligadoContabilidad();
+    }
+
+    @Override
+    public String getContribuyenteEspecial() {
+        return infoRetencion.getContribuyenteEspecial();
+    }
     
     
 }

@@ -129,6 +129,11 @@ public class ComprobanteDataNotaCredito extends ComprobanteDataFacturaNotaCredit
         public void setTipoIdentificacion(String tipoIdentificacion) {
             this.info.setTipoIdentificacionComprador(tipoIdentificacion);
         }
+
+        @Override
+        public void setContribuyenteEspecial(String contribuyenteEspecial) {
+            this.info.setContribuyenteEspecial(contribuyenteEspecial);
+        }
     
             
     }

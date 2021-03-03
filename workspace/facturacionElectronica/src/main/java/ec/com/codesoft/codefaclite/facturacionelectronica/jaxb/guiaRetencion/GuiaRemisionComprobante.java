@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.InformacionComprobanteAbstract;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -74,6 +75,17 @@ public class GuiaRemisionComprobante extends ComprobanteElectronico{
     public String getDireccionEstablecimiento() {
         return infoGuiaRemision.getDirEstablecimiento();
     }
+
+    @Override
+    public String getObligadoLlevarContabilidad() {
+        return infoGuiaRemision.getObligadoContabilidad();
+    }
+
+    @Override
+    public String getContribuyenteEspecial() {
+        return infoGuiaRemision.getObligadoContabilidad(); 
+    }
+
     
     
     

@@ -242,6 +242,7 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
         
         //notaCredito.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor));
         notaCredito.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
+        notaCredito.setContribuyenteEspecial(session.getEmpresa().getContribuyenteEspecial());
         //notaCredito.setSubtotalCero(BigDecimal.ZERO);
         
         

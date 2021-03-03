@@ -19,8 +19,10 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Carlos
  */
-@XmlType(propOrder = {"fechaEmision",
+@XmlType(propOrder = {
+    "fechaEmision",
     "dirEstablecimiento",
+    "contribuyenteEspecial",
     "obligadoContabilidad",
     "tipoIdentificacionComprador",
     "razonSocialComprador",

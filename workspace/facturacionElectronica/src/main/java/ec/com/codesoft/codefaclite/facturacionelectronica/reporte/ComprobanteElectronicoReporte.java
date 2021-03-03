@@ -75,8 +75,8 @@ public abstract class ComprobanteElectronicoReporte
         }
     
         map.put("direccion_sucursal",direccionEstablecimiento);
-        map.put("contribuyente_especial","");
-        map.put("obligado_contabilidad","");
+        map.put("contribuyente_especial",comprobante.getContribuyenteEspecial());
+        map.put("obligado_contabilidad",comprobante.getObligadoLlevarContabilidad());
         return map;
     }
     
