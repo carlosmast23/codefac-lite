@@ -1701,7 +1701,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void imprimir() {
         if (this.factura != null && estadoFormulario.equals(ESTADO_EDITAR)) {
             
-            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
             {
                 if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {
