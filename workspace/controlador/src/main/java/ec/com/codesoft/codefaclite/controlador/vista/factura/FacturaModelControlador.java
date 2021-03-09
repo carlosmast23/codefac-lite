@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -51,6 +52,7 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -873,7 +875,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             return;
         }
 
-        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);        
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);       
         Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
         
         String nombreReporte="comprobante_venta.jrxml";
@@ -1024,19 +1026,47 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             return mapParametros;
             
     }
+    
+    public static Integer obtenerDecimalesRedondeo(Empresa empresa)
+    {
+        try {
+            return ParametroUtilidades.obtenerValorBaseDatos(empresa
+                    , ParametroCodefac.NUMERO_DECIMALES_RIDE, new ParametroUtilidades.ComparadorInterface() {
+                @Override
+                public Object consultarParametro(String nombreParametro) {
+                    return Integer.parseInt(nombreParametro);
+                }
+            });
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
         
     public static List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando)
     {
+        
         List<ComprobanteVentaData> dataReporte = new ArrayList<ComprobanteVentaData>();
-
+        Integer redondedoDecimalesPrecios=obtenerDecimalesRedondeo(facturaProcesando.getEmpresa());
         for (FacturaDetalle detalle : facturaProcesando.getDetalles()) {
             
             ComprobanteVentaData data = new ComprobanteVentaData();
             data.setCantidad(detalle.getCantidad().toString());
             data.setCodigo(detalle.getCodigoPrincipal());
             data.setNombre(detalle.getDescripcion().toString());
-            data.setPrecioUnitario(detalle.getPrecioUnitario().toString());
-            data.setTotal(detalle.getTotal().toString());
+            
+            BigDecimal precioUnitario=detalle.getPrecioUnitario();
+            BigDecimal total=detalle.getTotal();
+            
+            //Redondeando deciamales cuando este configurado ese modo
+            if(redondedoDecimalesPrecios!=null)
+            {
+                precioUnitario=precioUnitario.setScale(redondedoDecimalesPrecios,BigDecimal.ROUND_UP);
+                total=total.setScale(redondedoDecimalesPrecios,BigDecimal.ROUND_UP);
+            }                        
+            
+            data.setPrecioUnitario(precioUnitario.toString());
+            data.setTotal(total.toString());
             
             //Datos adicionales para las proformas
             data.setDescuento(detalle.getDescuento().toString());
