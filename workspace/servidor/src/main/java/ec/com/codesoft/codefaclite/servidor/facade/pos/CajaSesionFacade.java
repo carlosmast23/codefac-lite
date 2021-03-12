@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
+import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -31,13 +32,19 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
             Query query = getEntityManager().createQuery(stringQuery);
             query.setParameter(1, caja);
             query.setParameter(2, CajaSessionEnum.FINALIZADO.getEstado());
-
-            return (CajaSession) query.getResultList().get(0);
+            
+            List<CajaSession> resultadoLista= query.getResultList();
+            
+            if(resultadoLista.size()>0)
+            {
+                return resultadoLista.get(0);
+            }
         } 
         catch (NoResultException e) 
         {
-            return null;
+           return null;
         }
+         return null;
     }
     
 }

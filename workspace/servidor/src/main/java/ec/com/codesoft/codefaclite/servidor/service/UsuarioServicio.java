@@ -105,23 +105,30 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         //Usuario usuario=null;        
         if(!nick.equals("") && !clave.equals(""))
         {
-            /**
-             * Este usuario es para configurar la primera vez el sistema
-             */
-            if(nick.toLowerCase().equals(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION) && empresa==null)
+            ////////////////////////////////////////////////////////////////////
+            ///         USUARIO PARA CONFIGURAR LA PRIMERA VEZ EL SISTEMA
+            /// NOTA: Esta validación solo funciona para el usuario Admin
+            ////////////////////////////////////////////////////////////////////
+            if(nick.toLowerCase().equals(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION))
             {
-                if(clave.toLowerCase().equals(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION))
-                {
-                    Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    mapParametros.put("nick", Usuario.SUPER_USUARIO);
-                    List<Usuario> resultados= getFacade().findByMap(mapParametros);
-                    LOG.log(Level.INFO,"Ingresando con usuario de configuracion");
-                    //UsuarioServicio usuarioServicio=new UsuarioServicio();
-                    //Usuario usuarioConfig = usuarioServicio.obtenerUsuarioConfiguracion();//obtiene el usuario root de la base de datos 
-                    //usuarioRoot.isConfig=true;
-                    //loginRespuesta.usuario = usuarioRoot;                    
-                    loginRespuesta.estadoEnum = LoginRespuesta.EstadoLoginEnum.CORRECTO_USUARIO;
-                    loginRespuesta.usuario=resultados.get(0);
+                //Permite usar el usuario admin mientras no tenga creado ningun otro usuario
+                UsuarioServicio usuarioService=new UsuarioServicio();
+                Integer cantidadUsuariosActivos=usuarioService.obtenerCantidadUsuariosActivosPorEmpresa(empresa);
+                if(cantidadUsuariosActivos==0)
+                {                
+                    if(clave.toLowerCase().equals(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION))
+                    {
+                        Map<String, Object> mapParametros = new HashMap<String, Object>();
+                        mapParametros.put("nick", Usuario.SUPER_USUARIO);
+                        List<Usuario> resultados= getFacade().findByMap(mapParametros);
+                        LOG.log(Level.INFO,"Ingresando con usuario de configuracion");
+                        //UsuarioServicio usuarioServicio=new UsuarioServicio();
+                        //Usuario usuarioConfig = usuarioServicio.obtenerUsuarioConfiguracion();//obtiene el usuario root de la base de datos 
+                        //usuarioRoot.isConfig=true;
+                        //loginRespuesta.usuario = usuarioRoot;                    
+                        loginRespuesta.estadoEnum = LoginRespuesta.EstadoLoginEnum.CORRECTO_USUARIO;
+                        loginRespuesta.usuario=resultados.get(0);
+                    }
                 }
                 
             }//Validacion para verificar si no es un usuario root es decir para soporte
@@ -481,6 +488,23 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
 
     }
     
+    public Integer obtenerCantidadUsuariosActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        //TODO: Optimizar para obtener directamente por Query
+        //Usuario u;
+        //u.getEmpresa();
+        //u.getEstado();
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("empresa",empresa);
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        
+        List<Usuario> resultadoList=getFacade().findByMap(mapParametros);
+        return resultadoList.size();
+    }
+    
+    @Deprecated
+    //TODO: Al parecer este metodo no se usa por que realmente no se tiene un usuario en la base de datos, solo es temporal
+    // Analizar si debo borrar
     public Usuario obtenerUsuarioConfiguracion() throws ServicioCodefacException,java.rmi.RemoteException
     {
         //Usuario u;

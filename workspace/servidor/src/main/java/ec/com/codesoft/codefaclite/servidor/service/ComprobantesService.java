@@ -1543,7 +1543,14 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
             Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap(empresa);
             
-            String modoFacturacion = parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION).valor;
+            //Por defecto si no existe un modo configurado selecciono produccion
+            String modoFacturacion=ComprobanteElectronicoService.MODO_PRODUCCION;
+            
+            if(parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION)!=null)
+            {
+                modoFacturacion = parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION).valor;
+            }
+            
             servicio.setModoFacturacion(modoFacturacion);
             /**
              * Cargar los web services dependiendo el modo de facturacion

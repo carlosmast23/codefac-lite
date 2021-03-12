@@ -183,8 +183,13 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
                         }
                         else //Si esta en modo de produccion hago las validaciones normales
                         {                        
-                            //Validacion de las ventanas cuando el usuario es gratis
-                            if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
+                            //Validacion de las ventanas cuando el usuario es GRATIS o no tiene creado ningun otro usuario y esta entrando con el usuario de soporte de ADMIN
+                            //Solo habilito los acceso que son del gratuito hasta que pueda terminar de configurar      
+                            //TODO: Talvez esta parte se debe mejorar por que ya se hace la misma consulta para poder dar acceso al usuario en el login
+                            UsuarioServicio usuarioServicio=new UsuarioServicio();
+                            Integer numeroUsuarios=usuarioServicio.obtenerCantidadUsuariosActivosPorEmpresa(sessionCodefac.getEmpresa());
+                             
+                            if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS) || numeroUsuarios==0)
                             {
                                 //Si el tipo de licencia de la pantala es gratis le activo solo las pantallas disponibles para esta modalidad
                                 if (menuControlador.getModulo().equals(moduloSistema)) 
@@ -240,16 +245,7 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
                         //Esta pantalla filtra que solo se agregue si pertenece al modulo y a la submenu corecto
                         if (menuControlador.getCategoriaMenu().equals(categoriaEnum)&& agregarAlMenu ) {
                             existenMenuItem = true;
-                            /*String nombreVentana = "Sin nombre";
-                            try {
-                                LOG.log(Level.INFO,moduloSistema.getNombre()+":"+categoriaEnum.getNombre()+"->"+menuControlador.getNombre());
-                                nombreVentana =menuControlador.getNombre();
-                            } catch (java.lang.UnsupportedOperationException uoe) {
-                                LOG.log(Level.WARNING,menuControlador.getClass().getSimpleName() + ": Ventana sin implementar nombre");
-                            }*/
-
-                            //JMenuItem menuVentana = new JMenuItem(nombreVentana);
-                            //menuVentana.setFont(new Font("Arial", 0, 13));
+                            
                             
                             //Agregar atajo de teclado si existe
                             if(menuControlador.getTeclaAtajo()!=null)
@@ -260,8 +256,7 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
                             respuesta.getVentanasDisponibles().add(menuControlador);
                             //menuCategoria.add(menuVentana);
 
-                            //TODO: Esto no va porque activa el menuItem 
-                            //menuControlador.setJmenuItem(menuVentana);
+                            
                         }
                         
                     }

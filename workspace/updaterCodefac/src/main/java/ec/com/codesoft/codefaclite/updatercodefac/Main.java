@@ -77,9 +77,13 @@ public class Main {
             File aplicacionActualizada = new File(VERSION_NUEVA_NAME);
             File aplicacionNueva = new File(VERSION_ACTUAL_NAME);
             
-           
-             //Muevo el archivo nuevo para actualizar el codefac 
-            Files.move(aplicacionActualizada.toPath(), aplicacionNueva.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            //Primero verifico si existe una nueva version por que si el CODEFAC.jar es relativamente el mismo no se tiene que copiar
+            //if(aplicacionActualizada.exists())
+            //{
+                 //Muevo el archivo nuevo para actualizar el codefac 
+                Files.move(aplicacionActualizada.toPath(), aplicacionNueva.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            //}
+            
             
             /**
              * @Author: Carlos Sánchez

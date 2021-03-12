@@ -43,7 +43,6 @@ public class UtilidadesWeb {
     public static boolean descargarArchivo(String nombreArchivo,String url, String carpeta)
     {
          try {
-            //String url = this.url; //dirección url del recurso a descargar
             String name = nombreArchivo;//nombre del archivo destino
 
             //Directorio destino para las descargas
