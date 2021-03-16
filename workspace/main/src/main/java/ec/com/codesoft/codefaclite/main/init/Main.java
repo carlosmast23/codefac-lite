@@ -208,7 +208,7 @@ public class Main {
         String carpetaDescarga="tmp"; //nombre de la carpeta para almacenar en el directoro TODO: Crear una variable global paa hacer referenca al directorio temporal
         
         String nameUltimaVersion="codefac.jar"; //Nombre del archivo de la nueva version de Codefac para descargar        
-        String nameVersionPropiedades="ultimaVersion.codefac"; //Nombe del archivo de las propiedades para comparar si tenemos al ultima versions
+        String nameVersionPropiedades="ultimaVersion.codefac"; //Nombre del archivo de las propiedades para comparar si tenemos la última version
         String nameUpdater="updater.jar"; //Nombre del archivo updater que se encarga de hacer la actualizacion
         
         //Descargar el archivo de propiedades de la ultima version vigente
@@ -240,7 +240,11 @@ public class Main {
                    
                     archivosDescargar.add(new ArchivoDescarga(nameUltimaVersion,path+nameUltimaVersion,carpetaDescarga));
                     archivosDescargar.addAll(buscarLibreriasActualizar(path,carpetaDescarga)); //Obtiene una lista de librerias de descargar para actualizar
-                    DescargaModel descargaModel=new DescargaModel(archivosDescargar);
+                    
+                    List<String> excepcionesOptimizacion=new ArrayList<String>();
+                    excepcionesOptimizacion.add(nameUltimaVersion);
+                            
+                    DescargaModel descargaModel=new DescargaModel(archivosDescargar,excepcionesOptimizacion);
                     descargaModel.empezarDescarga();
                     descargaModel.setVisible(true);
                     
@@ -263,7 +267,8 @@ public class Main {
                             ProcessBuilder pb = new ProcessBuilder()
                                     .command(comando);
                             Process p = pb.start();
-                            System.exit(0); //Terminar la ejecucion del hilo actual , porque el updater se encargara de lanzar la nueva version
+                            //System.exit(0); //Terminar la ejecucion del hilo actual , porque el updater se encargara de lanzar la nueva version
+                            Runtime.getRuntime().halt(0);//TODO: Metodo que permite cerrar el proceso actual de forma abructa a diferencia de Systema.Exit que cierra de forma ordenada los procesos
 
                         } catch (IOException ex) {
                             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -624,36 +629,10 @@ public class Main {
             }
 
             splashScren.siguiente();
-            /**
-             * Crear la session y cargar otro datos de la empresa
-             */
-
-            /*SessionCodefac session = new SessionCodefac();
-            if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
-                session.setTipoLicenciaEnum(UtilidadesServidor.tipoLicenciaEnum);
-            } else {
-                UtilidadesServiceIf utilidadesServiceIf= ServiceFactory.getFactory().getUtilidadesServiceIf();
-                TipoLicenciaEnum tipoLicencia = utilidadesServiceIf.getTipoLicencia();
-
-                session.setTipoLicenciaEnum(tipoLicencia);
-                
-                session.setModulos(utilidadesServiceIf.getModulosSistema());                
-                
-            }*/
             
-            //session.setUsuarioLicencia(UtilidadesServidor.usuarioLicencia);
             
-            //SessionCodefac session=ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido();
-            //EmpresaServiceIf empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
-            //List<Empresa> empresaList = empresaService.obtenerTodos();
-
-            //if (empresaList != null && empresaList.size() > 0) {
-            //    session.setEmpresa(empresaList.get(0));
-            //}
-
             //session.setParametrosCodefac(getParametros());
             splashScren.siguiente();
-            
             
 
             /**
@@ -700,16 +679,7 @@ public class Main {
                 LOG.log(Level.WARNING, "Error en la licencia ");
                 //return;
             }
-            //validacionesEmpresa(datosLogin.empresa, panel); //Haciendo verificacion de validacion de la licencia y datos de la empresa
-            //SessionCodefac session=ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido(datosLogin.empresa);
-            //SessionCodefac session=;
-            //panel.setSessionCodefac(session);
-
-            /*session.setUsuario(datosLogin.usuario);
-            session.setPerfiles(obtenerPerfilesUsuario(datosLogin.usuario));
-            session.setSucursal(datosLogin.sucursal);
-            session.setMatriz(datosLogin.matriz);
-            session.setEmpresa(datosLogin.empresa);*/
+            
             //panel.setSessionCodefac(session);
             SessionCodefac session=panel.getSessionCodefac(); //Solo obtengo la session porque se supone que ya fue creada en el login
             panel.setVentanasMenuList(null);

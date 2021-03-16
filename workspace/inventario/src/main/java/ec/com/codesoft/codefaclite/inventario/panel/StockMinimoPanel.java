@@ -12,6 +12,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -49,6 +50,11 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         chkTodasCategoria = new javax.swing.JCheckBox();
         lblEspacio = new javax.swing.JLabel();
         btnBuscarCategoria = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        cmbFechaFinal = new org.jdesktop.swingx.JXDatePicker();
+        lblEspacio12 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        cmbFechaInicial = new org.jdesktop.swingx.JXDatePicker();
 
         setClosable(true);
         setIconifiable(true);
@@ -86,7 +92,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -97,7 +103,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridwidth = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -105,10 +111,10 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Bodega:");
+        jLabel2.setText("Fecha Final:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
@@ -144,6 +150,35 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnBuscarCategoria, gridBagConstraints);
 
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel3.setText("Bodega:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        jPanel1.add(cmbFechaFinal, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel1.add(lblEspacio12, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText("Fecha Inicial:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel4, gridBagConstraints);
+        jPanel1.add(cmbFechaInicial, new java.awt.GridBagConstraints());
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -156,11 +191,16 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkTodasBodega;
     private javax.swing.JCheckBox chkTodasCategoria;
     private javax.swing.JComboBox<Bodega> cmbBodega;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaFinal;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaInicial;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEspacio;
+    private javax.swing.JLabel lblEspacio12;
     private javax.swing.JTable tblDato;
     private javax.swing.JTextField txtCategoria;
     // End of variables declaration//GEN-END:variables
@@ -221,7 +261,21 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         this.txtCategoria = txtCategoria;
     }
 
-    
-    
+    public JXDatePicker getCmbFechaFinal() {
+        return cmbFechaFinal;
+    }
+
+    public void setCmbFechaFinal(JXDatePicker cmbFechaFinal) {
+        this.cmbFechaFinal = cmbFechaFinal;
+    }
+
+    public JXDatePicker getCmbFechaInicial() {
+        return cmbFechaInicial;
+    }
+
+    public void setCmbFechaInicial(JXDatePicker cmbFechaInicial) {
+        this.cmbFechaInicial = cmbFechaInicial;
+    }
+
     
 }

@@ -32,17 +32,17 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
             Query query = getEntityManager().createQuery(stringQuery);
             query.setParameter(1, caja);
             query.setParameter(2, CajaSessionEnum.FINALIZADO.getEstado());
+
+            List<CajaSession> resultadoLista= query.getResultList();
             
-            List<CajaSession> cajasSession = query.getResultList();
-            
-            if(cajasSession.size() > 0)
+            if(resultadoLista.size()>0)
             {
-                return cajasSession.get(0);
+                return resultadoLista.get(0);
             }
         } 
         catch (NoResultException e) 
         {
-            return null;
+           return null;
         }
         
         return null;

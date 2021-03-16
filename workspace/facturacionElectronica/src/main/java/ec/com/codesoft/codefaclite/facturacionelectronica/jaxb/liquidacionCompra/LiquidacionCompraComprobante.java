@@ -83,6 +83,18 @@ public class LiquidacionCompraComprobante extends ComprobanteElectronicoFacturaA
     public void setInformacionComprobante(InformacionComprobanteAbstract informacionFactura) {
         this.informacionLiquidacionCompra=(InformacionLiquidacionCompra) informacionFactura;
     }
+
+    @Override
+    public String getObligadoLlevarContabilidad() {
+        return informacionLiquidacionCompra.getObligadoContabilidad();
+    }
+
+    @Override
+    public String getContribuyenteEspecial() {
+        return informacionLiquidacionCompra.getContribuyenteEspecial();
+    }
+
+
     
     
 }

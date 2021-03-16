@@ -77,19 +77,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 
                 ComprobantesService servicioComprobante = new ComprobantesService();
                 servicioComprobante.setearSecuencialComprobanteSinTransaccion(entity);
-                
-               /* 
-                ParametroCodefacService parametroService = new ParametroCodefacService();
-                ParametroCodefac parametro = null;
-                if (parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra())) {
-                    //factura.setTipoFacturacion(TipoFacturacionEnumEstado.ELECTRONICA.getLetra());
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION);
-                } else {
-                    //Estableciendo estado de facturacion manual
-                    entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION_FISICA);
-                }
-                */
+               
 
                 List<RetencionDetalle> detallesEliminar=new ArrayList<>();
                 for (RetencionDetalle retencionDetalle : entity.getDetalles()) 
@@ -107,17 +95,19 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 //Detalles a eliminar
                 entity.getDetalles().removeAll(detallesEliminar);
                 
+                //Validacion para evitar que la retención se quede sin ningun detalle
+                if(entity.getDetalles().size()==0)
+                {
+                    throw new ServicioCodefacException("No existen detalles de retenciones disponibles para procesar.\nNota:Verifique los códigos que no aplican en las retenciones");
+                }
 
                 entityManager.persist(entity);
                 entityManager.flush();
                 
                 grabarCartera(entity);
 
-                //Aumentar el secuencial para facturar
-                //parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
-                //entityManager.merge(parametro);
-                
-                
+                //Despues de grabar genero inmediatamente un flush para evitar perder la transacción por causas como perdida de energia
+                entityManager.flush();               
 
             }
         });

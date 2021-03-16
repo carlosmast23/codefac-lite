@@ -906,6 +906,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         guiaRemision.setPuntoEstablecimiento(new BigDecimal(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString()));
         guiaRemision.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision());
         guiaRemision.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
+        guiaRemision.setContribuyenteEspecial(session.getEmpresa().getContribuyenteEspecial());
         guiaRemision.setEmpresa(session.getEmpresa());
         guiaRemision.setSucursalEmpresa(session.getSucursal());
         

@@ -506,7 +506,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getBtnBuscarFacturaCompra().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CompraBusquedaDialogo compraBusqueda = new CompraBusquedaDialogo(session.getEmpresa());
+                CompraBusquedaDialogo compraBusqueda = new CompraBusquedaDialogo(session.getEmpresa(),true);
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(compraBusqueda);
                 buscarDialogoModel.setVisible(true);
                 
@@ -828,6 +828,8 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         retencion.setSucursalEmpresa(session.getSucursal());
         retencion.setPuntoEstablecimiento(new BigDecimal(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString()));
         retencion.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
+        retencion.setContribuyenteEspecial(session.getEmpresa().getContribuyenteEspecial());
+        
         TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         retencion.setTipoDocumento(tipoDocumentoEnum.getCodigo());
         

@@ -113,6 +113,11 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
          * Verificar que valor no mas acepta
          */
         info.setObligadoContabilidad(retencion.getObligadoLlevarContabilidad());
+        
+        if (retencion.getContribuyenteEspecial() != null && !retencion.getContribuyenteEspecial().trim().isEmpty()) {
+            info.setContribuyenteEspecial(retencion.getContribuyenteEspecial());
+        }
+        
         info.setPeriodoFiscal(retencion.getPeriodoFiscal());
         info.setRazonSocialSujetoRetenido(UtilidadValidador.normalizarTexto(retencion.getProveedor().getRazonSocial()));
         

@@ -20,7 +20,7 @@ public class TestEncriptar {
             //String datosEncriptado=UtilidadesEncriptar.encriptar("2020-09-01",ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
             //System.out.println(datosEncriptado);
             //System.out.println(UtilidadesEncriptar.desencriptar("1zP71DO+Pj+jLHF+c4sAdQ==", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-            String datosSinEncriptar=UtilidadesEncriptar.desencriptar("9pJbAMl/4kOodCm4FPuZFQ==", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            String datosSinEncriptar=UtilidadesEncriptar.desencriptar("5gdOfWztXqM\\=", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
             System.out.println(datosSinEncriptar);
         } catch (Exception ex) {
             Logger.getLogger(TestEncriptar.class.getName()).log(Level.SEVERE, null, ex);

@@ -32,6 +32,8 @@ public abstract class InformacionComprobanteAbstract implements Serializable{
     
     protected String obligadoContabilidad;
     
+    protected String contribuyenteEspecial;
+    
     protected List<TotalImpuesto> totalImpuestos;
     protected List<FormaPagoComprobante> formaPagos;
     
@@ -122,6 +124,15 @@ public abstract class InformacionComprobanteAbstract implements Serializable{
 
     public void setObligadoContabilidad(String obligadoContabilidad) {
         this.obligadoContabilidad = obligadoContabilidad;
+    }
+
+    @XmlElement(name = "contribuyenteEspecial")    
+    public String getContribuyenteEspecial() {
+        return contribuyenteEspecial;
+    }
+
+    public void setContribuyenteEspecial(String contribuyenteEspecial) {
+        this.contribuyenteEspecial = contribuyenteEspecial;
     }
     
     

@@ -124,6 +124,7 @@ public enum VentanaEnum implements Serializable{
     TRANSFERENCIA_BODEGA("ec.com.codesoft.codefaclite.inventario.model.TransferenciaBodegasModel", "TRBG", "Transferencia de Bodegas", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,null),
     STOCK_MINIMO("ec.com.codesoft.codefaclite.inventario.model.StockMinimoModel", "STMN", "Stock minimo", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,null),
     STOCK_REPORTE("ec.com.codesoft.codefaclite.inventario.model.StockReporteModel", "STRE", "Stock reporte", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,null),
+    ROTACION_INVENTARIO("ec.com.codesoft.codefaclite.inventario.model.RotacionInventarioModel", "RTIN", "Rotación Inventario", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,null),
     REFERIDO_REPORTE("ec.com.codesoft.codefaclite.facturacion.model.ReferidosReporteModel", "RERM", "Referido Reporte", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.PRO,null),
     LIQUIDACION_COMPRA("ec.com.codesoft.codefaclite.facturacion.model.LiquidacionCompraModel", "LICO", "Liquidación Compra", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.PRO,KeyEvent.VK_L),
     REPORTE_LIQUIDACION_COMPRA("ec.com.codesoft.codefaclite.facturacion.model.LiquidacionCompraReporteModel", "LICR", "Reporte Liquidación Compra", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.PRO,null),

@@ -145,6 +145,10 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
          */
         info.setObligadoContabilidad(guiaRemision.getObligadoLlevarContabilidad()); //Esta parte deberia agregar en la informacion del transportista
         
+        if (guiaRemision.getContribuyenteEspecial() != null && !guiaRemision.getContribuyenteEspecial().trim().isEmpty()) {
+            info.setContribuyenteEspecial(guiaRemision.getContribuyenteEspecial());
+        }
+        
         //Todo: Revisar este caso porque en los clientes coincide pero para las proveedores ya no coincide el codigo de tipo de identifiacion
 
         /**

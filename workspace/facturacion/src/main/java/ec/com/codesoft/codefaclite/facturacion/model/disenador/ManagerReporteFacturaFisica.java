@@ -112,10 +112,13 @@ public class ManagerReporteFacturaFisica {
                 if(elementoCaracteristica!=null)
                 {
                     Element elementoFont=buscarEtiquetaPorNombre(elementoCaracteristica, "font");
-                    elementoFont.getAttribute(NOMBRE_FONT_COMPONENTE).setValue(componente.getTamanioLetra()+"");//TODO: Falta grabar este valor
-                    
-                    String boldTxt=(componente.getNegrita().equals("s"))?"true":"false";
-                    elementoFont.getAttribute(NOMBRE_BOLD_COMPONENTE).setValue(boldTxt);                    
+                    if(elementoFont!=null)
+                    {
+                        elementoFont.getAttribute(NOMBRE_FONT_COMPONENTE).setValue(componente.getTamanioLetra()+"");//TODO: Falta grabar este valor
+
+                        String boldTxt=(componente.getNegrita().equals("s"))?"true":"false";
+                        elementoFont.getAttribute(NOMBRE_BOLD_COMPONENTE).setValue(boldTxt);                    
+                    }
                 }
                 
                 return;

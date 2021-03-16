@@ -288,7 +288,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="145" y="249" width="150" height="15" uuid="f9902681-6a04-4d2b-9fa1-d968cd848025"/>
 				<textElement>
 					<font size="9"/>
@@ -302,7 +302,7 @@
 				</textElement>
 				<text><![CDATA[Obligado a llevar Contabilidad]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="145" y="264" width="152" height="15" uuid="830f3c58-e5f5-41be-850d-110f21ea3892"/>
 				<textElement>
 					<font size="9"/>

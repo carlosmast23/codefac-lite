@@ -37,15 +37,22 @@ public class DescargaModel extends DescargaDialog implements Runnable{
      * @return 
      */
     private List<ArchivoDescarga> archivosDescargar;
+    /**
+     * Listado de archivos que no tienen que estar en ninguna optimizacion para que funione la actualizacion
+     * principalmente el Codefac.jar por que es el archivo principal que aveces comparadando tamaños no se actualza
+     * pero es necesario que ese archivo siempre se actualice
+     */
+    private List<String> excepcionesOptimizacion;
     
     private DefaultListModel<String> modeloLista;
     
     private Boolean descargaCompleta;
 
 
-    public DescargaModel(List<ArchivoDescarga> archivosDescargar) {
+    public DescargaModel(List<ArchivoDescarga> archivosDescargar,List<String> excepcionesOptimizacion) {
         super(null,true);
         this.archivosDescargar=archivosDescargar;
+        this.excepcionesOptimizacion=excepcionesOptimizacion;
         setLocationRelativeTo(null);
         cargarListaArchivos();
         descargaCompleta=false;
@@ -103,12 +110,17 @@ public class DescargaModel extends DescargaDialog implements Runnable{
                 File archivoActual = new File("lib/" + name.replace(".new","") );
                 int tamanioArchivoActual=(int) archivoActual.length();
                 
-                //Si los archivos son iguales entonces solo descargo los que faltan
-                if(tamanioTotal==tamanioArchivoActual)
+                //Verifico que el archivo no esta en la lista de excepcion
+                //TODO: Principalemente por el archivo codefac.jar
+                if(!excepcionesOptimizacion.contains(name))
                 {
-                    System.out.println(name+" Archivo literalmente iguales");
-                    modeloLista.removeElement(name);
-                    continue;
+                    //Si los archivos son iguales entonces solo descargo los que faltan
+                    if(tamanioTotal==tamanioArchivoActual )
+                    {
+                        System.out.println(name+" Archivo literalmente iguales");
+                        modeloLista.removeElement(name);
+                        continue;
+                    }
                 }
                 
                 

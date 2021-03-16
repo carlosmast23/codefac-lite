@@ -135,7 +135,8 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
 
         getCmbFechaFinal().setDate(UtilidadesFecha.getFechaHoy());
 
-        for (ComprobanteEntity.ComprobanteEnumEstado objeto : ComprobanteEntity.ComprobanteEnumEstado.values()) {
+        for (ComprobanteEntity.ComprobanteEnumEstado objeto : ComprobanteEntity.ComprobanteEnumEstado.values()) 
+        {
             getCmbTipoEstadoReporte().addItem(objeto);
         }
 
@@ -143,6 +144,9 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
         //    getCmbFormatoReporte().addItem(valor);
         //}
         UtilidadesComboBox.llenarComboBox(getCmbMesAts(), MesEnum.values());
+        
+        //Cargar los valores por defecto de los ats
+        UtilidadesComboBox.llenarComboBox(getCmbTipoAts(),TipoAtsEnum.values());
     }
 
     private void listenerBotones() {

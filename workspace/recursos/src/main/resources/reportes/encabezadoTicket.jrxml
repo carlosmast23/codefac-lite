@@ -12,11 +12,11 @@
 	<parameter name="pl_url_img1" class="java.lang.Object"/>
 	<parameter name="pl_razon_social" class="java.lang.String"/>
 	<title>
-		<band height="37" splitType="Stretch">
+		<band height="38" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="160" height="12" uuid="6d32c61e-7403-4e29-ae20-cc34c0e33104"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_titulo}]]></textFieldExpression>
 			</textField>
@@ -31,7 +31,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="12" width="160" height="11" uuid="957c3dc5-2b07-45d2-bd7b-2b90920bf27c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true" isItalic="true"/>
+					<font size="7" isBold="true" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_nombre_empresa}]]></textFieldExpression>
 			</textField>

@@ -94,6 +94,8 @@ public class KardexDetalle implements Serializable ,Cloneable {
     @ManyToOne
     private Kardex kardex;
     
+    
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "kardexDetalle")
     private List<KardexItemEspecifico> detallesEspecificos;
     

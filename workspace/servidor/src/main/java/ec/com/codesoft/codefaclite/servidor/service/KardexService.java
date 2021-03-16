@@ -18,14 +18,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.KardexFacade;
+import ec.com.codesoft.codefaclite.servidor.facade.KardexFacade.StockPromedioYCantidadRespuesta;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.RotacionInventarioRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TransferenciaBodegaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -1141,6 +1144,37 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         }
     
+    }
+    
+    public List<RotacionInventarioRespuesta> consultarRotacionInventario(Date fechaInicio,Date fechaFinal,Sucursal sucursal) throws RemoteException,ServicioCodefacException
+    {
+        List<RotacionInventarioRespuesta> respuestaList=new ArrayList<RotacionInventarioRespuesta>();
+        List<Producto> productosInventario=getFacade().obtenerListaProductosInventario(sucursal.getEmpresa());
+        
+        Map<Producto,BigDecimal> mapCantidadVentas=getFacade().obtenerCantidadVentas(fechaInicio, fechaFinal, sucursal);
+        Map<Producto,StockPromedioYCantidadRespuesta> mapStockPromedio=getFacade().obtenerStockComprasPromedioYCantidad(fechaInicio, fechaFinal, sucursal);
+        
+        for (Producto producto : productosInventario) 
+        {
+            BigDecimal cantidadVentas=mapCantidadVentas.get(producto);
+            StockPromedioYCantidadRespuesta stockPromedio=mapStockPromedio.get(producto);
+            
+            
+            
+            
+            RotacionInventarioRespuesta rotacionInventario=new RotacionInventarioRespuesta();
+            rotacionInventario.producto=producto;
+            rotacionInventario.cantidadVentas=cantidadVentas;
+            
+            rotacionInventario.stockPromedio=stockPromedio.promedio;
+            rotacionInventario.cantidadStockCompras=stockPromedio.cantidad;
+            
+                    
+            respuestaList.add(rotacionInventario);
+        }
+        
+        return respuestaList;
+        
     }
 
             

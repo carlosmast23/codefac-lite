@@ -1,0 +1,2 @@
+#Agregar un indice 
+ALTER TABLE APP.EMPLOYEE ADD PRIMARY KEY (SSN)

@@ -52,10 +52,16 @@ public abstract class ComprobanteElectronico implements Serializable{
      */
     public abstract String getDireccionEstablecimiento();
     
+
+    public abstract String getObligadoLlevarContabilidad();
+    
+    public abstract String getContribuyenteEspecial();
+    
     /**
      * Variable adicional que permite almacenar los correos en una lista que no se procesa al generar el xml
      */
     protected List<String> correos;
+    
 
     public ComprobanteElectronico() {
     }

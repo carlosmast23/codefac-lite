@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder = {
     "fechaEmision",
     "dirEstablecimiento",
+    "contribuyenteEspecial",
     "obligadoContabilidad",
     "tipoIdentificacionProveedor",
     "razonSocialProveedor",

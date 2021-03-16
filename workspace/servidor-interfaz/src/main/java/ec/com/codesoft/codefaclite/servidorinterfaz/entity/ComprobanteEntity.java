@@ -110,6 +110,10 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
      */
     @Column(name = "TIPO_AMBIENTE")
     protected String tipoAmbiente;
+    
+    
+    @Column(name = "CONTRIBUYENTE_ESPECIAL")
+    protected String contribuyenteEspecial;
 
     /**
      *
@@ -307,6 +311,15 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         this.sucursalEmpresa = sucursalEmpresa;
     }
 
+    public String getContribuyenteEspecial() {
+        return contribuyenteEspecial;
+    }
+
+    public void setContribuyenteEspecial(String contribuyenteEspecial) {
+        this.contribuyenteEspecial = contribuyenteEspecial;
+    }
+
+    
     public void addDatoAdicional(T comprobante) {
         if (comprobante.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_OTRO)) {
             addDatoAdicionalAbstract(comprobante);

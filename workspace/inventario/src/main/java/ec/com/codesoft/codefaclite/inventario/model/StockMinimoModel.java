@@ -180,36 +180,39 @@ public class StockMinimoModel extends StockMinimoPanel{
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    Bodega bodegaSeleccionada=(Bodega) getCmbBodega().getSelectedItem();
-                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStockMinimo(bodegaSeleccionada,categoriaProducto,session.getEmpresa());
-                    listaData=new ArrayList<StockMinimoData>();
-                    
-                     for (Object[] objeto : listaStock) 
-                     {
-                        Producto producto = (Producto) objeto[0];
-                        BigDecimal cantidad = (BigDecimal) objeto[1];
-                        
-                        StockMinimoData data=new StockMinimoData();
-                        
-                        data.setCodigo(producto.getCodigoPersonalizado().toString());
-                        data.setProducto(producto.getNombre());
-                        data.setStock(cantidad.toString());
-                        data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto()!=null)?producto.getCatalogoProducto().getCategoriaProducto().getNombre():"");
-                        data.setCantidadMinima(producto.getCantidadMinima().toString());
-                        
-                        listaData.add(data);
-                        
-                    }
-                    
-                    
-                    
-                    construirTabla();
-                } catch (RemoteException ex) {
-                    Logger.getLogger(StockMinimoModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                listenerBotonBuscar();
             }
         });
+    }
+    
+    public void listenerBotonBuscar()
+    {
+        try {
+            Bodega bodegaSeleccionada = (Bodega) getCmbBodega().getSelectedItem();
+            listaStock = ServiceFactory.getFactory().getKardexServiceIf().consultarStockMinimo(bodegaSeleccionada, categoriaProducto, session.getEmpresa());
+            listaData = new ArrayList<StockMinimoData>();
+
+            for (Object[] objeto : listaStock) 
+            {
+                Producto producto = (Producto) objeto[0];
+                BigDecimal cantidad = (BigDecimal) objeto[1];
+
+                StockMinimoData data = new StockMinimoData();
+
+                data.setCodigo(producto.getCodigoPersonalizado().toString());
+                data.setProducto(producto.getNombre());
+                data.setStock(cantidad.toString());
+                data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto() != null) ? producto.getCatalogoProducto().getCategoriaProducto().getNombre() : "");
+                data.setCantidadMinima(producto.getCantidadMinima().toString());
+
+                listaData.add(data);
+
+            }
+
+            construirTabla();
+        } catch (RemoteException ex) {
+            Logger.getLogger(StockMinimoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void listenerCheckBox() {
