@@ -71,9 +71,6 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
         
         sucursalList = ServiceFactory.getFactory().getSucursalServiceIf().obtenerTodos();
         estadosList = UtilidadesLista.arrayToList(CajaEnum.values());
-        
-        getInterfaz().listenerCombos();
-        getInterfaz().valoresSinSeleccionCombo();
     }
 
     @Override
@@ -85,7 +82,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try
         {
-            //Grabar
+            //Obtener datos desde vista
             setearDatos();
             ServiceFactory.getFactory().getCajaServiceIf().grabar(caja);
             //Mensaje
@@ -105,6 +102,8 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
         try {
+            //Obtener datos desde vista
+            setearDatos();
             ServiceFactory.getFactory().getCajaServiceIf().editar(caja);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
         } catch (ServicioCodefacException ex) {
@@ -171,8 +170,6 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     {        
         public PuntoEmision getPuntoEmision();
         public String getDescripcion();
-        public void listenerCombos();
-        public void valoresSinSeleccionCombo();
     }
     
     public interface SwingIf extends CajaModelControlador.CommonIf
@@ -211,15 +208,13 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
 
     public void setSucursalList(List<Sucursal> sucursalList) {
         this.sucursalList = sucursalList;
-    }
+    } 
     
     ////////////////////////////////////////////////////////////////////////////
     // Funciones
     ////////////////////////////////////////////////////////////////////////////
     public void setearDatos(){
         caja.setDescripcion(getInterfaz().getDescripcion());
-        if(getInterfaz().getPuntoEmision()!=null){
-            caja.setPuntoEmision(getInterfaz().getPuntoEmision());
-        }
+        caja.setPuntoEmision(getInterfaz().getPuntoEmision());
     }
 }   

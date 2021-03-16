@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
 import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
@@ -20,5 +21,6 @@ public interface CajaSesionServiceIf extends ServiceAbstractIf<CajaSession>
     public boolean buscarSiCajaTieneSessionActiva(Caja caja) throws RemoteException;
     public CajaSession obtenerUltimaCajaSession(Caja caja) throws RemoteException;
     public CajaSession obtenerCajaSessionPorPuntoEmisionYUsuario(Integer puntoEmision, Usuario usuario) throws RemoteException;
-    
+    public List<CajaSession> obtenerCajaSessionPorCajaYUsuario(Caja caja, Usuario usuario) throws RemoteException;
+
 }

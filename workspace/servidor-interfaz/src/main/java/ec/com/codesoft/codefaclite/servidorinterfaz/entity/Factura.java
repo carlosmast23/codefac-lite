@@ -272,8 +272,7 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
             this.detalles=new ArrayList<FacturaDetalle>();
         }
         detalle.setFactura(this);
-        this.detalles.add(detalle);
-        
+        this.detalles.add(detalle);        
     }
     
      /**

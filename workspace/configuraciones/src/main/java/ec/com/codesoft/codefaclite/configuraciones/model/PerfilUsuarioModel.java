@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.configuraciones.busqueda.PuntoEmisionBusqueda
 import ec.com.codesoft.codefaclite.configuraciones.panel.PerfilUsuarioPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CajaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TurnoBusquedaDiagolo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
@@ -26,6 +27,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Turno;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.TurnoAsignado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
@@ -41,6 +44,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.event.AncestorListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -260,6 +266,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         cargarListaPerfilesUsuario();
         cargarListaPuntosEmision();
         cargarListaCajaPermiso();
+        cargarListaTurnos(null);
         getCmbEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
         
     }
@@ -377,6 +384,46 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             }
         });
         
+        getBtnAgregarTurno().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CajaPermiso cajaPermiso = getjListCajaPermiso().getSelectedValue();
+                if (cajaPermiso == null) 
+                {
+                    DialogoCodefac.mensaje("Seleccionar un Caja", "Debe seleccionar una caja para asignar el turno", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+                else
+                {
+                    TurnoBusquedaDiagolo turnoBusquedaDiagolo = new TurnoBusquedaDiagolo(session);
+                    BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(turnoBusquedaDiagolo);
+                    buscarDialogoModel.setVisible(true);
+                    Turno turnoTemp = (Turno) buscarDialogoModel.getResultado();
+                    if(turnoTemp != null)
+                    {
+
+                        TurnoAsignado turnoAsignado = new TurnoAsignado();
+                        turnoAsignado.setCajaPermiso(cajaPermiso);
+                        turnoAsignado.setTurno(turnoTemp);
+
+                        cajaPermiso.addTurnoAsignado(turnoAsignado);
+
+                        cargarListaTurnos(cajaPermiso);
+                    }
+                }
+            }
+        });
+        
+        getjListCajaPermiso().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                CajaPermiso cajaPermisoSelect = getjListCajaPermiso().getSelectedValue();
+                if(cajaPermisoSelect != null)
+                {
+                    cargarListaTurnos(cajaPermisoSelect);
+                }
+            }
+        });        
+        
         getBtnQuitarPerfil().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -443,15 +490,28 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         DefaultListModel listaModelCajaPermiso = new DefaultListModel();
         if(usuario != null && usuario.getCajasPermisoUsuario() != null)
         {
-            usuario.getCajasPermisoUsuario().forEach( cp ->
+            for(CajaPermiso cajaPermiso : usuario.getCajasPermisoUsuario())
             {
-                if(cp.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                if(cajaPermiso.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
                 {
-                    listaModelCajaPermiso.addElement(cp);
+                    listaModelCajaPermiso.addElement(cajaPermiso);
                 }
-            });
+            }
         }
         getjListCajaPermiso().setModel(listaModelCajaPermiso);
+    }
+    
+    private void cargarListaTurnos(CajaPermiso cajaPermiso)
+    {
+        DefaultListModel listaModelTurno = new DefaultListModel();
+        if(usuario != null && cajaPermiso != null)
+        {
+            for(TurnoAsignado turnoAsignado : cajaPermiso.getTurnoAsignadoList())
+            {
+                listaModelTurno.addElement(turnoAsignado);
+            }
+            getjListTurnosCaja().setModel(listaModelTurno);
+        }
     }
     
     private void cargarListaPerfilesUsuario()

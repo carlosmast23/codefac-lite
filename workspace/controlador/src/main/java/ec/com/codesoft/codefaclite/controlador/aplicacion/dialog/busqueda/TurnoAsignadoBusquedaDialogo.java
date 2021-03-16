@@ -34,10 +34,11 @@ public class TurnoAsignadoBusquedaDialogo implements InterfaceModelFind<TurnoAsi
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT ta FROM TurnoAsignado ta WHERE ";
-        queryString+=" ((ta.cajaPermiso.caja.nombre) like ?1 ) and (ta.estado) like ?2";
+        queryString+=" ((ta.cajaPermiso.caja.nombre) like ?1 ) and (ta.estado) like ?2 and (ta.cajaPermiso.estado) like ?3";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
         queryDialog.agregarParametro(2,GeneralEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(3,GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 

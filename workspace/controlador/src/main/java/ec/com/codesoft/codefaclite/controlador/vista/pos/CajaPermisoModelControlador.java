@@ -49,6 +49,7 @@ public class CajaPermisoModelControlador extends ModelControladorAbstract<CajaPe
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         cajaPermiso = new CajaPermiso();
+        cajaPermiso.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         estadosLista = UtilidadesLista.arrayToList(GeneralEnumEstado.values());
     }
 

@@ -42,12 +42,28 @@ public class CajaPermisoBusquedaDialogo implements InterfaceModelFind<CajaPermis
 
     @Override
     public QueryDialog getConsulta(String filter) {
+        
         String queryString = "SELECT cp FROM CajaPermiso cp WHERE ";
-        queryString+=" ( LOWER(cp.usuario.nick) like ?1 or LOWER(cp.caja.nombre) like ?2 and (cp.estado) like ?3)";
+        
+        if(this.session != null)
+        {
+            queryString+=" ( LOWER(cp.usuario.nick) like ?1 or LOWER(cp.caja.nombre) like ?2) and (cp.estado) like ?3 and (cp.caja.sucursal) like ?4";     
+        }
+        else
+        {
+            queryString+=" ( LOWER(cp.usuario.nick) like ?1 or LOWER(cp.caja.nombre) like ?2) and (cp.estado) like ?3";     
+        }
+        
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
         queryDialog.agregarParametro(2,filter);
         queryDialog.agregarParametro(3,GeneralEnumEstado.ACTIVO.getEstado());
+        
+        if(this.session != null)
+        {
+            queryDialog.agregarParametro(4, this.session.getSucursal());
+        }
+        
         return queryDialog;
     }
 

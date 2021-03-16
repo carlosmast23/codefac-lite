@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -115,6 +116,17 @@ public class CajaPermiso implements Serializable
         this.turnoAsignadoList = turnoAsignadoList;
     }
     
+    public void addTurnoAsignado(TurnoAsignado turnoAsignado)
+    {
+        if(turnoAsignadoList==null)
+        {
+            turnoAsignadoList=new ArrayList<>();
+        }
+        
+        turnoAsignado.setCajaPermiso(this);
+        turnoAsignadoList.add(turnoAsignado);
+    }
+    
     @Override
     public int hashCode() {
         int hash = 5;
@@ -142,8 +154,6 @@ public class CajaPermiso implements Serializable
 
     @Override
     public String toString() {
-        return "" + caja.getNombre() + 
-               " - " + caja.getPuntoEmision() +
-               " - " + turnoAsignadoList;
+        return "Caja: " + caja.getNombre() + " - Punto Emisión: " + caja.getPuntoEmision();
     }
 }

@@ -79,7 +79,7 @@ public class CajaPermisoModel extends CajaPermisoPanel implements ControladorVis
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.controlador.obtenerDialogoBusqueda();
     }
 
     @Override

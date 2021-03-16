@@ -50,6 +50,7 @@ public class TurnoAsignadoModelControlador extends ModelControladorAbstract<Turn
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         turnoAsignado = new TurnoAsignado();
+        turnoAsignado.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         estadoLista = UtilidadesLista.arrayToList(GeneralEnumEstado.values());        
     }
 

@@ -232,6 +232,9 @@ public abstract class ComponentBindingAbstract<T,A> {
         
     }
     
+    /**
+     * Actualiza los modelos con las vista
+     */
     public void actualizarBindingVista()
     {
         ejecutarMetodoControlador("actualizarBindingCompontValues");
