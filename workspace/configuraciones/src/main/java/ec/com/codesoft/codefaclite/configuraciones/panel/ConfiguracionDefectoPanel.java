@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
-import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.TipoReporteEnum;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FormatoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
@@ -1116,7 +1116,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbHabilitarRetencionesEnCompras;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbModoFacturasGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarTituloFactFisica;
-    private javax.swing.JComboBox<TipoReporteEnum> cmbReporteDefectoVenta;
+    private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoVenta;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
@@ -1422,11 +1422,11 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         this.jComboFiltrarFacturaPorUsuario = jComboFiltrarFacturaPorUsuario;
     }
 
-    public JComboBox<TipoReporteEnum> getCmbReporteDefectoVenta() {
+    public JComboBox<FormatoReporteEnum> getCmbReporteDefectoVenta() {
         return cmbReporteDefectoVenta;
     }
 
-    public void setCmbReporteDefectoVenta(JComboBox<TipoReporteEnum> cmbReporteDefectoVenta) {
+    public void setCmbReporteDefectoVenta(JComboBox<FormatoReporteEnum> cmbReporteDefectoVenta) {
         this.cmbReporteDefectoVenta = cmbReporteDefectoVenta;
     }
 

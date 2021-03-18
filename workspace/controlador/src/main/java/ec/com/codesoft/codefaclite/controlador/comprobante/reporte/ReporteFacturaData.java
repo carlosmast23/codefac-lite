@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.comprobante.reporte;
 
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura.AgrupadoReporteIf;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
@@ -17,9 +18,11 @@ import java.util.List;
  *
  * @author CodesoftDesarrollo
  */
-public class ReporteFacturaData implements ExcelDatosInterface,Cloneable  {
+public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,AgrupadoReporteIf  {
     
     public Boolean mostrarReferido=false;
+    
+    protected String campoAgrupado;
 
     protected String numeroFactura;
     protected String fechaFactura;
@@ -69,6 +72,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable  {
      * Este parametro me permite sacar un reporte de productos agrupado por precio para el reporte de ventas
      */
     protected String precioUnitarioReporte;
+    
+    protected String formaPago;
     
     public ReporteFacturaData() {
     }
@@ -349,6 +354,23 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable  {
     public void setPrecioUnitarioReporte(String precioUnitarioReporte) {
         this.precioUnitarioReporte = precioUnitarioReporte;
     }
+
+    public String getCampoAgrupado() {
+        return campoAgrupado;
+    }
+
+    public void setCampoAgrupado(String campoAgrupado) {
+        this.campoAgrupado = campoAgrupado;
+    }
+
+    public String getFormaPago() {
+        return formaPago;
+    }
+
+    public void setFormaPago(String formaPago) {
+        this.formaPago = formaPago;
+    }
+    
     
     
 

@@ -331,7 +331,11 @@ public class ControladorReporteFactura {
                         //Agregar datos adicionales al modelo de la factura
                         reporteData.setFechaMaximaPago((factura.getFechaVencimiento() != null) ? UtilidadesFecha.formatoDiaMesAño(factura.getFechaVencimiento()) : "");
                         reporteData.setVendedor((factura.getVendedor() != null) ? factura.getVendedor().getNombresCompletos() : "");
-                        reporteData.setCosto((mapCostos.get(factura)!=null)?mapCostos.get(factura).toString():"0");                                                
+                        reporteData.setCosto((mapCostos.get(factura)!=null)?mapCostos.get(factura).toString():"0");     
+                        //Agregar por defecto la primera forma de pago que se aplico en la factura
+                        //TODO: Terminar de aplicar la misma logica para las notas de credito
+                        //TODO: Analizar como debe funcionar cuando se tiene varias formas de pago , seguramente se tiene que dividir los registros en varios
+                        reporteData.setFormaPago(obtenerFormaPago(factura));
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
                         
                         if(reporteConDetallesFactura)
@@ -341,6 +345,8 @@ public class ControladorReporteFactura {
                         }
                         else
                         {
+                            //Agregar la cantidad de producto cuando no es individual por productos
+                            reporteData.setCantidad(factura.cantidadTotalProductos()+"");
                             data.add(reporteData);
                         }
                         
@@ -411,6 +417,15 @@ public class ControladorReporteFactura {
             Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    private String obtenerFormaPago(Factura factura)
+    {
+        if(factura.getFormaPagos()!=null && factura.getFormaPagos().size()>0)
+        {
+            return factura.getFormaPagos().get(0).getSriFormaPago().getNombre();
+        }
+        return "Sin forma de pago";
     }
     
     /**
@@ -618,6 +633,26 @@ public class ControladorReporteFactura {
         ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     
+    public void obtenerReporteAgrupadoPorFormasDePago(InterfazComunicacionPanel panelPadre)
+    {
+        String titulo = "Ventas Agrupado por Formas de Pago";
+        InputStream path=getReportePorPrecios();
+        ordenarListaPorPrecio(data);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+    }
+    
+    public void obtenerReporteAgrupado(InterfazComunicacionPanel panelPadre,TipoReporteEnum tipoReporteEnum)
+    {
+        String titulo = "Ventas "+tipoReporteEnum.getNombre();
+        InputStream path=getReporteAgrupado();
+        List<AgrupadoReporteIf> datosProcesar=(ArrayList<AgrupadoReporteIf>)(ArrayList<?>)data;
+        
+        tipoReporteEnum.procesarDatosReporte(datosProcesar);
+        
+        //ordenarListaPorPrecio(data);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), datosProcesar, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+    }
+    
     
     public void obtenerReporteAgrupadoPorVendedor(InterfazComunicacionPanel panelPadre)
     {
@@ -729,6 +764,11 @@ public class ControladorReporteFactura {
     protected InputStream getReportePorPrecios()
     {//reporte_factura_por_producto
         return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_factura_por_precios.jrxml");
+    }
+    
+    protected InputStream getReporteAgrupado()
+    {//reporte_factura_por_producto
+        return RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_factura_agrupado_generico.jrxml");
     }
 
     public List<ReporteFacturaData> getData() {
@@ -1031,7 +1071,135 @@ public class ControladorReporteFactura {
     }
     
     
+    public enum TipoReporteEnum
+    {
+        NORMAL("Normal",null),
+        AGRUPADO_POR_VENDEDOR("Agrupado por vendedor",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
+                return dato.getVendedor();
+            }
+        }),
+        
+        AGRUPADO_POR_PUNTO_EMISION("Agrupado por punto de emisión",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
+                return dato.getPuntoEmision();
+            }
+        }),
+        
+        AGRUPADO_POR_PRODUCTO("Agrupado por producto",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
+                return dato.getNombreProducto();
+            }
+        }),
+        
+        AGRUPADO_POR_CATEGORIA("Agrupado por categoria",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
+                return dato.getCategoria();
+            }
+        }),
+        
+        AGRUPADO_POR_FORMA_PAGO("Agrupado por forma de pago",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
+                return dato.getFormaPago();
+            }
+        }),
+        
+        AGRUPADO_POR_VALOR("Agrupado por valores",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
+                return dato.getPrecioUnitarioReporte();
+            }
+        });
+        
+        
+        private String nombre;
+        private CampoAgruparIf campoAgruparIf;
+        
+
+        private TipoReporteEnum(String nombre,CampoAgruparIf campoAgruparIf) {
+            this.nombre = nombre;
+            this.campoAgruparIf=campoAgruparIf;
+        }
+        
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+       
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+        public static TipoReporteEnum getEnum(String nombre) {
+
+            for (TipoReporteEnum enumerador : TipoReporteEnum.values()) {
+                if(enumerador.nombre.equals(nombre)){
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+        
+        /**
+         * Metodo principal que me permite llenar el dato de FILTRO
+         * y tambien ordenar los datos de acuerdo al parametro para AGRUPAR
+         */
+        public void procesarDatosReporte(List<AgrupadoReporteIf> reporteData)
+        {
+            llenarDatoAgrupacion(reporteData);
+            ordenarAgrupar(reporteData);
+            
+        }
+        
+        
+        /**
+         * Metodo que me permite agrupar los datos antes de poder procesar para el reporte
+         * @param reporteData 
+         */
+        public void ordenarAgrupar(List<AgrupadoReporteIf> reporteData)
+        {            
+            Collections.sort(reporteData,new Comparator<AgrupadoReporteIf>(){
+                public int compare(AgrupadoReporteIf obj1, AgrupadoReporteIf obj2) 
+                {                    
+                    return obj1.getCampoAgrupado().compareTo(obj2.getCampoAgrupado());
+                }
+             });
+        }
+        
+        public void llenarDatoAgrupacion(List<AgrupadoReporteIf> agrupadoReporteIf)
+        {
+            for (AgrupadoReporteIf reporteFacturaData : agrupadoReporteIf) 
+            {
+                String datoAgrupar=campoAgruparIf.obtenerCampoAgrupar((ReporteFacturaData) reporteFacturaData);
+                reporteFacturaData.setCampoAgrupado(datoAgrupar);
+            }
+        }
+                
+    }
     
+    /**
+     * Interfaz que me permite establecer la forma de ordenar cuando son datos agrupados
+     */
+    public interface CampoAgruparIf
+    {
+        public String obtenerCampoAgrupar(ReporteFacturaData dato);
+    };
+    
+    public interface AgrupadoReporteIf
+    {
+        public void setCampoAgrupado(String campoAgrupado);
+        public String getCampoAgrupado();
+    };
     
     
 }

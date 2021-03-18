@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.converter;
 
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel;
 import java.rmi.RemoteException;
 import javax.faces.convert.Converter;
@@ -19,7 +20,7 @@ public class TipoReporteEnumConverter  extends AbstractConverter implements Conv
 
     @Override
     public Object buscarObjetoPorId(String valor) throws RemoteException {
-        return FacturaReporteModel.TipoReporteEnum.getEnum(valor);
+        return TipoReporteEnum.getEnum(valor);
     }
     
 }

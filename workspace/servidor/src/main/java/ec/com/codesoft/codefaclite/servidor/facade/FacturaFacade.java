@@ -158,7 +158,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
     }*/
     
-    public Query ListaQuery(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,TipoConsultaEnum tipoConsultaEnum) {
+    public Query listaQuery(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,TipoConsultaEnum tipoConsultaEnum) {
         String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="",filtrarSucursal="", usuarioId="",enviadoGuiaRemisionStr="",vendedorStr="";
         
         if(vendedor!=null)
@@ -300,7 +300,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
     
     public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) {
         try {
-            Query query=ListaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.DATOS);
+            Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.DATOS);
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
@@ -309,7 +309,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
     
     public Long listaConTamanio(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) 
     {
-        Query query=ListaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.TAMANIO);
+        Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.TAMANIO);
         return (Long) query.getSingleResult();
     }
    

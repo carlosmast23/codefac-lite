@@ -776,4 +776,22 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         return facturaNueva;
     }
     
+    /**
+     * Metodo que me permite obtener la cantidad de productos vendidos en la factura
+     * @return 
+     */
+    public BigDecimal cantidadTotalProductos()
+    {
+        BigDecimal cantidadTotal=BigDecimal.ZERO;
+        
+        if(detalles!=null)
+        {
+            for (FacturaDetalle detalle : detalles) {
+                cantidadTotal=cantidadTotal.add(detalle.getCantidad());
+            }
+        }
+        
+        return cantidadTotal;
+    }
+    
 }

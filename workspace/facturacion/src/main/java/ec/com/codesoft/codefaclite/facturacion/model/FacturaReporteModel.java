@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaReportePanel;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DataEjemploReporte;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ReporteFacturaData;
@@ -225,7 +226,15 @@ public class FacturaReporteModel extends FacturaReportePanel {
             @Override
             public void pdf() {
                 
-                switch(tipoReporteEnum)
+                if(tipoReporteEnum.equals(TipoReporteEnum.NORMAL))
+                {
+                    controladorReporte.obtenerReportePdf(panelPadre);                    
+                }else
+                {
+                    controladorReporte.obtenerReporteAgrupado(panelPadre,tipoReporteEnum);
+                }
+                
+                /*switch(tipoReporteEnum)
                 {
                     case AGRUPADO_POR_PUNTO_EMISION:
                         controladorReporte.obtenerReportePdfAgrupadoPorPuntosEstablecimiento(panelPadre);
@@ -246,10 +255,14 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         controladorReporte.obtenerReporteAgrupadoPorProductoCategoria(panelPadre);
                         break;
                     case AGRUPADO_POR_VALOR:
+                        //controladorReporte.obtenerReporteAgrupadoPorPrecio(panelPadre);
+                        controladorReporte.obtenerReporteAgrupado(panelPadre,tipoReporteEnum);
+                        break;
+                    case AGRUPADO_POR_FORMA_PAGO:
                         controladorReporte.obtenerReporteAgrupadoPorPrecio(panelPadre);
                         break;
                     
-                }
+                }*/
                 
                 //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, titulo, OrientacionReporteEnum.HORIZONTAL);
             }
@@ -754,47 +767,6 @@ public class FacturaReporteModel extends FacturaReportePanel {
     }
             
             
-    public enum TipoReporteEnum
-    {
-        NORMAL("Normal"),
-        AGRUPADO_POR_VENDEDOR("Agrupado por vendedor"),
-        AGRUPADO_POR_PUNTO_EMISION("Agrupado por punto de emisión"),
-        AGRUPADO_POR_PRODUCTO("Agrupado por producto"),
-        AGRUPADO_POR_CATEGORIA("Agrupado por categoria"),
-        AGRUPADO_POR_VALOR("Agrupado por valores");
-        
-        
-        
-
-        private TipoReporteEnum(String nombre) {
-            this.nombre = nombre;
-        }
-        
-        private String nombre;
-
-        public String getNombre() {
-            return nombre;
-        }
-
-        public void setNombre(String nombre) {
-            this.nombre = nombre;
-        }
-       
-        @Override
-        public String toString() {
-            return nombre;
-        }
-        
-        public static FacturaReporteModel.TipoReporteEnum getEnum(String nombre) {
-
-            for (FacturaReporteModel.TipoReporteEnum enumerador : FacturaReporteModel.TipoReporteEnum.values()) {
-                if(enumerador.nombre.equals(nombre)){
-                    return enumerador;
-                }
-            }
-            return null;
-        }
-        
-    }
+    
     
 }

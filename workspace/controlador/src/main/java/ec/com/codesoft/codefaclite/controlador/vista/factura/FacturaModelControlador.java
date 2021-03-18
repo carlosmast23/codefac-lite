@@ -851,7 +851,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      */
     public static void imprimirComprobanteVenta(Factura facturaProcesando,String nombre,Boolean activarConfiguracionesImpresion,SessionCodefacInterface session,InterfazComunicacionPanel panelPadre) 
     {
-        TipoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, TipoReporteEnum.A2);
+        FormatoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, FormatoReporteEnum.A2);
         
         if(tipoReporteEnum!=null && tipoReporteEnum.equals(tipoReporteEnum.A4) && facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
         {
@@ -952,7 +952,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                         //nombreReporte = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
                         nombreReporte = "comprobante_venta_ticket.jrxml";
                         //TODO:Terminar de implementar para los demas comprobantes
-                        TipoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, TipoReporteEnum.A2);
+                        FormatoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, FormatoReporteEnum.A2);
                         if(tipoReporteEnum!=null)
                         {
                             nombreReporte=tipoReporteEnum.getReporteJasperNombre();
@@ -1150,7 +1150,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
     }
     
-    public enum TipoReporteEnum implements ParametroUtilidades.ComparadorInterface
+    public enum FormatoReporteEnum implements ParametroUtilidades.ComparadorInterface
     {
         A4("A4",""),
         A2("A2",""),
@@ -1158,7 +1158,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         POS_50("POS 50","comprobante_venta_ticket_50.jrxml"),
         POS_40("POS 40","comprobante_venta_ticket_40.jrxml");
 
-        private TipoReporteEnum(String nombre,String reporteJasperNombre) {
+        private FormatoReporteEnum(String nombre,String reporteJasperNombre) {
             this.nombre = nombre;
             this.reporteJasperNombre=reporteJasperNombre;
         }
@@ -1174,9 +1174,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             return reporteJasperNombre;
         }
         
-        public static TipoReporteEnum findByName(String nombre)
+        public static FormatoReporteEnum findByName(String nombre)
         {
-            for (TipoReporteEnum enumerador : TipoReporteEnum.values()) {
+            for (FormatoReporteEnum enumerador : FormatoReporteEnum.values()) {
                 if(enumerador.getNombre().equals(nombre))
                 {
                     return enumerador;
@@ -1187,7 +1187,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
 
         @Override
         public Object consultarParametro(String nombreParametro) {
-            return TipoReporteEnum.findByName(nombreParametro);
+            return FormatoReporteEnum.findByName(nombreParametro);
         }
         
     }

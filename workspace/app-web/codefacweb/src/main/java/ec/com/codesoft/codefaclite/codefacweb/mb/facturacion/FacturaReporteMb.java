@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Ejempl
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ReporteFacturaData;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
@@ -79,12 +80,12 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     private ComprobanteEntity.ComprobanteEnumEstado[] comprobanteEstados;
     private List<PuntoEmision> puntosEmision;
     private List<Sucursal> sucursales;
-    private FacturaReporteModel.TipoReporteEnum[] tiposReporte;
+    private TipoReporteEnum[] tiposReporte;
     
     private DocumentoEnum documentoSeleccionado;
     private ComprobanteEntity.ComprobanteEnumEstado comprobanteEstadoSeleccionado;
     private PuntoEmision puntoEmisionSeleccionado;
-    private FacturaReporteModel.TipoReporteEnum tipoReporteSeleccionado;
+    private TipoReporteEnum tipoReporteSeleccionado;
     private java.util.Date fechaInicial;
     private java.util.Date fechaFinal;
     private Boolean clienteCheckTodos;
@@ -224,7 +225,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         this.puntosEmision=puntosEmision;
         
         //Tipo Reporte
-        this.tiposReporte = FacturaReporteModel.TipoReporteEnum.values();
+        this.tiposReporte = TipoReporteEnum.values();
     }
     
     // Abrir Dialogo Busqueda Cliente
@@ -342,7 +343,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     {
         String titulo = "";
         InputStream path = null;
-        FacturaReporteModel.TipoReporteEnum tipoReporteEnum=(FacturaReporteModel.TipoReporteEnum) tipoReporteSeleccionado;
+        TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) tipoReporteSeleccionado;
         switch(tipoReporteEnum)
         {
             case AGRUPADO_POR_PUNTO_EMISION:
@@ -460,19 +461,19 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         this.puntoEmisionSeleccionado = puntoEmisionSeleccionado;
     }
 
-    public FacturaReporteModel.TipoReporteEnum[] getTiposReporte() {
+    public TipoReporteEnum[] getTiposReporte() {
         return tiposReporte;
     }
 
-    public void setTiposReporte(FacturaReporteModel.TipoReporteEnum[] tiposReporte) {
+    public void setTiposReporte(TipoReporteEnum[] tiposReporte) {
         this.tiposReporte = tiposReporte;
     }
 
-    public FacturaReporteModel.TipoReporteEnum getTipoReporteSeleccionado() {
+    public TipoReporteEnum getTipoReporteSeleccionado() {
         return tipoReporteSeleccionado;
     }
 
-    public void setTipoReporteSeleccionado(FacturaReporteModel.TipoReporteEnum tipoReporteSeleccionado) {
+    public void setTipoReporteSeleccionado(TipoReporteEnum tipoReporteSeleccionado) {
         this.tipoReporteSeleccionado = tipoReporteSeleccionado;
     }
 
