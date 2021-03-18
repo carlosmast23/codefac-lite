@@ -13,9 +13,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -31,6 +34,24 @@ public class CajaService extends ServiceAbstract<Caja,CajaFacade> implements Caj
     }
 
     @Override
+    public Caja grabar(Caja entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                if(entity.getPuntoEmision() == null)
+                    throw new ServicioCodefacException("No existe un punto de emisión seleccionado");
+                
+                if(entity.getSucursal() == null)
+                    throw new ServicioCodefacException("No existe una sucursal seleccionada");
+                
+                entityManager.persist(entity);
+            }
+        });
+        return entity;
+    }
+
+    
+    @Override
     public void eliminar(Caja entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
@@ -45,5 +66,16 @@ public class CajaService extends ServiceAbstract<Caja,CajaFacade> implements Caj
     @Override
     public List<Caja> buscarCajasAutorizadasPorUsuario(Usuario usuario) throws RemoteException {
         return this.cajaFacade.buscarCajasAutorizadasParaUsuario(usuario);
-    }  
+    }
+    
+    @Override
+    public List<Caja> buscarCajasPorSucursal(SessionCodefacInterface session)
+    {
+        Map<String, Object> mapParametros = new HashMap<>();
+        mapParametros.put("sucursal", session.getSucursal());
+        mapParametros.put("estado", CajaEnum.ACTIVO.getEstado());
+        List<Caja> cajas = getFacade().findByMap(mapParametros);
+
+        return (cajas.size() > 0)? cajas : null;    
+    }
 }

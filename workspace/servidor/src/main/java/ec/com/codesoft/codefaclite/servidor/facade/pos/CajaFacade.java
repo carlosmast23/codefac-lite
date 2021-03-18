@@ -18,7 +18,8 @@ import javax.persistence.Query;
  */
 public class CajaFacade extends AbstractFacade<Caja>{
 
-    public CajaFacade() {
+    public CajaFacade() 
+    {
         super(Caja.class);
     }
     

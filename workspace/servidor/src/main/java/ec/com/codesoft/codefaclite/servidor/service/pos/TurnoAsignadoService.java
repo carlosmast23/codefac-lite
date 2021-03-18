@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.servidor.service.pos;
 
 import ec.com.codesoft.codefaclite.servidor.facade.pos.TurnoAsignadoFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.TurnoAsignado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.TurnoAsignadoServiceIf;
 import java.rmi.RemoteException;
@@ -21,5 +23,19 @@ public class TurnoAsignadoService extends ServiceAbstract<TurnoAsignado, TurnoAs
     public TurnoAsignadoService() throws RemoteException {
         super(TurnoAsignadoFacade.class);
     }
+
+    @Override
+    public TurnoAsignado grabar(TurnoAsignado entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+               entityManager.persist(entity);
+               entity.getCajaPermiso().addTurnoAsignado(entity);
+               entityManager.merge(entity.getCajaPermiso());
+            }
+        });
+        return entity;
+    }
+    
     
 }

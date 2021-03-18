@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.TurnoAsignado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import javax.swing.JButton;
@@ -87,6 +88,11 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         btnAgregarCaja = new javax.swing.JButton();
         btnQuitarCaja = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        btnAgregarTurno = new javax.swing.JButton();
+        btnQuitarTurno = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jListTurnosCaja = new javax.swing.JList<>();
 
         jLabel7.setText("jLabel7");
 
@@ -421,7 +427,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         jLabel13.setText("             ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -430,6 +436,45 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel4.add(jLabel13, gridBagConstraints);
+
+        jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel14.setText("Turno:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel14, gridBagConstraints);
+
+        btnAgregarTurno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarTurno.setToolTipText("Agregar un perfil al usuario");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(btnAgregarTurno, gridBagConstraints);
+
+        btnQuitarTurno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
+        btnQuitarTurno.setToolTipText("Quitar el peril");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(btnQuitarTurno, gridBagConstraints);
+
+        jListTurnosCaja.setMinimumSize(new java.awt.Dimension(100, 80));
+        jListTurnosCaja.setPreferredSize(new java.awt.Dimension(100, 80));
+        jScrollPane4.setViewportView(jListTurnosCaja);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jScrollPane4, gridBagConstraints);
 
         jTabbedPane1.addTab("Caja", jPanel4);
 
@@ -443,10 +488,12 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarCaja;
     private javax.swing.JButton btnAgregarPerfil;
     private javax.swing.JButton btnAgregarPuntoEmision;
+    private javax.swing.JButton btnAgregarTurno;
     private javax.swing.JButton btnBuscarEmpleado;
     private javax.swing.JButton btnQuitarCaja;
     private javax.swing.JButton btnQuitarPerfil;
     private javax.swing.JButton btnQuitarPuntoEmision;
+    private javax.swing.JButton btnQuitarTurno;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JComboBox<EnumSiNo> jComboBoxFiltrarFacturas;
     private javax.swing.JLabel jLabel1;
@@ -454,6 +501,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -465,6 +513,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JList<CajaPermiso> jListCajaPermiso;
     private javax.swing.JList<String> jListPerfiles;
     private javax.swing.JList<PuntoEmisionUsuario> jListPuntoEmision;
+    private javax.swing.JList<TurnoAsignado> jListTurnosCaja;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -472,6 +521,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblBlanco;
     private javax.swing.JLabel lblClaveAnterior;
@@ -650,4 +700,28 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     public void setjListCajaPermiso(JList<CajaPermiso> jListCajaPermiso) {
         this.jListCajaPermiso = jListCajaPermiso;
     }
+
+    public JButton getBtnAgregarTurno() {
+        return btnAgregarTurno;
+    }
+
+    public void setBtnAgregarTurno(JButton btnAgregarTurno) {
+        this.btnAgregarTurno = btnAgregarTurno;
+    }
+
+    public JButton getBtnQuitarTurno() {
+        return btnQuitarTurno;
+    }
+
+    public void setBtnQuitarTurno(JButton btnQuitarTurno) {
+        this.btnQuitarTurno = btnQuitarTurno;
+    }
+
+    public JList<TurnoAsignado> getjListTurnosCaja() {
+        return jListTurnosCaja;
+    }
+
+    public void setjListTurnosCaja(JList<TurnoAsignado> jListTurnosCaja) {
+        this.jListTurnosCaja = jListTurnosCaja;
+    }    
 }

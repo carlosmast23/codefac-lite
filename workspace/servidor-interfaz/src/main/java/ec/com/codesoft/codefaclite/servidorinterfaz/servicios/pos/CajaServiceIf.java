@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -17,4 +18,5 @@ import java.util.List;
  */
 public interface CajaServiceIf extends ServiceAbstractIf<Caja>{
     public List<Caja> buscarCajasAutorizadasPorUsuario(Usuario usuario) throws RemoteException;
+    public List<Caja> buscarCajasPorSucursal(SessionCodefacInterface session) throws RemoteException;
 }

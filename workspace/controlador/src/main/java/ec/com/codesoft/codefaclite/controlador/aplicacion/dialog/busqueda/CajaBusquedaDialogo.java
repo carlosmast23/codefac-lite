@@ -45,12 +45,23 @@ public class CajaBusquedaDialogo implements InterfaceModelFind<Caja>
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT c FROM Caja c WHERE ";
-        //queryString+=" ( LOWER(c.nombre) like ?1 and (c.estado) like ?2 and (c.sucursal.empresa) = ?3)";
-        queryString+=" ( LOWER(c.nombre) like ?1 and (c.estado) like ?2)";
+        
+        if(this.session == null)
+        {
+            queryString+=" ( LOWER(c.nombre) like ?1 and (c.estado) like ?2)";
+        }else
+        {
+            queryString+=" ( LOWER(c.nombre) like ?1 and (c.estado) like ?2 and (c.sucursal) = ?3)";    
+        }
+        
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1, filter);
         queryDialog.agregarParametro(2, GeneralEnumEstado.ACTIVO.getEstado());
-        //queryDialog.agregarParametro(3, this.session.getEmpresa());
+        if(this.session != null)
+        {
+            queryDialog.agregarParametro(3, this.session.getMatriz());
+        }
+        
         return queryDialog;
     }
 

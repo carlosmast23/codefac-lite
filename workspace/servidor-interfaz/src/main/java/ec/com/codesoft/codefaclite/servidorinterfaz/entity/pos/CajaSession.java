@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -214,6 +215,16 @@ public class CajaSession implements Serializable
 
     public void setIngresosCaja(List<IngresoCaja> ingresosCaja) {
         this.ingresosCaja = ingresosCaja;
+    }
+    
+    public void addIngresoCaja(IngresoCaja ingresoCaja){
+        if(this.ingresosCaja == null)
+        {
+            this.ingresosCaja = new ArrayList<>();
+        }
+        
+        ingresoCaja.setCajaSession(this);
+        this.ingresosCaja.add(ingresoCaja);
     }
     
     /*

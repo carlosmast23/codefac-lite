@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
@@ -250,7 +251,7 @@ public class Usuario implements Serializable{
 
     @Override
     public String toString() {
-        return "Usuario{" + "nick=" + nick + ", clave=" + clave + '}';
+        return "Nick: " + nick;
     }
 
     /**
@@ -306,7 +307,7 @@ public class Usuario implements Serializable{
     
     public boolean NoRepetirCajaPermisoUsuario(CajaPermiso cajaPermiso){
         for (CajaPermiso cp : this.cajasPermisoUsuario) {
-            if(cp.getCaja().equals(cajaPermiso.getCaja()))
+            if(cp.getCaja().equals(cajaPermiso.getCaja()) && cp.getCaja().getEstadoEnum().equals(CajaEnum.ELIMINADO)) 
                 return true;
         }
         return false;
@@ -342,6 +343,5 @@ public class Usuario implements Serializable{
             }
         }
         return puntoEmisionTxt;
-    }
-    
+    }    
 }

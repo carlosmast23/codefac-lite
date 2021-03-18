@@ -223,11 +223,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 validacionInicialFacturar(factura,CrudEnum.CREAR);
-                
-                //TODO Esta validación la realizo porque no existe una variable global que me permita saber si se realiza POS
-                if(factura.getUsuario().getCajasPermisoUsuario() != null && !factura.getUsuario().getCajasPermisoUsuario().isEmpty())
-                    agregarDatosParaCajaSession(factura);
-                
+                               
                 grabarSinTransaccion(factura,carteraParametro);
                 
                 /**
@@ -239,6 +235,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 {
                     PrestamoService prestamoService=new PrestamoService();
                     prestamoService.grabarSinTransaccion(prestamo, factura);
+                }
+                
+                 //TODO Esta validación la realizo porque no existe una variable global que me permita saber si se realiza POS
+                if(factura.getUsuario().getCajasPermisoUsuario() != null && !factura.getUsuario().getCajasPermisoUsuario().isEmpty())
+                {
+                    agregarDatosParaCajaSession(factura);
                 }
                 
                 
@@ -920,15 +922,20 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             throw new ServicioCodefacException("No se encontro ninguna session para el punto de emisión");
         }
         
-        //Grabar el valor de la venta para contavilizar cuando se termine la session de la 
+        //Grabar el valor de la venta para contavilizar cuando se termine la session de la caja
         IngresoCaja ingresoCaja = new IngresoCaja();
         ingresoCaja.setCajaSession(cajaSession);
         ingresoCaja.setValor(factura.getTotal());
         ingresoCaja.setFactura(factura);
         
-        entityManager.merge(ingresoCaja);
+        entityManager.persist(ingresoCaja);
+    
+        cajaSession.addIngresoCaja(ingresoCaja);
+  
+        entityManager.merge(cajaSession);
     }
     
+    @Override
     public Factura obtenerPedidoVentaDiariaActivo(Sucursal sucursal) throws RemoteException,ServicioCodefacException 
     {
         //Factura factura;

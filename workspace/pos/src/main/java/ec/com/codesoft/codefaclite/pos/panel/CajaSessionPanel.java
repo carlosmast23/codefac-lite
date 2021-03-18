@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBi
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JButton;
@@ -222,11 +223,11 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     }// </editor-fold>//GEN-END:initComponents
 
     @ComboBoxBinding(source = "controlador.estadoCajaSessionList", valueSelect = "controlador.cajaSession.estadoCierreCaja")
-    public JComboBox<String> getjComboBoxEstadoCierre() {
+    public JComboBox<CajaSessionEnum> getjComboBoxEstadoCierre() {
         return jComboBoxEstadoCierre;
     }
 
-    public void setjComboBoxEstadoCierre(JComboBox<String> jComboBoxEstadoCierre) {
+    public void setjComboBoxEstadoCierre(JComboBox<CajaSessionEnum> jComboBoxEstadoCierre) {
         this.jComboBoxEstadoCierre = jComboBoxEstadoCierre;
     }
    
@@ -294,7 +295,7 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<Caja> jCmbCajaPermiso;
-    private javax.swing.JComboBox<String> jComboBoxEstadoCierre;
+    private javax.swing.JComboBox<CajaSessionEnum> jComboBoxEstadoCierre;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;

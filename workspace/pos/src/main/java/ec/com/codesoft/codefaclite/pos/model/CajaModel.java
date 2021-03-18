@@ -36,10 +36,12 @@ import java.util.logging.Logger;
 public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaModelControlador.SwingIf{
      
     private CajaModelControlador controlador=new CajaModelControlador(DialogoCodefac.intefaceMensaje, session, this,ModelControladorAbstract.TipoVista.ESCRITORIO);
+    private PuntoEmision puntoEmision;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.controlador.iniciar();
+        listenerCombos();
     }
 
     @Override
@@ -118,28 +120,22 @@ public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaMode
         return controlador;
     }
        
-    @Override
-    public void listenerCombos(){
+    public void listenerCombos()
+    {
         getjComboSucursal().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                valoresSinSeleccionCombo();
+                try {
+                    Sucursal sucursal = (Sucursal) getjComboSucursal().getSelectedItem();
+                    List<PuntoEmision> puntoEmisionLista;
+                    puntoEmisionLista = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sucursal);                   
+                    UtilidadesComboBox.llenarComboBox(getjComboPuntoEmision(), puntoEmisionLista); 
+                    puntoEmision = (PuntoEmision) getjComboPuntoEmision().getSelectedItem();
+                } catch (ServicioCodefacException | RemoteException ex) {
+                    Logger.getLogger(CajaModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
-    }
-     
-    @Override
-    public void valoresSinSeleccionCombo(){
-        try {
-            Sucursal sucursal = (Sucursal) getjComboSucursal().getSelectedItem();
-            List<PuntoEmision> puntoEmisionLista;
-            puntoEmisionLista = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sucursal);
-            UtilidadesComboBox.llenarComboBox(getjComboPuntoEmision(), puntoEmisionLista);  
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(CajaModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(CajaModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     @Override
