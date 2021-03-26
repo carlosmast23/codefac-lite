@@ -15,10 +15,13 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.pos.panel.CajaSessionPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.hora.UtilidadesHora;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -33,11 +36,12 @@ import java.util.Map;
 //public class CajaSessionModel extends CajaSessionPanel implements CajaSesionModelControlador.Interface
 public class CajaSessionModel extends CajaSessionPanel implements ControladorVistaIf, CajaSesionModelControlador.SwingIf
 {
-    private CajaSesionModelControlador controlador;
+    private CajaSesionModelControlador controlador ;
     
     @Override
-    public void iniciar() {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         controlador = new CajaSesionModelControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
+        this.controlador.iniciar();
     }
 
     @Override
@@ -104,12 +108,30 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         getjTextFechaApertura().setText("" + UtilidadesFecha.castDateSqlToUtil(UtilidadesFecha.getFechaDeTimeStamp(cajaSession.getFechaHoraApertura())));
         getjTextHoraApertura().setText("" + UtilidadesFecha.castDateSqlToUtil(UtilidadesFecha.getFechaDeTimeStamp(cajaSession.getFechaHoraApertura())));
         
+        getjTextFechaCierre().setText("" + UtilidadesFecha.getFechaHoy());
+        getjTextHoraCierre().setText("" + UtilidadesHora.horaActual());
+        
         getjTextValorApertura().setText("" + cajaSession.getValorApertura());
-        getjTextValorCierre().setText("" + (cajaSession.getValorCierre() == null ? BigDecimal.ZERO : cajaSession.getValorCierre()));
         
         getjCmbCajaPermiso().setSelectedItem(cajaSession.getCaja());
         getjComboBoxEstadoCierre().setSelectedItem(cajaSession.getEstadoSessionEnum());
         
+        if(cajaSession.getIngresosCaja().isEmpty())
+        {
+            getjTextValorCierre().setText("" + cajaSession.getValorApertura());
+        }
+        else
+        {    
+            BigDecimal totalVentas = BigDecimal.ZERO;
+            totalVentas = cajaSession.getValorApertura();
+
+            for(IngresoCaja ingresoCaja: cajaSession.getIngresosCaja())
+            {
+                totalVentas = totalVentas.add(ingresoCaja.getValor());
+            }
+            
+            getjTextValorCierre().setText("" + totalVentas);
+        }
     }
 
     @Override
@@ -133,5 +155,10 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
 
     public void setControlador(CajaSesionModelControlador controlador) {
         this.controlador = controlador;
+    }
+
+    @Override
+    public String valorApertura() {
+        return getjTextValorApertura().getText();
     }
 }

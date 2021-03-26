@@ -232,7 +232,7 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     }
    
     @LimpiarAnotacion 
-    @TextFieldBinding(value = "controlador.cajaSession.valorApertura")
+    //@TextFieldBinding(value = "controlador.CajaSession.ValorApertura")
     public JTextField getjTextValorApertura() {
         return jTextValorApertura;
     }
@@ -242,7 +242,7 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @TextFieldBinding(value = "controlador.cajaSession.valorCierre")
+    //@TextFieldBinding(value = "controlador.CajaSession.ValorCierre")
     public JTextField getjTextValorCierre() {
         return jTextValorCierre;
     }
@@ -284,7 +284,7 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     }
 
      
-    @ComboBoxBinding(source = "controlador.cajasList",valueSelect = "controlador.cajaSession.caja")
+    @ComboBoxBinding(source = "controlador.cajasList",valueSelect = "controlador.CajaSession.Caja")
     public JComboBox<Caja> getjCmbCajaPermiso() {
         return jCmbCajaPermiso;
     }

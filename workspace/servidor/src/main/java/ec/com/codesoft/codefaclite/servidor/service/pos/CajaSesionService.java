@@ -87,19 +87,23 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 
                 BigDecimal totalVentas = BigDecimal.ZERO;
+                boolean grabarAunqueNoTengaVentas = false;
                 
                 if(entity.getIngresosCaja() == null || entity.getIngresosCaja().isEmpty())
                 {
-                    throw  new ServicioCodefacException("No se ha agregado ninguna venta al punto de emisión");
+                    grabarAunqueNoTengaVentas = true;
                 }
                 
                 totalVentas = entity.getValorApertura();
                 
-                for(IngresoCaja ingresoCaja: entity.getIngresosCaja())
+                if(!grabarAunqueNoTengaVentas)
                 {
-                    totalVentas = totalVentas.add(ingresoCaja.getValor());
+                    for(IngresoCaja ingresoCaja: entity.getIngresosCaja())
+                    {
+                        totalVentas = totalVentas.add(ingresoCaja.getValor());
+                    }
                 }
-                
+
                 entity.setValorCierre(totalVentas);
                 entity.setEstadoSessionEnum(CajaSessionEnum.FINALIZADO);
                 entity.setFechaHoraCierre(UtilidadesFecha.getFechaHoyTimeStamp());

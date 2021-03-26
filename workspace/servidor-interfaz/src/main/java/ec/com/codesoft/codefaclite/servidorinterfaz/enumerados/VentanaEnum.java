@@ -133,12 +133,11 @@ public enum VentanaEnum implements Serializable{
     ATS("ec.com.codesoft.codefaclite.impuestos.model.AtsModel", "ATSM", "ATS", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.PRO,null),
     CAJA("ec.com.codesoft.codefaclite.pos.model.CajaModel", "CAJA", "Caja", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.PRO,null),
     DESCUENTO_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.DescuentoAcademicoModel", "DSAC", "Descuento Académico", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR,null),
-    CAJA_SESSION("ec.com.codesoft.codefaclite.pos.model.CajaSessionModel", "CJSN", "Caja Sesión",ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
+    CAJA_SESSION("ec.com.codesoft.codefaclite.pos.model.CajaSessionModel", "CJSN", "Caja Sesión",ModuloCodefacEnum.POS, CategoriaMenuEnum.PROCESOS, TipoLicenciaEnum.PRO, null),
     ARQUEO_CAJA("ec.com.codesoft.codefaclite.pos.model.ArqueoCajaModel", "AQCJ", "Arqueo Caja", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
-    INGRESO_CAJA("ec.com.codesoft.codefaclite.pos.model.IngresoCajaModel", "INCA", "Ingreso Caja", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
     CAJA_PERMISO("ec.com.codesoft.codefaclite.pos.model.CajaPermisoModel", "CAPE", "Caja Permiso", ModuloCodefacEnum.POS, CategoriaMenuEnum.PROCESOS, TipoLicenciaEnum.PRO, null),
     TURNO("ec.com.codesoft.codefaclite.pos.model.TurnoModel", "TURN", "Turno", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
-    TURNO_ASIGNADO("ec.com.codesoft.codefaclite.pos.model.TurnoAsignadoModel", "TURA", "Turno Asignado", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
+    TURNO_ASIGNADO("ec.com.codesoft.codefaclite.pos.model.TurnoAsignadoModel", "TURA", "Turno Asignado", ModuloCodefacEnum.POS, CategoriaMenuEnum.PROCESOS, TipoLicenciaEnum.PRO, null),
     REPORTE_CAJA_SESSION("ec.com.codesoft.codefaclite.pos.model.CajaSessionReporteModel", "CAJR", "Reporte Caja Sesion", ModuloCodefacEnum.POS, CategoriaMenuEnum.REPORTES, TipoLicenciaEnum.PRO, null);
     
 

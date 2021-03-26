@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ArqueoCajaEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -101,11 +101,11 @@ public class ArqueoCaja implements Serializable
         this.valorFisico = valorFisico;
     }
 
-    public GeneralEnumEstado getEstadoEnum() {
-        return GeneralEnumEstado.getEnum(estado);
+    public ArqueoCajaEnum getEstadoEnum() {
+        return ArqueoCajaEnum.getEnum(estado);
     }
 
-    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+    public void setEstadoEnum(ArqueoCajaEnum estadoEnum) {
         if(estadoEnum==null)
         {
             this.estado=null;

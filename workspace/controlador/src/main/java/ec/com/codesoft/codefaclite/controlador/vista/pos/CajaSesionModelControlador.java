@@ -75,6 +75,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try
         {
+            setearDatos();
             //Grabar
             ServiceFactory.getFactory().getCajaSesionServiceIf().grabar(cajaSession);
             //Mensaje
@@ -89,7 +90,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
-        try {           
+        try {       
             //Editar
             ServiceFactory.getFactory().getCajaSesionServiceIf().editar(cajaSession);
             //Mensaje
@@ -167,7 +168,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
      */
     public interface CommonIf
     {
-        
+        public String valorApertura();
     }
     
     public interface SwingIf extends CajaSesionModelControlador.CommonIf
@@ -217,5 +218,12 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     ////////////////////////////////////////////////////////////////////////////
     // Funciones
     ////////////////////////////////////////////////////////////////////////////
-
+    
+    public void setearDatos()
+    {
+        if(getInterfaz().valorApertura().length()>0)
+        {
+            this.cajaSession.setValorApertura(new BigDecimal(getInterfaz().valorApertura()));
+        }
+    }
 }

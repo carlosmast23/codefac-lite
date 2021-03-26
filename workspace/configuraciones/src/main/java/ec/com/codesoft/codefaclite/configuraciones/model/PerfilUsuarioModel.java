@@ -404,9 +404,9 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                         TurnoAsignado turnoAsignado = new TurnoAsignado();
                         turnoAsignado.setCajaPermiso(cajaPermiso);
                         turnoAsignado.setTurno(turnoTemp);
+                        turnoAsignado.setEstadoEnum(GeneralEnumEstado.ACTIVO);
 
                         cajaPermiso.addTurnoAsignado(turnoAsignado);
-
                         cargarListaTurnos(cajaPermiso);
                     }
                 }
@@ -465,6 +465,26 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             }
         });
         
+        getBtnQuitarTurno().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CajaPermiso cajaPermiso = getjListCajaPermiso().getSelectedValue();
+                if (cajaPermiso == null) 
+                {
+                    DialogoCodefac.mensaje("Seleccionar un Caja", "Debe seleccionar una caja para elegir el turno a eliminar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+                else
+                {
+                    TurnoAsignado turnoAsignado = getjListTurnosCaja().getSelectedValue();
+                    if(turnoAsignado != null)
+                    {
+                        turnoAsignado.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                        cargarListaTurnos(cajaPermiso);
+                    }
+                }
+            }
+        });
+        
     }
             
     private void cargarListaPuntosEmision()
@@ -508,10 +528,13 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         {
             for(TurnoAsignado turnoAsignado : cajaPermiso.getTurnoAsignadoList())
             {
-                listaModelTurno.addElement(turnoAsignado);
+                if(turnoAsignado.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                {
+                    listaModelTurno.addElement(turnoAsignado);
+                }
             }
-            getjListTurnosCaja().setModel(listaModelTurno);
         }
+        getjListTurnosCaja().setModel(listaModelTurno);
     }
     
     private void cargarListaPerfilesUsuario()

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ArqueoCajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -35,7 +36,7 @@ import java.util.logging.Logger;
 public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoCajaModelControlador.CommonIf, ArqueoCajaModelControlador.SwingIf, ArqueoCajaModelControlador.WebIf> implements VistaCodefacIf
 {
     private ArqueoCaja arqueoCaja;
-    private List<GeneralEnumEstado> estadosList;
+    private List<ArqueoCajaEnum> estadosList;
         
 
     public ArqueoCajaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, ArqueoCajaModelControlador.CommonIf interfaz, TipoVista tipoVista) 
@@ -53,14 +54,14 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
         arqueoCaja=new ArqueoCaja();
         arqueoCaja.setValorFisico(BigDecimal.ZERO);
         arqueoCaja.setValorTeorico("Cero");
-        arqueoCaja.setEstadoEnum(GeneralEnumEstado.ACTIVO);        
+        arqueoCaja.setEstadoEnum(ArqueoCajaEnum.CUADRO);        
         
         
         long date = new java.util.Date().getTime();
         getInterfaz().setFechaRevision(new Date(date));      
         getInterfaz().setHoraRevision(new Date(date));
         
-        estadosList = UtilidadesLista.arrayToList(GeneralEnumEstado.values());
+        estadosList = UtilidadesLista.arrayToList(ArqueoCajaEnum.values());
     }
 
     public void nuevo() throws ExcepcionCodefacLite, RemoteException{
@@ -173,11 +174,11 @@ public class ArqueoCajaModelControlador extends ModelControladorAbstract<ArqueoC
         this.arqueoCaja = arqueoCaja;
     }
 
-    public List<GeneralEnumEstado> getEstadosList() {
+    public List<ArqueoCajaEnum> getEstadosList() {
         return estadosList;
     }
 
-    public void setEstadosList(List<GeneralEnumEstado> estadosList) {
+    public void setEstadosList(List<ArqueoCajaEnum> estadosList) {
         this.estadosList = estadosList;
     }
 
