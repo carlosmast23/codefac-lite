@@ -545,7 +545,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanel1.add(txtDiasCreditoProveedor, gridBagConstraints);
 
         jLabel29.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel29.setText("Categoria Cliente:");
+        jLabel29.setText("Tipo Establecimiento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
