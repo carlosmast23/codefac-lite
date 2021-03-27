@@ -36,7 +36,7 @@ import java.util.Map;
 //public class CajaSessionModel extends CajaSessionPanel implements CajaSesionModelControlador.Interface
 public class CajaSessionModel extends CajaSessionPanel implements ControladorVistaIf, CajaSesionModelControlador.SwingIf
 {
-    private CajaSesionModelControlador controlador ;
+    protected CajaSesionModelControlador controlador ;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {

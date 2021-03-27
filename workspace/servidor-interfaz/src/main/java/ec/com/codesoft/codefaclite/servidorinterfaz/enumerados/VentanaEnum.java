@@ -134,6 +134,8 @@ public enum VentanaEnum implements Serializable{
     CAJA("ec.com.codesoft.codefaclite.pos.model.CajaModel", "CAJA", "Caja", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.PRO,null),
     DESCUENTO_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.DescuentoAcademicoModel", "DSAC", "Descuento Académico", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR,null),
     CAJA_SESSION("ec.com.codesoft.codefaclite.pos.model.CajaSessionModel", "CJSN", "Caja Sesión",ModuloCodefacEnum.POS, CategoriaMenuEnum.PROCESOS, TipoLicenciaEnum.PRO, null),
+    ABRIR_CAJA("ec.com.codesoft.codefaclite.pos.model.AbrirCajaModel", "CJSN", "Abrir Caja",ModuloCodefacEnum.POS, CategoriaMenuEnum.PROCESOS, TipoLicenciaEnum.PRO, null),
+    CERRAR_CAJA("ec.com.codesoft.codefaclite.pos.model.CerrarCajaModel", "CJSN", "Cerrar Caja",ModuloCodefacEnum.POS, CategoriaMenuEnum.PROCESOS, TipoLicenciaEnum.PRO, null),
     ARQUEO_CAJA("ec.com.codesoft.codefaclite.pos.model.ArqueoCajaModel", "AQCJ", "Arqueo Caja", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
     CAJA_PERMISO("ec.com.codesoft.codefaclite.pos.model.CajaPermisoModel", "CAPE", "Caja Permiso", ModuloCodefacEnum.POS, CategoriaMenuEnum.PROCESOS, TipoLicenciaEnum.PRO, null),
     TURNO("ec.com.codesoft.codefaclite.pos.model.TurnoModel", "TURN", "Turno", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
