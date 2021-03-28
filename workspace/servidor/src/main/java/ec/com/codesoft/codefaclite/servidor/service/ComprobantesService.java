@@ -2015,12 +2015,14 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             
             parametroCodefac.getValor();
         }
-        agregarParametrosConfiguracionEmpresa(comprobante);
+        //agregarParametrosConfiguracionEmpresa(comprobante);
     }
     
     /**
      * Agregar datos adiucionales que fueron configurados en la empresa como regimen impositivo y otras cosas
+     * TODO: Metodo que ya no se va a usar por que esso datos van directamente en los xml
      */
+    /*@Deprecated
     private void agregarParametrosConfiguracionEmpresa(ComprobanteEntity comprobante)
     {
         //Leyenda del regimen de microempresa
@@ -2045,7 +2047,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         
         
-    }
+    }*/
     
     private void agregarParametroComprobante(ComprobanteEntity comprobante,String txtJson)
     {
