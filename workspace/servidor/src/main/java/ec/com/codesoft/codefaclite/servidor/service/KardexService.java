@@ -588,6 +588,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         {
             throw new ServicioCodefacException("No se puede eliminar porque el Stock esta en 0");
         }
+                
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
@@ -609,6 +610,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 }
                 kardexDetalle.recalcularTotalSinGarantia();
                 kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
+                kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
                 kardexDetalle.setKardex(kardex);
                 
                 grabarKardexDetallSinTransaccion(kardexDetalle);

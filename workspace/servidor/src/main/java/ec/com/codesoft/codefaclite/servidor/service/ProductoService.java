@@ -164,15 +164,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                         //if (kardex.getStock() > 0) 
                         if (kardex.getStock().compareTo(BigDecimal.ZERO)==0) 
                         {
-                            //Agrego a la lista la bodega con el kardex que tiene problema antes de eliminar
-                            stockPositivoBodega.add(kardex.getBodega().getNombre());                    
-                            //throw new ServicioCodefacException("No se puede eliminar el producto porque tiene stock en las bodegas: ");
-                            //stockPositivoBodega.add(kardex.getBodega().getNombre());
-                        } else 
-                        {
                             //Si los kardex no tiene problema y estan con saldos en 0 los elimino y si no se cumple con todos no importa porque se realiza un rollback
                             kardex.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                             entityManager.merge(kardex);
+                            
+                        } else 
+                        {
+                            //Agrego a la lista la bodega con el kardex que tiene problema antes de eliminar
+                            stockPositivoBodega.add(kardex.getBodega().getNombre());                    
                         }
                     }
                 }
