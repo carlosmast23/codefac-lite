@@ -338,6 +338,15 @@ public class ControladorReporteFactura {
                         reporteData.setFormaPago(obtenerFormaPago(factura));
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
                         
+                        //ZONA: Creada la zona y verificando primero si existe para generar el reporte
+                        String zonaStr="";
+                        if(factura.getSucursal()!=null && factura.getSucursal().getZona()!=null)
+                        {
+                            zonaStr=factura.getSucursal().getZona().getNombre();
+                        }
+                        
+                        reporteData.setZona(zonaStr);
+                        
                         if(reporteConDetallesFactura)
                         {
                             List<ReporteFacturaData> respuesta=convertirDatosReportePorProducto(factura, reporteData);
@@ -1113,6 +1122,13 @@ public class ControladorReporteFactura {
             @Override
             public String obtenerCampoAgrupar(ReporteFacturaData dato) {
                 return dato.getPrecioUnitarioReporte();
+            }
+        }),
+        
+        AGRUPADO_POR_ZONA("Agrupado por zonas",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
+                return dato.getZona();
             }
         });
         

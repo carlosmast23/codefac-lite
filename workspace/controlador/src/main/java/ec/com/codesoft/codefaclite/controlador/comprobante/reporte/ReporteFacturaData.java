@@ -75,6 +75,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     
     protected String formaPago;
     
+    protected String zona;
+    
     public ReporteFacturaData() {
     }
     
@@ -370,6 +372,15 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     public void setFormaPago(String formaPago) {
         this.formaPago = formaPago;
     }
+
+    public String getZona() {
+        return zona;
+    }
+
+    public void setZona(String zona) {
+        this.zona = zona;
+    }
+    
     
     
     
