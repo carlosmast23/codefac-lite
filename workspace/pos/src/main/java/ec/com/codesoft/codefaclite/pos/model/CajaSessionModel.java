@@ -116,6 +116,8 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         getjCmbCajaPermiso().setSelectedItem(cajaSession.getCaja());
         getjComboBoxEstadoCierre().setSelectedItem(cajaSession.getEstadoSessionEnum());
         
+        getjCmbCajaPermiso().setSelectedItem(cajaSession.getCaja());
+        
         if(cajaSession.getIngresosCaja().isEmpty())
         {
             getjTextValorCierre().setText("" + cajaSession.getValorApertura());
