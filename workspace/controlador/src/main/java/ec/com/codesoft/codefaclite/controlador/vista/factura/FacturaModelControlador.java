@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
@@ -703,7 +704,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
         
         try {                        
-            BigDecimal saldoDisponibleCartera=ServiceFactory.getFactory().getCarteraServiceIf().obtenerSaldoDisponibleCruzar(factura.getCliente(),session.getEmpresa());
+            
+            BigDecimal saldoDisponibleCartera=ServiceFactory.getFactory().getCarteraServiceIf().obtenerSaldoDisponibleCruzar(factura.getCliente(),session.getEmpresa(),interfaz.getEStudiante());
             
             //Si el cliente no tiene saldo en cartera entonces ya no continua con el proceso
             if(saldoDisponibleCartera==null || saldoDisponibleCartera.compareTo(BigDecimal.ZERO)==0)
@@ -1146,6 +1148,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public void setModoEdicionDetalle(Boolean modoEdicionDetalle);
         public void limpiarIngresoDetalleVista();
         public Boolean isPagoConCartera();
+        public Estudiante getEStudiante();
         
         
     }

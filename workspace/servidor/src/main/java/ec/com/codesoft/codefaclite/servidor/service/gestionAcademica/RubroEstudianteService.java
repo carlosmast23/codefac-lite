@@ -323,23 +323,33 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     }
 
 
-    public void crearRubrosEstudiantes(List<EstudianteInscrito> estudiantes, RubrosNivel rubroNivel) throws RemoteException {
-        EntityTransaction transaccion = getTransaccion();
-        transaccion.begin();
-        for (EstudianteInscrito estudiante : estudiantes) {
-            RubroEstudiante rubroEstudiante = new RubroEstudiante();
-            rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-            rubroEstudiante.setFechaGenerado(UtilidadesFecha.getFechaHoy());
-            rubroEstudiante.setEstudianteInscrito(estudiante);
-            rubroEstudiante.setSaldo(rubroNivel.getValor());
-            rubroEstudiante.setValor(rubroNivel.getValor());
-            rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
-            rubroEstudiante.setRubroNivel(rubroNivel);
+    public void crearRubrosEstudiantes(List<EstudianteInscrito> estudiantes, RubrosNivel rubroNivel) throws RemoteException ,ServicioCodefacException{
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                //TODO: Agregar validacion para evitar ingresar rubros de estudiantes duplicados
+                
+                for (EstudianteInscrito estudiante : estudiantes) {
+                    RubroEstudiante rubroEstudiante = new RubroEstudiante();
+                    rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                    rubroEstudiante.setFechaGenerado(UtilidadesFecha.getFechaHoy());
+                    rubroEstudiante.setEstudianteInscrito(estudiante);
+                    rubroEstudiante.setSaldo(rubroNivel.getValor());
+                    rubroEstudiante.setValor(rubroNivel.getValor());
+                    rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
+                    rubroEstudiante.setRubroNivel(rubroNivel);
 
-            entityManager.persist(rubroEstudiante);
-        }
-        entityManager.flush();
-        transaccion.commit();
+                    entityManager.persist(rubroEstudiante);
+                }
+                entityManager.flush();
+
+            }
+        });
+        //EntityTransaction transaccion = getTransaccion();
+        //transaccion.begin();
+        
     }
 
     public void crearRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException {

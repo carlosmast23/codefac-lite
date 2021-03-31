@@ -192,10 +192,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -3853,6 +3850,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public ComprobanteDataInterface obtenerComprobanteData() {
         return FacturaModelControlador.obtenerComprobanteData(factura);
+    }
+
+    @Override
+    public Estudiante getEStudiante() {
+        return estudiante;
     }
 
 }

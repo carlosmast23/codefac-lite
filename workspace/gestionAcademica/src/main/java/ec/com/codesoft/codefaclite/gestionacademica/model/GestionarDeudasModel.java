@@ -68,6 +68,10 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
             DialogoCodefac.mensaje("Error","No existe comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite("Cancelar grabar");
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite("Cancelar grabar");
         }
         
     }
