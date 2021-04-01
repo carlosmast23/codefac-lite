@@ -147,6 +147,10 @@ public class Departamento implements Serializable
     {
         Otros("Otros","o"),
         Ventas("Ventas","v"),
+        /**
+         * Categoria utilizada para vendedores que deben facturar externamente desde la web o la app y solo deben ver sus clientes de ruta
+         */
+        Vendedores_Externos("Vendedores Externos","e"),
         Supervisor("Supervisor","s");
 
         private TipoEnum(String nombre, String letra) {

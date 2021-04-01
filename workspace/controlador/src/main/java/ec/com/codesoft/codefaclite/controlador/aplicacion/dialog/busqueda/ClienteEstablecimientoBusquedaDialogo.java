@@ -13,8 +13,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RutaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -35,10 +39,14 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
 {
     private Empresa empresa;
     private Boolean moduloAcademicoActivo;
+    
+    private Boolean filtrarClientesRuta;
+    private Empleado empleado;
 
     public ClienteEstablecimientoBusquedaDialogo(SessionCodefacInterface sessionCodefac) {
         this.empresa = sessionCodefac.getEmpresa();
         this.moduloAcademicoActivo=sessionCodefac.verificarExisteModulo(ModuloCodefacEnum.GESTIONA_ACADEMICA);
+        verificarFiltroPorRuta(sessionCodefac);
     }
     
     @Override
@@ -85,7 +93,9 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
     public QueryDialog getConsulta(String filter) {
         
         String queryFiltroEmpresa=" AND u.persona.empresa=?2 ";
+        
         Boolean datosCompartidosEmpresas=false;
+        
         try {
             datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);           
         } catch (RemoteException ex) {
@@ -98,17 +108,40 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
             queryFiltroEmpresa = "";
         }
         
+        
         String leftJoinEstudiante="";
-        if(moduloAcademicoActivo)
+        if(moduloAcademicoActivo && !filtrarClientesRuta)
         {
             leftJoinEstudiante+=" LEFT JOIN u.persona.estudiantes e ";
         }
         
-        String queryString = "SELECT DISTINCT  u FROM PersonaEstablecimiento u "+leftJoinEstudiante+"  WHERE ";
+        /**
+         * Si tiene que filtrar por rutas 
+         */
+        String queryString = "";
+        if(filtrarClientesRuta)
+        {
+            queryString = "SELECT DISTINCT u FROM RutaDetalle rd LEFT JOIN rd.establecimiento u LEFT JOIN rd.ruta r LEFT JOIN r.vendedor v WHERE v=?4 AND ";
+        }
+        else
+        {
+            queryString = "SELECT DISTINCT  u FROM PersonaEstablecimiento u "+leftJoinEstudiante+"  WHERE ";
+        }
+        
+        /*RutaDetalle rd;
+        rd.getEstablecimiento();
+        rd.getRuta();
+        Ruta r;
+        r.getVendedor();
+        Empleado v;
+        v.*/
+        
+                
+        
         queryString+=" u.persona.estado=?3 "+queryFiltroEmpresa+" AND ( LOWER(u.persona.razonSocial) like ?1 OR u.persona.identificacion like ?1 OR LOWER(u.nombreComercial) like ?1 ";
         
         //Agregar Where para modulo academico
-        if(moduloAcademicoActivo)
+        if(moduloAcademicoActivo && !filtrarClientesRuta)
         {
             queryString+=" OR LOWER(e.apellidos) like ?1 OR LOWER(e.nombres) like ?1 ";
         }
@@ -124,7 +157,35 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
         }        
         
         queryDialog.agregarParametro(3,GeneralEnumEstado.ACTIVO.getEstado());
+        
+        if(filtrarClientesRuta)
+        {
+            queryDialog.agregarParametro(4,this.empleado);
+        }
+        
         return queryDialog;
+    }
+    
+    
+    
+    private void verificarFiltroPorRuta(SessionCodefacInterface sessionCodefac)
+    {
+        filtrarClientesRuta=false;
+        Empleado empleado=sessionCodefac.getUsuario().getEmpleado();
+        if(empleado!=null)
+        {
+            Departamento departamento=empleado.getDepartamento();
+            if(departamento!=null)
+            {
+                if(departamento.getTipoEnum().equals(Departamento.TipoEnum.Vendedores_Externos))
+                {
+                    filtrarClientesRuta=true;
+                    this.empleado=empleado;
+                }
+            }
+        }
+        
+       /// sessionCodefac.getUsuario().getEmpleado().getDepartamento();
     }
 
     @Override

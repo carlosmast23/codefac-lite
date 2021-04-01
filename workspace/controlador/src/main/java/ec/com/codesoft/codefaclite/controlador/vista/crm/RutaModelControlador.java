@@ -168,7 +168,7 @@ public class RutaModelControlador extends ModelControladorAbstract<RutaModelCont
     
     public void listenerBotonBuscarVendedor()
     {
-        EmpleadoBusquedaDialogo busqueda=new EmpleadoBusquedaDialogo(Departamento.TipoEnum.Ventas);
+        EmpleadoBusquedaDialogo busqueda=new EmpleadoBusquedaDialogo(Departamento.TipoEnum.Vendedores_Externos);
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busqueda);
         buscarDialogoModel.setVisible(true);
         if (buscarDialogoModel.getResultado() != null) {
