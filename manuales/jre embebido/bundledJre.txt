@@ -1,0 +1,11 @@
+Configurar JRE dentro del programa de Java
+===========================================
+
+Nota: Se hizo pruebas con el programa Launch4j que permite generar exe con un jre incluido, pero es muy limitado para algunas configuraciones especiales que se necesita
+
+PROCEDIMIENTO:
+---------------------------------------------
+1.- Copiar una carpeta del jre en la direccion donde se tiene el programa de java
+2.- Crear un archivo bat con la siguiente estructura de ejemplo: .\jre\bin\java.exe -jar codefac.jar
+
+
