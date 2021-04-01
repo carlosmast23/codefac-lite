@@ -19,6 +19,12 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
  */
 public class DepartamentoBusquedaDialogo implements InterfaceModelFind<Departamento>
 {
+    private GeneralEnumEstado filtroEstado;
+
+    public DepartamentoBusquedaDialogo(GeneralEnumEstado filtroEstado) {
+        this.filtroEstado = filtroEstado;
+    }
+    
 
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
@@ -30,12 +36,23 @@ public class DepartamentoBusquedaDialogo implements InterfaceModelFind<Departame
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT d FROM Departamento d WHERE (LOWER(d.codigo) like ?1) or ";
-        queryString+="(LOWER(d.nombre) like ?2) and d.estado=?3";
+        //Departamento d;
+        //d.setEstado(estado);
+        String queryString = "SELECT d FROM Departamento d WHERE ( (LOWER(d.codigo) like ?1) or ";
+        queryString+="(LOWER(d.nombre) like ?2) ) ";
+        
+        if(filtroEstado!=null)
+        {
+            queryString+=" and d.estado=?3 "; 
+        }
+        
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
         queryDialog.agregarParametro(2,filter);
-        queryDialog.agregarParametro(3,GeneralEnumEstado.ACTIVO.getEstado());
+        if(filtroEstado!=null)
+        {
+            queryDialog.agregarParametro(3,filtroEstado.getEstado());
+        }
         return queryDialog;
     }
 

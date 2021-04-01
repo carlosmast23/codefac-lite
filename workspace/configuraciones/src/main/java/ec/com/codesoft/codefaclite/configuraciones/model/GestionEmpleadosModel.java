@@ -165,7 +165,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
     {
         try {
             getCmbDepartamento().removeAllItems();
-            List<Departamento> departamentos = ServiceFactory.getFactory().getDepartamentoServiceIf().obtenerTodos();
+            List<Departamento> departamentos = ServiceFactory.getFactory().getDepartamentoServiceIf().obtenerActivos();
             for (Departamento departamento : departamentos) {
                 getCmbDepartamento().addItem(departamento);
             }
@@ -193,6 +193,8 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
                 getCmbSexo().addItem(genero);
             }
         } catch (RemoteException ex) {
+            Logger.getLogger(GestionEmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(GestionEmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
