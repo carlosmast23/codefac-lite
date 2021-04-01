@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service.pos;
 import ec.com.codesoft.codefaclite.servidor.facade.pos.CajaSesionFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
@@ -153,9 +154,28 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
         Map<String, Object> mapParametros = new HashMap<>();
         mapParametros.put("caja", caja);
         mapParametros.put("usuario", usuario);
-        mapParametros.put("estadoCierreCaja", CajaSessionEnum.FINALIZADO.getEstado());
+        mapParametros.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
         
         List<CajaSession> cajasSession = getFacade().findByMap(mapParametros);
+        
+        if(cajasSession.size() > 0)
+        {
+            return cajasSession;
+        }
+        
+        return null;
+    }
+
+    @Override
+    public List<CajaSession> obtenerCajaSessionPorUsuarioYSucursal(Usuario usuario, Sucursal sucursal) throws RemoteException 
+    {
+        Map<String, Object> map = new HashMap<>();
+        
+        map.put("usuario", usuario);
+        map.put("caja.sucursal", sucursal);
+        map.put("estadoCierreCaja",  CajaSessionEnum.ACTIVO.getEstado());
+        
+        List<CajaSession> cajasSession = getFacade().findByMap(map);
         
         if(cajasSession.size() > 0)
         {
