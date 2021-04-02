@@ -10,7 +10,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.ParametroCodefacFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -212,5 +214,21 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         });
     }
     
+    public void crearParametroPorDefectoEmpresaSinTrasaccion(Empresa empresa) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+//Datos de un correo por defecto para que puedan hacer pruebas
+        entityManager.persist(crearObjectoSinTransaccion(empresa, ParametroCodefac.CORREO_USUARIO, "codefac.test@gmail.com"));
+        entityManager.persist(crearObjectoSinTransaccion(empresa, ParametroCodefac.CORREO_CLAVE, "26hhdTtckLvAO/VRy7q+dQ=="));
+        entityManager.persist(crearObjectoSinTransaccion(empresa, ParametroCodefac.SMTP_HOST, "smtp.gmail.com"));
+        entityManager.persist(crearObjectoSinTransaccion(empresa, ParametroCodefac.SMTP_PORT, "587"));
+    }
     
+    private ParametroCodefac crearObjectoSinTransaccion(Empresa empresa,String nombre, String valor)
+    {
+        ParametroCodefac parametro=new ParametroCodefac();
+        parametro.setEmpresa(empresa);
+        parametro.setNombre(nombre);
+        parametro.setValor(valor);
+        return parametro;
+    }
 }
