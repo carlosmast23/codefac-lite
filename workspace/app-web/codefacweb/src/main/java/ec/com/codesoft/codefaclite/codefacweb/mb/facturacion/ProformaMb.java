@@ -733,8 +733,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         reportDatosAdicionales=buscarReporteDatosAdicionales(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionales.jrxml");
         mapParametros.put("SUBREPORT_INFO_ADICIONAL",reportDatosAdicionales);
         
-        reportDatosAdicionales=buscarReporteDatosAdicionales(RecursoCodefac.JASPER, "pl_firmas_factura.jrxml");
-        mapParametros.put("pl_firmas_factura",reportDatosAdicionales);
+        //reportDatosAdicionales=buscarReporteDatosAdicionales(RecursoCodefac.JASPER, "pl_firmas_factura.jrxml");
+        //mapParametros.put("pl_firmas_factura",reportDatosAdicionales);
         
 
         /*try {
