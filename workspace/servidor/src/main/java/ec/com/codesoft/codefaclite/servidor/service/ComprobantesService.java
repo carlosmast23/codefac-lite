@@ -1936,6 +1936,26 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
     }
     
+    private void agregarDatosAdicionalVendedor(ComprobanteEntity comprobante)
+    {
+        DocumentoEnum documento=comprobante.getCodigoDocumentoEnum();
+        if(documento.equals(DocumentoEnum.FACTURA) || documento.equals(DocumentoEnum.NOTA_VENTA) || documento.equals(DocumentoEnum.NOTA_VENTA_INTERNA) )
+        {
+            Factura factura=(Factura) comprobante;
+            if(factura.getVendedor()!=null)
+            {
+                FacturaAdicional facturaAdicional=new FacturaAdicional(
+                        ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(),
+                        factura.getVendedor().getNombresCompletos(),
+                        ComprobanteAdicional.Tipo.TIPO_OTRO);
+
+                factura.addDatoAdicional(facturaAdicional);
+            }
+            
+        }
+    
+    }
+    
     /**
      * Metodo que me permite agregar parametros propios de cada usuario al comprobante electronico
      * @param comprobante 
@@ -2159,6 +2179,12 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
          * Agregado datos adicionales de cada usuario
          */
         agregarParametrosPorUsuario(comprobante);
+        
+        
+         /**
+         * Agregado datos adicionales de los vendedores
+         */
+        agregarDatosAdicionalVendedor(comprobante);
         
         /**
          * Por el momento a todas las facturas no procesadas grabo con no facturar

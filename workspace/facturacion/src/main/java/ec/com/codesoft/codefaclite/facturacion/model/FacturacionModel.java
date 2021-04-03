@@ -706,15 +706,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
                             factura.getVendedor().getNombresCompletos(), 
                             ComprobanteAdicional.Tipo.TIPO_OTRO) {
-                    });*/
-                                   
-                    FacturaAdicional facturaAdicional=new FacturaAdicional(
-                            ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
-                            factura.getVendedor().getNombresCompletos(), 
-                            ComprobanteAdicional.Tipo.TIPO_OTRO);
-                    
-                    factura.addDatoAdicional(facturaAdicional);
-                    
+                    });*/                                  
+                                        
                     //factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(),factura.getVendedor().getNombresCompletos());
                     cargarTablaDatosAdicionales();
                 }
