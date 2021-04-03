@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
+import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -64,6 +65,26 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                 {
                     throw new ServicioCodefacException("No se puede grabar una Guía de Remisión con detalles de otros documentos diferentes de Facturas");
                 }
+            }
+        }
+        
+        /**
+         * Validar que todos los detalles de las facturas estan activas por cualquier motivo antes de procesar
+         */
+        for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {
+            FacturacionService facturaService=new FacturacionService();
+            //Actualizo la referencia de la factura para evitar tener alguna modificación
+            Factura factura=facturaService.buscarPorId(destinatario.getFacturaReferencia().getId());
+            if(factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) || factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI))
+            {
+                throw  new ServicioCodefacException("No se puede procesar por que la factura: "+factura.getPreimpreso()+" fue eliminada");
+                
+            }
+            
+            //Eliminar tambien las NC que afecten a facturas que les anules por completo
+            if(factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL))
+            {
+                throw  new ServicioCodefacException("No se puede procesar por que la factura: "+factura.getPreimpreso()+" esta afectada por una Nota Crédito");
             }
         }
     }

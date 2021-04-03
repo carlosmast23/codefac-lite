@@ -257,7 +257,9 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
                     null,
                     null,
                     vendedorSeleccionado,
-                    null);
+                    null,
+                    true
+                    );
             
             castListDataTable(ventasList);
             

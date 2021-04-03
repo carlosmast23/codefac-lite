@@ -230,8 +230,16 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                     data.agregarCantidad(detallesProducto.getCantidad());
                 }
                 
+                
                 //Agregar el valor total del detalle                
-                data.setTotal(data.getTotal().add(facturaDetalle.calcularTotalFinal()));
+                BigDecimal totalDetalle=facturaDetalle.calcularTotalFinal();
+                data.setTotal(data.getTotal().add(totalDetalle));
+                
+                if(data.getCodigoInterno().equals("12210"))
+                {
+                    System.out.println("Dato principal ,valor= "+totalDetalle+" -> "+facturaDetalle.getFactura().getPreimpreso());
+                    System.out.println("Destinatario Detalle"+destinatario.getCodDucumentoSustento());
+                }
                 
             }
         }
