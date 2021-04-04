@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DiaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -90,6 +91,14 @@ public class Ruta implements Serializable {
 
     public void setDiaVisita(Integer diaVisita) {
         this.diaVisita = diaVisita;
+    }
+    
+    public DiaEnum getDiaVisitaEnum() {
+        return DiaEnum.buscarPorNumero(diaVisita);
+    }
+
+    public void setDiaVisitaEnum(DiaEnum diaVisitaEnum) {
+        this.diaVisita = diaVisitaEnum.getNumero();
     }
 
     public Empleado getVendedor() {

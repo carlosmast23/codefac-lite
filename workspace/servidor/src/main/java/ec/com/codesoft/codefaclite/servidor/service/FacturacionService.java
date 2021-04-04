@@ -47,6 +47,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.TurnoAsignado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DiaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
@@ -175,24 +176,31 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * Estos datos se graban en la misma factura para poder hacer un reporte mas rapido y evitar hacer tantas consultas
      * @param proforma 
      */
-    private void setearDatosDistribuidor(Factura proforma) throws RemoteException, ServicioCodefacException
+    private void setearDatosDistribuidor(Factura venta) throws RemoteException, ServicioCodefacException
     {
         //Si la proforma tiene una zona la grabo con los datos de la oficina del cliente
-        if(proforma.getSucursal().getZona()!=null)
+        if(venta.getSucursal().getZona()!=null)
         {
-            proforma.setZonaId(proforma.getSucursal().getZona().getId());
-            proforma.setZonaNombre(proforma.getSucursal().getZona().getNombre());
+            venta.setZonaId(venta.getSucursal().getZona().getId());
+            venta.setZonaNombre(venta.getSucursal().getZona().getNombre());
         }
         
-        //Si el cliente tiene un vendedor consulto a que ruta pertenece el cliente
-        if(proforma.getVendedor()!=null)
+        //Si la venta viene previamente de una proforma y tiene datos de los vendedores entonces selecciono los mismos valores
+        Factura proformaTmp=venta.getProforma();
+        if(proformaTmp==null)
         {
-            RutaService rutaService=new RutaService();
-            Ruta ruta=rutaService.consultarRutaActivaPorVendedorYCliente(proforma.getVendedor(),proforma.getSucursal());
-            if(ruta!=null)
+            //Si el cliente tiene un vendedor consulto a que ruta pertenece el cliente
+            if(venta.getVendedor()!=null)
             {
-                proforma.setRutaId(ruta.getId());
-                proforma.setRutaNombre(ruta.getNombre());
+                RutaService rutaService=new RutaService();
+                Integer dia=UtilidadesFecha.obtenerDiaSemana(venta.getFechaEmision()); //Por el momento busca la ruta segun el día que esta generando la proforma o factura
+                DiaEnum diaEnum=DiaEnum.buscarPorNumero(dia);
+                Ruta ruta=rutaService.consultarRutaActivaPorVendedorYCliente(venta.getVendedor(),venta.getSucursal(),diaEnum);
+                if(ruta!=null)
+                {
+                    venta.setRutaId(ruta.getId());
+                    venta.setRutaNombre(ruta.getNombre());
+                }
             }
         }
         
