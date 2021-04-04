@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -123,7 +124,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         
                         ComprobantesService servicioComprobante = new ComprobantesService();
                         servicioComprobante.setearSecuencialComprobanteSinTransaccion(liquidacionCompra);           
-                        setearDatosCliente(liquidacionCompra);
+                        setearDatosClienteYDistribuidor(liquidacionCompra);
                         grabarDetallesFacturaSinTransaccion(liquidacionCompra); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
                     
@@ -158,7 +159,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         proforma.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                         
                         proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
-                        setearDatosCliente(proforma);
+                        setearDatosClienteYDistribuidor(proforma);
                         grabarDetallesFacturaSinTransaccion(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
                     
@@ -168,6 +169,33 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         
         return proforma;
+    }
+    
+    /**
+     * Estos datos se graban en la misma factura para poder hacer un reporte mas rapido y evitar hacer tantas consultas
+     * @param proforma 
+     */
+    private void setearDatosDistribuidor(Factura proforma) throws RemoteException, ServicioCodefacException
+    {
+        //Si la proforma tiene una zona la grabo con los datos de la oficina del cliente
+        if(proforma.getSucursal().getZona()!=null)
+        {
+            proforma.setZonaId(proforma.getSucursal().getZona().getId());
+            proforma.setZonaNombre(proforma.getSucursal().getZona().getNombre());
+        }
+        
+        //Si el cliente tiene un vendedor consulto a que ruta pertenece el cliente
+        if(proforma.getVendedor()!=null)
+        {
+            RutaService rutaService=new RutaService();
+            Ruta ruta=rutaService.consultarRutaActivaPorVendedorYCliente(proforma.getVendedor(),proforma.getSucursal());
+            if(ruta!=null)
+            {
+                proforma.setRutaId(ruta.getId());
+                proforma.setRutaNombre(ruta.getNombre());
+            }
+        }
+        
     }
     
     private void asignarVendedorProforma(Factura proforma)
@@ -190,7 +218,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                setearDatosCliente(proforma);
+                setearDatosClienteYDistribuidor(proforma);
                 entityManager.merge(proforma);
             }
         });
@@ -201,12 +229,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * Metodo que permite setear los datos del cliente en la venta para poder datos estaticos para realizar control de la venta
      * @param venta 
      */
-    private void setearDatosCliente(Factura venta)
+    private void setearDatosClienteYDistribuidor(Factura venta) throws RemoteException, ServicioCodefacException
     {
         venta.setRazonSocial(venta.getCliente().getRazonSocial());
         venta.setIdentificacion(venta.getCliente().getIdentificacion());
         venta.setDireccion(venta.getSucursal().getDireccion());
-        venta.setTelefono(venta.getCliente().getTelefonoCelular()); //todo: ver si hago un metodo para obtener los telefonos        
+        venta.setTelefono(venta.getCliente().getTelefonoCelular()); //todo: ver si hago un metodo para obtener los telefonos 
+        
+        setearDatosDistribuidor(venta);
     }
     
     /**
@@ -357,10 +387,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
 
         //Setear los datos del cliente en la factura para tener un historico y vovler a consultar
         //Todo: Ver si es necesario corregir este problema tambien en la factura cuando edita
-        factura.setRazonSocial(factura.getCliente().getRazonSocial());
-        factura.setIdentificacion(factura.getCliente().getIdentificacion());
-        factura.setDireccion(factura.getSucursal().getDireccion());
-        factura.setTelefono(factura.getSucursal().getTelefonoConvencional());
+        //factura.setRazonSocial(factura.getCliente().getRazonSocial());
+        //factura.setIdentificacion(factura.getCliente().getIdentificacion());
+        //factura.setDireccion(factura.getSucursal().getDireccion());
+        //factura.setTelefono(factura.getSucursal().getTelefonoConvencional());
+        setearDatosClienteYDistribuidor(factura);        
+        
         asignarVendedorAutomatico(factura);
         
         //Cambiar el estado si viene de un pedido si fuera el caso
@@ -418,7 +450,6 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
        
         factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());
-        //facturaFacade.create(factura);
         entityManager.persist(factura);
         entityManager.flush();
 
@@ -433,6 +464,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     break;
                 case INVENTARIO:
                     //Todo: Mejorar esta parte por el momento cuando es una proforma no proceso el tema del inventario
+                    //TODO: Parece que la parte de proforma deveria estar en la parte superior por que no debe afectar a ningun otro modulo
                     if (factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA)) {
                         break;
                     }

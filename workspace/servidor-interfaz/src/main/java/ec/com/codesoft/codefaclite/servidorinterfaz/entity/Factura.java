@@ -101,6 +101,18 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     @JoinColumn(name = "PEDIDO_ID")
     private Factura proforma;
     
+    @Column(name = "ZONA_ID")
+    private Long zonaId;
+    
+    @Column(name = "ZONA_NOMBRE")
+    private String zonaNombre;
+    
+    @Column(name = "RUTA_ID")
+    private Long rutaId;
+    
+    @Column(name = "RUTA_NOMBRE")
+    private String rutaNombre;
+    
         
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -413,69 +425,40 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setTotalSubsidio(BigDecimal totalSubsidio) {
         this.totalSubsidio = totalSubsidio;
     }
-    
-    
-    
-    
-    /*public void addDatoAdicional(String campo, String valor)
-    {
-        FacturaAdicional dato=new FacturaAdicional();
-        dato.setCampo(campo);
-        dato.setNumero(0);
-        dato.setTipo(FacturaAdicional.Tipo.TIPO_OTRO.getLetra());
-        dato.setValor(valor);
-        
-        addDatoAdicional(dato);
-    }*/
-    
-    
-    /*public void addDatoAdicional(FacturaAdicional datoAdicional)
-    {
-        if(this.datosAdicionales==null)
-        {
-            this.datosAdicionales=new ArrayList<FacturaAdicional>();
-        }
-        datoAdicional.setFactura(this);
-        this.datosAdicionales.add(datoAdicional);
-    }*/
-    
-    /*public void addDatosAdicionalCorreo(String correo,FacturaAdicional.Tipo tipoCorreo,FacturaAdicional.CampoDefectoEnum campoDefecto)
-    {
-        FacturaAdicional facturaAdicional=new FacturaAdicional();
-        facturaAdicional.setCampo(campoDefecto.getNombre());
-        facturaAdicional.setFactura(this);
-        facturaAdicional.setTipo(tipoCorreo.getLetra());
-        facturaAdicional.setValor(correo);
-        
-        if (this.datosAdicionales == null) {
-            this.datosAdicionales = new ArrayList<FacturaAdicional>();
-        }
-        
-        //Buscar si existe un correo anterior para nombrar de forma secuencial
-        Integer numeroMaximo=0;
-        for (FacturaAdicional datoAdicional : datosAdicionales) {            
-            if(datoAdicional.getTipo().equals(tipoCorreo.getLetra()))
-            {
-                if(datoAdicional.getNumero()>numeroMaximo)
-                {
-                    numeroMaximo=datoAdicional.getNumero();
-                }
-            }
-        }
-        
-        facturaAdicional.setNumero(numeroMaximo+1);
-        //Modificar el nombre si el correo es mas de 2
-        if(facturaAdicional.getNumero()>1)
-        {
-            facturaAdicional.setCampo(campoDefecto.getNombre()+" "+facturaAdicional.getNumero());
-        }
 
-        this.datosAdicionales.add(facturaAdicional);
-    
-    }*/
-    
-    
+    public Long getZonaId() {
+        return zonaId;
+    }
 
+    public void setZonaId(Long zonaId) {
+        this.zonaId = zonaId;
+    }
+
+    public Long getRutaId() {
+        return rutaId;
+    }
+
+    public void setRutaId(Long rutaId) {
+        this.rutaId = rutaId;
+    }
+
+    public String getZonaNombre() {
+        return zonaNombre;
+    }
+
+    public void setZonaNombre(String zonaNombre) {
+        this.zonaNombre = zonaNombre;
+    }
+
+    public String getRutaNombre() {
+        return rutaNombre;
+    }
+
+    public void setRutaNombre(String rutaNombre) {
+        this.rutaNombre = rutaNombre;
+    }
+    
+    
 
     @Override
     public int hashCode() {

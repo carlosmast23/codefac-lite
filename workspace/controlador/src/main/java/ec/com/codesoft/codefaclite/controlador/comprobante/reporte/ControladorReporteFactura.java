@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Zona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
@@ -338,14 +339,9 @@ public class ControladorReporteFactura {
                         reporteData.setFormaPago(obtenerFormaPago(factura));
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
                         
-                        //ZONA: Creada la zona y verificando primero si existe para generar el reporte
-                        String zonaStr="";
-                        if(factura.getSucursal()!=null && factura.getSucursal().getZona()!=null)
-                        {
-                            zonaStr=factura.getSucursal().getZona().getNombre();
-                        }
-                        
-                        reporteData.setZona(zonaStr);
+                        //Agregando Zona y Ruta
+                        reporteData.setZona(buscarZona(factura));
+                        reporteData.setRuta((factura.getRutaNombre()!=null)?factura.getRutaNombre():"");
                         
                         if(reporteConDetallesFactura)
                         {
@@ -426,6 +422,27 @@ public class ControladorReporteFactura {
             Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    //TODO: Metodo temporal para hacer retrocompatible con datos de facturas anteriores
+    @Deprecated
+    private String buscarZona(Factura factura)
+    {
+        if(factura.getZonaNombre()!=null)
+        {
+            return factura.getZonaNombre();
+        }
+        else
+        {
+            if(factura.getSucursal()!=null)
+            {
+                if(factura.getSucursal().getZona()!=null)
+                {
+                    return factura.getSucursal().getZona().getNombre();
+                }
+            }
+        }
+        return "";
     }
     
     private String obtenerFormaPago(Factura factura)
@@ -1125,12 +1142,21 @@ public class ControladorReporteFactura {
             }
         }),
         
+        AGRUPADO_POR_RUTA("Agrupado por ruta",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
+                return dato.getRuta();
+            }
+        }),
+        
         AGRUPADO_POR_ZONA("Agrupado por zonas",new CampoAgruparIf() {
             @Override
             public String obtenerCampoAgrupar(ReporteFacturaData dato) {
                 return dato.getZona();
             }
         });
+        
+        
         
         
         private String nombre;
