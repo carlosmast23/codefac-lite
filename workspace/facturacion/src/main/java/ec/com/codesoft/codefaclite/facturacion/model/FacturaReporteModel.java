@@ -341,7 +341,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
             titulo.add("Referido");
         else
             titulo.add("Nombre legal");
-            
+        
+        titulo.add("Ruta");
+        titulo.add("Zona");
         titulo.add("Documento");
         titulo.add("Estado");
         titulo.add("Tipo");
