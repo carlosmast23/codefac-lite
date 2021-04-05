@@ -35,7 +35,16 @@ public class UtilidadesComboBox {
     
     public static void llenarComboBox(JComboBox comboBox,List datos)
     {
-        comboBox.removeAllItems();
+        llenarComboBox(comboBox, datos, Boolean.TRUE);
+    }
+    
+    public static void llenarComboBox(JComboBox comboBox,List datos,Boolean limpiar)
+    {
+        if(limpiar)
+        {
+            comboBox.removeAllItems();
+        }
+        
         for (Object object : datos) 
         {
             comboBox.addItem(object);

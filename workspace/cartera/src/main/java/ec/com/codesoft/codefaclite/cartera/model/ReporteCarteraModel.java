@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -62,9 +63,27 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
         datosInicialesVista();
         listenerBotones();
         listenerCheckBox();
+        listenerCombos();
     
         //Cargar por defecto el boton de tipo de cartera
         listenerCmbTipoCartera();
+    }
+    
+    private void listenerCombos()
+    {
+        getCmbDocumentoCategoriaCartera().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Cartera.CarteraCategoriaEnum carteraCategoriaEnum=(Cartera.CarteraCategoriaEnum) getCmbDocumentoCategoriaCartera().getSelectedItem();
+                
+                List<DocumentoEnum> resultados=DocumentoEnum.obtenerPorCategoria(carteraCategoriaEnum.getDocumentoCategoriaEnum());
+
+                getCmbDocumento().removeAllItems();
+                getCmbDocumento().addItem(null);
+                UtilidadesComboBox.llenarComboBox(getCmbDocumento(),resultados,false);
+                
+            }
+        });
     }
 
     @Override
@@ -186,6 +205,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
         UtilidadesComboBox.llenarComboBox(getCmbTipoCartera(), Cartera.TipoCarteraEnum.values());
         UtilidadesComboBox.llenarComboBox(getCmbTipoSaldo(), Cartera.TipoSaldoCarteraEnum.values());
         UtilidadesComboBox.llenarComboBox(getCmbTipoReporte(),TipoReporteEnum.values());
+        
     }
 
     private void construirResultadoData(List<Cartera> datos) {
@@ -193,6 +213,13 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
             resultadoData = new ArrayList<CarteraDocumentoData>();
 
             for (Cartera dato : datos) {
+                
+                String referenciaDescripcion="";
+                if(dato.getSegundaReferenciaDescripcion()!=null)
+                {
+                    referenciaDescripcion=dato.getSegundaReferenciaDescripcion();
+                }
+                
                 resultadoData.add(new CarteraDocumentoData(
                         dato.getCodigo(),
                         dato.obtenerDescripciones(),
@@ -205,7 +232,9 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                         "",
                         "",
                         "",
-                        ""
+                        "",
+                        referenciaDescripcion
+                        
                 ));
             }
         }
@@ -269,6 +298,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
             "Código",
             "Documento",
             "Descripción",
+            "Referencia",
             "Nombres Persona",
             "Total",
             "Saldo",
@@ -280,6 +310,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                 carteraData.getCodigo(),
                 carteraData.getDocumento(),
                 carteraData.getDescripcion(),
+                carteraData.getReferenciaDescripcion(),
                 carteraData.getPersona(),
                 carteraData.getValor(),
                 carteraData.getSaldo(),
@@ -325,6 +356,8 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                 
                 Cartera.CarteraCategoriaEnum carteraCategoriaEnum = (Cartera.CarteraCategoriaEnum) getCmbDocumentoCategoriaCartera().getSelectedItem();
                 Cartera.TipoSaldoCarteraEnum saldoCarteraEnum=(Cartera.TipoSaldoCarteraEnum) getCmbTipoSaldo().getSelectedItem();
+                
+                DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                 //DocumentoCategoriaEnum.
                 try {
                     List<Cartera> resultado = ServiceFactory.getFactory().getCarteraServiceIf().listaCarteraSaldoCero(
@@ -336,7 +369,9 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                             saldoCarteraEnum,
                             Cartera.TipoOrdenamientoEnum.POR_RAZON_SOCIAL,
                             CarteraEstadoReporteEnum.TODO,
-                            session.getSucursal());
+                            session.getSucursal(),
+                            documentoEnum);
+                    
 
                     construirResultadoData(resultado);
                     construirResultadoDataDetalle(resultado);

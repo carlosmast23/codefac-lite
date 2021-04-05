@@ -17,7 +17,7 @@ import java.util.List;
 public class CarteraDataDetalle extends CarteraDocumentoData
 {
     public CarteraDataDetalle(String codigo, String descripcion, String valor, String saldo, String preimpreso, String fechaEmision, String persona, String documento, String codigoDetalleDocumento, String nombreDetalleDocumento, String subtotalDetalle, String saldoDetalle) {
-        super(codigo, descripcion, valor, saldo, preimpreso, fechaEmision, persona, documento, codigoDetalleDocumento, nombreDetalleDocumento, subtotalDetalle, saldoDetalle);
+        super(codigo, descripcion, valor, saldo, preimpreso, fechaEmision, persona, documento, codigoDetalleDocumento, nombreDetalleDocumento, subtotalDetalle, saldoDetalle,null);
     }
 
     

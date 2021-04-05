@@ -1146,6 +1146,7 @@ public class CarteraModel extends CarteraPanel{
             if(estudianteSeleccionado!=null)
             {
                 cartera.setSegundaReferenciaId(estudianteSeleccionado.getIdEstudiante());
+                cartera.setSegundaReferenciaDescripcion(estudianteSeleccionado.getNombreCompleto());
             }
         }
         

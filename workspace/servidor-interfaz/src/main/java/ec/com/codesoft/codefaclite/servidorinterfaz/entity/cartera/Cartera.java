@@ -129,6 +129,9 @@ public class Cartera implements Serializable{
     @Column(name = "SEGUNDA_REFERENCIA_ID")
     private Long segundaReferenciaId;
     
+    @Column(name = "SEGUNDA_REFERENCIA_DESCRIPCION")
+    private String segundaReferenciaDescripcion;
+    
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartera", fetch = FetchType.EAGER)
     private List<CarteraDetalle> detalles;
@@ -356,6 +359,14 @@ public class Cartera implements Serializable{
 
     public void setSegundaReferenciaId(Long segundaReferenciaId) {
         this.segundaReferenciaId = segundaReferenciaId;
+    }
+
+    public String getSegundaReferenciaDescripcion() {
+        return segundaReferenciaDescripcion;
+    }
+
+    public void setSegundaReferenciaDescripcion(String segundaReferenciaDescripcion) {
+        this.segundaReferenciaDescripcion = segundaReferenciaDescripcion;
     }
     
     
