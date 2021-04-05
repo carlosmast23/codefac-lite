@@ -42,6 +42,12 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
     
     private Boolean filtrarClientesRuta;
     private Empleado empleado;
+    
+    /**
+     * TODO: Pensar en un futuro otra forma estandar para poder ordenar cualquier campo
+     * Variable que me permite identificar si se quiere crear el dialogo con la primera columna como la razon social
+     */
+    private Boolean primeraColumnaNombre=false;
 
     public ClienteEstablecimientoBusquedaDialogo(SessionCodefacInterface sessionCodefac) {
         this.empresa = sessionCodefac.getEmpresa();
@@ -53,8 +59,17 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
     public Vector<ColumnaDialogo> getColumnas() 
     {
         Vector<ColumnaDialogo> titulo=new Vector<ColumnaDialogo>();
-        titulo.add(new ColumnaDialogo("Identificacion",0.15d));
-        titulo.add(new ColumnaDialogo("Razón Social ",0.3d));
+        if(primeraColumnaNombre)
+        {
+            titulo.add(new ColumnaDialogo("Razón Social ",0.3d));
+            titulo.add(new ColumnaDialogo("Identificacion",0.15d));            
+        }
+        else
+        {
+            titulo.add(new ColumnaDialogo("Identificacion",0.15d));
+            titulo.add(new ColumnaDialogo("Razón Social ",0.3d));
+        }
+        
         titulo.add(new ColumnaDialogo("Nombre Legal",0.2d));
         
         if(!moduloAcademicoActivo)
@@ -74,8 +89,17 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
     @Override
     public void agregarObjeto(PersonaEstablecimiento t, Vector dato) 
     {
-        dato.add(t.getPersona().getIdentificacion());
-        dato.add(t.getPersona().getRazonSocial());
+        if(primeraColumnaNombre)
+        {            
+            dato.add(t.getPersona().getRazonSocial());
+            dato.add(t.getPersona().getIdentificacion());
+        }
+        else
+        {
+            dato.add(t.getPersona().getIdentificacion());
+            dato.add(t.getPersona().getRazonSocial());
+        }
+            
         dato.add((t.getNombreComercial()!=null)?t.getNombreComercial():"");
         if(!moduloAcademicoActivo)
         {
@@ -128,16 +152,6 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
             queryString = "SELECT DISTINCT  u FROM PersonaEstablecimiento u "+leftJoinEstudiante+"  WHERE ";
         }
         
-        /*RutaDetalle rd;
-        rd.getEstablecimiento();
-        rd.getRuta();
-        Ruta r;
-        r.getVendedor();
-        Empleado v;
-        v.*/
-        
-                
-        
         queryString+=" u.persona.estado=?3 "+queryFiltroEmpresa+" AND ( LOWER(u.persona.razonSocial) like ?1 OR u.persona.identificacion like ?1 OR LOWER(u.nombreComercial) like ?1 ";
         
         //Agregar Where para modulo academico
@@ -185,14 +199,24 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
             }
         }
         
-       /// sessionCodefac.getUsuario().getEmpleado().getDepartamento();
+      
     }
 
     @Override
     public Vector<String> getNamePropertysObject() {
         Vector<String> propiedades = new Vector<String>();
-        propiedades.add("persona.identificacion");
-        propiedades.add("persona.razonSocial");
+        
+        if(primeraColumnaNombre)
+        {
+            propiedades.add("persona.razonSocial");
+            propiedades.add("persona.identificacion");            
+        }
+        else
+        {
+            propiedades.add("persona.identificacion");
+            propiedades.add("persona.razonSocial");
+        }
+        
         propiedades.add("nombreComercial");//TODO: Ver como puedo hacer para establecer una propiedad personalizada
         if(!moduloAcademicoActivo)
         {
@@ -205,5 +229,15 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
         }
         return propiedades;
     }
+
+    public Boolean getPrimeraColumnaNombre() {
+        return primeraColumnaNombre;
+    }
+
+    public void setPrimeraColumnaNombre(Boolean primeraColumnaNombre) {
+        this.primeraColumnaNombre = primeraColumnaNombre;
+    }
+    
+    
     
 }

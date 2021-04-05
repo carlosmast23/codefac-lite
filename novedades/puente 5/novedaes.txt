@@ -1,0 +1,10 @@
+=====================
+	APP MOVIL
+=====================
+*Agregar una pantalla para poder visualizar por vendedor cada cuanto tiene venddido
+*Ver la posiblidad de configurar por nombre en la primera fila del buscador cuando se va a crear una proforma
+*Revisar el tema de las ubicaciones gps
+*Revisar ese tema que cuando no tiene movimiento inicial no sale en el reporte de stock
+
+* Ver la posibilidad de en los pedidos poner si es a credito o no
+* Ver la posibilidad de agregar varias direcciÃ³nes en consumidor final

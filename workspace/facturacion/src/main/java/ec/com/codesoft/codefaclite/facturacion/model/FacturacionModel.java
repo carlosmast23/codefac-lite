@@ -1939,6 +1939,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getCmbPreciosVenta().removeAllItems();
         getCmbConsumidorFinal().setSelected(false); //Ver si esta dato esta parametrizado en configuraciones
+        getTxtDiasCredito().setValue(0);
         
         
         
@@ -2446,6 +2447,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setEmpresa(session.getEmpresa());
         factura.setUsuario(session.getUsuario());
         factura.setSucursalEmpresa(session.getSucursal());
+        
+        factura.setVentaCreditoEnum(EnumSiNo.getEnumByBoolean(getChkHabilitarCredito().isSelected()));
+        factura.setDiasCredito((Integer) getTxtDiasCredito().getValue());
         //factura.setVendedor(vendedor);
         
         //factura.setIvaSriId(session.get;
@@ -2583,6 +2587,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(factura.getFechaVencimiento()!=null)
         {
             getCmbFechaVencimiento().setDate(factura.getFechaVencimiento());
+        }
+        
+        if(factura.getVentaCredito()!=null)
+        {
+            getChkHabilitarCredito().setSelected(factura.getVentaCreditoEnum().getBool());
+        }
+        
+        if(factura.getDiasCredito()!=null)
+        {
+            getTxtDiasCredito().setValue(factura.getDiasCredito());
         }
         
     }

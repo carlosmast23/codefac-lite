@@ -287,6 +287,19 @@
                         </p:panelGrid>                        
 
                     </p:tab>
+                    
+                    <p:tab title="Cartera">
+                        <div class="p-grid " style="text-align: left"  >
+                            <div class="p-col-12 p-md-6 p-lg-6" >
+                                <p:selectBooleanCheckbox value="#{proformaMb.factura.ventaCreditoBool}" itemLabel="Habilitar Crédito al cliente"/>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-6" >
+                                <p:outputLabel for="input1" value="Días de Crédito: "/>
+                                <p:inputNumber id="input1" value="#{proformaMb.factura.diasCredito}"  />
+                            </div>
+                        </div>
+                        
+                    </p:tab>
                 </p:tabView>
 
                 <p:dataTable 
