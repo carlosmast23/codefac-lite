@@ -551,8 +551,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametroEditar(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA);
         
         DocumentoEnum documentoDefectoVistaFactura =(DocumentoEnum) getCmbDocumentoDefectoVistaFactura().getSelectedItem();
-        agregarParametro(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA,documentoDefectoVistaFactura.getCodigo());
-        agregarParametroEditar(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA);
+        if(documentoDefectoVistaFactura!=null)
+        {
+            agregarParametro(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA,documentoDefectoVistaFactura.getCodigo());
+            agregarParametroEditar(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA);
+        }
         
         ComprobanteEntity.ComprobanteEnumEstado modoFacturasGuiaRemision =(ComprobanteEntity.ComprobanteEnumEstado) getCmbModoFacturasGuiaRemision().getSelectedItem();
         if(modoFacturasGuiaRemision!=null)

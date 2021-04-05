@@ -254,8 +254,27 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
-        initModelTablaDatoAdicional();
+        initModelTablaDatoAdicional();        
         //setearVariablesIniciales();
+    }
+    
+    /**
+     * TODO: unir con la parte web para no mostrar información no necesaria para el usuario
+     */
+    private void setearVisibilidadComponentes()
+    {
+        try {
+            
+            getChkPagoConCartera().setVisible(false);
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_CARTERA,EnumSiNo.SI))
+            {
+                getChkPagoConCartera().setVisible(true);
+                
+            }  
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public Factura getFactura() {
@@ -2524,6 +2543,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         iniciarValoresIniciales();
+        setearVisibilidadComponentes();
         
     }
 
